@@ -24,14 +24,11 @@ import com.fh.util.PageData;
 
 @Repository("redisDaoImpl")
 public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> implements RedisDao{
-	
-	
 	/**新增(存储字符串)
 	 * @param key
 	 * @param value
 	 * @return
 	 */
-	@Override
 	public boolean addString(final String key, final String value) {
 		boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {  
             public Boolean doInRedis(RedisConnection connection)  
@@ -50,7 +47,6 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 * @param value
 	 * @return
 	 */
-	@Override
 	public boolean appendString(final String key, final String value) {
 		boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {  
             public Boolean doInRedis(RedisConnection connection)  
@@ -74,7 +70,6 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 * @param value
 	 * @return
 	 */
-	@Override
 	public String addMap(String key, Map<String, String> map) {
 		 Jedis jedis = getJedis();
 		 String result = jedis.hmset(key,map);
@@ -86,7 +81,6 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 * @param key
 	 * @return
 	 */
-	@Override
 	public Map<String,String> getMap(String key){
 		Jedis jedis = getJedis();
 		Map<String, String> map = new HashMap<String, String>();
@@ -104,7 +98,6 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 * @param pd
 	 * @return
 	 */
-	@Override
 	public void addList(String key, List<String> list){
 		Jedis jedis = getJedis();
 		jedis.del(key); //开始前，先移除所有的内容  
@@ -153,7 +146,6 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 * (non-Javadoc)
 	 * @see com.fh.dao.redis.RedisDao#delete(java.lang.String)
 	 */
-	@Override
 	public boolean delete(final String key) {
 		boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {  
             public Boolean doInRedis(RedisConnection connection)  
@@ -175,7 +167,6 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 * (non-Javadoc)
 	 * @see com.fh.dao.redis.RedisDao#delete(java.util.List)
 	 */
-	@Override
 	public void delete(List<String> keys) {
 		redisTemplate.delete(keys); 
 	}
@@ -184,7 +175,6 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 * (non-Javadoc)
 	 * @see com.fh.dao.redis.RedisDao#eidt(java.lang.String, java.lang.String)
 	 */
-	@Override
 	public boolean eidt(String key, String value) {
 		if(delete(key)){
 			addString(key,value);
@@ -197,7 +187,6 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 * (non-Javadoc)
 	 * @see com.fh.dao.redis.RedisDao#get(java.lang.String)
 	 */
-	@Override
 	public String get(final String keyId) {
 		String result = redisTemplate.execute(new RedisCallback<String>() {  
             public String doInRedis(RedisConnection connection)  
