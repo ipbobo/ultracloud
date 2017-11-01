@@ -540,12 +540,12 @@ public class DbFH{
 		return columnList;
 	}
 	
-	/**读取dbfh.properties 配置文件
+	/**读取db.properties 配置文件
 	 * @return
 	 * @throws IOException
 	 */
 	public static Properties getPprVue() {
-		InputStream inputStream = DbFH.class.getClassLoader().getResourceAsStream("dbfh.properties");
+		InputStream inputStream = DbFH.class.getClassLoader().getResourceAsStream("conf/db.properties");
 		Properties p = new Properties();
 		try {
 			p.load(inputStream);

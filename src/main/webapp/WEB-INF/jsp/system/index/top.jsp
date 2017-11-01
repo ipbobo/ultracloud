@@ -1,4 +1,4 @@
-﻿		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
 		<title>${pd.SYSNAME}</title>
 		<meta name="description" content="" />
@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="static/ace/css/ace-fonts.css" />
 		<!-- ace styles -->
 		<link rel="stylesheet" href="static/ace/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<link rel="stylesheet" href="static/ace/css/ace-skins.css" class="ace-main-stylesheet" id="ace-skins-stylesheet" />
 		<!--[if lte IE 9]>
 			<link rel="stylesheet" href="static/ace/css/ace-part2.css" class="ace-main-stylesheet" />
 		<![endif]-->

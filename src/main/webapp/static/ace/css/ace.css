@@ -2108,8 +2108,9 @@ pre.prettyprint {
 .nav-list > li .submenu > li > a:hover {
   text-decoration: none;
 }
+<!-- 第二层菜单默认显示display: block/none -->
 .nav-list > li .submenu > li a > .menu-icon {
-  display: none;
+  display: block;
   font-size: 12px;
   font-weight: normal;
   width: 18px;

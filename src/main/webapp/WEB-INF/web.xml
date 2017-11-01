@@ -6,16 +6,11 @@
 	<display-name>cmp</display-name>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			classpath:spring/ApplicationContext-main.xml,
-			classpath:spring/ApplicationContext-dataSource.xml,
-			classpath:spring/ApplicationContext-shiro.xml,
-			classpath:spring/ApplicationContext-redis.xml
-		</param-value>
+		<param-value>classpath:spring-applicationContext.xml</param-value>
 	</context-param>
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
-		<param-value>classpath:log4j.properties</param-value>
+		<param-value>classpath:log4j.xml</param-value>
 	</context-param>
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -73,7 +68,7 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:spring/ApplicationContext-mvc.xml</param-value>
+			<param-value>classpath:spring-mvc-servlet.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

@@ -1,5 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -45,7 +44,7 @@
 	<!-- 即时通讯 -->
 	
 </head>
-	<body class="no-skin">
+	<body class="skin-1">
 		<!-- #section:basics/navbar.layout -->
 		
 		<!-- 页面顶部¨ -->
@@ -74,55 +73,31 @@
 							</div>
 
 							<div class="ace-settings-box clearfix" id="ace-settings-box">
-								<div class="pull-left width-50">
+								<div class="pull-left width-300">
 									<!-- #section:settings.skins -->
 									<div class="ace-settings-item">
 										<div class="pull-left">
 											<select id="skin-colorpicker" class="hide">
-												<option data-skin="no-skin" value="#438EB9">#438EB9</option>
 												<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+												<option data-skin="no-skin" value="#438EB9">#438EB9</option>
 												<option data-skin="skin-2" value="#C6487E">#C6487E</option>
 												<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
 											</select>
 										</div>
-										<span>&nbsp; 选择皮肤</span>
-									</div>
-
-									<!-- #section:settings.breadcrumbs -->
-									<div class="ace-settings-item">
-										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
-										<label class="lbl" for="ace-settings-breadcrumbs">固定面包屑</label>
-									</div>
-
-									<!-- #section:settings.container -->
-									<div class="ace-settings-item">
-										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
-										<label class="lbl" for="ace-settings-add-container">
-											居中风格
-										</label>
-									</div>
-
-									<!-- /section:settings.container -->
-								</div><!-- /.pull-left -->
-
-								<div class="pull-left width-50">
-									<!-- #section:basics/sidebar.options -->
-									<div class="ace-settings-item">
+										<span>选择皮肤</span>
 										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" />
-										<label class="lbl" for="ace-settings-hover">折叠菜单</label>
-									</div>
-
-									<div class="ace-settings-item">
-										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" />
+										<label class="lbl" for="ace-settings-hover">层级菜单</label>
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" checked/>
 										<label class="lbl" for="ace-settings-compact">压缩菜单</label>
 									</div>
-
 									<div class="ace-settings-item">
 										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" />
 										<label class="lbl" for="ace-settings-highlight">弹出风格</label>
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
+										<label class="lbl" for="ace-settings-breadcrumbs">固定面包屑</label>
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
+										<label class="lbl" for="ace-settings-add-container">居中风格</label>
 									</div>
-
-									<!-- /section:basics/sidebar.options -->
 								</div><!-- /.pull-left -->
 							</div><!-- /.ace-settings-box -->
 						</div><!-- /.ace-settings-container -->
