@@ -7,7 +7,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.fh.dao.DaoSupport;
+import com.fh.entity.Page;
 import com.fh.entity.system.Department;
+import com.fh.util.PageData;
 
 @Service("organizationService")
 public class OrganizationServiceImpl implements OrganizationService {
@@ -31,6 +33,23 @@ public class OrganizationServiceImpl implements OrganizationService {
 			depar.setIcon("static/images/user.gif");
 		}
 		return departmentList;
+	}
+	
+	/**列表
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> list(Page page)throws Exception{
+		return (List<PageData>)dao.findForList("DepartmentMapper.datalistPage", page);
+	}
+	
+	/**通过id获取数据
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findById(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("DepartmentMapper.findById", pd);
 	}
 
 	/**
