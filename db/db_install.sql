@@ -12,7 +12,7 @@ CREATE TABLE `t_environment` (
   INDEX idx_datacenter_id(`datacenter_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='环境'; 
 
 -- ----------------------------
 -- 数据中心
@@ -27,7 +27,7 @@ CREATE TABLE `t_datacenter` (
   INDEX idx_datacenter_id(`area_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心'; 
 
 -- ----------------------------
 -- 资源池
@@ -45,7 +45,7 @@ CREATE TABLE `t_resourcepool` (
   INDEX idx_type(`type`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='资源池'; 
 
 -- ----------------------------
 -- 集群
@@ -60,7 +60,7 @@ CREATE TABLE `t_cluster` (
   INDEX idx_datacenter_id(`resourcepool_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='集群'; 
 
 -- ----------------------------
 -- 宿主机
@@ -85,7 +85,7 @@ CREATE TABLE `t_hostmachine` (
   INDEX idx_status(`status`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='宿主机'; 
 
 -- ----------------------------
 -- 存储
@@ -103,11 +103,11 @@ CREATE TABLE `t_storage` (
   INDEX idx_type(`type`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='存储'; 
 
 
 -- ----------------------------
--- 存储与宿主机映射关系
+-- 存储与宿主机关联
 -- ----------------------------
 DROP TABLE IF EXISTS `t_storage_hm_map`;
 CREATE TABLE `t_storage_hm_map` (
@@ -119,7 +119,7 @@ CREATE TABLE `t_storage_hm_map` (
   UNIQUE INDEX uk_storage_hostmachine(`storage_id`,`hostmachine_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='存储与宿主机关联'; 
 
 -- ----------------------------
 -- 网络
@@ -139,10 +139,10 @@ CREATE TABLE `t_network` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网络'; 
 
 -- ----------------------------
--- 资源池与网络映射关系
+-- 资源池与网络关联
 -- ----------------------------
 DROP TABLE IF EXISTS `t_resourcepool_network_map`;
 CREATE TABLE `t_resourcepool_network_map` (
@@ -156,7 +156,7 @@ CREATE TABLE `t_resourcepool_network_map` (
   INDEX idx_network_id(`network_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='资源池与网络关联'; 
 
 -- ----------------------------
 -- 虚拟机
@@ -182,7 +182,7 @@ CREATE TABLE `t_virtualmachine` (
   INDEX idx_hostmachine_id(`hostmachine_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='虚拟机'; 
 
 
 -- ----------------------------
@@ -201,7 +201,7 @@ CREATE TABLE `t_snapshoot` (
   INDEX idx_creator(`creator`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='快照'; 
 
 -- ----------------------------
 -- 镜像
@@ -219,7 +219,7 @@ CREATE TABLE `t_mirror` (
   INDEX idx_creator(`creator`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='镜像'; 
 
 -- ----------------------------
 -- 镜像模板
@@ -242,10 +242,10 @@ CREATE TABLE `t_mirrortemplate` (
   INDEX idx_resourcepool_id(`resourcepool_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='镜像模板'; 
 
 -- ----------------------------
--- 镜像与模板映射关系
+-- 镜像与模板关联
 -- ----------------------------
 DROP TABLE IF EXISTS `t_mirror_template_map`;
 CREATE TABLE `t_mirror_template_map` (
@@ -257,7 +257,7 @@ CREATE TABLE `t_mirror_template_map` (
   UNIQUE INDEX uk_mirror_template(`mirror_id`,`mirrortemplate_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='镜像与模板关联'; 
 
 -- ----------------------------
 -- 工单
@@ -285,7 +285,7 @@ CREATE TABLE `t_workorder` (
   INDEX idx_status(`status`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='工单'; 
 
 
 -- ----------------------------
@@ -314,7 +314,7 @@ CREATE TABLE `t_order` (
   INDEX idx_status(`status`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单'; 
 
 
 -- ----------------------------
@@ -337,7 +337,7 @@ CREATE TABLE `t_project` (
   INDEX idx_resourcepool_id(`resourcepool_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目'; 
 
 
 -- ----------------------------
@@ -359,7 +359,7 @@ CREATE TABLE `t_script` (
   INDEX idx_medium_id(`medium_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='脚本'; 
 
 
 -- ----------------------------
@@ -378,7 +378,7 @@ CREATE TABLE `t_script_param` (
   INDEX idx_script_id(`script_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='脚本参数'; 
 
 
 -- ----------------------------
@@ -397,7 +397,7 @@ CREATE TABLE `t_medium` (
   INDEX idx_user_id(`user_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='介质'; 
 
 
 -- ----------------------------
@@ -414,12 +414,13 @@ CREATE TABLE `t_document` (
   INDEX idx_user_id(`user_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='安装文档'; 
 
 
 -- ----------------------------
 -- 系统日志
 -- ----------------------------
+DROP TABLE IF EXISTS `t_system_log`;
 create table `t_system_log` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned NOT NULL COMMENT '操作者id',
@@ -435,8 +436,35 @@ create table `t_system_log` (
   INDEX idx_opt_object(`opt_object`),
   INDEX idx_opt_status(`opt_status`),
   PRIMARY KEY (`id`)
-); 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统日志'; 
 
+
+-- ----------------------------
+-- 用户组
+-- ----------------------------
+DROP TABLE IF EXISTS `t_usergroup`;
+create table `t_usergroup` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL COMMENT '用户组名称',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组';
+
+
+-- ----------------------------
+-- 用户组与角色关联
+-- ----------------------------
+DROP TABLE IF EXISTS `t_usergroup_role_map`;
+create table `t_usergroup_role_map` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `usergroup_id` bigint unsigned NOT NULL COMMENT '用户组id',
+  `role_id` bigint unsigned NOT NULL COMMENT '角色id',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  UNIQUE INDEX uk_usergroup_role(`usergroup_id`,`role_id`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组与角色关联';
 
 
 
