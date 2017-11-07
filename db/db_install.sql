@@ -24,7 +24,7 @@ CREATE TABLE `t_datacenter` (
   `areacode` varchar(20) DEFAULT NULL COMMENT '地域',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_datacenter_id(`area_id`),
+  INDEX idx_areacode(`areacode`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心'; 
@@ -57,7 +57,7 @@ CREATE TABLE `t_cluster` (
   `resourcepool_id` bigint unsigned DEFAULT NULL COMMENT '资源池id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_datacenter_id(`resourcepool_id`),
+  INDEX idx_resourcepool_id(`resourcepool_id`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='集群'; 
@@ -333,8 +333,11 @@ CREATE TABLE `t_project` (
   `describe` varchar(500) DEFAULT NULL COMMENT '描述',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_datacenter_id(`datacenter_id`),
-  INDEX idx_resourcepool_id(`resourcepool_id`),
+  INDEX idx_level(`level`),
+  INDEX idx_parent_idd(`parent_id`),
+  INDEX idx_powergroup_id(`powergroup_id`),
+  INDEX idx_poweruser_id(`poweruser_id`),
+  INDEX idx_auditrole_id(`auditrole_id`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目'; 
