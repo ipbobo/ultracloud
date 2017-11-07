@@ -11,7 +11,7 @@
 	<head>
 		<base href="<%=basePath%>">
 		<!-- jsp文件头和头部 -->
-		<%@ include file="../../system/index/top.jsp"%>
+		<%@ include file="../system/index/top.jsp"%>
 		
 	
 </head>
@@ -25,7 +25,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 					
-					<form action="department/${msg }.do" name="Form" id="Form" method="post">
+					<form action="organization/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
 						<input type="hidden" name="PARENT_ID" id="PARENT_ID" value="${null == pd.PARENT_ID ? DEPARTMENT_ID:pd.PARENT_ID}"/>
 						<div id="zhongxin">
@@ -100,7 +100,7 @@
 
 
 	<!-- 页面底部js¨ -->
-	<%@ include file="../../system/index/foot.jsp"%>
+	<%@ include file="../system/index/foot.jsp"%>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 		<script type="text/javascript">
@@ -149,7 +149,7 @@
 			if("" == BIANMA)return;
 			$.ajax({
 				type: "POST",
-				url: '<%=basePath%>department/hasBianma.do',
+				url: '<%=basePath%>organization/hasBianma.do',
 		    	data: {BIANMA:BIANMA,tm:new Date().getTime()},
 				dataType:'json',
 				cache: false,

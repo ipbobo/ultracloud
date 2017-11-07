@@ -14,7 +14,7 @@
 <base href="<%=basePath%>">
 
 <!-- jsp文件头和头部 -->
-<%@ include file="../../system/index/top.jsp"%>
+<%@ include file="../system/index/top.jsp"%>
 </head>
 <body class="no-skin">
 
@@ -177,7 +177,7 @@
 
 	<!-- basic scripts -->
 	<!-- 页面底部js¨ -->
-	<%@ include file="../../system/index/foot.jsp"%>
+	<%@ include file="../system/index/foot.jsp"%>
 	<!-- 删除时确认窗口 -->
 	<script src="static/ace/js/bootbox.js"></script>
 	<!-- ace scripts -->
@@ -195,7 +195,7 @@
 		//去此ID下子级列表
 		function goSondict(DEPARTMENT_ID){
 			top.jzts();
-			window.location.href="<%=basePath%>department/list.do?DEPARTMENT_ID="+DEPARTMENT_ID;
+			window.location.href="<%=basePath%>organization/list.do?DEPARTMENT_ID="+DEPARTMENT_ID;
 		};
 		
 		//新增
@@ -204,12 +204,12 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>department/goAdd.do?DEPARTMENT_ID='+DEPARTMENT_ID;
+			 diag.URL = '<%=basePath%>organization/goAdd.do?DEPARTMENT_ID='+DEPARTMENT_ID;
 			 diag.Width = 700;
 			 diag.Height = 550;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if('none' == diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display){
-					 parent.location.href="<%=basePath%>department/listAllDepartment.do?DEPARTMENT_ID=${DEPARTMENT_ID}&dnowPage=${page.currentPage}";
+					 parent.location.href="<%=basePath%>organization/listAllOrganization.do?DEPARTMENT_ID=${DEPARTMENT_ID}&dnowPage=${page.currentPage}";
 				}
 				diag.close();
 			 };
@@ -221,10 +221,10 @@
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>department/delete.do?DEPARTMENT_ID="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>organization/delete.do?DEPARTMENT_ID="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						if("success" == data.result){
-							parent.location.href="<%=basePath%>department/listAllDepartment.do?DEPARTMENT_ID=${DEPARTMENT_ID}&dnowPage=${page.currentPage}";
+							parent.location.href="<%=basePath%>organization/listAllOrganization.do?DEPARTMENT_ID=${DEPARTMENT_ID}&dnowPage=${page.currentPage}";
 						}else if("false" == data.result){
 							top.hangge();
 							bootbox.dialog({
@@ -250,12 +250,12 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>department/goEdit.do?DEPARTMENT_ID='+Id;
+			 diag.URL = '<%=basePath%>organization/goEdit.do?DEPARTMENT_ID='+Id;
 			 diag.Width = 700;
 			 diag.Height = 550;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 parent.location.href="<%=basePath%>department/listAllDepartment.do?DEPARTMENT_ID=${DEPARTMENT_ID}&dnowPage=${page.currentPage}";
+					 parent.location.href="<%=basePath%>organization/listAllOrganization.do?DEPARTMENT_ID=${DEPARTMENT_ID}&dnowPage=${page.currentPage}";
 				}
 				diag.close();
 			 };
