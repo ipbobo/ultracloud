@@ -181,4 +181,5 @@
  	</bean>
  	-->
  	<!-- QQ313596790 -->
+ 	<beans:import resource="activiti.cfg.xml"/><!-- 加载activiti5配置文件 -->
 </beans>
