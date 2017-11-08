@@ -96,8 +96,8 @@
 		
 		//转化编码
 		function zencoding(encoding){
-			var FHFILE_ID="${pd.FHFILE_ID}";
-			window.location.href='<%=basePath%>document/goViewTxt.do?id='+id+'&encoding='+encoding;;
+			var FHFILE_ID="${pd.id}";
+			window.location.href='<%=basePath%>document/goViewTxt.do?id='+id+'&encoding='+encoding;
 		}
 		
 		if(ie_error()){

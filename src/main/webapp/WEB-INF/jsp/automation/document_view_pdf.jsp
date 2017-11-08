@@ -327,7 +327,7 @@
 	    PDFJS.cMapUrl = '<%=basePath%>plugins/pdf/web/cmaps/';
 	    PDFJS.cMapPacked = true;
 	   }
-	 var DEFAULT_URL = '<%=basePath%>uploadFiles/uploadFile/${pd.FILEPATH}';
+	 var DEFAULT_URL = '<%=basePath%>uploadFiles/uploadFile/${pd.url}';
 	</script>
     
   </body>

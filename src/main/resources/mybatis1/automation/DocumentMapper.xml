@@ -16,7 +16,7 @@
 	<sql id="Field_main">
 		name,
 		url,
-		size,
+		filesize,
 		detail,
 		user_id
 	</sql>
@@ -36,7 +36,7 @@
 	<sql id="FieldValue_main">	
 		#{name},
 		#{url},
-		#{size},
+		#{filesize},
 		#{detail},
 		#{user_id}
 	</sql>
@@ -72,7 +72,7 @@
 		set 
 			name = #{name},
 			url = #{url},
-			size = #{size},
+			filesize = #{filesize},
 			detail = #{detail},
 			user_id = #{user_id}
 		where 

@@ -1,6 +1,8 @@
 package com.cmp.controller;
 
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,7 +63,7 @@ public class DocumentController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("user_id", Jurisdiction.getUsername()); // 上传者
-		pd.put("size", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH"))); // 文件大小
+		pd.put("filesize", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("url"))); // 文件大小
 		documentService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -84,7 +86,7 @@ public class DocumentController extends BaseController {
 		pd = this.getPageData();
 		pd = documentService.findById(pd);
 		documentService.delete(pd);
-		DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH")); // 删除文件
+		DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("url")); // 删除文件
 		out.write("success");
 		out.close();
 	}
@@ -150,15 +152,15 @@ public class DocumentController extends BaseController {
 				fileType = "pdf"; // ppt文件类型
 			}
 			npd.put("fileType", fileType); // 用于文件图标
-			npd.put("id", varList.get(i).getString("id")); // 唯一ID
+			npd.put("id", ((BigInteger)varList.get(i).get("id")).intValue()); // 唯一ID
 			npd.put("name", varList.get(i).getString("name")); // 文件名
 			npd.put("url", url); // 文件名+扩展名
-			npd.put("gmt_create", varList.get(i).getString("gmt_create")); // 创建时间
-			npd.put("gmt_modified", varList.get(i).getString("gmt_modified")); // 更新时间
+			npd.put("gmt_create", varList.get(i).get("gmt_create")); // 创建时间
+			npd.put("gmt_modified", varList.get(i).get("gmt_modified")); // 更新时间
 			npd.put("user_id", varList.get(i).getString("user_id")); // 用户名
 			//npd.put("DEPARTMENT_ID", varList.get(i).getString("DEPARTMENT_ID"));// 机构级别
-			npd.put("size", varList.get(i).getString("size")); // 文件大小
-			npd.put("describe", varList.get(i).getString("describe")); // 备注
+			npd.put("filesize", varList.get(i).getString("filesize")); // 文件大小
+			npd.put("detail", varList.get(i).getString("detail")); // 备注
 			nvarList.add(npd);
 		}
 		mv.setViewName("automation/document_list");
@@ -215,7 +217,7 @@ public class DocumentController extends BaseController {
 		pd = this.getPageData();
 		String encoding = pd.getString("encoding");
 		pd = documentService.findById(pd);
-		String code = Tools.readTxtFileAll(Const.FILEPATHFILEOA + pd.getString("FILEPATH"), encoding);
+		String code = Tools.readTxtFileAll(Const.FILEPATHFILEOA + pd.getString("url"), encoding);
 		pd.put("code", code);
 		mv.setViewName("automation/document_view_txt");
 		mv.addObject("pd", pd);
@@ -246,7 +248,7 @@ public class DocumentController extends BaseController {
 			for (int i = 0; i < ArrayDATA_IDS.length; i++) {
 				fpd.put("id", ArrayDATA_IDS[i]);
 				fpd = documentService.findById(fpd);
-				DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHFILEOA + fpd.getString("FILEPATH")); // 删除物理文件
+				DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHFILEOA + fpd.getString("url")); // 删除物理文件
 			}
 			documentService.deleteAll(ArrayDATA_IDS); // 删除数据库记录
 			pd.put("msg", "ok");
@@ -269,7 +271,7 @@ public class DocumentController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = documentService.findById(pd);
-		String fileName = pd.getString("FILEPATH");
+		String fileName = pd.getString("url");
 		FileDownload.fileDownload(response, PathUtil.getClasspath() + Const.FILEPATHFILEOA + fileName,
 				pd.getString("name") + fileName.substring(19, fileName.length()));
 	}

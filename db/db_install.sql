@@ -410,10 +410,10 @@ DROP TABLE IF EXISTS `t_document`;
 CREATE TABLE `t_document` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
-  `url` varchar(1000) DEFAULT NULL COMMENT '路径',
-  `size` int unsigned NOT NULL COMMENT '大小',
+  `url` varchar(1000) NOT NULL COMMENT '路径',
+  `filesize` varchar(20) NOT NULL COMMENT '大小',
   `detail` varchar(2000) DEFAULT NULL COMMENT '备注',
-  `user_id` bigint unsigned NOT NULL COMMENT '创建者id',
+  `user_id` varchar(40) NOT NULL COMMENT '创建者id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   INDEX idx_user_id(`user_id`),
