@@ -78,6 +78,11 @@
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
+													<c:if test="${QX.userBinding == 1 }">
+													<a class="btn btn-xs btn-info" title="绑定用户" onclick="userBinding('${var.id}');">
+														<i class="ace-icon glyphicon glyphicon-user"></i>
+													</a>
+													</c:if>
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
