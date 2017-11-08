@@ -9,8 +9,8 @@
 	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
 		<property name="customSessionFactories">
             <list>
-                <bean class="com.wasu.isearch.activiti.CustomUserEntityManagerFactory"/>
-                <bean class="com.wasu.isearch.activiti.CustomGroupEntityManagerFactory"/>
+                <bean class="com.cmp.activiti.CustomUserEntityManagerFactory"/>
+                <bean class="com.cmp.activiti.CustomGroupEntityManagerFactory"/>
             </list>
         </property>
     	<property name="databaseType" value="mysql"/><!-- 基于JDBC参数配置的数据库连接会使用默认的MyBatis连接池 -->
