@@ -6,8 +6,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.entity.Organization;
 import com.fh.dao.DaoSupport;
-import com.fh.entity.system.Department;
+import com.fh.entity.Page;
+import com.fh.util.PageData;
 
 @Service("organizationService")
 public class OrganizationServiceImpl implements OrganizationService {
@@ -22,15 +24,32 @@ public class OrganizationServiceImpl implements OrganizationService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Department> listAllDepartment(String parentId) throws Exception {
-		List<Department> departmentList = this.listSubDepartmentByParentId(parentId);
-		for (Department depar : departmentList) {
+	public List<Organization> listAllOrganization(String parentId) throws Exception {
+		List<Organization> OrganizationList = this.listSubOrganizationByParentId(parentId);
+		for (Organization depar : OrganizationList) {
 			depar.setTreeurl("organization/list.do?DEPARTMENT_ID=" + depar.getDEPARTMENT_ID());
-			depar.setSubDepartment(this.listAllDepartment(depar.getDEPARTMENT_ID()));
+			depar.setSubDepartment(this.listAllOrganization(depar.getDEPARTMENT_ID()));
 			depar.setTarget("treeFrame");
 			depar.setIcon("static/images/user.gif");
 		}
-		return departmentList;
+		return OrganizationList;
+	}
+	
+	/**列表
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> list(Page page)throws Exception{
+		return (List<PageData>)dao.findForList("OrganizationMapper.datalistPage", page);
+	}
+	
+	/**通过id获取数据
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findById(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("OrganizationMapper.findById", pd);
 	}
 
 	/**
@@ -41,7 +60,39 @@ public class OrganizationServiceImpl implements OrganizationService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Department> listSubDepartmentByParentId(String parentId) throws Exception {
-		return (List<Department>) dao.findForList("DepartmentMapper.listSubDepartmentByParentId", parentId);
+	public List<Organization> listSubOrganizationByParentId(String parentId) throws Exception {
+		return (List<Organization>) dao.findForList("OrganizationMapper.listSubOrganizationByParentId", parentId);
+	}
+	
+	/**新增
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void save(PageData pd)throws Exception{
+		dao.save("OrganizationMapper.save", pd);
+	}
+	
+	/**修改
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void edit(PageData pd)throws Exception{
+		dao.update("OrganizationMapper.edit", pd);
+	}
+	
+	/**删除
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void delete(PageData pd)throws Exception{
+		dao.delete("OrganizationMapper.delete", pd);
+	}
+	
+	/**通过编码获取数据
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findByBianma(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("OrganizationMapper.findByBianma", pd);
 	}
 }
