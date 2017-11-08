@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UsergroupMapper">
+	
+	<!--关联表名 -->
+	<sql id="tableName">
+		t_usergroup
+	</sql>
+	
+	<!--用户组角色关联表名 -->
+	<sql id="usergrouproletableName">
+		t_usergroup_role_map
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,	
+		<include refid="Field_main"></include>,<include refid="Field_time"></include>
+	</sql>
+	
+	<sql id="Field_main">
+		name
+	</sql>
+	
+	<sql id="Field_time">
+		gmt_create,
+		gmt_modified
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},	
+		<include refid="FieldValue_main"></include>,<include refid="FieldValue_time"></include>
+	</sql>
+		
+	<!-- 字段值 -->
+	<sql id="FieldValue_main">	
+		#{name}
+	</sql>
+	
+	<sql id="FieldValue_time">	
+		#{gmt_create},
+		#{gmt_modified}
+	</sql>
+	
+	<!-- 用户组角色关联表字段 -->
+	<sql id="usergrouproleField">
+		id,	
+		usergroup_id,
+		role_id,
+		gmt_create,
+		gmt_modified
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field_main"></include>
+		) values (
+	<include refid="FieldValue_main"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			name = #{name}
+		where 
+		id = #{id}
+	</update>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where
+			1=1
+		<if test="pd.id!= null and pd.id != ''"><!-- 检索 -->
+		and id = #{pd.id}
+		</if>
+		<if test="pd.name != null and pd.name != ''"><!-- 关键词检索 -->
+			and
+				(
+				 name LIKE CONCAT(CONCAT('%', #{pd.name}),'%')
+				)
+		</if>
+		order by gmt_modified desc
+	</select>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+</mapper>

@@ -16,6 +16,9 @@
 		<typeAlias type="com.fh.entity.system.Dictionaries" alias="Dictionaries"/>
 		<typeAlias type="com.fh.entity.system.Department" alias="Department"/>
 		
+		
+		<typeAlias type="com.cmp.entity.Organization" alias="Organization"/>
+		<typeAlias type="com.cmp.entity.UserGroup" alias="UserGroup"/>
 		<!-- 这里添加生成的实体类 -->
 		
 		
