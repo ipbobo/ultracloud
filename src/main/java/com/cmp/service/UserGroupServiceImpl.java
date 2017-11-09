@@ -28,7 +28,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 	/**
 	 * 新增
 	 */
-	@Override
 	public void save(PageData pd) throws Exception {
 		dao.save("UsergroupMapper.save", pd);
 	}
@@ -36,7 +35,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 	/**
 	 * 删除
 	 */
-	@Override
 	public void delete(PageData pd) throws Exception {
 		dao.delete("UsergroupMapper.delete", pd);
 	}
@@ -52,7 +50,6 @@ public class UserGroupServiceImpl implements UserGroupService {
 	/**
 	 * 修改
 	 */
-	@Override
 	public void edit(PageData pd) throws Exception {
 		dao.update("UsergroupMapper.edit", pd);
 	}

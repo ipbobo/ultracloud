@@ -62,7 +62,7 @@ public class DocumentController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("user_id", Jurisdiction.getUsername()); // 上传者
+		pd.put("username", Jurisdiction.getUsername()); // 上传者
 		pd.put("filesize", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("url"))); // 文件大小
 		documentService.save(pd);
 		mv.addObject("msg", "success");

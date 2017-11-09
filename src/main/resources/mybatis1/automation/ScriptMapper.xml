@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="DocumentMapper">
+<mapper namespace="ScriptMapper">
 	
 	<!--表名 -->
 	<sql id="tableName">
-		t_document
+		t_script
 	</sql>
 	
 	<!-- 字段 -->
@@ -15,10 +15,12 @@
 	
 	<sql id="Field_main">
 		name,
+		type,
+		script_key,
+		purpose,
+		username,
 		url,
-		filesize,
-		detail,
-		username
+		medium_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -35,10 +37,12 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
 		#{name},
+		#{type},
+		#{script_key},
+		#{purpose},
+		#{username},
 		#{url},
-		#{filesize},
-		#{detail},
-		#{username}
+		#{medium_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -71,10 +75,12 @@
 		<include refid="tableName"></include>
 		set 
 			name = #{name},
+			type = #{type},
+			script_key = #{script_key},
+			purpose = #{purpose},
+			username = #{username},
 			url = #{url},
-			filesize = #{filesize},
-			detail = #{detail},
-			username = #{username}
+			medium_id = #{medium_id}
 		where 
 		id = #{id}
 	</update>
