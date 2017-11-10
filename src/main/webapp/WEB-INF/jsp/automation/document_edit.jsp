@@ -51,7 +51,7 @@
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">备注:</td>
-								<td><input type="text" name="desc" id="desc" value="" maxlength="100" placeholder="这里输入备注" title="备注" style="width:98%;"/></td>
+								<td><input type="text" name="detail" id="detail" value="" maxlength="100" placeholder="这里输入备注" title="备注" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
@@ -107,14 +107,14 @@
 			    });
 			return false;
 			}
-			if($("#describe").val()==""){
-				$("#describe").tips({
+			if($("#detail").val()==""){
+				$("#detail").tips({
 					side:3,
 		            msg:'请输入备注',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#describe").focus();
+				$("#detail").focus();
 			return false;
 			}
 			$('#uploadify1').uploadifyUpload();

@@ -265,7 +265,7 @@ CREATE TABLE `t_mirror_template_map` (
 DROP TABLE IF EXISTS `t_workorder`;
 CREATE TABLE `t_workorder` (
   `id` bigint unsigned NOT NULL,
-  `user_id` bigint unsigned NOT NULL COMMENT '申请者id',
+  `username` varchar(40) NOT NULL COMMENT '申请者id',
   `status` tinyint unsigned NOT NULL COMMENT '状态',
   `areacode` varchar(20) DEFAULT NULL COMMENT '地域',
   `name` varchar(20) NOT NULL COMMENT '名称',
@@ -281,7 +281,7 @@ CREATE TABLE `t_workorder` (
   `duedate` datetime DEFAULT NULL COMMENT '到期时间',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_user_id(`user_id`),
+  INDEX idx_username(`username`),
   INDEX idx_status(`status`),
   PRIMARY KEY (`id`)
 
@@ -294,7 +294,7 @@ CREATE TABLE `t_workorder` (
 DROP TABLE IF EXISTS `t_order`;
 CREATE TABLE `t_order` (
   `id` bigint unsigned NOT NULL,
-  `user_id` bigint unsigned NOT NULL COMMENT '申请者id',
+  `username` varchar(40) NOT NULL COMMENT '申请者id',
   `status` tinyint unsigned NOT NULL COMMENT '状态',
   `areacode` varchar(20) DEFAULT NULL COMMENT '地域',
   `name` varchar(20) NOT NULL COMMENT '名称',
@@ -310,7 +310,7 @@ CREATE TABLE `t_order` (
   `duedate` datetime DEFAULT NULL COMMENT '到期时间',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_user_id(`user_id`),
+  INDEX idx_username(`username`),
   INDEX idx_status(`status`),
   PRIMARY KEY (`id`)
 
@@ -328,7 +328,7 @@ CREATE TABLE `t_project` (
   `level` varchar(5) DEFAULT NULL COMMENT '项目等级',
   `parent_id` bigint unsigned NOT NULL COMMENT '父项目id',
   `powergroup_id` bigint unsigned NOT NULL COMMENT '项目所归属的组织',
-  `poweruser_id` bigint unsigned NOT NULL COMMENT '负责人',
+  `power_username` bigint unsigned NOT NULL COMMENT '负责人',
   `auditrole_id` bigint unsigned NOT NULL COMMENT '审核角色id',
   `detail` varchar(500) DEFAULT NULL COMMENT '描述',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -336,7 +336,7 @@ CREATE TABLE `t_project` (
   INDEX idx_level(`level`),
   INDEX idx_parent_idd(`parent_id`),
   INDEX idx_powergroup_id(`powergroup_id`),
-  INDEX idx_poweruser_id(`poweruser_id`),
+  INDEX idx_power_username(`power_username`),
   INDEX idx_auditrole_id(`auditrole_id`),
   PRIMARY KEY (`id`)
 
@@ -350,16 +350,17 @@ DROP TABLE IF EXISTS `t_script`;
 CREATE TABLE `t_script` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '脚本名称',
-  `type` tinyint unsigned NOT NULL COMMENT '脚本类型',
+  `type` varchar(20) NOT NULL COMMENT '脚本类型',
   `script_key` varchar(10) DEFAULT NULL COMMENT '脚本key',
   `purpose` varchar(20) DEFAULT NULL COMMENT '用途',
-  `user_id` bigint unsigned NOT NULL COMMENT '创建者id',
+  `username` varchar(40) NOT NULL COMMENT '创建者',
   `url` varchar(1000) DEFAULT NULL COMMENT '路径',
   `medium_id` bigint unsigned NOT NULL COMMENT '关联介质id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   INDEX idx_type(`type`),
   INDEX idx_medium_id(`medium_id`),
+  INDEX idx_username(`username`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='脚本'; 
@@ -393,11 +394,11 @@ CREATE TABLE `t_medium` (
   `name` varchar(20) NOT NULL COMMENT '介质名称',
   `purpose` varchar(20) DEFAULT NULL COMMENT '用途',
   `url` varchar(1000) DEFAULT NULL COMMENT '路径',
-  `user_id` bigint unsigned NOT NULL COMMENT '创建者id',
+  `username` varchar(40) NOT NULL COMMENT '创建者',
   `detail` varchar(500) DEFAULT NULL COMMENT '描述',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_user_id(`user_id`),
+  INDEX idx_username(`username`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='介质'; 
@@ -410,13 +411,13 @@ DROP TABLE IF EXISTS `t_document`;
 CREATE TABLE `t_document` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
-  `url` varchar(1000) DEFAULT NULL COMMENT '路径',
-  `size` int unsigned NOT NULL COMMENT '大小',
+  `url` varchar(1000) NOT NULL COMMENT '路径',
+  `filesize` varchar(20) NOT NULL COMMENT '大小',
   `detail` varchar(2000) DEFAULT NULL COMMENT '备注',
-  `user_id` bigint unsigned NOT NULL COMMENT '创建者id',
+  `username` varchar(40) NOT NULL COMMENT '创建者',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_user_id(`user_id`),
+  INDEX idx_username(`username`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='安装文档'; 
@@ -428,7 +429,7 @@ CREATE TABLE `t_document` (
 DROP TABLE IF EXISTS `t_system_log`;
 create table `t_system_log` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint unsigned NOT NULL COMMENT '操作者id',
+  `username` varchar(40) NOT NULL COMMENT '操作者',
   `type` tinyint unsigned NOT NULL COMMENT '操作类型',
   `opt_object` varchar(20) NOT NULL COMMENT '操作对象',
   `opt_status` tinyint unsigned NOT NULL COMMENT '操作状态',
@@ -436,7 +437,7 @@ create table `t_system_log` (
   `detail` varchar(2000) DEFAULT NULL COMMENT '操作详细描述',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_user_id(`user_id`),
+  INDEX idx_username(`username`),
   INDEX idx_type(`type`),
   INDEX idx_opt_object(`opt_object`),
   INDEX idx_opt_status(`opt_status`),

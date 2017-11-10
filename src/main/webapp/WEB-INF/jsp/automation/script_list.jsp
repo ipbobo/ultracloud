@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -13,20 +12,8 @@
 <html lang="en">
 <head>
 <base href="<%=basePath%>">
-<!-- 下拉框 -->
-<link rel="stylesheet" href="static/ace/css/chosen.css" />
 <!-- jsp文件头和头部 -->
 <%@ include file="../system/index/top.jsp"%>
-<!-- 日期框 -->
-<link rel="stylesheet" href="static/ace/css/datepicker.css" />
-<style type="text/css">
-.yulantu{
-	z-index: 9999999999999999;
-	position:absolute;
-	border:3px solid #438EB9;
-	display: none;
-}
-</style>
 </head>
 <body class="no-skin">
 
@@ -40,7 +27,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="document/list.do" method="post" name="Form" id="Form">
+						<form action="script/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
@@ -65,11 +52,14 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">文件名</th>
-									<th class="center">上传者</th>
-									<th class="center">备注</th>
-									<th class="center">上传时间</th>
-									<th class="center">文件大小</th>
+									<th class="center">名称</th>
+									<th class="center">类型</th>
+									<th class="center">脚本key</th>
+									<th class="center">用途</th>
+									<th class="center">创建者</th>
+									<th class="center">路径</th>
+									<th class="center">关联介质id</th>
+									<th class="center">创建时间</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -85,27 +75,26 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
+											<td class='center'>${var.name}</td>
 											<td class='center'>
-												<img style="margin-top: -3px;" alt="${var.NAME}" src="static/images/extension/${var.fileType}.png">
-												${var.name}${fn:substring(var.url ,19,fn:length(var.url))}
-												&nbsp;
-												<c:if test="${var.fileType == 'tupian' }"><a style="cursor:pointer;" onmouseover="showTU('uploadFiles/uploadFile/${var.url}','yulantu${vs.index+1}');" onmouseout="hideTU('yulantu${vs.index+1}');">[预览]</a></c:if>
-												<c:if test="${var.fileType == 'pdf' }"><a style="cursor:pointer;" onclick="goViewPdf('${var.name}${fn:substring(var.url ,19,fn:length(var.url))}','${var.id}');">[预览]</a></c:if>
-												<c:if test="${var.fileType == 'wenben' }"><a style="cursor:pointer;" onclick="goViewTxt('${var.name}${fn:substring(var.url ,19,fn:length(var.url))}','${var.id}','gbk');">[预览]</a></c:if>
-												<div class="yulantu" id="yulantu${vs.index+1}"></div>
+												<c:if test="${var.type == '0' }">安装软件</c:if>
+												<c:if test="${var.type == '1' }">创建帐号</c:if>
+												<c:if test="${var.type == '2' }">批处理</c:if>
 											</td>
-											<td class='center'>${var.user_id}-${var.zindex }</td>
-											<td class='center'>${var.detail}</td>
-											<td class='center' style="width:150px;">${var.gmt_modified}</td>
-											<td class='center' style="width:100px;">${var.filesize}&nbsp;KB</td>
-											<td class="center" style="width:150px;">
+											<td class='center'>${var.script_key}</td>
+											<td class='center'>${var.purpose}</td>
+											<td class='center'>${var.username}</td>
+											<td class='center'  style="width: 200px;">${var.url}</td>
+											<td class='center'>${var.medium_id}</td>
+											<td class='center' style="width: 170px;">${var.gmt_create}</td>
+											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="下载" onclick="window.location.href='<%=basePath%>/document/download.do?id=${var.id}'">
-														<i class="ace-icon fa fa-cloud-download bigger-120" title="下载"></i>
+													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
+														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
 													</a>
 													</c:if>
 													<c:if test="${QX.del == 1 }">
@@ -123,9 +112,9 @@
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 															<c:if test="${QX.edit == 1 }">
 															<li>
-																<a style="cursor:pointer;" onclick="window.location.href='<%=basePath%>/document/download.do?id=${var.id}'" class="tooltip-success" data-rel="tooltip" title="下载">
+																<a style="cursor:pointer;" onclick="edit('${var.id}');" class="tooltip-success" data-rel="tooltip" title="修改">
 																	<span class="green">
-																		<i class="ace-icon fa fa-cloud-download bigger-120"></i>
+																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																	</span>
 																</a>
 															</li>
@@ -166,10 +155,10 @@
 							<tr>
 								<td style="vertical-align:top;">
 									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
+									<a class="btn btn-sm btn-success" onclick="add();">新增</a>
 									</c:if>
 									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
+									<a class="btn btn-sm btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -203,8 +192,6 @@
 	<script src="static/ace/js/bootbox.js"></script>
 	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
-	<!-- 下拉框 -->
-	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
@@ -215,7 +202,6 @@
 			$("#Form").submit();
 		}
 		$(function() {
-			
 			//复选框全选控制
 			var active_class = 'active';
 			$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
@@ -234,12 +220,9 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>document/goAdd.do';
-			 diag.Width = 460;
-			 diag.Height = 290;
-			 diag.Modal = true;				//有无遮罩窗口
-			 diag. ShowMaxButton = true;	//最大化按钮
-		     diag.ShowMinButton = true;		//最小化按钮
+			 diag.URL = '<%=basePath%>script/goAdd.do';
+			 diag.Width = 450;
+			 diag.Height = 375;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
@@ -254,61 +237,35 @@
 			 diag.show();
 		}
 		
-		//预览pdf
-		function goViewPdf(fileName,Id){
-			var diag = new top.Dialog();
-			diag.Drag=true;
-			diag.Title =fileName;
-			diag.URL = '<%=basePath%>document/goViewPdf.do?id='+Id;
-			diag.Width = 1000;
-			diag.Height = 600;
-			diag.Modal = false;				//有无遮罩窗口
-			diag. ShowMaxButton = true;		//最大化按钮
-			diag.ShowMinButton = true;		//最小化按钮
-			diag.CancelEvent = function(){ 	//关闭事件
-			diag.close();
-			};
-			diag.show();
-		}
-		
-		//预览txt,java,php,等文本文件页面
-		function goViewTxt(fileName,Id,encoding){
-			var diag = new top.Dialog();
-			diag.Drag=true;
-			diag.Title =fileName;
-			diag.URL = '<%=basePath%>document/goViewTxt.do?id='+Id+'&encoding='+encoding;
-			diag.Width = 1000;
-			diag.Height = 608;
-			diag.Modal = false;				//有无遮罩窗口
-			diag.ShowMinButton = true;		//最小化按钮
-			diag.CancelEvent = function(){ 	//关闭事件
-			diag.close();
-			};
-			diag.show();
-		}
-		
-		//显示图片
-		function showTU(path,TPID){
-			 $("#"+TPID).html('<img width="300" src="'+path+'">');
-			 $("#"+TPID).show();
-		}
-		
-		//隐藏图片
-		function hideTU(TPID){
-			 $("#"+TPID).hide();
-		}
-		
 		//删除
 		function del(Id){
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>document/delete.do?id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>script/delete.do?id="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						nextPage(${page.currentPage});
 					});
 				}
 			});
+		}
+		
+		//修改
+		function edit(Id){
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="编辑";
+			 diag.URL = '<%=basePath%>script/goEdit.do?id='+Id;
+			 diag.Width = 450;
+			 diag.Height = 375;
+			 diag.CancelEvent = function(){ //关闭事件
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 nextPage(${page.currentPage});
+				}
+				diag.close();
+			 };
+			 diag.show();
 		}
 		
 		//批量操作
@@ -320,7 +277,7 @@
 					  if(document.getElementsByName('ids')[i].checked){
 					  	if(str=='') str += document.getElementsByName('ids')[i].value;
 					  	else str += ',' + document.getElementsByName('ids')[i].value;
-					  };
+					  }
 					}
 					if(str==''){
 						bootbox.dialog({
@@ -340,7 +297,7 @@
 							top.jzts();
 							$.ajax({
 								type: "POST",
-								url: '<%=basePath%>document/deleteAll.do?tm='+new Date().getTime(),
+								url: '<%=basePath%>script/deleteAll.do?tm='+new Date().getTime(),
 						    	data: {DATA_IDS:str},
 								dataType:'json',
 								//beforeSend: validateData,
@@ -352,8 +309,8 @@
 								}
 							});
 						}
-					};
-				};
+					}
+				}
 			});
 		};
 		
