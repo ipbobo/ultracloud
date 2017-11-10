@@ -10,3 +10,5 @@ source ./db/activiti.mysql.drop.identity.sql
 source ./db/activiti.mysql.create.engine.sql
 source ./db/activiti.mysql.create.history.sql
 source ./db/activiti.mysql.create.identity.sql
+source ./db/db_init.sql
+source ./db/db_install.sql
