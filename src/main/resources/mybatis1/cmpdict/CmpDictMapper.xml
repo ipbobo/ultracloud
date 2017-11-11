@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CmpDictMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		cmp_dict
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="fieldName">
+		id,
+		createTime,
+		lastUpdateTime,
+		dictType,
+		dictCode,
+		dictValue,
+		dictDesc,
+		dictOrder
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="fieldValue">
+		#{id},
+		#{createTime},
+		#{lastUpdateTime},
+		#{dictType},
+		#{dictCode},
+		#{dictValue},
+		#{dictDesc},
+		#{dictOrder}
+	</sql>
+	
+	<!-- 数据字典列表查询resultType及resultMap互斥： -->
+	<select id="getCmpDictList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+	</select>
+</mapper>
