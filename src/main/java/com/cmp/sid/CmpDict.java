@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.data.annotation.Transient;
 
 //数据字典
-public class CmpDict {
+public class CmpDict implements Comparable<CmpDict> {
 	@Transient
 	private static final long serialVersionUID = 1L;
 	protected Long id;//ID
@@ -17,6 +17,17 @@ public class CmpDict {
 	private String dictDesc;//字典描述
 	private int dictOrder;//字典顺序
 
+	@Override
+	public int compareTo(CmpDict obj) {
+		if (this.getDictOrder() < obj.getDictOrder()) {
+			return 1;
+		} else if (this.getDictOrder() > obj.getDictOrder()) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+	
 	public Long getId() {
 		return id;
 	}

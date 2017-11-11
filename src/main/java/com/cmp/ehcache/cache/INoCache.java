@@ -1,4 +1,4 @@
 package com.cmp.ehcache.cache;
 
-public interface INotCacheable {
+public interface INoCache {
 }

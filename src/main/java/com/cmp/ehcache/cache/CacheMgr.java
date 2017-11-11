@@ -53,7 +53,7 @@ public class CacheMgr {
 
 	public void addEntity(Object id, Object entity) throws Exception {
 		CacheException.asserts((id != null) && (entity != null), "添加的实体和主键值不可为NULL:" + entity.getClass().getName());
-		if (entity instanceof INotCacheable) {//该实体类不需缓存
+		if (entity instanceof INoCache) {//该实体类不需缓存
 			return;
 		}
 		
@@ -71,7 +71,7 @@ public class CacheMgr {
 		}
 		
 		boolean removed = false;
-		if (!(entity instanceof INotCacheable)) {
+		if (!(entity instanceof INoCache)) {
 			removed = cacheOperMgr.removeEntity(entityClass, entityKey);
 		}
 		

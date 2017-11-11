@@ -1,5 +1,6 @@
 package com.cmp.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -14,7 +15,9 @@ public class CmpDictService extends AbstractDao<CmpDict, Long> {
 
 	public List<CmpDict> getCmpDictList(String dictType) {
 		try {
-			return getCacheQuery().eq("dictType", dictType).getList();
+			List<CmpDict> cmpDictList=getCacheQuery().eq("dictType", dictType).getList();
+			Collections.sort(cmpDictList);//排序
+			return cmpDictList;
 		} catch (Exception e) {
 			logger.error("获取数据字典列表时错误："+e);
 			return null;
