@@ -7,7 +7,7 @@ CREATE TABLE `cmp_dict` (
   `dictCode` varchar(30) NOT NULL COMMENT '字典项代码，编号规则一般是99项之内用01，02....，超出99项的又是小于999项用001，002.....来命名,以此类推',
   `dictValue` varchar(200) NOT NULL COMMENT '字典值，是字典项代码对应的字典内容，如项目储备（字典项01对应的中文解释），项目立项（字典项02对应的中文解释）',
   `dictDesc` varchar(60) DEFAULT NULL COMMENT '字典描述',
-  `dictDefault` varchar(1) DEFAULT '0' COMMENT '是否默认：0-否；1是',
+  `dictDefault` varchar(1) DEFAULT '0' COMMENT '是否默认：0-否；1-是',
   `dictOrder` int(10) DEFAULT '0' COMMENT '字典顺序',
   PRIMARY KEY (`id`),
   UNIQUE KEY `indx_cmp_dict_dd` (`dictType`,`dictCode`)
