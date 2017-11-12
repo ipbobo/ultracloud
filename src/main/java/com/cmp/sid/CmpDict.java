@@ -20,9 +20,9 @@ public class CmpDict implements Comparable<CmpDict> {
 
 	@Override
 	public int compareTo(CmpDict obj) {
-		if (this.getDictOrder() < obj.getDictOrder()) {
+		if (this.getDictOrder() > obj.getDictOrder()) {
 			return 1;
-		} else if (this.getDictOrder() > obj.getDictOrder()) {
+		} else if (this.getDictOrder() < obj.getDictOrder()) {
 			return -1;
 		} else {
 			return 0;
