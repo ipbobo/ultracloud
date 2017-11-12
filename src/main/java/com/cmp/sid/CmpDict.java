@@ -15,6 +15,7 @@ public class CmpDict implements Comparable<CmpDict> {
 	private String dictCode;//字典项代码，编号规则一般是99项之内用01，02....，超出99项的又是小于999项用001，002.....来命名,以此类推
 	private String dictValue;//字典值，是字典项代码对应的字典内容，如项目储备（字典项01对应的中文解释），项目立项（字典项02对应的中文解释）
 	private String dictDesc;//字典描述
+	private String dictDefault;//是否默认：0-否；1是
 	private int dictOrder;//字典顺序
 
 	@Override
@@ -84,6 +85,14 @@ public class CmpDict implements Comparable<CmpDict> {
 		this.dictDesc = dictDesc;
 	}
 
+	public String getDictDefault() {
+		return dictDefault;
+	}
+
+	public void setDictDefault(String dictDefault) {
+		this.dictDefault = dictDefault;
+	}
+	
 	public int getDictOrder() {
 		return dictOrder;
 	}
