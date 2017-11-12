@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.entity.Medium;
+import com.cmp.service.MediumService;
 import com.cmp.service.ScriptService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
@@ -31,6 +33,9 @@ public class ScriptController extends BaseController {
 	
 	@Resource(name="scriptService")
 	private ScriptService scriptService;
+	
+	@Resource(name="mediumService")
+	private MediumService mediumService;
 	
 	/**保存
 	 * @param
@@ -115,6 +120,12 @@ public class ScriptController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
+		List<Medium> mediumList = mediumService.listAllMediumByPId(pd);
+		mv.addObject("mediumList", mediumList);
 		mv.setViewName("automation/script_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
@@ -130,7 +141,13 @@ public class ScriptController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
 		pd = scriptService.findById(pd);	//根据ID读取
+		List<Medium> mediumList = mediumService.listAllMediumByPId(pd);
+		mv.addObject("mediumList", mediumList);
 		mv.setViewName("automation/script_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

@@ -55,7 +55,14 @@
 							</tr>
 							<tr>
 								<td style="width:79px;text-align: right;padding-top: 13px;">关联介质:</td>
-								<td><input type="text" name="medium_id" id="medium_id" value="${pd.medium_id}" maxlength="30" placeholder="这里输入关联介质id" title="关联介质id" style="width:98%;"/></td>
+								<td id="js">
+									<select class="chosen-select form-control" name="medium_id" id="medium_id" data-placeholder="请选择介质" style="vertical-align:top;"  title="介质" style="width:98%;" >
+									<option value=""></option>
+									<c:forEach items="${mediumList}" var="medium">
+										<option value="${medium.id }" <c:if test="${medium.id == pd.medium_id }">selected</c:if>>${medium.name }</option>
+									</c:forEach>
+									</select>
+								</td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">

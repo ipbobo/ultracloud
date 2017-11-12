@@ -37,10 +37,10 @@
 	</logger>
 
 	<logger name="org.mybatis.spring">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 	<logger name="java.sql">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 	<!-- Root Logger -->
 	<root>

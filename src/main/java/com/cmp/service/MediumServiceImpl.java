@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.entity.Medium;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -91,6 +92,11 @@ public class MediumServiceImpl implements MediumService {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("MediumMapper.deleteAll", ArrayDATA_IDS);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Medium> listAllMediumByPId(PageData pd) throws Exception {
+		return (List<Medium>) dao.findForList("MediumMapper.listAllMediumByPId", pd);
 	}
 
 }

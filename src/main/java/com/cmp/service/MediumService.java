@@ -1,6 +1,8 @@
 package com.cmp.service;
 
 import java.util.List;
+
+import com.cmp.entity.Medium;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -66,5 +68,13 @@ public interface MediumService {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
+
+	/**
+	 * 查询出所有符合条件的列表
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Medium> listAllMediumByPId(PageData pd) throws Exception;
 
 }
