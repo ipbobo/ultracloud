@@ -13,3 +13,4 @@ source ./db/activiti.mysql.create.identity.sql
 source ./db/db_init.sql
 source ./db/db_install.sql
 source ./db/cmp_dict.sql
+source ./db/insertdata.sql
