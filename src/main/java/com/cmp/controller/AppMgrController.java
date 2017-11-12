@@ -24,7 +24,7 @@ public class AppMgrController extends BaseController {
 		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("platTypeList", platTypeList);//数据字典列表
-		mv.setViewName("appmgr/appmgr_qry_input");
+		mv.setViewName("appmgr/resapp_qry_input");
 		return mv;
 	}
 }
