@@ -27,7 +27,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="script/list.do" method="post" name="Form" id="Form">
+						<form action="medium/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
@@ -53,13 +53,11 @@
 									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">名称</th>
-									<th class="center">类型</th>
-									<th class="center">脚本key</th>
 									<th class="center">用途</th>
 									<th class="center">创建者</th>
 									<th class="center">路径</th>
-									<th class="center">关联介质</th>
 									<th class="center">创建时间</th>
+									<th class="center">描述</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -76,17 +74,11 @@
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
-											<td class='center'>
-												<c:if test="${var.type == '0' }">安装软件</c:if>
-												<c:if test="${var.type == '1' }">创建帐号</c:if>
-												<c:if test="${var.type == '2' }">批处理</c:if>
-											</td>
-											<td class='center'>${var.script_key}</td>
 											<td class='center'>${var.purpose}</td>
 											<td class='center'>${var.username}</td>
 											<td class='center'  style="width: 200px;">${var.url}</td>
-											<td class='center'>${var.medium_name}</td>
 											<td class='center' style="width: 170px;">${var.gmt_create}</td>
+											<td class='center'>${var.detail}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
@@ -220,7 +212,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>script/goAdd.do';
+			 diag.URL = '<%=basePath%>medium/goAdd.do';
 			 diag.Width = 450;
 			 diag.Height = 375;
 			 diag.CancelEvent = function(){ //关闭事件
@@ -242,7 +234,7 @@
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>script/delete.do?id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>medium/delete.do?id="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						nextPage(${page.currentPage});
 					});
@@ -256,7 +248,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>script/goEdit.do?id='+Id;
+			 diag.URL = '<%=basePath%>medium/goEdit.do?id='+Id;
 			 diag.Width = 450;
 			 diag.Height = 375;
 			 diag.CancelEvent = function(){ //关闭事件
@@ -297,7 +289,7 @@
 							top.jzts();
 							$.ajax({
 								type: "POST",
-								url: '<%=basePath%>script/deleteAll.do?tm='+new Date().getTime(),
+								url: '<%=basePath%>medium/deleteAll.do?tm='+new Date().getTime(),
 						    	data: {DATA_IDS:str},
 								dataType:'json',
 								//beforeSend: validateData,

@@ -19,6 +19,7 @@
 		
 		<typeAlias type="com.cmp.entity.Organization" alias="Organization"/>
 		<typeAlias type="com.cmp.entity.UserGroup" alias="UserGroup"/>
+		<typeAlias type="com.cmp.entity.Medium" alias="Medium"/>
 		<!-- 这里添加生成的实体类 -->
 		
 		

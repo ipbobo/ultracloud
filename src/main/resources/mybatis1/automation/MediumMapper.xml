@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="ScriptMapper">
+<mapper namespace="MediumMapper">
+	
+	<resultMap type="Medium" id="mediumResultMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="purpose" property="purpose"/>
+		<result column="url" property="url"/>
+		<result column="username" property="username"/>
+		<result column="detail" property="detail"/>
+		<result column="gmt_create" property="gmt_create"/>
+		<result column="gmt_modified" property="gmt_modified"/>
+	</resultMap>
 	
 	<!--表名 -->
 	<sql id="tableName">
-		t_script
-	</sql>
-	<sql id="mediumtableName">
 		t_medium
 	</sql>
 	
@@ -18,12 +26,10 @@
 	
 	<sql id="Field_main">
 		name,
-		type,
-		script_key,
 		purpose,
 		username,
 		url,
-		medium_id
+		detail
 	</sql>
 	
 	<sql id="Field_time">
@@ -40,12 +46,10 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
 		#{name},
-		#{type},
-		#{script_key},
 		#{purpose},
 		#{username},
 		#{url},
-		#{medium_id}
+		#{detail}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -78,12 +82,10 @@
 		<include refid="tableName"></include>
 		set 
 			name = #{name},
-			type = #{type},
-			script_key = #{script_key},
 			purpose = #{purpose},
 			username = #{username},
 			url = #{url},
-			medium_id = #{medium_id}
+			detail = #{detail}
 		where 
 		id = #{id}
 	</update>
@@ -98,31 +100,22 @@
 			id = #{id}
 	</select>
 	
-	<!-- 用户列表 -->
-	<select id="datalistPage" parameterType="page" resultType="pd" >
-		select  s.id,
-				s.name,
-				s.type,
-				s.script_key,
-				s.purpose,
-				s.username,
-				s.url,
-				s.medium_id,
-				s.gmt_create,
-				s.gmt_modified,
-				m.name as medium_name
-		from <include refid="tableName"></include> s, <include refid="mediumtableName"></include> m 
-		where s.medium_id=m.id
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
-					s.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 				)
 		</if>
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
 			and id in ${pd.item}
 		</if>
-		order by s.gmt_modified desc
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -143,5 +136,14 @@
                  #{item}
 		</foreach>
 	</delete>
+	
+	<!-- 列出满足条件的所有介质 -->
+	<select id="listAllMediumByPId" resultMap="mediumResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		ORDER BY id
+	</select>
 	
 </mapper>

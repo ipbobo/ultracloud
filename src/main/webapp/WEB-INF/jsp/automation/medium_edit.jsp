@@ -23,27 +23,13 @@
 				<div class="row">
 					<div class="col-xs-12">
 					
-					<form action="script/${msg }.do" name="Form" id="Form" method="post">
+					<form action="medium/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td style="width:79px;text-align: right;padding-top: 13px;">名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">类型:</td>
-								<td>
-									<select name="type" title="类型">
-										<option value="2" <c:if test="${pd.type == '2' }">selected</c:if> >执行批处理</option>
-										<option value="1" <c:if test="${pd.type == '1' }">selected</c:if> >创建帐号</option>
-										<option value="0" <c:if test="${pd.type == '0' }">selected</c:if> >安装软件</option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">脚本key:</td>
-								<td><input type="text" name="script_key" id="script_key" value="${pd.script_key}" maxlength="30" placeholder="这里输入脚本key" title="脚本key" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:79px;text-align: right;padding-top: 13px;">用途:</td>
@@ -54,14 +40,9 @@
 								<td><input type="text" name="url" id="url" value="${pd.url}" maxlength="30" placeholder="这里输入路径" title="路径" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">关联介质:</td>
-								<td id="js">
-									<select class="chosen-select form-control" name="medium_id" id="medium_id" data-placeholder="请选择介质" style="vertical-align:top;"  title="介质" style="width:98%;" >
-									<option value=""></option>
-									<c:forEach items="${mediumList}" var="medium">
-										<option value="${medium.id }" <c:if test="${medium.id == pd.medium_id }">selected</c:if>>${medium.name }</option>
-									</c:forEach>
-									</select>
+								<td style="width:78px;height:130px;text-align: right;padding-top: 13px;">描述:</td>
+								<td >
+									<textarea rows="5" cols="10" id="detail" name="detail" style="width:98%;"></textarea>
 								</td>
 							</tr>
 							<tr>
@@ -110,16 +91,6 @@
 		            time:2
 		        });
 				$("#name").focus();
-			return false;
-			}
-			if($("#script_key").val()==""){
-				$("#script_key").tips({
-					side:3,
-		            msg:'请输入脚本key',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#script_key").focus();
 			return false;
 			}
 			if($("#purpose").val()==""){
