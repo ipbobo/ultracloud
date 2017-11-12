@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.ultracloud</groupId>
-	<artifactId>ultracloud</artifactId>
+	<groupId>com.cmp</groupId>
+	<artifactId>cmp</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ultracloud</name>
+	<name>cmp</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -503,10 +503,57 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/sun.misc.BASE64Decoder.jar</systemPath>
 		</dependency>
-
+		<!-- begin-actiiviti Jar包 -->
+	    <dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-engine</artifactId>
+			<version>5.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-spring</artifactId>
+			<version>5.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-explorer</artifactId>
+			<version>5.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-modeler</artifactId>
+			<version>5.22.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xalan</groupId>
+					<artifactId>xalan</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-diagram-rest</artifactId>
+			<version>5.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-simple-workflow</artifactId>
+			<version>5.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.7</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.uuid</groupId>
+		    <artifactId>java-uuid-generator</artifactId>
+		    <version>3.1.4</version>
+		</dependency>
+		<!-- end-actiiviti Jar包 -->
 	</dependencies>
 	<build>
-		<finalName>ultracloud</finalName>
+		<finalName>cmp</finalName>
 		<plugins>
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>

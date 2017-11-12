@@ -16,9 +16,9 @@
 	<sql id="Field_main">
 		name,
 		url,
-		size,
+		filesize,
 		detail,
-		user_id
+		username
 	</sql>
 	
 	<sql id="Field_time">
@@ -36,9 +36,9 @@
 	<sql id="FieldValue_main">	
 		#{name},
 		#{url},
-		#{size},
+		#{filesize},
 		#{detail},
-		#{user_id}
+		#{username}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -72,9 +72,9 @@
 		set 
 			name = #{name},
 			url = #{url},
-			size = #{size},
+			filesize = #{filesize},
 			detail = #{detail},
-			user_id = #{user_id}
+			username = #{username}
 		where 
 		id = #{id}
 	</update>

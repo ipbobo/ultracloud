@@ -62,6 +62,9 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<listener>
+		<listener-class>com.cmp.ehcache.listener.CacheListener</listener-class>
+	</listener>
 	
 	<servlet>
 		<servlet-name>springMvc</servlet-name>

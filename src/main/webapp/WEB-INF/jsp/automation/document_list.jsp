@@ -95,16 +95,16 @@
 												<div class="yulantu" id="yulantu${vs.index+1}"></div>
 											</td>
 											<td class='center'>${var.user_id}-${var.zindex }</td>
-											<td class='center'>${var.describe}</td>
+											<td class='center'>${var.detail}</td>
 											<td class='center' style="width:150px;">${var.gmt_modified}</td>
-											<td class='center' style="width:100px;">${var.size}&nbsp;KB</td>
+											<td class='center' style="width:100px;">${var.filesize}&nbsp;KB</td>
 											<td class="center" style="width:150px;">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="下载" onclick="window.location.href='<%=basePath%>/document/download.do?FHFILE_ID=${var.id}'">
+													<a class="btn btn-xs btn-success" title="下载" onclick="window.location.href='<%=basePath%>/document/download.do?id=${var.id}'">
 														<i class="ace-icon fa fa-cloud-download bigger-120" title="下载"></i>
 													</a>
 													</c:if>
@@ -234,7 +234,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>fhfile/goAdd.do';
+			 diag.URL = '<%=basePath%>document/goAdd.do';
 			 diag.Width = 460;
 			 diag.Height = 290;
 			 diag.Modal = true;				//有无遮罩窗口
