@@ -155,8 +155,24 @@ function editUserH(){
 	 jzts();
 	 var diag = new top.Dialog();
 	 diag.Drag=true;
-	 diag.Title ="个人资料";
+	 diag.Title ="用户设置";
 	 diag.URL = locat+'/user/goEditMyU.do';
+	 diag.Width = 469;
+	 diag.Height = 465;
+	 diag.CancelEvent = function(){ //关闭事件
+		diag.close();
+	 };
+	 diag.show();
+}
+
+
+//帮助
+function help(){
+	 jzts();
+	 var diag = new top.Dialog();
+	 diag.Drag=true;
+	 diag.Title ="帮助";
+	 diag.URL = locat+'/user/goHelp.do';
 	 diag.Width = 469;
 	 diag.Height = 465;
 	 diag.CancelEvent = function(){ //关闭事件

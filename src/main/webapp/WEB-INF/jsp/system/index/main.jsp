@@ -175,5 +175,33 @@
 		
 		<!--提示框-->
 		<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+		<!-- 动态查询个人任务 -->
+		<script type="text/javascript">
+		//查询任务
+		function queryPersonalTask(){
+			var usertaskList = new Array();
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				contentType: "application/json;charset=utf-8", 
+				url: '<%=basePath%>main/queryTasks.do?1=1',
+				cache: false,
+				success: function(data){
+					if (data.taskSize > 0){
+						$("#span_task_tital").html("目前的已经收到的任务是:");
+						$("#span_task_no").html(data.taskSize);
+						usertaskList = data.userTaskList;
+						for (var i = 0; i < usertaskList.length; i++) {
+							$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\">"+ usertaskList[i].taskName +"</li>" );
+						}
+					};
+				}
+			});
+		}
+		queryPersonalTask();
+		function goTask(taskId){
+			alert("去执行任务" + taskId);
+		}
+	</script>
 	</body>
 </html>
