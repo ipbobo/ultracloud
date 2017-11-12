@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cmp.service.ScriptService;
+import com.cmp.service.MediumService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
@@ -21,16 +21,16 @@ import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 
 /** 
- * 脚本 控制层
+ * 介质 控制层
  */
 @Controller
-@RequestMapping(value="/script")
-public class ScriptController extends BaseController {
+@RequestMapping(value="/medium")
+public class MediumController extends BaseController {
 	
-	String menuUrl = "script/list.do"; //菜单地址(权限用)
+	String menuUrl = "medium/list.do"; //菜单地址(权限用)
 	
-	@Resource(name="scriptService")
-	private ScriptService scriptService;
+	@Resource(name="mediumService")
+	private MediumService mediumService;
 	
 	/**保存
 	 * @param
@@ -38,13 +38,13 @@ public class ScriptController extends BaseController {
 	 */
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"新增Script");
+		logBefore(logger, Jurisdiction.getUsername()+"新增Medium");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("username", Jurisdiction.getUsername()); // 创建者
-		scriptService.save(pd);
+		mediumService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -56,11 +56,11 @@ public class ScriptController extends BaseController {
 	 */
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"删除Script");
+		logBefore(logger, Jurisdiction.getUsername()+"删除Medium");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		scriptService.delete(pd);
+		mediumService.delete(pd);
 		out.write("success");
 		out.close();
 	}
@@ -71,13 +71,13 @@ public class ScriptController extends BaseController {
 	 */
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"修改Script");
+		logBefore(logger, Jurisdiction.getUsername()+"修改Medium");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("username", Jurisdiction.getUsername()); // 创建者
-		scriptService.edit(pd);
+		mediumService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -89,7 +89,7 @@ public class ScriptController extends BaseController {
 	 */
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"列表Script");
+		logBefore(logger, Jurisdiction.getUsername()+"列表Medium");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -98,8 +98,8 @@ public class ScriptController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = scriptService.list(page);	//列出列表
-		mv.setViewName("automation/script_list");
+		List<PageData>	varList = mediumService.list(page);	//列出列表
+		mv.setViewName("automation/medium_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
@@ -115,7 +115,7 @@ public class ScriptController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		mv.setViewName("automation/script_edit");
+		mv.setViewName("automation/medium_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
 		return mv;
@@ -130,8 +130,8 @@ public class ScriptController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = scriptService.findById(pd);	//根据ID读取
-		mv.setViewName("automation/script_edit");
+		pd = mediumService.findById(pd);	//根据ID读取
+		mv.setViewName("automation/medium_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
@@ -144,7 +144,7 @@ public class ScriptController extends BaseController {
 	@RequestMapping(value="/deleteAll")
 	@ResponseBody
 	public Object deleteAll() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"批量删除Script");
+		logBefore(logger, Jurisdiction.getUsername()+"批量删除Medium");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -153,7 +153,7 @@ public class ScriptController extends BaseController {
 		String DATA_IDS = pd.getString("DATA_IDS");
 		if(null != DATA_IDS && !"".equals(DATA_IDS)){
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			scriptService.deleteAll(ArrayDATA_IDS);
+			mediumService.deleteAll(ArrayDATA_IDS);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");
