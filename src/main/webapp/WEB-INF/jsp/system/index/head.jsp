@@ -1,4 +1,6 @@
-﻿		<div id="navbar" class="navbar navbar-default">
+﻿	
+		
+		<div id="navbar" class="navbar navbar-default">
 			<script type="text/javascript">
 				try{ace.settings.check('navbar' , 'fixed');}catch(e){}
 			</script>
@@ -35,19 +37,13 @@
 						<li class="grey">
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 								<i class="ace-icon fa fa-tasks"></i>
-								<span class="badge badge-grey">2</span>
+								<span id="span_task_no" class="badge badge-grey"></span>
 							</a>
 
-							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+							<ul  id="ul_tasks" class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
 								<li class="dropdown-header">
 									<i class="ace-icon fa fa-check"></i>
-									预留功能,待开发
-								</li>
-								<li class="dropdown-footer">
-									<a href="javascript:">
-										预留功能,待开发
-										<i class="ace-icon fa fa-arrow-right"></i>
-									</a>
+									<span id="span_task_tital">目前无任务</span>
 								</li>
 							</ul>
 						</li>
@@ -84,13 +80,10 @@
 
 							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
-									<a onclick="editPhoto();" style="cursor:pointer;"><i class="ace-icon glyphicon glyphicon-picture"></i>修改头像</a><!-- editUserH()在 WebRoot\static\js\myjs\head.js中 -->
-								</li>
-								<li>
-									<a onclick="editUserH();" style="cursor:pointer;"><i class="ace-icon fa fa-user"></i>修改资料</a><!-- editUserH()在 WebRoot\static\js\myjs\head.js中 -->
+									<a onclick="editUserH();" style="cursor:pointer;"><i class="ace-icon fa fa-user"></i>用户设置</a><!-- editUserH()在 WebRoot\static\js\myjs\head.js中 -->
 								</li>
 								<li id="systemset">
-									<a onclick="editSys();" style="cursor:pointer;"><i class="ace-icon fa fa-cog"></i>系统设置</a><!-- editSys()在 WebRoot\static\js\myjs\head.js中 -->
+									<a onclick="help();" style="cursor:pointer;"><i class="ace-icon fa fa-cog"></i>帮助</a>
 								</li>
 								<li class="divider"></li>
 								<li>

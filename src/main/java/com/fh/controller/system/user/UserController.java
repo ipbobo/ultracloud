@@ -382,6 +382,20 @@ public class UserController extends BaseController {
 		return mv;
 	}
 	
+	
+	/**去帮助
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/goHelp")
+	public ModelAndView goHelp() throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		mv.setViewName("system/index/help");
+		return mv;
+	}
+	
 	/**查看用户
 	 * @return
 	 * @throws Exception

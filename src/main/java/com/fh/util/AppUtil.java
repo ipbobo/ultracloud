@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.map.util.JSONPObject;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+
 
 /** 接口参数校验
  * @author:	fh qq313596790[青苔]

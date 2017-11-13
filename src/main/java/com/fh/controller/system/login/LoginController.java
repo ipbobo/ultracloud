@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.activiti.bean.TaskBean;
+import com.cmp.activiti.service.ActivitiService;
+import com.cmp.util.Page;
 import com.fh.controller.base.BaseController;
 import com.fh.service.fhoa.datajur.DatajurManager;
 import com.fh.service.system.appuser.AppuserManager;
@@ -70,6 +73,8 @@ public class LoginController extends BaseController {
 	private FHlogManager FHLOG;
 	@Resource(name="loginimgService")
 	private LogInImgManager loginimgService;
+	@Resource(name="activitiService")
+	private ActivitiService activitiService;
 	
 	/**访问登录页
 	 * @return
@@ -204,6 +209,32 @@ public class LoginController extends BaseController {
 		pd.put("SYSNAME", Tools.readTxtFile(Const.SYSNAME)); //读取系统名称
 		mv.addObject("pd",pd);
 		return mv;
+	}
+	/**
+	 * 查询个人任务
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="/main/queryTasks")
+	@ResponseBody
+	public Object queryPersonalTask(String userId) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		String errInfo = "success";
+		Session session = Jurisdiction.getSession();
+		User userr = (User)session.getAttribute(Const.SESSION_USERROL);
+		//获取个人任务
+		Page<TaskBean> page= activitiService.getPersonalTaskList(userr.getUSER_ID(), 1, Const.MAX_PAGE_TASK-1);
+		List<TaskBean> tasks = page.getResults();
+		
+		//返回查询到的任务
+		if (tasks != null && tasks.size() > 0) {
+			map.put("userTaskList", tasks);
+			map.put("taskSize", tasks.size());
+		} else {
+			map.put("userTaskList", null);
+			map.put("taskSize", 0);
+		}
+		return map;
 	}
 	
 	/**菜单缓存
