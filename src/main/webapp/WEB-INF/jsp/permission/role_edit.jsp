@@ -10,7 +10,7 @@
 <head>
 <base href="<%=basePath%>">
 <!-- jsp文件头和头部 -->
-<%@ include file="../index/top.jsp"%>
+<%@ include file="../system/index/top.jsp"%>
 </head>
 <body class="no-skin">
 <!-- /section:basics/navbar.layout -->
@@ -55,7 +55,7 @@
 
 
 	<!-- 页面底部js¨ -->
-	<%@ include file="../index/foot.jsp"%>
+	<%@ include file="../system/index/foot.jsp"%>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
