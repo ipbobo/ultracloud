@@ -61,6 +61,10 @@
 		PHONE
 	</sql>
 	
+	<sql id="Field_new">
+		<include refid="Field"></include>,DEPARTMENT_ID   
+	</sql>
+	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
 		#{USER_ID},
@@ -77,6 +81,10 @@
 		#{EMAIL},
 		#{NUMBER},
 		#{PHONE}
+	</sql>
+	
+	<sql id="FieldValue_new">
+		<include refid="FieldValue"></include>,#{DEPARTMENT_ID}
 	</sql>
 	
 	<!-- 判断用户名和密码 -->
@@ -266,7 +274,7 @@
 	<!-- 通过user_id获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd" >
 		select 
-			<include refid="Field"></include>
+			<include refid="Field_new"></include>
 		from 
 			<include refid="tableName"></include>
 		where 
@@ -282,6 +290,15 @@
 		)
 	</insert>
 	
+	<!-- 新增用户(新) -->
+	<insert id="save" parameterType="pd" >
+		insert into <include refid="tableName"></include> (
+			<include refid="Field_new"></include>
+		) values (
+			<include refid="FieldValue_new"></include>
+		)
+	</insert>
+	
 	<!-- 修改 -->
 	<update id="editU" parameterType="pd" >
 		update  <include refid="tableName"></include>
@@ -291,6 +308,23 @@
 				EMAIL					= #{EMAIL},
 				NUMBER					= #{NUMBER},
 				PHONE					= #{PHONE}
+			<if test="PASSWORD != null and PASSWORD != ''">
+				,PASSWORD				= #{PASSWORD}
+			</if>
+			where 
+				USER_ID = #{USER_ID}
+	</update>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd" >
+		update  <include refid="tableName"></include>
+			set NAME 					= #{NAME},
+				ROLE_ID 				= #{ROLE_ID},
+				BZ						= #{BZ},
+				EMAIL					= #{EMAIL},
+				NUMBER					= #{NUMBER},
+				PHONE					= #{PHONE},
+				DEPARTMENT_ID 			= #{DEPARTMENT_ID}
 			<if test="PASSWORD != null and PASSWORD != ''">
 				,PASSWORD				= #{PASSWORD}
 			</if>

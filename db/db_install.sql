@@ -444,6 +444,23 @@ create table `t_system_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统日志'; 
 
+-- ----------------------------
+-- 组织机构
+-- ----------------------------
+DROP TABLE IF EXISTS `oa_department`;
+CREATE TABLE `oa_department` (
+  `DEPARTMENT_ID` varchar(100) NOT NULL,
+  `NAME` varchar(30) DEFAULT NULL COMMENT '名称',
+  `NAME_EN` varchar(50) DEFAULT NULL COMMENT '英文',
+  `BIANMA` varchar(50) DEFAULT NULL COMMENT '编码',
+  `PARENT_ID` varchar(100) DEFAULT NULL COMMENT '上级ID',
+  `BZ` varchar(255) DEFAULT NULL COMMENT '备注',
+  `HEADMAN` varchar(30) DEFAULT NULL COMMENT '负责人',
+  `TEL` varchar(50) DEFAULT NULL COMMENT '电话',
+  `FUNCTIONS` varchar(255) DEFAULT NULL COMMENT '部门职能',
+  `ADDRESS` varchar(255) DEFAULT NULL COMMENT '地址',
+  PRIMARY KEY (`DEPARTMENT_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='组织机构';
 
 -- ----------------------------
 -- 用户组
@@ -471,6 +488,31 @@ create table `t_usergroup_role_map` (
   UNIQUE INDEX uk_usergroup_role(`usergroup_id`,`role_id`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组与角色关联';
+
+-- ----------------------------
+-- 用户
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user`;
+CREATE TABLE `sys_user` (
+  `USER_ID` varchar(100) NOT NULL COMMENT '用户id',
+  `USERNAME` varchar(255) DEFAULT NULL COMMENT '登录名',
+  `PASSWORD` varchar(255) DEFAULT NULL COMMENT '密码',
+  `NAME` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `RIGHTS` varchar(255) DEFAULT NULL COMMENT '',
+  `ROLE_ID` varchar(100) DEFAULT NULL COMMENT '关联角色id',
+  `LAST_LOGIN` varchar(255) DEFAULT NULL COMMENT '最后登录时间',
+  `IP` varchar(100) DEFAULT NULL COMMENT '登录ip',
+  `STATUS` varchar(32) DEFAULT NULL COMMENT '状态',
+  `BZ` varchar(255) DEFAULT NULL COMMENT '备注',
+  `SKIN` varchar(100) DEFAULT NULL COMMENT '',
+  `EMAIL` varchar(32) DEFAULT NULL COMMENT '邮箱',
+  `NUMBER` varchar(100) DEFAULT NULL COMMENT '编号',
+  `PHONE` varchar(32) DEFAULT NULL COMMENT '手机号',
+  `DEPARTMENT_ID` varchar(100) NOT NULL COMMENT '所属部门id',
+  INDEX idx_role_id(`ROLE_ID`),
+  INDEX idx_department_id(`DEPARTMENT_ID`),
+  PRIMARY KEY (`USER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- 数据字典

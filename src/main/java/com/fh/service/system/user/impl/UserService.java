@@ -131,6 +131,14 @@ public class UserService implements UserManager{
 	public void saveU(PageData pd)throws Exception{
 		dao.save("UserMapper.saveU", pd);
 	}
+	
+	/**保存用户(新)
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void save(PageData pd)throws Exception{
+		dao.save("UserMapper.save", pd);
+	}
 	 
 	/**修改用户
 	 * @param pd
@@ -138,6 +146,14 @@ public class UserService implements UserManager{
 	 */
 	public void editU(PageData pd)throws Exception{
 		dao.update("UserMapper.editU", pd);
+	}
+	
+	/**修改用户(新)
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void edit(PageData pd)throws Exception{
+		dao.update("UserMapper.edit", pd);
 	}
 	
 	/**删除用户

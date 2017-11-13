@@ -94,11 +94,23 @@ public interface UserManager {
 	 */
 	public void editU(PageData pd)throws Exception;
 	
+	/**修改用户(新)
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void edit(PageData pd)throws Exception;
+	
 	/**保存用户
 	 * @param pd
 	 * @throws Exception
 	 */
 	public void saveU(PageData pd)throws Exception;
+	
+	/**保存用户(新)
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void save(PageData pd)throws Exception;
 	
 	/**删除用户
 	 * @param pd

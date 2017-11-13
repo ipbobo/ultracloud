@@ -12,6 +12,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.Role;
+import com.fh.service.fhoa.department.DepartmentManager;
 import com.fh.service.system.fhlog.FHlogManager;
 import com.fh.service.system.menu.MenuManager;
 import com.fh.service.system.role.RoleManager;
@@ -61,6 +64,8 @@ public class UserController extends BaseController {
 	private MenuManager menuService;
 	@Resource(name="fhlogService")
 	private FHlogManager FHLOG;
+	@Resource(name="departmentService")
+	private DepartmentManager departmentService;
 	
 	/**显示用户列表
 	 * @param page
@@ -89,6 +94,40 @@ public class UserController extends BaseController {
 		pd.put("ROLE_ID", "1");
 		List<Role> roleList = roleService.listAllRolesByPId(pd);//列出所有系统用户角色
 		mv.setViewName("system/user/user_list");
+		mv.addObject("userList", userList);
+		mv.addObject("roleList", roleList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		return mv;
+	}
+	
+	/**显示用户列表(新)
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/list")
+	public ModelAndView listUser(Page page)throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
+		String lastLoginStart = pd.getString("lastLoginStart");	//开始时间
+		String lastLoginEnd = pd.getString("lastLoginEnd");		//结束时间
+		if(lastLoginStart != null && !"".equals(lastLoginStart)){
+			pd.put("lastLoginStart", lastLoginStart+" 00:00:00");
+		}
+		if(lastLoginEnd != null && !"".equals(lastLoginEnd)){
+			pd.put("lastLoginEnd", lastLoginEnd+" 00:00:00");
+		} 
+		page.setPd(pd);
+		List<PageData>	userList = userService.listUsers(page);	//列出用户列表
+		pd.put("ROLE_ID", "1");
+		List<Role> roleList = roleService.listAllRolesByPId(pd);//列出所有系统用户角色
+		mv.setViewName("permission/user_list");
 		mv.addObject("userList", userList);
 		mv.addObject("roleList", roleList);
 		mv.addObject("pd", pd);
@@ -131,6 +170,28 @@ public class UserController extends BaseController {
 		return mv;
 	}
 	
+	/**去新增页面(新)
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/goAdd")
+	public ModelAndView goAdd()throws Exception{
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("ROLE_ID", "1");
+		List<Role> roleList = roleService.listAllRolesByPId(pd);//列出所有系统用户角色
+		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
+		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect(Jurisdiction.getDEPARTMENT_ID(),zdepartmentPdList));
+		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
+		mv.setViewName("permission/user_edit");
+		mv.addObject("msg", "save");
+		mv.addObject("pd", pd);
+		mv.addObject("roleList", roleList);
+		return mv;
+	}
+	
 	/**保存用户
 	 * @return
 	 * @throws Exception
@@ -151,6 +212,35 @@ public class UserController extends BaseController {
 		pd.put("PASSWORD", new SimpleHash("SHA-1", pd.getString("USERNAME"), pd.getString("PASSWORD")).toString());	//密码加密
 		if(null == userService.findByUsername(pd)){	//判断用户名是否存在
 			userService.saveU(pd); 					//执行保存
+			FHLOG.save(Jurisdiction.getUsername(), "新增系统用户："+pd.getString("USERNAME"));
+			mv.addObject("msg","success");
+		}else{
+			mv.addObject("msg","failed");
+		}
+		mv.setViewName("save_result");
+		return mv;
+	}
+	
+	/**保存用户(新)
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/save")
+	public ModelAndView save() throws Exception{
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		logBefore(logger, Jurisdiction.getUsername()+"新增user");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("USER_ID", this.get32UUID());	//ID 主键
+		pd.put("LAST_LOGIN", "");				//最后登录时间
+		pd.put("IP", "");						//IP
+		pd.put("STATUS", "0");					//状态
+		pd.put("SKIN", "default");
+		pd.put("RIGHTS", "");		
+		pd.put("PASSWORD", new SimpleHash("SHA-1", pd.getString("USERNAME"), pd.getString("PASSWORD")).toString());	//密码加密
+		if(null == userService.findByUsername(pd)){	//判断用户名是否存在
+			userService.save(pd); 					//执行保存
 			FHLOG.save(Jurisdiction.getUsername(), "新增系统用户："+pd.getString("USERNAME"));
 			mv.addObject("msg","success");
 		}else{
@@ -245,6 +335,32 @@ public class UserController extends BaseController {
 		return mv;
 	}
 	
+	/**去修改用户页面(新)
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/goEdit")
+	public ModelAndView goEdit() throws Exception{
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		if("1".equals(pd.getString("USER_ID"))){return null;}		//不能修改admin用户
+		pd.put("ROLE_ID", "1");
+		List<Role> roleList = roleService.listAllRolesByPId(pd);	//列出所有系统用户角色
+		mv.addObject("fx", "user");
+		pd = userService.findById(pd);								//根据ID读取
+		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
+		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect(Jurisdiction.getDEPARTMENT_ID(),zdepartmentPdList));
+		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
+		mv.addObject("depname", departmentService.findById(pd).getString("NAME"));
+		mv.setViewName("permission/user_edit");
+		mv.addObject("msg", "edit");
+		mv.addObject("pd", pd);
+		mv.addObject("roleList", roleList);
+		return mv;
+	}
+	
 	/**去修改用户页面(个人修改)
 	 * @return
 	 * @throws Exception
@@ -281,6 +397,27 @@ public class UserController extends BaseController {
 		List<Role> roleList = roleService.listAllRolesByPId(pd);	//列出所有系统用户角色
 		pd = userService.findByUsername(pd);						//根据ID读取
 		mv.setViewName("system/user/user_view");
+		mv.addObject("msg", "editU");
+		mv.addObject("pd", pd);
+		mv.addObject("roleList", roleList);
+		return mv;
+	}
+	
+	/**查看用户(新)
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/viewUser")
+	public ModelAndView viewUser() throws Exception{
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		if("admin".equals(pd.getString("USERNAME"))){return null;}	//不能查看admin用户
+		pd.put("ROLE_ID", "1");
+		List<Role> roleList = roleService.listAllRolesByPId(pd);	//列出所有系统用户角色
+		pd = userService.findByUsername(pd);						//根据ID读取
+		mv.setViewName("permission/user_view");
 		mv.addObject("msg", "editU");
 		mv.addObject("pd", pd);
 		mv.addObject("roleList", roleList);
@@ -327,6 +464,32 @@ public class UserController extends BaseController {
 			pd.put("PASSWORD", new SimpleHash("SHA-1", pd.getString("USERNAME"), pd.getString("PASSWORD")).toString());
 		}
 		userService.editU(pd);	//执行修改
+		FHLOG.save(Jurisdiction.getUsername(), "修改系统用户："+pd.getString("USERNAME"));
+		mv.addObject("msg","success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+	
+	/**
+	 * 修改用户(新)
+	 */
+	@RequestMapping(value="/edit")
+	public ModelAndView edit() throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"修改ser");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		if(!Jurisdiction.getUsername().equals(pd.getString("USERNAME"))){		//如果当前登录用户修改用户资料提交的用户名非本人
+			if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}  //校验权限 判断当前操作者有无用户管理查看权限
+			if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限判断当前操作者有无用户管理修改权限
+			if("admin".equals(pd.getString("USERNAME")) && !"admin".equals(Jurisdiction.getUsername())){return null;}	//非admin用户不能修改admin
+		}else{	//如果当前登录用户修改用户资料提交的用户名是本人，则不能修改本人的角色ID
+			pd.put("ROLE_ID", userService.findByUsername(pd).getString("ROLE_ID")); //对角色ID还原本人角色ID
+		}
+		if(pd.getString("PASSWORD") != null && !"".equals(pd.getString("PASSWORD"))){
+			pd.put("PASSWORD", new SimpleHash("SHA-1", pd.getString("USERNAME"), pd.getString("PASSWORD")).toString());
+		}
+		userService.edit(pd);	//执行修改
 		FHLOG.save(Jurisdiction.getUsername(), "修改系统用户："+pd.getString("USERNAME"));
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
