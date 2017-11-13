@@ -76,11 +76,7 @@
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
-											<td class='center'>
-												<c:if test="${var.type == '0' }">安装软件</c:if>
-												<c:if test="${var.type == '1' }">创建帐号</c:if>
-												<c:if test="${var.type == '2' }">批处理</c:if>
-											</td>
+											<td class='center'>${var.typename}</td>
 											<td class='center'>${var.script_key}</td>
 											<td class='center'>${var.purpose}</td>
 											<td class='center'>${var.username}</td>

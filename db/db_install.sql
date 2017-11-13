@@ -350,7 +350,7 @@ DROP TABLE IF EXISTS `t_script`;
 CREATE TABLE `t_script` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '脚本名称',
-  `type` varchar(20) NOT NULL COMMENT '脚本类型',
+  `type` varchar(40) NOT NULL COMMENT '脚本类型',
   `script_key` varchar(10) DEFAULT NULL COMMENT '脚本key',
   `purpose` varchar(20) DEFAULT NULL COMMENT '用途',
   `username` varchar(40) NOT NULL COMMENT '创建者',
@@ -485,6 +485,7 @@ CREATE TABLE `sys_dictionaries` (
   `PARENT_ID` varchar(100) DEFAULT NULL COMMENT '上级ID',
   `BZ` varchar(255) DEFAULT NULL COMMENT '备注',
   `TBSNAME` varchar(100) DEFAULT NULL COMMENT '排查表',
+  UNIQUE INDEX uk_bianma(`BIANMA`),
   PRIMARY KEY (`DICTIONARIES_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据字典';
 

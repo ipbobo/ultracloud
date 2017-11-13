@@ -18,6 +18,8 @@ import com.cmp.service.MediumService;
 import com.cmp.service.ScriptService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.Dictionaries;
+import com.fh.service.system.dictionaries.impl.DictionariesService;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
@@ -36,6 +38,9 @@ public class ScriptController extends BaseController {
 	
 	@Resource(name="mediumService")
 	private MediumService mediumService;
+	
+	@Resource(name="dictionariesService")
+	private DictionariesService dictionariesService;
 	
 	/**保存
 	 * @param
@@ -126,6 +131,8 @@ public class ScriptController extends BaseController {
 		}
 		List<Medium> mediumList = mediumService.listAllMediumByPId(pd);
 		mv.addObject("mediumList", mediumList);
+		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("script_type");
+		mv.addObject("dictionariesList", dictionariesList);
 		mv.setViewName("automation/script_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
@@ -148,6 +155,8 @@ public class ScriptController extends BaseController {
 		pd = scriptService.findById(pd);	//根据ID读取
 		List<Medium> mediumList = mediumService.listAllMediumByPId(pd);
 		mv.addObject("mediumList", mediumList);
+		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("script_type");
+		mv.addObject("dictionariesList", dictionariesList);
 		mv.setViewName("automation/script_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

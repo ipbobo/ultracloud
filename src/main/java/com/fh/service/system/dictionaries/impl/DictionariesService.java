@@ -84,6 +84,18 @@ public class DictionariesService implements DictionariesManager{
 		return (List<Dictionaries>) dao.findForList("DictionariesMapper.listSubDictByParentId", parentId);
 	}
 	
+	
+	/**
+	 * 通过编码获取其子级列表
+	 * @param bianma
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Dictionaries> listSubDictByBianma(String bianma) throws Exception {
+		return (List<Dictionaries>) dao.findForList("DictionariesMapper.listSubDictByBianma", bianma);
+	}
+	
 	/**
 	 * 获取所有数据并填充每条数据的子级列表(递归处理)
 	 * @param MENU_ID
