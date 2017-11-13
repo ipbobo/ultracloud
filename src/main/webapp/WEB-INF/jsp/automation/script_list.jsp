@@ -58,7 +58,7 @@
 									<th class="center">用途</th>
 									<th class="center">创建者</th>
 									<th class="center">路径</th>
-									<th class="center">关联介质id</th>
+									<th class="center">关联介质</th>
 									<th class="center">创建时间</th>
 									<th class="center">操作</th>
 								</tr>
@@ -76,16 +76,12 @@
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
-											<td class='center'>
-												<c:if test="${var.type == '0' }">安装软件</c:if>
-												<c:if test="${var.type == '1' }">创建帐号</c:if>
-												<c:if test="${var.type == '2' }">批处理</c:if>
-											</td>
+											<td class='center'>${var.typename}</td>
 											<td class='center'>${var.script_key}</td>
 											<td class='center'>${var.purpose}</td>
 											<td class='center'>${var.username}</td>
 											<td class='center'  style="width: 200px;">${var.url}</td>
-											<td class='center'>${var.medium_id}</td>
+											<td class='center'>${var.medium_name}</td>
 											<td class='center' style="width: 170px;">${var.gmt_create}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">

@@ -83,6 +83,36 @@ public class RoleController extends BaseController {
 		return mv;
 	}
 	
+	/**
+	 * 进入角色列表页
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/list")
+	public ModelAndView list2()throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		try{
+			pd = this.getPageData();
+			if(pd.getString("ROLE_ID") == null || "".equals(pd.getString("ROLE_ID").trim())){
+				pd.put("ROLE_ID", "1");										//默认列出第一组角色(初始设计系统用户和会员组不能删除)
+			}
+			PageData fpd = new PageData();
+			fpd.put("ROLE_ID", "0");
+			List<Role> roleList = roleService.listAllRolesByPId(fpd);		//列出组(页面横向排列的一级组)
+			List<Role> roleList_z = roleService.listAllRoles(pd);		//列出此组下架角色
+			pd = roleService.findObjectById(pd);							//取得点击的角色组(横排的)
+			mv.addObject("pd", pd);
+			mv.addObject("roleList", roleList);
+			mv.addObject("roleList_z", roleList_z);
+			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+			mv.setViewName("permission/role_list");
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
+		return mv;
+	}
+	
 	/**去新增页面
 	 * @param 
 	 * @return

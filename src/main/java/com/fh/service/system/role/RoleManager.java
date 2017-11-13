@@ -18,6 +18,13 @@ public interface RoleManager {
 	 */
 	public List<Role> listAllRolesByPId(PageData pd) throws Exception;
 	
+	/**列出所有的角色
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Role> listAllRoles(PageData pd) throws Exception;
+	
 	/**通过id查找
 	 * @param pd
 	 * @return

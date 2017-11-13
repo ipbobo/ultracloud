@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.entity.Medium;
+import com.cmp.service.MediumService;
 import com.cmp.service.ScriptService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.Dictionaries;
+import com.fh.service.system.dictionaries.impl.DictionariesService;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
@@ -31,6 +35,12 @@ public class ScriptController extends BaseController {
 	
 	@Resource(name="scriptService")
 	private ScriptService scriptService;
+	
+	@Resource(name="mediumService")
+	private MediumService mediumService;
+	
+	@Resource(name="dictionariesService")
+	private DictionariesService dictionariesService;
 	
 	/**保存
 	 * @param
@@ -115,6 +125,14 @@ public class ScriptController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
+		List<Medium> mediumList = mediumService.listAllMediumByPId(pd);
+		mv.addObject("mediumList", mediumList);
+		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("script_type");
+		mv.addObject("dictionariesList", dictionariesList);
 		mv.setViewName("automation/script_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
@@ -130,7 +148,15 @@ public class ScriptController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
 		pd = scriptService.findById(pd);	//根据ID读取
+		List<Medium> mediumList = mediumService.listAllMediumByPId(pd);
+		mv.addObject("mediumList", mediumList);
+		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("script_type");
+		mv.addObject("dictionariesList", dictionariesList);
 		mv.setViewName("automation/script_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -144,7 +170,7 @@ public class ScriptController extends BaseController {
 	@RequestMapping(value="/deleteAll")
 	@ResponseBody
 	public Object deleteAll() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"批量删除Fhbutton");
+		logBefore(logger, Jurisdiction.getUsername()+"批量删除Script");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();

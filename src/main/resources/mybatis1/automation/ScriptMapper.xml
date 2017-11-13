@@ -6,6 +6,12 @@
 	<sql id="tableName">
 		t_script
 	</sql>
+	<sql id="mediumtableName">
+		t_medium
+	</sql>
+	<sql id="dictionariestableName">
+		SYS_DICTIONARIES
+	</sql>
 	
 	<!-- 字段 -->
 	<sql id="Field">
@@ -95,22 +101,31 @@
 			id = #{id}
 	</select>
 	
-	<!-- 列表 -->
-	<select id="datalistPage" parameterType="page" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where 1=1
+	<!-- 用户列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd" >
+		select  s.id,
+				s.name,
+				d.NAME as typename,
+				s.script_key,
+				s.purpose,
+				s.username,
+				s.url,
+				s.medium_id,
+				s.gmt_create,
+				s.gmt_modified,
+				m.name as medium_name
+		from <include refid="tableName"></include> s, <include refid="mediumtableName"></include> m, <include refid="dictionariestableName"></include> d    
+		where s.medium_id=m.id and s.type=d.BIANMA
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
-					NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					s.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 				)
 		</if>
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
 			and id in ${pd.item}
 		</if>
+		order by s.gmt_modified desc
 	</select>
 	
 	<!-- 列表(全部) -->

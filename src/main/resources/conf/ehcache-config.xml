@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<cache id="eh" class="com.cmp.ehcache.cache.oper.impl.CacheOperEh" default="true"/>
+	
+	<!-- cache指定使用缓存id，可以为空，为空则取default="true"的缓存，多个default="true"，后面的生效 -->
+	<entity cache="eh" class="com.cmp.sid.CmpDict">
+		<indx name="dictType"/>
+		<indx name="dictCode"/>
+	</entity>
+</config>

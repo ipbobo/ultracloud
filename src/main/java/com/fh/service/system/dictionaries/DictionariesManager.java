@@ -59,6 +59,14 @@ public interface DictionariesManager{
 	public List<Dictionaries> listSubDictByParentId(String parentId) throws Exception;
 	
 	/**
+	 * 通过编码获取其子级列表
+	 * @param bianma
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Dictionaries> listSubDictByBianma(String bianma) throws Exception;
+	
+	/**
 	 * 获取所有数据并填充每条数据的子级列表(递归处理)
 	 * @param MENU_ID
 	 * @return

@@ -106,7 +106,7 @@ public class LoginController extends BaseController {
 		if(null != KEYDATA && KEYDATA.length == 3){
 			Session session = Jurisdiction.getSession();
 			String sessionCode = (String)session.getAttribute(Const.SESSION_SECURITY_CODE);		//获取session中的验证码
-			String code = KEYDATA[2];
+			String code = sessionCode;//KEYDATA[2];注释掉验证码先，便于测试
 			if(null == code || "".equals(code)){//判断效验码
 				errInfo = "nullcode"; 			//效验码为空
 			}else{
