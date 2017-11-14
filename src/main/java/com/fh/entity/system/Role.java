@@ -18,6 +18,7 @@ public class Role {
 	private String DEL_QX;
 	private String EDIT_QX;
 	private String CHA_QX;
+	private String TYPE;
 	
 	public String getROLE_ID() {
 		return ROLE_ID;
@@ -66,6 +67,12 @@ public class Role {
 	}
 	public void setCHA_QX(String cHA_QX) {
 		CHA_QX = cHA_QX;
+	}
+	public String getTYPE() {
+		return TYPE;
+	}
+	public void setTYPE(String tYPE) {
+		TYPE = tYPE;
 	}
 	
 	

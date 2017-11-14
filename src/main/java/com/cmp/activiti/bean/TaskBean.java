@@ -12,7 +12,7 @@ public class TaskBean {
 	private String processInstanceId;//流程实例ID
 	private String executionId;//执行对象ID
 	private String processDefinitionId;//流程定义ID
-
+	private String status; //任务状态   0 : 初始状态  1:待审批  2:待处理  3:处理中 4:退回  5:完成
 	public String getAppNo() {
 		return appNo;
 	}
@@ -100,4 +100,14 @@ public class TaskBean {
 	public void setProcessDefinitionId(String processDefinitionId) {
 		this.processDefinitionId = processDefinitionId;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	
 }
