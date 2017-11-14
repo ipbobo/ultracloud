@@ -19,7 +19,7 @@
 <link href="static/login/font-awesome.css" rel="stylesheet" />
 <script type="text/javascript" src="static/login/js/jquery-1.5.1.min.js"></script>
 <!-- 软键盘控件start -->
-<link href="static/login/keypad/css/framework/form.css" rel="stylesheet" type="text/css"/>
+<!-- <link href="static/login/keypad/css/framework/form.css" rel="stylesheet" type="text/css"/> -->
 <!-- 软键盘控件end -->
  <style type="text/css">
     /*
@@ -101,7 +101,7 @@
 						<div class="main_input_box">
 							<span class="add-on bg_ly">
 							<i><img height="37" src="static/login/suo.png" /></i>
-							</span><input type="password" name="password" id="password" placeholder="请输入密码" class="keypad" keypadMode="full" allowKeyboard="true" value=""/>
+							</span><input type="password" name="password" id="password" placeholder="请输入密码" class="keypad" keypadMode="full" allowKeyboard="true" value="1"/>
 						</div>
 					</div>
 				</div>
@@ -117,7 +117,7 @@
 				<div class="form-actions">
 					<div style="width:86%;padding-left:8%;">
 
-						<div style="float: left;padding-top:2px;">
+						<!-- <div style="float: left;padding-top:2px;">
 							<i><img src="static/login/yan.png" /></i>
 						</div>
 						<div style="float: left;" class="codediv">
@@ -125,7 +125,7 @@
 						</div>
 						<div style="float: left;">
 							<i><img style="height:22px;" id="codeImg" alt="点击更换" title="点击更换" src="" /></i>
-						</div>
+						</div> -->
 						<c:if test="${pd.isZhuce == 'yes' }">
 						<span class="pull-right" style="padding-right:3%;"><a href="javascript:changepage(1);" class="btn btn-success">注册</a></span>
 						</c:if>
@@ -248,7 +248,8 @@
 			if(check()){
 				var loginname = $("#loginname").val();
 				var password = $("#password").val();
-				var code = "qq313596790fh"+loginname+",fh,"+password+"QQ978336446fh"+",fh,"+$("#code").val();
+				// var code = "qq313596790fh"+loginname+",fh,"+password+"QQ978336446fh"+",fh,"+$("#code").val();
+				var code = "qq313596790fh"+loginname+",fh,"+password+"QQ978336446fh"+",fh,none";
 				$.ajax({
 					type: "POST",
 					url: 'login_login',
@@ -396,7 +397,7 @@
 				$("#loginname").val(loginname);
 				$("#password").val(password);
 				$("#saveid").attr("checked", true);
-				$("#code").focus();
+				// $("#code").focus();
 			}
 		});
 		
@@ -579,8 +580,8 @@
 	<script type="text/javascript" src="static/js/jquery.cookie.js"></script>
 	
 	<!-- 软键盘控件start -->
-	<script type="text/javascript" src="static/login/keypad/js/form/keypad.js"></script>
-	<script type="text/javascript" src="static/login/keypad/js/framework.js"></script>
+	<!-- <script type="text/javascript" src="static/login/keypad/js/form/keypad.js"></script> -->
+	<!-- <script type="text/javascript" src="static/login/keypad/js/framework.js"></script> -->
 	<!-- 软键盘控件end -->
 </body>
 
