@@ -187,12 +187,31 @@
 				url: '<%=basePath%>main/queryTasks.do?1=1',
 				cache: false,
 				success: function(data){
-					if (data.taskSize > 0){
-						$("#span_task_tital").html("目前的已经收到的任务是:");
-						$("#span_task_no").html(data.taskSize);
-						usertaskList = data.userTaskList;
-						for (var i = 0; i < usertaskList.length; i++) {
-							$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\">"+ usertaskList[i].taskName +"</li>" );
+					if (data.totalTaskNo > 0){
+						$("#span_task_tital").html("目前进行中的任务 :" + data.totalTaskNo);
+						$("#span_task_no").html(data.totalTaskNo);
+						//判断用户类型 if (data.user.role.type == 0)
+						if (data.taskApplyWorking != null && data.taskApplyWorking != 'null')
+						{
+							usertaskList = data.taskApplyWorking;
+							for (var i = 0; i < usertaskList.length; i++) {
+								$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-star\"></i>"+ usertaskList[i].taskName +"</li> " );
+	
+							}
+						}
+						if (data.taskApplyComplete != null && data.taskApplyComplete != 'null')
+						{
+							usertaskList = data.taskApplyComplete;
+							for (var i = 0; i < usertaskList.length; i++) {
+								$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ usertaskList[i].taskName +"</li>" );
+							}
+						}
+						if (data.taskApplyReject != null && data.taskApplyReject != 'null')
+						{
+							usertaskList = data.taskApplyReject;
+							for (var i = 0; i < usertaskList.length; i++) {
+								$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-remove\"></i>"+ usertaskList[i].taskName +"</li>" );
+							}
 						}
 					};
 				}

@@ -213,28 +213,61 @@ public class LoginController extends BaseController {
 	/**
 	 * 查询个人任务
 	 * @param userId
-	 * @return
+	 * @return map对象  用户任务集合
 	 */
 	@RequestMapping(value="/main/queryTasks")
 	@ResponseBody
 	public Object queryPersonalTask(String userId) {
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> outmap = new HashMap<String,Object>();
+		int totalTaskNo = 0;
+		List taskApplyWorking = new ArrayList<>(); //申请者 处理中
+		List taskApplyComplete = new ArrayList<>(); //申请者  工单完成
+		List taskApplyReject = new ArrayList<>(); //申请者 退回
+		
+		List taskToCheck = new ArrayList<>(); //审核者 待审核
+		
+		List taskToDeal = new ArrayList<>(); //执行者 待处理、处理中、工单完成
+		List taskHandling = new ArrayList<>(); //执行者 处理中
+		List taskWorkComplete = new ArrayList<>(); //执行者 工单完成
 		String errInfo = "success";
 		Session session = Jurisdiction.getSession();
 		User userr = (User)session.getAttribute(Const.SESSION_USERROL);
+		outmap.put("user", userr);
 		//获取个人任务
 		Page<TaskBean> page= activitiService.getPersonalTaskList(userr.getUSER_ID(), 1, Const.MAX_PAGE_TASK-1);
 		List<TaskBean> tasks = page.getResults();
 		
+		//************************测试不同的角色登录*******************
+		//申请者
+		TaskBean bean1 = new TaskBean();
+		bean1.setTaskName("申请虚拟机进行中");
+		bean1.setTaskId("1001");
+		taskApplyWorking.add(bean1);
+		
+		TaskBean bean2 = new TaskBean();
+		bean2.setTaskName("申请虚拟机工单完成");
+		bean2.setTaskId("1002");
+		taskApplyComplete.add(bean2);
+		
+		TaskBean bean3 = new TaskBean();
+		bean3.setTaskName("申请虚拟机工单退回");
+		bean3.setTaskId("1003");
+		taskApplyReject.add(bean3);
+		
+		totalTaskNo = 3;
+		outmap.put("taskApplyWorking", taskApplyWorking);
+		outmap.put("taskApplyComplete", taskApplyComplete);
+		outmap.put("taskApplyReject", taskApplyReject);
+		
+		//**************以上测试结束*************//
+		
 		//返回查询到的任务
-		if (tasks != null && tasks.size() > 0) {
-			map.put("userTaskList", tasks);
-			map.put("taskSize", tasks.size());
+		if (totalTaskNo  > 0) {
+			outmap.put("totalTaskNo", totalTaskNo);
 		} else {
-			map.put("userTaskList", null);
-			map.put("taskSize", 0);
+			outmap.put("totalTaskNo", 0);
 		}
-		return map;
+		return outmap;
 	}
 	
 	/**菜单缓存
