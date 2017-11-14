@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmp.service.UserGroupService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.Role;
+import com.fh.service.system.role.RoleManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
@@ -34,6 +36,9 @@ public class UserGroupController extends BaseController {
 	
 	@Resource(name="userGroupService")
 	private UserGroupService userGroupService;
+	
+	@Resource(name="roleService")
+	private RoleManager roleService;
 	
 	/**保存
 	 * @param
@@ -130,6 +135,11 @@ public class UserGroupController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		
+		PageData pd2 = new PageData();
+		pd2.put("ROLE_ID", "1");
+		List<Role> roleList = roleService.listAllRolesByPId(pd2);//列出所有系统用户角色
+		mv.addObject("roleList", roleList);
 		return mv;
 	}
 	
@@ -142,6 +152,9 @@ public class UserGroupController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("ROLE_ID", "1");
+		List<Role> roleList = roleService.listAllRolesByPId(pd);//列出所有系统用户角色
+		mv.addObject("roleList", roleList);
 		mv.setViewName("permission/usergroup_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
@@ -157,7 +170,10 @@ public class UserGroupController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("ROLE_ID", "1");
+		List<Role> roleList = roleService.listAllRolesByPId(pd);//列出所有系统用户角色
 		pd = userGroupService.findById(pd);	//根据ID读取
+		mv.addObject("roleList", roleList);
 		mv.setViewName("permission/usergroup_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

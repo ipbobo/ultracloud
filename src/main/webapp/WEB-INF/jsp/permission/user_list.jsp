@@ -73,7 +73,7 @@
 									<th class="center">编号</th>
 									<th class="center">用户名</th>
 									<th class="center">姓名</th>
-									<th class="center">角色</th>
+									<th class="center">所属角色</th>
 									<th class="center"><i class="ace-icon fa fa-envelope-o"></i>邮箱</th>
 									<th class="center"><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>最近登录</th>
 									<th class="center">上次登录IP</th>

@@ -6,8 +6,9 @@
 	<sql id="tableName">
 		t_usergroup
 	</sql>
-	
-	<!--用户组角色关联表名 -->
+	<sql id="roleTableName">
+		SYS_ROLE
+	</sql>
 	<sql id="usergrouproletableName">
 		t_usergroup_role_map
 	</sql>
@@ -19,7 +20,8 @@
 	</sql>
 	
 	<sql id="Field_main">
-		name
+		name,
+		ROLE_ID
 	</sql>
 	
 	<sql id="Field_time">
@@ -30,26 +32,19 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue">
 		#{id},	
+
 		<include refid="FieldValue_main"></include>,<include refid="FieldValue_time"></include>
 	</sql>
 		
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
-		#{name}
+		#{name},
+		#{ROLE_ID}
 	</sql>
 	
 	<sql id="FieldValue_time">	
 		#{gmt_create},
 		#{gmt_modified}
-	</sql>
-	
-	<!-- 用户组角色关联表字段 -->
-	<sql id="usergrouproleField">
-		id,	
-		usergroup_id,
-		role_id,
-		gmt_create,
-		gmt_modified
 	</sql>
 	
 	<!-- 新增-->
@@ -86,29 +81,32 @@
 		update
 		<include refid="tableName"></include>
 		set 
-			name = #{name}
+			name = #{name},
+			ROLE_ID = #{ROLE_ID}
 		where 
 		id = #{id}
 	</update>
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where
-			1=1
-		<if test="pd.id!= null and pd.id != ''"><!-- 检索 -->
-		and id = #{pd.id}
+		select up.id,
+		       up.name,
+		       up.ROLE_ID,
+               up.gmt_create,
+               up.gmt_modified,
+			   r.ROLE_NAME
+		from <include refid="tableName"></include> up, <include refid="roleTableName"></include> r 
+		where up.ROLE_ID = r.ROLE_ID
+		<if test="pd.ROLE_ID != null and pd.ROLE_ID != ''"><!-- 角色检索 -->
+			and up.ROLE_ID=#{pd.ROLE_ID} 
 		</if>
 		<if test="pd.name != null and pd.name != ''"><!-- 关键词检索 -->
 			and
 				(
-				 name LIKE CONCAT(CONCAT('%', #{pd.name}),'%')
+				 up.name LIKE CONCAT(CONCAT('%', #{pd.name}),'%')
 				)
 		</if>
-		order by gmt_modified desc
+		order by up.gmt_modified desc
 	</select>
 	
 	<!-- 通过ID获取数据 -->

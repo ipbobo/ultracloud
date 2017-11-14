@@ -469,6 +469,7 @@ DROP TABLE IF EXISTS `t_usergroup`;
 create table `t_usergroup` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '用户组名称',
+  `ROLE_ID` varchar(40) NOT NULL COMMENT '角色ID',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
