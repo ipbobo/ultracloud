@@ -13,15 +13,17 @@ var oladress="";		//在线管理和站内信服务器IP和端口
 
 function siMenu(id,fid,MENU_NAME,MENU_URL){
 	if(id != mid){
-		$("#"+mid).removeClass();
+		$("#"+mid).removeClass("active");
+		$("#"+id).addClass("active");
 		mid = id;
 	}
+	
 	if(fid != fmid){
-		$("#"+fmid).removeClass();
+		$("#"+fmid).removeClass("active open");
+		$("#"+fid).addClass("active open");
 		fmid = fid;
 	}
-	$("#"+fid).attr("class","active open");
-	$("#"+id).attr("class","active");
+	
 	top.mainFrame.tabAddHandler(id,MENU_NAME,MENU_URL);
 	if(MENU_URL != "druid/index.html"){
 		jzts();
