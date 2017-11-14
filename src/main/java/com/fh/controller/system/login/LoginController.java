@@ -107,13 +107,13 @@ public class LoginController extends BaseController {
 			Session session = Jurisdiction.getSession();
 			String sessionCode = (String)session.getAttribute(Const.SESSION_SECURITY_CODE);		//获取session中的验证码
 			String code = sessionCode;//KEYDATA[2];注释掉验证码先，便于测试
-			if(null == code || "".equals(code)){//判断效验码
-				errInfo = "nullcode"; 			//效验码为空
-			}else{
+//			if(null == code || "".equals(code)){//判断效验码
+//				errInfo = "nullcode"; 			//效验码为空
+//			}else{
 				String USERNAME = KEYDATA[0];	//登录过来的用户名
 				String PASSWORD  = KEYDATA[1];	//登录过来的密码
 				pd.put("USERNAME", USERNAME);
-				if(Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(code)){		//判断登录验证码
+//				if(Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(code)){		//判断登录验证码
 					String passwd = new SimpleHash("SHA-1", USERNAME, PASSWORD).toString();	//密码加密
 					pd.put("PASSWORD", passwd);
 					pd = userService.getUserByNameAndPwd(pd);	//根据用户名和密码去读取用户信息
@@ -146,15 +146,15 @@ public class LoginController extends BaseController {
 						logBefore(logger, USERNAME+"登录系统密码或用户名错误");
 						FHLOG.save(USERNAME, "登录系统密码或用户名错误");
 					}
-				}else{
-					errInfo = "codeerror";				 	//验证码输入有误
-				}
+//				}else{
+//					errInfo = "codeerror";				 	//验证码输入有误
+//				}
 				if(Tools.isEmpty(errInfo)){
 					errInfo = "success";					//验证成功
 					logBefore(logger, USERNAME+"登录系统");
 					FHLOG.save(USERNAME, "登录系统");
 				}
-			}
+//			}
 		}else{
 			errInfo = "error";	//缺少参数
 		}

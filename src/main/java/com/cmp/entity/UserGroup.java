@@ -15,6 +15,7 @@ public class UserGroup {
 	private String name;
 	private Timestamp gmt_create;
 	private Timestamp gmt_modified;
+	private String ROLE_ID;
 
 	public BigInteger getId() {
 		return id;
@@ -46,6 +47,14 @@ public class UserGroup {
 
 	public void setGmt_modified(Timestamp gmt_modified) {
 		this.gmt_modified = gmt_modified;
+	}
+
+	public String getROLE_ID() {
+		return ROLE_ID;
+	}
+
+	public void setROLE_ID(String rOLE_ID) {
+		ROLE_ID = rOLE_ID;
 	}
 
 }

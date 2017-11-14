@@ -38,6 +38,15 @@
 										</span>
 									</div>
 								</td>
+								<td style="vertical-align:top;padding-left:2px;">
+								 	<select class="chosen-select form-control" name="ROLE_ID" id="role_id" data-placeholder="请选择角色" style="vertical-align:top;width: 120px;">
+									<option value=""></option>
+									<option value="">全部</option>
+									<c:forEach items="${roleList}" var="role">
+										<option value="${role.ROLE_ID }" <c:if test="${pd.ROLE_ID==role.ROLE_ID}">selected</c:if>>${role.ROLE_NAME }</option>
+									</c:forEach>
+								  	</select>
+								</td>
 								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								</c:if>
@@ -53,6 +62,7 @@
 									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">名称</th>
+									<th class="center">所属角色</th>
 									<th class="center">创建时间</th>
 									<th class="center">更新时间</th>
 									<th class="center">操作</th>
@@ -71,6 +81,7 @@
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
+											<td class="center">${var.ROLE_NAME }</td>
 											<td class='center'>${var.gmt_create}</td>
 											<td class='center'>${var.gmt_modified}</td>
 											<td class="center">
