@@ -4,25 +4,27 @@
 	
 	<!--表名 -->
 	<sql id="tableName">
-		TB_ATTACHED
+		T_PROJECT
 	</sql>
 	
 	<!-- 字段 -->
 	<sql id="Field">
 		NAME,	
-		FDESCRIBE,	
-		PRICE,	
-		CTIME,	
-		ATTACHED_ID
+		<!-- STATE, -->	
+		POWER_USERNAME,	
+		POWERGROUP_ID,	
+		<!-- SERVER_COUNT, -->
+		GMT_CREATE
 	</sql>
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
 		#{NAME},	
-		#{FDESCRIBE},	
-		#{PRICE},	
-		#{CTIME},	
-		#{ATTACHED_ID}
+		<!-- #{STATE}, -->
+		#{POWER_USERNAME},	
+		#{POWERGROUP_ID},	
+		<!-- #{SERVER_COUNT}, -->
+		#{GMT_CREATE}
 	</sql>
 	
 	<!-- 新增-->

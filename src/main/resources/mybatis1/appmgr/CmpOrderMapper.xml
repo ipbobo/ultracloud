@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CmpOrderMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		cmp_order
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="fieldName">
+		id,
+		createTime,
+		lastUpdateTime,
+		areaCode,
+		platType,
+		deployType,
+		envCode,
+		resType,
+		virName,
+		virIp,
+		cpu,
+		memory,
+		diskType,
+		diskSize,
+		diskEncrypt,
+		softName,
+		softVer,
+		softParam,
+		projectCode,
+		osType,
+		osBitNum,
+		imgCode,
+		imgUserName,
+		imgUserPass,
+		imgPath,
+		imgExpireDate,
+		expireDate,
+		virNum
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="fieldValue">
+		#{id},
+		#{createTime},
+		#{lastUpdateTime},
+		#{areaCode},
+		#{platType},
+		#{deployType},
+		#{envCode},
+		#{resType},
+		#{virName},
+		#{virIp},
+		#{cpu},
+		#{memory},
+		#{diskType},
+		#{diskSize},
+		#{diskEncrypt},
+		#{softName},
+		#{softVer},
+		#{softParam},
+		#{projectCode},
+		#{osType},
+		#{osBitNum},
+		#{imgCode},
+		#{imgUserName},
+		#{imgUserPass},
+		#{imgPath},
+		#{imgExpireDate},
+		#{expireDate},
+		#{virNum}
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="saveFieldName">
+		areaCode,
+		platType,
+		deployType,
+		envCode,
+		resType,
+		virName,
+		virIp,
+		cpu,
+		memory,
+		diskType,
+		diskSize,
+		diskEncrypt,
+		softName,
+		softVer,
+		softParam,
+		projectCode,
+		osType,
+		osBitNum,
+		imgCode,
+		imgUserName,
+		imgUserPass,
+		imgPath,
+		imgExpireDate,
+		expireDate,
+		virNum
+	</sql>
+	
+	<sql id="saveFieldValue">
+		#{areaCode},
+		#{platType},
+		#{deployType},
+		#{envCode},
+		#{resType},
+		#{virName},
+		#{virIp},
+		#{cpu},
+		#{memory},
+		#{diskType},
+		#{diskSize},
+		#{diskEncrypt},
+		#{softName},
+		#{softVer},
+		#{softParam},
+		#{projectCode},
+		#{osType},
+		#{osBitNum},
+		#{imgCode},
+		#{imgUserName},
+		#{imgUserPass},
+		#{imgPath},
+		#{imgExpireDate},
+		#{expireDate},
+		#{virNum}
+	</sql>
+	
+	<!-- 清单列表查询resultType及resultMap互斥： -->
+	<select id="getCmpOrderList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+	</select>
+	
+	<!-- 新增清单 -->
+	<insert id="saveCmpOrder" parameterType="com.cmp.sid.CmpOrder" >
+		insert into <include refid="tableName"/> (
+			<include refid="saveFieldName"/>
+		) values (
+			<include refid="saveFieldValue"/>
+		)
+	</insert>
+</mapper>
