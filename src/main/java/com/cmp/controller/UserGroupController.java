@@ -1,6 +1,7 @@
 package com.cmp.controller;
 
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.entity.UserGroupUserMap;
 import com.cmp.service.UserGroupService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.Role;
 import com.fh.service.system.role.RoleManager;
+import com.fh.service.system.user.UserManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
@@ -39,6 +42,9 @@ public class UserGroupController extends BaseController {
 	
 	@Resource(name="roleService")
 	private RoleManager roleService;
+	
+	@Resource(name="userService")
+	private UserManager userService;
 	
 	/**保存
 	 * @param
@@ -179,4 +185,91 @@ public class UserGroupController extends BaseController {
 		mv.addObject("pd", pd);
 		return mv;
 	}	
+	
+	 /**绑定用户
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/goUserbind")
+	@ResponseBody
+	public Object goUserbind() throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String role_id = pd.getString("ROLE_ID");
+		pd.put("ROLE_ID", role_id);
+		List<PageData>	notBindingUserList = userService.listAllOutUserByPdId(pd);
+		mv.addObject("notBindingUserList", notBindingUserList);
+		List<PageData>	bindedUserList = userService.listAllInUserByUserGroupId(pd);
+		mv.addObject("bindedUserList", bindedUserList);
+		pd = userGroupService.findById(pd);	//根据ID读取
+		mv.setViewName("permission/usergroup_userbind");
+		mv.addObject("msg", "edit");
+		mv.addObject("pd", pd);
+		return mv;
+	}
+	
+	 /**绑定用户
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/userbind")
+	@ResponseBody
+	public Object userbind() throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"绑定用户");
+		PageData pd = new PageData();		
+		pd = this.getPageData();
+		BigInteger id = new BigInteger(pd.getString("id"));
+		String DATA_IDS = pd.getString("DATA_IDS");
+		if(null != DATA_IDS && !"".equals(DATA_IDS)){
+			List<UserGroupUserMap> newList = new ArrayList<UserGroupUserMap>();
+			String ArrayDATA_IDS[] = DATA_IDS.split(",");
+			
+			
+			List<UserGroupUserMap> existList = userGroupService.listUserGroupUserMap(pd);
+			
+			List<BigInteger> deleteIdList = new ArrayList<BigInteger>();
+			if(null != existList && existList.size() > 0) {
+				StringBuffer sb = new StringBuffer();
+				
+				for(UserGroupUserMap userGroupUserMap : existList) {
+					sb.append(userGroupUserMap.getUSER_ID()+",");
+					if(!DATA_IDS.contains(userGroupUserMap.getUSER_ID())) {
+						deleteIdList.add(userGroupUserMap.getId());
+					} 
+				}
+				
+				
+				for(int i = 0; i < ArrayDATA_IDS.length; i++) {
+					if(!sb.toString().contains(ArrayDATA_IDS[i])) {
+						UserGroupUserMap uguMap = new UserGroupUserMap();
+						uguMap.setUSER_ID(ArrayDATA_IDS[i]);
+						uguMap.setUsergroup_id(id);
+						newList.add(uguMap);
+					}
+				}
+			} else {
+				for(int i = 0; i < ArrayDATA_IDS.length; i++) {
+						UserGroupUserMap uguMap = new UserGroupUserMap();
+						uguMap.setUSER_ID(ArrayDATA_IDS[i]);
+						uguMap.setUsergroup_id(id);
+						newList.add(uguMap);
+				}
+			}
+			
+			if(deleteIdList.size() > 0) {
+				userGroupService.deleteAllUsergroup(deleteIdList);
+			}
+			if(newList.size() > 0) {
+				userGroupService.insertAllUsergroup(newList);
+			}
+		} else {
+			userGroupService.deleteByUsergroupId(id);
+		}
+		
+		ModelAndView mv = this.getModelAndView();
+		mv.addObject("msg","success");
+		mv.setViewName("save_result");
+		return mv;
+	}
 }

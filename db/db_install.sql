@@ -479,16 +479,16 @@ create table `t_usergroup` (
 -- ----------------------------
 -- 用户组与角色关联
 -- ----------------------------
-DROP TABLE IF EXISTS `t_usergroup_role_map`;
-create table `t_usergroup_role_map` (
+DROP TABLE IF EXISTS `t_usergroup_user_map`;
+create table `t_usergroup_user_map` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `usergroup_id` bigint unsigned NOT NULL COMMENT '用户组id',
-  `role_id` bigint unsigned NOT NULL COMMENT '角色id',
+  `USER_ID` varchar(100) NOT NULL COMMENT '用户id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  UNIQUE INDEX uk_usergroup_role(`usergroup_id`,`role_id`),
+  UNIQUE INDEX uk_usergroup_role(`usergroup_id`,`USER_ID`),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组与角色关联';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组与用户关联';
 
 -- ----------------------------
 -- 用户

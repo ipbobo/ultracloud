@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="UsergroupMapper">
 	
+	<resultMap type="UserGroupUserMap" id="userGroupUserMapResultMap">
+		<id column="id" property="id"/>
+		<result column="usergroup_id" property="usergroup_id"/>
+		<result column="USER_ID" property="USER_ID"/>
+		<result column="gmt_create" property="gmt_create"/>
+		<result column="gmt_modified" property="gmt_modified"/>
+	</resultMap>
+	
 	<!--关联表名 -->
 	<sql id="tableName">
 		t_usergroup
@@ -11,6 +19,9 @@
 	</sql>
 	<sql id="usergrouproletableName">
 		t_usergroup_role_map
+	</sql>
+	<sql id="usergroupusertableName">
+		t_usergroup_user_map
 	</sql>
 	
 	<!-- 字段 -->
@@ -76,6 +87,34 @@
 		</foreach>
 	</delete>
 	
+	<!-- 批量删除用户组与用户的关联 -->
+	<delete id="deleteAllUsergroup" parameterType="String">
+		delete from
+		<include refid="usergroupusertableName"></include>
+		where id in
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量插入用户组与用户的关联 -->
+	<insert id="insertAllUsergroup" parameterType="java.util.List">   
+    	insert into 
+    	<include refid="usergroupusertableName"></include> (usergroup_id,USER_ID)   
+    	values  
+    	<foreach collection="list" item="item" index="index" separator="," >  
+        	(#{item.usergroup_id},#{item.USER_ID})  
+    	</foreach>  
+	</insert> 
+	
+	<!-- 删除用户组与用户的关联，按用户组 -->
+	<delete id="deleteByUsergroupId" parameterType="pd">
+		delete from
+		<include refid="usergroupusertableName"></include>
+		where 
+			usergroup_id = #{id}
+	</delete>
+	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
@@ -117,6 +156,13 @@
 		<include refid="tableName"></include>
 		where 
 			id = #{id}
+	</select>
+	
+	<!-- 通过id查找 -->
+	<select id="listUserGroupUserMap" parameterType="String" resultMap="userGroupUserMapResultMap">
+		select * from 
+		<include refid="usergroupusertableName"></include>
+		where usergroup_id=#{id}
 	</select>
 	
 </mapper>
