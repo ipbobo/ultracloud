@@ -1,10 +1,10 @@
 .tablecls{ background-color:#f4fbff;}
 
-ul.ullitab li{ font-size:12px; cursor:pointer; border:1px solid #fff; float:left; clear:none; margin:0; height:36px; line-height:36px; background-color:#e4e4e4; width:150px; text-align:center; color:#000;}
+ul.ullitab li{ font-size:14px; cursor:pointer; border:1px solid #fff; float:left; clear:none; margin:0; height:36px; line-height:36px; background-color:#cccccc; width:150px; text-align:center; color:#000;}
 ul.ullitab li.active{ color:#FFFFFF; background-color:#0099cc;}
 
 .divbtn{ margin:10; height:36px; line-height:36px;}
-.btncls{ font-size:12px; cursor:pointer; float:right; border:1px solid #f5620a; clear:none; margin:10; height:36px; line-height:36px; width:180px; text-align:center; color:#000;}
+.btncls{ cursor:pointer; float:right; border:1px solid #f5620a; clear:none; margin:10; height:36px; line-height:36px; width:180px; text-align:center; color:#000;}
 .btncls a:link { color:#000; text-decoration: none; height: 36px; display: block;}  
 .btncls a:hover,a:visited { color:#000; text-decoration: none; background-color:#f5620a; height: 36px; display: block;}
 
