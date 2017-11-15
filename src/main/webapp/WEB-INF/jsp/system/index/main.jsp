@@ -187,12 +187,69 @@
 				url: '<%=basePath%>main/queryTasks.do?1=1',
 				cache: false,
 				success: function(data){
-					if (data.taskSize > 0){
-						$("#span_task_tital").html("目前的已经收到的任务是:");
-						$("#span_task_no").html(data.taskSize);
-						usertaskList = data.userTaskList;
-						for (var i = 0; i < usertaskList.length; i++) {
-							$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\">"+ usertaskList[i].taskName +"</li>" );
+					if (data.totalTaskNo > 0){
+						$("#span_task_tital").html("目前进行中的任务 :" + data.totalTaskNo);
+						$("#span_task_no").html(data.totalTaskNo);
+						//判断用户类型 if (data.user.role.type == 0)
+						if (data.tasks != null && data.tasks != 'null')
+						{
+							usertaskList = data.tasks;
+							if (data.user.role.type == 'applicant'){
+								for (var i = 0; i < usertaskList.length; i++) {
+									//处理中的工单	
+									if (usertaskList[i].status == '1'){
+										$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ usertaskList[i].taskName +"</li>" );
+									}
+									if (usertaskList[i].status == '2'){
+										$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ usertaskList[i].taskName +"</li>" );
+									}	
+									if (usertaskList[i].status == '3'){
+										$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ usertaskList[i].taskName +"</li>" );
+									}	
+									//工单完成
+									if (usertaskList[i].status == '5'){
+										$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ usertaskList[i].taskName +"</li>" );
+									}		
+									//退回
+									if (usertaskList[i].status == '4'){
+										$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-remove\"></i>"+ usertaskList[i].taskName +"</li>" );
+									}	
+								}
+							}
+							if (data.user.role.type == 'audit'){
+								for (var i = 0; i < usertaskList.length; i++) {
+									if (usertaskList[i].status == '1'){
+										$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ usertaskList[i].taskName +"</li>" );
+									}	
+								}
+							}
+							if (data.user.role.type == 'executor'){
+								for (var i = 0; i < usertaskList.length; i++) {	
+									if (usertaskList[i].status == '2'){
+										$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ usertaskList[i].taskName +"</li>" );
+									}	
+									if (usertaskList[i].status == '3'){
+										$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-refresh\"></i>"+ usertaskList[i].taskName +"</li>" );
+									}	
+									if (usertaskList[i].status == '5'){
+										$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ usertaskList[i].taskName +"</li>" );
+									}	
+								}
+							}
+						}
+						if (data.taskApplyComplete != null && data.taskApplyComplete != 'null')
+						{
+							usertaskList = data.taskApplyComplete;
+							for (var i = 0; i < usertaskList.length; i++) {
+								$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ usertaskList[i].taskName +"</li>" );
+							}
+						}
+						if (data.taskApplyReject != null && data.taskApplyReject != 'null')
+						{
+							usertaskList = data.taskApplyReject;
+							for (var i = 0; i < usertaskList.length; i++) {
+								$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-remove\"></i>"+ usertaskList[i].taskName +"</li>" );
+							}
 						}
 					};
 				}

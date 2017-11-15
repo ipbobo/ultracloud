@@ -105,6 +105,9 @@ public class ActivitiService {
   		return page;
   	}
   	
+  	
+  	
+  	
   	//未签收任务列表查询
   	public Page<TaskBean> getUnsignedTaskList(String currUser, int currPage, int qryNum) {
   		int  totalNum=(int)taskService.createTaskQuery().taskCandidateUser(currUser).count();
