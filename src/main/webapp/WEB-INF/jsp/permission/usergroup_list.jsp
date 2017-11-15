@@ -61,7 +61,7 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">名称</th>
+									<th class="center">用户组名称</th>
 									<th class="center">所属角色</th>
 									<th class="center">创建时间</th>
 									<th class="center">更新时间</th>

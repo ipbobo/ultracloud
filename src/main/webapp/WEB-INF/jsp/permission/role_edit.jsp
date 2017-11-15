@@ -25,22 +25,34 @@
 						<input type="hidden" name="ROLE_ID" id="id" value="${pd.ROLE_ID}"/>
 						<input name="PARENT_ID" id="parent_id" value="${pd.parent_id }" type="hidden">
 							<div id="zhongxin" style="padding-top:13px;">
-							<table class="center" style="width:100%;">
-								<tr style="text-align: center;">
-									<td><input type="text" name="ROLE_NAME" id="roleName" placeholder="这里输入名称" value="${pd.ROLE_NAME}"  title="名称" style="width:99%;"/></td>
-								</tr>
-								<tr>
-									<td style="text-align: center;padding-top:5px;">
+							<table  id="table_report" class="table table-striped table-bordered table-hover">
+							<tr>
+									<td style="width:79px;text-align: right;padding-top: 13px;">名称:</td>
+									<td><input type="text" name="ROLE_NAME" id="roleName" placeholder="这里输入名称" value="${pd.ROLE_NAME}"  title="名称" style="width:98%;" maxlength="30" /></td>
+							</tr>
+							<tr>
+								<td style="width:79px;text-align: right;padding-top: 13px;">类型:</td>
+								<td id="js">
+									<select class="chosen-select form-control" name="type" id=type data-placeholder="请选择类型" style="vertical-align:top;"  title="类型" style="width:98%;" >
+									<option value=""></option>
+									<c:forEach items="${dictionariesList}" var="dictionaries">
+										<option value="${dictionaries.BIANMA }" <c:if test="${dictionaries.BIANMA == pd.type }">selected</c:if>>${dictionaries.NAME }</option>
+									</c:forEach>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align: center;" colspan="10">
 										<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
 										<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
-									</td>
-								</tr>
+								</td>
+							</tr>
 							</table>
 							</div>
+							<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
 						</form>
 					
 					<div id="zhongxin2" class="center" style="display:none"><img src="static/images/jzx.gif" style="width: 50px;" /><br/><h4 class="lighter block green"></h4></div>
-
 					</div>
 					<!-- /.col -->
 				</div>
@@ -76,8 +88,6 @@
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
 	}
-	
-	
 	</script>
 </body>
 </html>

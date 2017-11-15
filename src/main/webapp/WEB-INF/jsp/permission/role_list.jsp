@@ -191,9 +191,9 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>role/toAdd.do?parent_id='+pid;
-			 diag.Width = 222;
-			 diag.Height = 100;
+			 diag.URL = '<%=basePath%>role/goAdd.do?parent_id='+pid;
+			 diag.Width = 450;
+			 diag.Height = 220;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					top.jzts();
@@ -210,9 +210,9 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>role/toEdit.do?ROLE_ID='+ROLE_ID;
-			 diag.Width = 222;
-			 diag.Height = 100;
+			 diag.URL = '<%=basePath%>role/goEdit.do?ROLE_ID='+ROLE_ID;
+			 diag.Width = 450;
+			 diag.Height = 220;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					top.jzts();

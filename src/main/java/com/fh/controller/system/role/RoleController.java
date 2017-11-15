@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
+import com.fh.entity.system.Dictionaries;
 import com.fh.entity.system.Menu;
 import com.fh.entity.system.Role;
 import com.fh.service.system.appuser.AppuserManager;
+import com.fh.service.system.dictionaries.impl.DictionariesService;
 import com.fh.service.system.fhlog.FHlogManager;
 import com.fh.service.system.role.RoleManager;
 import com.fh.service.system.user.UserManager;
@@ -52,6 +54,8 @@ public class RoleController extends BaseController {
 	private AppuserManager appuserService;
 	@Resource(name="fhlogService")
 	private FHlogManager FHLOG;
+	@Resource(name="dictionariesService")
+	private DictionariesService dictionariesService;
 	
 	/** 进入权限首页
 	 * @param 
@@ -132,6 +136,27 @@ public class RoleController extends BaseController {
 		return mv;
 	}
 	
+	/**去新增页面(新)
+	 * @param 
+	 * @return
+	 */
+	@RequestMapping(value="/goAdd")
+	public ModelAndView goAdd(){
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		try{
+			pd = this.getPageData();
+			mv.addObject("msg", "add");
+			mv.setViewName("permission/role_edit");
+			List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("role_type");
+			mv.addObject("dictionariesList", dictionariesList);
+			mv.addObject("pd", pd);
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
+		return mv;
+	}
+	
 	/**保存新增角色
 	 * @return
 	 * @throws Exception
@@ -183,6 +208,30 @@ public class RoleController extends BaseController {
 			mv.addObject("msg", "edit");
 			mv.addObject("pd", pd);
 			mv.setViewName("system/role/role_edit");
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
+		return mv;
+	}
+	
+	/**请求编辑(新)
+	 * @param ROLE_ID
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/goEdit")
+	public ModelAndView goEdit( String ROLE_ID )throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		try{
+			pd = this.getPageData();
+			pd.put("ROLE_ID", ROLE_ID);
+			pd = roleService.findObjectById(pd);
+			List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("role_type");
+			mv.addObject("dictionariesList", dictionariesList);
+			mv.addObject("msg", "edit");
+			mv.addObject("pd", pd);
+			mv.setViewName("permission/role_edit");
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}

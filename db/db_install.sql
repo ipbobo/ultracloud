@@ -513,7 +513,24 @@ CREATE TABLE `sys_user` (
   INDEX idx_role_id(`ROLE_ID`),
   INDEX idx_department_id(`DEPARTMENT_ID`),
   PRIMARY KEY (`USER_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户';
+
+-- ----------------------------
+-- 角色
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role`;
+CREATE TABLE `sys_role` (
+  `ROLE_ID` varchar(100) NOT NULL,
+  `ROLE_NAME` varchar(100) DEFAULT NULL,
+  `RIGHTS` varchar(255) DEFAULT NULL,
+  `PARENT_ID` varchar(100) DEFAULT NULL,
+  `ADD_QX` varchar(255) DEFAULT NULL,
+  `DEL_QX` varchar(255) DEFAULT NULL,
+  `EDIT_QX` varchar(255) DEFAULT NULL,
+  `CHA_QX` varchar(255) DEFAULT NULL,
+  `type` varchar(20) DEFAULT NULL COMMENT '角色类型',
+  PRIMARY KEY (`ROLE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色';
 
 -- ----------------------------
 -- 数据字典

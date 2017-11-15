@@ -18,7 +18,8 @@
 		ADD_QX,
 		DEL_QX,
 		EDIT_QX,
-		CHA_QX
+		CHA_QX,
+		type
 	</sql>
 	
 	<!-- 字段值 -->
@@ -30,7 +31,8 @@
 		#{ADD_QX},
 		#{DEL_QX},
 		#{EDIT_QX},
-		#{CHA_QX}
+		#{CHA_QX},
+		#{type}
 	</sql>
 	
 	<!--表名 -->
@@ -83,7 +85,8 @@
 	<update id="edit" parameterType="pd">
 		update 
 		<include refid="tableName"></include>
-		set ROLE_NAME = #{ROLE_NAME}
+		set ROLE_NAME = #{ROLE_NAME},
+		type = #{type}
 		where ROLE_ID = #{ROLE_ID}
 	</update>
 	
