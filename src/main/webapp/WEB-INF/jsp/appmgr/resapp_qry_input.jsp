@@ -84,9 +84,9 @@ function addDiskRow(){
 		        	subDataStr+="<option value=\""+item.dictCode+"\" "+(item.dictDefault=='1'?"selected":"")+">"+item.dictValue+"</option>"
 		        });
 		        
-		        var tdStr="<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+dataStr+"</select></td>"
+		        var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"diskType\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+dataStr+"</select></td>"
 				    +"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"diskSize\" data-placeholder=\"请选择磁盘大小\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+subDataStr+"</select></td>"
-				    +"<td align=\"center\" style=\"width: 120x;padding:10px;\"><input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
+				    +"<td align=\"center\" style=\"width: 120x;\"><input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
 			    $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 			}
 	    },
@@ -118,9 +118,9 @@ function addSoftRow(){
 		        	subDataStr+="<option value=\""+item.dictCode+"\" "+(item.dictDefault=='1'?"selected":"")+">"+item.dictValue+"</option>"
 		        });
 		        
-		        var tdStr="<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"softName\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+dataStr+"</select></td>"
+		        var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"softName\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+dataStr+"</select></td>"
 			    	+"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"softVer\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+subDataStr+"</select></td>"
-				    +"<td align=\"center\" style=\"width: 150x;padding:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
+				    +"<td align=\"center\" style=\"width: 120x;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
 				$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
 			}
 	    },
@@ -426,7 +426,7 @@ function delRow(rowId){
 			<td style="padding:10px;" colspan="6">
 				<table id="diskTableId">
 					<tr id="trId1">
-						<td align="left" style="width: 120px;padding:10px;">
+						<td align="left" style="width: 120px;">
 							<select class="chosen-select form-control" name="diskType" data-placeholder="请选择磁盘类型" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${diskTypeList}" var="var">
@@ -442,7 +442,7 @@ function delRow(rowId){
 							</c:forEach>
 						  	</select>
 						</td>
-						<td align="center" style="width: 120px;padding:10px;">
+						<td align="center" style="width: 120px;">
 						  	<input name="diskEncrypt" type="checkbox" value=""/>加密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</td>
 					</tr>
@@ -457,7 +457,7 @@ function delRow(rowId){
 			<td style="padding:10px;" colspan="6">
 				<table id="softTableId">
 					<tr id="softTrId">
-						<td align="left" style="width: 120px;padding:10px;">
+						<td align="left" style="width: 120px;">
 							<select class="chosen-select form-control" name="softName" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${softNameList}" var="var">
@@ -473,9 +473,9 @@ function delRow(rowId){
 							</c:forEach>
 						  	</select>
 						</td>
-						<td align="center" style="width: 150px;padding:10px;">
+						<td align="center" style="width: 120px;">
 							<input type="hidden" name="softParam" id="softParam1" value=""/>
-						  	<a href="javascript:void()" onclick="setSoftParam(1)">设置参数</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						  	<a href="javascript:void()" onclick="setSoftParam(1)">设置参数</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</td>
 					</tr>
 				</table>
