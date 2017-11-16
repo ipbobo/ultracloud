@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <% String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/"; %>
+<!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet" href="css/style.css"/>
@@ -84,9 +85,9 @@ function addDiskRow(){
 		        	subDataStr+="<option value=\""+item.dictCode+"\" "+(item.dictDefault=='1'?"selected":"")+">"+item.dictValue+"</option>"
 		        });
 		        
-		        var tdStr="<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+dataStr+"</select></td>"
+		        var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"diskType\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+dataStr+"</select></td>"
 				    +"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"diskSize\" data-placeholder=\"请选择磁盘大小\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+subDataStr+"</select></td>"
-				    +"<td align=\"center\" style=\"width: 120x;padding:10px;\"><input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
+				    +"<td align=\"center\" style=\"width: 120x;\"><input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
 			    $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 			}
 	    },
@@ -118,9 +119,9 @@ function addSoftRow(){
 		        	subDataStr+="<option value=\""+item.dictCode+"\" "+(item.dictDefault=='1'?"selected":"")+">"+item.dictValue+"</option>"
 		        });
 		        
-		        var tdStr="<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"softName\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+dataStr+"</select></td>"
+		        var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"softName\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+dataStr+"</select></td>"
 			    	+"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"softVer\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+subDataStr+"</select></td>"
-				    +"<td align=\"center\" style=\"width: 150x;padding:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
+				    +"<td align=\"center\" style=\"width: 120x;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
 				$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
 			}
 	    },
@@ -216,6 +217,18 @@ function addList(){
 function delRow(rowId){
     $("#"+rowId).remove();  
 }
+
+//必须加<!DOCTYPE html>
+//$(document).height();//整个网页的高度
+//$(window).height();//浏览器可视窗口的高度
+//$(window).scrollTop();//浏览器可视窗口顶端距离网页顶端的高度（垂直偏移）
+$(window).scroll(function() {
+	if ($('#btnId').offset().top + $('#btnId').height() <= $(window).height() + $(window).scrollTop()) {
+    	$('#btnId').css('position', 'fixed');
+    	$('#btnId').css('bottom', '0');
+    	$('#btnId').css('backgroundColor', '#ffffff');
+	}
+})
 </script>
 </head>
 <body>
@@ -426,7 +439,7 @@ function delRow(rowId){
 			<td style="padding:10px;" colspan="6">
 				<table id="diskTableId">
 					<tr id="trId1">
-						<td align="left" style="width: 120px;padding:10px;">
+						<td align="left" style="width: 120px;">
 							<select class="chosen-select form-control" name="diskType" data-placeholder="请选择磁盘类型" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${diskTypeList}" var="var">
@@ -442,7 +455,7 @@ function delRow(rowId){
 							</c:forEach>
 						  	</select>
 						</td>
-						<td align="center" style="width: 120px;padding:10px;">
+						<td align="center" style="width: 120px;">
 						  	<input name="diskEncrypt" type="checkbox" value=""/>加密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</td>
 					</tr>
@@ -457,7 +470,7 @@ function delRow(rowId){
 			<td style="padding:10px;" colspan="6">
 				<table id="softTableId">
 					<tr id="softTrId">
-						<td align="left" style="width: 120px;padding:10px;">
+						<td align="left" style="width: 120px;">
 							<select class="chosen-select form-control" name="softName" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${softNameList}" var="var">
@@ -473,9 +486,9 @@ function delRow(rowId){
 							</c:forEach>
 						  	</select>
 						</td>
-						<td align="center" style="width: 150px;padding:10px;">
+						<td align="center" style="width: 120px;">
 							<input type="hidden" name="softParam" id="softParam1" value=""/>
-						  	<a href="javascript:void()" onclick="setSoftParam(1)">设置参数</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						  	<a href="javascript:void()" onclick="setSoftParam(1)">设置参数</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</td>
 					</tr>
 				</table>
@@ -517,12 +530,19 @@ function delRow(rowId){
 			<td align="right" style="width: 120px;padding:10px;">实例规格：</td>
 			<td align="left" style="width: 120px;padding:10px;" colspan="2"><span id="areaCode"></span></td>
 		</tr>
+		<tr><td colspan="8">&nbsp;</td>
 	</table>
-	<fieldset><legend>&nbsp;</legend></fieldset>
-	<div class="divbtn">
-	    <span class="btncls"><a href="javascript:void()" onclick="thxFriend()">保存为套餐</a></span>                
-	    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
-	</div>
+	<table id="btnId" style="width:100%;border-top:1px solid #f5f5f5;">
+		<tr>
+			<td>
+				<div class="divbtn">
+				    <span class="btncls"><a href="javascript:void()" onclick="thxFriend()">保存为套餐</a></span>                
+				    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
+				</div>
+			</td>
+		</tr>
+	</table>
+	<table style="width:100%;border-top:1px solid #f5f5f5;"><tr><td><div class="divbtn"></div></td></tr></table>
 	</form>
 </div>
 <div id="tcsq" class="tab-pane fade">

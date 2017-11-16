@@ -28,5 +28,7 @@ CREATE TABLE `cmp_order` (
   `imgExpireDate` varchar(19) DEFAULT NULL COMMENT '镜像到期时间',
   `expireDate` varchar(19) DEFAULT NULL COMMENT '到期时间',
   `virNum` varchar(10) DEFAULT NULL COMMENT '虚拟机数量',
+  `pckgName` varchar(60) DEFAULT NULL COMMENT '套餐名称',
+  `pckgFlag` varchar(1) DEFAULT '0' COMMENT '套餐标志：0-否；1-是',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='清单表';
