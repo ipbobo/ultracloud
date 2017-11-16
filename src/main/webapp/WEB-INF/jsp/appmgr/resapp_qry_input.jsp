@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <% String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/"; %>
+<!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet" href="css/style.css"/>
@@ -216,6 +217,18 @@ function addList(){
 function delRow(rowId){
     $("#"+rowId).remove();  
 }
+
+//必须加<!DOCTYPE html>
+//$(document).height();//整个网页的高度
+//$(window).height();//浏览器可视窗口的高度
+//$(window).scrollTop();//浏览器可视窗口顶端距离网页顶端的高度（垂直偏移）
+$(window).scroll(function() {
+	if ($('#btnId').offset().top + $('#btnId').height() <= $(window).height() + $(window).scrollTop()) {
+    	$('#btnId').css('position', 'fixed');
+    	$('#btnId').css('bottom', '0');
+    	$('#btnId').css('backgroundColor', '#ffffff');
+	}
+})
 </script>
 </head>
 <body>
@@ -517,12 +530,19 @@ function delRow(rowId){
 			<td align="right" style="width: 120px;padding:10px;">实例规格：</td>
 			<td align="left" style="width: 120px;padding:10px;" colspan="2"><span id="areaCode"></span></td>
 		</tr>
+		<tr><td colspan="8">&nbsp;</td>
 	</table>
-	<fieldset><legend>&nbsp;</legend></fieldset>
-	<div class="divbtn">
-	    <span class="btncls"><a href="javascript:void()" onclick="thxFriend()">保存为套餐</a></span>                
-	    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
-	</div>
+	<table id="btnId" style="width:100%;border-top:1px solid #f5f5f5;">
+		<tr>
+			<td>
+				<div class="divbtn">
+				    <span class="btncls"><a href="javascript:void()" onclick="thxFriend()">保存为套餐</a></span>                
+				    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
+				</div>
+			</td>
+		</tr>
+	</table>
+	<table style="width:100%;border-top:1px solid #f5f5f5;"><tr><td><div class="divbtn"></div></td></tr></table>
 	</form>
 </div>
 <div id="tcsq" class="tab-pane fade">
