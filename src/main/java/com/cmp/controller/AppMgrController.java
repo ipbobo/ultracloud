@@ -99,6 +99,14 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
+	//加入清单
+	@RequestMapping(value="/savePckgPre")
+	public ModelAndView savePckgPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("appmgr/resapp_savepckg_input");
+		return mv;
+	}
+	
 	//获取参数Bean
 	public CmpOrder getParam(HttpServletRequest request){
 		CmpOrder cmpOrder=new CmpOrder();
@@ -127,6 +135,8 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setImgExpireDate(request.getParameter("imgExpireDate"));//镜像到期时间
 		cmpOrder.setExpireDate(request.getParameter("expireDate"));//到期时间
 		cmpOrder.setVirNum(request.getParameter("virNum"));//数量
+		cmpOrder.setPckgFlag(request.getParameter("pckgFlag"));//套餐标志：0-否；1-是
+		cmpOrder.setPckgName(request.getParameter("pckgName"));//套餐名称
 		return cmpOrder;
 	}
 	

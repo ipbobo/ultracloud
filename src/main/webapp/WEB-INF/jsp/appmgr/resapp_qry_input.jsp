@@ -130,49 +130,51 @@ function addSoftRow(){
 }
 
 //数据校验
-function checkData(){
-	if($("#virName").val()==""){
-		$("#virName").tips({side:3, msg:'虚拟主机不能为空', bg:'#AE81FF', time:2});
-		$("#virName").focus();
-		return false;
-	}
-	
-	if($("#imgUserName").val()==""){
-		$("#imgUserName").tips({side:3, msg:'用户名不能为空', bg:'#AE81FF', time:2});
-		$("#imgUserName").focus();
-		return false;
-	}
-	
-	if($("#imgUserPass").val()==""){
-		$("#imgUserPass").tips({side:3, msg:'密码不能为空', bg:'#AE81FF', time:2});
-		$("#imgUserPass").focus();
-		return false;
-	}
-	
-	if($("#osType").val()=="redhat" && $("#imgPath").val()==""){
-		$("#imgPath").tips({side:3, msg:'路径不能为空', bg:'#AE81FF', time:2});
-		$("#imgPath").focus();
-		return false;
-	}
-	
-	if($("#imgExpireDate").val()==""){
-		$("#imgExpireDate").tips({side:3, msg:'镜像到期时间不能为空', bg:'#AE81FF', time:2});
-		$("#imgExpireDate").focus();
-		return false;
-	}
-	
-	if($("#expireDate").val()==""){
-		$("#expireDate").tips({side:3, msg:'到期时间不能为空', bg:'#AE81FF', time:2});
-		$("#expireDate").focus();
-		return false;
+function checkData(chkFlag){
+	if(chkFlag){
+		if($("#virName").val()==""){
+			$("#virName").tips({side:3, msg:'虚拟主机不能为空', bg:'#AE81FF', time:2});
+			$("#virName").focus();
+			return false;
+		}
+		
+		if($("#imgUserName").val()==""){
+			$("#imgUserName").tips({side:3, msg:'用户名不能为空', bg:'#AE81FF', time:2});
+			$("#imgUserName").focus();
+			return false;
+		}
+		
+		if($("#imgUserPass").val()==""){
+			$("#imgUserPass").tips({side:3, msg:'密码不能为空', bg:'#AE81FF', time:2});
+			$("#imgUserPass").focus();
+			return false;
+		}
+		
+		if($("#osType").val()=="redhat" && $("#imgPath").val()==""){
+			$("#imgPath").tips({side:3, msg:'路径不能为空', bg:'#AE81FF', time:2});
+			$("#imgPath").focus();
+			return false;
+		}
+		
+		if($("#imgExpireDate").val()==""){
+			$("#imgExpireDate").tips({side:3, msg:'镜像到期时间不能为空', bg:'#AE81FF', time:2});
+			$("#imgExpireDate").focus();
+			return false;
+		}
+		
+		if($("#expireDate").val()==""){
+			$("#expireDate").tips({side:3, msg:'到期时间不能为空', bg:'#AE81FF', time:2});
+			$("#expireDate").focus();
+			return false;
+		}
 	}
 	
 	return true;
 }
 
 //加入清单
-function addList(){
-	if(checkData()){//数据校验
+function addList(chkFlag){
+	if(checkData(chkFlag)){//数据校验
 		var diskTypeArr=new Array()
 		$("select[name='diskType']").each(function() {
 			diskTypeArr.push($(this).val());
@@ -210,6 +212,28 @@ function addList(){
 		$("#softVerStr").val(softVerArr.join());
 		$("#softParamStr").val(softParamArr.join());
 		$("#mainForm").submit();
+		$("#pckgFlag").val("0");//套餐标志：0-否；1-是
+		$("#pckgName").val("");//套餐名称
+	}
+}
+
+//保存为套餐预查询
+function savePckgPre(){
+	if(checkData(true)){//数据校验
+		var diag = new top.Dialog();
+		diag.Drag=true;
+		diag.Title ="新增";
+		diag.URL = '<%=basePath%>/savePckgPre.do';
+		diag.Width = 500;
+		diag.Height = 100;
+		diag.CancelEvent=function(){diag.close();};//关闭事件
+		diag.OKEvent=function(){//OK事件
+			$("#pckgFlag").val("1");//套餐标志：0-否；1-是
+			$("#pckgName").val(diag.innerFrame.contentWindow.document.getElementById('pckgName').value);
+			addList(false);//加入清单
+			diag.close();
+		};
+		diag.show();
 	}
 }
 
@@ -252,6 +276,8 @@ $(window).scroll(function() {
 	<input type="hidden" name="softNameStr" id="softNameStr" value=""/><!-- 软件名称字符串 -->
 	<input type="hidden" name="softVerStr" id="softVerStr" value=""/><!-- 软件版本字符串 -->
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
+	<input type="text" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
+	<input type="text" name="pckgFlag" id="pckgFlag" value="0"/><!-- 套餐标志：0-否；1-是 -->
 	<table style="width:100%;margin-top: 10px;margin-left: 0px;border-collapse:collapse;">
 		<tr class="tablecls">
 			<td align="left" style="width: 10px;padding:10px;background-color:#cccccc;">地域</td>
@@ -536,9 +562,9 @@ $(window).scroll(function() {
 		<tr>
 			<td align="left" style="padding:10px;">
 				<div class="divbtn">
-				    <span class="btncls"><a href="javascript:void()" onclick="savePckg()">保存为套餐</a></span>
+				    <span class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
 				    <span style="width:30px;float:right;">&nbsp;</span>
-				    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
+				    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList(true)">加入清单</a></span>  
 				</div>
 			</td>
 		</tr>
