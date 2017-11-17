@@ -347,7 +347,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8">&nbsp;</td>
 		<tr class="tablecls">
-			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="6">基本配置</td>
+			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="5">基本配置</td>
 			<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="resTypeId" class="ullitab list-inline">
@@ -365,12 +365,12 @@ $(window).scroll(function() {
 				<input type="text" name="virName" id="virName"  value=""/>
 			</td>
 		</tr>
-		<tr class="tablecls">
+		<!-- <tr class="tablecls">
 			<td align="right" style="width: 120px;padding:10px;">虚拟机IP：</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<input type="text" name="virIp" id="virIp"  value=""/>
 			</td>
-		</tr>
+		</tr> -->
 		<tr class="tablecls">
 			<td align="right" style="width: 120px;padding:10px;">推荐配置：</td>
 			<td align="left" style="padding:10px;" colspan="6">
