@@ -276,8 +276,8 @@ $(window).scroll(function() {
 	<input type="hidden" name="softNameStr" id="softNameStr" value=""/><!-- 软件名称字符串 -->
 	<input type="hidden" name="softVerStr" id="softVerStr" value=""/><!-- 软件版本字符串 -->
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
-	<input type="text" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
-	<input type="text" name="pckgFlag" id="pckgFlag" value="0"/><!-- 套餐标志：0-否；1-是 -->
+	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
+	<input type="hidden" name="pckgFlag" id="pckgFlag" value="0"/><!-- 套餐标志：0-否；1-是 -->
 	<table style="width:100%;margin-top: 10px;margin-left: 0px;border-collapse:collapse;">
 		<tr class="tablecls">
 			<td align="left" style="width: 10px;padding:10px;background-color:#cccccc;">地域</td>
