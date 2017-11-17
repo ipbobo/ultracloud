@@ -260,7 +260,7 @@
 		 diag.Drag=true;
 		 diag.Title ="编辑";
 		 diag.URL = '<%=basePath%>usergroup/goEdit.do?id='+Id;
-		 diag.Width = 450;
+		 //diag.Width = 450;
 		 diag.Height = 358;
 		 diag.CancelEvent = function(){ //关闭事件
 			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
@@ -326,8 +326,8 @@
 		 diag.Drag=true;
 		 diag.Title ="选择成员";
 		 diag.URL = '<%=basePath%>usergroup/goUserbind.do?id='+id+'&ROLE_ID='+ROLE_ID;
-		 diag.Width = 1024;
-		 diag.Height = 340;
+		 diag.Width = 1000;
+		 diag.Height = 400;
 		 diag.CancelEvent = function(){ //关闭事件
 			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 				 nextPage(${page.currentPage});
