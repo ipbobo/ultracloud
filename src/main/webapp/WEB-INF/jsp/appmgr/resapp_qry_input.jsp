@@ -129,6 +129,11 @@ function addSoftRow(){
 	});
 }
 
+//删除行  
+function delRow(rowId){
+    $("#"+rowId).remove();  
+}
+
 //数据校验
 function checkData(chkFlag){
 	if(chkFlag){
@@ -237,9 +242,13 @@ function savePckgPre(){
 	}
 }
 
-//删除行  
-function delRow(rowId){
-    $("#"+rowId).remove();  
+//套餐申请
+function pckgApp(){
+	if(tcsq || $("#tcsq").is(".active")){
+		return;
+	}
+	tcsq=true;
+	$("#tcsq").load("resAppPre.do");
 }
 
 //必须加<!DOCTYPE html>
@@ -258,7 +267,7 @@ $(window).scroll(function() {
 <body>
 <ul class="nav nav-tabs">
 	<li class="active"><a href="#zdysq" data-toggle="tab">自定义申请</a></li>
-	<li><a href="#tcsq" data-toggle="tab">套餐申请</a></li>
+	<li><a href="#tcsq" onclick="pckgApp('tcsq')" data-toggle="tab">套餐申请</a></li>
 </ul>
 <div class="tab-content">
 <div id="zdysq" class="tab-pane fade in active">
@@ -558,24 +567,22 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8">&nbsp;</td>
 	</table>
-	<table id="btnId" style="width:100%;border-top:1px solid #f5f5f5;">
-		<tr>
-			<td align="left" style="padding:10px;">
-				<div class="divbtn">
-				    <span class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
-				    <span style="width:30px;float:right;">&nbsp;</span>
-				    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList(true)">加入清单</a></span>  
-				</div>
-			</td>
-		</tr>
-	</table>
-	<table style="width:100%;border-top:1px solid #f5f5f5;"><tr><td style="padding:10px;"><div class="divbtn"></div></td></tr></table>
 	</form>
 </div>
-<div id="tcsq" class="tab-pane fade">
-	
+<div id="tcsq" class="tab-pane fade"></div>
 </div>
-</div>
+<table id="btnId" style="width:100%;border-top:1px solid #f5f5f5;">
+	<tr>
+		<td align="left" style="padding:10px;">
+			<div class="divbtn">
+			    <span class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
+			    <span style="width:30px;float:right;">&nbsp;</span>
+			    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList(true)">加入清单</a></span>  
+			</div>
+		</td>
+	</tr>
+</table>
+<table style="width:100%;border-top:1px solid #f5f5f5;"><tr><td style="padding:10px;"><div class="divbtn"></div></td></tr></table>
 <script type="text/javascript">
 $(top.hangge());
 $('.date-picker').datepicker({autoclose: true,todayHighlight: true});//datepicker
