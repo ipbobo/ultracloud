@@ -243,12 +243,14 @@ function savePckgPre(){
 }
 
 //套餐申请
+var tcsq=false;
 function pckgApp(){
 	if(tcsq || $("#tcsq").is(".active")){
 		return;
 	}
-	tcsq=true;
+	
 	$("#tcsq").load("resAppPre.do");
+	tcsq=true;
 }
 
 //必须加<!DOCTYPE html>
