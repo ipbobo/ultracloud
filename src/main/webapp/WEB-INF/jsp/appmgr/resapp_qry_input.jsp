@@ -534,15 +534,16 @@ $(window).scroll(function() {
 	</table>
 	<table id="btnId" style="width:100%;border-top:1px solid #f5f5f5;">
 		<tr>
-			<td>
+			<td style="padding:10px;">
 				<div class="divbtn">
-				    <span class="btncls"><a href="javascript:void()" onclick="thxFriend()">保存为套餐</a></span>                
+				    <span class="btncls"><a href="javascript:void()" onclick="thxFriend()">保存为套餐</a></span>
+				    <span style="width:30px;float:right;"><a href="javascript:void()" onclick="thxFriend()">&nbsp;</a></span>
 				    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
 				</div>
 			</td>
 		</tr>
 	</table>
-	<table style="width:100%;border-top:1px solid #f5f5f5;"><tr><td><div class="divbtn"></div></td></tr></table>
+	<table style="width:100%;border-top:1px solid #f5f5f5;"><tr><td style="padding:10px;"><div class="divbtn"></div></td></tr></table>
 	</form>
 </div>
 <div id="tcsq" class="tab-pane fade">

@@ -35,7 +35,9 @@
 		imgPath,
 		imgExpireDate,
 		expireDate,
-		virNum
+		virNum,
+		pckgName,
+		pckgFlag
 	</sql>
 	
 	<!-- 字段值 -->
@@ -67,7 +69,9 @@
 		#{imgPath},
 		#{imgExpireDate},
 		#{expireDate},
-		#{virNum}
+		#{virNum},
+		#{pckgName},
+		#{pckgFlag}
 	</sql>
 	
 	<!-- 字段 -->
@@ -96,7 +100,9 @@
 		imgPath,
 		imgExpireDate,
 		expireDate,
-		virNum
+		virNum,
+		pckgName,
+		pckgFlag
 	</sql>
 	
 	<sql id="saveFieldValue">
@@ -124,7 +130,9 @@
 		#{imgPath},
 		#{imgExpireDate},
 		#{expireDate},
-		#{virNum}
+		#{virNum},
+		#{pckgName},
+		#{pckgFlag}
 	</sql>
 	
 	<!-- 清单列表查询resultType及resultMap互斥： -->
