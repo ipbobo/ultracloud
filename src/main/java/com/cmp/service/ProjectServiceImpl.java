@@ -17,33 +17,33 @@ public class ProjectServiceImpl implements ProjectService {
 	private DaoSupport dao;
 
 	public void save(PageData pd) throws Exception {
-		dao.save("AttachedMapper.save", pd);
+		dao.save("ProjectMapper.save", pd);
 	}
 
 	public void delete(PageData pd) throws Exception {
-		dao.delete("AttachedMapper.delete", pd);
+		dao.delete("ProjectMapper.delete", pd);
 	}
 
 	public void edit(PageData pd) throws Exception {
-		dao.update("AttachedMapper.edit", pd);
+		dao.update("ProjectMapper.edit", pd);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("AttachedMapper.datalistPage", page);
+		return (List<PageData>) dao.findForList("ProjectMapper.datalistPage", page);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("AttachedMapper.listAll", pd);
+		return (List<PageData>) dao.findForList("ProjectMapper.listAll", pd);
 	}
 
 	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("AttachedMapper.findById", pd);
+		return (PageData) dao.findForObject("ProjectMapper.findById", pd);
 	}
 
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("AttachedMapper.deleteAll", ArrayDATA_IDS);
+		dao.delete("ProjectMapper.deleteAll", ArrayDATA_IDS);
 	}
 
 }
