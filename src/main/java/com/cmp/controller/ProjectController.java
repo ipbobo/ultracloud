@@ -1,5 +1,6 @@
 package com.cmp.controller;
 
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -19,12 +22,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.ProjectService;
+import com.cmp.service.UserGroupService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.Dictionaries;
+import com.fh.service.fhoa.department.DepartmentManager;
+import com.fh.service.system.dictionaries.impl.DictionariesService;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
-import com.fh.util.Tools;
 
 @Controller
 @RequestMapping(value = "/project")
@@ -34,6 +40,15 @@ public class ProjectController extends BaseController {
 
 	@Resource(name = "projectService")
 	private ProjectService projectService;
+	
+	@Resource(name="dictionariesService")
+	private DictionariesService dictionariesService;
+	
+	@Resource(name="userGroupService")
+	private UserGroupService userGroupService;
+	
+	@Resource(name="departmentService")
+	private DepartmentManager departmentService;
 
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
@@ -49,7 +64,7 @@ public class ProjectController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData> varList = projectService.list(page); // 列出Attached列表
-		mv.setViewName("console/project/project_list");
+		mv.setViewName("project/project_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
@@ -58,15 +73,13 @@ public class ProjectController extends BaseController {
 
 	@RequestMapping(value = "/save")
 	public ModelAndView save() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "新增Attached");
+		logBefore(logger, Jurisdiction.getUsername() + "新增Project");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
 		} // 校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("ATTACHED_ID", this.get32UUID()); // 主键
-		pd.put("CTIME", Tools.date2Str(new Date())); // 创建时间
 		projectService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -75,7 +88,7 @@ public class ProjectController extends BaseController {
 
 	@RequestMapping(value = "/edit")
 	public ModelAndView edit() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "修改Attached");
+		logBefore(logger, Jurisdiction.getUsername() + "修改Project");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
 			return null;
 		} // 校验权限
@@ -93,7 +106,24 @@ public class ProjectController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		mv.setViewName("information/attached/attached_edit");
+		
+		//查询项目等级
+		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("project_type");
+		mv.addObject("dictionariesList", dictionariesList);
+		
+		//查询所有审核角色类型的用户组
+		Page page = this.getPage();
+		PageData pagedata = page.getPd();
+		pagedata.put("type", "audit");
+		List<PageData>	usergroupList = userGroupService.list(page);	
+		mv.addObject("usergroupList", usergroupList);
+		
+		//查询部门树
+		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
+		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect(Jurisdiction.getDEPARTMENT_ID(),zdepartmentPdList));
+		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
+		
+		mv.setViewName("project/project_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
 		return mv;
@@ -105,15 +135,48 @@ public class ProjectController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = projectService.findById(pd); // 根据ID读取
-		mv.setViewName("information/attached/attached_edit");
+		
+		//查询项目等级
+		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("project_type");
+		mv.addObject("dictionariesList", dictionariesList);
+				
+		//查询所有审核角色类型的用户组
+		Page page = this.getPage();
+		PageData pagedata = page.getPd();
+		pagedata.put("type", "audit");
+		List<PageData>	usergroupList = userGroupService.list(page);	
+		mv.addObject("usergroupList", usergroupList);
+				
+		//查询部门树
+		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
+		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect(Jurisdiction.getDEPARTMENT_ID(),zdepartmentPdList));
+		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
+		mv.addObject("depname", departmentService.findById(pd).getString("NAME"));
+		
+		mv.setViewName("project/project_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
 	}
+	
+	/**删除
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/delete")
+	public void delete(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername()+"删除Project");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		projectService.delete(pd);
+		out.write("success");
+		out.close();
+	}
 
 	@RequestMapping(value = "/deleteAll")
 	public @ResponseBody Object deleteAll() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "批量删除Attached");
+		logBefore(logger, Jurisdiction.getUsername() + "批量删除Project");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
 			return null;
 		} // 校验权限

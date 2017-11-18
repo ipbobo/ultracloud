@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="UsergroupMapper">
+<mapper namespace="ProjectMapper">
 	
-	<resultMap type="UserGroupUserMap" id="userGroupUserMapResultMap">
+<!-- 	<resultMap type="ProjectMap" id="projectResultMap">
 		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="shortname" property="shortname"/>
+		<result column="level" property="level"/>
+		<result column="parent_id" property="parent_id"/>
+		<result column="DEPARTMENT_ID" property="DEPARTMENT_ID"/>
+		<result column="USERNAME" property="USERNAME"/>
 		<result column="usergroup_id" property="usergroup_id"/>
-		<result column="USER_ID" property="USER_ID"/>
+		<result column="detail" property="detail"/>
 		<result column="gmt_create" property="gmt_create"/>
 		<result column="gmt_modified" property="gmt_modified"/>
-	</resultMap>
+	</resultMap> -->
 	
 	<!--关联表名 -->
 	<sql id="tableName">
+		t_project
+	</sql>
+	<sql id="departmentTableName">
+		OA_DEPARTMENT
+	</sql>
+	<sql id="usertableName">
+		SYS_USER
+	</sql>
+	<sql id="usergrouptableName">
 		t_usergroup
-	</sql>
-	<sql id="roleTableName">
-		SYS_ROLE
-	</sql>
-	<sql id="usergrouproletableName">
-		t_usergroup_role_map
-	</sql>
-	<sql id="usergroupusertableName">
-		t_usergroup_user_map
 	</sql>
 	
 	<!-- 字段 -->
@@ -32,7 +38,13 @@
 	
 	<sql id="Field_main">
 		name,
-		ROLE_ID
+		shortname,
+		level,
+		parent_id,
+		DEPARTMENT_ID,
+		USERNAME,
+		usergroup_id,
+		detail
 	</sql>
 	
 	<sql id="Field_time">
@@ -50,7 +62,13 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
 		#{name},
-		#{ROLE_ID}
+		#{shortname},
+		#{level},
+		#{parent_id},
+		#{DEPARTMENT_ID},
+		#{USERNAME},
+		#{usergroup_id},
+		#{detail}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -86,34 +104,7 @@
                  #{item}
 		</foreach>
 	</delete>
-	
-	<!-- 批量删除用户组与用户的关联 -->
-	<delete id="deleteAllUsergroup" parameterType="String">
-		delete from
-		<include refid="usergroupusertableName"></include>
-		where id in
-		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
-                 #{item}
-		</foreach>
-	</delete>
-	
-	<!-- 批量插入用户组与用户的关联 -->
-	<insert id="insertAllUsergroup" parameterType="java.util.List">   
-    	insert into 
-    	<include refid="usergroupusertableName"></include> (usergroup_id,USER_ID)   
-    	values  
-    	<foreach collection="list" item="item" index="index" separator="," >  
-        	(#{item.usergroup_id},#{item.USER_ID})  
-    	</foreach>  
-	</insert> 
-	
-	<!-- 删除用户组与用户的关联，按用户组 -->
-	<delete id="deleteByUsergroupId" parameterType="pd">
-		delete from
-		<include refid="usergroupusertableName"></include>
-		where 
-			usergroup_id = #{id}
-	</delete>
+
 	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
@@ -121,35 +112,42 @@
 		<include refid="tableName"></include>
 		set 
 			name = #{name},
-			ROLE_ID = #{ROLE_ID}
+			shortname = #{shortname},
+			level = #{level},
+			parent_id = #{parent_id},
+			DEPARTMENT_ID = #{DEPARTMENT_ID},
+			USERNAME = #{USERNAME},
+			usergroup_id = #{usergroup_id},
+			detail = #{detail}
 		where 
 		id = #{id}
 	</update>
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-		select up.id,
-		       up.name,
-		       up.ROLE_ID,
-               up.gmt_create,
-               up.gmt_modified,
-			   r.ROLE_NAME,
-			   r.type
-		from <include refid="tableName"></include> up, <include refid="roleTableName"></include> r 
-		where up.ROLE_ID = r.ROLE_ID
-		<if test="pd.ROLE_ID != null and pd.ROLE_ID != ''"><!-- 角色ID检索 -->
-			and up.ROLE_ID=#{pd.ROLE_ID} 
-		</if>
-		<if test="pd.type != null and pd.type != ''"><!-- 角色类型检索 -->
-			and r.type=#{pd.type} 
-		</if>
+		select p.id,
+		       p.name,
+			   p.shortname,
+			   p.level,
+			   p.parent_id,
+			   p.DEPARTMENT_ID,
+			   p.USERNAME,
+			   p.usergroup_id,
+			   p.detail,
+               p.gmt_create,
+               p.gmt_modified,
+			   d.NAME as DEPARTMENT_NAME, 
+			   ug.name as usergroup_name
+		from <include refid="tableName"></include> p, <include refid="departmentTableName"></include> d, <include refid="usergrouptableName"></include> ug
+		where p.DEPARTMENT_ID = d.DEPARTMENT_ID
+		and   p.usergroup_id = ug.id
 		<if test="pd.name != null and pd.name != ''"><!-- 关键词检索 -->
 			and
 				(
-				 up.name LIKE CONCAT(CONCAT('%', #{pd.name}),'%')
+				 p.name LIKE CONCAT(CONCAT('%', #{p.name}),'%')
 				)
 		</if>
-		order by up.gmt_modified desc
+		order by p.gmt_modified desc
 	</select>
 	
 	<!-- 通过ID获取数据 -->
@@ -160,13 +158,6 @@
 		<include refid="tableName"></include>
 		where 
 			id = #{id}
-	</select>
-	
-	<!-- 通过id查找 -->
-	<select id="listUserGroupUserMap" parameterType="String" resultMap="userGroupUserMapResultMap">
-		select * from 
-		<include refid="usergroupusertableName"></include>
-		where usergroup_id=#{id}
 	</select>
 	
 </mapper>
