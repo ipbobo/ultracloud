@@ -22,29 +22,37 @@
 	<script type="text/javascript" src="plugins/selectZtree/ztree/ztree.js"></script>
 	<link type="text/css" rel="stylesheet" href="plugins/selectZtree/ztree/ztree.css"></link>
 	<!-- 树形下拉框end -->
+	<!-- 左右双列 start -->
+	<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/ultracloud/static/html_UI/assets/css/prettify.css">
+	<link rel="stylesheet" href="/ultracloud/static/html_UI/assets/css/bootstrap-duallistbox.css" />
+	<script src="http://www.jq22.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<script src="/ultracloud/static/html_UI/assets/js/jquery.bootstrap-duallistbox.js"></script>
+	<!-- 左右双列 end -->
 </head>
-<body class="no-skin">
+<body class="no-skin" style="width: 98%;">
 <!-- /section:basics/navbar.layout -->
-<div class="main-container" id="main-container">
+<div class="main-container" id="main-container" >
 	<!-- /section:basics/sidebar -->
 	<div class="main-content">
 		<div class="main-content-inner">
 			<div class="page-content">
-				<div class="row">
+				<div class="row"  >
 					
-					
-					<form action="project/${msg }.do" name="Form" id="Form" method="post">
+					<form action="project/${msg }.do" name="Form" id="Form" method="post" >
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
-						<div id="zhongxin" style="padding-top: 13px;">
+						<input type="hidden" name="DATA_IDS" id="DATA_IDS" />
+						<div id="zhongxin" style="padding-top: 13px;padding-left: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:100px;text-align: right;padding-top: 13px;">项目名称:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">项目名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30"  style="width:98%;"/></td>
-								<td style="width:100px;text-align: right;padding-top: 13px;">项目简称:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">项目简称:</td>
 								<td><input type="text" name="shortname" id="shortname" value="${pd.shortname}" maxlength="30" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:100px;text-align: right;padding-top: 13px;">项目等级:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">项目等级:</td>
 								<td id="js">
 									<select class="chosen-select form-control" name="level" id=level data-placeholder="请选择等级" style="vertical-align:top;"  title="等级" style="width:98%;" >
 									<option value=""></option>
@@ -53,7 +61,7 @@
 									</c:forEach>
 									</select>
 								</td>
-								<td style="width:100px;text-align: right;padding-top: 13px;">审核用户组:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">审核用户组:</td>
 								<td id="juese">
 								<select class="chosen-select form-control" name="usergroup_id" id="usergroup_id" data-placeholder="请选择用户组" style="vertical-align:top;" style="width:98%;" >
 								<option value=""></option>
@@ -64,21 +72,36 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:100px;text-align: right;padding-top: 13px;">项目归属部门:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">项目归属部门:</td>
 								<td>
 									<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
 									<div class="selectTree" id="selectTree"></div>
 								</td>
-								<td style="width:100px;text-align: right;padding-top: 13px;">项目责任人:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">项目责任人:</td>
 								<td>
 									<input type="text" name="USERNAME" id="USERNAME" value="${pd.USERNAME}" maxlength="30"  style="width:70%;"/>&nbsp;&nbsp;
 									<a class="btn btn-mini btn-primary" onclick="selectLeaderUser('USERNAME');">选择</a>
 								</td>
 							</tr>
+ 				 			<tr>
+								<td style="width:120px;height:130px;text-align: right;padding-top: 13px;">项目组成员:</td>
+								<div class="col-xs-12">
+								<td colspan="8">
+										<select multiple="multiple" size="5" name="duallistbox_demo1[]" class="demo2">
+											<c:forEach items="${notBindingUserList}" var="user">
+												<option value="${user.USER_ID }">${user.NAME }</option>
+											</c:forEach>
+											<c:forEach items="${bindedUserList}" var="user">
+												<option value="${user.USER_ID }" selected="selected">${user.NAME }</option>
+											</c:forEach>
+										</select>
+								</td>
+								</div>
+							</tr>
 							<tr>
-								<td style="width:100px;height:130px;text-align: right;padding-top: 13px;">描述:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">描述:</td>
 								<td  colspan="10">
-									<textarea rows="5" cols="10" id="detail" name="detail" style="width:98%;"></textarea>
+									<textarea rows="3" cols="10" id="detail" name="detail" style="width:98%;"></textarea>
 								</td>
 							</tr>
 							<tr>
@@ -103,7 +126,6 @@
 	<!-- /.main-content -->
 </div>
 <!-- /.main-container -->
-
 
 	<!-- 页面底部js¨ -->
 	<%@ include file="../system/index/foot.jsp"%>
@@ -176,6 +198,24 @@
 			 };
 			 diag.show();
 		}
+		
+		var demo1 = $('select[name="duallistbox_demo1[]"]')
+		.bootstrapDualListbox({
+			nonSelectedListLabel : '未加入',
+			selectedListLabel : '已加入',
+			preserveSelectionOnMove : 'moved',
+			moveOnSelect : true,
+			nonSelectedFilter : '',		
+			infoText : '',
+			filterPlaceHolder : '可输入用户名过滤',
+			selectorMinimalHeight: 10
+		});
+
+		$("#demoform").submit(function() {
+			$("#DATA_IDS").val($('[name="duallistbox_demo1[]"]').val());
+			//alert($('[name="duallistbox_demo1[]"]').val());
+			return true;
+		});
 		</script>
 </body>
 </html>
