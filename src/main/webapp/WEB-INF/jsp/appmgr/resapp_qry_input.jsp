@@ -18,7 +18,6 @@
 <script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 <script src="static/ace/js/bootstrap.js"></script>
 <script type="text/javascript" src="static/js/jquery.tips.js"></script>
-<script src="js/json2.js"></script>
 <script type="text/javascript">
 //$('.f_uli li').eq(0).addClass("active");
 //$('.f_uli li').eq(1).removeClass("active");
@@ -250,7 +249,7 @@ function pckgApp(){
 		return;
 	}
 	
-	$("#tcsq").load("resAppPre.do");
+	$("#tcsq").load("pckgAppPre.do");
 	tcsq=true;
 }
 
