@@ -1,6 +1,7 @@
 package com.cmp.controller;
 
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.entity.ProjectUserMap;
 import com.cmp.service.ProjectService;
 import com.cmp.service.UserGroupService;
 import com.fh.controller.base.BaseController;
@@ -28,6 +30,7 @@ import com.fh.entity.Page;
 import com.fh.entity.system.Dictionaries;
 import com.fh.service.fhoa.department.DepartmentManager;
 import com.fh.service.system.dictionaries.impl.DictionariesService;
+import com.fh.service.system.user.UserManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
@@ -49,6 +52,9 @@ public class ProjectController extends BaseController {
 	
 	@Resource(name="departmentService")
 	private DepartmentManager departmentService;
+	
+	@Resource(name="userService")
+	private UserManager userService;
 
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
@@ -80,7 +86,12 @@ public class ProjectController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String id = this.get32UUID();
+		pd.put("id", id);	//ID 主键
 		projectService.save(pd);
+		
+		updateProjectUserMap(pd, id);
+		
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -95,10 +106,67 @@ public class ProjectController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String id = pd.getString("id");
 		projectService.edit(pd);
+		
+		updateProjectUserMap(pd, id);
+		
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
+	}
+
+	/**
+	 * 更新项目与用户的关联
+	 * @param pd
+	 * @param id
+	 * @throws Exception
+	 */
+	private void updateProjectUserMap(PageData pd, String id) throws Exception {
+		String DATA_IDS = pd.getString("DATA_IDS");
+		if(null != DATA_IDS && !"".equals(DATA_IDS)){
+			List<ProjectUserMap> newList = new ArrayList<ProjectUserMap>();
+			String ArrayDATA_IDS[] = DATA_IDS.split(",");
+			
+			List<ProjectUserMap> existList = projectService.listProjectUserMap(pd);
+			List<BigInteger> deleteIdList = new ArrayList<BigInteger>();
+			if(null != existList && existList.size() > 0) {
+				StringBuffer sb = new StringBuffer();
+				
+				for(ProjectUserMap projectUserMap : existList) {
+					sb.append(projectUserMap.getUSER_ID()+",");
+					if(!DATA_IDS.contains(projectUserMap.getUSER_ID())) {
+						deleteIdList.add(projectUserMap.getId());
+					} 
+				}
+				
+				
+				for(int i = 0; i < ArrayDATA_IDS.length; i++) {
+					if(!sb.toString().contains(ArrayDATA_IDS[i])) {
+						ProjectUserMap puMap = new ProjectUserMap();
+						puMap.setUSER_ID(ArrayDATA_IDS[i]);
+						puMap.setProject_id(id);
+						newList.add(puMap);
+					}
+				}
+			} else {
+				for(int i = 0; i < ArrayDATA_IDS.length; i++) {
+						ProjectUserMap uguMap = new ProjectUserMap();
+						uguMap.setUSER_ID(ArrayDATA_IDS[i]);
+						uguMap.setProject_id(id);
+						newList.add(uguMap);
+				}
+			}
+			
+			if(deleteIdList.size() > 0) {
+				projectService.deleteAllProjectUserMap(deleteIdList);
+			}
+			if(newList.size() > 0) {
+				projectService.insertAllProjectUserMap(newList);
+			}
+		} else {
+			projectService.deleteByProjectId(id);
+		}
 	}
 
 	@RequestMapping(value = "/goAdd")
@@ -122,6 +190,10 @@ public class ProjectController extends BaseController {
 		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
 		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect(Jurisdiction.getDEPARTMENT_ID(),zdepartmentPdList));
 		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
+		
+		//查询用户列表
+		List<PageData>	notBindingUserList = userService.listAllOutProjectByPdId(pd);
+		mv.addObject("notBindingUserList", notBindingUserList);
 		
 		mv.setViewName("project/project_edit");
 		mv.addObject("msg", "save");
@@ -152,6 +224,12 @@ public class ProjectController extends BaseController {
 		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect(Jurisdiction.getDEPARTMENT_ID(),zdepartmentPdList));
 		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
 		mv.addObject("depname", departmentService.findById(pd).getString("NAME"));
+		
+		//查询用户列表
+		List<PageData>	notBindingUserList = userService.listAllOutProjectByPdId(pd);
+		mv.addObject("notBindingUserList", notBindingUserList);
+		List<PageData>	bindedUserList = userService.listAllInProjectByProjectId(pd);
+		mv.addObject("bindedUserList", bindedUserList);
 		
 		mv.setViewName("project/project_edit");
 		mv.addObject("msg", "edit");

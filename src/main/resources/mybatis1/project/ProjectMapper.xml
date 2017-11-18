@@ -2,19 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ProjectMapper">
 	
-<!-- 	<resultMap type="ProjectMap" id="projectResultMap">
+	<resultMap type="ProjectUserMap" id="ProjectUserMapResultMap">
 		<id column="id" property="id"/>
-		<result column="name" property="name"/>
-		<result column="shortname" property="shortname"/>
-		<result column="level" property="level"/>
-		<result column="parent_id" property="parent_id"/>
-		<result column="DEPARTMENT_ID" property="DEPARTMENT_ID"/>
-		<result column="USERNAME" property="USERNAME"/>
-		<result column="usergroup_id" property="usergroup_id"/>
-		<result column="detail" property="detail"/>
+		<result column="project_id" property="project_id"/>
+		<result column="USER_ID" property="USER_ID"/>
 		<result column="gmt_create" property="gmt_create"/>
 		<result column="gmt_modified" property="gmt_modified"/>
-	</resultMap> -->
+	</resultMap>
 	
 	<!--关联表名 -->
 	<sql id="tableName">
@@ -28,6 +22,9 @@
 	</sql>
 	<sql id="usergrouptableName">
 		t_usergroup
+	</sql>
+	<sql id="projectusermaptableName">
+		t_project_user_map
 	</sql>
 	
 	<!-- 字段 -->
@@ -80,9 +77,9 @@
 	<insert id="save" parameterType="pd">
 		insert into 
 	<include refid="tableName"></include>
-		(
+		(id,
 	<include refid="Field_main"></include>
-		) values (
+		) values (#{id},
 	<include refid="FieldValue_main"></include>
 		)
 	</insert>
@@ -95,11 +92,29 @@
 			id = #{id}
 	</delete>
 	
+	<!-- 删除项目与用户的关联-->
+	<delete id="deleteProjectUserMap" parameterType="pd">
+		delete from
+		<include refid="projectusermaptableName"></include>
+		where 
+			project_id = #{id}
+	</delete>
+	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
 		<include refid="tableName"></include>
 		where id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量删除项目与用户的关联 -->
+	<delete id="deleteAllProjectUserMapByProjectId" parameterType="String">
+		delete from
+		<include refid="projectusermaptableName"></include>
+		where project_id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                  #{item}
 		</foreach>
@@ -159,5 +174,40 @@
 		where 
 			id = #{id}
 	</select>
+	
+	<!-- 通过项目查找用户列表 -->
+	<select id="listProjectUserMap" parameterType="String" resultMap="ProjectUserMapResultMap">
+		select * from 
+		<include refid="projectusermaptableName"></include>
+		where project_id=#{id}
+	</select>
+	
+	<!-- 批量删除项目与用户的关联 -->
+	<delete id="deleteAllProjectUserMap" parameterType="String">
+		delete from
+		<include refid="projectusermaptableName"></include>
+		where id in
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量插入用户组与用户的关联 -->
+	<insert id="insertAllProjectUserMap" parameterType="java.util.List">   
+    	insert into 
+    	<include refid="projectusermaptableName"></include> (project_id,USER_ID)   
+    	values  
+    	<foreach collection="list" item="item" index="index" separator="," >  
+        	(#{item.project_id},#{item.USER_ID})  
+    	</foreach>  
+	</insert> 
+	
+	<!-- 删除用户组与用户的关联，按用户组 -->
+	<delete id="deleteByProjectId" parameterType="pd">
+		delete from
+		<include refid="projectusermaptableName"></include>
+		where 
+			project_id = #{id}
+	</delete>
 	
 </mapper>

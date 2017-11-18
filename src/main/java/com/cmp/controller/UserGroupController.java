@@ -198,10 +198,12 @@ public class UserGroupController extends BaseController {
 		pd = this.getPageData();
 		String role_id = pd.getString("ROLE_ID");
 		pd.put("ROLE_ID", role_id);
+		
 		List<PageData>	notBindingUserList = userService.listAllOutUserByPdId(pd);
 		mv.addObject("notBindingUserList", notBindingUserList);
 		List<PageData>	bindedUserList = userService.listAllInUserByUserGroupId(pd);
 		mv.addObject("bindedUserList", bindedUserList);
+		
 		pd = userGroupService.findById(pd);	//根据ID读取
 		mv.setViewName("permission/usergroup_userbind");
 		mv.addObject("msg", "edit");
@@ -227,7 +229,6 @@ public class UserGroupController extends BaseController {
 			
 			
 			List<UserGroupUserMap> existList = userGroupService.listUserGroupUserMap(pd);
-			
 			List<BigInteger> deleteIdList = new ArrayList<BigInteger>();
 			if(null != existList && existList.size() > 0) {
 				StringBuffer sb = new StringBuffer();

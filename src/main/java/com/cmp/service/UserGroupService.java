@@ -43,7 +43,7 @@ public interface UserGroupService {
 	 */
 	public void deleteAllUsergroup(List<BigInteger> list)throws Exception;
 	
-	/**批量删除用户组与用户关联
+	/**批量插入用户组与用户关联
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
