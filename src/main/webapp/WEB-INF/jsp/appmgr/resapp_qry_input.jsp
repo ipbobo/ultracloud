@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/bootstrap-spinner.css">
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
 <link rel="stylesheet" href="static/ace/css/chosen.css" />
+<link rel="stylesheet" href="static/ace/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.spinner.min.js"></script>
@@ -227,10 +228,10 @@ function savePckgPre(){
 	if(checkData(true)){//数据校验
 		var diag = new top.Dialog();
 		diag.Drag=true;
-		diag.Title ="新增";
+		diag.Title ="保存为套餐";
 		diag.URL = '<%=basePath%>/savePckgPre.do';
 		diag.Width = 500;
-		diag.Height = 100;
+		diag.Height = 80;
 		diag.CancelEvent=function(){diag.close();};//关闭事件
 		diag.OKEvent=function(){//OK事件
 			$("#pckgFlag").val("1");//套餐标志：0-否；1-是
@@ -289,7 +290,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
 	<input type="hidden" name="pckgFlag" id="pckgFlag" value="0"/><!-- 套餐标志：0-否；1-是 -->
-	<table style="width:100%;margin-top: 10px;margin-left: 0px;border-collapse:collapse;">
+	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;border-collapse:collapse;">
 		<tr class="tablecls">
 			<td align="left" style="width: 10px;padding:10px;background-color:#cccccc;">地域</td>
 			<td align="right" style="width: 120px;padding:10px;">地域：</td>
@@ -475,7 +476,7 @@ $(window).scroll(function() {
 			<td align="right" style="width: 120px;padding:10px;">存储：</td>
 			<td style="padding:10px;" colspan="6">
 				<table id="diskTableId">
-					<tr id="trId1">
+					<tr id="diskTrId">
 						<td align="left" style="width: 120px;">
 							<select class="chosen-select form-control" name="diskType" data-placeholder="请选择磁盘类型" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
@@ -567,7 +568,6 @@ $(window).scroll(function() {
 			<td align="right" style="width: 120px;padding:10px;">实例规格：</td>
 			<td align="left" style="width: 120px;padding:10px;" colspan="2"><span id="areaCode"></span></td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
 	</table>
 	</form>
 </div>
