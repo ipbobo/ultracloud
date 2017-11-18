@@ -94,6 +94,7 @@ public class ScriptController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("username", Jurisdiction.getUsername()); // 创建者
+		pd.put("filesize", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("url"))); // 文件大小
 		scriptService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");

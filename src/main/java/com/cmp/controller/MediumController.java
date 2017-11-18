@@ -17,8 +17,11 @@ import com.cmp.service.MediumService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
+import com.fh.util.Const;
+import com.fh.util.FileUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
+import com.fh.util.PathUtil;
 
 /** 
  * 介质 控制层
@@ -44,6 +47,7 @@ public class MediumController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("username", Jurisdiction.getUsername()); // 创建者
+		pd.put("filesize", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("url"))); // 文件大小
 		mediumService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -77,6 +81,7 @@ public class MediumController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("username", Jurisdiction.getUsername()); // 创建者
+		pd.put("filesize", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("url"))); // 文件大小
 		mediumService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
