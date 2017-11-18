@@ -26,6 +26,8 @@ public class CmpOrder {
 	private String imgExpireDate;//镜像到期时间
 	private String expireDate;//到期时间
 	private String virNum;//虚拟机数量
+	private String pckgName;//套餐名称
+	private String pckgFlag;//套餐标志：0-否；1-是
 
 	public String getAreaCode() {
 		return areaCode;
@@ -225,5 +227,21 @@ public class CmpOrder {
 
 	public void setVirNum(String virNum) {
 		this.virNum = virNum;
+	}
+
+	public String getPckgName() {
+		return pckgName;
+	}
+
+	public void setPckgName(String pckgName) {
+		this.pckgName = pckgName;
+	}
+
+	public String getPckgFlag() {
+		return pckgFlag;
+	}
+
+	public void setPckgFlag(String pckgFlag) {
+		this.pckgFlag = pckgFlag;
 	}
 }

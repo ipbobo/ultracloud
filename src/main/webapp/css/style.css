@@ -4,7 +4,7 @@ ul.ullitab li{ font-size:14px; cursor:pointer; border:1px solid #fff; float:left
 ul.ullitab li.active{ color:#FFFFFF; background-color:#0099cc;}
 
 .divbtn{ margin:10; height:36px; line-height:36px;}
-.btncls{ cursor:pointer; float:right; border:1px solid #f5620a; clear:none; margin:10; height:36px; line-height:36px; width:180px; text-align:center; color:#000;}
-.btncls a:link { color:#000; text-decoration: none; height: 36px; display: block;}  
-.btncls a:hover,a:visited { color:#000; text-decoration: none; background-color:#f5620a; height: 36px; display: block;}
+.divbtn .btncls{ cursor:pointer; float:right; border:1px solid #f5620a; clear:none; margin:10; height:36px; line-height:36px; width:180px; text-align:center; color:#000;}
+.divbtn .btncls a:link { color:#000; text-decoration: none; height: 35px; display: block;}  
+.divbtn .btncls a:hover,a:visited { color:#000; text-decoration: none; background-color:#f5620a; height: 35px; display: block;}
 
