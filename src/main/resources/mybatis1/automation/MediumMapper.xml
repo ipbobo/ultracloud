@@ -29,7 +29,8 @@
 		purpose,
 		username,
 		url,
-		detail
+		detail,
+		filesize
 	</sql>
 	
 	<sql id="Field_time">
@@ -49,7 +50,8 @@
 		#{purpose},
 		#{username},
 		#{url},
-		#{detail}
+		#{detail},
+		#{filesize}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -85,7 +87,8 @@
 			purpose = #{purpose},
 			username = #{username},
 			url = #{url},
-			detail = #{detail}
+			detail = #{detail},
+			filesize = #{filesize}
 		where 
 		id = #{id}
 	</update>
