@@ -158,4 +158,18 @@ public interface UserManager {
 	 */
 	public List<PageData> listAllOutUserByPdId(PageData pd) throws Exception;
 	
+	/**列出已加入该项目的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAllInProjectByProjectId(PageData pd) throws Exception;
+	
+	/**列出未加入该项目的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAllOutProjectByPdId(PageData pd) throws Exception;
+	
 }

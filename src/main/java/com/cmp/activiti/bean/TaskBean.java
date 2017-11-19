@@ -13,6 +13,12 @@ public class TaskBean {
 	private String executionId;//执行对象ID
 	private String processDefinitionId;//流程定义ID
 	private String status; //任务状态   0 : 初始状态  1:待审批  2:待处理  3:处理中 4:退回  5:完成
+	public final static String STATUS_INIT = "0";   //任务状态   0 : 初始状态  1:待审批  2:待处理  3:处理中 4:退回  5:完成
+	public final static String STATUS_APPROVE = "1"; //任务状态   0 : 初始状态  1:待审批  2:待处理  3:处理中 4:退回  5:完成
+	public final static String STATUS_PENDING = "2"; //任务状态   0 : 初始状态  1:待审批  2:待处理  3:处理中 4:退回  5:完成
+	public final static String STATUS_HANDLING = "3"; //任务状态   0 : 初始状态  1:待审批  2:待处理  3:处理中 4:退回  5:完成
+	public final static String STATUS_RETURN = "4"; //任务状态   0 : 初始状态  1:待审批  2:待处理  3:处理中 4:退回  5:完成
+	public final static String STATUS_FINISH = "5"; //任务状态   0 : 初始状态  1:待审批  2:待处理  3:处理中 4:退回  5:完成
 	public String getAppNo() {
 		return appNo;
 	}

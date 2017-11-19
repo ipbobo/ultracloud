@@ -220,4 +220,24 @@ public class UserService implements UserManager{
 		return (List<PageData>) dao.findForList("UserMapper.listAllOutUserByPdId", pd);
 	}
 	
+	/**列出已加入该项目的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllInProjectByProjectId(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("UserMapper.listAllInProjectByProjectId", pd);
+	}
+	
+	/**列出未加入该项目的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllOutProjectByPdId(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("UserMapper.listAllOutProjectByPdId", pd);
+	}
+	
 }

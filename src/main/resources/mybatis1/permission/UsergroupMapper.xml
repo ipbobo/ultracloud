@@ -162,7 +162,7 @@
 			id = #{id}
 	</select>
 	
-	<!-- 通过id查找 -->
+	<!-- 通过用户组查找用户列表 -->
 	<select id="listUserGroupUserMap" parameterType="String" resultMap="userGroupUserMapResultMap">
 		select * from 
 		<include refid="usergroupusertableName"></include>

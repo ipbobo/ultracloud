@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +22,13 @@ import com.fh.entity.Page;
 import com.fh.entity.system.Dictionaries;
 import com.fh.service.system.dictionaries.impl.DictionariesService;
 import com.fh.util.AppUtil;
+import com.fh.util.Const;
+import com.fh.util.FileDownload;
+import com.fh.util.FileUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
+import com.fh.util.PathUtil;
+import com.fh.util.Tools;
 
 /** 
  * 脚本 控制层
@@ -54,6 +60,7 @@ public class ScriptController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("username", Jurisdiction.getUsername()); // 创建者
+		pd.put("filesize", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("url"))); // 文件大小
 		scriptService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -87,6 +94,7 @@ public class ScriptController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("username", Jurisdiction.getUsername()); // 创建者
+		pd.put("filesize", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("url"))); // 文件大小
 		scriptService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -187,5 +195,41 @@ public class ScriptController extends BaseController {
 		pdList.add(pd);
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
+	}
+	
+	/**
+	 * 下载
+	 * 
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/download")
+	public void download(HttpServletResponse response) throws Exception {
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd = scriptService.findById(pd);
+		String fileName = pd.getString("url");
+		FileDownload.fileDownload(response, PathUtil.getClasspath() + Const.FILEPATHFILEOA + fileName,
+				pd.getString("name") + fileName.substring(19, fileName.length()));
+	}
+	
+	/**
+	 * 去预览脚本文件页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goViewTxt")
+	public ModelAndView goViewTxt() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String encoding = pd.getString("encoding");
+		pd = scriptService.findById(pd);
+		String code = Tools.readTxtFileAll(Const.FILEPATHFILEOA + pd.getString("url"), encoding);
+		pd.put("code", code);
+		mv.setViewName("automation/script_view_txt");
+		mv.addObject("pd", pd);
+		return mv;
 	}
 }

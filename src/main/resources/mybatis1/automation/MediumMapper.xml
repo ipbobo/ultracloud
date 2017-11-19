@@ -9,6 +9,7 @@
 		<result column="url" property="url"/>
 		<result column="username" property="username"/>
 		<result column="detail" property="detail"/>
+		<result column="filesize" property="filesize"/>
 		<result column="gmt_create" property="gmt_create"/>
 		<result column="gmt_modified" property="gmt_modified"/>
 	</resultMap>
@@ -29,7 +30,8 @@
 		purpose,
 		username,
 		url,
-		detail
+		detail,
+		filesize
 	</sql>
 	
 	<sql id="Field_time">
@@ -49,7 +51,8 @@
 		#{purpose},
 		#{username},
 		#{url},
-		#{detail}
+		#{detail},
+		#{filesize}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -85,7 +88,8 @@
 			purpose = #{purpose},
 			username = #{username},
 			url = #{url},
-			detail = #{detail}
+			detail = #{detail},
+			filesize = #{filesize}
 		where 
 		id = #{id}
 	</update>

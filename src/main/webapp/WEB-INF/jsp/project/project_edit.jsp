@@ -26,7 +26,7 @@
 	<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="/ultracloud/static/html_UI/assets/css/prettify.css">
 	<link rel="stylesheet" href="/ultracloud/static/html_UI/assets/css/bootstrap-duallistbox.css" />
-	<script src="http://www.jq22.com/jquery/2.1.1/jquery.min.js"></script>
+	<!-- <script src="http://www.jq22.com/jquery/2.1.1/jquery.min.js"></script> -->
 	<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 	<script src="/ultracloud/static/html_UI/assets/js/jquery.bootstrap-duallistbox.js"></script>
 	<!-- 左右双列 end -->
@@ -40,11 +40,11 @@
 			<div class="page-content">
 				<div class="row"  >
 					
-					<form action="project/${msg }.do" name="Form" id="Form" method="post" >
+					<form action="project/${msg }.do" name="Form1" id="Form1" method="post" >
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<input type="hidden" name="DATA_IDS" id="DATA_IDS" />
 						<div id="zhongxin" style="padding-top: 13px;padding-left: 13px;">
-						<table id="table_report" class="table table-striped table-bordered table-hover">
+						<table id="table_report" class="table table-striped table-bordered table-hover" style="padding-left: 13px;">
 							<tr>
 								<td style="width:120px;text-align: right;padding-top: 13px;">项目名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30"  style="width:98%;"/></td>
@@ -178,7 +178,7 @@
 				$("#name").focus();
 			return false;
 			}
-			$("#Form").submit();
+			$("#Form1").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
 		}
@@ -211,9 +211,10 @@
 			selectorMinimalHeight: 10
 		});
 
-		$("#demoform").submit(function() {
+		$("#Form1").submit(function() {
+			console.log('111111111111');
 			$("#DATA_IDS").val($('[name="duallistbox_demo1[]"]').val());
-			//alert($('[name="duallistbox_demo1[]"]').val());
+			console.log($('[name="duallistbox_demo1[]"]').val());
 			return true;
 		});
 		</script>

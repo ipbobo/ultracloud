@@ -322,7 +322,7 @@ CREATE TABLE `t_order` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_project`;
 CREATE TABLE `t_project` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `id` varchar(32) NOT NULL COMMENT '用户id',
   `name` varchar(20) NOT NULL COMMENT '项目名称',
   `shortname` varchar(20) DEFAULT NULL COMMENT '项目简称',
   `level` varchar(20) DEFAULT NULL COMMENT '项目等级',
@@ -342,6 +342,19 @@ CREATE TABLE `t_project` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目'; 
 
+-- ----------------------------
+-- 项目用户关联
+-- ----------------------------
+DROP TABLE IF EXISTS `t_project_user_map`;
+create table `t_project_user_map` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` varchar(32) NOT NULL COMMENT '项目id',
+  `USER_ID` varchar(100) NOT NULL COMMENT '用户id',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  UNIQUE INDEX uk_project_user(`project_id`,`USER_ID`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目用户关联';
 
 -- ----------------------------
 -- 脚本
@@ -355,6 +368,7 @@ CREATE TABLE `t_script` (
   `purpose` varchar(20) DEFAULT NULL COMMENT '用途',
   `username` varchar(40) NOT NULL COMMENT '创建者',
   `url` varchar(1000) DEFAULT NULL COMMENT '路径',
+  `filesize` varchar(20) DEFAULT NULL COMMENT '大小',
   `medium_id` bigint unsigned NOT NULL COMMENT '关联介质id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
@@ -394,6 +408,7 @@ CREATE TABLE `t_medium` (
   `name` varchar(20) NOT NULL COMMENT '介质名称',
   `purpose` varchar(20) DEFAULT NULL COMMENT '用途',
   `url` varchar(1000) DEFAULT NULL COMMENT '路径',
+  `filesize` varchar(20) DEFAULT NULL COMMENT '大小',
   `username` varchar(40) NOT NULL COMMENT '创建者',
   `detail` varchar(500) DEFAULT NULL COMMENT '描述',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -474,21 +489,6 @@ create table `t_usergroup` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组';
-
-
--- ----------------------------
--- 用户组与角色关联
--- ----------------------------
-DROP TABLE IF EXISTS `t_usergroup_user_map`;
-create table `t_usergroup_user_map` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `usergroup_id` bigint unsigned NOT NULL COMMENT '用户组id',
-  `USER_ID` varchar(100) NOT NULL COMMENT '用户id',
-  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  UNIQUE INDEX uk_usergroup_role(`usergroup_id`,`USER_ID`),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组与用户关联';
 
 -- ----------------------------
 -- 用户

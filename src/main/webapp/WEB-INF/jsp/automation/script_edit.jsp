@@ -12,6 +12,15 @@
 	<base href="<%=basePath%>">
 	<!-- jsp文件头和头部 -->
 	<%@ include file="../system/index/top.jsp"%>
+	<script type="text/javascript" src="static/ace/js/jquery.js"></script>
+	<!-- 上传插件 -->
+	<link href="plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="plugins/uploadify/swfobject.js"></script>
+	<script type="text/javascript" src="plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
+	<!-- 上传插件 -->
+	<script type="text/javascript">
+	var jsessionid = "<%=session.getId()%>";  //勿删，uploadify兼容火狐用到
+	</script>
 </head>
 <body class="no-skin">
 <!-- /section:basics/navbar.layout -->
@@ -24,17 +33,18 @@
 					<div class="col-xs-12">
 					
 					<form action="script/${msg }.do" name="Form" id="Form" method="post">
+						<input type="hidden" value="no" id="hasTp1" />
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">名称:</td>
-								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:98%;"/></td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">名称:</td>
+								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">类型:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">类型:</td>
 								<td id="js">
-									<select class="chosen-select form-control" name="type" id=type data-placeholder="请选择类型" style="vertical-align:top;"  title="类型" style="width:98%;" >
+									<select class="chosen-select form-control" name="type" id=type data-placeholder="请选择类型" style="vertical-align:top;"  title="类型"  >
 									<option value=""></option>
 									<c:forEach items="${dictionariesList}" var="dictionaries">
 										<option value="${dictionaries.BIANMA }" <c:if test="${dictionaries.BIANMA == pd.type }">selected</c:if>>${dictionaries.NAME }</option>
@@ -43,26 +53,34 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">脚本key:</td>
-								<td><input type="text" name="script_key" id="script_key" value="${pd.script_key}" maxlength="30" placeholder="这里输入脚本key" title="脚本key" style="width:98%;"/></td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">脚本key:</td>
+								<td><input type="text" name="script_key" id="script_key" value="${pd.script_key}" maxlength="30" placeholder="这里输入脚本key" title="脚本key" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">用途:</td>
-								<td><input type="text" name="purpose" id="purpose" value="${pd.purpose}" maxlength="30" placeholder="这里输入用途" title="用途" style="width:98%;"/></td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">用途:</td>
+								<td><input type="text" name="purpose" id="purpose" value="${pd.purpose}" maxlength="30" placeholder="这里输入用途" title="用途" style="width:100%;"/></td>
 							</tr>
+							
 							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">路径:</td>
-								<td><input type="text" name="url" id="url" value="${pd.url}" maxlength="30" placeholder="这里输入路径" title="路径" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">关联介质:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">关联介质:</td>
 								<td id="js">
-									<select class="chosen-select form-control" name="medium_id" id="medium_id" data-placeholder="请选择介质" style="vertical-align:top;"  title="介质" style="width:98%;" >
+									<select class="chosen-select form-control" name="medium_id" id="medium_id" data-placeholder="请选择介质" style="vertical-align:top;"  title="介质" >
 									<option value=""></option>
 									<c:forEach items="${mediumList}" var="medium">
 										<option value="${medium.id }" <c:if test="${medium.id == pd.medium_id }">selected</c:if>>${medium.name }</option>
 									</c:forEach>
 									</select>
+								</td>
+							</tr>
+							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;">直接输入路径:</td>
+								<td><input type="text" name="url" id="url" value="${pd.url}" maxlength="30" placeholder="这里输入路径" title="路径" style="width:100%;"/></td>
+							</tr>
+							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;" id="FILEPATHn">通过文件上传:</td>
+								<td>
+									<input type="file" name="File_name" id="uploadify1" keepDefaultStyle = "true"/>
+									<!-- <input type="hidden" name="url" id="url" value=""/> -->
 								</td>
 							</tr>
 							<tr>
@@ -92,6 +110,8 @@
 
 	<!-- 页面底部js¨ -->
 	<%@ include file="../system/index/foot.jsp"%>
+	<!-- 下拉框 -->
+	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 		<script type="text/javascript">
@@ -133,20 +153,69 @@
 				$("#purpose").focus();
 			return false;
 			}
-			if($("#url").val()==""){
+			if($("#url").val()=="" && $("#hasTp1").val()=="no"){
 				$("#url").tips({
 					side:3,
-		            msg:'请输入路径',
+		            msg:'请输入路径或上传文件',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#url").focus();
 			return false;
 			}
-			$("#Form").submit();
-			$("#zhongxin").hide();
-			$("#zhongxin2").show();
+			
+			if($("#hasTp1").val()=="ok") {
+				$('#uploadify1').uploadifyUpload();
+			} else {
+				$("#Form").submit();
+				$("#zhongxin").hide();
+				$("#zhongxin2").show();
+			}
 		}
+		
+		//====================上传=================
+		$(document).ready(function(){
+			var str='';
+			$("#uploadify1").uploadify({
+				'buttonImg'	: 	"<%=basePath%>static/images/fileup.png",
+				'uploader'	:	"<%=basePath%>plugins/uploadify/uploadify.swf",
+				'script'    :	"<%=basePath%>plugins/uploadify/uploadFile.jsp;jsessionid="+jsessionid,
+				'cancelImg' :	"<%=basePath%>plugins/uploadify/cancel.png",
+				'folder'	:	"<%=basePath%>uploadFiles/uploadFile",//上传文件存放的路径,请保持与uploadFile.jsp中PATH的值相同
+				'queueId'	:	"fileQueue",
+				'queueSizeLimit'	:	1,//限制上传文件的数量
+				//'fileExt'	:	"*.rar,*.zip",
+				//'fileDesc'	:	"RAR *.rar",//限制文件类型
+				'fileExt'     : '*.*;*.*;*.*',
+				'fileDesc'    : 'Please choose(.*, .*, .*)',
+				'auto'		:	false,
+				'multi'		:	true,//是否允许多文件上传
+				'simUploadLimit':	2,//同时运行上传的进程数量
+				'buttonText':	"files",
+				'scriptData':	{'uploadPath':'/uploadFiles/uploadFile/'},//这个参数用于传递用户自己的参数，此时'method' 必须设置为GET, 后台可以用request.getParameter('name')获取名字的值
+				'method'	:	"GET",
+				'onComplete':function(event,queueId,fileObj,response,data){
+					str = response.trim();//单个上传完毕执行
+				},
+				'onAllComplete' : function(event,data) {
+					//alert(str);	//全部上传完毕执行
+					$("#url").val(str);
+					$("#Form").submit();
+					$("#zhongxin").hide();
+					$("#zhongxin2").show();
+		    	},
+		    	'onSelect' : function(event, queueId, fileObj){
+		    		console.log("ok");
+		    		$("#hasTp1").val("ok");
+		    	}
+			});
+					
+		});
+		//====================上传=================
+			//清除空格
+		String.prototype.trim=function(){
+		     return this.replace(/(^\s*)|(\s*$)/g,'');
+		};
 		</script>
 </body>
 </html>

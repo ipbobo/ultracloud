@@ -57,7 +57,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 		dao.delete("UsergroupMapper.deleteAllUsergroup", list);
 	}
 	
-	/**批量删除用户组与用户关联
+	/**批量插入用户组与用户关联
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
