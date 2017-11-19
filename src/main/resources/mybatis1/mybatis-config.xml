@@ -20,6 +20,8 @@
 		<typeAlias type="com.cmp.entity.Organization" alias="Organization"/>
 		<typeAlias type="com.cmp.entity.UserGroup" alias="UserGroup"/>
 		<typeAlias type="com.cmp.entity.Medium" alias="Medium"/>
+		<typeAlias type="com.cmp.entity.UserGroupUserMap" alias="UserGroupUserMap"/>
+		<typeAlias type="com.cmp.entity.ProjectUserMap" alias="ProjectUserMap"/>
 		<!-- 这里添加生成的实体类 -->
 		
 		

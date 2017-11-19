@@ -137,4 +137,39 @@ public interface UserManager {
 	 */
 	public PageData getUserCount(String value)throws Exception;
 	
+	/**列出用户组下的所有用户
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<User> listUserBypd(PageData pd) throws Exception;
+	
+	/**列出已加入用户组的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAllInUserByUserGroupId(PageData pd) throws Exception;
+	
+	/**列出未加入用户组的同角色的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAllOutUserByPdId(PageData pd) throws Exception;
+	
+	/**列出已加入该项目的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAllInProjectByProjectId(PageData pd) throws Exception;
+	
+	/**列出未加入该项目的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAllOutProjectByPdId(PageData pd) throws Exception;
+	
 }

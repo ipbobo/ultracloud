@@ -21,7 +21,7 @@
 		<div class="main-content-inner">
 			<div class="page-content">
 				<div class="row">
-					<div class="col-xs-12">
+					
 					
 					<form action="usergroup/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
@@ -59,7 +59,6 @@
 					</form>
 	
 					<div id="zhongxin2" class="center" style="display:none"><img src="static/images/jzx.gif" style="width: 50px;" /><br/><h4 class="lighter block green"></h4></div>
-					</div>
 					<!-- /.col -->
 				</div>
 				<!-- /.row -->

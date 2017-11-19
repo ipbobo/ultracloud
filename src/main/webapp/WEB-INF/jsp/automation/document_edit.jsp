@@ -107,16 +107,6 @@
 			    });
 			return false;
 			}
-			if($("#detail").val()==""){
-				$("#detail").tips({
-					side:3,
-		            msg:'请输入备注',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#detail").focus();
-			return false;
-			}
 			$('#uploadify1').uploadifyUpload();
 		}
 		

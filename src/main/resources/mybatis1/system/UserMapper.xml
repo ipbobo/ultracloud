@@ -43,6 +43,18 @@
 	<sql id="staffTableName">
 		OA_STAFF
 	</sql>
+	<sql id="usergroupusermapTableName">
+		t_usergroup_user_map
+	</sql>
+	<sql id="usergroupTableName">
+		t_usergroup
+	</sql>
+	<sql id="projectTableName">
+		t_project
+	</sql>
+	<sql id="projectusermapTableName">
+		t_project_user_map
+	</sql>
 	
 	<!-- 字段 -->
 	<sql id="Field">
@@ -153,7 +165,9 @@
 	
 	<!-- 列出某角色下的所有用户 -->
 	<select id="listAllUserByRoldId"  parameterType="pd" resultType="pd" >
-		select USER_ID
+		select USER_ID,
+			   USERNAME,
+			   NAME
 		from 
 		<include refid="tableName"></include>
 		where 
@@ -406,5 +420,60 @@
 		<include refid="tableName"></include>
 	</select>
 	
-	<!-- fh313596790qq(青苔) -->
+	<!-- 列出已加入用户组的所有用户 -->
+	<select id="listAllInUserByUserGroupId"  parameterType="pd" resultType="pd" >
+		select  u.USER_ID,
+				u.USERNAME,
+				u.PASSWORD,
+				u.LAST_LOGIN,
+				u.NAME,
+				u.IP,
+				u.EMAIL,
+				u.NUMBER,
+				u.PHONE
+		from <include refid="tableName"></include> u, <include refid="usergroupusermapTableName"></include> ugu
+		where u.USER_ID = ugu.USER_ID 
+		and ugu.usergroup_id= #{id}
+	</select>
+	
+	<!-- 列出已加入该项目的所有用户 -->
+	<select id="listAllInProjectByProjectId"  parameterType="pd" resultType="pd" >
+		select  u.USER_ID,
+				u.USERNAME,
+				u.PASSWORD,
+				u.LAST_LOGIN,
+				u.NAME,
+				u.IP,
+				u.EMAIL,
+				u.NUMBER,
+				u.PHONE
+		from <include refid="tableName"></include> u, <include refid="projectusermapTableName"></include> pu
+		where u.USER_ID = pu.USER_ID 
+		and pu.project_id= #{id}
+	</select>
+	
+	<!-- 列出未加入用户组的同角色的所有用户 -->
+	<select id="listAllOutUserByPdId"  parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where ROLE_ID = #{ROLE_ID} 
+		and USER_ID NOT IN (select ugu.USER_ID from <include refid="tableName"></include> u,<include refid="usergroupusermapTableName"></include> ugu 
+						where u.USER_ID=ugu.USER_ID
+						and ugu.usergroup_id= #{id})
+	</select>
+	
+	<!-- 列出未加入该项目的所有用户 -->
+	<select id="listAllOutProjectByPdId"  parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1=1
+		and USER_ID NOT IN (select u.USER_ID from <include refid="tableName"></include> u,<include refid="projectusermapTableName"></include> pu
+						where u.USER_ID=pu.USER_ID
+						and pu.project_id= #{id})
+	</select>
+	
 </mapper>

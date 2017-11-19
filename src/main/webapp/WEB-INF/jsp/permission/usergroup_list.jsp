@@ -90,7 +90,7 @@
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.userBinding == 1 }">
-													<a class="btn btn-xs btn-info" title="绑定用户" onclick="userBinding('${var.id}');">
+													<a class="btn btn-xs btn-info" title="选择成员" onclick="goUserbind('${var.id}','${var.ROLE_ID}');">
 														<i class="ace-icon glyphicon glyphicon-user"></i>
 													</a>
 													</c:if>
@@ -241,6 +241,7 @@
 	
 	//删除
 	function del(Id){
+		console.log(Id);
 		bootbox.confirm("确定要删除吗?", function(result) {
 			if(result) {
 				top.jzts();
@@ -259,7 +260,7 @@
 		 diag.Drag=true;
 		 diag.Title ="编辑";
 		 diag.URL = '<%=basePath%>usergroup/goEdit.do?id='+Id;
-		 diag.Width = 450;
+		 //diag.Width = 450;
 		 diag.Height = 358;
 		 diag.CancelEvent = function(){ //关闭事件
 			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
@@ -314,7 +315,27 @@
 				}
 			}
 		});
-	};
+	}
+	
+	//打开绑定用户窗口
+	function goUserbind(id,ROLE_ID){
+		console.log(id);
+		console.log(ROLE_ID);
+		 top.jzts();
+		 var diag = new top.Dialog();
+		 diag.Drag=true;
+		 diag.Title ="选择成员";
+		 diag.URL = '<%=basePath%>usergroup/goUserbind.do?id='+id+'&ROLE_ID='+ROLE_ID;
+		 diag.Width = 1000;
+		 diag.Height = 400;
+		 diag.CancelEvent = function(){ //关闭事件
+			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+				 nextPage(${page.currentPage});
+			}
+			diag.close();
+		 };
+		 diag.show();
+	}
 	</script>
 
 </body>

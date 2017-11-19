@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
+import com.fh.entity.system.Role;
 import com.fh.entity.system.User;
 import com.fh.service.system.user.UserManager;
 import com.fh.util.PageData;
@@ -187,6 +188,56 @@ public class UserService implements UserManager{
 	 */
 	public PageData getUserCount(String value)throws Exception{
 		return (PageData)dao.findForObject("UserMapper.getUserCount", value);
+	}
+	
+	/**列出用户组下的所有用户
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<User> listUserBypd(PageData pd) throws Exception {
+		return (List<User>) dao.findForList("UserMapper.listUserBypd", pd);
+	}
+	
+	/**列出已加入用户组的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllInUserByUserGroupId(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("UserMapper.listAllInUserByUserGroupId", pd);
+	}
+	
+	/**列出未加入用户组的同角色的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllOutUserByPdId(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("UserMapper.listAllOutUserByPdId", pd);
+	}
+	
+	/**列出已加入该项目的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllInProjectByProjectId(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("UserMapper.listAllInProjectByProjectId", pd);
+	}
+	
+	/**列出未加入该项目的所有用户 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllOutProjectByPdId(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("UserMapper.listAllOutProjectByPdId", pd);
 	}
 	
 }

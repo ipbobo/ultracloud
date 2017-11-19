@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="UsergroupMapper">
 	
+	<resultMap type="UserGroupUserMap" id="userGroupUserMapResultMap">
+		<id column="id" property="id"/>
+		<result column="usergroup_id" property="usergroup_id"/>
+		<result column="USER_ID" property="USER_ID"/>
+		<result column="gmt_create" property="gmt_create"/>
+		<result column="gmt_modified" property="gmt_modified"/>
+	</resultMap>
+	
 	<!--关联表名 -->
 	<sql id="tableName">
 		t_usergroup
@@ -11,6 +19,9 @@
 	</sql>
 	<sql id="usergrouproletableName">
 		t_usergroup_role_map
+	</sql>
+	<sql id="usergroupusertableName">
+		t_usergroup_user_map
 	</sql>
 	
 	<!-- 字段 -->
@@ -76,6 +87,34 @@
 		</foreach>
 	</delete>
 	
+	<!-- 批量删除用户组与用户的关联 -->
+	<delete id="deleteAllUsergroup" parameterType="String">
+		delete from
+		<include refid="usergroupusertableName"></include>
+		where id in
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量插入用户组与用户的关联 -->
+	<insert id="insertAllUsergroup" parameterType="java.util.List">   
+    	insert into 
+    	<include refid="usergroupusertableName"></include> (usergroup_id,USER_ID)   
+    	values  
+    	<foreach collection="list" item="item" index="index" separator="," >  
+        	(#{item.usergroup_id},#{item.USER_ID})  
+    	</foreach>  
+	</insert> 
+	
+	<!-- 删除用户组与用户的关联，按用户组 -->
+	<delete id="deleteByUsergroupId" parameterType="pd">
+		delete from
+		<include refid="usergroupusertableName"></include>
+		where 
+			usergroup_id = #{id}
+	</delete>
+	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
@@ -94,11 +133,15 @@
 		       up.ROLE_ID,
                up.gmt_create,
                up.gmt_modified,
-			   r.ROLE_NAME
+			   r.ROLE_NAME,
+			   r.type
 		from <include refid="tableName"></include> up, <include refid="roleTableName"></include> r 
 		where up.ROLE_ID = r.ROLE_ID
-		<if test="pd.ROLE_ID != null and pd.ROLE_ID != ''"><!-- 角色检索 -->
+		<if test="pd.ROLE_ID != null and pd.ROLE_ID != ''"><!-- 角色ID检索 -->
 			and up.ROLE_ID=#{pd.ROLE_ID} 
+		</if>
+		<if test="pd.type != null and pd.type != ''"><!-- 角色类型检索 -->
+			and r.type=#{pd.type} 
 		</if>
 		<if test="pd.name != null and pd.name != ''"><!-- 关键词检索 -->
 			and
@@ -117,6 +160,13 @@
 		<include refid="tableName"></include>
 		where 
 			id = #{id}
+	</select>
+	
+	<!-- 通过用户组查找用户列表 -->
+	<select id="listUserGroupUserMap" parameterType="String" resultMap="userGroupUserMapResultMap">
+		select * from 
+		<include refid="usergroupusertableName"></include>
+		where usergroup_id=#{id}
 	</select>
 	
 </mapper>

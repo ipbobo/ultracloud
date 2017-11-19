@@ -8,9 +8,9 @@ import org.springframework.data.annotation.Transient;
 public class CmpDict implements Comparable<CmpDict> {
 	@Transient
 	private static final long serialVersionUID = 1L;
-	protected Long id;//ID
-	protected Date createTime;//创建时间
-	protected Date lastUpdateTime;//最后修改时间
+	private Long id;//ID
+	private Date createTime;//创建时间
+	private Date lastUpdateTime;//最后修改时间
 	private String dictType;//字典表代码，按照字典实际意义来命名，如proj_stat，表示是项目状态字典表
 	private String dictCode;//字典项代码，编号规则一般是99项之内用01，02....，超出99项的又是小于999项用001，002.....来命名,以此类推
 	private String dictValue;//字典值，是字典项代码对应的字典内容，如项目储备（字典项01对应的中文解释），项目立项（字典项02对应的中文解释）

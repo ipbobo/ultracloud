@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -80,7 +81,10 @@
 											<td class='center'>${var.script_key}</td>
 											<td class='center'>${var.purpose}</td>
 											<td class='center'>${var.username}</td>
-											<td class='center'  style="width: 200px;">${var.url}</td>
+											<td class='center'  style="width: 200px;">
+												<img style="margin-top: -3px;" alt="${var.NAME}" src="static/images/extension/wenben.png">${var.url}
+												<a style="cursor:pointer;" onclick="goViewTxt('${var.name}${fn:substring(var.url ,19,fn:length(var.url))}','${var.id}','gbk');">[预览]</a>
+											</td>
 											<td class='center'>${var.medium_name}</td>
 											<td class='center' style="width: 170px;">${var.gmt_create}</td>
 											<td class="center">
@@ -88,6 +92,9 @@
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
+													<a class="btn btn-xs btn-success" title="下载" onclick="window.location.href='<%=basePath%>/script/download.do?id=${var.id}'">
+														<i class="ace-icon fa fa-cloud-download bigger-120" title="下载"></i>
+													</a>
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
@@ -217,8 +224,8 @@
 			 diag.Drag=true;
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>script/goAdd.do';
-			 diag.Width = 450;
-			 diag.Height = 375;
+			 diag.Width = 600;
+			 diag.Height = 500;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
@@ -253,8 +260,8 @@
 			 diag.Drag=true;
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>script/goEdit.do?id='+Id;
-			 diag.Width = 450;
-			 diag.Height = 375;
+			 diag.Width = 600;
+			 diag.Height = 500;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 nextPage(${page.currentPage});
@@ -309,6 +316,22 @@
 				}
 			});
 		};
+		
+		//预览txt,java,php,等文本文件页面
+		function goViewTxt(fileName,Id,encoding){
+			var diag = new top.Dialog();
+			diag.Drag=true;
+			diag.Title =fileName;
+			diag.URL = '<%=basePath%>script/goViewTxt.do?id='+Id+'&encoding='+encoding;
+			diag.Width = 1000;
+			diag.Height = 608;
+			diag.Modal = false;				//有无遮罩窗口
+			diag.ShowMinButton = true;		//最小化按钮
+			diag.CancelEvent = function(){ 	//关闭事件
+			diag.close();
+			};
+			diag.show();
+		}
 		
 	</script>
 
