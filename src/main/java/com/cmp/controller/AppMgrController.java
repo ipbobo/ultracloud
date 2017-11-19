@@ -140,12 +140,31 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
-	//加入清单
+	//保存为套餐预查询
 	@RequestMapping(value="/savePckgPre")
 	public ModelAndView savePckgPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("appmgr/resapp_savepckg_input");
 		return mv;
+	}
+	
+	//保存为套餐
+	@RequestMapping(value="/savePckg", produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+	public String savePckg(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try{
+			CmpOrder cmpOrder=getParam(request);//获取参数Bean
+			String errMsg = checkParam(cmpOrder);//参数校验
+			if (errMsg != null) {
+				logger.error(errMsg);
+			}
+			
+			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单
+			return StringUtil.getRetStr("0", "保存套餐成功");
+		} catch (Exception e) {
+	    	logger.error("保存套餐时错误："+e);
+	    	return StringUtil.getRetStr("-1", "保存套餐时错误："+e);
+	    }
 	}
 	
 	//获取参数Bean
