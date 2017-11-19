@@ -20,6 +20,11 @@ public class Role {
 	private String CHA_QX;
 	private String TYPE;
 	
+	public static final String TYPE_ADMIN = "admin";
+	public static final String TYPE_APPLICANT = "applicant";
+	public static final String TYPE_AUDIT = "audit";
+	public static final String TYPE_EXECUTOR = "executor";
+	
 	public String getROLE_ID() {
 		return ROLE_ID;
 	}

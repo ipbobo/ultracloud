@@ -73,8 +73,7 @@ public class LoginController extends BaseController {
 	private FHlogManager FHLOG;
 	@Resource(name="loginimgService")
 	private LogInImgManager loginimgService;
-	@Resource(name="activitiService")
-	private ActivitiService activitiService;
+	
 	
 	/**访问登录页
 	 * @return
@@ -210,94 +209,7 @@ public class LoginController extends BaseController {
 		mv.addObject("pd",pd);
 		return mv;
 	}
-	/**
-	 * 查询个人任务
-	 * @param userId
-	 * @return map对象  用户任务集合
-	 */
-	@RequestMapping(value="/main/queryTasks")
-	@ResponseBody
-	public Object queryPersonalTask(String userId) {
-		Map<String,Object> outmap = new HashMap<String,Object>();
-		int totalTaskNo = 0;
-		List taskApplying = new ArrayList<>(); //申请者 处理中
-		List taskApplyComplete = new ArrayList<>(); //申请者  工单完成
-		List taskApplyReject = new ArrayList<>(); //申请者 退回
-		
-		List taskToCheck = new ArrayList<>(); //审核者 待审核
-		
-		List taskToDeal = new ArrayList<>(); //执行者 待处理、处理中、工单完成
-		List taskHandling = new ArrayList<>(); //执行者 处理中
-		List taskWorkComplete = new ArrayList<>(); //执行者 工单完成
-		String errInfo = "success";
-		Session session = Jurisdiction.getSession();
-		User userr = (User)session.getAttribute(Const.SESSION_USERROL);
-		outmap.put("user", userr);
-		
-		List<TaskBean> tasks = new ArrayList<>();
-		//根据用户类型不同，查询不同的任务
-		if (userr.getRole().getTYPE().equals("applicant")) { //***************要改
-			//获取处理中任务
-			
-			//获取工单完成任务
-			
-			//获取退回任务
-		}
-		if (userr.getRole().getTYPE().equals("audit")) {
-			//获取待审批任务
-			Page<TaskBean> page= activitiService.getPersonalTaskList(userr.getUSER_ID(), 1, Const.MAX_PAGE_TASK-1);
-			tasks.addAll(page.getResults());
-		}
-		
-		if (userr.getRole().getTYPE().equals("executor")) {
-			//获取待处理任务
-			Page<TaskBean> page= activitiService.getPersonalTaskList(userr.getUSER_ID(), 1, Const.MAX_PAGE_TASK-1);
-			tasks.addAll(page.getResults());
-			
-			//获取处理中任务
-			
-			//获取工单完成任务
-			
-		}
-		
-		if (userr.getRole().getTYPE().equals("admin")) {
-			//获取待处理任务
-			//管理员无任务可获取 
-			
-		}
-		
-		//************************测试不同的角色登录*******************
-		//申请者
-		TaskBean bean1 = new TaskBean();
-		bean1.setTaskName("申请虚拟机进行中");
-		bean1.setTaskId("1001");
-		bean1.setStatus("0");
-		tasks.add(bean1);
-		
-		TaskBean bean2 = new TaskBean();
-		bean2.setTaskName("申请虚拟机工单完成");
-		bean2.setTaskId("1002");
-		bean1.setStatus("1");
-		tasks.add(bean2);
-		
-		TaskBean bean3 = new TaskBean();
-		bean3.setTaskName("申请虚拟机工单退回");
-		bean3.setTaskId("1003");
-		bean1.setStatus("2");
-		tasks.add(bean3);
-		
-		//**************以上测试结束*************//
-		totalTaskNo = tasks.size();
-		outmap.put("roleType", userr.getRole().getRIGHTS()); //**********************************要改
-		outmap.put("tasks", tasks);
-		//返回查询到的任务
-		if (totalTaskNo  > 0) {
-			outmap.put("totalTaskNo", totalTaskNo);
-		} else {
-			outmap.put("totalTaskNo", 0);
-		}
-		return outmap;
-	}
+	
 	
 	/**菜单缓存
 	 * @param session
