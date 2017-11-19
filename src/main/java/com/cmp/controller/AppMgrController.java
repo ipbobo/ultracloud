@@ -167,6 +167,20 @@ public class AppMgrController extends BaseController {
 	    }
 	}
 	
+	//删除套餐
+	@RequestMapping(value="/delPckg", produces={"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String delPckg(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try{
+			String pckgId=request.getParameter("pckgId");//套餐ID
+			cmpOrderService.delPckg(pckgId);//新增清单
+			return StringUtil.getRetStr("0", "删除套餐成功");
+		} catch (Exception e) {
+			logger.error("删除套餐时错误："+e);
+			return StringUtil.getRetStr("-1", "删除套餐时错误："+e);
+		}
+	}
+	
 	//获取参数Bean
 	public CmpOrder getParam(HttpServletRequest request){
 		CmpOrder cmpOrder=new CmpOrder();

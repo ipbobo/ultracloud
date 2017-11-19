@@ -24,4 +24,9 @@ public class CmpOrderService {
 	public List<CmpOrder> getPckgList() throws Exception {
 		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getPckgList", null);
 	}
+	
+	//删除套餐
+	public void delPckg(String pckgId) throws Exception {
+		dao.delete("CmpOrderMapper.delPckg", pckgId);
+	}
 }

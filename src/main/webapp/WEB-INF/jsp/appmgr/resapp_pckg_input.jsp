@@ -5,9 +5,19 @@
 <head>
 <script type="text/javascript">
 //删除套餐
-function delPckg(obj, pckgName){
+function delPckg(obj, pckgId, pckgName){
 	if(confirm("确定要删除该套餐["+pckgName+"]吗?")){
-		$(obj).parent().parent().remove();
+		$.ajax({
+		    type: 'post',  
+		    url: 'delPckg.do?pckgId='+pckgId,
+		    dataType: 'json',  
+		    success: function(data){
+			    if(data.retCode=="0"){//删除成功
+			    	$(obj).parent().parent().remove();
+			    }
+		    },
+		    error: function(data) {}
+		});
 	}
 }
 
@@ -143,7 +153,7 @@ function choosePckg(jsonStr){
 				<tr>
 					<td align="left" style="width: 120px;padding:10px;">
 						<span style="float: left;"><input type="radio" name="tcName" id="tctableId" onclick='choosePckg("{\"id\":\"${var.id}\",\"envCode\":\"${var.envCode}\",\"projectCode\":\"${var.projectCode}\",\"resType\":\"${var.projectCode}\",\"virName\":\"${var.virName}\",\"cpu\":\"${var.cpu}\",\"memory\":\"${var.memory}\",\"osType\":\"${var.osType}\",\"osBitNum\":\"${var.osBitNum}\",\"imgCode\":\"${var.imgCode}\",\"imgUserName\":\"${var.imgUserName}\",\"imgUserPass\":\"${var.imgUserPass}\",\"imgPath\":\"${var.imgPath}\",\"imgExpireDate\":\"${var.imgExpireDate}\",\"diskType\":\"${var.diskType}\",\"diskSize\":\"${var.diskSize}\",\"diskEncrypt\":\"${var.diskEncrypt}\",\"softName\":\"${var.softName}\",\"softVer\":\"${var.softVer}\",\"softParam\":\"${var.softParam}\",\"expireDate\":\"${var.expireDate}\",\"virNum\":\"${var.virNum}\"}	")'/>${var.pckgName}</span>
-						<div style="background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delPckg(this, '${var.pckgName}')" class="img_close"></div>
+						<div style="background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delPckg(this, '${var.id}', '${var.pckgName}')" class="img_close"></div>
 					</td>
 					<td>
 						<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
