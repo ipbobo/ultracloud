@@ -27,8 +27,8 @@ public class AppMgrController extends BaseController {
 	private CmpOrderService cmpOrderService;
 	
 	//资源申请预查询
-	@RequestMapping(value="/appMgrPre")
-	public ModelAndView appMgrPre() throws Exception{
+	@RequestMapping(value="/resAppPre")
+	public ModelAndView resAppPre() throws Exception{
 		List<CmpDict> areaCodeList=cmpDictService.getCmpDictList("area_code");//数据字典列表查询
 		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");//数据字典列表查询
 		List<CmpDict> deployTypeList=cmpDictService.getCmpDictList("deploy_type");//数据字典列表查询

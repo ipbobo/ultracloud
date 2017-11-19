@@ -1,7 +1,7 @@
 delete from sys_menu where menu_id in(121, 122, 123);
 INSERT INTO `sys_menu` VALUES ('121', '申请管理', '#', '0', '2', 'menu-icon fa fa-home blue', '2', '1');
-INSERT INTO `sys_menu` VALUES ('122', '资源申请', 'appMgrPre.do', '121', '1', 'menu-icon fa fa-home blue', '1', '1');
-INSERT INTO `sys_menu` VALUES ('123', '运维服务申请', 'appMgrPre.do', '121', '2', 'menu-icon fa fa-home blue', '1', '1');
+INSERT INTO `sys_menu` VALUES ('122', '资源申请', 'resAppPre.do', '121', '1', 'menu-icon fa fa-home blue', '1', '1');
+INSERT INTO `sys_menu` VALUES ('123', '运维服务申请', 'resAppPre.do', '121', '2', 'menu-icon fa fa-home blue', '1', '1');
 
 truncate table cmp_dict;
 INSERT INTO `cmp_dict` VALUES ('1', '2017-11-13 00:40:29', '2017-11-12 21:58:37', 'plat_type', 'vmware', 'VMware', '平台类型', '1', '1');
