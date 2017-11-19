@@ -59,7 +59,7 @@ function checkExpireDate(isChk){
 			$("#expireDate").val("");
 		}
 	}else{//非复选框选择
-		$("#expireDateChk").attr("checked", false);//不选择复选框
+		$("#expireDateChk").prop("checked", false);//不选择复选框
 	}
 }
 
@@ -265,15 +265,21 @@ function savePckgPre(){
 	}
 }
 
-//套餐申请
+//点击tab页
 var tcsq=false;
-function pckgApp(){
-	if(tcsq || $("#tcsq").is(".active")){
+function tabFunc(tabId){
+	if(tabId=="zdysq"){//自定义申请
+		$("#savePckgBtnId").show();
 		return;
+	}else{//套餐申请
+		$("#savePckgBtnId").hide();
+		if(tcsq || $("#tcsq").is(".active")){
+			return;
+		}
+		
+		tcsq=true;
+		$("#tcsq").load("pckgAppPre.do");
 	}
-	
-	$("#tcsq").load("pckgAppPre.do");
-	tcsq=true;
 }
 
 //必须加<!DOCTYPE html>
@@ -291,8 +297,8 @@ $(window).scroll(function() {
 </head>
 <body>
 <ul class="nav nav-tabs">
-	<li class="active"><a href="#zdysq" data-toggle="tab">自定义申请</a></li>
-	<li><a href="#tcsq" onclick="pckgApp('tcsq')" data-toggle="tab">套餐申请</a></li>
+	<li class="active"><a href="#zdysq" onclick="tabFunc('zdysq')" data-toggle="tab">自定义申请</a></li>
+	<li><a href="#tcsq" onclick="tabFunc('tcsq')" data-toggle="tab">套餐申请</a></li>
 </ul>
 <div class="tab-content">
 <div id="zdysq" class="tab-pane fade in active">
@@ -599,9 +605,9 @@ $(window).scroll(function() {
 	<tr>
 		<td align="left" style="padding:10px;">
 			<div class="divbtn">
-			    <span class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
-			    <span style="width:30px;float:right;">&nbsp;</span>
 			    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
+			    <span style="width:30px;float:right;">&nbsp;</span>
+			    <span id="savePckgBtnId" class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
 			</div>
 		</td>
 	</tr>

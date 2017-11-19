@@ -22,7 +22,7 @@ function addPckgDiskRow(diskType, diskSize, diskEncrypt){
 	
 	$("#tcdiskType").val(diskTypes[0]);
     $("#tcdiskSize").val(diskSizes[0]);
-    $("#tcdiskEncrypt").attr("checked", diskEncrypts[0]==1);//复选框
+    $("#tcdiskEncrypt").prop("checked", diskEncrypts[0]==1);//复选框，注意要用prop()，attr()只能赋值为初始值
     $.each(diskTypes, function (i, item) {
 	    if(i!=0){
 		    var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"tcdiskType\" id=\"tcdiskType"+i+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcdiskType").html()+"</select></td>"
@@ -31,7 +31,7 @@ function addPckgDiskRow(diskType, diskSize, diskEncrypt){
 		    $("#tcdiskTableId").append("<tr>"+tdStr+"</tr>");
 		    $("#tcdiskType"+i).val(item);
 		    $("#tcdiskSize"+i).val(diskSizes[i]);
-		    $("#tcdiskEncrypt"+i).attr("checked", diskEncrypts[i]==1);//不选择复选框
+		    $("#tcdiskEncrypt"+i).prop("checked", diskEncrypts[i]==1);//不选择复选框
 	    }
     });
 }
@@ -52,7 +52,7 @@ function addPckgSoftRow(softName, softVer, softParam){
 	    if(i!=0){
 	    	var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"tcsoftName\" id=\"tcsoftName"+i+"\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcsoftName").html()+"</select></td>"
 		    	+"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"tcsoftVer\" id=\"tcsoftVer"+i+"\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcsoftVer").html()+"</select></td>"
-			    +"<td align=\"left\" style=\"width: 120x;\"><input type=\"text\" name=\"tcsoftParam\" id=\"tcsoftParam"+i+"\" value=\"\"/></td>";
+			    +"<td align=\"left\" style=\"width: 120x;\"><input type=\"hidden\" name=\"tcsoftParam\" id=\"tcsoftParam"+i+"\" value=\"\"/></td>";
 			$("#tcsoftTableId").append("<tr>"+tdStr+"</tr>");
 		    $("#tcsoftName"+i).val(item);
 		    $("#tcsoftVer"+i).val(softVers[i]);
@@ -87,10 +87,10 @@ function choosePckg(jsonStr){
 </head>
 <body>
 <form id="tcmainForm" name="tcmainForm" action="addList.do" enctype="multipart/form-data" method="post">
-<input type="text" name="tcareaCode" id="tcareaCode" value="1"/>
-<input type="text" name="tcplatType" id="tcplatType" value="vmware"/>
-<input type="text" name="tcdeployType" id="tcdeployType" value="1"/>
-<input type="text" name="pckgId" id="pckgId" value=""/>
+<input type="hidden" name="tcareaCode" id="tcareaCode" value="1"/>
+<input type="hidden" name="tcplatType" id="tcplatType" value="vmware"/>
+<input type="hidden" name="tcdeployType" id="tcdeployType" value="1"/>
+<input type="hidden" name="pckgId" id="pckgId" value=""/>
 <table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 	<tr class="tablecls">
 		<td align="left" style="width: 10px;padding:10px;background-color:#cccccc;">地域</td>
@@ -335,7 +335,7 @@ function choosePckg(jsonStr){
 					  	</select>
 					</td>
 					<td align="left" style="width: 120px;">
-					  	<input name="tcdiskEncrypt" id="tcdiskEncrypt" type="checkbox" value="" disabled/>加密000
+					  	<input name="tcdiskEncrypt" id="tcdiskEncrypt" type="checkbox" value="" disabled/>加密
 					</td>
 				</tr>
 			</table>
@@ -365,7 +365,7 @@ function choosePckg(jsonStr){
 					  	</select>
 					</td>
 					<td align="left" style="width: 120px;">
-						<input type="text" name="tcsoftParam" id="tcsoftParam" value=""/>
+						<input type="hidden" name="tcsoftParam" id="tcsoftParam" value=""/>
 					</td>
 				</tr>
 			</table>
