@@ -142,6 +142,14 @@
 		<include refid="tableName"/>
 	</select>
 	
+	<!-- 套餐列表查询resultType及resultMap互斥： -->
+	<select id="getPckgList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where pckgFlag='1'
+	</select>
+	
 	<!-- 新增清单 -->
 	<insert id="saveCmpOrder" parameterType="com.cmp.sid.CmpOrder" >
 		insert into <include refid="tableName"/> (

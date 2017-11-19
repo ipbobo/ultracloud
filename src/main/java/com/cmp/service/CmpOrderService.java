@@ -1,5 +1,7 @@
 package com.cmp.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -15,5 +17,11 @@ public class CmpOrderService {
 	//新增清单
 	public void saveCmpOrder(CmpOrder cmpOrder) throws Exception {
 		dao.save("CmpOrderMapper.saveCmpOrder", cmpOrder);
+	}
+	
+	//套餐列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpOrder> getPckgList() throws Exception {
+		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getPckgList", null);
 	}
 }
