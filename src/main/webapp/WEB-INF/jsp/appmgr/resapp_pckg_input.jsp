@@ -96,7 +96,7 @@ function choosePckg(jsonStr){
 </script>
 </head>
 <body>
-<form id="tcmainForm" name="tcmainForm" action="addList.do" enctype="multipart/form-data" method="post">
+<form id="tcmainForm" name="tcmainForm" action="addPckgList.do" enctype="multipart/form-data" method="post">
 <input type="hidden" name="tcareaCode" id="tcareaCode" value="1"/>
 <input type="hidden" name="tcplatType" id="tcplatType" value="vmware"/>
 <input type="hidden" name="tcdeployType" id="tcdeployType" value="1"/>

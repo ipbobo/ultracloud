@@ -19,6 +19,11 @@ public class CmpOrderService {
 		dao.save("CmpOrderMapper.saveCmpOrder", cmpOrder);
 	}
 	
+	//新增套餐清单
+	public void addPckgList(CmpOrder cmpOrder) throws Exception {
+		dao.save("CmpOrderMapper.addPckgList", cmpOrder);
+	}
+	
 	//套餐列表查询
 	@SuppressWarnings("unchecked")
 	public List<CmpOrder> getPckgList() throws Exception {

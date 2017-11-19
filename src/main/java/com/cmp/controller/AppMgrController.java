@@ -140,6 +140,21 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
+	//加入套餐清单
+	@RequestMapping(value="/addPckgList")
+	public ModelAndView addPckgList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		CmpOrder cmpOrder=getPckgParam(request);//获取套餐参数Bean
+		String errMsg = checkParam(cmpOrder);//参数校验
+		if (errMsg != null) {
+			logger.error(errMsg);
+		}
+		
+		cmpOrderService.addPckgList(cmpOrder);//新增套餐清单
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("appmgr/resapp_qry_input");
+		return mv;
+	}
+	
 	//保存为套餐预查询
 	@RequestMapping(value="/savePckgPre")
 	public ModelAndView savePckgPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -211,6 +226,17 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setVirNum(request.getParameter("virNum"));//数量
 		cmpOrder.setPckgFlag(request.getParameter("pckgFlag"));//套餐标志：0-否；1-是
 		cmpOrder.setPckgName(request.getParameter("pckgName"));//套餐名称
+		return cmpOrder;
+	}
+	
+	//获取套餐参数Bean
+	public CmpOrder getPckgParam(HttpServletRequest request){
+		CmpOrder cmpOrder=new CmpOrder();
+		cmpOrder.setAreaCode(request.getParameter("tcareaCode"));//地域
+		cmpOrder.setPlatType(request.getParameter("tcplatType"));//平台类型
+		cmpOrder.setDeployType(request.getParameter("tcdeployType"));//部署类型
+		cmpOrder.setVirName(request.getParameter("tcvirName"));//虚拟机名称
+		cmpOrder.setId(Long.parseLong(request.getParameter("pckgId")));//套餐ID
 		return cmpOrder;
 	}
 	
