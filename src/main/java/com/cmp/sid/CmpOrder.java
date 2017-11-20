@@ -1,6 +1,9 @@
 package com.cmp.sid;
 
 public class CmpOrder {
+	private Long id;//ID
+	private String createTime;//创建时间
+	private String lastUpdateTime;//最后修改时间
 	private String areaCode;//地域代码
 	private String platType;//平台类型
 	private String deployType;//部署类型
@@ -29,6 +32,30 @@ public class CmpOrder {
 	private String pckgName;//套餐名称
 	private String pckgFlag;//套餐标志：0-否；1-是
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getLastUpdateTime() {
+		return lastUpdateTime;
+	}
+
+	public void setLastUpdateTime(String lastUpdateTime) {
+		this.lastUpdateTime = lastUpdateTime;
+	}
+	
 	public String getAreaCode() {
 		return areaCode;
 	}

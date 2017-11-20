@@ -27,8 +27,8 @@ public class AppMgrController extends BaseController {
 	private CmpOrderService cmpOrderService;
 	
 	//资源申请预查询
-	@RequestMapping(value="/appMgrPre")
-	public ModelAndView appMgrPre() throws Exception{
+	@RequestMapping(value="/resAppPre")
+	public ModelAndView resAppPre() throws Exception{
 		List<CmpDict> areaCodeList=cmpDictService.getCmpDictList("area_code");//数据字典列表查询
 		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");//数据字典列表查询
 		List<CmpDict> deployTypeList=cmpDictService.getCmpDictList("deploy_type");//数据字典列表查询
@@ -55,7 +55,6 @@ public class AppMgrController extends BaseController {
 		mv.addObject("recommendTypeList", recommendTypeList);//推荐配置列表
 		mv.addObject("cpuList", cpuList);//CPU列表
 		mv.addObject("memoryList", memoryList);//内存列表
-		
 		mv.addObject("osTypeList", osTypeList);//OS类型列表
 		mv.addObject("osBitNumList", osBitNumList);//位数列表
 		mv.addObject("imgCodeList", imgCodeList);//模板列表
@@ -67,7 +66,49 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
-	@RequestMapping(value="/getDictList", produces={"application/json;charset=UTF-8"})
+	//套餐申请预查询
+	@RequestMapping(value="/pckgAppPre")
+	public ModelAndView pckgAppPre() throws Exception{
+		List<CmpDict> areaCodeList=cmpDictService.getCmpDictList("area_code");//数据字典列表查询
+		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");//数据字典列表查询
+		List<CmpDict> deployTypeList=cmpDictService.getCmpDictList("deploy_type");//数据字典列表查询
+		List<CmpDict> envCodeList=cmpDictService.getCmpDictList("env_code");//数据字典列表查询
+		List<CmpDict> projectCodeList=cmpDictService.getCmpDictList("project_code");//数据字典列表查询
+		List<CmpDict> resTypeList=cmpDictService.getCmpDictList("res_type");//数据字典列表查询
+		List<CmpDict> recommendTypeList=cmpDictService.getCmpDictList("recommend_type");//数据字典列表查询
+		List<CmpDict> cpuList=cmpDictService.getCmpDictList("cpu");//数据字典列表查询
+		List<CmpDict> memoryList=cmpDictService.getCmpDictList("memory");//数据字典列表查询
+		List<CmpDict> osTypeList=cmpDictService.getCmpDictList("os_type");//数据字典列表查询
+		List<CmpDict> osBitNumList=cmpDictService.getCmpDictList("os_bit_num");//数据字典列表查询
+		List<CmpDict> imgCodeList=cmpDictService.getCmpDictList("img_code");//数据字典列表查询
+		List<CmpDict> diskTypeList=cmpDictService.getCmpDictList("disk_type");//数据字典列表查询
+		List<CmpDict> diskSizeList=cmpDictService.getCmpDictList("disk_size");//数据字典列表查询
+		List<CmpDict> softNameList=cmpDictService.getCmpDictList("soft_name");//数据字典列表查询
+		List<CmpDict> softVerList=cmpDictService.getCmpDictList("soft_ver");//数据字典列表查询
+		List<CmpOrder> pckgList=cmpOrderService.getPckgList();//套餐列表查询
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("areaCodeList", areaCodeList);//区域列表
+		mv.addObject("platTypeList", platTypeList);//平台类型列表
+		mv.addObject("deployTypeList", deployTypeList);//部署类型列表
+		mv.addObject("envCodeList", envCodeList);//环境列表
+		mv.addObject("projectCodeList", projectCodeList);//项目列表
+		mv.addObject("resTypeList", resTypeList);//资源类型列表
+		mv.addObject("recommendTypeList", recommendTypeList);//推荐配置列表
+		mv.addObject("cpuList", cpuList);//CPU列表
+		mv.addObject("memoryList", memoryList);//内存列表
+		mv.addObject("osTypeList", osTypeList);//OS类型列表
+		mv.addObject("osBitNumList", osBitNumList);//位数列表
+		mv.addObject("imgCodeList", imgCodeList);//模板列表
+		mv.addObject("diskTypeList", diskTypeList);//磁盘类型列表
+		mv.addObject("diskSizeList", diskSizeList);//磁盘大小列表
+		mv.addObject("softNameList", softNameList);//软件名称列表
+		mv.addObject("softVerList", softVerList);//软件版本列表
+		mv.addObject("pckgList", pckgList);//软件版本列表
+		mv.setViewName("appmgr/resapp_pckg_input");
+		return mv;
+	}
+	
+	/*@RequestMapping(value="/getDictList", produces={"application/json;charset=UTF-8"})
     @ResponseBody
 	public String getDataDiskTypeList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		String operType=request.getParameter("operType");//操作类型：disk-磁盘；soft-软件安装
@@ -82,7 +123,7 @@ public class AppMgrController extends BaseController {
 		}
 		
 		return StringUtil.getRetStr("-", "调用失败：不支持的操作类型");
-	}
+	}*/
 	
 	//加入清单
 	@RequestMapping(value="/addList")
@@ -99,12 +140,60 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
-	//加入清单
+	//加入套餐清单
+	@RequestMapping(value="/addPckgList")
+	public ModelAndView addPckgList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		CmpOrder cmpOrder=getPckgParam(request);//获取套餐参数Bean
+		String errMsg = checkParam(cmpOrder);//参数校验
+		if (errMsg != null) {
+			logger.error(errMsg);
+		}
+		
+		cmpOrderService.addPckgList(cmpOrder);//新增套餐清单
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("appmgr/resapp_qry_input");
+		return mv;
+	}
+	
+	//保存为套餐预查询
 	@RequestMapping(value="/savePckgPre")
 	public ModelAndView savePckgPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("appmgr/resapp_savepckg_input");
 		return mv;
+	}
+	
+	//保存为套餐
+	@RequestMapping(value="/savePckg", produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+	public String savePckg(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try{
+			CmpOrder cmpOrder=getParam(request);//获取参数Bean
+			String errMsg = checkParam(cmpOrder);//参数校验
+			if (errMsg != null) {
+				logger.error(errMsg);
+			}
+			
+			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单
+			return StringUtil.getRetStr("0", "保存套餐成功");
+		} catch (Exception e) {
+	    	logger.error("保存套餐时错误："+e);
+	    	return StringUtil.getRetStr("-1", "保存套餐时错误："+e);
+	    }
+	}
+	
+	//删除套餐
+	@RequestMapping(value="/delPckg", produces={"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String delPckg(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try{
+			String pckgId=request.getParameter("pckgId");//套餐ID
+			cmpOrderService.delPckg(pckgId);//新增清单
+			return StringUtil.getRetStr("0", "删除套餐成功");
+		} catch (Exception e) {
+			logger.error("删除套餐时错误："+e);
+			return StringUtil.getRetStr("-1", "删除套餐时错误："+e);
+		}
 	}
 	
 	//获取参数Bean
@@ -137,6 +226,17 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setVirNum(request.getParameter("virNum"));//数量
 		cmpOrder.setPckgFlag(request.getParameter("pckgFlag"));//套餐标志：0-否；1-是
 		cmpOrder.setPckgName(request.getParameter("pckgName"));//套餐名称
+		return cmpOrder;
+	}
+	
+	//获取套餐参数Bean
+	public CmpOrder getPckgParam(HttpServletRequest request){
+		CmpOrder cmpOrder=new CmpOrder();
+		cmpOrder.setAreaCode(request.getParameter("tcareaCode"));//地域
+		cmpOrder.setPlatType(request.getParameter("tcplatType"));//平台类型
+		cmpOrder.setDeployType(request.getParameter("tcdeployType"));//部署类型
+		cmpOrder.setVirName(request.getParameter("tcvirName"));//虚拟机名称
+		cmpOrder.setId(Long.parseLong(request.getParameter("pckgId")));//套餐ID
 		return cmpOrder;
 	}
 	

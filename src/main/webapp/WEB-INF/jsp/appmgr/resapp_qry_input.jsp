@@ -18,7 +18,6 @@
 <script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 <script src="static/ace/js/bootstrap.js"></script>
 <script type="text/javascript" src="static/js/jquery.tips.js"></script>
-<script src="js/json2.js"></script>
 <script type="text/javascript">
 //$('.f_uli li').eq(0).addClass("active");
 //$('.f_uli li').eq(1).removeClass("active");
@@ -48,18 +47,20 @@ function setRecommendType(obj, fieldName, fieldValue){
 
 //设置软件参数
 function setSoftParam(indx){
-	$("#softParam"+indx).val(indx);
+	$("#softParam"+(indx==0?"":indx)).val(indx);
 }
 
-function checkExpireDate(obj){
-	if($(obj).is(":checked")){
-		$("#expireDate").val("9999-12-31");
+//永久到期时间选择
+function checkExpireDate(isChk){
+	if(isChk){//复选框选择
+		if($("#expireDateChk").is(":checked")){
+			$("#expireDate").val("9999-12-31");
+		}else{
+			$("#expireDate").val("");
+		}
+	}else{//非复选框选择
+		$("#expireDateChk").prop("checked", false);//不选择复选框
 	}
-}
-
-//到期时间不选中
-function setExpireDateChk(){
-	$("#expireDateChk").attr("checked", false);
 }
 
 //新增磁盘行
@@ -70,30 +71,10 @@ function addDiskRow(){
     	return;
     }
     
-    $.ajax({
-	    type: 'post',  
-	    url: 'getDictList.do?operType=disk',  
-	    dataType: 'json',  
-	    success: function(data){
-			if(data.retCode=='0'){
-		        var dataStr="";
-		        $.each(data.dataList, function (i, item) {
-		        	dataStr+="<option value=\""+item.dictCode+"\" "+(item.dictDefault=='1'?"selected":"")+">"+item.dictValue+"</option>"
-		        });
-		        
-		        var subDataStr="";
-		        $.each(data.subDataList, function (i, item) {
-		        	subDataStr+="<option value=\""+item.dictCode+"\" "+(item.dictDefault=='1'?"selected":"")+">"+item.dictValue+"</option>"
-		        });
-		        
-		        var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"diskType\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+dataStr+"</select></td>"
-				    +"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"diskSize\" data-placeholder=\"请选择磁盘大小\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+subDataStr+"</select></td>"
-				    +"<td align=\"center\" style=\"width: 120x;\"><input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
-			    $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
-			}
-	    },
-	    error: function(data) {$("#diskTableId").tips({side:3, msg:data.retMsg, bg:'#AE81FF', time:2});}  
-	});
+    var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\">"+$("#diskType").html()+"</select></td>"
+	    +"<td align=\"left\" style=\"width: 120px;padding:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\"/></td>"
+	    +"<td align=\"left\" style=\"width: 200x;\">GB&nbsp;&nbsp;&nbsp;<span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
+    $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
 //新增软件安装行
@@ -104,30 +85,10 @@ function addSoftRow(){
     	return;
     }
     
-    $.ajax({
-	    type: 'post',  
-	    url: 'getDictList.do?operType=soft',  
-	    dataType: 'json',  
-	    success: function(data){
-			if(data.retCode=='0'){
-		        var dataStr="";
-		        $.each(data.dataList, function (i, item) {
-		        	dataStr+="<option value=\""+item.dictCode+"\" "+(item.dictDefault=='1'?"selected":"")+">"+item.dictValue+"</option>"
-		        });
-		        
-		        var subDataStr="";
-		        $.each(data.subDataList, function (i, item) {
-		        	subDataStr+="<option value=\""+item.dictCode+"\" "+(item.dictDefault=='1'?"selected":"")+">"+item.dictValue+"</option>"
-		        });
-		        
-		        var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"softName\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+dataStr+"</select></td>"
-			    	+"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"softVer\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\"><option value=\"\">请选择</option>"+subDataStr+"</select></td>"
-				    +"<td align=\"center\" style=\"width: 120x;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
-				$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
-			}
-	    },
-	    error: function(data) {$("#softTableId").tips({side:3, msg:data.retMsg, bg:'#AE81FF', time:2});}  
-	});
+    var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"softName\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softName").html()+"</select></td>"
+    	+"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"softVer\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\">"+$("#softVer").html()+"</select></td>"
+	    +"<td align=\"left\" style=\"width: 120x;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
+	$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
 //删除行  
@@ -135,97 +96,116 @@ function delRow(rowId){
     $("#"+rowId).remove();  
 }
 
-//数据校验
-function checkData(chkFlag){
-	if(chkFlag){
-		if($("#virName").val()==""){
-			$("#virName").tips({side:3, msg:'虚拟主机不能为空', bg:'#AE81FF', time:2});
-			$("#virName").focus();
-			return false;
+//套餐数据校验
+function checkPckgData(){
+	if($("#pckgId").val()==""){
+		if($("#tctableId").length>0){
+			$("#tctableId").tips({side:3, msg:'请选择套餐', bg:'#AE81FF', time:2});
+			$("#tctableId").focus();
+		}else{
+			alert("请选择套餐");
 		}
 		
-		if($("#imgUserName").val()==""){
-			$("#imgUserName").tips({side:3, msg:'用户名不能为空', bg:'#AE81FF', time:2});
-			$("#imgUserName").focus();
-			return false;
-		}
-		
-		if($("#imgUserPass").val()==""){
-			$("#imgUserPass").tips({side:3, msg:'密码不能为空', bg:'#AE81FF', time:2});
-			$("#imgUserPass").focus();
-			return false;
-		}
-		
-		if($("#osType").val()=="redhat" && $("#imgPath").val()==""){
-			$("#imgPath").tips({side:3, msg:'路径不能为空', bg:'#AE81FF', time:2});
-			$("#imgPath").focus();
-			return false;
-		}
-		
-		if($("#imgExpireDate").val()==""){
-			$("#imgExpireDate").tips({side:3, msg:'镜像到期时间不能为空', bg:'#AE81FF', time:2});
-			$("#imgExpireDate").focus();
-			return false;
-		}
-		
-		if($("#expireDate").val()==""){
-			$("#expireDate").tips({side:3, msg:'到期时间不能为空', bg:'#AE81FF', time:2});
-			$("#expireDate").focus();
-			return false;
-		}
+		return false;
+	}
+	
+	if($("#tcvirName").val()==""){
+		$("#tcvirName").tips({side:3, msg:'虚拟机名称不能为空', bg:'#AE81FF', time:2});
+		$("#tcvirName").focus();
+		return false;
 	}
 	
 	return true;
 }
 
+//数据校验
+function checkData(){
+	if($("#virName").val()==""){
+		$("#virName").tips({side:3, msg:'虚拟机名称不能为空', bg:'#AE81FF', time:2});
+		$("#virName").focus();
+		return false;
+	}
+	
+	if($("#imgUserName").val()==""){
+		$("#imgUserName").tips({side:3, msg:'用户名不能为空', bg:'#AE81FF', time:2});
+		$("#imgUserName").focus();
+		return false;
+	}
+	
+	if($("#imgUserPass").val()==""){
+		$("#imgUserPass").tips({side:3, msg:'密码不能为空', bg:'#AE81FF', time:2});
+		$("#imgUserPass").focus();
+		return false;
+	}
+	
+	if($("#osType").val()=="redhat" && $("#imgPath").val()==""){
+		$("#imgPath").tips({side:3, msg:'路径不能为空', bg:'#AE81FF', time:2});
+		$("#imgPath").focus();
+		return false;
+	}
+	
+	if($("#imgExpireDate").val()==""){
+		$("#imgExpireDate").tips({side:3, msg:'镜像到期时间不能为空', bg:'#AE81FF', time:2});
+		$("#imgExpireDate").focus();
+		return false;
+	}
+	
+	if($("#expireDate").val()==""){
+		$("#expireDate").tips({side:3, msg:'到期时间不能为空', bg:'#AE81FF', time:2});
+		$("#expireDate").focus();
+		return false;
+	}
+	
+	//存储
+	var diskTypeArr=new Array()
+	$("select[name='diskType']").each(function() {
+		diskTypeArr.push($(this).val());
+	});
+	var diskSizeArr=new Array()
+	$("input[name='diskSize']").each(function() {
+		diskSizeArr.push($(this).val());
+	});
+	var diskEncryptArr=new Array()
+	$("input:checkbox[name='diskEncrypt']").each(function() {
+		diskEncryptArr.push($(this).is(":checked")==true?"1":"0");
+	});
+	$("#diskTypeStr").val(diskTypeArr.join());
+	$("#diskSizeStr").val(diskSizeArr.join());
+	$("#diskEncryptStr").val(diskEncryptArr.join());
+	
+	//软件安装
+	var softNameArr=new Array()
+	$("select[name='softName']").each(function() {
+		softNameArr.push($(this).val());
+	});
+	var softVerArr=new Array()
+	$("select[name='softVer']").each(function() {
+		softVerArr.push($(this).val());
+	});
+	var softParamArr=new Array()
+	$("input[name='softParam']").each(function() {
+		softParamArr.push($(this).val());
+	});
+	$("#softNameStr").val(softNameArr.join());
+	$("#softVerStr").val(softVerArr.join());
+	$("#softParamStr").val(softParamArr.join());
+	return true;
+}
+
 //加入清单
-function addList(chkFlag){
-	if(checkData(chkFlag)){//数据校验
-		var diskTypeArr=new Array()
-		$("select[name='diskType']").each(function() {
-			diskTypeArr.push($(this).val());
-		});
-		
-		var diskSizeArr=new Array()
-		$("select[name='diskSize']").each(function() {
-			diskSizeArr.push($(this).val());
-		});
-		
-		var diskEncryptArr=new Array()
-		$("input:checkbox[name='diskEncrypt']").each(function() {
-			diskEncryptArr.push($(this).is(":checked")==true?"1":"0");
-		});
-		
-		var softNameArr=new Array()
-		$("select[name='softName']").each(function() {
-			softNameArr.push($(this).val());
-		});
-		
-		var softVerArr=new Array()
-		$("select[name='softVer']").each(function() {
-			softVerArr.push($(this).val());
-		});
-		
-		var softParamArr=new Array()
-		$("input[name='softParam']").each(function() {
-			softParamArr.push($(this).val());
-		});
-		
-		$("#diskTypeStr").val(diskTypeArr.join());
-		$("#diskSizeStr").val(diskSizeArr.join());
-		$("#diskEncryptStr").val(diskEncryptArr.join());
-		$("#softNameStr").val(softNameArr.join());
-		$("#softVerStr").val(softVerArr.join());
-		$("#softParamStr").val(softParamArr.join());
+function addList(){
+	if($("#tcsq").is(".active")){//套餐数据校验
+		if(checkPckgData()){
+			$("#tcmainForm").submit();
+		}
+	}else if(checkData()){//数据校验
 		$("#mainForm").submit();
-		$("#pckgFlag").val("0");//套餐标志：0-否；1-是
-		$("#pckgName").val("");//套餐名称
 	}
 }
 
 //保存为套餐预查询
 function savePckgPre(){
-	if(checkData(true)){//数据校验
+	if(checkData()){//数据校验
 		var diag = new top.Dialog();
 		diag.Drag=true;
 		diag.Title ="保存为套餐";
@@ -236,22 +216,98 @@ function savePckgPre(){
 		diag.OKEvent=function(){//OK事件
 			$("#pckgFlag").val("1");//套餐标志：0-否；1-是
 			$("#pckgName").val(diag.innerFrame.contentWindow.document.getElementById('pckgName').value);
-			addList(false);//加入清单
+			savePckg();//保存为套餐
+			$("#pckgFlag").val("0");//套餐标志：0-否；1-是
+			$("#pckgName").val("");//套餐名称
 			diag.close();
 		};
 		diag.show();
 	}
 }
 
-//套餐申请
-var tcsq=false;
-function pckgApp(){
-	if(tcsq || $("#tcsq").is(".active")){
+//保存为套餐
+function savePckg(){
+	var jsonObj={};
+	jsonObj.areaCode=$("#areaCode").val();//地域代码                       
+	jsonObj.platType=$("#platType").val();//平台类型                       
+	jsonObj.deployType=$("#deployType").val();//部署类型                     
+	jsonObj.envCode=$("#envCode").val();//环境代码                        
+	jsonObj.resType=$("#resType").val();//资源类型                        
+	jsonObj.virName=$("#virName").val();//虚拟机名称                      
+	jsonObj.cpu=$("#cpu").val();//CPU                                 
+	jsonObj.memory=$("#memory").val();//内存                             
+	jsonObj.diskTypeStr=$("#diskTypeStr").val();//磁盘类型，多个用英文逗号分隔   
+	jsonObj.diskSizeStr=$("#diskSizeStr").val();//磁盘大小，多个用英文逗号分隔   
+	jsonObj.diskEncryptStr=$("#diskEncryptStr").val();//磁盘加密，多个用英文逗号分隔
+	jsonObj.softNameStr=$("#softNameStr").val();//软件名称，多个用英文逗号分隔   
+	jsonObj.softVerStr=$("#softVerStr").val();//软件版本，多个用英文逗号分隔    
+	jsonObj.softParamStr=$("#softParamStr").val();//软件参数，多个用英文逗号分隔  
+	jsonObj.projectCode=$("#projectCode").val();//项目代码                    
+	jsonObj.osType=$("#osType").val();//操作系统类型                     
+	jsonObj.osBitNum=$("#osBitNum").val();//操作系统位数                   
+	jsonObj.imgCode=$("#imgCode").val();//镜像代码                        
+	jsonObj.imgUserName=$("#imgUserName").val();//镜像用户名                  
+	jsonObj.imgUserPass=$("#imgUserPass").val();//镜像用户密码                
+	jsonObj.imgPath=$("#imgPath").val();//镜像路径                        
+	jsonObj.imgExpireDate=$("#imgExpireDate").val();//镜像到期时间              
+	jsonObj.expireDate=$("#expireDate").val();//到期时间                     
+	jsonObj.virNum=$("#virNum").val();//虚拟机数量                       
+	jsonObj.pckgName=$("#pckgName").val();//套餐名称                       
+	jsonObj.pckgFlag=$("#pckgFlag").val();//套餐标志：0-否；1-是
+	
+    $.ajax({
+	    type: 'post',  
+	    url: 'savePckg.do',
+	    data: jsonObj,
+	    dataType: 'json',  
+	    success: function(data){
+	    	$("#savePckgBtnId").tips({side:1, msg:data.retMsg, bg:'#AE81FF', time:2});
+	    },
+	    error: function(data) {
+	    	$("#savePckgBtnId").tips({side:3, msg:data.retMsg, bg:'#AE81FF', time:2});
+	    }
+	});
+}
+
+//磁盘大小失焦触发
+function diskSizeFunc(obj, diskTypeId, iopsId){
+	var diskSize=$(obj).val();
+	if($(obj).val()==""){
 		return;
 	}
 	
-	$("#tcsq").load("resAppPre.do");
-	tcsq=true;
+	if(!diskSize.match(/^\d*$/) || diskSize<20){
+		$(obj).val("20");
+		diskSize=20;
+	}
+	
+	if(diskSize>32768){
+		$(obj).val("32768");
+		diskSize=32768;
+	}
+	
+	if($("#"+diskTypeId).val()=="1"){//高效云盘1120+6
+		$("#"+iopsId).html(1120+(diskSize-20)*6);
+	}else if($("#"+diskTypeId).val()=="2"){//SSD云盘1800+30
+		$("#"+iopsId).html(1800+(diskSize-20)*30);
+	}
+}
+
+//点击tab页
+var tcsq=false;
+function tabFunc(tabId){
+	if(tabId=="zdysq"){//自定义申请
+		$("#savePckgBtnId").show();
+		return;
+	}else{//套餐申请
+		$("#savePckgBtnId").hide();
+		if(tcsq || $("#tcsq").is(".active")){
+			return;
+		}
+		
+		tcsq=true;
+		$("#tcsq").load("pckgAppPre.do");
+	}
 }
 
 //必须加<!DOCTYPE html>
@@ -269,8 +325,8 @@ $(window).scroll(function() {
 </head>
 <body>
 <ul class="nav nav-tabs">
-	<li class="active"><a href="#zdysq" data-toggle="tab">自定义申请</a></li>
-	<li><a href="#tcsq" onclick="pckgApp('tcsq')" data-toggle="tab">套餐申请</a></li>
+	<li class="active"><a href="#zdysq" onclick="tabFunc('zdysq')" data-toggle="tab">自定义申请</a></li>
+	<li><a href="#tcsq" onclick="tabFunc('tcsq')" data-toggle="tab">套餐申请</a></li>
 </ul>
 <div class="tab-content">
 <div id="zdysq" class="tab-pane fade in active">
@@ -290,7 +346,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
 	<input type="hidden" name="pckgFlag" id="pckgFlag" value="0"/><!-- 套餐标志：0-否；1-是 -->
-	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;border-collapse:collapse;">
+	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 		<tr class="tablecls">
 			<td align="left" style="width: 10px;padding:10px;background-color:#cccccc;">地域</td>
 			<td align="right" style="width: 120px;padding:10px;">地域：</td>
@@ -478,7 +534,7 @@ $(window).scroll(function() {
 				<table id="diskTableId">
 					<tr id="diskTrId">
 						<td align="left" style="width: 120px;">
-							<select class="chosen-select form-control" name="diskType" data-placeholder="请选择磁盘类型" style="vertical-align:top;width: 120px;">
+							<select class="chosen-select form-control" name="diskType" id="diskType" data-placeholder="请选择磁盘类型" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${diskTypeList}" var="var">
 								<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
@@ -486,15 +542,10 @@ $(window).scroll(function() {
 						  	</select>
 						</td>
 						<td align="left" style="width: 120px;padding:10px;">
-							<select class="chosen-select form-control" name="diskSize" data-placeholder="请选择磁盘大小" style="vertical-align:top;width: 120px;">
-							<option value="">请选择</option>
-							<c:forEach items="${diskSizeList}" var="var">
-								<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
-							</c:forEach>
-						  	</select>
+							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')"/>
 						</td>
-						<td align="center" style="width: 120px;">
-						  	<input name="diskEncrypt" type="checkbox" value=""/>加密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<td align="left" style="width: 200px;">
+						  	GB&nbsp;&nbsp;&nbsp;<span id="iopsId">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密
 						</td>
 					</tr>
 				</table>
@@ -509,7 +560,7 @@ $(window).scroll(function() {
 				<table id="softTableId">
 					<tr id="softTrId">
 						<td align="left" style="width: 120px;">
-							<select class="chosen-select form-control" name="softName" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;">
+							<select class="chosen-select form-control" name="softName" id="softName" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${softNameList}" var="var">
 								<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
@@ -517,16 +568,16 @@ $(window).scroll(function() {
 						  	</select>
 						</td>
 						<td align="left" style="width: 120px;padding:10px;">
-							<select class="chosen-select form-control" name="softVer" data-placeholder="请选择软件版本" style="vertical-align:top;width: 120px;">
+							<select class="chosen-select form-control" name="softVer" id="softVer" data-placeholder="请选择软件版本" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${softVerList}" var="var">
 								<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
 							</c:forEach>
 						  	</select>
 						</td>
-						<td align="center" style="width: 120px;">
-							<input type="hidden" name="softParam" id="softParam1" value=""/>
-						  	<a href="javascript:void()" onclick="setSoftParam(1)">设置参数</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<td align="left" style="width: 120px;">
+							<input type="hidden" name="softParam" id="softParam" value=""/>
+						  	<a href="javascript:void()" onclick="setSoftParam(0)">设置参数</a>
 						</td>
 					</tr>
 				</table>
@@ -538,18 +589,18 @@ $(window).scroll(function() {
 			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="2">数量</td>
 			<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
 			<td style="padding:10px;" colspan="6">
-				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onclick="setExpireDateChk()" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(this)"/>永久
+				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onclick="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
 			</td>
 		</tr>
 		<tr class="tablecls">
 			<td align="right" style="width: 120px;padding:10px;">数量：</td>
 			<td style="width: 120px;padding:10px;" colspan="6">
 				<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
-				    <input type="text" name="virNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1"> 
+				    <input type="text" id="virNum" name="virNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1"> 
 				    <div class="input-group-addon"> 
-				        <a href="javascript:;" class="spin-up" data-spin="up"><i class="icon-sort-up"></i></a> 
-				        <a href="javascript:;" class="spin-down" data-spin="down"><i class="icon-sort-down"></i></a> 
+				        <a href="javascript:void();" class="spin-up" data-spin="up"><i class="icon-sort-up"></i></a> 
+				        <a href="javascript:void();" class="spin-down" data-spin="down"><i class="icon-sort-down"></i></a> 
 				    </div> 
 				</div>
 			</td>
@@ -564,9 +615,9 @@ $(window).scroll(function() {
 			<td align="right" style="width: 120px;padding:10px;">计费方式：</td>
 			<td align="left" style="width: 120px;padding:10px;">包年包月</td>
 			<td align="right" style="width: 120px;padding:10px;">地域：</td>
-			<td align="left" style="width: 120px;padding:10px;"><span id="areaCode"></span></td>
+			<td align="left" style="width: 120px;padding:10px;"><span id="areaCodeLbl"></span></td>
 			<td align="right" style="width: 120px;padding:10px;">实例规格：</td>
-			<td align="left" style="width: 120px;padding:10px;" colspan="2"><span id="areaCode"></span></td>
+			<td align="left" style="width: 120px;padding:10px;" colspan="2"><span id="areaCodeLbl"></span></td>
 		</tr>
 	</table>
 	</form>
@@ -577,9 +628,9 @@ $(window).scroll(function() {
 	<tr>
 		<td align="left" style="padding:10px;">
 			<div class="divbtn">
-			    <span class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
+			    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
 			    <span style="width:30px;float:right;">&nbsp;</span>
-			    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList(true)">加入清单</a></span>  
+			    <span id="savePckgBtnId" class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
 			</div>
 		</td>
 	</tr>

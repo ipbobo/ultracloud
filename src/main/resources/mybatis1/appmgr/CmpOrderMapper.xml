@@ -135,13 +135,6 @@
 		#{pckgFlag}
 	</sql>
 	
-	<!-- 清单列表查询resultType及resultMap互斥： -->
-	<select id="getCmpOrderList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
-		select <include refid="fieldName"/>
-		from 
-		<include refid="tableName"/>
-	</select>
-	
 	<!-- 新增清单 -->
 	<insert id="saveCmpOrder" parameterType="com.cmp.sid.CmpOrder" >
 		insert into <include refid="tableName"/> (
@@ -150,4 +143,33 @@
 			<include refid="saveFieldValue"/>
 		)
 	</insert>
+	
+	<!-- 新增套餐清单 -->
+	<insert id="addPckgList" parameterType="com.cmp.sid.CmpOrder" >
+		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
+		select #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum, '', '0'
+		from 
+		<include refid="tableName"/>
+		where id=#{id}
+	</insert>
+	
+	<!-- 清单列表查询resultType及resultMap互斥： -->
+	<select id="getCmpOrderList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+	</select>
+	
+	<!-- 套餐列表查询resultType及resultMap互斥： -->
+	<select id="delPckg" parameterType="String">
+		delete from <include refid="tableName"/> where id=#{pckgId}
+	</select>
+	
+	<!-- 套餐列表查询resultType及resultMap互斥： -->
+	<select id="getPckgList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where pckgFlag='1'
+	</select>
 </mapper>

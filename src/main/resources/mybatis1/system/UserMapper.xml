@@ -17,6 +17,7 @@
 			<id column="ROLE_ID" property="ROLE_ID"/>
 			<result column="ROLE_NAME" property="ROLE_NAME"/>
 			<result column="ROLE_RIGHTS" property="RIGHTS"/>
+			<result column="type" property="TYPE"/>
 		</association>
 	</resultMap>
 	<resultMap type="User" id="userResultMap">
@@ -131,7 +132,8 @@
 				u.SKIN,
 				r.ROLE_ID,
 				r.ROLE_NAME,
-				r.RIGHTS as ROLE_RIGHTS 
+				r.RIGHTS as ROLE_RIGHTS,
+				r.type  
 		from 
 		<include refid="tableName"></include> u 
 		left join 

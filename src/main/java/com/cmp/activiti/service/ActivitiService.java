@@ -16,7 +16,10 @@ import org.activiti.engine.ManagementService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricDetail;
 import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.history.HistoricVariableUpdate;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLink;
@@ -104,6 +107,51 @@ public class ActivitiService {
   		page.setResults(list);
   		return page;
   	}
+  	
+  	/**
+  	 * 查询个人发起任务数(根据processInstance)
+  	 *
+  	 */
+  	public int  countByUserHistoricProcess(String userId, boolean finished) {
+  		int totalCount = 0;
+  		if (finished) {
+  			totalCount = (int)historyService.createHistoricProcessInstanceQuery().startedBy(userId).finished().count();
+  		}else {
+  			totalCount = (int)historyService.createHistoricProcessInstanceQuery().startedBy(userId).unfinished().count();
+  		}
+  		return totalCount;
+  	}
+  	
+  	
+  	/**
+  	 * 根据流程实例ID查询流程变量
+  	 * @param processInstanceId
+  	 * @return
+  	 */
+  	public Map<String, Object> getHistoricProcessInstanceVariables(String processInstanceId){
+  		List<HistoricVariableInstance> hvilist = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId).list();
+  		Map<String, Object> variablesMap = new HashMap<String, Object>();
+  		for (HistoricVariableInstance historicVariableInstance : hvilist) {
+  			historicVariableInstance.getVariableName();
+  		    variablesMap.put(historicVariableInstance.getVariableName(), historicVariableInstance.getValue());
+  		}
+  		return variablesMap;
+  	}
+  	
+  	/**
+  	 * 查询个人发起任务数(根据processInstance)
+  	 *
+  	 */
+  	public int countByUserActInst(String userId, boolean finished) {
+  		int totalCount = 0;
+  		if (finished) {
+  			totalCount = (int)historyService.createHistoricActivityInstanceQuery().taskAssignee(userId).finished().count(); 		
+  		} else {
+  			totalCount = (int)historyService.createHistoricActivityInstanceQuery().taskAssignee(userId).unfinished().count();
+  		}
+  		return totalCount;
+  	}
+  	
   	
   	
   	

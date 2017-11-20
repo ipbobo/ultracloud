@@ -1,7 +1,7 @@
 delete from sys_menu where menu_id in(121, 122, 123);
 INSERT INTO `sys_menu` VALUES ('121', '申请管理', '#', '0', '2', 'menu-icon fa fa-home blue', '2', '1');
-INSERT INTO `sys_menu` VALUES ('122', '资源申请', 'appMgrPre.do', '121', '1', 'menu-icon fa fa-home blue', '1', '1');
-INSERT INTO `sys_menu` VALUES ('123', '运维服务申请', 'appMgrPre.do', '121', '2', 'menu-icon fa fa-home blue', '1', '1');
+INSERT INTO `sys_menu` VALUES ('122', '资源申请', 'resAppPre.do', '121', '1', 'menu-icon fa fa-home blue', '1', '1');
+INSERT INTO `sys_menu` VALUES ('123', '运维服务申请', 'resAppPre.do', '121', '2', 'menu-icon fa fa-home blue', '1', '1');
 
 truncate table cmp_dict;
 INSERT INTO `cmp_dict` VALUES ('1', '2017-11-13 00:40:29', '2017-11-12 21:58:37', 'plat_type', 'vmware', 'VMware', '平台类型', '1', '1');
@@ -12,8 +12,6 @@ INSERT INTO `cmp_dict` VALUES ('7', '2017-11-13 15:21:55', '2017-11-15 21:04:04'
 INSERT INTO `cmp_dict` VALUES ('8', '2017-11-13 15:22:10', '2017-11-15 21:04:07', 'img_code', '2', '模板2', '模板', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('9', '2017-11-13 16:51:45', '2017-11-15 13:16:15', 'disk_type', '1', '高效云盘', '磁盘类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES ('10', '2017-11-13 16:52:25', '2017-11-15 13:16:18', 'disk_type', '2', 'SSD云盘', '磁盘类型', '0', '2');
-INSERT INTO `cmp_dict` VALUES ('11', '2017-11-13 16:53:43', '2017-11-13 16:54:32', 'disk_size', '1', '20G', '磁盘大小', '1', '1');
-INSERT INTO `cmp_dict` VALUES ('12', '2017-11-13 16:54:25', '2017-11-13 16:54:33', 'disk_size', '2', '40G', '磁盘大小', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('13', '2017-11-14 21:47:39', '2017-11-14 21:47:39', 'area_code', '1', '华东', '区域', '1', '1');
 INSERT INTO `cmp_dict` VALUES ('14', '2017-11-14 21:47:53', '2017-11-14 21:47:53', 'area_code', '2', '华北', '区域', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('15', '2017-11-14 22:37:24', '2017-11-14 23:19:43', 'deploy_type', '1', '常规部署', '部署类型', '1', '1');
