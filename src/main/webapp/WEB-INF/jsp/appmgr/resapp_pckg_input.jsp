@@ -21,6 +21,15 @@ function delPckg(obj, pckgId, pckgName){
 	}
 }
 
+//获取IOPS
+function getIops(diskType, diskSize, iopsId){
+	if(diskType=="1"){//高效云盘1120+6
+		$("#"+iopsId).html(1120+(diskSize-20)*6);
+	}else if(diskType=="2"){//SSD云盘1800+30
+		$("#"+iopsId).html(1800+(diskSize-20)*30);
+	}
+}
+
 //新增套餐磁盘行
 function addPckgDiskRow(diskType, diskSize, diskEncrypt){
 	var diskTypes=diskType.split(",");
@@ -33,15 +42,17 @@ function addPckgDiskRow(diskType, diskSize, diskEncrypt){
 	$("#tcdiskType").val(diskTypes[0]);
     $("#tcdiskSize").val(diskSizes[0]);
     $("#tcdiskEncrypt").prop("checked", diskEncrypts[0]==1);//复选框，注意要用prop()，attr()只能赋值为初始值
+    getIops(diskTypes[0], diskSizes[0], "tciopsId");//获取IOPS
     $.each(diskTypes, function (i, item) {
 	    if(i!=0){
 		    var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"tcdiskType\" id=\"tcdiskType"+i+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcdiskType").html()+"</select></td>"
-			    +"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"tcdiskSize\" id=\"tcdiskSize"+i+"\" data-placeholder=\"请选择磁盘大小\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcdiskSize").html()+"</select></td>"
-			    +"<td align=\"left\"><input name=\"tcdiskEncrypt\" id=\"tcdiskEncrypt"+i+"\" type=\"checkbox\" value=\"\" disabled/>加密</td>";
+			    +"<td align=\"left\" style=\"width: 120px;padding:10px;\"><input type=\"text\" name=\"tcdiskSize\" id=\"tcdiskSize"+i+"\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" disabled/></td>"
+			    +"<td align=\"left\" style=\"width: 200px;\">GB&nbsp;&nbsp;&nbsp;<span id=\"tciopsId"+i+"\">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name=\"tcdiskEncrypt\" id=\"tcdiskEncrypt"+i+"\" type=\"checkbox\" value=\"\" disabled/>加密</td>";
 		    $("#tcdiskTableId").append("<tr>"+tdStr+"</tr>");
 		    $("#tcdiskType"+i).val(item);
 		    $("#tcdiskSize"+i).val(diskSizes[i]);
 		    $("#tcdiskEncrypt"+i).prop("checked", diskEncrypts[i]==1);//不选择复选框
+		    getIops(item, diskSizes[i], "tciopsId"+i);//获取IOPS
 	    }
     });
 }
@@ -152,7 +163,7 @@ function choosePckg(jsonStr){
 				<c:forEach items="${pckgList}" var="var" varStatus="st">
 				<tr>
 					<td align="left" style="width: 120px;padding:10px;">
-						<span style="float: left;"><input type="radio" name="tcName" id="tctableId" onclick='choosePckg("{\"id\":\"${var.id}\",\"envCode\":\"${var.envCode}\",\"projectCode\":\"${var.projectCode}\",\"resType\":\"${var.projectCode}\",\"virName\":\"${var.virName}\",\"cpu\":\"${var.cpu}\",\"memory\":\"${var.memory}\",\"osType\":\"${var.osType}\",\"osBitNum\":\"${var.osBitNum}\",\"imgCode\":\"${var.imgCode}\",\"imgUserName\":\"${var.imgUserName}\",\"imgUserPass\":\"${var.imgUserPass}\",\"imgPath\":\"${var.imgPath}\",\"imgExpireDate\":\"${var.imgExpireDate}\",\"diskType\":\"${var.diskType}\",\"diskSize\":\"${var.diskSize}\",\"diskEncrypt\":\"${var.diskEncrypt}\",\"softName\":\"${var.softName}\",\"softVer\":\"${var.softVer}\",\"softParam\":\"${var.softParam}\",\"expireDate\":\"${var.expireDate}\",\"virNum\":\"${var.virNum}\"}	")'/>${var.pckgName}</span>
+						<span style="float: left;"><input type="radio" name="tcName" id="tctableId" onclick='choosePckg("{\"id\":\"${var.id}\",\"envCode\":\"${var.envCode}\",\"projectCode\":\"${var.projectCode}\",\"resType\":\"${var.resType}\",\"virName\":\"${var.virName}\",\"cpu\":\"${var.cpu}\",\"memory\":\"${var.memory}\",\"osType\":\"${var.osType}\",\"osBitNum\":\"${var.osBitNum}\",\"imgCode\":\"${var.imgCode}\",\"imgUserName\":\"${var.imgUserName}\",\"imgUserPass\":\"${var.imgUserPass}\",\"imgPath\":\"${var.imgPath}\",\"imgExpireDate\":\"${var.imgExpireDate}\",\"diskType\":\"${var.diskType}\",\"diskSize\":\"${var.diskSize}\",\"diskEncrypt\":\"${var.diskEncrypt}\",\"softName\":\"${var.softName}\",\"softVer\":\"${var.softVer}\",\"softParam\":\"${var.softParam}\",\"expireDate\":\"${var.expireDate}\",\"virNum\":\"${var.virNum}\"}	")'/>${var.pckgName}</span>
 						<div style="background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delPckg(this, '${var.id}', '${var.pckgName}')" class="img_close"></div>
 					</td>
 					<td>
@@ -337,15 +348,10 @@ function choosePckg(jsonStr){
 					  	</select>
 					</td>
 					<td align="left" style="width: 120px;padding:10px;">
-						<select class="chosen-select form-control" name="tcdiskSize" id="tcdiskSize" data-placeholder="请选择磁盘大小" style="vertical-align:top;width: 120px;" disabled>
-						<option value="">请选择</option>
-						<c:forEach items="${diskSizeList}" var="var">
-							<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
-						</c:forEach>
-					  	</select>
+						<input type="text" name="tcdiskSize" id="tcdiskSize" value="20" style="width: 120px;" maxlength="5" disabled/>
 					</td>
-					<td align="left" style="width: 120px;">
-					  	<input name="tcdiskEncrypt" id="tcdiskEncrypt" type="checkbox" value="" disabled/>加密
+					<td align="left" style="width: 200px;">
+					  	GB&nbsp;&nbsp;&nbsp;<span id="tciopsId">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name="tcdiskEncrypt" id="tcdiskEncrypt" type="checkbox" value="" disabled/>加密
 					</td>
 				</tr>
 			</table>

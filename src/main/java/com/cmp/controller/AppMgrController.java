@@ -108,7 +108,7 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
-	@RequestMapping(value="/getDictList", produces={"application/json;charset=UTF-8"})
+	/*@RequestMapping(value="/getDictList", produces={"application/json;charset=UTF-8"})
     @ResponseBody
 	public String getDataDiskTypeList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		String operType=request.getParameter("operType");//操作类型：disk-磁盘；soft-软件安装
@@ -123,7 +123,7 @@ public class AppMgrController extends BaseController {
 		}
 		
 		return StringUtil.getRetStr("-", "调用失败：不支持的操作类型");
-	}
+	}*/
 	
 	//加入清单
 	@RequestMapping(value="/addList")

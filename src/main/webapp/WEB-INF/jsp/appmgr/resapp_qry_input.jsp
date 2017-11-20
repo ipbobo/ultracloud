@@ -47,7 +47,7 @@ function setRecommendType(obj, fieldName, fieldValue){
 
 //设置软件参数
 function setSoftParam(indx){
-	$("#softParam"+indx).val(indx);
+	$("#softParam"+(indx==0?"":indx)).val(indx);
 }
 
 //永久到期时间选择
@@ -71,9 +71,9 @@ function addDiskRow(){
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"diskType\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\">"+$("#diskType").html()+"</select></td>"
-	    +"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"diskSize\" data-placeholder=\"请选择磁盘大小\" style=\"vertical-align:top;width: 120px;\">"+$("#diskSize").html()+"</select></td>"
-	    +"<td align=\"left\" style=\"width: 120x;\"><input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
+    var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\">"+$("#diskType").html()+"</select></td>"
+	    +"<td align=\"left\" style=\"width: 120px;padding:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\"/></td>"
+	    +"<td align=\"left\" style=\"width: 200x;\">GB&nbsp;&nbsp;&nbsp;<span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
     $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
@@ -162,7 +162,7 @@ function checkData(){
 		diskTypeArr.push($(this).val());
 	});
 	var diskSizeArr=new Array()
-	$("select[name='diskSize']").each(function() {
+	$("input[name='diskSize']").each(function() {
 		diskSizeArr.push($(this).val());
 	});
 	var diskEncryptArr=new Array()
@@ -267,6 +267,30 @@ function savePckg(){
 	    	$("#savePckgBtnId").tips({side:3, msg:data.retMsg, bg:'#AE81FF', time:2});
 	    }
 	});
+}
+
+//磁盘大小失焦触发
+function diskSizeFunc(obj, diskTypeId, iopsId){
+	var diskSize=$(obj).val();
+	if($(obj).val()==""){
+		return;
+	}
+	
+	if(!diskSize.match(/^\d*$/) || diskSize<20){
+		$(obj).val("20");
+		diskSize=20;
+	}
+	
+	if(diskSize>32768){
+		$(obj).val("32768");
+		diskSize=32768;
+	}
+	
+	if($("#"+diskTypeId).val()=="1"){//高效云盘1120+6
+		$("#"+iopsId).html(1120+(diskSize-20)*6);
+	}else if($("#"+diskTypeId).val()=="2"){//SSD云盘1800+30
+		$("#"+iopsId).html(1800+(diskSize-20)*30);
+	}
 }
 
 //点击tab页
@@ -518,15 +542,10 @@ $(window).scroll(function() {
 						  	</select>
 						</td>
 						<td align="left" style="width: 120px;padding:10px;">
-							<select class="chosen-select form-control" name="diskSize" id="diskSize" data-placeholder="请选择磁盘大小" style="vertical-align:top;width: 120px;">
-							<option value="">请选择</option>
-							<c:forEach items="${diskSizeList}" var="var">
-								<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
-							</c:forEach>
-						  	</select>
+							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')"/>
 						</td>
-						<td align="left" style="width: 120px;">
-						  	<input name="diskEncrypt" type="checkbox" value=""/>加密
+						<td align="left" style="width: 200px;">
+						  	GB&nbsp;&nbsp;&nbsp;<span id="iopsId">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密
 						</td>
 					</tr>
 				</table>
@@ -557,8 +576,8 @@ $(window).scroll(function() {
 						  	</select>
 						</td>
 						<td align="left" style="width: 120px;">
-							<input type="hidden" name="softParam" id="softParam1" value=""/>
-						  	<a href="javascript:void()" onclick="setSoftParam(1)">设置参数</a>
+							<input type="hidden" name="softParam" id="softParam" value=""/>
+						  	<a href="javascript:void()" onclick="setSoftParam(0)">设置参数</a>
 						</td>
 					</tr>
 				</table>
