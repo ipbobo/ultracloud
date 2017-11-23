@@ -7,11 +7,11 @@
 <head>
 <link rel="stylesheet" href="css/style.css"/>
 <link rel="stylesheet" href="css/bootstrap.min.css"/>
-<link rel="stylesheet" href="css/font-awesome.min.css">
-<link rel="stylesheet" href="css/bootstrap-spinner.css">
-<link rel="stylesheet" href="static/ace/css/datepicker.css" />
-<link rel="stylesheet" href="static/ace/css/chosen.css" />
-<link rel="stylesheet" href="static/ace/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+<link rel="stylesheet" href="css/font-awesome.min.css"/>
+<link rel="stylesheet" href="css/bootstrap-spinner.css"/>
+<link rel="stylesheet" href="static/ace/css/datepicker.css"/>
+<link rel="stylesheet" href="static/ace/css/chosen.css"/>
+<link rel="stylesheet" href="static/ace/css/ace.css"/>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.spinner.min.js"></script>
@@ -308,6 +308,17 @@ function tabFunc(tabId){
 		tcsq=true;
 		$("#tcsq").load("pckgAppPre.do");
 	}
+}
+
+//点击遮罩层
+function maskLayerClick(){
+	$('#shoppingCartId').toggleClass('open');//开关
+	var isOpen=$('#shoppingCartId').hasClass("open");//是否开启
+  	$('#shoppingCartTable').css('top', isOpen?"0px":"130px");
+  	$('#maskLayerId').css('display', isOpen?"block":"none");
+  	$('#shoppingCartId').css('min-height', (isOpen?$(window).height():0)+"px");
+  	$('#shoppingCartId').css('max-height', (isOpen?$(window).height():0)+"px");
+	$("#shoppingCartId").load("getOrderList.do");
 }
 
 //必须加<!DOCTYPE html>
@@ -624,6 +635,7 @@ $(window).scroll(function() {
 </div>
 <div id="tcsq" class="tab-pane fade"></div>
 </div>
+<!-- glyphicon glyphicon-time -->
 <table id="btnId" style="width:100%;border-top:1px solid #f5f5f5;">
 	<tr>
 		<td align="left" style="padding:10px;">
@@ -636,6 +648,13 @@ $(window).scroll(function() {
 	</tr>
 </table>
 <table style="width:100%;border-top:1px solid #f5f5f5;"><tr><td style="padding:10px;"><div class="divbtn"></div></td></tr></table>
+<table id="shoppingCartTable" style="position: fixed; right: 0; top: 130px; z-index: 999999999;">
+	<tr>
+		<td onclick="maskLayerClick()" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-shopping-cart"></span><div style="width: 10px;">购买清单</div><span id="shoppingCartNum" style="color: #f5620a">5000</span></div></td>
+		<td id="shoppingCartId" class="shoppingCart" style="overflow-y: auto;"></td>
+	</tr>
+</table>
+<div id="maskLayerId" onclick="maskLayerClick()" style="width: 100%; height: 100%; border-top: white1pxgroove;padding-bottom: 5px;padding-top: 0px;background-color: buttonface;text-align: center;background-color: #7f7f7f;filter: alpha(opacity=1);left: 0px;position: absolute;top: 1px;z-index: 3;display: none;cursor: default"></div><!-- 遮罩层 -->
 <script type="text/javascript">
 $(top.hangge());
 $('.date-picker').datepicker({autoclose: true,todayHighlight: true});//datepicker
