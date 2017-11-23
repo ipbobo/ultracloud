@@ -23,7 +23,7 @@
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
 			<tr>
 				<td align="left" style="width: 60px;">ECS</td>
-				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delPckg(this, '${var.id}', '${var.pckgName}')" class="img_close"></div></td>
+				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delPckg(this, '${var.id}', '${var.pckgName}')" class="img_close"></div></td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">计费方式：</td>

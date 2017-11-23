@@ -108,6 +108,48 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
+	//清单列表查询
+	@RequestMapping(value="/getOrderList")
+	public ModelAndView getOrderList() throws Exception{
+		List<CmpDict> areaCodeList=cmpDictService.getCmpDictList("area_code");//数据字典列表查询
+		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");//数据字典列表查询
+		List<CmpDict> deployTypeList=cmpDictService.getCmpDictList("deploy_type");//数据字典列表查询
+		List<CmpDict> envCodeList=cmpDictService.getCmpDictList("env_code");//数据字典列表查询
+		List<CmpDict> projectCodeList=cmpDictService.getCmpDictList("project_code");//数据字典列表查询
+		List<CmpDict> resTypeList=cmpDictService.getCmpDictList("res_type");//数据字典列表查询
+		List<CmpDict> recommendTypeList=cmpDictService.getCmpDictList("recommend_type");//数据字典列表查询
+		List<CmpDict> cpuList=cmpDictService.getCmpDictList("cpu");//数据字典列表查询
+		List<CmpDict> memoryList=cmpDictService.getCmpDictList("memory");//数据字典列表查询
+		List<CmpDict> osTypeList=cmpDictService.getCmpDictList("os_type");//数据字典列表查询
+		List<CmpDict> osBitNumList=cmpDictService.getCmpDictList("os_bit_num");//数据字典列表查询
+		List<CmpDict> imgCodeList=cmpDictService.getCmpDictList("img_code");//数据字典列表查询
+		List<CmpDict> diskTypeList=cmpDictService.getCmpDictList("disk_type");//数据字典列表查询
+		List<CmpDict> diskSizeList=cmpDictService.getCmpDictList("disk_size");//数据字典列表查询
+		List<CmpDict> softNameList=cmpDictService.getCmpDictList("soft_name");//数据字典列表查询
+		List<CmpDict> softVerList=cmpDictService.getCmpDictList("soft_ver");//数据字典列表查询
+		List<CmpOrder> pckgList=cmpOrderService.getPckgList();//套餐列表查询
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("areaCodeList", areaCodeList);//区域列表
+		mv.addObject("platTypeList", platTypeList);//平台类型列表
+		mv.addObject("deployTypeList", deployTypeList);//部署类型列表
+		mv.addObject("envCodeList", envCodeList);//环境列表
+		mv.addObject("projectCodeList", projectCodeList);//项目列表
+		mv.addObject("resTypeList", resTypeList);//资源类型列表
+		mv.addObject("recommendTypeList", recommendTypeList);//推荐配置列表
+		mv.addObject("cpuList", cpuList);//CPU列表
+		mv.addObject("memoryList", memoryList);//内存列表
+		mv.addObject("osTypeList", osTypeList);//OS类型列表
+		mv.addObject("osBitNumList", osBitNumList);//位数列表
+		mv.addObject("imgCodeList", imgCodeList);//模板列表
+		mv.addObject("diskTypeList", diskTypeList);//磁盘类型列表
+		mv.addObject("diskSizeList", diskSizeList);//磁盘大小列表
+		mv.addObject("softNameList", softNameList);//软件名称列表
+		mv.addObject("softVerList", softVerList);//软件版本列表
+		mv.addObject("pckgList", pckgList);//软件版本列表
+		mv.setViewName("appmgr/order_qry_list");
+		return mv;
+	}
+	
 	/*@RequestMapping(value="/getDictList", produces={"application/json;charset=UTF-8"})
     @ResponseBody
 	public String getDataDiskTypeList(HttpServletRequest request, HttpServletResponse response) throws Exception{
