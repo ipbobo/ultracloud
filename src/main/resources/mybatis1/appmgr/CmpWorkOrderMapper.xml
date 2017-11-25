@@ -147,12 +147,16 @@
 		#{virNum}
 	</sql>
 	
+	<!-- 获取申请编号 -->
+	<select id="getAppNo" parameterType="String" resultType="String">
+		select func_nextval(#{seqName})
+	</select>
+	
 	<!-- 新增工单 -->
-	<insert id="addWorkOrder" parameterType="pd" >
+	<insert id="addWorkOrder" parameterType="pd">
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
 		select #{appNo}, #{appType}, #{status}, #{procInstId}, #{applyUserId}, areaCode, platType, deployType, envCode, resType, virName, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum
-		from 
-		<include refid="tableName"/>
+		from cmp_order
 		where id=#{orderId}
 	</insert>
 </mapper>

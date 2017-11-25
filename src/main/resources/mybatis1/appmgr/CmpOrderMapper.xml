@@ -193,6 +193,11 @@
 		update <include refid="tableName"/> set status='1' where id=#{orderId}
 	</select>
 	
+	<!-- 清空购物车 -->
+	<select id="clearShoppingCart" parameterType="String">
+		delete from <include refid="tableName"/> where status='0' and applyUserId=#{applyUserId}
+	</select>
+	
 	<!-- 删除清单 -->
 	<select id="delCmpOrder" parameterType="String">
 		delete from <include refid="tableName"/> where id=#{orderId}

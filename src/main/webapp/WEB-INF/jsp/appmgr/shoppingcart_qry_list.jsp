@@ -6,7 +6,7 @@
 <script type="text/javascript">
 //删除清单
 function delCmpOrder(obj, orderId){
-	if(confirm("确定要删除该清单2["+orderId+"]吗?")){
+	if(confirm("确定要删除该清单["+orderId+"]吗?")){
 		$.ajax({
 		    type: 'post',  
 		    url: 'delCmpOrder.do?orderId='+orderId,
@@ -17,6 +17,26 @@ function delCmpOrder(obj, orderId){
 			    }
 		    },
 		    error: function(data) {}
+		});
+	}
+}
+
+//清空购物车
+function clearShoppingCart(){
+	if(confirm("确定要清空购物车吗?")){
+		$.ajax({
+		    type: 'post',  
+		    url: "clearShoppingCart.do",
+		    dataType: 'json',  
+		    success: function(data){
+		    	alert(data.retMsg);
+		    	$("input:checkbox[name='orderId']").each(function() {
+					$(this).parent().parent().remove();
+				});
+		    },
+		    error: function(data) {
+		    	alert(data.retMsg);
+		    }
 		});
 	}
 }
@@ -34,7 +54,19 @@ function batchBuy(){
 		orderIdArr.push($(this).val());
 	});
 	
-	ajaxHttpPost("appCommit.do", {"orderIdStr": orderIdArr.join()}, "batchBuyId");//发送Ajax请求
+	$.ajax({
+	    type: 'post',  
+	    url: "appCommit.do",
+	    data: {"orderIdStr": orderIdArr.join()},
+	    dataType: 'json',  
+	    success: function(data){
+	    	alert(data.retMsg);
+		    maskLayerClick();//关闭遮罩层
+	    },
+	    error: function(data) {
+	    	alert(data.retMsg);
+	    }
+	});
 }
 </script>
 </head>

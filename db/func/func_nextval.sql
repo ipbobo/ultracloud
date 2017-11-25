@@ -1,5 +1,5 @@
 DROP FUNCTION IF EXISTS `func_nextval`;
-CREATE FUNCTION `func_nextval`(i_seqName varchar(60), i_prefix varchar(5))
+CREATE FUNCTION `func_nextval`(i_seqName varchar(60))
 RETURNS varchar(20)
 BEGIN
 	DECLARE v_count int(11);
@@ -10,5 +10,5 @@ BEGIN
 		update cmp_sequence set currval=currval+incrVal where seqName=i_seqName;
 	end if;
 	
-	return func_currVal(i_seqName, i_prefix);
+	return func_currVal(i_seqName);
 END
