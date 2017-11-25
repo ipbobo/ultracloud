@@ -14,6 +14,7 @@
 		appNo,
 		appType,
 		status,
+		procInstId,
 		applyUserId,
 		areaCode,
 		platType,
@@ -50,6 +51,7 @@
 		#{appNo},
 		#{appType},
 		#{status},
+		#{procInstId},
 		#{applyUserId},
 		#{areaCode},
 		#{platType},
@@ -83,6 +85,7 @@
 		appNo,
 		appType,
 		status,
+		procInstId,
 		applyUserId,
 		areaCode,
 		platType,
@@ -115,6 +118,7 @@
 		#{appNo},
 		#{appType},
 		#{status},
+		#{procInstId},
 		#{applyUserId},
 		#{areaCode},
 		#{platType},
@@ -146,7 +150,7 @@
 	<!-- 新增工单 -->
 	<insert id="addWorkOrder" parameterType="pd" >
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select #{appNo}, #{appType}, #{status}, #{applyUserId}, areaCode, platType, deployType, envCode, resType, virName, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum
+		select #{appNo}, #{appType}, #{status}, #{procInstId}, #{applyUserId}, areaCode, platType, deployType, envCode, resType, virName, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum
 		from 
 		<include refid="tableName"/>
 		where id=#{orderId}

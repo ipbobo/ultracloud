@@ -7,6 +7,7 @@ public class CmpWorkOrder {
 	private String appNo;//申请编号
 	private String appType;//申请类型
 	private String status;//状态：0-待提交；1-审批中；2-审批通过；3-审批不通过
+	private String procInstId;//流程实例ID
 	private String applyUserId;//申请者
 	private String areaCode;//地域代码
 	private String platType;//平台类型
@@ -82,6 +83,14 @@ public class CmpWorkOrder {
 		this.status = status;
 	}
 
+	public String getProcInstId() {
+		return procInstId;
+	}
+
+	public void setProcInstId(String procInstId) {
+		this.procInstId = procInstId;
+	}
+	
 	public String getApplyUserId() {
 		return applyUserId;
 	}
