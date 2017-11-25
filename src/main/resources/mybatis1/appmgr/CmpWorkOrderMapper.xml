@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CmpWorkOrderMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		cmp_workorder
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="fieldName">
+		id,
+		createTime,
+		lastUpdateTime,
+		status,
+		applyUserId,
+		areaCode,
+		platType,
+		deployType,
+		envCode,
+		resType,
+		virName,
+		virIp,
+		cpu,
+		memory,
+		diskType,
+		diskSize,
+		diskEncrypt,
+		softName,
+		softVer,
+		softParam,
+		projectCode,
+		osType,
+		osBitNum,
+		imgCode,
+		imgUserName,
+		imgUserPass,
+		imgPath,
+		imgExpireDate,
+		expireDate,
+		virNum
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="fieldValue">
+		#{id},
+		#{createTime},
+		#{lastUpdateTime},
+		#{status},
+		#{applyUserId},
+		#{areaCode},
+		#{platType},
+		#{deployType},
+		#{envCode},
+		#{resType},
+		#{virName},
+		#{virIp},
+		#{cpu},
+		#{memory},
+		#{diskType},
+		#{diskSize},
+		#{diskEncrypt},
+		#{softName},
+		#{softVer},
+		#{softParam},
+		#{projectCode},
+		#{osType},
+		#{osBitNum},
+		#{imgCode},
+		#{imgUserName},
+		#{imgUserPass},
+		#{imgPath},
+		#{imgExpireDate},
+		#{expireDate},
+		#{virNum}
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="saveFieldName">
+		status,
+		applyUserId,
+		areaCode,
+		platType,
+		deployType,
+		envCode,
+		resType,
+		virName,
+		virIp,
+		cpu,
+		memory,
+		diskType,
+		diskSize,
+		diskEncrypt,
+		softName,
+		softVer,
+		softParam,
+		projectCode,
+		osType,
+		osBitNum,
+		imgCode,
+		imgUserName,
+		imgUserPass,
+		imgPath,
+		imgExpireDate,
+		expireDate,
+		virNum
+	</sql>
+	
+	<sql id="saveFieldValue">
+		#{status},
+		#{applyUserId},
+		#{areaCode},
+		#{platType},
+		#{deployType},
+		#{envCode},
+		#{resType},
+		#{virName},
+		#{virIp},
+		#{cpu},
+		#{memory},
+		#{diskType},
+		#{diskSize},
+		#{diskEncrypt},
+		#{softName},
+		#{softVer},
+		#{softParam},
+		#{projectCode},
+		#{osType},
+		#{osBitNum},
+		#{imgCode},
+		#{imgUserName},
+		#{imgUserPass},
+		#{imgPath},
+		#{imgExpireDate},
+		#{expireDate},
+		#{virNum}
+	</sql>
+	
+	<!-- 新增工单 -->
+	<insert id="addWorkOrder" parameterType="pd" >
+		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
+		select #{status}, #{applyUserId}, areaCode, platType, deployType, envCode, resType, virName, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum
+		from 
+		<include refid="tableName"/>
+		where id=#{orderId}
+	</insert>
+</mapper>

@@ -13,7 +13,7 @@ function delPckg(obj, pckgId, pckgName){
 		    dataType: 'json',  
 		    success: function(data){
 			    if(data.retCode=="0"){//删除成功
-			    	$(obj).parent().parent().remove();
+			    	$(obj).parent().parent().parent().parent().parent().remove();
 			    }
 		    },
 		    error: function(data) {}
@@ -107,7 +107,7 @@ function choosePckg(jsonStr){
 </script>
 </head>
 <body>
-<form id="tcmainForm" name="tcmainForm" action="addPckgList.do" enctype="multipart/form-data" method="post">
+<form id="tcmainForm" name="tcmainForm" action="" enctype="multipart/form-data" method="post">
 <input type="hidden" name="tcareaCode" id="tcareaCode" value="1"/>
 <input type="hidden" name="tcplatType" id="tcplatType" value="vmware"/>
 <input type="hidden" name="tcdeployType" id="tcdeployType" value="1"/>
@@ -171,26 +171,19 @@ function choosePckg(jsonStr){
 						<tr>
 							<td align="right" style="width: 120px;">计费方式：</td>
 							<td align="left" style="width: 180px;">包年包月</td>
-							<td align="right" style="width: 120px;">地域：</td>
-							<td align="left" style="width: 180px;">${var.areaCode}</td>
 							<td align="right" style="width: 120px;">实例规格：</td>
-							<td align="left" style="width: 180px;">${var.cpu}&nbsp;${var.memory}</td>
-						</tr>
-						<tr>
+							<td align="left" style="width: 180px;">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
 							<td align="right" style="width: 120px;">I/O优化：</td>
 							<td align="left" style="width: 180px;">I/O优化实例</td>
-							<td align="right" style="width: 120px;">网络：</td>
-							<td align="left" style="width: 180px;">公网带宽&nbsp;4Mbps(专用网络)</td>
-							<td align="right" style="width: 120px;">镜像：</td>
-							<td align="left" style="width: 180px;">${var.osType}&nbsp;${var.osBitNum}</td>
 						</tr>
 						<tr>
-							<td align="right" style="width: 120px;">系统盘：</td>
-							<td align="left" style="width: 180px;">默认</td>
+							
+							<td align="right" style="width: 120px;">镜像：</td>
+							<td align="left" style="width: 180px;">${var.osType}&nbsp;${var.osBitNum}&nbsp;位</td>
 							<td align="right" style="width: 120px;">数据盘：</td>
-							<td align="left" style="width: 180px;">${var.diskType}(${var.diskSize})</td>
+							<td align="left" style="width: 180px;">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
 							<td align="right" style="width: 120px;">购买量：</td>
-							<td align="left" style="width: 180px;">${var.virNum}</td>
+							<td align="left" style="width: 180px;">1&nbsp;个月&nbsp;${var.virNum}&nbsp;台</td>
 						</tr>
 						</table>
 					</td>

@@ -1,10 +1,10 @@
 package com.cmp.sid;
 
-public class CmpOrder {
+public class CmpWorkOrder {
 	private Long id;//ID
 	private String createTime;//创建时间
 	private String lastUpdateTime;//最后修改时间
-	private String status;//状态：0-待提交；1-已提交；T-套餐
+	private String status;//状态：0-待提交；1-审批中；2-审批通过；3-审批不通过
 	private String applyUserId;//申请者
 	private String areaCode;//地域代码
 	private String platType;//平台类型
@@ -31,7 +31,6 @@ public class CmpOrder {
 	private String imgExpireDate;//镜像到期时间
 	private String expireDate;//到期时间
 	private String virNum;//虚拟机数量
-	private String pckgName;//套餐名称
 
 	public Long getId() {
 		return id;
@@ -271,13 +270,5 @@ public class CmpOrder {
 
 	public void setVirNum(String virNum) {
 		this.virNum = virNum;
-	}
-
-	public String getPckgName() {
-		return pckgName;
-	}
-
-	public void setPckgName(String pckgName) {
-		this.pckgName = pckgName;
 	}
 }

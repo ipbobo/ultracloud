@@ -11,6 +11,8 @@
 		id,
 		createTime,
 		lastUpdateTime,
+		status,
+		applyUserId,
 		areaCode,
 		platType,
 		deployType,
@@ -36,8 +38,7 @@
 		imgExpireDate,
 		expireDate,
 		virNum,
-		pckgName,
-		pckgFlag
+		pckgName
 	</sql>
 	
 	<!-- 字段值 -->
@@ -45,6 +46,8 @@
 		#{id},
 		#{createTime},
 		#{lastUpdateTime},
+		#{status},
+		#{applyUserId},
 		#{areaCode},
 		#{platType},
 		#{deployType},
@@ -70,12 +73,13 @@
 		#{imgExpireDate},
 		#{expireDate},
 		#{virNum},
-		#{pckgName},
-		#{pckgFlag}
+		#{pckgName}
 	</sql>
 	
 	<!-- 字段 -->
 	<sql id="saveFieldName">
+		status,
+		applyUserId,
 		areaCode,
 		platType,
 		deployType,
@@ -101,11 +105,12 @@
 		imgExpireDate,
 		expireDate,
 		virNum,
-		pckgName,
-		pckgFlag
+		pckgName
 	</sql>
 	
 	<sql id="saveFieldValue">
+		#{status},
+		#{applyUserId},
 		#{areaCode},
 		#{platType},
 		#{deployType},
@@ -131,11 +136,41 @@
 		#{imgExpireDate},
 		#{expireDate},
 		#{virNum},
-		#{pckgName},
-		#{pckgFlag}
+		#{pckgName}
 	</sql>
 	
-	<!-- 新增清单 -->
+	<!-- 清单列表查询resultType及resultMap互斥： -->
+	<select id="getCmpOrderList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+	</select>
+	
+	<!-- 套餐列表查询 -->
+	<select id="getPckgList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where status='T'
+	</select>
+	
+	<!-- 购物车列表查询 -->
+	<select id="getShoppingCartList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where status='0'
+	</select>
+	
+	<!-- 已购历史列表查询 -->
+	<select id="getBuyHisList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where status='1'
+	</select>
+	
+	<!-- 新增清单或套餐 -->
 	<insert id="saveCmpOrder" parameterType="com.cmp.sid.CmpOrder" >
 		insert into <include refid="tableName"/> (
 			<include refid="saveFieldName"/>
@@ -147,29 +182,24 @@
 	<!-- 新增套餐清单 -->
 	<insert id="addPckgList" parameterType="com.cmp.sid.CmpOrder" >
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum, '', '0'
+		select #{status}, #{applyUserId}, #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum, ''
 		from 
 		<include refid="tableName"/>
 		where id=#{id}
 	</insert>
 	
-	<!-- 清单列表查询resultType及resultMap互斥： -->
-	<select id="getCmpOrderList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
-		select <include refid="fieldName"/>
-		from 
-		<include refid="tableName"/>
+	<!-- 更新清单状态 -->
+	<select id="updateCmpOrderStatus" parameterType="String">
+		update <include refid="tableName"/> set status='1' where id=#{orderId}
 	</select>
 	
-	<!-- 套餐列表查询resultType及resultMap互斥： -->
+	<!-- 删除清单 -->
+	<select id="delCmpOrder" parameterType="String">
+		delete from <include refid="tableName"/> where id=#{orderId}
+	</select>
+	
+	<!-- 删除套餐 -->
 	<select id="delPckg" parameterType="String">
 		delete from <include refid="tableName"/> where id=#{pckgId}
-	</select>
-	
-	<!-- 套餐列表查询resultType及resultMap互斥： -->
-	<select id="getPckgList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
-		select <include refid="fieldName"/>
-		from 
-		<include refid="tableName"/>
-		where pckgFlag='1'
 	</select>
 </mapper>

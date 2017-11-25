@@ -1,9 +1,9 @@
-DROP table if EXISTS cmp_order;
-CREATE TABLE `cmp_order` (
+DROP table if EXISTS cmp_workorder;
+CREATE TABLE `cmp_workorder` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `lastUpdateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  `status` varchar(10) DEFAULT NULL COMMENT '状态：0-待提交；1-已提交；T-套餐',
+  `status` varchar(10) DEFAULT NULL COMMENT '状态：0-待提交；1-审批中；2-审批通过；3-审批不通过',
   `applyUserId` varchar(20) NOT NULL COMMENT '申请者',
   `areaCode` varchar(20) DEFAULT NULL COMMENT '地域代码',
   `platType` varchar(20) DEFAULT NULL COMMENT '平台类型',
@@ -30,7 +30,6 @@ CREATE TABLE `cmp_order` (
   `imgExpireDate` varchar(19) DEFAULT NULL COMMENT '镜像到期时间',
   `expireDate` varchar(19) DEFAULT NULL COMMENT '到期时间',
   `virNum` varchar(10) DEFAULT NULL COMMENT '虚拟机数量',
-  `pckgName` varchar(60) DEFAULT NULL COMMENT '套餐名称',
   PRIMARY KEY (`id`),
-  KEY `indx_cmp_order_status` (`status`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='清单表';
+  KEY `indx_cmp_workorder_status` (`status`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='工单表';

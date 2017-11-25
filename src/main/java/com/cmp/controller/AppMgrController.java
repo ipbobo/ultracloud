@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,10 +14,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
+import com.cmp.service.CmpWorkOrderService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOrder;
 import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
+import com.fh.entity.system.User;
+import com.fh.util.Const;
+import com.fh.util.Jurisdiction;
 
 //申请管理
 @Controller
@@ -25,6 +30,8 @@ public class AppMgrController extends BaseController {
 	private CmpDictService cmpDictService;
 	@Resource
 	private CmpOrderService cmpOrderService;
+	@Resource
+	private CmpWorkOrderService cmpWorkOrderService;
 	
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
@@ -108,45 +115,23 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
-	//清单列表查询
-	@RequestMapping(value="/getOrderList")
-	public ModelAndView getOrderList() throws Exception{
-		List<CmpDict> areaCodeList=cmpDictService.getCmpDictList("area_code");//数据字典列表查询
-		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");//数据字典列表查询
-		List<CmpDict> deployTypeList=cmpDictService.getCmpDictList("deploy_type");//数据字典列表查询
-		List<CmpDict> envCodeList=cmpDictService.getCmpDictList("env_code");//数据字典列表查询
-		List<CmpDict> projectCodeList=cmpDictService.getCmpDictList("project_code");//数据字典列表查询
-		List<CmpDict> resTypeList=cmpDictService.getCmpDictList("res_type");//数据字典列表查询
-		List<CmpDict> recommendTypeList=cmpDictService.getCmpDictList("recommend_type");//数据字典列表查询
-		List<CmpDict> cpuList=cmpDictService.getCmpDictList("cpu");//数据字典列表查询
-		List<CmpDict> memoryList=cmpDictService.getCmpDictList("memory");//数据字典列表查询
-		List<CmpDict> osTypeList=cmpDictService.getCmpDictList("os_type");//数据字典列表查询
-		List<CmpDict> osBitNumList=cmpDictService.getCmpDictList("os_bit_num");//数据字典列表查询
-		List<CmpDict> imgCodeList=cmpDictService.getCmpDictList("img_code");//数据字典列表查询
-		List<CmpDict> diskTypeList=cmpDictService.getCmpDictList("disk_type");//数据字典列表查询
-		List<CmpDict> diskSizeList=cmpDictService.getCmpDictList("disk_size");//数据字典列表查询
-		List<CmpDict> softNameList=cmpDictService.getCmpDictList("soft_name");//数据字典列表查询
-		List<CmpDict> softVerList=cmpDictService.getCmpDictList("soft_ver");//数据字典列表查询
-		List<CmpOrder> pckgList=cmpOrderService.getPckgList();//套餐列表查询
+	//购物车列表查询
+	@RequestMapping(value="/getShoppingCartList")
+	public ModelAndView getShoppingCartList() throws Exception{
+		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList();//购物车列表查询
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("areaCodeList", areaCodeList);//区域列表
-		mv.addObject("platTypeList", platTypeList);//平台类型列表
-		mv.addObject("deployTypeList", deployTypeList);//部署类型列表
-		mv.addObject("envCodeList", envCodeList);//环境列表
-		mv.addObject("projectCodeList", projectCodeList);//项目列表
-		mv.addObject("resTypeList", resTypeList);//资源类型列表
-		mv.addObject("recommendTypeList", recommendTypeList);//推荐配置列表
-		mv.addObject("cpuList", cpuList);//CPU列表
-		mv.addObject("memoryList", memoryList);//内存列表
-		mv.addObject("osTypeList", osTypeList);//OS类型列表
-		mv.addObject("osBitNumList", osBitNumList);//位数列表
-		mv.addObject("imgCodeList", imgCodeList);//模板列表
-		mv.addObject("diskTypeList", diskTypeList);//磁盘类型列表
-		mv.addObject("diskSizeList", diskSizeList);//磁盘大小列表
-		mv.addObject("softNameList", softNameList);//软件名称列表
-		mv.addObject("softVerList", softVerList);//软件版本列表
-		mv.addObject("pckgList", pckgList);//软件版本列表
-		mv.setViewName("appmgr/order_qry_list");
+		mv.addObject("shoppingCartList", shoppingCartList);//软件版本列表
+		mv.setViewName("appmgr/shoppingcart_qry_list");
+		return mv;
+	}
+	
+	//已购历史列表查询
+	@RequestMapping(value="/getBuyHisList")
+	public ModelAndView getBuyHisList() throws Exception{
+		List<CmpOrder> buyHisList=cmpOrderService.getBuyHisList();//已购历史列表查询
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("buyHisList", buyHisList);//已购历史列表
+		mv.setViewName("appmgr/buyhis_qry_list");
 		return mv;
 	}
 	
@@ -168,33 +153,67 @@ public class AppMgrController extends BaseController {
 	}*/
 	
 	//加入清单
-	@RequestMapping(value="/addList")
-	public ModelAndView addList(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		CmpOrder cmpOrder=getParam(request);//获取参数Bean
-		String errMsg = checkParam(cmpOrder);//参数校验
-		if (errMsg != null) {
-			logger.error(errMsg);
-		}
-		
-		cmpOrderService.saveCmpOrder(cmpOrder);//新增清单
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("appmgr/resapp_qry_input");
-		return mv;
+	@RequestMapping(value="/addList", produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+	public String addList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try{
+			CmpOrder cmpOrder=getParam(request);//获取参数Bean
+			String errMsg = checkParam(cmpOrder);//参数校验
+			if (errMsg != null) {
+				logger.error(errMsg);
+			}
+			
+			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
+			cmpOrder.setApplyUserId(getUserId());//获取登录用户
+			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
+			return StringUtil.getRetStr("0", "加入清单成功");
+		} catch (Exception e) {
+	    	logger.error("加入清单时错误："+e);
+	    	return StringUtil.getRetStr("-1", "加入清单时错误："+e);
+	    }
 	}
 	
 	//加入套餐清单
-	@RequestMapping(value="/addPckgList")
-	public ModelAndView addPckgList(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		CmpOrder cmpOrder=getPckgParam(request);//获取套餐参数Bean
-		String errMsg = checkParam(cmpOrder);//参数校验
-		if (errMsg != null) {
-			logger.error(errMsg);
-		}
-		
-		cmpOrderService.addPckgList(cmpOrder);//新增套餐清单
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("appmgr/resapp_qry_input");
-		return mv;
+	@RequestMapping(value="/addPckgList", produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+	public String addPckgList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try{
+			CmpOrder cmpOrder=getPckgParam(request);//获取套餐参数Bean
+			String errMsg = checkParam(cmpOrder);//参数校验
+			if (errMsg != null) {
+				logger.error(errMsg);
+			}
+			
+			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
+			cmpOrder.setApplyUserId(getUserId());//获取登录用户
+			cmpOrderService.addPckgList(cmpOrder);//新增套餐清单
+			return StringUtil.getRetStr("0", "加入套餐清单成功");
+		} catch (Exception e) {
+	    	logger.error("加入套餐清单时错误："+e);
+	    	return StringUtil.getRetStr("-1", "加入套餐清单时错误："+e);
+	    }
+	}
+	
+	//提交申请
+	@RequestMapping(value="/appCommit", produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+	public String appCommit(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try{
+			String orderIdStr=request.getParameter("orderIdStr");//清单ID字符串
+			String[] orderIds=orderIdStr.split(",");
+			if(orderIds!=null && orderIds.length>0){
+				String applyUserId=getUserId();//获取登录用户
+				for(String orderId: orderIds){
+					cmpWorkOrderService.addWorkOrder(orderId, applyUserId);//提交申请
+					cmpOrderService.updateCmpOrderStatus(orderId);//更新清单状态
+				}
+			}
+			
+			return StringUtil.getRetStr("0", "保存套餐成功");
+		} catch (Exception e) {
+	    	logger.error("保存套餐时错误："+e);
+	    	return StringUtil.getRetStr("-1", "保存套餐时错误："+e);
+	    }
 	}
 	
 	//保存为套餐预查询
@@ -216,12 +235,27 @@ public class AppMgrController extends BaseController {
 				logger.error(errMsg);
 			}
 			
-			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单
+			cmpOrder.setApplyUserId(getUserId());//获取登录用户
+			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			return StringUtil.getRetStr("0", "保存套餐成功");
 		} catch (Exception e) {
 	    	logger.error("保存套餐时错误："+e);
 	    	return StringUtil.getRetStr("-1", "保存套餐时错误："+e);
 	    }
+	}
+	
+	//删除清单
+	@RequestMapping(value="/delCmpOrder", produces={"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String delCmpOrder(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try{
+			String orderId=request.getParameter("orderId");//清单ID
+			cmpOrderService.delCmpOrder(orderId);//删除清单
+			return StringUtil.getRetStr("0", "删除清单成功");
+		} catch (Exception e) {
+			logger.error("删除清单时错误："+e);
+			return StringUtil.getRetStr("-1", "删除清单时错误："+e);
+		}
 	}
 	
 	//删除套餐
@@ -230,7 +264,7 @@ public class AppMgrController extends BaseController {
 	public String delPckg(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		try{
 			String pckgId=request.getParameter("pckgId");//套餐ID
-			cmpOrderService.delPckg(pckgId);//新增清单
+			cmpOrderService.delPckg(pckgId);//删除套餐
 			return StringUtil.getRetStr("0", "删除套餐成功");
 		} catch (Exception e) {
 			logger.error("删除套餐时错误："+e);
@@ -238,8 +272,20 @@ public class AppMgrController extends BaseController {
 		}
 	}
 	
+	//获取登录用户
+	private String getUserId() throws Exception{
+		try{
+			Session session = Jurisdiction.getSession();
+			User user=(User)session.getAttribute(Const.SESSION_USER);
+			return user.getUSERNAME();//获取登录用户
+		} catch (Exception e) {
+	    	logger.error("获取登录用户时错误："+e);
+	    	return StringUtil.getRetStr("-1", "获取登录用户时错误："+e);
+	    }
+	}
+	
 	//获取参数Bean
-	public CmpOrder getParam(HttpServletRequest request){
+	private CmpOrder getParam(HttpServletRequest request){
 		CmpOrder cmpOrder=new CmpOrder();
 		cmpOrder.setAreaCode(request.getParameter("areaCode"));//地域
 		cmpOrder.setPlatType(request.getParameter("platType"));//平台类型
@@ -266,13 +312,13 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setImgExpireDate(request.getParameter("imgExpireDate"));//镜像到期时间
 		cmpOrder.setExpireDate(request.getParameter("expireDate"));//到期时间
 		cmpOrder.setVirNum(request.getParameter("virNum"));//数量
-		cmpOrder.setPckgFlag(request.getParameter("pckgFlag"));//套餐标志：0-否；1-是
+		cmpOrder.setStatus(request.getParameter("status"));//状态：0-待提交；1-已提交；T-套餐
 		cmpOrder.setPckgName(request.getParameter("pckgName"));//套餐名称
 		return cmpOrder;
 	}
 	
 	//获取套餐参数Bean
-	public CmpOrder getPckgParam(HttpServletRequest request){
+	private CmpOrder getPckgParam(HttpServletRequest request){
 		CmpOrder cmpOrder=new CmpOrder();
 		cmpOrder.setAreaCode(request.getParameter("tcareaCode"));//地域
 		cmpOrder.setPlatType(request.getParameter("tcplatType"));//平台类型

@@ -4,26 +4,53 @@
 <html>
 <head>
 <script type="text/javascript">
+//删除清单
+function delCmpOrder(obj, orderId){
+	if(confirm("确定要删除该清单2["+orderId+"]吗?")){
+		$.ajax({
+		    type: 'post',  
+		    url: 'delCmpOrder.do?orderId='+orderId,
+		    dataType: 'json',  
+		    success: function(data){
+			    if(data.retCode=="0"){//删除成功
+			    	$(obj).parent().parent().parent().parent().parent().parent().remove();
+			    }
+		    },
+		    error: function(data) {}
+		});
+	}
+}
+
+//批量购买
+function batchBuy(){
+	var len = $("input:checkbox[name='orderId']:checked").length;
+    if(len==0){
+    	alert("请选择清单");
+    	return;
+    }
+    
+    var orderIdArr=new Array();
+	$("input:checkbox[name='orderId']:checked").each(function() {
+		orderIdArr.push($(this).val());
+	});
+	
+	ajaxHttpPost("appCommit.do", {"orderIdStr": orderIdArr.join()}, "batchBuyId");//发送Ajax请求
+}
 </script>
 </head>
 <body>
-<form id="tcmainForm" name="tcmainForm" action="addPckgList.do" enctype="multipart/form-data" method="post">
-<input type="hidden" name="tcareaCode" id="tcareaCode" value="1"/>
-<input type="hidden" name="tcplatType" id="tcplatType" value="vmware"/>
-<input type="hidden" name="tcdeployType" id="tcdeployType" value="1"/>
-<input type="hidden" name="pckgId" id="pckgId" value=""/>
 <table style="width: 100%;" border=1>
-	<c:if test="${not empty pckgList}">
-	<c:forEach items="${pckgList}" var="var" varStatus="st">
+	<c:if test="${not empty shoppingCartList}">
+	<c:forEach items="${shoppingCartList}" var="var" varStatus="st">
 	<tr style="width: 100%;border:1px solid #cccccc;">
-		<td align="left" style="width: 10px;padding:10px;">
-			<input type="checkbox" name="orderId" onclick='choosePckg("{\"${var.id}\")'/>
+		<td align="center" style="width: 30px;">
+			<input type="checkbox" name="orderId" id="orderId" value="${var.id}" checked/>
 		</td>
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
 			<tr>
 				<td align="left" style="width: 60px;">ECS</td>
-				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delPckg(this, '${var.id}', '${var.pckgName}')" class="img_close"></div></td>
+				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.id}')" class="img_close"></div></td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">计费方式：</td>
@@ -67,18 +94,5 @@
 	</c:forEach>
 	</c:if>
 </table>
-<!-- <table style="position:fixed;bottom:0;width:100%;border-top:1px solid #f5f5f5;">
-	<tr>
-		<td align="left" style="padding:10px;">
-			<div class="divbtn">
-			    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
-			    <span style="width:30px;float:right;">&nbsp;</span>
-			    <span id="savePckgBtnId" class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
-			</div>
-		</td>
-	</tr>
-</table>
-<table style="width:100%;border-top:1px solid #f5f5f5;"><tr><td style="padding:10px;"><div class="divbtn"></div></td></tr></table> -->
-</form>
 </body>
 </html>

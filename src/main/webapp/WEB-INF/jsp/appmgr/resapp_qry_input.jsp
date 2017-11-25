@@ -36,6 +36,22 @@ function setFieldValue(obj, fieldName, fieldValue){
 	setFieldCls(obj, fieldName);
 }
 
+//发送Ajax请求
+function ajaxHttpPost(url, jsonObj, tipId){
+    $.ajax({
+	    type: 'post',  
+	    url: url,
+	    data: jsonObj,
+	    dataType: 'json',  
+	    success: function(data){
+	    	$("#"+tipId).tips({side:1, msg:data.retMsg, bg:'#AE81FF', time:2});
+	    },
+	    error: function(data) {
+	    	$("#"+tipId).tips({side:3, msg:data.retMsg, bg:'#AE81FF', time:2});
+	    }
+	});
+}
+
 //点击推荐配置
 function setRecommendType(obj, fieldName, fieldValue){
 	setFieldCls(obj, fieldName);
@@ -157,15 +173,15 @@ function checkData(){
 	}
 	
 	//存储
-	var diskTypeArr=new Array()
+	var diskTypeArr=new Array();
 	$("select[name='diskType']").each(function() {
 		diskTypeArr.push($(this).val());
 	});
-	var diskSizeArr=new Array()
+	var diskSizeArr=new Array();
 	$("input[name='diskSize']").each(function() {
 		diskSizeArr.push($(this).val());
 	});
-	var diskEncryptArr=new Array()
+	var diskEncryptArr=new Array();
 	$("input:checkbox[name='diskEncrypt']").each(function() {
 		diskEncryptArr.push($(this).is(":checked")==true?"1":"0");
 	});
@@ -174,15 +190,15 @@ function checkData(){
 	$("#diskEncryptStr").val(diskEncryptArr.join());
 	
 	//软件安装
-	var softNameArr=new Array()
+	var softNameArr=new Array();
 	$("select[name='softName']").each(function() {
 		softNameArr.push($(this).val());
 	});
-	var softVerArr=new Array()
+	var softVerArr=new Array();
 	$("select[name='softVer']").each(function() {
 		softVerArr.push($(this).val());
 	});
-	var softParamArr=new Array()
+	var softParamArr=new Array();
 	$("input[name='softParam']").each(function() {
 		softParamArr.push($(this).val());
 	});
@@ -194,12 +210,44 @@ function checkData(){
 
 //加入清单
 function addList(){
+	var jsonObj={};//JSON请求数据
 	if($("#tcsq").is(".active")){//套餐数据校验
 		if(checkPckgData()){
-			$("#tcmainForm").submit();
+			jsonObj.tcareaCode=$("#tcareaCode").val();//地域代码                       
+			jsonObj.tcplatType=$("#tcplatType").val();//平台类型                       
+			jsonObj.tcdeployType=$("#tcdeployType").val();//部署类型                     
+			jsonObj.tcvirName=$("#tcvirName").val();//虚拟机名称
+			jsonObj.pckgId=$("#pckgId").val();//套餐ID     
+			ajaxHttpPost("addPckgList.do", jsonObj, "addListBtnId");//发送Ajax请求
 		}
 	}else if(checkData()){//数据校验
-		$("#mainForm").submit();
+		jsonObj.areaCode=$("#areaCode").val();//地域代码                       
+		jsonObj.platType=$("#platType").val();//平台类型                       
+		jsonObj.deployType=$("#deployType").val();//部署类型                     
+		jsonObj.envCode=$("#envCode").val();//环境代码                        
+		jsonObj.resType=$("#resType").val();//资源类型                        
+		jsonObj.virName=$("#virName").val();//虚拟机名称                      
+		jsonObj.cpu=$("#cpu").val();//CPU                                 
+		jsonObj.memory=$("#memory").val();//内存                             
+		jsonObj.diskTypeStr=$("#diskTypeStr").val();//磁盘类型，多个用英文逗号分隔   
+		jsonObj.diskSizeStr=$("#diskSizeStr").val();//磁盘大小，多个用英文逗号分隔   
+		jsonObj.diskEncryptStr=$("#diskEncryptStr").val();//磁盘加密，多个用英文逗号分隔
+		jsonObj.softNameStr=$("#softNameStr").val();//软件名称，多个用英文逗号分隔   
+		jsonObj.softVerStr=$("#softVerStr").val();//软件版本，多个用英文逗号分隔    
+		jsonObj.softParamStr=$("#softParamStr").val();//软件参数，多个用英文逗号分隔  
+		jsonObj.projectCode=$("#projectCode").val();//项目代码                    
+		jsonObj.osType=$("#osType").val();//操作系统类型                     
+		jsonObj.osBitNum=$("#osBitNum").val();//操作系统位数                   
+		jsonObj.imgCode=$("#imgCode").val();//镜像代码                        
+		jsonObj.imgUserName=$("#imgUserName").val();//镜像用户名                  
+		jsonObj.imgUserPass=$("#imgUserPass").val();//镜像用户密码                
+		jsonObj.imgPath=$("#imgPath").val();//镜像路径                        
+		jsonObj.imgExpireDate=$("#imgExpireDate").val();//镜像到期时间              
+		jsonObj.expireDate=$("#expireDate").val();//到期时间                     
+		jsonObj.virNum=$("#virNum").val();//虚拟机数量                       
+		jsonObj.pckgName=$("#pckgName").val();//套餐名称                       
+		jsonObj.status=$("#status").val();//状态：0-待提交；1-已提交；T-套餐
+		ajaxHttpPost("addList.do", jsonObj, "addListBtnId");//发送Ajax请求
 	}
 }
 
@@ -214,10 +262,10 @@ function savePckgPre(){
 		diag.Height = 80;
 		diag.CancelEvent=function(){diag.close();};//关闭事件
 		diag.OKEvent=function(){//OK事件
-			$("#pckgFlag").val("1");//套餐标志：0-否；1-是
+			$("#status").val("T");//状态：0-待提交；1-已提交；T-套餐
 			$("#pckgName").val(diag.innerFrame.contentWindow.document.getElementById('pckgName').value);
 			savePckg();//保存为套餐
-			$("#pckgFlag").val("0");//套餐标志：0-否；1-是
+			$("#status").val("0");//状态：0-待提交；1-已提交；T-套餐
 			$("#pckgName").val("");//套餐名称
 			diag.close();
 		};
@@ -227,10 +275,10 @@ function savePckgPre(){
 
 //保存为套餐
 function savePckg(){
-	var jsonObj={};
-	jsonObj.areaCode=$("#areaCode").val();//地域代码                       
-	jsonObj.platType=$("#platType").val();//平台类型                       
-	jsonObj.deployType=$("#deployType").val();//部署类型                     
+	var jsonObj={};//JSON请求数据
+	//jsonObj.areaCode=$("#areaCode").val();//地域代码
+	//jsonObj.platType=$("#platType").val();//平台类型
+	//jsonObj.deployType=$("#deployType").val();//部署类型
 	jsonObj.envCode=$("#envCode").val();//环境代码                        
 	jsonObj.resType=$("#resType").val();//资源类型                        
 	jsonObj.virName=$("#virName").val();//虚拟机名称                      
@@ -253,20 +301,8 @@ function savePckg(){
 	jsonObj.expireDate=$("#expireDate").val();//到期时间                     
 	jsonObj.virNum=$("#virNum").val();//虚拟机数量                       
 	jsonObj.pckgName=$("#pckgName").val();//套餐名称                       
-	jsonObj.pckgFlag=$("#pckgFlag").val();//套餐标志：0-否；1-是
-	
-    $.ajax({
-	    type: 'post',  
-	    url: 'savePckg.do',
-	    data: jsonObj,
-	    dataType: 'json',  
-	    success: function(data){
-	    	$("#savePckgBtnId").tips({side:1, msg:data.retMsg, bg:'#AE81FF', time:2});
-	    },
-	    error: function(data) {
-	    	$("#savePckgBtnId").tips({side:3, msg:data.retMsg, bg:'#AE81FF', time:2});
-	    }
-	});
+	jsonObj.status=$("#status").val();//状态：0-待提交；1-已提交；T-套餐
+	ajaxHttpPost("savePckg.do", jsonObj, "savePckgBtnId");//发送Ajax请求
 }
 
 //磁盘大小失焦触发
@@ -294,31 +330,52 @@ function diskSizeFunc(obj, diskTypeId, iopsId){
 }
 
 //点击tab页
-var tcsq=false;
 function tabFunc(tabId){
 	if(tabId=="zdysq"){//自定义申请
 		$("#savePckgBtnId").show();
 		return;
 	}else{//套餐申请
 		$("#savePckgBtnId").hide();
-		if(tcsq || $("#tcsq").is(".active")){
-			return;
-		}
-		
-		tcsq=true;
 		$("#tcsq").load("pckgAppPre.do");
 	}
 }
 
 //点击遮罩层
-function maskLayerClick(){
-	$('#shoppingCartId').toggleClass('open');//开关
-	var isOpen=$('#shoppingCartId').hasClass("open");//是否开启
-  	$('#shoppingCartTable').css('top', isOpen?"0px":"130px");
-  	$('#maskLayerId').css('display', isOpen?"block":"none");
-  	$('#shoppingCartId').css('min-height', (isOpen?$(window).height():0)+"px");
-  	$('#shoppingCartId').css('max-height', (isOpen?$(window).height():0)+"px");
-	$("#shoppingCartId").load("getOrderList.do");
+function maskLayerClick(id){
+	if(id=="shoppingCart"){//购物车
+		if($('#buyHisId').hasClass("open")){
+			maskLayerClick("buyHis");//点击遮罩层
+		}
+		
+		$('#shoppingCartId').toggleClass('open');//开关
+		var isOpen=$('#shoppingCartId').hasClass("open");//是否开启
+	  	$('#maskLayerId').css('display', isOpen?"block":"none");
+	  	$('#shoppingCartTable').css('top', isOpen?"0px":"130px");
+	  	$('#shoppingCartId').css('min-height', (isOpen?$(window).height():0)+"px");
+	  	$('#shoppingCartId').css('max-height', (isOpen?$(window).height():0)+"px");
+	  	$('#batchBuy').css('display', isOpen?"block":"none");
+	  	$('#getShoppingCartList').css('height', (isOpen?$(window).height()-50:0)+"px");
+	  	if(isOpen){
+			$("#getShoppingCartList").load("getShoppingCartList.do");
+	  	}
+	}else if(id=="buyHis"){//已购历史
+		if($('#shoppingCartId').hasClass("open")){
+			maskLayerClick("shoppingCart");//点击遮罩层
+		}
+		
+		$('#buyHisId').toggleClass('open');//开关
+		var isOpen=$('#buyHisId').hasClass("open");//是否开启
+		$('#maskLayerId').css('display', isOpen?"block":"none");
+	  	$('#buyHisTable').css('top', isOpen?"0px":"280px");
+	  	$('#buyHisId').css('min-height', (isOpen?$(window).height():0)+"px");
+	  	$('#buyHisId').css('max-height', (isOpen?$(window).height():0)+"px");
+	  	$('#getBuyHisList').css('height', (isOpen?$(window).height():0)+"px");
+	  	if(isOpen){
+			$("#getBuyHisList").load("getBuyHisList.do");
+	  	}
+	}else{//遮罩层
+		maskLayerClick($('#shoppingCartId').hasClass("open")?"shoppingCart":"buyHis");//点击遮罩层
+	}
 }
 
 //必须加<!DOCTYPE html>
@@ -341,7 +398,7 @@ $(window).scroll(function() {
 </ul>
 <div class="tab-content">
 <div id="zdysq" class="tab-pane fade in active">
-	<form id="mainForm" name="mainForm" action="addList.do" enctype="multipart/form-data" method="post">
+	<form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="areaCode" id="areaCode" value="1"/>
 	<input type="hidden" name="platType" id="platType" value="vmware"/>
 	<input type="hidden" name="deployType" id="deployType" value="1"/>
@@ -355,8 +412,8 @@ $(window).scroll(function() {
 	<input type="hidden" name="softNameStr" id="softNameStr" value=""/><!-- 软件名称字符串 -->
 	<input type="hidden" name="softVerStr" id="softVerStr" value=""/><!-- 软件版本字符串 -->
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
+	<input type="hidden" name="status" id="status" value="0"/><!-- 状态：0-待提交；1-已提交；T-套餐 -->
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
-	<input type="hidden" name="pckgFlag" id="pckgFlag" value="0"/><!-- 套餐标志：0-否；1-是 -->
 	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 		<tr class="tablecls">
 			<td align="left" style="width: 10px;padding:10px;background-color:#cccccc;">地域</td>
@@ -635,12 +692,12 @@ $(window).scroll(function() {
 </div>
 <div id="tcsq" class="tab-pane fade"></div>
 </div>
-<!-- glyphicon glyphicon-time -->
+<!-- 按钮 -->
 <table id="btnId" style="width:100%;border-top:1px solid #f5f5f5;">
 	<tr>
 		<td align="left" style="padding:10px;">
 			<div class="divbtn">
-			    <span class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
+			    <span id="addListBtnId" class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
 			    <span style="width:30px;float:right;">&nbsp;</span>
 			    <span id="savePckgBtnId" class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
 			</div>
@@ -648,10 +705,28 @@ $(window).scroll(function() {
 	</tr>
 </table>
 <table style="width:100%;border-top:1px solid #f5f5f5;"><tr><td style="padding:10px;"><div class="divbtn"></div></td></tr></table>
+<!-- 购物车 -->
 <table id="shoppingCartTable" style="position: fixed; right: 0; top: 130px; z-index: 999999999;">
 	<tr>
-		<td onclick="maskLayerClick()" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-shopping-cart"></span><div style="width: 10px;">购买清单</div><span id="shoppingCartNum" style="color: #f5620a">5000</span></div></td>
-		<td id="shoppingCartId" class="shoppingCart" style="overflow-y: auto;"></td>
+		<td onclick="maskLayerClick('shoppingCart')" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-shopping-cart"></span><div style="width: 10px;">购买清单</div><span id="shoppingCartNum" style="color: #f5620a">5000</span></div></td>
+		<td id="shoppingCartId" class="shoppingCart">
+			<div id="getShoppingCartList" style="height:0px;overflow-y: auto;"></div>
+			<div id="batchBuy" class="divbtn" style="display:none;width:100%;height:50px;padding:10px;border-top:1px solid #f5f5f5;">
+				共计：<span id="totalPrice" style="font-size:26px;color: #f5620a;">￥123456789.00</span>
+				<span id="batchBuyId" class="btncls" style="width:100px;background-color:#f5620a;"><a href="javascript:void()" onclick="batchBuy()">批量购买</a></span>
+				<span style="width:20px;float:right;">&nbsp;</span>
+			    <span class="btncls" style="width:100px;"><a href="javascript:void()" onclick="clearShoppingCart()">清空购物车</a></span>
+			</div>
+		</td>
+	</tr>
+</table>
+<!-- 购买历史 -->
+<table id="buyHisTable" style="position: fixed; right: 0; top: 280px; z-index: 999999999;">
+	<tr>
+		<td onclick="maskLayerClick('buyHis')" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-time"></span><div style="width: 10px;">已购历史</div><span id="buyHisNum" style="color: #f5620a">5000</span></div></td>
+		<td id="buyHisId" class="shoppingCart">
+			<div id="getBuyHisList" style="height:0px;overflow-y: auto;"></div>
+		</td>
 	</tr>
 </table>
 <div id="maskLayerId" onclick="maskLayerClick()" style="width: 100%; height: 100%; border-top: white1pxgroove;padding-bottom: 5px;padding-top: 0px;background-color: buttonface;text-align: center;background-color: #7f7f7f;filter: alpha(opacity=1);left: 0px;position: absolute;top: 1px;z-index: 3;display: none;cursor: default"></div><!-- 遮罩层 -->
