@@ -3,6 +3,7 @@ CREATE TABLE `cmp_workorder` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `lastUpdateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `appNo` varchar(20) DEFAULT NULL COMMENT '申请编号：A+YYYYMMDD+00001',
   `status` varchar(10) DEFAULT NULL COMMENT '状态：0-待提交；1-审批中；2-审批通过；3-审批不通过',
   `applyUserId` varchar(20) NOT NULL COMMENT '申请者',
   `areaCode` varchar(20) DEFAULT NULL COMMENT '地域代码',
