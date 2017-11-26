@@ -35,7 +35,7 @@
 						<input type="hidden" name="TYPE" value="${pd.TYPE}" />
 						<table style="margin-top:5px;">
 							<tr>
-								<td style="padding-left:6px;"><a class="btn btn-primary btn-sm">创建</a></td>
+								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">创建</a></td>
 								<td style="padding-left:6px;"><a class="btn btn-warning btn-sm">回滚</a></td>
 								<td style="padding-left:6px;"><a class="btn btn-danger btn-sm">删除</a></td>
 								<td style="padding-left:6px;">
