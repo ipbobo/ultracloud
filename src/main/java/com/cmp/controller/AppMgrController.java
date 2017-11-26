@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ import com.cmp.service.CmpCommonService;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
-import com.cmp.sid.CmpDict;
+import com.cmp.service.ProjectService;
 import com.cmp.sid.CmpOrder;
 import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
@@ -41,43 +42,31 @@ public class AppMgrController extends BaseController {
 	private CmpOrderService cmpOrderService;
 	@Resource
 	private CmpWorkOrderService cmpWorkOrderService;
+	@Resource
+	private ProjectService projectService;
 	
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
-	public ModelAndView resAppPre() throws Exception{
-		List<CmpDict> areaCodeList=cmpDictService.getCmpDictList("area_code");//数据字典列表查询
-		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");//数据字典列表查询
-		List<CmpDict> deployTypeList=cmpDictService.getCmpDictList("deploy_type");//数据字典列表查询
-		List<CmpDict> envCodeList=cmpDictService.getCmpDictList("env_code");//数据字典列表查询
-		List<CmpDict> projectCodeList=cmpDictService.getCmpDictList("project_code");//数据字典列表查询
-		List<CmpDict> resTypeList=cmpDictService.getCmpDictList("res_type");//数据字典列表查询
-		List<CmpDict> recommendTypeList=cmpDictService.getCmpDictList("recommend_type");//数据字典列表查询
-		List<CmpDict> cpuList=cmpDictService.getCmpDictList("cpu");//数据字典列表查询
-		List<CmpDict> memoryList=cmpDictService.getCmpDictList("memory");//数据字典列表查询
-		List<CmpDict> osTypeList=cmpDictService.getCmpDictList("os_type");//数据字典列表查询
-		List<CmpDict> osBitNumList=cmpDictService.getCmpDictList("os_bit_num");//数据字典列表查询
-		List<CmpDict> imgCodeList=cmpDictService.getCmpDictList("img_code");//数据字典列表查询
-		List<CmpDict> diskTypeList=cmpDictService.getCmpDictList("disk_type");//数据字典列表查询
-		List<CmpDict> diskSizeList=cmpDictService.getCmpDictList("disk_size");//数据字典列表查询
-		List<CmpDict> softNameList=cmpDictService.getCmpDictList("soft_name");//数据字典列表查询
-		List<CmpDict> softVerList=cmpDictService.getCmpDictList("soft_ver");//数据字典列表查询
+	public ModelAndView resAppPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String orderId=request.getParameter("orderId");
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("areaCodeList", areaCodeList);//区域列表
-		mv.addObject("platTypeList", platTypeList);//平台类型列表
-		mv.addObject("deployTypeList", deployTypeList);//部署类型列表
-		mv.addObject("envCodeList", envCodeList);//环境列表
-		mv.addObject("projectCodeList", projectCodeList);//项目列表
-		mv.addObject("resTypeList", resTypeList);//资源类型列表
-		mv.addObject("recommendTypeList", recommendTypeList);//推荐配置列表
-		mv.addObject("cpuList", cpuList);//CPU列表
-		mv.addObject("memoryList", memoryList);//内存列表
-		mv.addObject("osTypeList", osTypeList);//OS类型列表
-		mv.addObject("osBitNumList", osBitNumList);//位数列表
-		mv.addObject("imgCodeList", imgCodeList);//模板列表
-		mv.addObject("diskTypeList", diskTypeList);//磁盘类型列表
-		mv.addObject("diskSizeList", diskSizeList);//磁盘大小列表
-		mv.addObject("softNameList", softNameList);//软件名称列表
-		mv.addObject("softVerList", softVerList);//软件版本列表
+		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
+		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
+		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
+		mv.addObject("envCodeList", cmpDictService.getCmpDictList("env_code"));//环境列表
+		mv.addObject("projectList", projectService.getProjectList());//项目列表
+		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
+		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
+		mv.addObject("cpuList", cmpDictService.getCmpDictList("cpu"));//CPU列表
+		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
+		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
+		mv.addObject("osBitNumList", cmpDictService.getCmpDictList("os_bit_num"));//位数列表
+		mv.addObject("imgCodeList", cmpDictService.getCmpDictList("img_code"));//模板列表
+		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
+		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
+		mv.addObject("softNameList", cmpDictService.getCmpDictList("soft_name"));//软件名称列表
+		mv.addObject("softVerList", cmpDictService.getCmpDictList("soft_ver"));//软件版本列表
+		mv.addObject("cmpOrder", StringUtils.isBlank(orderId)?null:cmpOrderService.getOrderDtl(orderId));//清单详细信息
 		mv.setViewName("appmgr/resapp_qry_input");
 		return mv;
 	}
@@ -85,40 +74,24 @@ public class AppMgrController extends BaseController {
 	//套餐申请预查询
 	@RequestMapping(value="/pckgAppPre")
 	public ModelAndView pckgAppPre() throws Exception{
-		List<CmpDict> areaCodeList=cmpDictService.getCmpDictList("area_code");//数据字典列表查询
-		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");//数据字典列表查询
-		List<CmpDict> deployTypeList=cmpDictService.getCmpDictList("deploy_type");//数据字典列表查询
-		List<CmpDict> envCodeList=cmpDictService.getCmpDictList("env_code");//数据字典列表查询
-		List<CmpDict> projectCodeList=cmpDictService.getCmpDictList("project_code");//数据字典列表查询
-		List<CmpDict> resTypeList=cmpDictService.getCmpDictList("res_type");//数据字典列表查询
-		List<CmpDict> recommendTypeList=cmpDictService.getCmpDictList("recommend_type");//数据字典列表查询
-		List<CmpDict> cpuList=cmpDictService.getCmpDictList("cpu");//数据字典列表查询
-		List<CmpDict> memoryList=cmpDictService.getCmpDictList("memory");//数据字典列表查询
-		List<CmpDict> osTypeList=cmpDictService.getCmpDictList("os_type");//数据字典列表查询
-		List<CmpDict> osBitNumList=cmpDictService.getCmpDictList("os_bit_num");//数据字典列表查询
-		List<CmpDict> imgCodeList=cmpDictService.getCmpDictList("img_code");//数据字典列表查询
-		List<CmpDict> diskTypeList=cmpDictService.getCmpDictList("disk_type");//数据字典列表查询
-		List<CmpDict> diskSizeList=cmpDictService.getCmpDictList("disk_size");//数据字典列表查询
-		List<CmpDict> softNameList=cmpDictService.getCmpDictList("soft_name");//数据字典列表查询
-		List<CmpDict> softVerList=cmpDictService.getCmpDictList("soft_ver");//数据字典列表查询
 		List<CmpOrder> pckgList=cmpOrderService.getPckgList();//套餐列表查询
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("areaCodeList", areaCodeList);//区域列表
-		mv.addObject("platTypeList", platTypeList);//平台类型列表
-		mv.addObject("deployTypeList", deployTypeList);//部署类型列表
-		mv.addObject("envCodeList", envCodeList);//环境列表
-		mv.addObject("projectCodeList", projectCodeList);//项目列表
-		mv.addObject("resTypeList", resTypeList);//资源类型列表
-		mv.addObject("recommendTypeList", recommendTypeList);//推荐配置列表
-		mv.addObject("cpuList", cpuList);//CPU列表
-		mv.addObject("memoryList", memoryList);//内存列表
-		mv.addObject("osTypeList", osTypeList);//OS类型列表
-		mv.addObject("osBitNumList", osBitNumList);//位数列表
-		mv.addObject("imgCodeList", imgCodeList);//模板列表
-		mv.addObject("diskTypeList", diskTypeList);//磁盘类型列表
-		mv.addObject("diskSizeList", diskSizeList);//磁盘大小列表
-		mv.addObject("softNameList", softNameList);//软件名称列表
-		mv.addObject("softVerList", softVerList);//软件版本列表
+		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
+		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
+		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
+		mv.addObject("envCodeList", cmpDictService.getCmpDictList("env_code"));//环境列表
+		mv.addObject("projectList", projectService.getProjectList());//项目列表
+		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
+		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
+		mv.addObject("cpuList", cmpDictService.getCmpDictList("cpu"));//CPU列表
+		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
+		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
+		mv.addObject("osBitNumList", cmpDictService.getCmpDictList("os_bit_num"));//位数列表
+		mv.addObject("imgCodeList", cmpDictService.getCmpDictList("img_code"));//模板列表
+		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
+		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
+		mv.addObject("softNameList", cmpDictService.getCmpDictList("soft_name"));//软件名称列表
+		mv.addObject("softVerList", cmpDictService.getCmpDictList("soft_ver"));//软件版本列表
 		mv.addObject("pckgList", pckgList);//软件版本列表
 		mv.setViewName("appmgr/resapp_pckg_input");
 		return mv;

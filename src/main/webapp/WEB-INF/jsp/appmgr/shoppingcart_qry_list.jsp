@@ -71,7 +71,7 @@ function batchBuy(){
 </script>
 </head>
 <body>
-<table style="width: 100%;" border=1>
+<table style="width: 100%;">
 	<c:if test="${not empty shoppingCartList}">
 	<c:forEach items="${shoppingCartList}" var="var" varStatus="st">
 	<tr style="width: 100%;border:1px solid #cccccc;">
