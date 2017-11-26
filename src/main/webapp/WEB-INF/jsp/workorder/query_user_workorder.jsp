@@ -26,7 +26,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							
-						<form action="user/listUsers.do" method="post" name="userForm" id="userForm">
+						<form action="queryUserApplyWorkOrderPre.do" method="post" name="queryForm" id="queryForm">
 						<table style="margin-top:15px;">
 							<tr>
 								<td style="width:120px;text-align: right;">&nbsp;工单类型:</td>
@@ -56,6 +56,9 @@
 				                       </c:forEach>
 									</select>
 								</td>
+								<td style="width:120px;text-align: right;" rowspan="2">
+									<button class="btn btn-info" id="btn_query" type="submit">查询</button>
+								 </td>
 							</tr>
 							<tr>
 								<td style="width:120px;text-align: right;">&nbsp;工单号:</td>
@@ -71,10 +74,16 @@
 										<option value="3">近一年</option>
 									</select>
 								</td>
+								
+								 
 								<td style="width:80px;text-align: right;">&nbsp;导出:</td>
 								<td style="width:120px;text-align: left;">
 									&nbsp;&nbsp;<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a>
 								</td>
+								
+							</tr>
+							<tr>
+								
 							</tr>
 						</table>	
 						</form>	
