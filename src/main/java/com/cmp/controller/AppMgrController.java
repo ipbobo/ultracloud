@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.activiti.service.ActivitiService;
+import com.cmp.service.CmpCommonService;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
@@ -30,6 +31,8 @@ import com.fh.util.Jurisdiction;
 @Controller
 public class AppMgrController extends BaseController {
 	private static String processDefinitionKey="resapp";
+	@Resource
+	private CmpCommonService cmpCommonService;
 	@Resource
 	private CmpDictService cmpDictService;
 	@Resource
@@ -210,7 +213,7 @@ public class AppMgrController extends BaseController {
 			if(orderIds!=null && orderIds.length>0){
 				String applyUserId=getUserId();//获取登录用户
 				for(String orderId: orderIds){
-					String appNo=cmpWorkOrderService.getAppNo("cmp_workorder", "A");
+					String appNo=cmpCommonService.getAppNo("cmp_workorder");
 					Map<String, Object> variables=new HashMap<String, Object>();
 					variables.put("btnName", "提交");
 					String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动

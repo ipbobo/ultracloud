@@ -11,14 +11,6 @@ import com.fh.util.PageData;
 public class CmpWorkOrderService {
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
-
-	//获取申请编号
-	public String getAppNo(String seqName, String prefix) throws Exception {
-		PageData pd=new PageData();
-		pd.put("seqName", seqName);//序列名称，即表名
-		pd.put("prefix", prefix);//申请编号前缀
-		return (String)dao.findForObject("CmpWorkOrderMapper.getAppNo", pd);
-	}
 	
 	//提交申请
 	public void addWorkOrder(String appNo, String orderId, String applyUserId, String procInstId) throws Exception {
