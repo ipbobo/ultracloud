@@ -20,7 +20,7 @@ CREATE TABLE `cmp_order` (
   `softName` varchar(300) DEFAULT NULL COMMENT '软件名称，多个用英文逗号分隔',
   `softVer` varchar(300) DEFAULT NULL COMMENT '软件版本，多个用英文逗号分隔',
   `softParam` varchar(300) DEFAULT NULL COMMENT '软件参数，多个用英文逗号分隔',
-  `projectCode` varchar(20) DEFAULT NULL COMMENT '项目代码',
+  `projectCode` varchar(32) DEFAULT NULL COMMENT '项目代码',
   `osType` varchar(20) DEFAULT NULL COMMENT '操作系统类型',
   `osBitNum` varchar(10) DEFAULT NULL COMMENT '操作系统位数',
   `imgCode` varchar(20) DEFAULT NULL COMMENT '镜像代码',
