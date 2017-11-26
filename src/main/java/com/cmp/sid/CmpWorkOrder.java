@@ -1,7 +1,7 @@
 package com.cmp.sid;
 
 public class CmpWorkOrder {
-	private Long id;//ID
+	private String id;//ID
 	private String createTime;//创建时间
 	private String lastUpdateTime;//最后修改时间
 	private String appNo;//申请编号
@@ -35,11 +35,13 @@ public class CmpWorkOrder {
 	private String expireDate;//到期时间
 	private String virNum;//虚拟机数量
 
-	public Long getId() {
+	
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

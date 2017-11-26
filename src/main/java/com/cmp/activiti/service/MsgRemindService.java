@@ -17,8 +17,8 @@ public class MsgRemindService {
 	
 	public static final int MAX_NUM_PER_PAGE = 5000;   //消息提醒每页最大查询数
 	
-	@Resource
-	ActivitiService activitiService;
+	@Resource(name="activitiService")
+	private ActivitiService activitiService;
 	
 	/**
 	 * 查询用户未完成的任务数

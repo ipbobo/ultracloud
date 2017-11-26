@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CmpOpServeMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		cmp_op_serve
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="fieldName">
+		id,
+		serviceType,
+		operType,
+		vm,
+		vmMsg,
+		middleware,
+		middlewareMsg,
+		appmsg,
+		createTime
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="fieldValue">
+		#{id},
+		#{serviceType},
+		#{operType},
+		#{vm},
+		#{vmMsg},
+		#{middleware},
+		#{middlewareMsg},
+		#{appmsg},
+		#{createTime}
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="saveFieldName">
+		serviceType,
+		operType,
+		vm,
+		vmMsg,
+		middleware,
+		middlewareMsg,
+		appmsg
+	</sql>
+	
+	<sql id="saveFieldValue">
+		#{serviceType},
+		#{operType},
+		#{vm},
+		#{vmMsg},
+		#{middleware},
+		#{middlewareMsg},
+		#{appmsg}
+	</sql>
+	
+	<!-- 新增 -->
+	<insert id="saveCmpOpServe"  useGeneratedKeys="true" keyProperty="id"  parameterType="com.cmp.sid.CmpOpServe" >
+		insert into <include refid="tableName"/> (
+			<include refid="saveFieldName"/>
+		) values (
+			<include refid="saveFieldValue"/>
+		)
+	</insert>
+	
+</mapper>

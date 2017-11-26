@@ -82,6 +82,7 @@
 	
 	<!-- 字段 -->
 	<sql id="saveFieldName">
+		id,
 		appNo,
 		appType,
 		status,
@@ -115,6 +116,7 @@
 	</sql>
 	
 	<sql id="saveFieldValue">
+		#{id},
 		#{appNo},
 		#{appType},
 		#{status},
@@ -155,4 +157,25 @@
 		<include refid="tableName"/>
 		where id=#{orderId}
 	</insert>
+	
+	<!-- 新增工单 -->
+	<insert id="saveWorkOrder" parameterType="com.cmp.sid.CmpWorkOrder" >
+		<selectKey keyProperty="id" order="BEFORE" resultType="String"> 
+			select func_nextval('cmp_workorder')
+		</selectKey>
+		insert into <include refid="tableName"/> (
+			<include refid="saveFieldName"/>
+		) values (
+			<include refid="saveFieldValue"/>
+		)
+	</insert>
+	
+	<!--个人工单查询 -->
+	<select id="getCmpWorkOrderList" parameterType="String" resultType="com.cmp.sid.CmpWorkOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where applyUserId=#{applyUserId}
+	</select>
+	
 </mapper>
