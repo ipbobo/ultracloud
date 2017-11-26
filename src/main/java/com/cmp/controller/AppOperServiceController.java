@@ -107,7 +107,7 @@ public class AppOperServiceController  extends BaseController {
 		User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
 		CmpWorkOrder workworder = new CmpWorkOrder();
 		workworder.setAppNo(String.valueOf(opServe.getId() == null ? "" : opServe.getId()));
-		workworder.setAppType("1"); //暂定。运维服务申请
+		workworder.setAppType("2"); //暂定。运维服务申请
 		workworder.setStatus("0");
 		workworder.setApplyUserId(String.valueOf(user.getUSER_ID()));
 		cmpWorkOrderService.addWordOrder(workworder);

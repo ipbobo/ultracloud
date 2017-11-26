@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  *
  */
 public class Project {
-	private BigInteger id;
+	private String id;
 	private String name;
 	private String shortname;
 	private String level;
@@ -22,11 +22,11 @@ public class Project {
 	private Timestamp gmt_create;
 	private Timestamp gmt_modified;
 
-	public BigInteger getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(BigInteger id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
