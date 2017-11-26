@@ -146,6 +146,14 @@
 		<include refid="tableName"/>
 	</select>
 	
+	<!-- 清单详细信息查询 -->
+	<select id="getOrderDtl" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where id=#{orderId}
+	</select>
+	
 	<!-- 套餐列表查询 -->
 	<select id="getPckgList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
 		select <include refid="fieldName"/>

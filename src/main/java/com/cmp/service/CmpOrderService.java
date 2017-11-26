@@ -14,6 +14,11 @@ public class CmpOrderService {
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
 
+	//清单详细信息查询
+	public CmpOrder getOrderDtl(String orderId) throws Exception {
+		return (CmpOrder)dao.findForList("CmpOrderMapper.getOrderDtl", orderId);
+	}
+	
 	//套餐列表查询
 	@SuppressWarnings("unchecked")
 	public List<CmpOrder> getPckgList() throws Exception {
