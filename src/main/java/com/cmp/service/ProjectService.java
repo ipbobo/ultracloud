@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import com.cmp.entity.ProjectUserMap;
-import com.cmp.entity.UserGroupUserMap;
+import com.cmp.sid.CmpDict;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -49,4 +49,7 @@ public interface ProjectService {
 	 * @throws Exception
 	 */
 	public void deleteByProjectId(String id) throws Exception;
+	
+	//项目列表查询
+	public List<CmpDict> getProjectList() throws Exception;
 }

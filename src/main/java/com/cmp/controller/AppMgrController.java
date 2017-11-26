@@ -19,6 +19,7 @@ import com.cmp.service.CmpCommonService;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
+import com.cmp.service.ProjectService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOrder;
 import com.cmp.util.StringUtil;
@@ -41,6 +42,8 @@ public class AppMgrController extends BaseController {
 	private CmpOrderService cmpOrderService;
 	@Resource
 	private CmpWorkOrderService cmpWorkOrderService;
+	@Resource
+	private ProjectService projectService;
 	
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
@@ -49,7 +52,7 @@ public class AppMgrController extends BaseController {
 		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");//数据字典列表查询
 		List<CmpDict> deployTypeList=cmpDictService.getCmpDictList("deploy_type");//数据字典列表查询
 		List<CmpDict> envCodeList=cmpDictService.getCmpDictList("env_code");//数据字典列表查询
-		List<CmpDict> projectCodeList=cmpDictService.getCmpDictList("project_code");//数据字典列表查询
+		List<CmpDict> projectCodeList=projectService.getProjectList();//项目列表查询
 		List<CmpDict> resTypeList=cmpDictService.getCmpDictList("res_type");//数据字典列表查询
 		List<CmpDict> recommendTypeList=cmpDictService.getCmpDictList("recommend_type");//数据字典列表查询
 		List<CmpDict> cpuList=cmpDictService.getCmpDictList("cpu");//数据字典列表查询

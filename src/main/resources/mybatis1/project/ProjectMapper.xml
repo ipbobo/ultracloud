@@ -210,4 +210,8 @@
 			project_id = #{id}
 	</delete>
 	
+	<!-- 项目列表查询 -->
+	<select id="getProjectList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_project
+	</select>
 </mapper>
