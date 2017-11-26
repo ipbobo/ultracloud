@@ -1,5 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -18,6 +17,7 @@
 <%@ include file="../../system/index/top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
+<script src="static/js/myjs/head.js"></script>
 </head>
 <body class="no-skin">
 
@@ -35,7 +35,7 @@
 						<input type="hidden" name="TYPE" value="${pd.TYPE}" />
 						<table style="margin-top:5px;">
 							<tr>
-								<td style="padding-left:6px;"><a class="btn btn-primary btn-sm">申请</a></td>
+								<td style="padding-left:6px;"><a class="btn btn-primary btn-sm" onclick="apply()">申请</a></td>
 								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">开机</a></td>
 								<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm">关机</a></td>
 								<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm">重启</a></td>
@@ -207,8 +207,8 @@
 			top.jzts();
 			$("#Form").submit();
 		}
-		$(function() {
 		
+		$(function() {
 			//日期框
 			$('.date-picker').datepicker({
 				autoclose: true,
@@ -380,6 +380,10 @@
 				diag.close();
 			 };
 			 diag.show();
+		}
+		
+		function apply() {
+			siMenu('122','121','资源申请','resAppPre.do')
 		}
 	</script>
 
