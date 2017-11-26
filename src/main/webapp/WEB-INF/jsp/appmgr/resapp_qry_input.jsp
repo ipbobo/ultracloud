@@ -591,7 +591,7 @@ $(window).scroll(function() {
 			</td>
 			<td align="right" style="width: 120px;padding:10px;">路径：</td>
 			<td align="left" style="padding:10px;" colspan="2">
-				<input type="text" name="imgPath" id="imgPath"  value=""/>&nbsp;&nbsp;Linux系统必填
+				<input type="text" name="imgPath" id="imgPath"  value="/opt"/>&nbsp;&nbsp;Linux系统必填
 			</td>
 		</tr>
 		<tr class="tablecls">
