@@ -1,6 +1,8 @@
 package com.cmp.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.activiti.service.ActivitiService;
+import com.cmp.service.CmpCommonService;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
@@ -26,8 +30,13 @@ import com.fh.util.Jurisdiction;
 //申请管理
 @Controller
 public class AppMgrController extends BaseController {
+	private static String processDefinitionKey="resapp";
+	@Resource
+	private CmpCommonService cmpCommonService;
 	@Resource
 	private CmpDictService cmpDictService;
+	@Resource
+	private ActivitiService activitiService;
 	@Resource
 	private CmpOrderService cmpOrderService;
 	@Resource
@@ -204,15 +213,19 @@ public class AppMgrController extends BaseController {
 			if(orderIds!=null && orderIds.length>0){
 				String applyUserId=getUserId();//获取登录用户
 				for(String orderId: orderIds){
-					cmpWorkOrderService.addWorkOrder(orderId, applyUserId);//提交申请
+					String appNo=cmpCommonService.getAppNo("cmp_workorder");
+					Map<String, Object> variables=new HashMap<String, Object>();
+					variables.put("btnName", "提交");
+					String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动
+					cmpWorkOrderService.addWorkOrder(appNo, orderId, applyUserId, procInstId);//提交申请
 					cmpOrderService.updateCmpOrderStatus(orderId);//更新清单状态
 				}
 			}
 			
-			return StringUtil.getRetStr("0", "保存套餐成功");
+			return StringUtil.getRetStr("0", "提交申请成功");
 		} catch (Exception e) {
-	    	logger.error("保存套餐时错误："+e);
-	    	return StringUtil.getRetStr("-1", "保存套餐时错误："+e);
+	    	logger.error("提交申请时错误："+e);
+	    	return StringUtil.getRetStr("-1", "提交申请时错误："+e);
 	    }
 	}
 	
@@ -242,6 +255,19 @@ public class AppMgrController extends BaseController {
 	    	logger.error("保存套餐时错误："+e);
 	    	return StringUtil.getRetStr("-1", "保存套餐时错误："+e);
 	    }
+	}
+	
+	//清空购物车
+	@RequestMapping(value="/clearShoppingCart", produces={"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String clearShoppingCart(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try{
+			cmpOrderService.clearShoppingCart(getUserId());//清空购物车
+			return StringUtil.getRetStr("0", "清空购物车成功");
+		} catch (Exception e) {
+			logger.error("清空购物车时错误："+e);
+			return StringUtil.getRetStr("-1", "清空购物车时错误："+e);
+		}
 	}
 	
 	//删除清单

@@ -697,6 +697,7 @@ $(window).scroll(function() {
 	<tr>
 		<td align="left" style="padding:10px;">
 			<div class="divbtn">
+				配置费用：<span id="totalPrice" style="font-size:26px;color: #f5620a;">￥123456789.00</span>
 			    <span id="addListBtnId" class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
 			    <span style="width:30px;float:right;">&nbsp;</span>
 			    <span id="savePckgBtnId" class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
@@ -713,7 +714,7 @@ $(window).scroll(function() {
 			<div id="getShoppingCartList" style="height:0px;overflow-y: auto;"></div>
 			<div id="batchBuy" class="divbtn" style="display:none;width:100%;height:50px;padding:10px;border-top:1px solid #f5f5f5;">
 				共计：<span id="totalPrice" style="font-size:26px;color: #f5620a;">￥123456789.00</span>
-				<span id="batchBuyId" class="btncls" style="width:100px;background-color:#f5620a;"><a href="javascript:void()" onclick="batchBuy()">批量购买</a></span>
+				<span class="btncls" style="width:100px;background-color:#f5620a;"><a href="javascript:void()" onclick="batchBuy()">批量购买</a></span>
 				<span style="width:20px;float:right;">&nbsp;</span>
 			    <span class="btncls" style="width:100px;"><a href="javascript:void()" onclick="clearShoppingCart()">清空购物车</a></span>
 			</div>

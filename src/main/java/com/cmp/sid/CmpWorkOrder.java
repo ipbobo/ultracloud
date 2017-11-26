@@ -5,7 +5,7 @@ public class CmpWorkOrder {
 	private String createTime;//创建时间
 	private String lastUpdateTime;//最后修改时间
 	private String appNo;//申请编号
-	private String appType;//申请类型
+	private String appType;//申请类型：1-资源申请；2-运维服务申请
 	private String status;//状态：0-待提交；1-审批中；2-审批通过；3-审批不通过
 	private String procInstId;//流程实例ID
 	private String applyUserId;//申请者

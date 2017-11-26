@@ -47,6 +47,11 @@ public class CmpOrderService {
 		dao.update("CmpOrderMapper.updateCmpOrderStatus", orderId);
 	}
 	
+	//清空购物车
+	public void clearShoppingCart(String applyUserId) throws Exception {
+		dao.delete("CmpOrderMapper.clearShoppingCart", applyUserId);
+	}
+	
 	//删除清单
 	public void delCmpOrder(String orderId) throws Exception {
 		dao.delete("CmpOrderMapper.delCmpOrder", orderId);
