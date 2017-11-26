@@ -158,11 +158,11 @@ function choosePckg(jsonStr){
 	<tr class="tablecls">
 		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">套餐列表</td>
 		<td align="left" style="padding:10px;" colspan="7">
-			<table style="width: 100%;" border=1>
+			<table style="width: 100%;border:1px solid #cccccc;">
 				<c:if test="${not empty pckgList}">
 				<c:forEach items="${pckgList}" var="var" varStatus="st">
 				<tr>
-					<td align="left" style="width: 120px;padding:10px;">
+					<td align="left" style="width: 120px;padding:10px;border-right:1px solid #cccccc;">
 						<span style="float: left;"><input type="radio" name="tcName" id="tctableId" onclick='choosePckg("{\"id\":\"${var.id}\",\"envCode\":\"${var.envCode}\",\"projectCode\":\"${var.projectCode}\",\"resType\":\"${var.resType}\",\"virName\":\"${var.virName}\",\"cpu\":\"${var.cpu}\",\"memory\":\"${var.memory}\",\"osType\":\"${var.osType}\",\"osBitNum\":\"${var.osBitNum}\",\"imgCode\":\"${var.imgCode}\",\"imgUserName\":\"${var.imgUserName}\",\"imgUserPass\":\"${var.imgUserPass}\",\"imgPath\":\"${var.imgPath}\",\"imgExpireDate\":\"${var.imgExpireDate}\",\"diskType\":\"${var.diskType}\",\"diskSize\":\"${var.diskSize}\",\"diskEncrypt\":\"${var.diskEncrypt}\",\"softName\":\"${var.softName}\",\"softVer\":\"${var.softVer}\",\"softParam\":\"${var.softParam}\",\"expireDate\":\"${var.expireDate}\",\"virNum\":\"${var.virNum}\"}	")'/>${var.pckgName}</span>
 						<div style="float: left;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delPckg(this, '${var.id}', '${var.pckgName}')" class="img_close"></div>
 					</td>
@@ -212,7 +212,7 @@ function choosePckg(jsonStr){
 		<td align="left" style="width: 120px;padding:10px;" colspan="6">
 			<select class="chosen-select form-control" name="tcprojectCode" id="tcprojectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;" disabled>
 			<option value="">请选择</option>
-			<c:forEach items="${projectCodeList}" var="var">
+			<c:forEach items="${projectList}" var="var">
 				<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
 			</c:forEach>
 		  	</select>

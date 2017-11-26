@@ -136,6 +136,12 @@ function checkPckgData(){
 
 //数据校验
 function checkData(){
+	if($("#projectCode").val()==""){
+		$("#projectCode").tips({side:3, msg:'请选择项目', bg:'#AE81FF', time:2});
+		$("#projectCode").focus();
+		return false;
+	}
+	
 	if($("#virName").val()==""){
 		$("#virName").tips({side:3, msg:'虚拟机名称不能为空', bg:'#AE81FF', time:2});
 		$("#virName").focus();
@@ -475,7 +481,7 @@ $(window).scroll(function() {
 			<td align="left" style="width: 120px;padding:10px;" colspan="6">
 				<select class="chosen-select form-control" name="projectCode" id="projectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;">
 				<option value="">请选择</option>
-				<c:forEach items="${projectCodeList}" var="var">
+				<c:forEach items="${projectList}" var="var">
 					<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
 				</c:forEach>
 			  	</select>

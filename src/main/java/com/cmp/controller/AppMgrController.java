@@ -52,7 +52,7 @@ public class AppMgrController extends BaseController {
 		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");//数据字典列表查询
 		List<CmpDict> deployTypeList=cmpDictService.getCmpDictList("deploy_type");//数据字典列表查询
 		List<CmpDict> envCodeList=cmpDictService.getCmpDictList("env_code");//数据字典列表查询
-		List<CmpDict> projectCodeList=projectService.getProjectList();//项目列表查询
+		List<CmpDict> projectList=projectService.getProjectList();//项目列表查询
 		List<CmpDict> resTypeList=cmpDictService.getCmpDictList("res_type");//数据字典列表查询
 		List<CmpDict> recommendTypeList=cmpDictService.getCmpDictList("recommend_type");//数据字典列表查询
 		List<CmpDict> cpuList=cmpDictService.getCmpDictList("cpu");//数据字典列表查询
@@ -69,7 +69,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("platTypeList", platTypeList);//平台类型列表
 		mv.addObject("deployTypeList", deployTypeList);//部署类型列表
 		mv.addObject("envCodeList", envCodeList);//环境列表
-		mv.addObject("projectCodeList", projectCodeList);//项目列表
+		mv.addObject("projectList", projectList);//项目列表
 		mv.addObject("resTypeList", resTypeList);//资源类型列表
 		mv.addObject("recommendTypeList", recommendTypeList);//推荐配置列表
 		mv.addObject("cpuList", cpuList);//CPU列表
@@ -92,7 +92,7 @@ public class AppMgrController extends BaseController {
 		List<CmpDict> platTypeList=cmpDictService.getCmpDictList("plat_type");//数据字典列表查询
 		List<CmpDict> deployTypeList=cmpDictService.getCmpDictList("deploy_type");//数据字典列表查询
 		List<CmpDict> envCodeList=cmpDictService.getCmpDictList("env_code");//数据字典列表查询
-		List<CmpDict> projectCodeList=cmpDictService.getCmpDictList("project_code");//数据字典列表查询
+		List<CmpDict> projectList=projectService.getProjectList();//项目列表查询
 		List<CmpDict> resTypeList=cmpDictService.getCmpDictList("res_type");//数据字典列表查询
 		List<CmpDict> recommendTypeList=cmpDictService.getCmpDictList("recommend_type");//数据字典列表查询
 		List<CmpDict> cpuList=cmpDictService.getCmpDictList("cpu");//数据字典列表查询
@@ -110,7 +110,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("platTypeList", platTypeList);//平台类型列表
 		mv.addObject("deployTypeList", deployTypeList);//部署类型列表
 		mv.addObject("envCodeList", envCodeList);//环境列表
-		mv.addObject("projectCodeList", projectCodeList);//项目列表
+		mv.addObject("projectList", projectList);//项目列表
 		mv.addObject("resTypeList", resTypeList);//资源类型列表
 		mv.addObject("recommendTypeList", recommendTypeList);//推荐配置列表
 		mv.addObject("cpuList", cpuList);//CPU列表
