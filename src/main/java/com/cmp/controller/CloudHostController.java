@@ -31,7 +31,7 @@ import com.fh.util.PageData;
 @RequestMapping(value = "/cloudhost")
 public class CloudHostController extends BaseController {
 
-	String menuUrl = "cloudhost/list.do"; // 菜单地址(权限用)
+	String menuUrl = "cloudhost/list.do";
 
 	@Resource(name = "cloudHostService")
 	private CloudHostService cloudHostService;
