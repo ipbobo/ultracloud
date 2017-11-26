@@ -434,7 +434,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">平台类型</td>
 			<td align="right" style="width: 120px;padding:10px;">平台类型：</td>
@@ -448,7 +448,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">部署类型</td>
 			<td align="right" style="width: 120px;padding:10px;">部署类型：</td>
@@ -462,7 +462,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="2">项目</td>
 			<td align="right" style="width: 120px;padding:10px;">环境：</td>
@@ -487,7 +487,7 @@ $(window).scroll(function() {
 			  	</select>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="5">基本配置</td>
 			<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
@@ -549,7 +549,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="3">镜像</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
@@ -600,7 +600,7 @@ $(window).scroll(function() {
 				<input type="text" name="imgExpireDate" id="imgExpireDate" value="" class="span10 date-picker" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">存储</td>
 			<td align="right" style="width: 120px;padding:10px;">存储：</td>
@@ -626,7 +626,7 @@ $(window).scroll(function() {
 				<a href="javascript:void()" onclick="addDiskRow()"><span class="glyphicon glyphicon-plus"></span></a>增加磁盘，您可选配15块
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">软件安装</td>
 			<td align="right" style="width: 120px;padding:10px;">安装软件：</td>
@@ -658,7 +658,7 @@ $(window).scroll(function() {
 				<a href="javascript:void()" onclick="addSoftRow()"><span class="glyphicon glyphicon-plus"></span></a>增加安装软件，您可选择15个
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="2">数量</td>
 			<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
@@ -679,7 +679,7 @@ $(window).scroll(function() {
 				</div>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="2">当前配置</td>
 			<td align="right" style="width: 120px;padding:10px;">当前配置：</td>
