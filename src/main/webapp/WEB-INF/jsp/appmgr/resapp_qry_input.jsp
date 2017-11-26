@@ -587,7 +587,7 @@ $(window).scroll(function() {
 			</td>
 			<td align="right" style="width: 120px;padding:10px;">密码：</td>
 			<td align="left" style="width: 120px;padding:10px;">
-				<input type="text" name="imgUserPass" id="imgUserPass"  value=""/>
+				<input type="password" name="imgUserPass" id="imgUserPass"  value=""/>
 			</td>
 			<td align="right" style="width: 120px;padding:10px;">路径：</td>
 			<td align="left" style="padding:10px;" colspan="2">
