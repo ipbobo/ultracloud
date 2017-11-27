@@ -45,9 +45,9 @@ function addPckgDiskRow(diskType, diskSize, diskEncrypt){
     getIops(diskTypes[0], diskSizes[0], "tciopsId");//获取IOPS
     $.each(diskTypes, function (i, item) {
 	    if(i!=0){
-		    var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"tcdiskType\" id=\"tcdiskType"+i+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcdiskType").html()+"</select></td>"
-			    +"<td align=\"left\" style=\"width: 120px;padding:10px;\"><input type=\"text\" name=\"tcdiskSize\" id=\"tcdiskSize"+i+"\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" disabled/></td>"
-			    +"<td align=\"left\" style=\"width: 200px;\">GB&nbsp;&nbsp;&nbsp;<span id=\"tciopsId"+i+"\">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name=\"tcdiskEncrypt\" id=\"tcdiskEncrypt"+i+"\" type=\"checkbox\" value=\"\" disabled/>加密</td>";
+		    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"tcdiskType\" id=\"tcdiskType"+i+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcdiskType").html()+"</select></td>"
+			    +"<td align=\"left\" style=\"width: 120px;padding-top:10px;\"><input type=\"text\" name=\"tcdiskSize\" id=\"tcdiskSize"+i+"\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" disabled/></td>"
+			    +"<td align=\"left\" style=\"width: 200px;padding-top:10px;\">GB&nbsp;&nbsp;&nbsp;<span id=\"tciopsId"+i+"\">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name=\"tcdiskEncrypt\" id=\"tcdiskEncrypt"+i+"\" type=\"checkbox\" value=\"\" disabled/>加密</td>";
 		    $("#tcdiskTableId").append("<tr>"+tdStr+"</tr>");
 		    $("#tcdiskType"+i).val(item);
 		    $("#tcdiskSize"+i).val(diskSizes[i]);
@@ -71,9 +71,9 @@ function addPckgSoftRow(softName, softVer, softParam){
     $("#tcsoftParam").val(softParams[0]);
     $.each(softNames, function (i, item) {
 	    if(i!=0){
-	    	var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"tcsoftName\" id=\"tcsoftName"+i+"\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcsoftName").html()+"</select></td>"
-		    	+"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"tcsoftVer\" id=\"tcsoftVer"+i+"\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcsoftVer").html()+"</select></td>"
-			    +"<td align=\"left\" style=\"width: 120x;\"><input type=\"hidden\" name=\"tcsoftParam\" id=\"tcsoftParam"+i+"\" value=\"\"/></td>";
+	    	var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"tcsoftName\" id=\"tcsoftName"+i+"\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcsoftName").html()+"</select></td>"
+		    	+"<td align=\"left\" style=\"width: 120px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"tcsoftVer\" id=\"tcsoftVer"+i+"\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcsoftVer").html()+"</select></td>"
+			    +"<td align=\"left\" style=\"width: 120x;padding-top:10px;\"><input type=\"hidden\" name=\"tcsoftParam\" id=\"tcsoftParam"+i+"\" value=\"\"/></td>";
 			$("#tcsoftTableId").append("<tr>"+tdStr+"</tr>");
 		    $("#tcsoftName"+i).val(item);
 		    $("#tcsoftVer"+i).val(softVers[i]);
@@ -114,7 +114,7 @@ function choosePckg(jsonStr){
 <input type="hidden" name="pckgId" id="pckgId" value=""/>
 <table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 	<tr class="tablecls">
-		<td align="left" style="width: 10px;padding:10px;background-color:#cccccc;">地域</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;地域</td>
 		<td align="right" style="width: 120px;padding:10px;">地域：</td>
 		<td align="left" style="padding:10px;" colspan="6">
 			<ul id="tcareaCodeId" class="ullitab list-inline">
@@ -128,7 +128,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">平台类型</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;平台类型</td>
 		<td align="right" style="width: 120px;padding:10px;">平台类型：</td>
 		<td align="left" style="padding:10px;" colspan="6">
 			<ul id="tcplatTypeId" class="ullitab list-inline">
@@ -142,7 +142,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">部署类型</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;部署类型</td>
 		<td align="right" style="width: 120px;padding:10px;">部署类型：</td>
 		<td align="left" style="padding:10px;" colspan="6">
 			<ul id="tcdeployTypeId" class="ullitab list-inline">
@@ -156,7 +156,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">套餐列表</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;套餐列表</td>
 		<td align="left" style="padding:10px;" colspan="7">
 			<table style="width: 100%;border:1px solid #cccccc;">
 				<c:if test="${not empty pckgList}">
@@ -195,7 +195,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="2">项目</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;项目</td>
 		<td align="right" style="width: 120px;padding:10px;">环境：</td>
 		<td align="left" style="padding:10px;" colspan="6">
 			<ul id="tcenvCodeId" class="ullitab list-inline">
@@ -208,8 +208,8 @@ function choosePckg(jsonStr){
 		</td>
 	</tr>
 	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding:10px;">项目：</td>
-		<td align="left" style="width: 120px;padding:10px;" colspan="6">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">项目：</td>
+		<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;" colspan="6">
 			<select class="chosen-select form-control" name="tcprojectCode" id="tcprojectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;" disabled>
 			<option value="">请选择</option>
 			<c:forEach items="${projectList}" var="var">
@@ -220,7 +220,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="5">基本配置</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top" rowspan="5"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;基本配置</td>
 		<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
 		<td align="left" style="padding:10px;" colspan="6">
 			<ul id="tcresTypeId" class="ullitab list-inline">
@@ -233,14 +233,14 @@ function choosePckg(jsonStr){
 		</td>
 	</tr>
 	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding:10px;">虚拟机名称：</td>
-		<td align="left" style="padding:10px;" colspan="6">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">虚拟机名称：</td>
+		<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="6">
 			<input type="text" name="tcvirName" id="tcvirName"  value=""/>
 		</td>
 	</tr>
 	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding:10px;">推荐配置：</td>
-		<td align="left" style="padding:10px;" colspan="6">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">推荐配置：</td>
+		<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="6">
 			<ul id="tcrecommendTypeId" class="ullitab list-inline">
 				<c:if test="${not empty recommendTypeList}">
 				<c:forEach items="${recommendTypeList}" var="var" varStatus="st">
@@ -251,8 +251,8 @@ function choosePckg(jsonStr){
 		</td>
 	</tr>
 	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding:10px;">CPU：</td>
-		<td align="left" style="padding:10px;" colspan="6">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">CPU：</td>
+		<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="6">
 			<ul id="tccpuId" class="ullitab list-inline">
 				<c:if test="${not empty cpuList}">
 				<c:forEach items="${cpuList}" var="var" varStatus="st">
@@ -263,8 +263,8 @@ function choosePckg(jsonStr){
 		</td>
 	</tr>
 	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding:10px;">内存：</td>
-		<td align="left" style="padding:10px;" colspan="6">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">内存：</td>
+		<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="6">
 			<ul id="tcmemoryId" class="ullitab list-inline">
 				<c:if test="${not empty memoryList}">
 				<c:forEach items="${memoryList}" var="var" varStatus="st">
@@ -276,7 +276,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="3">镜像</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top" rowspan="3"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
 		<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
 		<td align="left" style="width: 120px;padding:10px;">
 			<select class="chosen-select form-control" name="tcosType" id="tcosType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;" disabled>
@@ -306,33 +306,33 @@ function choosePckg(jsonStr){
 		</td>
 	</tr>
 	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding:10px;">用户名：</td>
-		<td align="left" style="width: 120px;padding:10px;">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">用户名：</td>
+		<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
 			<input type="text" name="tcimgUserName" id="tcimgUserName" value="" disabled/>
 		</td>
-		<td align="right" style="width: 120px;padding:10px;">密码：</td>
-		<td align="left" style="width: 120px;padding:10px;">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">密码：</td>
+		<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
 			<input type="text" name="tcimgUserPass" id="tcimgUserPass" value="" disabled/>
 		</td>
-		<td align="right" style="width: 120px;padding:10px;">路径：</td>
-		<td align="left" style="padding:10px;" colspan="2">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">路径：</td>
+		<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="2">
 			<input type="text" name="tcimgPath" id="tcimgPath" value="" disabled/>&nbsp;&nbsp;Linux系统必填
 		</td>
 	</tr>
 	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
-		<td style="padding:10px;" colspan="6">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">到期时间：</td>
+		<td style="padding-left:10px;padding-bottom:10px;" colspan="6">
 			<input type="text" name="tcimgExpireDate" id="tcimgExpireDate" value="" class="span10 date-picker" data-date-format="yyyy-mm-dd" style="width:120px;" placeholder="到期时间" disabled/>
 		</td>
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">存储</td>
-		<td align="right" style="width: 120px;padding:10px;">存储：</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;存储</td>
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">存储：</td>
 		<td style="padding:10px;" colspan="6">
 			<table id="tcdiskTableId">
 				<tr>
-					<td align="left" style="width: 120px;">
+					<td align="left" style="width: 120px;padding-right:10px;">
 						<select class="chosen-select form-control" name="tcdiskType" id="tcdiskType" data-placeholder="请选择磁盘类型" style="vertical-align:top;width: 120px;" disabled>
 						<option value="">请选择</option>
 						<c:forEach items="${diskTypeList}" var="var">
@@ -340,7 +340,7 @@ function choosePckg(jsonStr){
 						</c:forEach>
 					  	</select>
 					</td>
-					<td align="left" style="width: 120px;padding:10px;">
+					<td align="left" style="width: 120px;">
 						<input type="text" name="tcdiskSize" id="tcdiskSize" value="20" style="width: 120px;" maxlength="5" disabled/>
 					</td>
 					<td align="left" style="width: 200px;">
@@ -352,12 +352,12 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">软件安装</td>
-		<td align="right" style="width: 120px;padding:10px;">安装软件：</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;软件安装</td>
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">安装软件：</td>
 		<td style="padding:10px;" colspan="6">
 			<table id="tcsoftTableId">
 				<tr>
-					<td align="left" style="width: 120px;">
+					<td align="left" style="width: 120px;padding-right:10px;">
 						<select class="chosen-select form-control" name="tcsoftName" id="tcsoftName" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;" disabled>
 						<option value="">请选择</option>
 						<c:forEach items="${softNameList}" var="var">
@@ -365,7 +365,7 @@ function choosePckg(jsonStr){
 						</c:forEach>
 					  	</select>
 					</td>
-					<td align="left" style="width: 120px;padding:10px;">
+					<td align="left" style="width: 120px;">
 						<select class="chosen-select form-control" name="tcsoftVer" id="tcsoftVer" data-placeholder="请选择软件版本" style="vertical-align:top;width: 120px;" disabled>
 						<option value="">请选择</option>
 						<c:forEach items="${softVerList}" var="var">
@@ -382,7 +382,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="2">数量</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;数量</td>
 		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
 		<td style="padding:10px;" colspan="6">
 			<input type="text" name="tcexpireDate" id="tcexpireDate" value="" class="span10 date-picker" data-date-format="yyyy-mm-dd" style="width:120px;" placeholder="到期时间" disabled/>
@@ -390,8 +390,8 @@ function choosePckg(jsonStr){
 		</td>
 	</tr>
 	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding:10px;">数量：</td>
-		<td style="width: 120px;padding:10px;" colspan="6">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">数量：</td>
+		<td style="width: 120px;padding-left:10px;padding-bottom:10px;" colspan="6">
 			<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 			    <input type="text" id="tcvirNum" name="tcvirNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1" disabled> 
 			    <div class="input-group-addon"> 
@@ -403,7 +403,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="2">当前配置</td>
+		<td align="left" style="width: 120px;padding-left:10px;background-color:#cccccc;" valign="top" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
 		<td align="right" style="width: 120px;padding:10px;">当前配置：</td>
 		<td style="padding:10px;" colspan="6"></td>
 	</tr>
