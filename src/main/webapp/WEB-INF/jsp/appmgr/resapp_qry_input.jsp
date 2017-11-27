@@ -87,9 +87,9 @@ function addDiskRow(){
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\">"+$("#diskType").html()+"</select></td>"
-	    +"<td align=\"left\" style=\"width: 120px;padding:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\"/></td>"
-	    +"<td align=\"left\" style=\"width: 200x;\">GB&nbsp;&nbsp;&nbsp;<span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
+    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-bottom:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\">"+$("#diskType").html()+"</select></td>"
+	    +"<td align=\"left\" style=\"width: 120px;padding-bottom:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\"/></td>"
+	    +"<td align=\"left\" style=\"width: 200x;padding-bottom:10px;\">GB&nbsp;&nbsp;&nbsp;<span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
     $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
@@ -101,9 +101,9 @@ function addSoftRow(){
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;\"><select class=\"chosen-select form-control\" name=\"softName\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softName").html()+"</select></td>"
-    	+"<td align=\"left\" style=\"width: 120px;padding:10px;\"><select class=\"chosen-select form-control\" name=\"softVer\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\">"+$("#softVer").html()+"</select></td>"
-	    +"<td align=\"left\" style=\"width: 120x;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
+    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-bottom:10px;\"><select class=\"chosen-select form-control\" name=\"softName\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softName").html()+"</select></td>"
+    	+"<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-bottom:10px;\"><select class=\"chosen-select form-control\" name=\"softVer\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\">"+$("#softVer").html()+"</select></td>"
+	    +"<td align=\"left\" style=\"width: 120x;padding-bottom:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
 	$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
@@ -422,8 +422,8 @@ $(window).scroll(function() {
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
 	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 		<tr class="tablecls">
-			<td align="left" style="width: 10px;padding:10px;background-color:#cccccc;">地域</td>
-			<td align="right" style="width: 120px;padding:10px;">地域：</td>
+			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;地域</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="areaCodeId" class="ullitab list-inline">
 					<c:if test="${not empty areaCodeList}">
@@ -434,10 +434,10 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">平台类型</td>
-			<td align="right" style="width: 120px;padding:10px;">平台类型：</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;平台类型</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="platTypeId" class="ullitab list-inline">
 					<c:if test="${not empty platTypeList}">
@@ -448,10 +448,10 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">部署类型</td>
-			<td align="right" style="width: 120px;padding:10px;">部署类型：</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;部署类型</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="deployTypeId" class="ullitab list-inline">
 					<c:if test="${not empty deployTypeList}">
@@ -462,9 +462,9 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="2">项目</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;项目</td>
 			<td align="right" style="width: 120px;padding:10px;">环境：</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="envCodeId" class="ullitab list-inline">
@@ -477,8 +477,8 @@ $(window).scroll(function() {
 			</td>
 		</tr>
 		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding:10px;">项目：</td>
-			<td align="left" style="width: 120px;padding:10px;" colspan="6">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">项目：</td>
+			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;" colspan="6">
 				<select class="chosen-select form-control" name="projectCode" id="projectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;">
 				<option value="">请选择</option>
 				<c:forEach items="${projectList}" var="var">
@@ -487,9 +487,9 @@ $(window).scroll(function() {
 			  	</select>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="5">基本配置</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="5"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;基本配置</td>
 			<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="resTypeId" class="ullitab list-inline">
@@ -502,20 +502,14 @@ $(window).scroll(function() {
 			</td>
 		</tr>
 		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding:10px;">虚拟机名称：</td>
-			<td align="left" style="padding:10px;" colspan="6">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">虚拟机名称：</td>
+			<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="6">
 				<input type="text" name="virName" id="virName"  value=""/>
 			</td>
 		</tr>
-		<!-- <tr class="tablecls">
-			<td align="right" style="width: 120px;padding:10px;">虚拟机IP：</td>
-			<td align="left" style="padding:10px;" colspan="6">
-				<input type="text" name="virIp" id="virIp"  value=""/>
-			</td>
-		</tr> -->
 		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding:10px;">推荐配置：</td>
-			<td align="left" style="padding:10px;" colspan="6">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">推荐配置：</td>
+			<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="6">
 				<ul id="recommendTypeId" class="ullitab list-inline">
 					<c:if test="${not empty recommendTypeList}">
 					<c:forEach items="${recommendTypeList}" var="var" varStatus="st">
@@ -526,8 +520,8 @@ $(window).scroll(function() {
 			</td>
 		</tr>
 		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding:10px;">CPU：</td>
-			<td align="left" style="padding:10px;" colspan="6">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">CPU：</td>
+			<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="6">
 				<ul id="cpuId" class="ullitab list-inline">
 					<c:if test="${not empty cpuList}">
 					<c:forEach items="${cpuList}" var="var" varStatus="st">
@@ -538,8 +532,8 @@ $(window).scroll(function() {
 			</td>
 		</tr>
 		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding:10px;">内存：</td>
-			<td align="left" style="padding:10px;" colspan="6">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">内存：</td>
+			<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="6">
 				<ul id="memoryId" class="ullitab list-inline">
 					<c:if test="${not empty memoryList}">
 					<c:forEach items="${memoryList}" var="var" varStatus="st">
@@ -549,9 +543,9 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="3">镜像</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="3"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
 			<td align="left" style="width: 120px;padding:10px;">
 				<select class="chosen-select form-control" name="osType" id="osType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;">
@@ -581,33 +575,33 @@ $(window).scroll(function() {
 			</td>
 		</tr>
 		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding:10px;">用户名：</td>
-			<td align="left" style="width: 120px;padding:10px;">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">用户名：</td>
+			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
 				<input type="text" name="imgUserName" id="imgUserName"  value=""/>
 			</td>
-			<td align="right" style="width: 120px;padding:10px;">密码：</td>
-			<td align="left" style="width: 120px;padding:10px;">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">密码：</td>
+			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
 				<input type="password" name="imgUserPass" id="imgUserPass"  value=""/>
 			</td>
-			<td align="right" style="width: 120px;padding:10px;">路径：</td>
-			<td align="left" style="padding:10px;" colspan="2">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">路径：</td>
+			<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="2">
 				<input type="text" name="imgPath" id="imgPath"  value="/opt"/>&nbsp;&nbsp;Linux系统必填
 			</td>
 		</tr>
 		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
-			<td style="padding:10px;" colspan="6">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">到期时间：</td>
+			<td style="padding-left:10px;padding-bottom:10px;" colspan="6">
 				<input type="text" name="imgExpireDate" id="imgExpireDate" value="" class="span10 date-picker" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">存储</td>
-			<td align="right" style="width: 120px;padding:10px;">存储：</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;存储</td>
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">数据盘：</td>
 			<td style="padding:10px;" colspan="6">
 				<table id="diskTableId">
 					<tr id="diskTrId">
-						<td align="left" style="width: 120px;">
+						<td align="left" style="width: 120px;padding-right:10px;padding-bottom:10px;">
 							<select class="chosen-select form-control" name="diskType" id="diskType" data-placeholder="请选择磁盘类型" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${diskTypeList}" var="var">
@@ -615,10 +609,10 @@ $(window).scroll(function() {
 							</c:forEach>
 						  	</select>
 						</td>
-						<td align="left" style="width: 120px;padding:10px;">
+						<td align="left" style="width: 120px;padding-bottom:10px;">
 							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')"/>
 						</td>
-						<td align="left" style="width: 200px;">
+						<td align="left" style="width: 200px;padding-bottom:10px;">
 						  	GB&nbsp;&nbsp;&nbsp;<span id="iopsId">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密
 						</td>
 					</tr>
@@ -626,14 +620,14 @@ $(window).scroll(function() {
 				<a href="javascript:void()" onclick="addDiskRow()"><span class="glyphicon glyphicon-plus"></span></a>增加磁盘，您可选配15块
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;">软件安装</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;软件安装</td>
 			<td align="right" style="width: 120px;padding:10px;">安装软件：</td>
 			<td style="padding:10px;" colspan="6">
 				<table id="softTableId">
 					<tr id="softTrId">
-						<td align="left" style="width: 120px;">
+						<td align="left" style="width: 120px;padding-right:10px;padding-bottom:10px;">
 							<select class="chosen-select form-control" name="softName" id="softName" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${softNameList}" var="var">
@@ -641,7 +635,7 @@ $(window).scroll(function() {
 							</c:forEach>
 						  	</select>
 						</td>
-						<td align="left" style="width: 120px;padding:10px;">
+						<td align="left" style="width: 120px;padding-right:10px;padding-bottom:10px;">
 							<select class="chosen-select form-control" name="softVer" id="softVer" data-placeholder="请选择软件版本" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${softVerList}" var="var">
@@ -649,7 +643,7 @@ $(window).scroll(function() {
 							</c:forEach>
 						  	</select>
 						</td>
-						<td align="left" style="width: 120px;">
+						<td align="left" style="width: 120px;padding-bottom:10px;">
 							<input type="hidden" name="softParam" id="softParam" value=""/>
 						  	<a href="javascript:void()" onclick="setSoftParam(0)">设置参数</a>
 						</td>
@@ -658,9 +652,9 @@ $(window).scroll(function() {
 				<a href="javascript:void()" onclick="addSoftRow()"><span class="glyphicon glyphicon-plus"></span></a>增加安装软件，您可选择15个
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="2">数量</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;数量</td>
 			<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
 			<td style="padding:10px;" colspan="6">
 				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onclick="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
@@ -668,8 +662,8 @@ $(window).scroll(function() {
 			</td>
 		</tr>
 		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding:10px;">数量：</td>
-			<td style="width: 120px;padding:10px;" colspan="6">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">数量：</td>
+			<td style="width: 120px;padding-left:10px;padding-bottom:10px;" colspan="6">
 				<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 				    <input type="text" id="virNum" name="virNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1"> 
 				    <div class="input-group-addon"> 
@@ -679,13 +673,9 @@ $(window).scroll(function() {
 				</div>
 			</td>
 		</tr>
-		<tr><td colspan="8">&nbsp;</td>
+		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="width: 20px;padding:10px;background-color:#cccccc;" rowspan="2">当前配置</td>
-			<td align="right" style="width: 120px;padding:10px;">当前配置：</td>
-			<td style="padding:10px;" colspan="6"></td>
-		</tr>
-		<tr class="tablecls">
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
 			<td align="right" style="width: 120px;padding:10px;">计费方式：</td>
 			<td align="left" style="width: 120px;padding:10px;">包年包月</td>
 			<td align="right" style="width: 120px;padding:10px;">地域：</td>
