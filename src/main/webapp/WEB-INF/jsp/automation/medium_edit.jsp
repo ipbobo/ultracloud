@@ -42,6 +42,10 @@
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:98%;"/></td>
 							</tr>
 							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;">版本号:</td>
+								<td><input type="text" name="version" id="version" value="${pd.version}" maxlength="30" placeholder="这里输入版本号" title="版本号" style="width:98%;"/></td>
+							</tr>
+							<tr>
 								<td style="width:120px;text-align: right;padding-top: 13px;">用途:</td>
 								<td><input type="text" name="purpose" id="purpose" value="${pd.purpose}" maxlength="30" placeholder="这里输入用途" title="用途" style="width:98%;"/></td>
 							</tr>

@@ -1,7 +1,7 @@
 package com.cmp.sid;
 
 public class CmpOrder {
-	private Long id;//ID
+	private String orderNo;//清单编号
 	private String createTime;//创建时间
 	private String lastUpdateTime;//最后修改时间
 	private String status;//状态：0-待提交；1-已提交；T-套餐
@@ -33,12 +33,12 @@ public class CmpOrder {
 	private String virNum;//虚拟机数量
 	private String pckgName;//套餐名称
 
-	public Long getId() {
-		return id;
+	public String getOrderNo() {
+		return orderNo;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 
 	public String getCreateTime() {

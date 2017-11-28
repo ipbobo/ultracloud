@@ -5,11 +5,11 @@
 <head>
 <script type="text/javascript">
 //删除清单
-function delCmpOrder(obj, orderId){
-	if(confirm("确定要删除该清单["+orderId+"]吗?")){
+function delCmpOrder(obj, orderNo){
+	if(confirm("确定要删除该清单["+orderNo+"]吗?")){
 		$.ajax({
 		    type: 'post',  
-		    url: 'delCmpOrder.do?orderId='+orderId,
+		    url: 'delCmpOrder.do?orderNo='+orderNo,
 		    dataType: 'json',  
 		    success: function(data){
 			    if(data.retCode=="0"){//删除成功
@@ -30,7 +30,7 @@ function clearShoppingCart(){
 		    dataType: 'json',  
 		    success: function(data){
 		    	alert(data.retMsg);
-		    	$("input:checkbox[name='orderId']").each(function() {
+		    	$("input:checkbox[name='orderNo']").each(function() {
 					$(this).parent().parent().remove();
 				});
 		    },
@@ -43,21 +43,21 @@ function clearShoppingCart(){
 
 //批量购买
 function batchBuy(){
-	var len = $("input:checkbox[name='orderId']:checked").length;
+	var len = $("input:checkbox[name='orderNo']:checked").length;
     if(len==0){
     	alert("请选择清单");
     	return;
     }
     
-    var orderIdArr=new Array();
-	$("input:checkbox[name='orderId']:checked").each(function() {
-		orderIdArr.push($(this).val());
+    var orderNoArr=new Array();
+	$("input:checkbox[name='orderNo']:checked").each(function() {
+		orderNoArr.push($(this).val());
 	});
 	
 	$.ajax({
 	    type: 'post',  
 	    url: "appCommit.do",
-	    data: {"orderIdStr": orderIdArr.join()},
+	    data: {"orderNoStr": orderNoArr.join()},
 	    dataType: 'json',  
 	    success: function(data){
 	    	alert(data.retMsg);
@@ -76,7 +76,7 @@ function batchBuy(){
 	<c:forEach items="${shoppingCartList}" var="var" varStatus="st">
 	<tr style="width: 100%;border:1px solid #cccccc;">
 		<td align="center" style="width: 30px;">
-			<input type="checkbox" name="orderId" id="orderId" value="${var.id}" checked/>
+			<input type="checkbox" name="orderNo" id="orderNo" value="${var.id}" checked/>
 		</td>
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
@@ -85,7 +85,7 @@ function batchBuy(){
 				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.id}')" class="img_close"></div></td>
 			</tr>
 			<tr>
-				<td align="left" style="width: 60px;">计费方式：</td>
+				<td align="left" style="width: 60px;">计s费方式：</td>
 				<td align="left">包年包月</td>
 			</tr>
 			<tr>
@@ -126,5 +126,8 @@ function batchBuy(){
 	</c:forEach>
 	</c:if>
 </table>
+<script type="text/javascript">
+$("#shoppingCartNum").html("${shoppingCartNum}");
+</script>
 </body>
 </html>

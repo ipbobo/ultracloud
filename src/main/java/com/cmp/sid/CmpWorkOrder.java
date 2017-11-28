@@ -1,10 +1,10 @@
 package com.cmp.sid;
 
 public class CmpWorkOrder {
-	private String id;//ID
+	private String appNo;//申请编号
 	private String createTime;//创建时间
 	private String lastUpdateTime;//最后修改时间
-	private String appNo;//申请编号
+	private String orderNo;//清单编号
 	private String appType;//申请类型：1-资源申请；2-运维服务申请
 	private String status;//状态：0-初始化；1-审批中；2-审批通过；3-审批不通过  4-运维执行   5-工单完成
 	private String procInstId;//流程实例ID
@@ -36,14 +36,12 @@ public class CmpWorkOrder {
 	private String virNum;//虚拟机数量
 	private String applyUserName; //申请者用户名
 
-	
-
-	public String getId() {
-		return id;
+	public String getAppNo() {
+		return appNo;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setAppNo(String appNo) {
+		this.appNo = appNo;
 	}
 
 	public String getCreateTime() {
@@ -62,12 +60,12 @@ public class CmpWorkOrder {
 		this.lastUpdateTime = lastUpdateTime;
 	}
 	
-	public String getAppNo() {
-		return appNo;
+	public String getOrderNo() {
+		return orderNo;
 	}
 
-	public void setAppNo(String appNo) {
-		this.appNo = appNo;
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 	
 	public String getAppType() {

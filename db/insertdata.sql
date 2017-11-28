@@ -79,3 +79,4 @@ INSERT INTO `cmp_dict` VALUES ('88', '2017-11-20 17:59:36', '2017-11-20 18:34:44
 INSERT INTO `cmp_dict` VALUES ('89', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '5', '工单完成', '工单状态', '0', '6');
 
 
+INSERT INTO `cmp_sequence` VALUES ('cmp_order', '1', '1', '5', 'O');

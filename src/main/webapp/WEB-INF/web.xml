@@ -51,6 +51,46 @@
 		<url-pattern>/druid/*</url-pattern>
 	</servlet-mapping>
 	<!-- 连接池 启用Web监控统计功能   end-->
+	
+	<!-- activiti begin -->
+  	<!-- Modeler的Rest服务 -->
+	<servlet>
+		<servlet-name>ActModelRestServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:activiti-modeler.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ActModelRestServlet</servlet-name>
+		<url-pattern>/service/*</url-pattern>
+	</servlet-mapping>
+	<!-- Rest接口 -->
+	<servlet>
+		<servlet-name>ActRestServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:activiti-rest.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ActRestServlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<!-- JSONP -->
+	<filter>
+		<filter-name>JSONPFilter</filter-name>
+		<filter-class>com.cmp.workflow.interceptor.JsonpCallbackFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>JSONPFilter</filter-name>
+		<url-pattern>/service/*</url-pattern>
+	</filter-mapping>
+	<!-- activiti end -->
 
 	<filter>
 		<filter-name>loginFilter</filter-name>

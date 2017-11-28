@@ -225,6 +225,7 @@ function addList(){
 			jsonObj.tcvirName=$("#tcvirName").val();//虚拟机名称
 			jsonObj.pckgId=$("#pckgId").val();//套餐ID     
 			ajaxHttpPost("addPckgList.do", jsonObj, "addListBtnId");//发送Ajax请求
+			$("#shoppingCartNum").html(($("#shoppingCartNum").html())*1+1);
 		}
 	}else if(checkData()){//数据校验
 		jsonObj.areaCode=$("#areaCode").val();//地域代码                       
@@ -705,7 +706,7 @@ $(window).scroll(function() {
 <!-- 购物车 -->
 <table id="shoppingCartTable" style="position: fixed; right: 0; top: 130px; z-index: 999999999;">
 	<tr>
-		<td onclick="maskLayerClick('shoppingCart')" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-shopping-cart"></span><div style="width: 10px;">购买清单</div><span id="shoppingCartNum" style="color: #f5620a">5000</span></div></td>
+		<td onclick="maskLayerClick('shoppingCart')" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-shopping-cart"></span><div style="width: 10px;">购买清单</div><span id="shoppingCartNum" style="color: #f5620a;">5000</span></div></td>
 		<td id="shoppingCartId" class="shoppingCart">
 			<div id="getShoppingCartList" style="height:0px;overflow-y: auto;"></div>
 			<div id="batchBuy" class="divbtn" style="display:none;width:100%;height:50px;padding:10px;border-top:1px solid #f5f5f5;">
@@ -730,6 +731,8 @@ $(window).scroll(function() {
 <script type="text/javascript">
 $(top.hangge());
 $('.date-picker').datepicker({autoclose: true,todayHighlight: true});//datepicker
+$("#shoppingCartNum").html("${shoppingCartNum}");
+$("#buyHisNum").html("${buyHisNum}");
 </script>
 </body>
 </html>
