@@ -15,8 +15,9 @@ public class CmpWorkOrderService {
 	//提交申请
 	public void addWorkOrder(String appNo, String orderId, String applyUserId, String procInstId) throws Exception {
 		PageData pd=new PageData();
-		pd.put("orderId", orderId);//清单ID
 		pd.put("appNo", appNo);//申请编号
+		pd.put("orderId", orderId);//清单ID
+		pd.put("orderNo", orderId);//清单ID
 		pd.put("appType", "1");//申请类型：1-资源申请；2-运维服务申请
 		pd.put("status", "0");//状态：0-待提交；1-审批中；2-审批通过；3-审批不通过
 		pd.put("procInstId", procInstId);//流程实例ID

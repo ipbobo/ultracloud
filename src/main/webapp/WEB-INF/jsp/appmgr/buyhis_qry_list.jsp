@@ -60,5 +60,8 @@
 	</c:forEach>
 	</c:if>
 </table>
+<script type="text/javascript">
+$("#buyHisNum").html("${buyHisNum}");
+</script>
 </body>
 </html>

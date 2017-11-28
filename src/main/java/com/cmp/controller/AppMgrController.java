@@ -67,6 +67,10 @@ public class AppMgrController extends BaseController {
 		mv.addObject("softNameList", cmpDictService.getCmpDictList("soft_name"));//软件名称列表
 		mv.addObject("softVerList", cmpDictService.getCmpDictList("soft_ver"));//软件版本列表
 		mv.addObject("cmpOrder", StringUtils.isBlank(orderId)?null:cmpOrderService.getOrderDtl(orderId));//清单详细信息
+		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList();//购物车列表查询
+		mv.addObject("shoppingCartNum", shoppingCartList!=null?shoppingCartList.size():0);//购物车列表大小
+		List<CmpOrder> buyHisList=cmpOrderService.getBuyHisList();//已购历史列表查询
+		mv.addObject("buyHisNum", buyHisList!=null?buyHisList.size():0);//已购历史列表大小
 		mv.setViewName("appmgr/resapp_qry_input");
 		return mv;
 	}
@@ -103,6 +107,7 @@ public class AppMgrController extends BaseController {
 		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList();//购物车列表查询
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("shoppingCartList", shoppingCartList);//软件版本列表
+		mv.addObject("shoppingCartNum", shoppingCartList!=null?shoppingCartList.size():0);//软件版本列表大小
 		mv.setViewName("appmgr/shoppingcart_qry_list");
 		return mv;
 	}
@@ -113,6 +118,7 @@ public class AppMgrController extends BaseController {
 		List<CmpOrder> buyHisList=cmpOrderService.getBuyHisList();//已购历史列表查询
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("buyHisList", buyHisList);//已购历史列表
+		mv.addObject("buyHisNum", buyHisList!=null?buyHisList.size():0);//已购历史列表大小
 		mv.setViewName("appmgr/buyhis_qry_list");
 		return mv;
 	}

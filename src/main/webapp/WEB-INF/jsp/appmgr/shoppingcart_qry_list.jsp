@@ -85,7 +85,7 @@ function batchBuy(){
 				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.id}')" class="img_close"></div></td>
 			</tr>
 			<tr>
-				<td align="left" style="width: 60px;">计费方式：</td>
+				<td align="left" style="width: 60px;">计s费方式：</td>
 				<td align="left">包年包月</td>
 			</tr>
 			<tr>
@@ -126,5 +126,8 @@ function batchBuy(){
 	</c:forEach>
 	</c:if>
 </table>
+<script type="text/javascript">
+$("#shoppingCartNum").html("${shoppingCartNum}");
+</script>
 </body>
 </html>

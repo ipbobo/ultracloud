@@ -8,10 +8,10 @@
 	
 	<!-- 字段 -->
 	<sql id="fieldName">
-		id,
+		appNo,
 		createTime,
 		lastUpdateTime,
-		appNo,
+		orderNo,
 		appType,
 		status,
 		procInstId,
@@ -45,10 +45,10 @@
 	
 	<!-- 字段值 -->
 	<sql id="fieldValue">
-		#{id},
+		#{appNo},
 		#{createTime},
 		#{lastUpdateTime},
-		#{appNo},
+		#{orderNo},
 		#{appType},
 		#{status},
 		#{procInstId},
@@ -83,6 +83,7 @@
 	<!-- 字段 -->
 	<sql id="saveFieldName">
 		appNo,
+		orderNo,
 		appType,
 		status,
 		procInstId,
@@ -116,6 +117,7 @@
 	
 	<sql id="saveFieldValue">
 		#{appNo},
+		#{orderNo},
 		#{appType},
 		#{status},
 		#{procInstId},
@@ -155,7 +157,7 @@
 	<!-- 新增工单 -->
 	<insert id="addWorkOrder" parameterType="pd">
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select #{appNo}, #{appType}, #{status}, #{procInstId}, #{applyUserId}, areaCode, platType, deployType, envCode, resType, virName, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum
+		select #{appNo}, #{orderNo}, #{appType}, #{status}, #{procInstId}, #{applyUserId}, areaCode, platType, deployType, envCode, resType, virName, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum
 		from cmp_order
 		where id=#{orderId}
 	</insert>
