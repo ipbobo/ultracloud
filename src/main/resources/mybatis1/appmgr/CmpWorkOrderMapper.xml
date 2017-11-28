@@ -85,7 +85,6 @@
 	
 	<!-- 字段 -->
 	<sql id="saveFieldName">
-		id,
 		appNo,
 		orderNo,
 		appType,
@@ -120,7 +119,6 @@
 	</sql>
 	
 	<sql id="saveFieldValue">
-		#{id},
 		#{appNo},
 		#{orderNo},
 		#{appType},
