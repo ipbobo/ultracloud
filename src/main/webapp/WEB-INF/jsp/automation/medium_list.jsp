@@ -53,6 +53,7 @@
 									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">名称</th>
+									<th class="center">版本号</th>
 									<th class="center">用途</th>
 									<th class="center">创建者</th>
 									<th class="center">路径</th>
@@ -74,6 +75,7 @@
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
+											<td class='center'>${var.version}</td>
 											<td class='center'>${var.purpose}</td>
 											<td class='center'>${var.username}</td>
 											<td class='center'  style="width: 200px;">${var.url}</td>

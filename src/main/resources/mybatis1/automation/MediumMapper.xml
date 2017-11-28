@@ -5,6 +5,7 @@
 	<resultMap type="Medium" id="mediumResultMap">
 		<id column="id" property="id"/>
 		<result column="name" property="name"/>
+		<result column="version" property="version"/>
 		<result column="purpose" property="purpose"/>
 		<result column="url" property="url"/>
 		<result column="username" property="username"/>
@@ -27,6 +28,7 @@
 	
 	<sql id="Field_main">
 		name,
+		version,
 		purpose,
 		username,
 		url,
@@ -48,6 +50,7 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
 		#{name},
+		#{version},
 		#{purpose},
 		#{username},
 		#{url},
@@ -85,6 +88,7 @@
 		<include refid="tableName"></include>
 		set 
 			name = #{name},
+			version = #{version},
 			purpose = #{purpose},
 			username = #{username},
 			url = #{url},

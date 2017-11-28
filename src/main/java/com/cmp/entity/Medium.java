@@ -13,6 +13,7 @@ public class Medium {
 
 	private BigInteger id;
 	private String name;
+	private String version;
 	private String purpose;
 	private String url;
 	private String username;
@@ -82,6 +83,14 @@ public class Medium {
 
 	public void setGmt_modified(Timestamp gmt_modified) {
 		this.gmt_modified = gmt_modified;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 }
