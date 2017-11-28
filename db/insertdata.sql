@@ -36,3 +36,5 @@ INSERT INTO `cmp_dict` VALUES ('33', '2017-11-15 10:51:59', '2017-11-15 15:13:35
 INSERT INTO `cmp_dict` VALUES ('34', '2017-11-15 10:52:11', '2017-11-15 15:13:32', 'soft_ver', '2', 'v2', '软件版本', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('35', '2017-11-15 17:59:21', '2017-11-15 17:59:38', 'os_bit_num', '32', '32位', '位数', '0', '1');
 INSERT INTO `cmp_dict` VALUES ('36', '2017-11-15 17:59:36', '2017-11-15 18:34:44', 'os_bit_num', '64', '64位', '位数', '1', '2');
+
+INSERT INTO `cmp_sequence` VALUES ('cmp_order', '1', '1', '5', 'O');
