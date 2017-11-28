@@ -262,7 +262,7 @@
 	//编辑模型
 	function edit(Id){
 		bootbox.confirm("确定要编辑模型吗?", function(result) {
-			window.open("<%=basePath%>/act-process-editor/modeler.html?modelId="+Id); 
+			window.open("<%=basePath%>act-process-editor/modeler.html?modelId="+Id); 
 		});
 	}
 	
@@ -329,26 +329,7 @@
 			}
 		});
 	}
-	
-	//打开绑定用户窗口
-	function goUserbind(id,ROLE_ID){
-		console.log(id);
-		console.log(ROLE_ID);
-		 top.jzts();
-		 var diag = new top.Dialog();
-		 diag.Drag=true;
-		 diag.Title ="选择成员";
-		 diag.URL = '<%=basePath%>usergroup/goUserbind.do?id='+id+'&ROLE_ID='+ROLE_ID;
-		 diag.Width = 1000;
-		 diag.Height = 400;
-		 diag.CancelEvent = function(){ //关闭事件
-			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-				 nextPage(${page.currentPage});
-			}
-			diag.close();
-		 };
-		 diag.show();
-	}
+
 	</script>
 
 </body>
