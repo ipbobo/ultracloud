@@ -76,13 +76,13 @@ function batchBuy(){
 	<c:forEach items="${shoppingCartList}" var="var" varStatus="st">
 	<tr style="width: 100%;border:1px solid #cccccc;">
 		<td align="center" style="width: 30px;">
-			<input type="checkbox" name="orderNo" id="orderNo" value="${var.id}" checked/>
+			<input type="checkbox" name="orderNo" id="orderNo" value="${var.orderNo}" checked/>
 		</td>
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
 			<tr>
 				<td align="left" style="width: 60px;">ECS</td>
-				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.id}')" class="img_close"></div></td>
+				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.orderNo}')" class="img_close"></div></td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">计s费方式：</td>
