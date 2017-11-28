@@ -199,14 +199,20 @@
 			and id like %#{pd.workorder_id}% 
 		</if>
 		<if test="pd.workorder_time != null and pd.workorder_time != ''">
-			<if test="pd.workorder_time == '1'">
-				and  date_sub(CURDATE(),interval 7 day)<=date(createTime) 
+			<if test="pd.workorder_time=='1'">
+				<![CDATA[
+				and  date_sub(CURDATE(),interval 7 day) <= date(createTime) 
+				]]>
 			</if>
 			<if test="pd.workorder_time == '2'">
+				<![CDATA[
 				and date_sub(curdate(),interval 1 month)<=date(createTime) 
+				]]>
 			</if>
 			<if test="pd.workorder_time == '3'">
+				<![CDATA[
 				and date_sub(curdate(),interval 1 year)<=date(createTime) 
+				]]>
 			</if>
 		</if>
 		
