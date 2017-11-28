@@ -13,15 +13,15 @@
 
 <head>
 <base href="<%=basePath%>">
-
-<!-- 左右双列 start -->
-<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/ultracloud/static/html_UI/assets/css/prettify.css">
-<link rel="stylesheet" href="/ultracloud/static/html_UI/assets/css/bootstrap-duallistbox.css" />
-<script src="http://www.jq22.com/jquery/2.1.1/jquery.min.js"></script>
-<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script src="/ultracloud/static/html_UI/assets/js/jquery.bootstrap-duallistbox.js"></script>
-<!-- 左右双列 end -->
+	<script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
+	<!-- 左右双列 start -->
+	<link rel="stylesheet" href="css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/ultracloud/static/html_UI/assets/css/prettify.css">
+	<link rel="stylesheet" href="static/html_UI/assets/css/bootstrap-duallistbox.css" />
+	<!-- <script src="http://www.jq22.com/jquery/2.1.1/jquery.min.js"></script> -->
+	<script src="js/bootstrap.min.js"></script>
+	<script src="static/html_UI/assets/js/jquery.bootstrap-duallistbox.js"></script>
+	<!-- 左右双列 end -->
 
 </head>
 
