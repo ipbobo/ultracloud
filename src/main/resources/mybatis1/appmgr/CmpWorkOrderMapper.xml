@@ -159,6 +159,6 @@
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
 		select #{appNo}, #{orderNo}, #{appType}, #{status}, #{procInstId}, #{applyUserId}, areaCode, platType, deployType, envCode, resType, virName, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum
 		from cmp_order
-		where id=#{orderId}
+		where orderNo=#{orderNo}
 	</insert>
 </mapper>

@@ -48,7 +48,7 @@ public class AppMgrController extends BaseController {
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
 	public ModelAndView resAppPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String orderId=request.getParameter("orderId");
+		String orderNo=request.getParameter("orderNo");
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
 		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
@@ -66,7 +66,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softNameList", cmpDictService.getCmpDictList("soft_name"));//软件名称列表
 		mv.addObject("softVerList", cmpDictService.getCmpDictList("soft_ver"));//软件版本列表
-		mv.addObject("cmpOrder", StringUtils.isBlank(orderId)?null:cmpOrderService.getOrderDtl(orderId));//清单详细信息
+		mv.addObject("cmpOrder", StringUtils.isBlank(orderNo)?null:cmpOrderService.getOrderDtl(orderNo));//清单详细信息
 		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList();//购物车列表查询
 		mv.addObject("shoppingCartNum", shoppingCartList!=null?shoppingCartList.size():0);//购物车列表大小
 		List<CmpOrder> buyHisList=cmpOrderService.getBuyHisList();//已购历史列表查询
@@ -187,17 +187,17 @@ public class AppMgrController extends BaseController {
     @ResponseBody
 	public String appCommit(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		try{
-			String orderIdStr=request.getParameter("orderIdStr");//清单ID字符串
-			String[] orderIds=orderIdStr.split(",");
-			if(orderIds!=null && orderIds.length>0){
+			String orderNoStr=request.getParameter("orderNoStr");//清单ID字符串
+			String[] orderNos=orderNoStr.split(",");
+			if(orderNos!=null && orderNos.length>0){
 				String applyUserId=getUserId();//获取登录用户
-				for(String orderId: orderIds){
+				for(String orderNo: orderNos){
 					String appNo=cmpCommonService.getAppNo("cmp_workorder");
 					Map<String, Object> variables=new HashMap<String, Object>();
 					variables.put("btnName", "提交");
 					String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动
-					cmpWorkOrderService.addWorkOrder(appNo, orderId, applyUserId, procInstId);//提交申请
-					cmpOrderService.updateCmpOrderStatus(orderId);//更新清单状态
+					cmpWorkOrderService.addWorkOrder(appNo, orderNo, applyUserId, procInstId);//提交申请
+					cmpOrderService.updateCmpOrderStatus(orderNo);//更新清单状态
 				}
 			}
 			
@@ -254,8 +254,8 @@ public class AppMgrController extends BaseController {
 	@ResponseBody
 	public String delCmpOrder(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		try{
-			String orderId=request.getParameter("orderId");//清单ID
-			cmpOrderService.delCmpOrder(orderId);//删除清单
+			String orderNo=request.getParameter("orderNo");//清单ID
+			cmpOrderService.delCmpOrder(orderNo);//删除清单
 			return StringUtil.getRetStr("0", "删除清单成功");
 		} catch (Exception e) {
 			logger.error("删除清单时错误："+e);
@@ -329,7 +329,7 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setPlatType(request.getParameter("tcplatType"));//平台类型
 		cmpOrder.setDeployType(request.getParameter("tcdeployType"));//部署类型
 		cmpOrder.setVirName(request.getParameter("tcvirName"));//虚拟机名称
-		cmpOrder.setId(Long.parseLong(request.getParameter("pckgId")));//套餐ID
+		cmpOrder.setOrderNo(request.getParameter("pckgId"));//套餐ID
 		return cmpOrder;
 	}
 	

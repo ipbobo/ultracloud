@@ -8,7 +8,7 @@
 	
 	<!-- 字段 -->
 	<sql id="fieldName">
-		id,
+		orderNo,
 		createTime,
 		lastUpdateTime,
 		status,
@@ -43,7 +43,7 @@
 	
 	<!-- 字段值 -->
 	<sql id="fieldValue">
-		#{id},
+		#{orderNo},
 		#{createTime},
 		#{lastUpdateTime},
 		#{status},
@@ -78,6 +78,7 @@
 	
 	<!-- 字段 -->
 	<sql id="saveFieldName">
+		orderNo,
 		status,
 		applyUserId,
 		areaCode,
@@ -109,6 +110,7 @@
 	</sql>
 	
 	<sql id="saveFieldValue">
+		func_nextval('cmp_order'),
 		#{status},
 		#{applyUserId},
 		#{areaCode},
@@ -151,7 +153,7 @@
 		select <include refid="fieldName"/>
 		from 
 		<include refid="tableName"/>
-		where id=#{orderId}
+		where orderNo=#{orderNo}
 	</select>
 	
 	<!-- 套餐列表查询 -->
@@ -190,15 +192,15 @@
 	<!-- 新增套餐清单 -->
 	<insert id="addPckgList" parameterType="com.cmp.sid.CmpOrder" >
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select #{status}, #{applyUserId}, #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum, ''
+		select func_nextval('cmp_order'), #{status}, #{applyUserId}, #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum, ''
 		from 
 		<include refid="tableName"/>
-		where id=#{id}
+		where orderNo=#{orderNo}
 	</insert>
 	
 	<!-- 更新清单状态 -->
 	<select id="updateCmpOrderStatus" parameterType="String">
-		update <include refid="tableName"/> set status='1' where id=#{orderId}
+		update <include refid="tableName"/> set status='1' where orderNo=#{orderNo}
 	</select>
 	
 	<!-- 清空购物车 -->
@@ -208,11 +210,11 @@
 	
 	<!-- 删除清单 -->
 	<select id="delCmpOrder" parameterType="String">
-		delete from <include refid="tableName"/> where id=#{orderId}
+		delete from <include refid="tableName"/> where orderNo=#{orderNo}
 	</select>
 	
 	<!-- 删除套餐 -->
 	<select id="delPckg" parameterType="String">
-		delete from <include refid="tableName"/> where id=#{pckgId}
+		delete from <include refid="tableName"/> where orderNo=#{pckgId}
 	</select>
 </mapper>

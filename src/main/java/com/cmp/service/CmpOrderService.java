@@ -15,8 +15,8 @@ public class CmpOrderService {
 	private DaoSupport dao;
 
 	//清单详细信息查询
-	public CmpOrder getOrderDtl(String orderId) throws Exception {
-		return (CmpOrder)dao.findForList("CmpOrderMapper.getOrderDtl", orderId);
+	public CmpOrder getOrderDtl(String orderNo) throws Exception {
+		return (CmpOrder)dao.findForList("CmpOrderMapper.getOrderDtl", orderNo);
 	}
 	
 	//套餐列表查询
@@ -48,8 +48,8 @@ public class CmpOrderService {
 	}
 	
 	//更新清单状态
-	public void updateCmpOrderStatus(String orderId) throws Exception {
-		dao.update("CmpOrderMapper.updateCmpOrderStatus", orderId);
+	public void updateCmpOrderStatus(String orderNo) throws Exception {
+		dao.update("CmpOrderMapper.updateCmpOrderStatus", orderNo);
 	}
 	
 	//清空购物车
@@ -58,8 +58,8 @@ public class CmpOrderService {
 	}
 	
 	//删除清单
-	public void delCmpOrder(String orderId) throws Exception {
-		dao.delete("CmpOrderMapper.delCmpOrder", orderId);
+	public void delCmpOrder(String orderNo) throws Exception {
+		dao.delete("CmpOrderMapper.delCmpOrder", orderNo);
 	}
 	
 	//删除套餐
