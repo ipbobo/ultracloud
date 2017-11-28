@@ -5,6 +5,9 @@
 	<sql id="tableName">
 		cmp_workorder
 	</sql>
+	<sql id="hi_taskinst">
+		act_hi_taskinst
+	</sql>
 	
 	<!-- 字段 -->
 	<sql id="fieldName">
@@ -175,11 +178,43 @@
 	</insert>
 	
 	<!--个人工单查询 -->
-	<select id="getCmpWorkOrderList" parameterType="String" resultType="com.cmp.sid.CmpWorkOrder">
+	<select id="workorderlistPage" parameterType="page" resultType="pd">
 		select <include refid="fieldName"/>
 		from 
 		<include refid="tableName"/>
-		where applyUserId=#{applyUserId}
+		where 1=1 
+		
+		<if test="pd.workorder_type != null and pd.workorder_type != ''">
+			and appType=#{pd.workorder_type} 
+		</if>
+		<if test="pd.workorder_status != null and pd.workorder_status != ''">
+			and status=#{pd.workorder_status} 
+		</if>
+		<if test="pd.project != null and pd.project != ''">
+			and projectCode=#{pd.project} 
+		</if>
+		<if test="pd.workorder_id != null and pd.workorder_id != ''">
+			and id like %#{pd.workorder_id}% 
+		</if>
+		<if test="pd.workorder_time != null and pd.workorder_time != ''">
+			<if test="pd.workorder_time == '1'">
+				and  date_sub(CURDATE(),interval 7 day)<=date(createTime) 
+			</if>
+			<if test="pd.workorder_time == '2'">
+				and date_sub(curdate(),interval 1 month)<=date(createTime) 
+			</if>
+			<if test="pd.workorder_time == '3'">
+				and date_sub(curdate(),interval 1 year)<=date(createTime) 
+			</if>
+		</if>
+		
+		and procInstId in 
+		(
+				select DISTINCT  PROC_INST_ID_ from 
+				<include refid="hi_taskinst" /> t 
+				where t.ASSIGNEE_=#{pd.USERNAME}
+		)
+		 order by status desc
 	</select>
 	
 </mapper>

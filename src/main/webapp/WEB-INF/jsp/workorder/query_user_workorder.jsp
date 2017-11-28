@@ -63,11 +63,11 @@
 							<tr>
 								<td style="width:120px;text-align: right;">&nbsp;工单号:</td>
 								<td  style="width:120px;text-align: left;">
-									<input type="text" name="workorder_type" id="workorder_type" />
+									<input type="text" name="workorder_id" id="workorder_id" />
 								</td>
 								<td style="width:120px;text-align: right;">&nbsp;时间选择:</td>
 								<td style="width:120px;text-align: left;">
-									<select name="workorder_status" id="workorder_status" title="时间选择">
+									<select name="workorder_time" id="workorder_time" title="时间选择">
 										<option value="" selected="selected">全部</option>
 										<option value="1">近一周</option>
 										<option value="2">近一个月</option>
@@ -95,12 +95,11 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">工单ID</th>
-									<th class="center">申请编号</th>
-									<th class="center">工单类别</th>
-									<th class="center">工单创建时间</th>
-									<th class="center">申请人</th>
+									<th class="center">工单号</th>
+									<th class="center">工单类型</th>
 									<th class="center">工单状态</th>
+									<th class="center">项目名称</th>
+									<th class="center">工单时间</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -120,11 +119,21 @@
 											
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.id}</td>
-											<td class="center">${var.appNo}</td>
-											<td class='center'>${var.appType}</td>
+											<td class='center'> 
+												<c:if test="${var.appType == '1'}"> 资源申请  </c:if>
+												<c:if test="${var.appType == '2'}"> 运维申请  </c:if>
+												 </td>
+											<td class='center'>
+												<c:if test="${var.status} == '0'}"> 初始化  </c:if>
+												<c:if test="${var.status} == '1'}"> 审批中  </c:if>
+												<c:if test="${var.status} == '2'}"> 审批通过  </c:if>
+												<c:if test="${var.status} == '3'}"> 审批不通过  </c:if>
+												<c:if test="${var.status} == '4'}"> 运维执行  </c:if>
+												<c:if test="${var.status} == '5'}"> 工单完成  </c:if>
+											</td>
+											<td class='center'></td>
 											<td class='center'>${var.createTime}</td>
-											<td class='center'>${var.applyUserName}</td>
-											<td class='center'>${var.status}</td>
+											
 											<td class="center">
 												<c:if test="${QX.query != 1 && QX.check != 1 && QX.execute != 1 }">
 													<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>

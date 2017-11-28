@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.cmp.sid.CmpWorkOrder;
 import com.fh.dao.DaoSupport;
+import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 @Service
@@ -32,8 +33,8 @@ public class CmpWorkOrderService {
 		dao.save("CmpWorkOrderMapper.saveWorkOrder", cmpWorkorder);
 	}
 	
-	//查询个人工单
-	public List<CmpWorkOrder> selectUserWorkOrder(String applyUserId) throws Exception{
-		return (List<CmpWorkOrder>)dao.findForList("CmpWorkOrderMapper.getCmpWorkOrderList", applyUserId);
+	//查询个人申请 工单
+	public List<PageData> listUserWorkorderByPd(Page page) throws Exception{
+		return (List<PageData>)dao.findForList("CmpWorkOrderMapper.workorderlistPage", page);
 	}
 }

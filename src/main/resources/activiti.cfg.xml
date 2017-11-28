@@ -15,7 +15,7 @@
         </property>
     	<property name="databaseType" value="mysql"/><!-- 基于JDBC参数配置的数据库连接会使用默认的MyBatis连接池 -->
     	<property name="dataSource" ref="dataSource"/>
-    	<property name="databaseSchemaUpdate" value="false"/><!-- false(默认)：检查数据库表的版本和依赖库的版本， 如果版本不匹配就抛出异常；true: 构建流程引擎时，执行检查，如果需要就执行更新。 如果表不存在，就创建；create-drop: 构建流程引擎时创建数据库表， 关闭流程引擎时删除这些表 -->
+    	<property name="databaseSchemaUpdate" value="true"/><!-- false(默认)：检查数据库表的版本和依赖库的版本， 如果版本不匹配就抛出异常；true: 构建流程引擎时，执行检查，如果需要就执行更新。 如果表不存在，就创建；create-drop: 构建流程引擎时创建数据库表， 关闭流程引擎时删除这些表 -->
     	<property name="jobExecutorActivate" value="false"/><!-- 禁止流程引擎启动时激活 -->
 		<property name="asyncExecutorEnabled" value="true"/>
 		<property name="asyncExecutorActivate" value="false"/>

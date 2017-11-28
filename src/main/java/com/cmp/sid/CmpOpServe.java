@@ -5,7 +5,7 @@ package com.cmp.sid;
  *
  */
 public class CmpOpServe {
-	private Long id;
+	private String id;
 	private String serviceType;
 	private String operType;
 	private String vm;
@@ -17,10 +17,11 @@ public class CmpOpServe {
 	private String status;//流程状态  0:启动   1:审核完成  2:工单完成
 	
 	
-	public Long getId() {
+	
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getServiceType() {

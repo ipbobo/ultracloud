@@ -34,6 +34,7 @@
 	
 	<!-- 字段 -->
 	<sql id="saveFieldName">
+		id,
 		serviceType,
 		operType,
 		vm,
@@ -44,6 +45,7 @@
 	</sql>
 	
 	<sql id="saveFieldValue">
+		#{id},
 		#{serviceType},
 		#{operType},
 		#{vm},
@@ -55,6 +57,9 @@
 	
 	<!-- 新增 -->
 	<insert id="saveCmpOpServe"  useGeneratedKeys="true" keyProperty="id"  parameterType="com.cmp.sid.CmpOpServe" >
+		<selectKey keyProperty="id" order="BEFORE" resultType="String"> 
+			select func_nextval('cmp_opserve')
+		</selectKey>
 		insert into <include refid="tableName"/> (
 			<include refid="saveFieldName"/>
 		) values (

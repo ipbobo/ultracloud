@@ -1,10 +1,13 @@
 package com.cmp.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,7 @@ import com.cmp.service.ProjectService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpWorkOrder;
 import com.fh.controller.base.BaseController;
+import com.fh.entity.Page;
 import com.fh.entity.system.User;
 import com.fh.service.system.user.UserManager;
 import com.fh.util.Const;
@@ -39,22 +43,34 @@ public class CmpWorkOrderController extends BaseController{
 	private ProjectService projectService;
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
-	public ModelAndView querUserApplyWorkOrderPre() throws Exception{
+	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
 		Session session = Jurisdiction.getSession();
+		ModelAndView mv = new ModelAndView();
 		User userr = (User)session.getAttribute(Const.SESSION_USERROL);				//读取session中的用户信息(含角色信息)
 		if (userr == null) {
 			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
+			if (user == null) {
+				mv.setViewName("system/index/login");
+				return mv;
+			}
 			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
-		
-		List<CmpWorkOrder> workOrderList = cmpWorkOrderService.selectUserWorkOrder(userr.getUSER_ID());
-		for (CmpWorkOrder workOrder : workOrderList) {
-			workOrder.setAppType(getAppTypeName(workOrder.getAppType()));
-			workOrder.setApplyUserName(getUserName(workOrder.getApplyUserId()));
-		}
-		
 		PageData pd = new PageData();
+		pd = this.getPageData();
+//		pd.put("appType", pd.get("workorder_type"));
+//		pd.put("status", pd.get("workorder_status"));
+//		pd.put("projectCode", pd.get("project"));
+//		pd.put("id", pd.get("workorder_id"));
+//		pd.put("time", pd.get("workorder_time"));
+//		pd.put("applyUserId", userr.getUSER_ID());
+		page.setPd(pd);
+		//根据用户类别查询不同的工单
+		//申请者可查询自己申请的工单
+		List<PageData> workOrderList = new ArrayList<PageData>();
+		workOrderList = cmpWorkOrderService.listUserWorkorderByPd(page);
+		
+		
 		
 		//工单类型
 		List<CmpDict> workorderTypeList =  cmpDictService.getCmpDictList("workorder_type");
@@ -74,27 +90,36 @@ public class CmpWorkOrderController extends BaseController{
 			qxMap.put("execute", "1");
 		}
 		
-		ModelAndView mv = new ModelAndView();
+		
 		mv.addObject("workOrderList", workOrderList);
 		mv.addObject("workorderTypeList", workorderTypeList);
 		mv.addObject("workorderStatusList", workorderStatusList);
 		mv.addObject("projectList", projectList);
-		
+		mv.addObject("appTypeNameMap", getAppTypeNameMap());
+		mv.addObject("workorderStatusNameMap", getWorkorderStatusNameMap());
 		mv.addObject("QX", qxMap); // 右侧按钮权限
 		mv.setViewName("workorder/query_user_workorder");
 		return mv;
 	}
 	
-	public String getAppTypeName(String appType) {
-		if (appType != null && appType.length() > 0) {
-			if (appType.equals("1")) {
-				return "资源申请";
-			}else if (appType.equals("2")) {
-				return "运维申请";
-			}return "其他";
+	public Map getAppTypeNameMap() {
+		Map<String, String> appTypeNameMap = new HashMap<String, String>();
+		List<CmpDict> workorderTypeList =  cmpDictService.getCmpDictList("workorder_type");
+		for (CmpDict workorderDict  : workorderTypeList) {
+			appTypeNameMap.put(workorderDict.getDictCode(), workorderDict.getDictValue());
 		}
-		return "未找到类别";
+		return appTypeNameMap;
 	}
+	
+	public Map getWorkorderStatusNameMap() {
+		Map<String, String> workorderStatusNameMap = new HashMap<String, String>();
+		List<CmpDict> workorderStatusList = cmpDictService.getCmpDictList("workorder_status");
+		for (CmpDict workorderStatusDict  : workorderStatusList) {
+			workorderStatusNameMap.put(workorderStatusDict.getDictCode(), workorderStatusDict.getDictValue());
+		}
+		return workorderStatusNameMap;
+	}
+	
 	
 	public String getUserName(String userId) throws Exception {
 		User userr = userService.getUserAndRoleById(userId);

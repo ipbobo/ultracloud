@@ -71,8 +71,8 @@ INSERT INTO `cmp_dict` VALUES ('83', '2017-11-20 17:59:36', '2017-11-20 18:34:44
 INSERT INTO `cmp_dict` VALUES ('84', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_type', '1', '资源申请', '工单类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES ('85', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_type', '2', '运维申请', '工单类型', '0', '2');
 
-INSERT INTO `cmp_dict` VALUES ('84', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '0', '初始化', '工单状态', '1', '1');
-INSERT INTO `cmp_dict` VALUES ('85', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '1', '审批中', '工单状态', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('90', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '0', '初始化', '工单状态', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('91', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '1', '审批中', '工单状态', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('86', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '2', '审批通过', '工单状态', '0', '3');
 INSERT INTO `cmp_dict` VALUES ('87', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '3', '审批不通过', '工单状态', '0', '4');
 INSERT INTO `cmp_dict` VALUES ('88', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '4', '运维执行', '工单状态', '0', '5');
