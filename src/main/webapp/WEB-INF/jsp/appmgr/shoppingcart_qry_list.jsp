@@ -14,6 +14,7 @@ function delCmpOrder(obj, orderNo){
 		    success: function(data){
 			    if(data.retCode=="0"){//删除成功
 			    	$(obj).parent().parent().parent().parent().parent().parent().remove();
+			    	$("#shoppingCartNum").html(($("#shoppingCartNum").html())*1-1);
 			    }
 		    },
 		    error: function(data) {}
@@ -81,7 +82,7 @@ function batchBuy(){
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
 			<tr>
-				<td align="left" style="width: 60px;">ECS</td>
+				<td align="left" style="width: 60px;">ECS（${var.orderNo}）</td>
 				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.orderNo}')" class="img_close"></div></td>
 			</tr>
 			<tr>

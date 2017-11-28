@@ -37,7 +37,7 @@ function setFieldValue(obj, fieldName, fieldValue){
 }
 
 //发送Ajax请求
-function ajaxHttpPost(url, jsonObj, tipId){
+function ajaxHttpPost(url, jsonObj, tipId, numId){
     $.ajax({
 	    type: 'post',  
 	    url: url,
@@ -45,6 +45,9 @@ function ajaxHttpPost(url, jsonObj, tipId){
 	    dataType: 'json',  
 	    success: function(data){
 	    	$("#"+tipId).tips({side:1, msg:data.retMsg, bg:'#AE81FF', time:2});
+	    	if($("#"+numId).length>0){
+	    		$("#"+numId).html(($("#"+numId).html())*1+1);
+	    	}
 	    },
 	    error: function(data) {
 	    	$("#"+tipId).tips({side:3, msg:data.retMsg, bg:'#AE81FF', time:2});
@@ -224,8 +227,7 @@ function addList(){
 			jsonObj.tcdeployType=$("#tcdeployType").val();//部署类型                     
 			jsonObj.tcvirName=$("#tcvirName").val();//虚拟机名称
 			jsonObj.pckgId=$("#pckgId").val();//套餐ID     
-			ajaxHttpPost("addPckgList.do", jsonObj, "addListBtnId");//发送Ajax请求
-			$("#shoppingCartNum").html(($("#shoppingCartNum").html())*1+1);
+			ajaxHttpPost("addPckgList.do", jsonObj, "addListBtnId", "shoppingCartNum");//发送Ajax请求
 		}
 	}else if(checkData()){//数据校验
 		jsonObj.areaCode=$("#areaCode").val();//地域代码                       
@@ -254,7 +256,7 @@ function addList(){
 		jsonObj.virNum=$("#virNum").val();//虚拟机数量                       
 		jsonObj.pckgName=$("#pckgName").val();//套餐名称                       
 		jsonObj.status=$("#status").val();//状态：0-待提交；1-已提交；T-套餐
-		ajaxHttpPost("addList.do", jsonObj, "addListBtnId");//发送Ajax请求
+		ajaxHttpPost("addList.do", jsonObj, "addListBtnId", "shoppingCartNum");//发送Ajax请求
 	}
 }
 
