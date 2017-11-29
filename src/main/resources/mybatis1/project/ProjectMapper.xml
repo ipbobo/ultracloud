@@ -165,6 +165,10 @@
 		order by p.gmt_modified desc
 	</select>
 	
+	<select id="listAllProject" resultType="com.cmp.entity.Project">
+		select * from <include refid="tableName"></include>
+	</select>
+	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select 

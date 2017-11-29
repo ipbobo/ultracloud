@@ -1,12 +1,12 @@
 package com.cmp.sid;
 
 public class CmpWorkOrder {
-	private Long id;//ID
+	private String appNo;//申请编号
 	private String createTime;//创建时间
 	private String lastUpdateTime;//最后修改时间
-	private String appNo;//申请编号
+	private String orderNo;//清单编号
 	private String appType;//申请类型：1-资源申请；2-运维服务申请
-	private String status;//状态：0-待提交；1-审批中；2-审批通过；3-审批不通过
+	private String status;//状态：0-初始化；1-审批中；2-审批通过；3-审批不通过  4-运维执行   5-工单完成
 	private String procInstId;//流程实例ID
 	private String applyUserId;//申请者
 	private String areaCode;//地域代码
@@ -34,13 +34,14 @@ public class CmpWorkOrder {
 	private String imgExpireDate;//镜像到期时间
 	private String expireDate;//到期时间
 	private String virNum;//虚拟机数量
+	private String applyUserName; //申请者用户名
 
-	public Long getId() {
-		return id;
+	public String getAppNo() {
+		return appNo;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setAppNo(String appNo) {
+		this.appNo = appNo;
 	}
 
 	public String getCreateTime() {
@@ -59,12 +60,12 @@ public class CmpWorkOrder {
 		this.lastUpdateTime = lastUpdateTime;
 	}
 	
-	public String getAppNo() {
-		return appNo;
+	public String getOrderNo() {
+		return orderNo;
 	}
 
-	public void setAppNo(String appNo) {
-		this.appNo = appNo;
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 	
 	public String getAppType() {
@@ -298,4 +299,14 @@ public class CmpWorkOrder {
 	public void setVirNum(String virNum) {
 		this.virNum = virNum;
 	}
+
+	public String getApplyUserName() {
+		return applyUserName;
+	}
+
+	public void setApplyUserName(String applyUserName) {
+		this.applyUserName = applyUserName;
+	}
+	
+	
 }

@@ -1,7 +1,8 @@
 delete from sys_menu where menu_id in(121, 122, 123);
 INSERT INTO `sys_menu` VALUES ('121', '申请管理', '#', '0', '2', 'menu-icon fa fa-home blue', '2', '1');
 INSERT INTO `sys_menu` VALUES ('122', '资源申请', 'resAppPre.do', '121', '1', 'menu-icon fa fa-home blue', '1', '1');
-INSERT INTO `sys_menu` VALUES ('123', '运维服务申请', 'resAppPre.do', '121', '2', 'menu-icon fa fa-home blue', '1', '1');
+INSERT INTO `sys_menu` VALUES ('123', '运维服务申请', 'reqOperServicePre.do', '121', '2', 'menu-icon fa fa-home blue', '1', '1');
+INSERT INTO `sys_menu` VALUES ('137', '工单查询', 'queryUserApplyWorkOrderPre.do', '121', '3', 'menu-icon fa fa-home blue', '1', '1');
 
 truncate table cmp_dict;
 INSERT INTO `cmp_dict` VALUES ('1', '2017-11-13 00:40:29', '2017-11-12 21:58:37', 'plat_type', 'vmware', 'VMware', '平台类型', '1', '1');
@@ -36,3 +37,46 @@ INSERT INTO `cmp_dict` VALUES ('33', '2017-11-15 10:51:59', '2017-11-15 15:13:35
 INSERT INTO `cmp_dict` VALUES ('34', '2017-11-15 10:52:11', '2017-11-15 15:13:32', 'soft_ver', '2', 'v2', '软件版本', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('35', '2017-11-15 17:59:21', '2017-11-15 17:59:38', 'os_bit_num', '32', '32位', '位数', '0', '1');
 INSERT INTO `cmp_dict` VALUES ('36', '2017-11-15 17:59:36', '2017-11-15 18:34:44', 'os_bit_num', '64', '64位', '位数', '1', '2');
+INSERT INTO `cmp_dict` VALUES ('37', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '1', '中间件启停', '服务类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('38', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '2', '软件安装', '服务类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('39', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '3', '故障处理', '服务类型', '0', '3');
+INSERT INTO `cmp_dict` VALUES ('40', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '4', '系统分区', '服务类型', '0', '4');
+INSERT INTO `cmp_dict` VALUES ('41', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '5', '创建文件系统', '服务类型', '0', '5');
+INSERT INTO `cmp_dict` VALUES ('42', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '6', '挂载磁盘', '服务类型', '0', '6');
+INSERT INTO `cmp_dict` VALUES ('43', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '7', 'ROOT权限申请', '服务类型', '0', '7');
+INSERT INTO `cmp_dict` VALUES ('44', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '8', 'VIP添加', '服务类型', '0', '8');
+INSERT INTO `cmp_dict` VALUES ('47', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'middleware', '1', '消息队列MQ', '中间件', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('48', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'middleware', '2', '性能测试PTS', '中间件', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('49', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'middleware', '3', '业务实时监控ARMS', '中间件', '0', '3');
+INSERT INTO `cmp_dict` VALUES ('50', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'middleware', '4', '分布式关系型数据库DRDS', '中间件', '0', '4');
+INSERT INTO `cmp_dict` VALUES ('51', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_1', '1', '启动', '操作类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('52', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_1', '2', '停止', '操作类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('53', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_2', '1', '分区安装', '操作类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('54', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_2', '2', '直接安装', '操作类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('55', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_3', '1', '处理故障', '操作类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('57', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_4', '1', '分区', '操作类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('58', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_4', '2', '不分区', '操作类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('59', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_5', '1', 'ext2', '操作类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('60', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_5', '2', 'ext3', '操作类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('61', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_6', '1', '300G', '操作类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('62', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_6', '2', '500G', '操作类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('63', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_7', '1', '开通ROOT', '操作类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('65', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type_8', '1', 'VIP添加', '操作类型', '1', '1');
+
+INSERT INTO `cmp_dict` VALUES ('80', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'role', '1', '管理员', '角色类型', '2', '1');
+INSERT INTO `cmp_dict` VALUES ('81', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'role', '2', '申请者', '角色类型', '2', '2');
+INSERT INTO `cmp_dict` VALUES ('82', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'role', '3', '审核者', '角色类型', '2', '3');
+INSERT INTO `cmp_dict` VALUES ('83', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'role', '4', '实施者', '角色类型', '2', '4');
+
+INSERT INTO `cmp_dict` VALUES ('84', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_type', '1', '资源申请', '工单类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('85', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_type', '2', '运维申请', '工单类型', '0', '2');
+
+INSERT INTO `cmp_dict` VALUES ('90', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '0', '初始化', '工单状态', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('91', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '1', '审批中', '工单状态', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('86', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '2', '审批通过', '工单状态', '0', '3');
+INSERT INTO `cmp_dict` VALUES ('87', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '3', '审批不通过', '工单状态', '0', '4');
+INSERT INTO `cmp_dict` VALUES ('88', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '4', '运维执行', '工单状态', '0', '5');
+INSERT INTO `cmp_dict` VALUES ('89', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '5', '工单完成', '工单状态', '0', '6');
+
+
+INSERT INTO `cmp_sequence` VALUES ('cmp_order', '1', '1', '5', 'O');

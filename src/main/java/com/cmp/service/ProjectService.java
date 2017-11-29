@@ -3,6 +3,7 @@ package com.cmp.service;
 import java.math.BigInteger;
 import java.util.List;
 
+import com.cmp.entity.Project;
 import com.cmp.entity.ProjectUserMap;
 import com.cmp.sid.CmpDict;
 import com.fh.entity.Page;
@@ -49,6 +50,13 @@ public interface ProjectService {
 	 * @throws Exception
 	 */
 	public void deleteByProjectId(String id) throws Exception;
+
+	/**
+	 * 查询所有的项目
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Project> listAllProject() throws Exception;
 	
 	//项目列表查询
 	public List<CmpDict> getProjectList() throws Exception;

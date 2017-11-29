@@ -1,6 +1,6 @@
 DROP table if EXISTS cmp_order;
 CREATE TABLE `cmp_order` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `orderNo` varchar(20) NOT NULL COMMENT '清单编号：O+YYYYMMDD+00001',
   `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `lastUpdateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `status` varchar(10) DEFAULT NULL COMMENT '状态：0-待提交；1-已提交；T-套餐',
@@ -31,6 +31,21 @@ CREATE TABLE `cmp_order` (
   `expireDate` varchar(19) DEFAULT NULL COMMENT '到期时间',
   `virNum` varchar(10) DEFAULT NULL COMMENT '虚拟机数量',
   `pckgName` varchar(60) DEFAULT NULL COMMENT '套餐名称',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`orderNo`),
   KEY `indx_cmp_order_status` (`status`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='清单表';
+
+
+DROP TABLE IF EXISTS `cmp_op_serve`;
+CREATE TABLE `cmp_op_serve` (
+  `id` varchar(20) NOT NULL COMMENT 'ID',
+  `serviceType` varchar(20) NOT NULL COMMENT '务服类型',
+  `operType` varchar(20) NOT NULL COMMENT '作操类型',
+  `vm` varchar(20) DEFAULT NULL COMMENT '拟机虚',
+  `vmMsg` varchar(500) DEFAULT NULL COMMENT '请申虚拟机操作说明',
+  `middleware` varchar(20) DEFAULT NULL COMMENT '间件中',
+  `middlewareMsg` varchar(500) DEFAULT NULL COMMENT '请申中间件操作说明',
+  `appmsg` varchar(500) DEFAULT NULL COMMENT '维运申请说明',
+  `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '建创时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

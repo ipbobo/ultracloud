@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.entity.Project;
 import com.cmp.entity.ProjectUserMap;
 import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
@@ -86,6 +87,13 @@ public class ProjectServiceImpl implements ProjectService {
 		dao.delete("ProjectMapper.deleteByProjectId", id);
 	}
 
+
+	
+
+	public List<Project> listAllProject() throws Exception{
+		return (List<Project>)dao.findForList("ProjectMapper.listAllProject", null);
+	}
+	
 	//项目列表查询
 	@SuppressWarnings("unchecked")
 	public List<CmpDict> getProjectList() throws Exception {

@@ -15,7 +15,7 @@
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
 			<tr>
-				<td align="left" style="width: 60px;">ECS</td>
+				<td align="left" style="width: 60px;">ECS（${var.orderNo}）</td>
 				<td align="right" style="padding: 10px;">${var.virNum}台</td>
 			</tr>
 			<tr>
@@ -60,5 +60,8 @@
 	</c:forEach>
 	</c:if>
 </table>
+<script type="text/javascript">
+$("#buyHisNum").html("${buyHisNum}");
+</script>
 </body>
 </html>
