@@ -53,12 +53,10 @@
 									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">名称</th>
-									<th class="center">版本号</th>
-									<th class="center">用途</th>
-									<th class="center">创建者</th>
-									<th class="center">路径</th>
-									<th class="center">创建时间</th>
+									<th class="center">版本</th>
 									<th class="center">描述</th>
+									<th class="center">路径</th>
+									<th class="center">创建者</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -76,11 +74,9 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
 											<td class='center'>${var.version}</td>
-											<td class='center'>${var.purpose}</td>
-											<td class='center'>${var.username}</td>
-											<td class='center'  style="width: 200px;">${var.url}</td>
-											<td class='center' style="width: 170px;">${var.gmt_create}</td>
 											<td class='center'>${var.detail}</td>
+											<td class='center'  style="width: 200px;">${var.url}</td>
+											<td class='center'>${var.username}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
