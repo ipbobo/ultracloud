@@ -46,6 +46,16 @@
 								<td><input type="text" name="version" id="version" value="${pd.version}" maxlength="30" placeholder="这里输入版本号" title="版本号" style="width:98%;"/></td>
 							</tr>
 							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;">类别:</td>
+								<td id="js">
+									<select class="chosen-select form-control" name="type" id=type data-placeholder="请选择类别" style="vertical-align:top;"  title="类别" style="width:98%;" >
+									<c:forEach items="${dictionariesList}" var="dictionaries">
+										<option value="${dictionaries.NAME }" <c:if test="${dictionaries.NAME == pd.type }">selected</c:if>>${dictionaries.NAME }</option>
+									</c:forEach>
+									</select>
+								</td>
+							</tr>
+							<tr>
 								<td style="width:120px;text-align: right;padding-top: 13px;">直接输入路径:</td>
 								<td><input type="text" name="url" id="url" value="${pd.url}" maxlength="30" placeholder="这里输入路径" title="路径" style="width:98%;"/></td>
 							</tr>

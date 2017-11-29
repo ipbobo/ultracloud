@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmp.service.MediumService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.Dictionaries;
+import com.fh.service.system.dictionaries.impl.DictionariesService;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.FileUtil;
@@ -34,6 +36,9 @@ public class MediumController extends BaseController {
 	
 	@Resource(name="mediumService")
 	private MediumService mediumService;
+	
+	@Resource(name="dictionariesService")
+	private DictionariesService dictionariesService;
 	
 	/**保存
 	 * @param
@@ -120,6 +125,11 @@ public class MediumController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		
+		//查询介质类别
+		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("medium_type");
+		mv.addObject("dictionariesList", dictionariesList);
+		
 		mv.setViewName("automation/medium_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
@@ -136,6 +146,11 @@ public class MediumController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = mediumService.findById(pd);	//根据ID读取
+		
+		//查询介质类别
+		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("medium_type");
+		mv.addObject("dictionariesList", dictionariesList);
+		
 		mv.setViewName("automation/medium_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

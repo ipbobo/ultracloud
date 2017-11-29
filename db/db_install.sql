@@ -407,7 +407,7 @@ CREATE TABLE `t_medium` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '介质名称',
   `version` varchar(20) NOT NULL COMMENT '版本号',
-  `purpose` varchar(20) DEFAULT NULL COMMENT '用途',
+  `type` varchar(30) DEFAULT NULL COMMENT '类别',
   `url` varchar(1000) DEFAULT NULL COMMENT '路径',
   `filesize` varchar(20) DEFAULT NULL COMMENT '大小',
   `username` varchar(40) NOT NULL COMMENT '创建者',

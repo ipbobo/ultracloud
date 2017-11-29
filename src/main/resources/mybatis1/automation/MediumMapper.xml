@@ -6,7 +6,7 @@
 		<id column="id" property="id"/>
 		<result column="name" property="name"/>
 		<result column="version" property="version"/>
-		<result column="purpose" property="purpose"/>
+		<result column="type" property="type"/>
 		<result column="url" property="url"/>
 		<result column="username" property="username"/>
 		<result column="detail" property="detail"/>
@@ -29,7 +29,7 @@
 	<sql id="Field_main">
 		name,
 		version,
-		purpose,
+		type,
 		username,
 		url,
 		detail,
@@ -51,7 +51,7 @@
 	<sql id="FieldValue_main">	
 		#{name},
 		#{version},
-		#{purpose},
+		#{type},
 		#{username},
 		#{url},
 		#{detail},
@@ -89,11 +89,12 @@
 		set 
 			name = #{name},
 			version = #{version},
-			purpose = #{purpose},
+			type = #{type},
 			username = #{username},
 			url = #{url},
 			detail = #{detail},
-			filesize = #{filesize}
+			filesize = #{filesize},
+			type = #{type}
 		where 
 		id = #{id}
 	</update>
