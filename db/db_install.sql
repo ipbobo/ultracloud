@@ -78,6 +78,7 @@ CREATE TABLE `t_hostmachine` (
   `duedate` datetime DEFAULT NULL COMMENT '到期时间',
   `username` varchar(20) NOT NULL COMMENT '用户名',
   `password` varchar(20) NOT NULL COMMENT '密码',
+  `cluster_id` bigint unsigned NOT NULL COMMENT '集群id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   INDEX idx_type(`type`),
@@ -146,6 +147,7 @@ CREATE TABLE `t_network` (
 DROP TABLE IF EXISTS `t_datacenter_network_map`;
 CREATE TABLE `t_datacenter_network_map` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL COMMENT '名称',
   `datacenter_id` bigint unsigned NOT NULL COMMENT '数据中心id',
   `network_id` bigint unsigned NOT NULL COMMENT '网络id',
   `ippool` varchar(40) DEFAULT NULL COMMENT 'ip池',

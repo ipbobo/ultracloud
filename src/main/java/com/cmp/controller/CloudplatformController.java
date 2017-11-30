@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.CloudplatformService;
+import com.cmp.service.ClusterService;
+import com.cmp.service.DatacenterService;
+import com.cmp.service.DatacenternetworkService;
+import com.cmp.service.HostmachineService;
+import com.cmp.service.ResourceService;
+import com.cmp.service.StorageService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
@@ -21,7 +27,7 @@ import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 
 /**
- * 脚本 控制层
+ * 云平台 控制层
  */
 @Controller
 @RequestMapping(value = "/cloudplatform")
@@ -31,6 +37,24 @@ public class CloudplatformController extends BaseController {
 
 	@Resource(name = "cloudplatformService")
 	private CloudplatformService cloudplatformService;
+
+	@Resource(name = "resourceService")
+	private ResourceService resourceService;
+
+	@Resource(name = "datacenterService")
+	private DatacenterService datacenterService;
+
+	@Resource(name = "clusterService")
+	private ClusterService clusterService;
+
+	@Resource(name = "hostmachineService")
+	private HostmachineService hostmachineService;
+
+	@Resource(name = "storageService")
+	private StorageService storageService;
+
+	@Resource(name = "datacenternetworkService")
+	private DatacenternetworkService datacenternetworkService;
 
 	/**
 	 * 保存
@@ -73,7 +97,7 @@ public class CloudplatformController extends BaseController {
 	}
 
 	/**
-	 * 数据初始化
+	 * 跳云平台数据初始化页面
 	 * 
 	 * @param out
 	 * @throws Exception
@@ -85,6 +109,27 @@ public class CloudplatformController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String id = pd.getString("id");
+		pd = cloudplatformService.findById(pd);
+
+		// 同步云平台数据 Todo
+		resourceService.syncCloudData(pd.getString("type"), pd.getString("ip"), pd.getString("username"), pd.getString("password"));
+
+		// 查询所有数据中心记录
+		List<PageData> datacenterList = datacenterService.listAll(pd);
+		// 查询所有集群记录
+		List<PageData> clusterList = clusterService.listAll(pd);
+		// 查询所有宿主机记录
+		List<PageData> hmList = hostmachineService.listAll(pd);
+		// 查询所有存储记录
+		List<PageData> storageList = storageService.listAll(pd);
+		// 查询所有分配的网络记录
+		List<PageData> dcnList = datacenternetworkService.listAll(pd);
+
+		mv.addObject("datacenterList", datacenterList);
+		mv.addObject("clusterList", clusterList);
+		mv.addObject("hmList", hmList);
+		mv.addObject("storageList", storageList);
+		mv.addObject("dcnList", dcnList);
 		mv.setViewName("resource/cloudplatform_init");
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
