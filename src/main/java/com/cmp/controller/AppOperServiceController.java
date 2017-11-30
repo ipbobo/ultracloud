@@ -1,6 +1,8 @@
 package com.cmp.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.activiti.service.ActivitiService;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpWorkOrderService;
@@ -20,6 +23,7 @@ import com.cmp.sid.CmpOpServe;
 import com.cmp.sid.CmpWorkOrder;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.system.User;
+import com.fh.service.system.user.impl.UserService;
 import com.fh.util.Const;
 import com.fh.util.Jurisdiction;
 
@@ -35,10 +39,16 @@ public class AppOperServiceController  extends BaseController {
 	private CmpDictService cmpDictService;
 	
 	@Resource
-	private CmpOpServeService CmpOpServeService;
+	private CmpOpServeService cmpOpServeService;
 	
 	@Resource
 	private CmpWorkOrderService  cmpWorkOrderService;
+	
+	@Resource
+	private ActivitiService activitiService;
+	
+	@Resource
+	private UserService userService;
 	
 	//运维服务申请表单查询
 	@RequestMapping(value="/reqOperServicePre")
@@ -101,16 +111,29 @@ public class AppOperServiceController  extends BaseController {
 		opServe.setServiceType(serviceType);
 		opServe.setVm(vm);
 		opServe.setVmMsg(vmMsg);
-		CmpOpServeService.saveCmpOpServe(opServe);
+		cmpOpServeService.saveCmpOpServe(opServe);
 		
 		Session session = Jurisdiction.getSession();
 		User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
 		CmpWorkOrder workworder = new CmpWorkOrder();
-		workworder.setAppNo(String.valueOf(opServe.getId() == null ? "" : opServe.getId()));
+		workworder.setOrderNo(String.valueOf(opServe.getId() == null ? "" : opServe.getId()));
 		workworder.setAppType("2"); //运维服务申请
 		workworder.setStatus("0");  //工作流初始状态
-		workworder.setApplyUserId(String.valueOf(user.getUSER_ID()));
+		workworder.setApplyUserId(user.getUSERNAME());
 		cmpWorkOrderService.addWordOrder(workworder);
+		
+		//启动工作流
+		String procDefKey = "resapp";
+		String procInstId = activitiService.start(procDefKey, user.getUSERNAME(), workworder.getAppNo(), null);
+		//完成申请任务
+		//List<User> userList = userService.listAllUserByRoldId(pd)
+		activitiService.handleTask(workworder.getAppNo(), procInstId,  user.getUSERNAME(), null, null);
+		
+		//更新工单(流程实例ID 和 工单状态)
+		Map<String, String> updateParams = new HashMap<String, String>();
+		updateParams.put("procInstId", procInstId);
+		updateParams.put("status", "1");
+		cmpWorkOrderService.updateWorkOrder(workworder.getAppNo(), updateParams);
 		
 		mv.addObject("retMsg","递交成功!");
 		return mv;

@@ -9,11 +9,14 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.task.Task;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.activiti.service.ActivitiService;
 import com.cmp.entity.Project;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpWorkOrderService;
@@ -42,6 +45,9 @@ public class CmpWorkOrderController extends BaseController{
 	@Resource(name="projectService")
 	private ProjectService projectService;
 	
+	@Resource
+	private ActivitiService activitiService;
+	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
 		Session session = Jurisdiction.getSession();
@@ -58,13 +64,15 @@ public class CmpWorkOrderController extends BaseController{
 		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
-//		pd.put("appType", pd.get("workorder_type"));
-//		pd.put("status", pd.get("workorder_status"));
-//		pd.put("projectCode", pd.get("project"));
-//		pd.put("id", pd.get("workorder_id"));
-//		pd.put("time", pd.get("workorder_time"));
-//		pd.put("applyUserId", userr.getUSER_ID());
+		pd.put("USERNAME", userr.getUSERNAME());
 		page.setPd(pd);
+		
+		
+		//查询用户组任务
+		//List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), page.getCurrentPage()+1, page.getShowCount());
+		//查询工作流中到个人的工单
+		//com.cmp.util.Page<TaskBean> taskBeans = activitiService.getPersonalTaskList(userr.getUSERNAME(), page.getCurrentPage()+1, page.getShowCount());
+		
 		//根据用户类别查询不同的工单
 		//申请者可查询自己申请的工单
 		List<PageData> workOrderList = new ArrayList<PageData>();
@@ -100,6 +108,170 @@ public class CmpWorkOrderController extends BaseController{
 		mv.addObject("QX", qxMap); // 右侧按钮权限
 		mv.setViewName("workorder/query_user_workorder");
 		return mv;
+	}
+	
+	@RequestMapping(value="/goWorkorderCheck")
+	public ModelAndView goWorkorderCheck(String appNo) throws Exception {
+		
+		ModelAndView mv = new ModelAndView();
+		if (appNo == null || appNo.length() == 0) {
+			return null;
+		}
+		CmpWorkOrder toCheckWorkorder = cmpWorkOrderService.findByAppNo(appNo);
+		String toCheckUrl = "";
+		//是资源申请，跳资源申请审核页面或运维申请审核页面
+		if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("1")) {
+			toCheckUrl = "workorder/applycheck";
+		}else if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("2")) {
+			toCheckUrl = "workorder/opercheck";
+		}
+		mv.addObject("workorder", toCheckWorkorder);
+		mv.setViewName(toCheckUrl);
+		return mv;
+	}
+	
+	@RequestMapping(value="/goWorkorderExecute")
+	public ModelAndView goWorkorderExecute(String appNo) throws Exception {
+		
+		ModelAndView mv = new ModelAndView();
+		if (appNo == null || appNo.length() == 0) {
+			return null;
+		}
+		CmpWorkOrder toExcuteWorkorder = cmpWorkOrderService.findByAppNo(appNo);
+		String toExecuteUrl = "";
+		//是资源申请，跳资源申请实施页面或运维申请实施页面
+		if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("1")) {
+			toExecuteUrl = "workorder/applyexecute";
+		}else if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("2")) {
+			toExecuteUrl = "workorder/operexecute";
+		}
+		mv.addObject("workorder", toExcuteWorkorder);
+		mv.setViewName(toExecuteUrl);
+		return mv;
+	}
+	
+	
+	@RequestMapping(value="/goWorkorderView")
+	public ModelAndView goWorkorderView(String appNo) throws Exception {
+		
+		ModelAndView mv = new ModelAndView();
+		if (appNo == null || appNo.length() == 0) {
+			return null;
+		}
+		CmpWorkOrder toViewWorkorder = cmpWorkOrderService.findByAppNo(appNo);
+		String toCheckUrl = "";
+		//是资源申请，跳资源申请审核页面或运维申请审核页面
+		if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("1")) {
+			toCheckUrl = "workorder/applyview";
+		}else if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("2")) {
+			toCheckUrl = "workorder/operview";
+		}
+		mv.addObject("workorder", toViewWorkorder);
+		mv.setViewName(toCheckUrl);
+		return mv;
+	}
+	
+	
+	/**工单审核
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/doCheck")
+	@ResponseBody
+	public Object doCheck(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		Map<String,String> map = new HashMap<String,String>();
+		String resultInfo = "审核失败";
+		String appNo = request.getParameter("appNo");
+		Session session = Jurisdiction.getSession();
+		
+		CmpWorkOrder toCheckWorkorder = cmpWorkOrderService.findByAppNo(appNo);
+		if (toCheckWorkorder == null) {
+			resultInfo = "审核失败,工单号不存在";
+			map.put("result", resultInfo);	
+			return map;
+		}
+		User userr = (User)session.getAttribute(Const.SESSION_USERROL);				//读取session中的用户信息(含角色信息)
+		if (userr == null) {
+			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
+			if (user == null) {
+				map.put("result", resultInfo);	
+				return map;
+			}
+			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
+			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
+		}
+		
+		
+		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 100);
+		for (Task task : userTaskList) {
+			if (task.getProcessInstanceId().equals(toCheckWorkorder.getProcInstId())) {
+				activitiService.claimTask(task.getId(), userr.getUSERNAME());
+				activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, null);
+				
+				//更新工单(流程实例ID 和 工单状态)
+				Map<String, String> updateParams = new HashMap<String, String>();
+				updateParams.put("status", "4");  //进入运维执行状态
+				updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
+				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+				
+				resultInfo = "审核成功";
+				map.put("result", resultInfo);	
+				return map;
+			}
+		}
+		map.put("result", resultInfo);				//返回结果
+		return map;
+	}
+	
+	/**工单执行
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/doExecute")
+	@ResponseBody
+	public Object doExecute(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		Map<String,String> map = new HashMap<String,String>();
+		String resultInfo = "执行失败";
+		String appNo = request.getParameter("appNo");
+		Session session = Jurisdiction.getSession();
+		
+		CmpWorkOrder toCheckWorkorder = cmpWorkOrderService.findByAppNo(appNo);
+		if (toCheckWorkorder == null) {
+			resultInfo = "执行失败,工单号不存在";
+			map.put("result", resultInfo);	
+			return map;
+		}
+		User userr = (User)session.getAttribute(Const.SESSION_USERROL);				//读取session中的用户信息(含角色信息)
+		if (userr == null) {
+			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
+			if (user == null) {
+				map.put("result", resultInfo);	
+				return map;
+			}
+			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
+			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
+		}
+		
+		
+		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 100);
+		for (Task task : userTaskList) {
+			if (task.getProcessInstanceId().equals(toCheckWorkorder.getProcInstId())) {
+				activitiService.claimTask(task.getId(), userr.getUSERNAME());
+				activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, null);
+				
+				//更新工单(流程实例ID 和 工单状态)
+				Map<String, String> updateParams = new HashMap<String, String>();
+				updateParams.put("status", "5");  //进入运维执行状态
+				updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
+				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+				
+				resultInfo = "执行成功";
+				map.put("result", resultInfo);	
+				return map;
+			}
+		}
+		map.put("result", resultInfo);				//返回结果
+		return map;
 	}
 	
 	public Map getAppTypeNameMap() {

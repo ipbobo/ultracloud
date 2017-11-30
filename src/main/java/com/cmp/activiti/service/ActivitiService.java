@@ -222,6 +222,21 @@ public class ActivitiService {
   		return map;
   	}
   	
+  	//查询用户组任务
+  	public List<Task> findGroupList(String currUser, int currPage, int qryNum){
+		List<Task> tasklist = taskService.createTaskQuery()//
+		                .taskCandidateUser(currUser)//指定组任务查询
+		                .listPage((currPage-1)*qryNum, currPage*qryNum);
+		return tasklist;
+  	}
+
+  	
+  	//拾取任务
+  	public void claimTask(String taskId, String currUser){
+  		taskService.claim(taskId, currUser);
+	}
+
+  	
   	//获取候选人及候选组
   	private Map<String, String> getCandidateMap(String taskId){
   		Map<String, String> map=new HashMap<String, String>();

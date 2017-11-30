@@ -594,6 +594,7 @@
 			<artifactId>activiti-modeler</artifactId>
 			<version>5.19.0</version>
 		</dependency>
+		
 		<dependency>
 		    <groupId>org.activiti</groupId>
 		    <artifactId>activiti-mule</artifactId>

@@ -1,6 +1,7 @@
 package com.cmp.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -36,5 +37,16 @@ public class CmpWorkOrderService {
 	//查询个人申请 工单
 	public List<PageData> listUserWorkorderByPd(Page page) throws Exception{
 		return (List<PageData>)dao.findForList("CmpWorkOrderMapper.workorderlistPage", page);
+	}
+	
+	
+	public void updateWorkOrder(String appNo, Map<String, String> params) throws Exception {
+		params.put("appNo", appNo);
+		dao.update("CmpWorkOrderMapper.updateWorkOrder", params);
+	}
+
+	public CmpWorkOrder findByAppNo(String appNo) throws Exception {
+		CmpWorkOrder workOrder = (CmpWorkOrder)dao.findForObject("CmpWorkOrderMapper.findByAppNo", appNo);
+		return workOrder;
 	}
 }

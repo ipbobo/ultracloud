@@ -118,20 +118,20 @@
 											
 											
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.id}</td>
+											<td class='center'>${var.appNo}</td>
 											<td class='center'> 
 												<c:if test="${var.appType == '1'}"> 资源申请  </c:if>
 												<c:if test="${var.appType == '2'}"> 运维申请  </c:if>
 												 </td>
 											<td class='center'>
-												<c:if test="${var.status} == '0'}"> 初始化  </c:if>
-												<c:if test="${var.status} == '1'}"> 审批中  </c:if>
-												<c:if test="${var.status} == '2'}"> 审批通过  </c:if>
-												<c:if test="${var.status} == '3'}"> 审批不通过  </c:if>
-												<c:if test="${var.status} == '4'}"> 运维执行  </c:if>
-												<c:if test="${var.status} == '5'}"> 工单完成  </c:if>
+												<c:if test="${var.status == '0'}"> 初始化  </c:if>
+												<c:if test="${var.status == '1'}"> 审批中  </c:if>
+												<c:if test="${var.status == '2'}"> 审批通过  </c:if>
+												<c:if test="${var.status == '3'}"> 审批不通过  </c:if>
+												<c:if test="${var.status == '4'}"> 运维执行  </c:if>
+												<c:if test="${var.status == '5'}"> 工单完成  </c:if>
 											</td>
-											<td class='center'></td>
+											<td class='center'>${var.projectCode}</td>
 											<td class='center'>${var.createTime}</td>
 											
 											<td class="center">
@@ -139,14 +139,29 @@
 													<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
-													<c:if test="${QX.query == 1 }">
-													<a class="btn btn-xs btn-success" title="查看" onclick="query('${var.id}');">
+													<c:if test="${QX.check == 1  and var.status != '1'}">
+													<a class="btn btn-xs btn-success" title="查看" onclick="query('${var.appNo}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看"></i>
 													</a>
 													</c:if>
-													<c:if test="${QX.check == 1 }">
-													<a class="btn btn-xs btn-danger" onclick="check('${var.id}');">
+													<c:if test="${QX.check == 1  and var.status == '1'}">
+													<a class="btn btn-xs btn-danger" onclick="check('${var.appNo}');">
 														<i class="ace-icon fa fa-trash-o bigger-120" title="审核"></i>
+													</a>
+													</c:if>
+													<c:if test="${QX.query == 1}">
+													<a class="btn btn-xs btn-success" title="查看" onclick="query('${var.appNo}');">
+														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看"></i>
+													</a>
+													</c:if>
+													<c:if test="${QX.execute == 1  and var.status != '4'}">
+													<a class="btn btn-xs btn-success" title="查看" onclick="query('${var.appNo}');">
+														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看"></i>
+													</a>
+													</c:if>
+													<c:if test="${QX.execute == 1  and var.status == '4'}">
+													<a class="btn btn-xs btn-danger" onclick="execute('${var.appNo}');">
+														<i class="ace-icon fa fa-trash-o bigger-120" title="实施"></i>
 													</a>
 													</c:if>
 												</div>
@@ -159,7 +174,7 @@
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 															<c:if test="${QX.query == 1 }">
 															<li>
-																<a style="cursor:pointer;" onclick="query('${var.id}');" class="tooltip-success" data-rel="tooltip" title="查看">
+																<a style="cursor:pointer;" onclick="query('${var.appNo}');" class="tooltip-success" data-rel="tooltip" title="查看">
 																	<span class="green">
 																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																	</span>
@@ -168,7 +183,7 @@
 															</c:if>
 															<c:if test="${QX.check == 1 }">
 															<li>
-																<a style="cursor:pointer;" onclick="check('${var.id}');" class="tooltip-error" data-rel="tooltip" title="审核">
+																<a style="cursor:pointer;" onclick="check('${var.appNo}');" class="tooltip-error" data-rel="tooltip" title="审核">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -238,7 +253,7 @@
 	//检索
 	function tosearch(){
 		top.jzts();
-		$("#Form").submit();
+		$("#queryForm").submit();
 	}
 	$(function() {
 		//复选框全选控制
@@ -253,24 +268,17 @@
 		});
 	});
 	
-	//新增
-	function add(){
+	//审查工单
+	function check(appNo){
 		 top.jzts();
 		 var diag = new top.Dialog();
 		 diag.Drag=true;
-		 diag.Title ="新增";
-		 diag.URL = '<%=basePath%>project/goAdd.do';
+		 diag.Title ="工单审查";
+		 diag.URL = '<%=basePath%>goWorkorderCheck.do?appNo='+ appNo;
 		 diag.Width = 992;
 		 diag.Height = 580;
 		 diag.CancelEvent = function(){ //关闭事件
-			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-				 if('${page.currentPage}' == '0'){
-					 top.jzts();
-					 setTimeout("self.location=self.location",100);
-				 }else{
-					 nextPage(${page.currentPage});
-				 }
-			}
+			 tosearch();
 			diag.close();
 		 };
 		 diag.show();
@@ -278,36 +286,30 @@
 	
 	
 	//查询
-	function query(Id){
+	function query(appNo){
 		top.jzts();
 		 var diag = new top.Dialog();
 		 diag.Drag=true;
-		 diag.Title ="工单详情";
-		 diag.URL = '<%=basePath%>workorder/goDetail.do?id='+Id;
+		 diag.Title ="工单查询";
+		 diag.URL = '<%=basePath%>goWorkorderView.do?appNo='+ appNo;
 		 diag.Width = 992;
 		 diag.Height = 580;
 		 diag.CancelEvent = function(){ //关闭事件
-			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-				 nextPage(${page.currentPage});
-			}
 			diag.close();
 		 };
 		 diag.show();
 	}
-	
-	//修改
-	function edit(Id){
-		 top.jzts();
+	//实施
+	function execute(appNo){
+		top.jzts();
 		 var diag = new top.Dialog();
 		 diag.Drag=true;
-		 diag.Title ="编辑";
-		 diag.URL = '<%=basePath%>project/goEdit.do?id='+Id;
+		 diag.Title ="工单实施";
+		 diag.URL = '<%=basePath%>goWorkorderExecute.do?appNo='+ appNo;
 		 diag.Width = 992;
 		 diag.Height = 580;
 		 diag.CancelEvent = function(){ //关闭事件
-			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-				 nextPage(${page.currentPage});
-			}
+			tosearch();
 			diag.close();
 		 };
 		 diag.show();
