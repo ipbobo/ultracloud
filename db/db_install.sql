@@ -15,37 +15,36 @@ CREATE TABLE `t_environment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='环境'; 
 
 -- ----------------------------
+-- 云平台
+-- ----------------------------
+DROP TABLE IF EXISTS `t_cloudplatform`;
+CREATE TABLE `t_cloudplatform` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL COMMENT '名称',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `ip` varchar(20) DEFAULT NULL COMMENT '虚拟机ip',
+  `username` varchar(20) NOT NULL COMMENT '用户名',
+  `password` varchar(20) NOT NULL COMMENT '密码',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='云平台'; 
+
+-- ----------------------------
 -- 数据中心
 -- ----------------------------
 DROP TABLE IF EXISTS `t_datacenter`;
 CREATE TABLE `t_datacenter` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
-  `areacode` varchar(20) DEFAULT NULL COMMENT '地域',
+  `cpf_id` bigint unsigned NOT NULL COMMENT '云平台id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_areacode(`areacode`),
+  INDEX idx_cpf_id(`cpf_id`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心'; 
-
--- ----------------------------
--- 资源池
--- ----------------------------
-DROP TABLE IF EXISTS `t_resourcepool`;
-CREATE TABLE `t_resourcepool` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL COMMENT '名称',
-  `type` tinyint unsigned NOT NULL COMMENT '类型',
-  `ip` varchar(20) NOT NULL COMMENT '资源池ip或域名',
-  `username` varchar(20) NOT NULL COMMENT '用户名',
-  `password` varchar(20) NOT NULL COMMENT '密码',
-  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_type(`type`),
-  PRIMARY KEY (`id`)
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='资源池'; 
 
 -- ----------------------------
 -- 集群
@@ -54,10 +53,10 @@ DROP TABLE IF EXISTS `t_cluster`;
 CREATE TABLE `t_cluster` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
-  `resourcepool_id` bigint unsigned DEFAULT NULL COMMENT '资源池id',
+  `datacenter_id` bigint unsigned DEFAULT NULL COMMENT '数据中心id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_resourcepool_id(`resourcepool_id`),
+  INDEX idx_datacenter_id(`datacenter_id`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='集群'; 
@@ -142,21 +141,21 @@ CREATE TABLE `t_network` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网络'; 
 
 -- ----------------------------
--- 资源池与网络关联
+-- 数据中心与网络关联
 -- ----------------------------
-DROP TABLE IF EXISTS `t_resourcepool_network_map`;
-CREATE TABLE `t_resourcepool_network_map` (
+DROP TABLE IF EXISTS `t_datacenter_network_map`;
+CREATE TABLE `t_datacenter_network_map` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `resourcepool_id` bigint unsigned NOT NULL COMMENT '资源池id',
+  `datacenter_id` bigint unsigned NOT NULL COMMENT '数据中心id',
   `network_id` bigint unsigned NOT NULL COMMENT '网络id',
   `ippool` varchar(40) DEFAULT NULL COMMENT 'ip池',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_resourcepool_id(`resourcepool_id`),
+  INDEX idx_datacenter_id(`datacenter_id`),
   INDEX idx_network_id(`network_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='资源池与网络关联'; 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心与网络关联'; 
 
 -- ----------------------------
 -- 虚拟机
