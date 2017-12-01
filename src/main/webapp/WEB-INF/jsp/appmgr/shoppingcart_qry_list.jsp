@@ -64,6 +64,7 @@ function batchBuy(){
 	    success: function(data){
 	    	alert(data.retMsg);
 		    $("#shoppingCartNum").html(($("#shoppingCartNum").html())*1-len);
+		    $("#buyHisNum").html(($("#buyHisNum").html())*1+len);
 		    maskLayerClick();//关闭遮罩层
 	    },
 	    error: function(data) {
