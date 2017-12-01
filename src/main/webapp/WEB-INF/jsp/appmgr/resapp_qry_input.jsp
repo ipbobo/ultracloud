@@ -600,7 +600,7 @@ $(window).scroll(function() {
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;存储</td>
-			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">数据盘：</td>
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<table id="diskTableId">
 					<tr id="diskTrId">
@@ -626,7 +626,7 @@ $(window).scroll(function() {
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;软件安装</td>
-			<td align="right" style="width: 120px;padding:10px;">安装软件：</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<table id="softTableId">
 					<tr id="softTrId">

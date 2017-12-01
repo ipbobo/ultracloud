@@ -78,7 +78,6 @@ public class AppMgrController extends BaseController {
 	//套餐申请预查询
 	@RequestMapping(value="/pckgAppPre")
 	public ModelAndView pckgAppPre() throws Exception{
-		List<CmpOrder> pckgList=cmpOrderService.getPckgList();//套餐列表查询
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
 		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
@@ -96,7 +95,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", cmpDictService.getCmpDictList("soft_code"));//软件代码列表
 		mv.addObject("softVerList", cmpDictService.getCmpDictList("soft_ver"));//软件版本列表
-		mv.addObject("pckgList", pckgList);//软件版本列表
+		mv.addObject("pckgList", cmpOrderService.getPckgList());//套餐列表查询
 		mv.setViewName("appmgr/resapp_pckg_input");
 		return mv;
 	}
