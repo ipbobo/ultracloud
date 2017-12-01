@@ -41,6 +41,7 @@
 	<link rel="stylesheet" type="text/css" href="plugins/websocketInstantMsg/css/websocket.css" />
 	<script type="text/javascript" src="plugins/websocketInstantMsg/ext4/ext-all-debug.js"></script>
 	<script type="text/javascript" src="plugins/websocketInstantMsg/websocket.js"></script>
+	<jsp:include page="../../msg/msg_dialog.jsp"></jsp:include>
 	<!-- 即时通讯 -->
 	
 </head>
@@ -248,7 +249,9 @@
 		}
 		queryPersonalTask();
 		function goTask(taskId){
-			alert("去执行任务" + taskId);
+			alert("aaaa");
+			showDialog("去执行任务");
+			//alert("去执行任务" + taskId);
 		}
 	</script>
 	</body>

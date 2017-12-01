@@ -42,44 +42,43 @@ public class MsgRemindController extends BaseController{
 	 */
 	@RequestMapping(value="/main/queryTasks")
 	@ResponseBody
-	public Object queryPersonalTask(String userId) {
+	public Object queryPersonalTask() {
 		Map<String,Object> outmap = new HashMap<String,Object>();
 		int totalTaskNo = 0;
 		String errInfo = "success";
 		Session session = Jurisdiction.getSession();
 		User userr = (User)session.getAttribute(Const.SESSION_USERROL);
 		outmap.put("user", userr);
-		
-		List<TaskBean> tasks = new ArrayList<>();
+		String userName = userr.getUSERNAME();
 		//根据用户类型不同，查询不同的任务
 		if (userr.getRole().getTYPE().equals(Role.TYPE_APPLICANT)) {
 			//获取退回任务数
-			int returnedTaskNum = msgRemindService.countReceiveTask(userId);
+			int returnedTaskNum = msgRemindService.countReceiveTask(userName);
 			outmap.put("returnedTaskNum", returnedTaskNum);
 			//获取处理中任务数
-			int unfinishTaskNum = msgRemindService.countUserUnfinishTask(userId, userr.getRole().getTYPE()) - returnedTaskNum;
+			int unfinishTaskNum = msgRemindService.countUserUnfinishTask(userName, userr.getRole().getTYPE()) - returnedTaskNum;
 			outmap.put("unfinishTaskNum", unfinishTaskNum);
 			//获取工单完成任务数
-			int finishedTaskNum = msgRemindService.countUserfinishTask(userId, userr.getRole().getTYPE());
+			int finishedTaskNum = msgRemindService.countUserfinishTask(userName, userr.getRole().getTYPE());
 			outmap.put("finishedTaskNum", finishedTaskNum);
 			totalTaskNo = unfinishTaskNum + finishedTaskNum;
 		}
 		if (userr.getRole().getTYPE().equals(Role.TYPE_AUDIT)) {
 			//获取待审批任务数
-			int dealingTaskNum = msgRemindService.countReceiveTask(userId);
+			int dealingTaskNum = msgRemindService.countReceiveTask(userName);
 			outmap.put("dealingTaskNum", dealingTaskNum);
 			totalTaskNo = dealingTaskNum;
 		}
 		
 		if (userr.getRole().getTYPE().equals(Role.TYPE_EXECUTOR)) {
 			//获取待处理任务数
-			int dealingTaskNum = msgRemindService.countReceiveTask(userId);
+			int dealingTaskNum = msgRemindService.countReceiveTask(userName);
 			outmap.put("dealingTaskNum", dealingTaskNum);
 			//获取处理中任务
-			int unfinishTaskNum = msgRemindService.countUserUnfinishTask(userId, userr.getRole().getTYPE());
+			int unfinishTaskNum = msgRemindService.countUserUnfinishTask(userName, userr.getRole().getTYPE());
 			outmap.put("unfinishTaskNum", unfinishTaskNum);
 			//获取工单完成任务数
-			int finishedTaskNum = msgRemindService.countUserfinishTask(userId, userr.getRole().getTYPE());
+			int finishedTaskNum = msgRemindService.countUserfinishTask(userName, userr.getRole().getTYPE());
 			outmap.put("finishedTaskNum", finishedTaskNum);
 			totalTaskNo = unfinishTaskNum + finishedTaskNum;
 		}
