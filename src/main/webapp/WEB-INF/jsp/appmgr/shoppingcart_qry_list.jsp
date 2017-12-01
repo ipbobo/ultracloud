@@ -33,6 +33,7 @@ function clearShoppingCart(){
 		    	alert(data.retMsg);
 		    	$("input:checkbox[name='orderNo']").each(function() {
 					$(this).parent().parent().remove();
+					$("#shoppingCartNum").html(0);
 				});
 		    },
 		    error: function(data) {
@@ -62,6 +63,7 @@ function batchBuy(){
 	    dataType: 'json',  
 	    success: function(data){
 	    	alert(data.retMsg);
+		    $("#shoppingCartNum").html(($("#shoppingCartNum").html())*1-len);
 		    maskLayerClick();//关闭遮罩层
 	    },
 	    error: function(data) {
