@@ -14,12 +14,12 @@ CREATE TABLE `cmp_order` (
   `virIp` varchar(20) DEFAULT NULL COMMENT '虚拟机IP',
   `cpu` varchar(10) DEFAULT NULL COMMENT 'CPU',
   `memory` varchar(10) DEFAULT NULL COMMENT '内存',
-  `diskType` varchar(300) DEFAULT NULL COMMENT '磁盘类型，多个用英文逗号分隔',
-  `diskSize` varchar(300) DEFAULT NULL COMMENT '磁盘大小，多个用英文逗号分隔',
-  `diskEncrypt` varchar(300) DEFAULT NULL COMMENT '磁盘加密，多个用英文逗号分隔',
-  `softCode` varchar(300) DEFAULT NULL COMMENT '软件代码，多个用英文逗号分隔',
-  `softVer` varchar(300) DEFAULT NULL COMMENT '软件版本，多个用英文逗号分隔',
-  `softParam` varchar(300) DEFAULT NULL COMMENT '软件参数，多个用英文逗号分隔',
+  `diskType` varchar(3000) DEFAULT NULL COMMENT '磁盘类型，多个用英文逗号分隔',
+  `diskSize` varchar(3000) DEFAULT NULL COMMENT '磁盘大小，多个用英文逗号分隔',
+  `diskEncrypt` varchar(3000) DEFAULT NULL COMMENT '磁盘加密，多个用英文逗号分隔',
+  `softCode` varchar(3000) DEFAULT NULL COMMENT '软件代码，多个用英文逗号分隔',
+  `softVer` varchar(3000) DEFAULT NULL COMMENT '软件版本，多个用英文逗号分隔',
+  `softParam` varchar(3000) DEFAULT NULL COMMENT '软件参数，多个用英文逗号分隔',
   `projectCode` varchar(32) DEFAULT NULL COMMENT '项目代码',
   `osType` varchar(20) DEFAULT NULL COMMENT '操作系统类型',
   `osBitNum` varchar(10) DEFAULT NULL COMMENT '操作系统位数',
@@ -34,18 +34,3 @@ CREATE TABLE `cmp_order` (
   PRIMARY KEY (`orderNo`),
   KEY `indx_cmp_order_status` (`status`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='清单表';
-
-
-DROP TABLE IF EXISTS `cmp_op_serve`;
-CREATE TABLE `cmp_op_serve` (
-  `id` varchar(20) NOT NULL COMMENT 'ID',
-  `serviceType` varchar(20) NOT NULL COMMENT '务服类型',
-  `operType` varchar(20) NOT NULL COMMENT '作操类型',
-  `vm` varchar(20) DEFAULT NULL COMMENT '拟机虚',
-  `vmMsg` varchar(500) DEFAULT NULL COMMENT '请申虚拟机操作说明',
-  `middleware` varchar(20) DEFAULT NULL COMMENT '间件中',
-  `middlewareMsg` varchar(500) DEFAULT NULL COMMENT '请申中间件操作说明',
-  `appmsg` varchar(500) DEFAULT NULL COMMENT '维运申请说明',
-  `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '建创时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
