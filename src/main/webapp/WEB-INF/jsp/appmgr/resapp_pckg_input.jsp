@@ -58,24 +58,24 @@ function addPckgDiskRow(diskType, diskSize, diskEncrypt){
 }
 
 //新增套餐软件安装行
-function addPckgSoftRow(softName, softVer, softParam){
-	var softNames=softName.split(",");
+function addPckgSoftRow(softCode, softVer, softParam){
+	var softCodes=softCode.split(",");
     var softVers=softVer.split(",");
     var softParams=softParam.split(",");
     $.each($("#tcsoftTableId tr"), function (i, item) {
     	if(i!=0)item.remove();
 	});
 	
-	$("#tcsoftName").val(softNames[0]);
+	$("#tcsoftCode").val(softCodes[0]);
     $("#tcsoftVer").val(softVers[0]);
     $("#tcsoftParam").val(softParams[0]);
-    $.each(softNames, function (i, item) {
+    $.each(softCodes, function (i, item) {
 	    if(i!=0){
-	    	var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"tcsoftName\" id=\"tcsoftName"+i+"\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcsoftName").html()+"</select></td>"
+	    	var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"tcsoftCode\" id=\"tcsoftCode"+i+"\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcsoftCode").html()+"</select></td>"
 		    	+"<td align=\"left\" style=\"width: 120px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"tcsoftVer\" id=\"tcsoftVer"+i+"\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcsoftVer").html()+"</select></td>"
 			    +"<td align=\"left\" style=\"width: 120x;padding-top:10px;\"><input type=\"hidden\" name=\"tcsoftParam\" id=\"tcsoftParam"+i+"\" value=\"\"/></td>";
 			$("#tcsoftTableId").append("<tr>"+tdStr+"</tr>");
-		    $("#tcsoftName"+i).val(item);
+		    $("#tcsoftCode"+i).val(item);
 		    $("#tcsoftVer"+i).val(softVers[i]);
 		    $("#tcsoftParam"+i).val(softParams[i]);
 	    }
@@ -102,7 +102,7 @@ function choosePckg(jsonStr){
 	$("#tcexpireDate").val(jsonObj.imgExpireDate);
 	$("#tcvirNum").val(jsonObj.virNum);
 	addPckgDiskRow(jsonObj.diskType, jsonObj.diskSize, jsonObj.diskEncrypt);//新增套餐磁盘行
-	addPckgSoftRow(jsonObj.softName, jsonObj.softVer, jsonObj.softParam);//新增套餐软件安装行
+	addPckgSoftRow(jsonObj.softCode, jsonObj.softVer, jsonObj.softParam);//新增套餐软件安装行
 }
 </script>
 </head>
@@ -163,7 +163,7 @@ function choosePckg(jsonStr){
 				<c:forEach items="${pckgList}" var="var" varStatus="st">
 				<tr>
 					<td align="left" style="width: 120px;padding:10px;border-right:1px solid #cccccc;border-bottom:1px solid #cccccc;">
-						<span style="float: left;"><input type="radio" name="tcName" id="tctableId" onclick='choosePckg("{\"id\":\"${var.orderNo}\",\"envCode\":\"${var.envCode}\",\"projectCode\":\"${var.projectCode}\",\"resType\":\"${var.resType}\",\"virName\":\"${var.virName}\",\"cpu\":\"${var.cpu}\",\"memory\":\"${var.memory}\",\"osType\":\"${var.osType}\",\"osBitNum\":\"${var.osBitNum}\",\"imgCode\":\"${var.imgCode}\",\"imgUserName\":\"${var.imgUserName}\",\"imgUserPass\":\"${var.imgUserPass}\",\"imgPath\":\"${var.imgPath}\",\"imgExpireDate\":\"${var.imgExpireDate}\",\"diskType\":\"${var.diskType}\",\"diskSize\":\"${var.diskSize}\",\"diskEncrypt\":\"${var.diskEncrypt}\",\"softName\":\"${var.softName}\",\"softVer\":\"${var.softVer}\",\"softParam\":\"${var.softParam}\",\"expireDate\":\"${var.expireDate}\",\"virNum\":\"${var.virNum}\"}	")'/>${var.pckgName}</span>
+						<span style="float: left;"><input type="radio" name="tcName" id="tctableId" onclick='choosePckg("{\"id\":\"${var.orderNo}\",\"envCode\":\"${var.envCode}\",\"projectCode\":\"${var.projectCode}\",\"resType\":\"${var.resType}\",\"virName\":\"${var.virName}\",\"cpu\":\"${var.cpu}\",\"memory\":\"${var.memory}\",\"osType\":\"${var.osType}\",\"osBitNum\":\"${var.osBitNum}\",\"imgCode\":\"${var.imgCode}\",\"imgUserName\":\"${var.imgUserName}\",\"imgUserPass\":\"${var.imgUserPass}\",\"imgPath\":\"${var.imgPath}\",\"imgExpireDate\":\"${var.imgExpireDate}\",\"diskType\":\"${var.diskType}\",\"diskSize\":\"${var.diskSize}\",\"diskEncrypt\":\"${var.diskEncrypt}\",\"softCode\":\"${var.softCode}\",\"softVer\":\"${var.softVer}\",\"softParam\":\"${var.softParam}\",\"expireDate\":\"${var.expireDate}\",\"virNum\":\"${var.virNum}\"}	")'/>${var.pckgName}</span>
 						<div style="float: left;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delPckg(this, '${var.orderNo}', '${var.pckgName}')" class="img_close"></div>
 					</td>
 					<td style="border-bottom:1px solid #cccccc;">
@@ -357,9 +357,9 @@ function choosePckg(jsonStr){
 			<table id="tcsoftTableId">
 				<tr>
 					<td align="left" style="width: 120px;padding-right:10px;">
-						<select class="chosen-select form-control" name="tcsoftName" id="tcsoftName" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;" disabled>
+						<select class="chosen-select form-control" name="tcsoftCode" id="tcsoftCode" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;" disabled>
 						<option value="">请选择</option>
-						<c:forEach items="${softNameList}" var="var">
+						<c:forEach items="${softCodeList}" var="var">
 							<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
 						</c:forEach>
 					  	</select>

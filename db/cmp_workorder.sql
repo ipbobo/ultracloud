@@ -20,7 +20,7 @@ CREATE TABLE `cmp_workorder` (
   `diskType` varchar(300) DEFAULT NULL COMMENT '磁盘类型，多个用英文逗号分隔',
   `diskSize` varchar(300) DEFAULT NULL COMMENT '磁盘大小，多个用英文逗号分隔',
   `diskEncrypt` varchar(300) DEFAULT NULL COMMENT '磁盘加密，多个用英文逗号分隔',
-  `softName` varchar(300) DEFAULT NULL COMMENT '软件名称，多个用英文逗号分隔',
+  `softCode` varchar(300) DEFAULT NULL COMMENT '软件代码，多个用英文逗号分隔',
   `softVer` varchar(300) DEFAULT NULL COMMENT '软件版本，多个用英文逗号分隔',
   `softParam` varchar(300) DEFAULT NULL COMMENT '软件参数，多个用英文逗号分隔',
   `projectCode` varchar(32) DEFAULT NULL COMMENT '项目代码',

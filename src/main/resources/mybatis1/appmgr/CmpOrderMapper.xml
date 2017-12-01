@@ -25,7 +25,7 @@
 		diskType,
 		diskSize,
 		diskEncrypt,
-		softName,
+		softCode,
 		softVer,
 		softParam,
 		projectCode,
@@ -60,7 +60,7 @@
 		#{diskType},
 		#{diskSize},
 		#{diskEncrypt},
-		#{softName},
+		#{softCode},
 		#{softVer},
 		#{softParam},
 		#{projectCode},
@@ -93,7 +93,7 @@
 		diskType,
 		diskSize,
 		diskEncrypt,
-		softName,
+		softCode,
 		softVer,
 		softParam,
 		projectCode,
@@ -125,7 +125,7 @@
 		#{diskType},
 		#{diskSize},
 		#{diskEncrypt},
-		#{softName},
+		#{softCode},
 		#{softVer},
 		#{softParam},
 		#{projectCode},
@@ -192,7 +192,7 @@
 	<!-- 新增套餐清单 -->
 	<insert id="addPckgList" parameterType="com.cmp.sid.CmpOrder" >
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select func_nextval('cmp_order'), #{status}, #{applyUserId}, #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softName, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum, ''
+		select func_nextval('cmp_order'), #{status}, #{applyUserId}, #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, softVer, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, imgExpireDate, expireDate, virNum, ''
 		from 
 		<include refid="tableName"/>
 		where orderNo=#{orderNo}

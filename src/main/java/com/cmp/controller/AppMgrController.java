@@ -64,7 +64,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("imgCodeList", cmpDictService.getCmpDictList("img_code"));//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
-		mv.addObject("softNameList", cmpDictService.getCmpDictList("soft_name"));//软件名称列表
+		mv.addObject("softCodeList", cmpDictService.getCmpDictList("soft_code"));//软件代码列表
 		mv.addObject("softVerList", cmpDictService.getCmpDictList("soft_ver"));//软件版本列表
 		mv.addObject("cmpOrder", StringUtils.isBlank(orderNo)?null:cmpOrderService.getOrderDtl(orderNo));//清单详细信息
 		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList();//购物车列表查询
@@ -94,7 +94,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("imgCodeList", cmpDictService.getCmpDictList("img_code"));//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
-		mv.addObject("softNameList", cmpDictService.getCmpDictList("soft_name"));//软件名称列表
+		mv.addObject("softCodeList", cmpDictService.getCmpDictList("soft_code"));//软件代码列表
 		mv.addObject("softVerList", cmpDictService.getCmpDictList("soft_ver"));//软件版本列表
 		mv.addObject("pckgList", pckgList);//软件版本列表
 		mv.setViewName("appmgr/resapp_pckg_input");
@@ -132,7 +132,7 @@ public class AppMgrController extends BaseController {
 			List<CmpDict> subDataList=cmpDictService.getCmpDictList("disk_size");//数据字典列表查询
 			return StringUtil.getRetStr("0", "调用成功", "dataList", dataList, "subDataList", subDataList);
 		}else if("soft".equals(operType)){//操作类型：disk-磁盘；soft-软件安装
-			List<CmpDict> dataList=cmpDictService.getCmpDictList("soft_name");//数据字典列表查询
+			List<CmpDict> dataList=cmpDictService.getCmpDictList("soft_code");//数据字典列表查询
 			List<CmpDict> subDataList=cmpDictService.getCmpDictList("soft_ver");//数据字典列表查询
 			return StringUtil.getRetStr("0", "调用成功", "dataList", dataList, "subDataList", subDataList);
 		}
@@ -304,7 +304,7 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setDiskType(request.getParameter("diskTypeStr"));//磁盘类型字符串
 		cmpOrder.setDiskSize(request.getParameter("diskSizeStr"));//磁盘大小字符串
 		cmpOrder.setDiskEncrypt(request.getParameter("diskEncryptStr"));//磁盘加密字符串
-		cmpOrder.setSoftName(request.getParameter("softNameStr"));//软件名称字符串
+		cmpOrder.setSoftCode(request.getParameter("softCodeStr"));//软件代码字符串
 		cmpOrder.setSoftVer(request.getParameter("softVerStr"));//软件版本字符串
 		cmpOrder.setSoftParam(request.getParameter("softParamStr"));//软件参数字符串
 		cmpOrder.setProjectCode(request.getParameter("projectCode"));//项目
