@@ -194,7 +194,6 @@
 								//beforeSend: validateData,
 								cache: false,
 								success: function(data){
-									console.log('11111111111111111111111111');
 									top.jzts();
 									setTimeout("self.location=self.location",100);
 									 //$.each(data.list, function(i, list){
