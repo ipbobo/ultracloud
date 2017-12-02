@@ -81,7 +81,7 @@
 											<td class="center">${var.key}</td> 
 											<td class="center">${var.version}</td>
 											<td class="center">${var.resourceName}</td>
-											<td class="center">${var.resourceName}</td>
+											<td class="center"><a href="javascritp:void(0);" onclick="currentType('image','${var.id}');return false" >${var.resourceName}</a></td>
 											<td class='center'>${var.deploymentTime}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
@@ -181,6 +181,9 @@
 	<script src="static/ace/js/ace/ace.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+	<!-- layer弹窗插件-->
+	<script src="plugins/layer/3.0/layer.js"></script>
+	<!--弹窗组件end-->
 	<script type="text/javascript">
 	$(top.hangge());//关闭加载状态
 	//检索
@@ -257,6 +260,20 @@
 					}
 				}
 			}
+		});
+	}
+	
+	//工作流程图
+	function currentType(type,pdId){
+		var width=document.documentElement.clientWidth * 0.85+"px";
+		var height=document.documentElement.clientHeight * 0.85+"px";
+		layer.open({
+		    type: 2,
+		    title: "流程【"+type+"】",
+		    shadeClose: true,
+		    maxmin: true,
+		    area: [width, height],
+		    content: "<%=basePath%>process/resource/read?resourceType="+type+"&processDefinitionId="+pdId
 		});
 	}
 	</script>
