@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.task.Task;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -123,8 +124,16 @@ public class AppOperServiceController  extends BaseController {
 		cmpWorkOrderService.addWordOrder(workworder);
 		
 		//启动工作流
-		String procDefKey = "resapp";
+		String procDefKey = "oper_workflow";
 		String procInstId = activitiService.start(procDefKey, user.getUSERNAME(), workworder.getAppNo(), null);
+		
+		//拾取任务并完成
+		List<Task> userTaskList = activitiService.findGroupList(user.getUSERNAME(), 1, 100);
+		for (Task task : userTaskList) {
+			if (task.getProcessInstanceId().equals(procInstId)) {
+				activitiService.claimTask(task.getId(), user.getUSERNAME());
+			}
+		}
 		//完成申请任务
 		//List<User> userList = userService.listAllUserByRoldId(pd)
 		activitiService.handleTask(workworder.getAppNo(), procInstId,  user.getUSERNAME(), null, null);

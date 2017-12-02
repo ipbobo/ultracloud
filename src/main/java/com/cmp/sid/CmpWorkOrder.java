@@ -21,7 +21,7 @@ public class CmpWorkOrder {
 	private String diskType;//磁盘类型，多个用英文逗号分隔
 	private String diskSize;//磁盘大小，多个用英文逗号分隔
 	private String diskEncrypt;//磁盘加密，多个用英文逗号分隔
-	private String softName;//软件名称，多个用英文逗号分隔
+	private String softCode;//软件代码，多个用英文逗号分隔
 	private String softVer;//软件版本，多个用英文逗号分隔
 	private String softParam;//软件参数，多个用英文逗号分隔
 	private String projectCode;//项目代码
@@ -196,12 +196,12 @@ public class CmpWorkOrder {
 		this.diskEncrypt = diskEncrypt;
 	}
 
-	public String getSoftName() {
-		return softName;
+	public String getSoftCode() {
+		return softCode;
 	}
 
-	public void setSoftName(String softName) {
-		this.softName = softName;
+	public void setSoftCode(String softCode) {
+		this.softCode = softCode;
 	}
 
 	public String getSoftVer() {

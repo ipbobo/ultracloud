@@ -7,24 +7,37 @@ public class CmpOrder {
 	private String status;//状态：0-待提交；1-已提交；T-套餐
 	private String applyUserId;//申请者
 	private String areaCode;//地域代码
+	private String areaCodeName;//地域代码名称
 	private String platType;//平台类型
+	private String platTypeName;//平台类型名称
 	private String deployType;//部署类型
+	private String deployTypeName;//部署类型名称
 	private String envCode;//环境代码
+	private String envCodeName;//环境代码名称
 	private String resType;//资源类型
+	private String resTypeName;//资源类型名称
 	private String virName;//虚拟机名称
 	private String virIp;//虚拟机IP
 	private String cpu;//CPU
 	private String memory;//内存
 	private String diskType;//磁盘类型，多个用英文逗号分隔
+	private String diskTypeName;//磁盘类型名称，多个用英文逗号分隔
 	private String diskSize;//磁盘大小，多个用英文逗号分隔
+	private String diskSizeName;//磁盘大小名称，多个用英文逗号分隔
 	private String diskEncrypt;//磁盘加密，多个用英文逗号分隔
+	private String softCode;//软件代码，多个用英文逗号分隔
 	private String softName;//软件名称，多个用英文逗号分隔
 	private String softVer;//软件版本，多个用英文逗号分隔
+	private String softVerName;//软件版本名称，多个用英文逗号分隔
 	private String softParam;//软件参数，多个用英文逗号分隔
 	private String projectCode;//项目代码
+	private String projectCodeName;//项目代码名称
 	private String osType;//操作系统类型
+	private String osTypeName;//操作系统类型名称
 	private String osBitNum;//操作系统位数
+	private String osBitNumName;//操作系统位数名称
 	private String imgCode;//镜像代码
+	private String imgCodeName;//镜像代码名称
 	private String imgUserName;//镜像用户名
 	private String imgUserPass;//镜像用户密码
 	private String imgPath;//镜像路径
@@ -56,7 +69,7 @@ public class CmpOrder {
 	public void setLastUpdateTime(String lastUpdateTime) {
 		this.lastUpdateTime = lastUpdateTime;
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
@@ -72,13 +85,21 @@ public class CmpOrder {
 	public void setApplyUserId(String applyUserId) {
 		this.applyUserId = applyUserId;
 	}
-	
+
 	public String getAreaCode() {
 		return areaCode;
 	}
 
 	public void setAreaCode(String areaCode) {
 		this.areaCode = areaCode;
+	}
+
+	public String getAreaCodeName() {
+		return areaCodeName;
+	}
+
+	public void setAreaCodeName(String areaCodeName) {
+		this.areaCodeName = areaCodeName;
 	}
 
 	public String getPlatType() {
@@ -89,12 +110,28 @@ public class CmpOrder {
 		this.platType = platType;
 	}
 
+	public String getPlatTypeName() {
+		return platTypeName;
+	}
+
+	public void setPlatTypeName(String platTypeName) {
+		this.platTypeName = platTypeName;
+	}
+
 	public String getDeployType() {
 		return deployType;
 	}
 
 	public void setDeployType(String deployType) {
 		this.deployType = deployType;
+	}
+
+	public String getDeployTypeName() {
+		return deployTypeName;
+	}
+
+	public void setDeployTypeName(String deployTypeName) {
+		this.deployTypeName = deployTypeName;
 	}
 
 	public String getEnvCode() {
@@ -105,12 +142,28 @@ public class CmpOrder {
 		this.envCode = envCode;
 	}
 
+	public String getEnvCodeName() {
+		return envCodeName;
+	}
+
+	public void setEnvCodeName(String envCodeName) {
+		this.envCodeName = envCodeName;
+	}
+
 	public String getResType() {
 		return resType;
 	}
 
 	public void setResType(String resType) {
 		this.resType = resType;
+	}
+
+	public String getResTypeName() {
+		return resTypeName;
+	}
+
+	public void setResTypeName(String resTypeName) {
+		this.resTypeName = resTypeName;
 	}
 
 	public String getVirName() {
@@ -153,6 +206,14 @@ public class CmpOrder {
 		this.diskType = diskType;
 	}
 
+	public String getDiskTypeName() {
+		return diskTypeName;
+	}
+
+	public void setDiskTypeName(String diskTypeName) {
+		this.diskTypeName = diskTypeName;
+	}
+
 	public String getDiskSize() {
 		return diskSize;
 	}
@@ -161,12 +222,28 @@ public class CmpOrder {
 		this.diskSize = diskSize;
 	}
 
+	public String getDiskSizeName() {
+		return diskSizeName;
+	}
+
+	public void setDiskSizeName(String diskSizeName) {
+		this.diskSizeName = diskSizeName;
+	}
+
 	public String getDiskEncrypt() {
 		return diskEncrypt;
 	}
 
 	public void setDiskEncrypt(String diskEncrypt) {
 		this.diskEncrypt = diskEncrypt;
+	}
+
+	public String getSoftCode() {
+		return softCode;
+	}
+
+	public void setSoftCode(String softCode) {
+		this.softCode = softCode;
 	}
 
 	public String getSoftName() {
@@ -185,6 +262,14 @@ public class CmpOrder {
 		this.softVer = softVer;
 	}
 
+	public String getSoftVerName() {
+		return softVerName;
+	}
+
+	public void setSoftVerName(String softVerName) {
+		this.softVerName = softVerName;
+	}
+
 	public String getSoftParam() {
 		return softParam;
 	}
@@ -201,12 +286,28 @@ public class CmpOrder {
 		this.projectCode = projectCode;
 	}
 
+	public String getProjectCodeName() {
+		return projectCodeName;
+	}
+
+	public void setProjectCodeName(String projectCodeName) {
+		this.projectCodeName = projectCodeName;
+	}
+
 	public String getOsType() {
 		return osType;
 	}
 
 	public void setOsType(String osType) {
 		this.osType = osType;
+	}
+
+	public String getOsTypeName() {
+		return osTypeName;
+	}
+
+	public void setOsTypeName(String osTypeName) {
+		this.osTypeName = osTypeName;
 	}
 
 	public String getOsBitNum() {
@@ -217,12 +318,28 @@ public class CmpOrder {
 		this.osBitNum = osBitNum;
 	}
 
+	public String getOsBitNumName() {
+		return osBitNumName;
+	}
+
+	public void setOsBitNumName(String osBitNumName) {
+		this.osBitNumName = osBitNumName;
+	}
+
 	public String getImgCode() {
 		return imgCode;
 	}
 
 	public void setImgCode(String imgCode) {
 		this.imgCode = imgCode;
+	}
+
+	public String getImgCodeName() {
+		return imgCodeName;
+	}
+
+	public void setImgCodeName(String imgCodeName) {
+		this.imgCodeName = imgCodeName;
 	}
 
 	public String getImgUserName() {

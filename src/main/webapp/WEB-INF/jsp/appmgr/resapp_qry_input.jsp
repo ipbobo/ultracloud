@@ -104,7 +104,7 @@ function addSoftRow(){
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-bottom:10px;\"><select class=\"chosen-select form-control\" name=\"softName\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softName").html()+"</select></td>"
+    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-bottom:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
     	+"<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-bottom:10px;\"><select class=\"chosen-select form-control\" name=\"softVer\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\">"+$("#softVer").html()+"</select></td>"
 	    +"<td align=\"left\" style=\"width: 120x;padding-bottom:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
 	$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
@@ -199,9 +199,9 @@ function checkData(){
 	$("#diskEncryptStr").val(diskEncryptArr.join());
 	
 	//软件安装
-	var softNameArr=new Array();
-	$("select[name='softName']").each(function() {
-		softNameArr.push($(this).val());
+	var softCodeArr=new Array();
+	$("select[name='softCode']").each(function() {
+		softCodeArr.push($(this).val());
 	});
 	var softVerArr=new Array();
 	$("select[name='softVer']").each(function() {
@@ -211,7 +211,7 @@ function checkData(){
 	$("input[name='softParam']").each(function() {
 		softParamArr.push($(this).val());
 	});
-	$("#softNameStr").val(softNameArr.join());
+	$("#softCodeStr").val(softCodeArr.join());
 	$("#softVerStr").val(softVerArr.join());
 	$("#softParamStr").val(softParamArr.join());
 	return true;
@@ -241,7 +241,7 @@ function addList(){
 		jsonObj.diskTypeStr=$("#diskTypeStr").val();//磁盘类型，多个用英文逗号分隔   
 		jsonObj.diskSizeStr=$("#diskSizeStr").val();//磁盘大小，多个用英文逗号分隔   
 		jsonObj.diskEncryptStr=$("#diskEncryptStr").val();//磁盘加密，多个用英文逗号分隔
-		jsonObj.softNameStr=$("#softNameStr").val();//软件名称，多个用英文逗号分隔   
+		jsonObj.softCodeStr=$("#softCodeStr").val();//软件代码，多个用英文逗号分隔   
 		jsonObj.softVerStr=$("#softVerStr").val();//软件版本，多个用英文逗号分隔    
 		jsonObj.softParamStr=$("#softParamStr").val();//软件参数，多个用英文逗号分隔  
 		jsonObj.projectCode=$("#projectCode").val();//项目代码                    
@@ -296,7 +296,7 @@ function savePckg(){
 	jsonObj.diskTypeStr=$("#diskTypeStr").val();//磁盘类型，多个用英文逗号分隔   
 	jsonObj.diskSizeStr=$("#diskSizeStr").val();//磁盘大小，多个用英文逗号分隔   
 	jsonObj.diskEncryptStr=$("#diskEncryptStr").val();//磁盘加密，多个用英文逗号分隔
-	jsonObj.softNameStr=$("#softNameStr").val();//软件名称，多个用英文逗号分隔   
+	jsonObj.softCodeStr=$("#softCodeStr").val();//软件代码，多个用英文逗号分隔   
 	jsonObj.softVerStr=$("#softVerStr").val();//软件版本，多个用英文逗号分隔    
 	jsonObj.softParamStr=$("#softParamStr").val();//软件参数，多个用英文逗号分隔  
 	jsonObj.projectCode=$("#projectCode").val();//项目代码                    
@@ -418,7 +418,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="diskTypeStr" id="diskTypeStr" value=""/><!-- 磁盘类型字符串 -->
 	<input type="hidden" name="diskSizeStr" id="diskSizeStr" value=""/><!-- 磁盘大小字符串 -->
 	<input type="hidden" name="diskEncryptStr" id="diskEncryptStr" value=""/><!-- 磁盘加密字符串 -->
-	<input type="hidden" name="softNameStr" id="softNameStr" value=""/><!-- 软件名称字符串 -->
+	<input type="hidden" name="softCodeStr" id="softCodeStr" value=""/><!-- 软件代码字符串 -->
 	<input type="hidden" name="softVerStr" id="softVerStr" value=""/><!-- 软件版本字符串 -->
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
 	<input type="hidden" name="status" id="status" value="0"/><!-- 状态：0-待提交；1-已提交；T-套餐 -->
@@ -600,7 +600,7 @@ $(window).scroll(function() {
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;存储</td>
-			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">数据盘：</td>
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<table id="diskTableId">
 					<tr id="diskTrId">
@@ -626,14 +626,14 @@ $(window).scroll(function() {
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;软件安装</td>
-			<td align="right" style="width: 120px;padding:10px;">安装软件：</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<table id="softTableId">
 					<tr id="softTrId">
 						<td align="left" style="width: 120px;padding-right:10px;padding-bottom:10px;">
-							<select class="chosen-select form-control" name="softName" id="softName" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;">
+							<select class="chosen-select form-control" name="softCode" id="softCode" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
-							<c:forEach items="${softNameList}" var="var">
+							<c:forEach items="${softCodeList}" var="var">
 								<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
 							</c:forEach>
 						  	</select>

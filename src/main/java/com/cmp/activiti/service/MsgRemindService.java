@@ -25,11 +25,11 @@ public class MsgRemindService {
 	 * @param userId
 	 * @return
 	 */
-	public int countUserUnfinishTask(String userId, String roleType) {
+	public int countUserUnfinishTask(String userName, String roleType) {
 		if (roleType != null && Role.TYPE_APPLICANT.equals(roleType)) {
-			return activitiService.countByUserHistoricProcess(userId, false);
+			return activitiService.countByUserHistoricProcess(userName, false);
 		} else if (roleType != null && Role.TYPE_EXECUTOR.equals(roleType)) {
-			return activitiService.countByUserActInst(userId, false);
+			return activitiService.countByUserActInst(userName, false);
 		} else {
 			return 0;
 		}
@@ -37,14 +37,14 @@ public class MsgRemindService {
 	
 	/**
 	 * 查询用户完成的任务数
-	 * @param userId
+	 * @param userName
 	 * @return
 	 */
-	public int countUserfinishTask(String userId, String roleType) {
+	public int countUserfinishTask(String userName, String roleType) {
 		if (roleType != null && Role.TYPE_APPLICANT.equals(roleType)) {
-			return activitiService.countByUserHistoricProcess(userId, true);
+			return activitiService.countByUserHistoricProcess(userName, true);
 		} else if (roleType != null && Role.TYPE_EXECUTOR.equals(roleType)) {
-			return activitiService.countByUserActInst(userId, true);
+			return activitiService.countByUserActInst(userName, true);
 		} else {
 			return 0;
 		}
@@ -54,8 +54,8 @@ public class MsgRemindService {
 	/**
 	 * 查询到达的任务数
 	 */
-	public int countReceiveTask(String userId) {
-		Page<TaskBean> page = activitiService.getPersonalTaskList(userId, 1, MAX_NUM_PER_PAGE);
+	public int countReceiveTask(String userName) {
+		Page<TaskBean> page = activitiService.getPersonalTaskList(userName, 1, MAX_NUM_PER_PAGE);
 		return page.getTotalCount();
 	}
 	
