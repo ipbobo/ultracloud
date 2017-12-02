@@ -105,7 +105,6 @@ function addSoftRow(){
     }
     
     var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-bottom:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
-    	+"<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-bottom:10px;\"><select class=\"chosen-select form-control\" name=\"softVer\" data-placeholder=\"请选择软件版本\" style=\"vertical-align:top;width: 120px;\">"+$("#softVer").html()+"</select></td>"
 	    +"<td align=\"left\" style=\"width: 120x;padding-bottom:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
 	$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
@@ -203,16 +202,11 @@ function checkData(){
 	$("select[name='softCode']").each(function() {
 		softCodeArr.push($(this).val());
 	});
-	var softVerArr=new Array();
-	$("select[name='softVer']").each(function() {
-		softVerArr.push($(this).val());
-	});
 	var softParamArr=new Array();
 	$("input[name='softParam']").each(function() {
 		softParamArr.push($(this).val());
 	});
 	$("#softCodeStr").val(softCodeArr.join());
-	$("#softVerStr").val(softVerArr.join());
 	$("#softParamStr").val(softParamArr.join());
 	return true;
 }
@@ -242,7 +236,6 @@ function addList(){
 		jsonObj.diskSizeStr=$("#diskSizeStr").val();//磁盘大小，多个用英文逗号分隔   
 		jsonObj.diskEncryptStr=$("#diskEncryptStr").val();//磁盘加密，多个用英文逗号分隔
 		jsonObj.softCodeStr=$("#softCodeStr").val();//软件代码，多个用英文逗号分隔   
-		jsonObj.softVerStr=$("#softVerStr").val();//软件版本，多个用英文逗号分隔    
 		jsonObj.softParamStr=$("#softParamStr").val();//软件参数，多个用英文逗号分隔  
 		jsonObj.projectCode=$("#projectCode").val();//项目代码                    
 		jsonObj.osType=$("#osType").val();//操作系统类型                     
@@ -297,7 +290,6 @@ function savePckg(){
 	jsonObj.diskSizeStr=$("#diskSizeStr").val();//磁盘大小，多个用英文逗号分隔   
 	jsonObj.diskEncryptStr=$("#diskEncryptStr").val();//磁盘加密，多个用英文逗号分隔
 	jsonObj.softCodeStr=$("#softCodeStr").val();//软件代码，多个用英文逗号分隔   
-	jsonObj.softVerStr=$("#softVerStr").val();//软件版本，多个用英文逗号分隔    
 	jsonObj.softParamStr=$("#softParamStr").val();//软件参数，多个用英文逗号分隔  
 	jsonObj.projectCode=$("#projectCode").val();//项目代码                    
 	jsonObj.osType=$("#osType").val();//操作系统类型                     
@@ -419,7 +411,6 @@ $(window).scroll(function() {
 	<input type="hidden" name="diskSizeStr" id="diskSizeStr" value=""/><!-- 磁盘大小字符串 -->
 	<input type="hidden" name="diskEncryptStr" id="diskEncryptStr" value=""/><!-- 磁盘加密字符串 -->
 	<input type="hidden" name="softCodeStr" id="softCodeStr" value=""/><!-- 软件代码字符串 -->
-	<input type="hidden" name="softVerStr" id="softVerStr" value=""/><!-- 软件版本字符串 -->
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
 	<input type="hidden" name="status" id="status" value="0"/><!-- 状态：0-待提交；1-已提交；T-套餐 -->
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
@@ -628,14 +619,6 @@ $(window).scroll(function() {
 							<select class="chosen-select form-control" name="softCode" id="softCode" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${softCodeList}" var="var">
-								<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
-							</c:forEach>
-						  	</select>
-						</td>
-						<td align="left" style="width: 120px;padding-right:10px;padding-bottom:10px;">
-							<select class="chosen-select form-control" name="softVer" id="softVer" data-placeholder="请选择软件版本" style="vertical-align:top;width: 120px;">
-							<option value="">请选择</option>
-							<c:forEach items="${softVerList}" var="var">
 								<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
 							</c:forEach>
 						  	</select>

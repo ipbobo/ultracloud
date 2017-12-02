@@ -18,7 +18,7 @@ CREATE TABLE `cmp_order` (
   `diskSize` varchar(3000) DEFAULT NULL COMMENT '磁盘大小，多个用英文逗号分隔',
   `diskEncrypt` varchar(3000) DEFAULT NULL COMMENT '磁盘加密，多个用英文逗号分隔',
   `softCode` varchar(3000) DEFAULT NULL COMMENT '软件代码，多个用英文逗号分隔',
-  `softVer` varchar(3000) DEFAULT NULL COMMENT '软件版本，多个用英文逗号分隔',
+  `softVer` varchar(3000) DEFAULT NULL COMMENT '软件版本，多个用英文逗号分隔，暂时无用',
   `softParam` varchar(3000) DEFAULT NULL COMMENT '软件参数，多个用英文逗号分隔',
   `projectCode` varchar(32) DEFAULT NULL COMMENT '项目代码',
   `osType` varchar(20) DEFAULT NULL COMMENT '操作系统类型',
