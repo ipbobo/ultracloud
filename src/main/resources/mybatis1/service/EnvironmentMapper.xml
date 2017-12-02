@@ -150,4 +150,8 @@
 		</foreach>
 	</delete>
 	
+	<!-- 项目列表查询 -->
+	<select id="getEnvList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_environment
+	</select>
 </mapper>

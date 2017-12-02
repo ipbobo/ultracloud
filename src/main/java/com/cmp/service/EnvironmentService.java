@@ -2,6 +2,7 @@ package com.cmp.service;
 
 import java.util.List;
 
+import com.cmp.sid.CmpDict;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -68,5 +69,7 @@ public interface EnvironmentService {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
-
+	
+	//环境列表查询
+	public List<CmpDict> getEnvList() throws Exception;
 }

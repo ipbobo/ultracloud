@@ -3,6 +3,7 @@ package com.cmp.service;
 import java.util.List;
 
 import com.cmp.entity.Medium;
+import com.cmp.sid.CmpDict;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -77,4 +78,6 @@ public interface MediumService {
 	 */
 	public List<Medium> listAllMediumByPId(PageData pd) throws Exception;
 
+	//软件列表查询
+	public List<CmpDict> getSoftList() throws Exception;
 }

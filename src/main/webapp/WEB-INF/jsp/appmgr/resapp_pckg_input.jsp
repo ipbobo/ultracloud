@@ -275,7 +275,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="3"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
+		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
 		<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
 		<td align="left" style="width: 120px;padding:10px;">
 			<select class="chosen-select form-control" name="tcosType" id="tcosType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;" disabled>
@@ -316,12 +316,6 @@ function choosePckg(jsonStr){
 		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">路径：</td>
 		<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="2">
 			<input type="text" name="tcimgPath" id="tcimgPath" value="" disabled/>&nbsp;&nbsp;Linux系统必填
-		</td>
-	</tr>
-	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">到期时间：</td>
-		<td style="padding-left:10px;padding-bottom:10px;" colspan="6">
-			<input type="text" name="tcimgExpireDate" id="tcimgExpireDate" value="" class="span10 date-picker" data-date-format="yyyy-mm-dd" style="width:120px;" placeholder="到期时间" disabled/>
 		</td>
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
