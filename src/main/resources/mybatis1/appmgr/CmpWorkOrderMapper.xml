@@ -204,6 +204,60 @@
 			where appNo = #{appNo}
 	</select>
 	
+	
+	
+	<!--个人所有工单 -->
+	<select id="listAllWorkorder" parameterType="page" resultType="pd">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where 1=1 
+		
+		<if test="pd.workorder_type != null and pd.workorder_type != ''">
+			and appType=#{pd.workorder_type} 
+		</if>
+		<if test="pd.workorder_status != null and pd.workorder_status != ''">
+			and status=#{pd.workorder_status} 
+		</if>
+		<if test="pd.project != null and pd.project != ''">
+			and projectCode=#{pd.project} 
+		</if>
+		<if test="pd.workorder_id != null and pd.workorder_id != ''">
+			and id like %#{pd.workorder_id}% 
+		</if>
+		<if test="pd.workorder_time != null and pd.workorder_time != ''">
+			<if test="pd.workorder_time=='1'">
+				<![CDATA[
+				and  date_sub(CURDATE(),interval 7 day) <= date(createTime) 
+				]]>
+			</if>
+			<if test="pd.workorder_time == '2'">
+				<![CDATA[
+				and date_sub(curdate(),interval 1 month)<=date(createTime) 
+				]]>
+			</if>
+			<if test="pd.workorder_time == '3'">
+				<![CDATA[
+				and date_sub(curdate(),interval 1 year)<=date(createTime) 
+				]]>
+			</if>
+		</if>
+		
+		and procInstId in 
+		(
+				<!-- 获取完成的工单 -->
+				select DISTINCT  PROC_INST_ID_ from 
+				<include refid="hi_actinst" /> t 
+				where t.ASSIGNEE_=#{pd.USERNAME}
+				UNION
+				<!-- 获取未拾取的工单 -->
+				select DISTINCT  r.PROC_INST_ID_ from <include refid="ru_task" />  r , <include refid="ru_identitylink" /> i where r.ID_ = i.TASK_ID_  and 
+						i.TYPE_ = 'candidate' and i.USER_ID_=#{pd.USERNAME}
+		)
+		 order by status asc
+	</select>
+	
+	
 	<!--个人工单查询 -->
 	<select id="workorderlistPage" parameterType="page" resultType="pd">
 		select <include refid="fieldName"/>

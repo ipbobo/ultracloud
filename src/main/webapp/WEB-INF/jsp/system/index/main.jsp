@@ -41,6 +41,7 @@
 	<link rel="stylesheet" type="text/css" href="plugins/websocketInstantMsg/css/websocket.css" />
 	<script type="text/javascript" src="plugins/websocketInstantMsg/ext4/ext-all-debug.js"></script>
 	<script type="text/javascript" src="plugins/websocketInstantMsg/websocket.js"></script>
+	<jsp:include page="../../msg/msg_dialog.jsp"></jsp:include>
 	<!-- 即时通讯 -->
 	
 </head>
@@ -191,55 +192,49 @@
 						$("#span_task_tital").html("目前进行中的任务 :" + data.totalTaskNo);
 						$("#span_task_no").html(data.totalTaskNo);
 						//判断用户类型 if (data.user.role.type == 0)
-						if (data.tasks != null && data.tasks != 'null')
+						if (data.totalTaskNo != null && data.totalTaskNo != '0')
 						{
 							usertaskList = data.tasks;
 							if (data.user.role.type == 'applicant'){
 								//处理中的工单	
-								if (data.unfinishTaskNum != '0'){
-									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "处理中的工单数:" + data.unfinishTaskNum +"</li>" );
+								if (data.toDoNum != '0'){
+									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "退回的工单数:" + data.toDoNum +"</li>" );
 								}
 								//工单完成
-								if (data.finishedTaskNum != '0'){
-									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ "完成的工单数:" + data.finishedTaskNum +"</li>" );
+								if (data.completeNum != '0'){
+									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ "完成的工单数:" + data.completeNum +"</li>" );
 								}
 								//退回
-								if (data.returnedTaskNum != '0'){
-									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-remove\"></i>"+ "退回的工单数:" + data.returnedTaskNum +"</li>" );
+								if (data.dealNum != '0'){
+									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-remove\"></i>"+ "处理中的工单数:" + data.dealNum +"</li>" );
 								}
 							}
 							if (data.user.role.type == 'audit'){
-								if (data.dealingTaskNum != '0'){
-									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "待审批的工单数:" + data.dealingTaskNum +"</li>" );
+								if (data.toDoNum != '0'){
+									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "待审批的工单数:" + data.toDoNum +"</li>" );
+								}
+								//处理中的工单	
+								if (data.dealNum != '0'){
+									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "处理中的工单数:" + data.dealNum +"</li>" );
+								}
+								//工单完成
+								if (data.completeNum != '0'){
+									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ "完成的工单数:" + data.completeNum +"</li>" );
 								}
 							}
 							if (data.user.role.type == 'executor'){
-								if (data.dealingTaskNum != '0'){
-									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "待处理的工单数:" + data.dealingTaskNum +"</li>" );
+								if (data.toDoNum != '0'){
+									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "待处理的工单数:" + data.toDoNum +"</li>" );
 								}
 								//处理中的工单	
-								if (data.unfinishTaskNum != '0'){
-									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "处理中的工单数:" + data.unfinishTaskNum +"</li>" );
+								if (data.dealNum != '0'){
+									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "处理中的工单数:" + data.dealNum +"</li>" );
 								}
 								//工单完成
-								if (data.finishedTaskNum != '0'){
-									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ "完成的工单数:" + data.finishedTaskNum +"</li>" );
+								if (data.completeNum != '0'){
+									$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ "完成的工单数:" + data.completeNum +"</li>" );
 								}
 								
-							}
-						}
-						if (data.taskApplyComplete != null && data.taskApplyComplete != 'null')
-						{
-							usertaskList = data.taskApplyComplete;
-							for (var i = 0; i < usertaskList.length; i++) {
-								$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ usertaskList[i].taskName +"</li>" );
-							}
-						}
-						if (data.taskApplyReject != null && data.taskApplyReject != 'null')
-						{
-							usertaskList = data.taskApplyReject;
-							for (var i = 0; i < usertaskList.length; i++) {
-								$("#ul_tasks").append( "<li onclick=\"goTask(" + usertaskList[i].taskId + ")\"><i class=\"ace-icon glyphicon glyphicon-remove\"></i>"+ usertaskList[i].taskName +"</li>" );
 							}
 						}
 					};
@@ -247,8 +242,10 @@
 			});
 		}
 		queryPersonalTask();
-		function goTask(taskId){
-			alert("去执行任务" + taskId);
+		function goTaskDetail(){
+			//showDialog("去执行任务");
+			//alert("去执行任务" + taskId);
+			siMenu('z137','lm121','工单查询','queryUserApplyWorkOrderPre.do');
 		}
 	</script>
 	</body>
