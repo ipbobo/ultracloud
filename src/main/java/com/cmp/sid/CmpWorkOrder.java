@@ -22,7 +22,6 @@ public class CmpWorkOrder {
 	private String diskSize;//磁盘大小，多个用英文逗号分隔
 	private String diskEncrypt;//磁盘加密，多个用英文逗号分隔
 	private String softCode;//软件代码，多个用英文逗号分隔
-	private String softVer;//软件版本，多个用英文逗号分隔
 	private String softParam;//软件参数，多个用英文逗号分隔
 	private String projectCode;//项目代码
 	private String osType;//操作系统类型
@@ -31,7 +30,6 @@ public class CmpWorkOrder {
 	private String imgUserName;//镜像用户名
 	private String imgUserPass;//镜像用户密码
 	private String imgPath;//镜像路径
-	private String imgExpireDate;//镜像到期时间
 	private String expireDate;//到期时间
 	private String virNum;//虚拟机数量
 	private String applyUserName; //申请者用户名
@@ -204,14 +202,6 @@ public class CmpWorkOrder {
 		this.softCode = softCode;
 	}
 
-	public String getSoftVer() {
-		return softVer;
-	}
-
-	public void setSoftVer(String softVer) {
-		this.softVer = softVer;
-	}
-
 	public String getSoftParam() {
 		return softParam;
 	}
@@ -274,14 +264,6 @@ public class CmpWorkOrder {
 
 	public void setImgPath(String imgPath) {
 		this.imgPath = imgPath;
-	}
-
-	public String getImgExpireDate() {
-		return imgExpireDate;
-	}
-
-	public void setImgExpireDate(String imgExpireDate) {
-		this.imgExpireDate = imgExpireDate;
 	}
 
 	public String getExpireDate() {

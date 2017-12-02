@@ -94,8 +94,7 @@ function choosePckg(jsonStr){
 	$("#tcimgUserName").val(jsonObj.imgUserName);
 	$("#tcimgUserPass").val(jsonObj.imgUserPass);
 	$("#tcimgPath").val(jsonObj.imgPath);
-	$("#tcimgExpireDate").val(jsonObj.imgExpireDate);
-	$("#tcexpireDate").val(jsonObj.imgExpireDate);
+	$("#tcexpireDate").val(jsonObj.expireDate);
 	$("#tcvirNum").val(jsonObj.virNum);
 	addPckgDiskRow(jsonObj.diskType, jsonObj.diskSize, jsonObj.diskEncrypt);//新增套餐磁盘行
 	addPckgSoftRow(jsonObj.softCode, jsonObj.softParam);//新增套餐软件安装行
@@ -159,7 +158,7 @@ function choosePckg(jsonStr){
 				<c:forEach items="${pckgList}" var="var" varStatus="st">
 				<tr>
 					<td align="left" style="width: 120px;padding:10px;border-right:1px solid #cccccc;border-bottom:1px solid #cccccc;">
-						<span style="float: left;"><input type="radio" name="tcName" id="tctableId" onclick='choosePckg("{\"id\":\"${var.orderNo}\",\"envCode\":\"${var.envCode}\",\"projectCode\":\"${var.projectCode}\",\"resType\":\"${var.resType}\",\"virName\":\"${var.virName}\",\"cpu\":\"${var.cpu}\",\"memory\":\"${var.memory}\",\"osType\":\"${var.osType}\",\"osBitNum\":\"${var.osBitNum}\",\"imgCode\":\"${var.imgCode}\",\"imgUserName\":\"${var.imgUserName}\",\"imgUserPass\":\"${var.imgUserPass}\",\"imgPath\":\"${var.imgPath}\",\"imgExpireDate\":\"${var.imgExpireDate}\",\"diskType\":\"${var.diskType}\",\"diskSize\":\"${var.diskSize}\",\"diskEncrypt\":\"${var.diskEncrypt}\",\"softCode\":\"${var.softCode}\",\"softParam\":\"${var.softParam}\",\"expireDate\":\"${var.expireDate}\",\"virNum\":\"${var.virNum}\"}	")'/>${var.pckgName}</span>
+						<span style="float: left;"><input type="radio" name="tcName" id="tctableId" onclick='choosePckg("{\"id\":\"${var.orderNo}\",\"envCode\":\"${var.envCode}\",\"projectCode\":\"${var.projectCode}\",\"resType\":\"${var.resType}\",\"virName\":\"${var.virName}\",\"cpu\":\"${var.cpu}\",\"memory\":\"${var.memory}\",\"osType\":\"${var.osType}\",\"osBitNum\":\"${var.osBitNum}\",\"imgCode\":\"${var.imgCode}\",\"imgUserName\":\"${var.imgUserName}\",\"imgUserPass\":\"${var.imgUserPass}\",\"imgPath\":\"${var.imgPath}\",\"diskType\":\"${var.diskType}\",\"diskSize\":\"${var.diskSize}\",\"diskEncrypt\":\"${var.diskEncrypt}\",\"softCode\":\"${var.softCode}\",\"softParam\":\"${var.softParam}\",\"expireDate\":\"${var.expireDate}\",\"virNum\":\"${var.virNum}\"}	")'/>${var.pckgName}</span>
 						<div style="float: left;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delPckg(this, '${var.orderNo}', '${var.pckgName}')" class="img_close"></div>
 					</td>
 					<td style="border-bottom:1px solid #cccccc;">

@@ -29,8 +29,6 @@ public class CmpOrder {
 	private String diskEncrypt;//磁盘加密，多个用英文逗号分隔
 	private String softCode;//软件代码，多个用英文逗号分隔
 	private String softName;//软件名称，多个用英文逗号分隔
-	private String softVer;//软件版本，多个用英文逗号分隔
-	private String softVerName;//软件版本名称，多个用英文逗号分隔
 	private String softParam;//软件参数，多个用英文逗号分隔
 	private String projectCode;//项目代码
 	private String projectCodeName;//项目代码名称
@@ -43,7 +41,6 @@ public class CmpOrder {
 	private String imgUserName;//镜像用户名
 	private String imgUserPass;//镜像用户密码
 	private String imgPath;//镜像路径
-	private String imgExpireDate;//镜像到期时间
 	private String expireDate;//到期时间
 	private String virNum;//虚拟机数量
 	private String pckgName;//套餐名称
@@ -249,22 +246,6 @@ public class CmpOrder {
 		this.softName = softName;
 	}
 
-	public String getSoftVer() {
-		return softVer;
-	}
-
-	public void setSoftVer(String softVer) {
-		this.softVer = softVer;
-	}
-
-	public String getSoftVerName() {
-		return softVerName;
-	}
-
-	public void setSoftVerName(String softVerName) {
-		this.softVerName = softVerName;
-	}
-
 	public String getSoftParam() {
 		return softParam;
 	}
@@ -359,14 +340,6 @@ public class CmpOrder {
 
 	public void setImgPath(String imgPath) {
 		this.imgPath = imgPath;
-	}
-
-	public String getImgExpireDate() {
-		return imgExpireDate;
-	}
-
-	public void setImgExpireDate(String imgExpireDate) {
-		this.imgExpireDate = imgExpireDate;
 	}
 
 	public String getExpireDate() {

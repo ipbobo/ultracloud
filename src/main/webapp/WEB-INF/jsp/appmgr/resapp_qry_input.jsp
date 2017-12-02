@@ -168,9 +168,9 @@ function checkData(){
 		return false;
 	}
 	
-	if($("#imgExpireDate").val()==""){
-		$("#imgExpireDate").tips({side:3, msg:'镜像到期时间不能为空', bg:'#AE81FF', time:2});
-		$("#imgExpireDate").focus();
+	if($("#softCode").val()==""){
+		$("#softCode").tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
+		$("#softCode").focus();
 		return false;
 	}
 	
@@ -244,7 +244,6 @@ function addList(){
 		jsonObj.imgUserName=$("#imgUserName").val();//镜像用户名                  
 		jsonObj.imgUserPass=$("#imgUserPass").val();//镜像用户密码                
 		jsonObj.imgPath=$("#imgPath").val();//镜像路径                        
-		jsonObj.imgExpireDate=$("#imgExpireDate").val();//镜像到期时间              
 		jsonObj.expireDate=$("#expireDate").val();//到期时间                     
 		jsonObj.virNum=$("#virNum").val();//虚拟机数量                       
 		jsonObj.pckgName=$("#pckgName").val();//套餐名称                       
@@ -298,7 +297,6 @@ function savePckg(){
 	jsonObj.imgUserName=$("#imgUserName").val();//镜像用户名                  
 	jsonObj.imgUserPass=$("#imgUserPass").val();//镜像用户密码                
 	jsonObj.imgPath=$("#imgPath").val();//镜像路径                        
-	jsonObj.imgExpireDate=$("#imgExpireDate").val();//镜像到期时间              
 	jsonObj.expireDate=$("#expireDate").val();//到期时间                     
 	jsonObj.virNum=$("#virNum").val();//虚拟机数量                       
 	jsonObj.pckgName=$("#pckgName").val();//套餐名称                       

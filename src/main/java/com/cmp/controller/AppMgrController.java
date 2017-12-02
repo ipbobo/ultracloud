@@ -291,7 +291,6 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setDiskSize(request.getParameter("diskSizeStr"));//磁盘大小字符串
 		cmpOrder.setDiskEncrypt(request.getParameter("diskEncryptStr"));//磁盘加密字符串
 		cmpOrder.setSoftCode(request.getParameter("softCodeStr"));//软件代码字符串
-		cmpOrder.setSoftVer(request.getParameter("softVerStr"));//软件版本字符串
 		cmpOrder.setSoftParam(request.getParameter("softParamStr"));//软件参数字符串
 		cmpOrder.setProjectCode(request.getParameter("projectCode"));//项目
 		cmpOrder.setOsType(request.getParameter("osType"));//操作系统
@@ -300,7 +299,6 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setImgUserName(request.getParameter("imgUserName"));//镜像用户名
 		cmpOrder.setImgUserPass(request.getParameter("imgUserPass"));//镜像用户密码
 		cmpOrder.setImgPath(request.getParameter("imgPath"));//镜像路径
-		cmpOrder.setImgExpireDate(request.getParameter("imgExpireDate"));//镜像到期时间
 		cmpOrder.setExpireDate(request.getParameter("expireDate"));//到期时间
 		cmpOrder.setVirNum(request.getParameter("virNum"));//数量
 		cmpOrder.setStatus(request.getParameter("status"));//状态：0-待提交；1-已提交；T-套餐
