@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -93,5 +94,10 @@ public class EnvironmentServiceImpl implements EnvironmentService {
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("EnvironmentMapper.deleteAll", ArrayDATA_IDS);
 	}
-
+	
+	//环境列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpDict> getEnvList() throws Exception {
+		return (List<CmpDict>) dao.findForList("EnvironmentMapper.getEnvList", null);
+	}
 }

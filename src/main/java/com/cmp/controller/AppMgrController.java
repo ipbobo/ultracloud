@@ -20,6 +20,7 @@ import com.cmp.service.CmpCommonService;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
+import com.cmp.service.EnvironmentService;
 import com.cmp.service.ProjectService;
 import com.cmp.sid.CmpOrder;
 import com.cmp.util.StringUtil;
@@ -44,6 +45,8 @@ public class AppMgrController extends BaseController {
 	private CmpWorkOrderService cmpWorkOrderService;
 	@Resource
 	private ProjectService projectService;
+	@Resource
+	private EnvironmentService environmentService;
 	
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
@@ -53,7 +56,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
 		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
-		mv.addObject("envCodeList", cmpDictService.getCmpDictList("env_code"));//环境列表
+		mv.addObject("envCodeList", environmentService.getEnvList());//环境列表
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
 		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
@@ -82,7 +85,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
 		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
-		mv.addObject("envCodeList", cmpDictService.getCmpDictList("env_code"));//环境列表
+		mv.addObject("envCodeList", environmentService.getEnvList());//环境列表
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
 		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
