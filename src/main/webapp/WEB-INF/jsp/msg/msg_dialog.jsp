@@ -16,8 +16,6 @@
 </script>
 </head>
 <body>
-<!-- 按钮触发模态框 -->
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">提示信息</button>
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

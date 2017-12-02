@@ -19,6 +19,7 @@
 <%@ include file="top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
+<jsp:include page="../msg/msg_dialog.jsp"></jsp:include>
 </head>
 <body class="no-skin">
 	<!-- /section:basics/navbar.layout -->
@@ -36,12 +37,11 @@
 						<input type="hidden" name="middleware_msg" id="middleware_msg" value="">
 						<input type="hidden" name="vm_msg" id="vm_msg" value="">
 							<div id="zhongxin" style="padding-top: 50px;">
-							<div id="left" style="padding-left: 20%; padding-right: 20%">
-							<table id="table_report" class="table table-striped table-bordered table-hover">
+							<table id="table_report" class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;" >
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;服务类型</td>
 									<td id="tip_service_type">
-									<select name="service_type" id="service_type" title="清选择服务类型" style="width:40%" onchange="onServiceTypeSelected(this.value)">
+									<select name="service_type" id="service_type" title="清选择服务类型" style="width:20%;margin-left: 100px;" onchange="onServiceTypeSelected(this.value)">
 										<option value="#" selected="selected">清选择服务类型</option>
 									   <c:forEach items="${serviceTypeList}" var="var">
 					                   <option value="${var.dictCode}">${var.dictValue}</option>
@@ -52,7 +52,7 @@
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;操作类型:</td>
 									<td id="tip_oper_type">
-									<select name="oper_type" id="oper_type" title="清选择操作类型" style="width:40%">
+									<select name="oper_type" id="oper_type" title="清选择操作类型" style="width:20%;margin-left: 100px;">
 										<option value="#">请选择操作类型</option>
 									</select>
 									</td>
@@ -60,14 +60,14 @@
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;选择虚拟机:</td>
 									<td id="tip_vm">
-									<button class="btn btn-info" id="btn_vm_add"  style="float:left;" type="button" data-toggle="modal" data-target="#vm_modal">添加</button>
+									<button class="btn btn-info" id="btn_vm_add"  style="float:left;margin-left: 100px;" type="button" data-toggle="modal" data-target="#vm_modal">添加</button>
 									<div style="float:left; text-align: center;line-height:40px; padding-left: 40px;" id="v_vm"></div>
 									</td>
 								</tr>
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;操作中间件:</td>
 									<td id="tip_middleware" >
-										<button class="btn btn-info" style="float:left;" id="btn_add_middleware" type="button" data-toggle="modal" data-target="#middleware_modal">添加</button>
+										<button class="btn btn-info" style="float:left;margin-left: 100px;" id="btn_add_middleware" type="button" data-toggle="modal" data-target="#middleware_modal">添加</button>
 										<div style="float:left; text-align: center;line-height:40px; padding-left: 40px;" id="v_middleware"></div>
 									</td>
 								</tr>
@@ -211,7 +211,7 @@
 	$(document).ready(function(){
 		var result = $('#ret_msg').val();
 		if (result != ''){
-			alert(result);
+			showDialog(result);
 		}
 	});
 	

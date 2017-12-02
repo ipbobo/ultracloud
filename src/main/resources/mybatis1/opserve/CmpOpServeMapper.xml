@@ -67,4 +67,8 @@
 		)
 	</insert>
 	
+	<select id="findByOrderNo" resultType="com.cmp.sid.CmpOpServe" parameterType="String">
+		select * from  <include refid="tableName"/> where id = #{id}
+	</select>
+	
 </mapper>
