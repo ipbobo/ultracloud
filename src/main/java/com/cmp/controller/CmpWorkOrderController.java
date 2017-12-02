@@ -1,5 +1,6 @@
 package com.cmp.controller;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.task.Task;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
@@ -20,10 +24,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmp.activiti.service.ActivitiService;
 import com.cmp.entity.Project;
 import com.cmp.service.CmpDictService;
+import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.ProjectService;
 import com.cmp.sid.CmpDict;
+import com.cmp.sid.CmpOpServe;
 import com.cmp.sid.CmpWorkOrder;
+import com.cmp.sid.RelateTask;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
@@ -49,6 +56,9 @@ public class CmpWorkOrderController extends BaseController{
 	
 	@Resource
 	private ActivitiService activitiService;
+	
+	@Resource
+	private CmpOpServeService cmpOpServeService;
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
@@ -105,7 +115,6 @@ public class CmpWorkOrderController extends BaseController{
 		}else if (userType != null && userType.equals("executor")) {
 			qxMap.put("execute", "1");
 		}
-		
 		
 		mv.addObject("workOrderList", workOrderList);
 		mv.addObject("workorderTypeList", workorderTypeList);
@@ -167,11 +176,45 @@ public class CmpWorkOrderController extends BaseController{
 			return null;
 		}
 		CmpWorkOrder toViewWorkorder = cmpWorkOrderService.findByAppNo(appNo);
-		String toCheckUrl = "";
+	
+		//获取工作流程图,查询流程定义
+		HistoricProcessInstance hpi = activitiService.findProcessInst(toViewWorkorder.getProcInstId());
+		ActivityImpl workorderImag = null;
+		if (!toViewWorkorder.getStatus().equals("5")) {
+			//流程执行未完毕
+			workorderImag = activitiService.getProcessMap(hpi.getProcessDefinitionId(), hpi.getId()); 
+		}
+		//获取流程信息
+		List<RelateTask> relateTaskList = new ArrayList<RelateTask>();
+		List<HistoricActivityInstance> hisActInst = activitiService.getHisActInfo(toViewWorkorder.getProcInstId());
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		for (HistoricActivityInstance hai : hisActInst) {
+			if(hai.getActivityName() == null || hai.getActivityName().equals("")) {
+				continue;
+			}
+			RelateTask rt = new RelateTask();
+			rt.setTaskNo(hai.getActivityId());
+			rt.setAssignee(hai.getAssignee());
+			rt.setStatus(hai.getEndTime() != null ? "关闭" : "新建");
+			rt.setResult(hai.getEndTime() != null ? "符合申请" : "未处理");
+			rt.setTime(hai.getEndTime() == null? "无" : df.format(hai.getEndTime()));
+			relateTaskList.add(rt);
+		}
+		
+		mv.addObject("relateTaskList", relateTaskList);
+		mv.addObject("hisActInst", hisActInst);
+		mv.addObject("workorderImag", workorderImag);
+		mv.addObject("procDefId", hpi.getProcessDefinitionId());
 		//是资源申请，跳资源申请审核页面或运维申请审核页面
+		String toCheckUrl = "";
 		if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("1")) {
+			
 			toCheckUrl = "workorder/applyview";
 		}else if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("2")) {
+			//查询工单关联的运维信息
+			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toViewWorkorder.getOrderNo());
+			cmpOpServeService.encase(opServe);  //中文填充
+			mv.addObject("opServe", opServe);
 			toCheckUrl = "workorder/operview";
 		}
 		mv.addObject("workorder", toViewWorkorder);
@@ -341,6 +384,31 @@ public class CmpWorkOrderController extends BaseController{
 		}
 		return mv;
 	}
+	
+	/** 
+	 * 获取流程图像 
+	 *@author
+	 * @return 
+	 */  
+	@RequestMapping(value="/findworkflowPic")  
+	public void findPic(String procDefId,HttpServletResponse response){  
+	    //HttpServletResponse response = ServletActionContext.getResponse();  
+	    try {  
+	        InputStream pic = activitiService.findProcessPic(procDefId);  
+	          
+	        byte[] b = new byte[1024];  
+	        int len = -1;  
+	        while((len = pic.read(b, 0, 1024)) != -1) {  
+	            response.getOutputStream().write(b, 0, len);  
+	        }  
+	  
+	    } catch (Exception e) {  
+	        logger.error("获取图片失败。。。");  
+	        e.printStackTrace();  
+	    }  
+	}  
+	
+	
 	
 	public Map getAppTypeNameMap() {
 		Map<String, String> appTypeNameMap = new HashMap<String, String>();
