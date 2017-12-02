@@ -18,6 +18,8 @@ public class Medium {
 	private String url;
 	private String username;
 	private String detail;
+	private String type;
+	private String filesize;
 	private Timestamp gmt_create;
 	private Timestamp gmt_modified;
 
@@ -91,6 +93,22 @@ public class Medium {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getFilesize() {
+		return filesize;
+	}
+
+	public void setFilesize(String filesize) {
+		this.filesize = filesize;
 	}
 
 }

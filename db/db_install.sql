@@ -394,8 +394,8 @@ DROP TABLE IF EXISTS `t_script_param`;
 CREATE TABLE `t_script_param` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '参数名称',
-  `script_param_key` varchar(10) DEFAULT NULL COMMENT '参数key',
-  `default_value` varchar(20) DEFAULT NULL COMMENT '默认值',
+  `param_key` varchar(10) DEFAULT NULL COMMENT '参数key',
+  `value` varchar(20) DEFAULT NULL COMMENT '默认值',
   `number` int unsigned DEFAULT NULL COMMENT '参数顺序',
   `script_id` bigint unsigned NOT NULL COMMENT '脚本id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
