@@ -219,11 +219,11 @@ CREATE TABLE `t_mirror` (
   `name` varchar(20) NOT NULL COMMENT '名称',
   `ostype` varchar(20) DEFAULT NULL COMMENT '操作系统类型',
   `osname` varchar(20) DEFAULT NULL COMMENT '操作系统名称',
-  `bitrate` tinyint unsigned DEFAULT NULL COMMENT '位数',
-  `creator` bigint unsigned NOT NULL COMMENT '创建者id',
+  `bitrate` int unsigned DEFAULT NULL COMMENT '位数',
+  `USERNAME` varchar(35) NOT NULL COMMENT '创建者id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_creator(`creator`),
+  INDEX idx_USERNAME(`USERNAME`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='镜像'; 
@@ -237,8 +237,8 @@ CREATE TABLE `t_mirrortemplate` (
   `name` varchar(20) NOT NULL COMMENT '名称',
   `url` varchar(1000) DEFAULT NULL COMMENT '镜像模板文件存储路径',
   `size` int unsigned DEFAULT NULL COMMENT '文件大小',
+  `cloudplatform_id` bigint unsigned NOT NULL COMMENT '云平台id',
   `datacenter_id` bigint unsigned NOT NULL COMMENT '数据中心id',
-  `resourcepool_id` bigint unsigned NOT NULL COMMENT '资源池id',
   `ostype` varchar(20) DEFAULT NULL COMMENT '操作系统类型',
   `osname` varchar(20) DEFAULT NULL COMMENT '操作系统名称',
   `bitrate` tinyint unsigned DEFAULT NULL COMMENT '位数',

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MirrorMapper">
+	
+	<resultMap type="MirrorTemplateMap" id="mirrorTemplateMapResultMap">
+		<id column="id" property="id"/>
+		<result column="usergroup_id" property="usergroup_id"/>
+		<result column="USER_ID" property="USER_ID"/>
+		<result column="gmt_create" property="gmt_create"/>
+		<result column="gmt_modified" property="gmt_modified"/>
+	</resultMap>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		t_mirror
+	</sql>
+	<sql id="mtmtableName">
+		t_mirror_template_map
+	</sql>
+	<sql id="mttableName">
+		t_mirrortemplate
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,	
+		<include refid="Field_main"></include>,<include refid="Field_time"></include>
+	</sql>
+	
+	<sql id="Field_main">
+		name,
+		ostype,
+		osname,
+		bitrate,
+		USERNAME
+	</sql>
+	
+	<sql id="Field_time">
+		gmt_create,
+		gmt_modified
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},	
+		<include refid="FieldValue_main"></include>,<include refid="FieldValue_time"></include>
+	</sql>
+		
+	<!-- 字段值 -->
+	<sql id="FieldValue_main">	
+		#{name},
+		#{ostype},
+		#{osname},
+		#{bitrate},
+		#{USERNAME}
+	</sql>
+	
+	<sql id="FieldValue_time">	
+		#{gmt_create},
+		#{gmt_modified}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field_main"></include>
+		) values (
+	<include refid="FieldValue_main"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			name = #{name},
+			ostype = #{ostype},
+			osname = #{osname},
+			bitrate = #{bitrate},
+			USERNAME = #{USERNAME}
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 脚本列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
+			and id in ${pd.item}
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 列出未加入镜像的模板 -->
+	<select id="listAllOutByMirrorId"  parameterType="pd" resultType="pd" >
+		select 
+			id,name,osname,bitrate
+		from 
+			t_mirrortemplate
+		where ostype=#{ostype} and bitrate=#{bitrate} and id NOT IN (select mtm.mirrortemplate_id from t_mirrortemplate m, t_mirror_template_map mtm
+						where m.id=mtm.mirrortemplate_id
+						and mtm.mirror_id= #{id})
+	</select>
+	
+	<!-- 列出已加入镜像的模板 -->
+	<select id="listAllInByMirrorId"  parameterType="pd" resultType="pd" >
+		select u.id,u.name,u.osname,u.bitrate
+		from t_mirrortemplate u, t_mirror_template_map ugu
+		where u.id = ugu.mirrortemplate_id 
+		and ugu.mirror_id= #{id}
+	</select>
+	
+	<!-- 通过镜像查找模板 -->
+	<select id="listMirrorTemplateMap" parameterType="String" resultMap="mirrorTemplateMapResultMap">
+		select * from 
+		<include refid="mtmtableName"></include>
+		where mirror_id=#{id}
+	</select>
+	
+	<!-- 批量删除镜像与模板的关联 -->
+	<delete id="deleteAllMirrorTemplateMap" parameterType="String">
+		delete from
+		<include refid="mtmtableName"></include>
+		where id in
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量插入镜像与模板的关联 -->
+	<insert id="insertAllMirrorTemplateMap" parameterType="java.util.List">   
+    	insert into 
+    	<include refid="mtmtableName"></include> (mirror_id,mirrortemplate_id)   
+    	values  
+    	<foreach collection="list" item="item" index="index" separator="," >  
+        	(#{item.mirror_id},#{item.mirrortemplate_id})  
+    	</foreach>  
+	</insert> 
+	
+	<!-- 删除镜像与模板的关联，按镜像 -->
+	<delete id="deleteByMirrorId" parameterType="pd">
+		delete from
+		<include refid="mtmtableName"></include>
+		where 
+			mirror_id = #{id}
+	</delete>
+	
+</mapper>
