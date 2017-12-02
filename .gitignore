@@ -13,4 +13,6 @@ buildNumber.properties
 
 .project
 .classpath
-.settings/
+.settings
+
+.DS_Store/
