@@ -158,25 +158,79 @@
 	
 	<!-- 套餐列表查询 -->
 	<select id="getPckgList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
-		select <include refid="fieldName"/>
+		select a.orderNo, a.createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softVer, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.imgExpireDate, a.expireDate, a.virNum, a.pckgName
+		, b.dictValue areaCodeName
+		, c.dictValue platTypeName
+		, d.dictValue deployTypeName
+		, e.dictValue envCodeName
+		, f.dictValue resTypeName
+		, g.name projectCodeName
+		, h.dictValue osTypeName
+		, i.dictValue osBitNumName
+		, j.dictValue imgCodeName
 		from 
-		<include refid="tableName"/>
+		<include refid="tableName"/> a
+		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
+		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
+		left join cmp_dict d on d.dictType='plat_type' and d.dictCode=a.deployType
+		left join cmp_dict e on e.dictType='env_code' and e.dictCode=a.envCode
+		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
+		left join t_project g on g.id=a.projectCode
+		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
+		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
+		left join cmp_dict j on j.dictType='img_code' and j.dictCode=a.imgCode
 		where status='T'
 	</select>
 	
 	<!-- 购物车列表查询 -->
 	<select id="getShoppingCartList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
-		select <include refid="fieldName"/>
+		select a.orderNo, a.createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softVer, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.imgExpireDate, a.expireDate, a.virNum, a.pckgName
+		, b.dictValue areaCodeName
+		, c.dictValue platTypeName
+		, d.dictValue deployTypeName
+		, e.dictValue envCodeName
+		, f.dictValue resTypeName
+		, g.name projectCodeName
+		, h.dictValue osTypeName
+		, i.dictValue osBitNumName
+		, j.dictValue imgCodeName
 		from 
-		<include refid="tableName"/>
+		<include refid="tableName"/> a
+		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
+		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
+		left join cmp_dict d on d.dictType='plat_type' and d.dictCode=a.deployType
+		left join cmp_dict e on e.dictType='env_code' and e.dictCode=a.envCode
+		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
+		left join t_project g on g.id=a.projectCode
+		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
+		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
+		left join cmp_dict j on j.dictType='img_code' and j.dictCode=a.imgCode
 		where status='0'
 	</select>
 	
 	<!-- 已购历史列表查询 -->
 	<select id="getBuyHisList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
-		select <include refid="fieldName"/>
+		select a.orderNo, a.createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softVer, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.imgExpireDate, a.expireDate, a.virNum, a.pckgName
+		, b.dictValue areaCodeName
+		, c.dictValue platTypeName
+		, d.dictValue deployTypeName
+		, e.dictValue envCodeName
+		, f.dictValue resTypeName
+		, g.name projectCodeName
+		, h.dictValue osTypeName
+		, i.dictValue osBitNumName
+		, j.dictValue imgCodeName
 		from 
-		<include refid="tableName"/>
+		<include refid="tableName"/> a
+		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
+		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
+		left join cmp_dict d on d.dictType='plat_type' and d.dictCode=a.deployType
+		left join cmp_dict e on e.dictType='env_code' and e.dictCode=a.envCode
+		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
+		left join t_project g on g.id=a.projectCode
+		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
+		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
+		left join cmp_dict j on j.dictType='img_code' and j.dictCode=a.imgCode
 		where status='1'
 	</select>
 	

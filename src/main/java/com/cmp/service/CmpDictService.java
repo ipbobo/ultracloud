@@ -1,7 +1,9 @@
 package com.cmp.service;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,24 @@ public class CmpDictService extends AbstractDao<CmpDict, Long> {
 			List<CmpDict> cmpDictList=getCacheQuery().eq("dictType", dictType).getList();
 			Collections.sort(cmpDictList);//排序
 			return cmpDictList;
+		} catch (Exception e) {
+			logger.error("数据字典列表查询时错误："+e);
+			return null;
+		}
+	}
+	
+	//数据字典列表查询
+	public Map<String, String> getCmpDictMap(String dictType) {
+		try {
+			Map<String, String> dictMap=new LinkedHashMap<String, String>();
+			List<CmpDict> cmpDictList=getCacheQuery().eq("dictType", dictType).getList();
+			if(cmpDictList!=null && !cmpDictList.isEmpty()){
+				for(CmpDict cmpDict: cmpDictList){
+					dictMap.put(cmpDict.getDictCode(), cmpDict.getDictValue());
+				}
+			}
+			
+			return dictMap;
 		} catch (Exception e) {
 			logger.error("数据字典列表查询时错误："+e);
 			return null;

@@ -178,7 +178,7 @@ function choosePckg(jsonStr){
 						</tr>
 						<tr>
 							<td align="right" style="width: 120px;">镜像：</td>
-							<td align="left" style="width: 180px;">${var.osType}&nbsp;${var.osBitNum}&nbsp;位</td>
+							<td align="left" style="width: 180px;">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
 							<td align="right" style="width: 120px;">数据盘：</td>
 							<td align="left" style="width: 180px;">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
 							<td align="right" style="width: 120px;">购买量：</td>
