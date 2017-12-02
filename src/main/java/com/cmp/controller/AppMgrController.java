@@ -21,6 +21,7 @@ import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.EnvironmentService;
+import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
 import com.cmp.sid.CmpOrder;
 import com.cmp.util.StringUtil;
@@ -47,6 +48,8 @@ public class AppMgrController extends BaseController {
 	private ProjectService projectService;
 	@Resource
 	private EnvironmentService environmentService;
+	@Resource
+	private MediumService mediumService;
 	
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
@@ -67,8 +70,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("imgCodeList", cmpDictService.getCmpDictList("img_code"));//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
-		mv.addObject("softCodeList", cmpDictService.getCmpDictList("soft_code"));//软件代码列表
-		mv.addObject("softVerList", cmpDictService.getCmpDictList("soft_ver"));//软件版本列表
+		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
 		mv.addObject("cmpOrder", StringUtils.isBlank(orderNo)?null:cmpOrderService.getOrderDtl(orderNo));//清单详细信息
 		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList();//购物车列表查询
 		mv.addObject("shoppingCartNum", shoppingCartList!=null?shoppingCartList.size():0);//购物车列表大小
@@ -96,8 +98,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("imgCodeList", cmpDictService.getCmpDictList("img_code"));//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
-		mv.addObject("softCodeList", cmpDictService.getCmpDictList("soft_code"));//软件代码列表
-		mv.addObject("softVerList", cmpDictService.getCmpDictList("soft_ver"));//软件版本列表
+		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
 		mv.addObject("pckgList", cmpOrderService.getPckgList());//套餐列表查询
 		mv.setViewName("appmgr/resapp_pckg_input");
 		return mv;
@@ -124,23 +125,6 @@ public class AppMgrController extends BaseController {
 		mv.setViewName("appmgr/buyhis_qry_list");
 		return mv;
 	}
-	
-	/*@RequestMapping(value="/getDictList", produces={"application/json;charset=UTF-8"})
-    @ResponseBody
-	public String getDataDiskTypeList(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String operType=request.getParameter("operType");//操作类型：disk-磁盘；soft-软件安装
-		if("disk".equals(operType)){//操作类型：disk-磁盘；soft-软件安装
-			List<CmpDict> dataList=cmpDictService.getCmpDictList("disk_type");//数据字典列表查询
-			List<CmpDict> subDataList=cmpDictService.getCmpDictList("disk_size");//数据字典列表查询
-			return StringUtil.getRetStr("0", "调用成功", "dataList", dataList, "subDataList", subDataList);
-		}else if("soft".equals(operType)){//操作类型：disk-磁盘；soft-软件安装
-			List<CmpDict> dataList=cmpDictService.getCmpDictList("soft_code");//数据字典列表查询
-			List<CmpDict> subDataList=cmpDictService.getCmpDictList("soft_ver");//数据字典列表查询
-			return StringUtil.getRetStr("0", "调用成功", "dataList", dataList, "subDataList", subDataList);
-		}
-		
-		return StringUtil.getRetStr("-", "调用失败：不支持的操作类型");
-	}*/
 	
 	//加入清单
 	@RequestMapping(value="/addList", produces={"application/json;charset=UTF-8"})

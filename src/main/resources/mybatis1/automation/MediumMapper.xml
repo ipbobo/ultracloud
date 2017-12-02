@@ -155,4 +155,8 @@
 		ORDER BY id
 	</select>
 	
+	<!-- 软件列表查询 -->
+	<select id="getSoftList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, contact(name, ' ', version) dictValue from t_medium
+	</select>
 </mapper>

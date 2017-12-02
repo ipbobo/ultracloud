@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.cmp.entity.Medium;
+import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -99,4 +100,9 @@ public class MediumServiceImpl implements MediumService {
 		return (List<Medium>) dao.findForList("MediumMapper.listAllMediumByPId", pd);
 	}
 
+	//软件列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpDict> getSoftList() throws Exception {
+		return (List<CmpDict>) dao.findForList("MediumMapper.getSoftList", null);
+	}
 }
