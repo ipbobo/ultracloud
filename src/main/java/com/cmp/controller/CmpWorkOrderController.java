@@ -1,5 +1,6 @@
 package com.cmp.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ import com.fh.entity.system.User;
 import com.fh.service.system.user.UserManager;
 import com.fh.util.Const;
 import com.fh.util.Jurisdiction;
+import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 @Controller
@@ -68,15 +70,21 @@ public class CmpWorkOrderController extends BaseController{
 		page.setPd(pd);
 		
 		
-		//查询用户组任务
-		//List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), page.getCurrentPage()+1, page.getShowCount());
-		//查询工作流中到个人的工单
-		//com.cmp.util.Page<TaskBean> taskBeans = activitiService.getPersonalTaskList(userr.getUSERNAME(), page.getCurrentPage()+1, page.getShowCount());
-		
-		//根据用户类别查询不同的工单
-		//申请者可查询自己申请的工单
+		//工单查询
 		List<PageData> workOrderList = new ArrayList<PageData>();
 		workOrderList = cmpWorkOrderService.listUserWorkorderByPd(page);
+		//中文转化
+		Map appTypeNameMap =  getAppTypeNameMap();
+		Map workStatusMap = getWorkorderStatusNameMap();
+		Map projectNameMap = getProjectNameMap();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		for (PageData workorderpd : workOrderList) {
+			workorderpd.put("projectName", projectNameMap.get(workorderpd.get("projectCode") == null ? "" : workorderpd.get("projectCode")));
+			workorderpd.put("statusName", workStatusMap.get(workorderpd.get("status") == null ? "" : workorderpd.get("status")));
+			workorderpd.put("appTypeName", appTypeNameMap.get(workorderpd.get("appType") == null ? "" : workorderpd.get("appType")));
+			workorderpd.put("createTime", workorderpd.get("createTime") == null ? "" : df.format(workorderpd.get("createTime")));
+			
+		}
 		
 		
 		
@@ -210,7 +218,7 @@ public class CmpWorkOrderController extends BaseController{
 				
 				//更新工单(流程实例ID 和 工单状态)
 				Map<String, String> updateParams = new HashMap<String, String>();
-				updateParams.put("status", "4");  //进入运维执行状态
+				updateParams.put("status", "2");  //进入运维执行状态
 				updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
 				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 				
@@ -274,6 +282,66 @@ public class CmpWorkOrderController extends BaseController{
 		return map;
 	}
 	
+	
+	/**导出工单信息到EXCEL
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/workorderExcel")
+	public ModelAndView exportExcel(Page page) throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		try{
+			Session session = Jurisdiction.getSession();
+			User userr = (User)session.getAttribute(Const.SESSION_USERROL);				//读取session中的用户信息(含角色信息)
+			if (userr == null) {
+				User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
+				if (user == null) {
+					mv.setViewName("system/index/login");
+					return mv;
+				}
+				userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
+				session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
+			}
+			pd = this.getPageData();
+			pd.put("USERNAME", userr.getUSERNAME());
+			page.setPd(pd);
+			
+			Map appTypeNameMap =  getAppTypeNameMap();
+			Map workStatusMap = getWorkorderStatusNameMap();
+			Map projectNameMap = getProjectNameMap();
+			List<PageData> workOrderList = new ArrayList<PageData>();
+			workOrderList = cmpWorkOrderService.listUserWorkorderByPd(page);
+			
+				Map<String,Object> dataMap = new HashMap<String,Object>();
+				List<String> titles = new ArrayList<String>();
+				titles.add("工单号"); 		//1
+				titles.add("工单类型");  		//2
+				titles.add("工单状态");			//3
+				titles.add("项目名称");			//4
+				titles.add("工单时间");			//5
+				dataMap.put("titles", titles);
+				List<PageData> varList = new ArrayList<PageData>();
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				for(int i=0;i<workOrderList.size();i++){
+					PageData vpd = new PageData();
+					vpd.put("var1", workOrderList.get(i).getString("appNo"));		//1
+					vpd.put("var2", appTypeNameMap.get(workOrderList.get(i).getString("appType") == null ?  "" : workOrderList.get(i).getString("appType")));		//2
+					vpd.put("var3", workStatusMap.get(workOrderList.get(i).getString("status") == null ? "" : workOrderList.get(i).getString("status") ));			//3
+					vpd.put("var4", projectNameMap.get(workOrderList.get(i).getString("projectCode") == null ? "" : workOrderList.get(i).getString("projectCode")));	//4
+					vpd.put("var5", df.format(workOrderList.get(i).get("createTime")));		//5
+					varList.add(vpd);
+				}
+				dataMap.put("varList", varList);
+				ObjectExcelView erv = new ObjectExcelView();					//执行excel操作
+				mv = new ModelAndView(erv,dataMap);
+		} catch(Exception e){
+			logger.error(e.toString(), e);
+		}
+		return mv;
+	}
+	
 	public Map getAppTypeNameMap() {
 		Map<String, String> appTypeNameMap = new HashMap<String, String>();
 		List<CmpDict> workorderTypeList =  cmpDictService.getCmpDictList("workorder_type");
@@ -292,6 +360,16 @@ public class CmpWorkOrderController extends BaseController{
 		return workorderStatusNameMap;
 	}
 	
+	
+	public Map getProjectNameMap() throws Exception {
+		Map<String, String> projectNameMap = new HashMap<String, String>();
+		List<Project>  projectList = projectService.listAllProject();
+		for (Project p : projectList) {
+			projectNameMap.put(p.getId(), p.getName());
+		}
+		return projectNameMap;
+		
+	}
 	
 	public String getUserName(String userId) throws Exception {
 		User userr = userService.getUserAndRoleById(userId);

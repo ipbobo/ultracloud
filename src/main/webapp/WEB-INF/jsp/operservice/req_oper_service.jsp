@@ -12,6 +12,7 @@
 <html lang="en">
 <head>
 <base href="<%=basePath%>">
+<link rel="stylesheet" href="css/style.css"/>
 <!-- 下拉框 -->
 <link rel="stylesheet" href="static/ace/css/chosen.css" />
 <!-- jsp文件头和头部 -->
@@ -59,14 +60,15 @@
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;选择虚拟机:</td>
 									<td id="tip_vm">
-									
-									<button class="btn btn-info" id="btn_vm_add" type="button" data-toggle="modal" data-target="#vm_modal">添加</button>
+									<button class="btn btn-info" id="btn_vm_add"  style="float:left;" type="button" data-toggle="modal" data-target="#vm_modal">添加</button>
+									<div style="float:left; text-align: center;line-height:40px; padding-left: 40px;" id="v_vm"></div>
 									</td>
 								</tr>
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;操作中间件:</td>
-									<td id="tip_middleware">
-										<button class="btn btn-info" id="btn_add_middleware" type="button" data-toggle="modal" data-target="#middleware_modal">添加</button>
+									<td id="tip_middleware" >
+										<button class="btn btn-info" style="float:left;" id="btn_add_middleware" type="button" data-toggle="modal" data-target="#middleware_modal">添加</button>
+										<div style="float:left; text-align: center;line-height:40px; padding-left: 40px;" id="v_middleware"></div>
 									</td>
 								</tr>
 								
@@ -105,10 +107,12 @@
 												<td align="right" style="width: 120px;padding:10px;">虚拟机：</td>
 												<td align="left" style="padding:10px;" id="tip_vm_btn_group">
 													<div class="btn-group"></div>
-														<c:if test="${not empty middlewareList}">
-														<c:forEach items="${vmList}" var="var" varStatus="st">
-														<button id="vm${var.dictCode}" onclick="setFieldValue(this, 'vm', '${var.dictValue}')" class="btn">${var.dictValue}</button>
-														</c:forEach>
+														<c:if test="${not empty vmList}">
+														<ul id="vmId" class="ullitab list-inline">
+															<c:forEach items="${vmList}" var="var" varStatus="st">
+															<li onclick="setFieldValue(this, 'vm', '${var.dictValue}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+															</c:forEach>
+														</ul>
 														</c:if>
 												</td>
 											</tr>
@@ -150,10 +154,13 @@
 												<td align="left" style="padding:10px;" id="tip_middleware_btn_group">
 													<div class="btn-group"></div>
 														<c:if test="${not empty middlewareList}">
-														<c:forEach items="${middlewareList}" var="var" varStatus="st">
-															<button id="middleware${var.dictCode}" onclick="setFieldValue(this, 'middleware', '${var.dictValue}')" class="btn">${var.dictValue}</button>
-														</c:forEach>
+														<ul id="middlewareId" class="ullitab list-inline">
+															<c:forEach items="${middlewareList}" var="var" varStatus="st">
+															<li onclick="setFieldValue(this, 'middleware', '${var.dictValue}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+															</c:forEach>
+														</ul>
 														</c:if>
+														
 												</td>
 											</tr>
 											<tr class="tablecls">
@@ -212,9 +219,19 @@
 		return(new RegExp(/^(?:[a-zA-Z0-9]+[_\-\+\.]?)*[a-zA-Z0-9]+@(?:([a-zA-Z0-9]+[_\-]?)*[a-zA-Z0-9]+\.)+([a-zA-Z]{2,})+$/).test(mail));
 	}
 	
+	function setFieldCls(obj, fieldName){
+		$("#"+fieldName+"Id li").each(function(){//$("#id li")
+			if($(this).hasClass("active")){
+				$(this).removeClass("active");
+			}
+		});
+		
+		$(obj).addClass("active");
+	}
 
 	function setFieldValue(obj, fieldName, fieldValue){
 		$("#"+fieldName).val(fieldValue);
+		setFieldCls(obj, fieldName);
 	}
 	
 	function middlewareModalOK(){
@@ -228,6 +245,8 @@
 			return false;
 		}
 		$('#middleware_msg').val($('#middleware_textarea').val());
+		$('#btn_add_middleware').text('修改');
+		$('#v_middleware').html("<b>你选择的中间件: "+ $('#middleware').val()+ "</b>")
 		$('#middleware_modal').modal('hide');
 	}
 	
@@ -242,6 +261,8 @@
 			return false;
 		}
 		$('#vm_msg').val($('#vm_textarea').val());
+		$('#btn_add_vm').text('修改');
+		$('#v_vm').html("<b>你选择的数据库: "+ $('#vm').val()+ "</b>")
 		$('#vm_modal').modal('hide');
 	}
 
@@ -278,7 +299,7 @@
 			return false;
 		}
 		if($("#middleware").val()==""){
-			$("#tip_middleware_btn_group").tips({
+			$("#tip_middleware").tips({
 				side:3,
 	            msg:'选择中间件',
 	            bg:'#AE81FF',

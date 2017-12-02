@@ -59,6 +59,10 @@
 								<td style="width:120px;text-align: right;" rowspan="2">
 									<button class="btn btn-info" id="btn_query" type="submit">查询</button>
 								 </td>
+								 	<td style="width:80px;text-align: right;" rowspan="2">&nbsp;导出:</td>
+									 <td style="width:120px;text-align: left;" rowspan="2">
+										&nbsp;&nbsp;<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a>
+									</td>
 							</tr>
 							<tr>
 								<td style="width:120px;text-align: right;">&nbsp;工单号:</td>
@@ -76,10 +80,7 @@
 								</td>
 								
 								 
-								<td style="width:80px;text-align: right;">&nbsp;导出:</td>
-								<td style="width:120px;text-align: left;">
-									&nbsp;&nbsp;<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a>
-								</td>
+							
 								
 							</tr>
 							<tr>
@@ -119,19 +120,9 @@
 											
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.appNo}</td>
-											<td class='center'> 
-												<c:if test="${var.appType == '1'}"> 资源申请  </c:if>
-												<c:if test="${var.appType == '2'}"> 运维申请  </c:if>
-												 </td>
-											<td class='center'>
-												<c:if test="${var.status == '0'}"> 初始化  </c:if>
-												<c:if test="${var.status == '1'}"> 审批中  </c:if>
-												<c:if test="${var.status == '2'}"> 审批通过  </c:if>
-												<c:if test="${var.status == '3'}"> 审批不通过  </c:if>
-												<c:if test="${var.status == '4'}"> 运维执行  </c:if>
-												<c:if test="${var.status == '5'}"> 工单完成  </c:if>
-											</td>
-											<td class='center'>${var.projectCode}</td>
+											<td class='center'>${var.appTypeName}</td>
+											<td class='center'>${var.statusName}</td>
+											<td class='center'>${var.projectName}</td>
 											<td class='center'>${var.createTime}</td>
 											
 											<td class="center">
@@ -154,12 +145,12 @@
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看"></i>
 													</a>
 													</c:if>
-													<c:if test="${QX.execute == 1  and var.status != '4'}">
+													<c:if test="${QX.execute == 1  and var.status != '2'}">
 													<a class="btn btn-xs btn-success" title="查看" onclick="query('${var.appNo}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看"></i>
 													</a>
 													</c:if>
-													<c:if test="${QX.execute == 1  and var.status == '4'}">
+													<c:if test="${QX.execute == 1  and var.status == '2'}">
 													<a class="btn btn-xs btn-danger" onclick="execute('${var.appNo}');">
 														<i class="ace-icon fa fa-trash-o bigger-120" title="实施"></i>
 													</a>
@@ -313,6 +304,11 @@
 			diag.close();
 		 };
 		 diag.show();
+	}
+	
+	//导出excel
+	function toExcel(){
+		window.location.href='<%=basePath%>workorderExcel.do';
 	}
 	
 	//批量操作

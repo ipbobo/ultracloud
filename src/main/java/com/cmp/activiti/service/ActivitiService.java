@@ -77,7 +77,9 @@ public class ActivitiService {
   		return page;
   	}
   	
-  	//个人任务列表查询
+  	
+  	
+	//个人任务列表查询
   	public Page<TaskBean> getPersonalTaskList(String currUser, int currPage, int qryNum) {
   		int totalNum=(int)taskService.createTaskQuery().taskAssignee(currUser).count();
   		Page<TaskBean> page=new Page<TaskBean>(currPage, qryNum);

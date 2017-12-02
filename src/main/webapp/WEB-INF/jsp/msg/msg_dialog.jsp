@@ -7,8 +7,7 @@
 <title></title>
 <script type="text/javascript">
 	function showDialog(msg){
-		alert('aaaa');
-		$('#msgModalLabel').val(msg);
+		$('#msg_div').text(msg);
 		$('#msgModal').modal('show');
 	}
 	function closeDialog(){
@@ -27,7 +26,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="msgModalLabel">提示信息</h4>
             </div>
-            <div class="modal-body"></div>
+            <div class="modal-body" id="msg_div"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
             </div>

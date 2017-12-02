@@ -39,6 +39,11 @@ public class CmpWorkOrderService {
 		return (List<PageData>)dao.findForList("CmpWorkOrderMapper.workorderlistPage", page);
 	}
 	
+	//查询个人所有 工单
+	public List<PageData> listAllUserWorkorderByPd(Page page) throws Exception{
+		return (List<PageData>)dao.findForList("CmpWorkOrderMapper.listAllWorkorder", page);
+	}
+	
 	
 	public void updateWorkOrder(String appNo, Map<String, String> params) throws Exception {
 		params.put("appNo", appNo);
