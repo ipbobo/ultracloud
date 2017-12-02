@@ -18,8 +18,8 @@ public class CmpOrderService {
 	private CmpDictService cmpDictService;
 
 	//清单详细信息查询
-	public CmpOrder getOrderDtl(String orderNo) throws Exception {
-		return (CmpOrder)dao.findForList("CmpOrderMapper.getOrderDtl", orderNo);
+	public List<CmpOrder> getOrderDtl(String orderNo) throws Exception {
+		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getOrderDtl", orderNo);
 	}
 	
 	//套餐列表查询

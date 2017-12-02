@@ -14,6 +14,7 @@
 <base href="<%=basePath%>">
 <!-- jsp文件头和头部 -->
 <%@ include file="../system/index/top.jsp"%>
+<jsp:include page="../msg/msg_dialog.jsp"></jsp:include>
 </head>
 <body class="no-skin">
 
