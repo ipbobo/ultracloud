@@ -24,7 +24,7 @@
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">地域：</td>
-				<td align="left">${var.areaCode}</td>
+				<td align="left">${var.areaCodeName}</td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">实例规格：</td>
@@ -40,7 +40,7 @@
 			</tr>
 			<tr>
 				<td align="left">镜像：</td>
-				<td align="left">${var.osType}&nbsp;${var.osBitNum}&nbsp;位</td>
+				<td align="left">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
 			</tr>
 			<tr>
 				<td align="left">系统盘：</td>

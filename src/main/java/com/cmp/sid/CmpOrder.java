@@ -1,5 +1,8 @@
 package com.cmp.sid;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class CmpOrder {
 	private String orderNo;//清单编号
 	private String createTime;//创建时间
@@ -23,7 +26,6 @@ public class CmpOrder {
 	private String diskType;//磁盘类型，多个用英文逗号分隔
 	private String diskTypeName;//磁盘类型名称，多个用英文逗号分隔
 	private String diskSize;//磁盘大小，多个用英文逗号分隔
-	private String diskSizeName;//磁盘大小名称，多个用英文逗号分隔
 	private String diskEncrypt;//磁盘加密，多个用英文逗号分隔
 	private String softCode;//软件代码，多个用英文逗号分隔
 	private String softName;//软件名称，多个用英文逗号分隔
@@ -45,6 +47,7 @@ public class CmpOrder {
 	private String expireDate;//到期时间
 	private String virNum;//虚拟机数量
 	private String pckgName;//套餐名称
+	private Map<String, String> diskTypeMap=new LinkedHashMap<String, String>();//套餐名称
 
 	public String getOrderNo() {
 		return orderNo;
@@ -222,14 +225,6 @@ public class CmpOrder {
 		this.diskSize = diskSize;
 	}
 
-	public String getDiskSizeName() {
-		return diskSizeName;
-	}
-
-	public void setDiskSizeName(String diskSizeName) {
-		this.diskSizeName = diskSizeName;
-	}
-
 	public String getDiskEncrypt() {
 		return diskEncrypt;
 	}
@@ -396,5 +391,9 @@ public class CmpOrder {
 
 	public void setPckgName(String pckgName) {
 		this.pckgName = pckgName;
+	}
+	
+	public void setDiskTypeMap(String key, String value) {
+		this.diskTypeMap.put(key, value);
 	}
 }

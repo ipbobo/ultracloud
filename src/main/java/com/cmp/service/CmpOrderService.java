@@ -1,6 +1,7 @@
 package com.cmp.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -13,6 +14,8 @@ import com.fh.dao.DaoSupport;
 public class CmpOrderService {
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
+	@Resource
+	private CmpDictService cmpDictService;
 
 	//清单详细信息查询
 	public CmpOrder getOrderDtl(String orderNo) throws Exception {
@@ -22,7 +25,20 @@ public class CmpOrderService {
 	//套餐列表查询
 	@SuppressWarnings("unchecked")
 	public List<CmpOrder> getPckgList() throws Exception {
-		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getPckgList", null);
+		List<CmpOrder> list=(List<CmpOrder>)dao.findForList("CmpOrderMapper.getPckgList", null);
+		if(list!=null && !list.isEmpty()){
+			for(CmpOrder co: list){
+				Map<String, String> diskTypeMap=cmpDictService.getCmpDictMap("disk_type");
+				String[] diskTypes=co.getDiskType().split(",");
+				if(diskTypes!=null && diskTypes.length>0){
+					for(String diskType: diskTypes){
+						co.setDiskTypeMap(diskType, diskTypeMap.get(diskType));
+					}
+				}
+			}
+		}
+		
+		return list;
 	}
 	
 	//购物车列表查询
