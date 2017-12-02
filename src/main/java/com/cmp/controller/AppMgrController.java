@@ -23,6 +23,7 @@ import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.EnvironmentService;
 import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
+import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOrder;
 import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
@@ -59,7 +60,14 @@ public class AppMgrController extends BaseController {
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
 		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
-		mv.addObject("envCodeList", environmentService.getEnvList());//环境列表
+		List<CmpDict> envList=environmentService.getEnvList();
+		if(envList!=null && !envList.isEmpty()){
+			CmpDict cmpDict=envList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultEnvCode", cmpDict.getDictCode());//默认环境
+			mv.addObject("envCodeList", envList);//环境列表
+		}
+		
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
 		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表

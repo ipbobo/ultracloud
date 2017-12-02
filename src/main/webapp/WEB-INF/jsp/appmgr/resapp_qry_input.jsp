@@ -137,7 +137,13 @@ function checkPckgData(){
 }
 
 //数据校验
-function checkData(){
+function checkData(btnId){
+	if($("#envCode").val()==""){
+		$("#"+btnId).tips({side:1, msg:'环境不能为空', bg:'#AE81FF', time:2});
+		$("#"+btnId).focus();
+		return false;
+	}
+	
 	if($("#projectCode").val()==""){
 		$("#projectCode").tips({side:3, msg:'请选择项目', bg:'#AE81FF', time:2});
 		$("#projectCode").focus();
@@ -223,7 +229,7 @@ function addList(){
 			jsonObj.pckgId=$("#pckgId").val();//套餐ID     
 			ajaxHttpPost("addPckgList.do", jsonObj, "addListBtnId", "shoppingCartNum");//发送Ajax请求
 		}
-	}else if(checkData()){//数据校验
+	}else if(checkData("addListBtnId")){//数据校验
 		jsonObj.areaCode=$("#areaCode").val();//地域代码                       
 		jsonObj.platType=$("#platType").val();//平台类型                       
 		jsonObj.deployType=$("#deployType").val();//部署类型                     
@@ -254,7 +260,7 @@ function addList(){
 
 //保存为套餐预查询
 function savePckgPre(){
-	if(checkData()){//数据校验
+	if(checkData("savePckgBtnId")){//数据校验
 		var diag = new top.Dialog();
 		diag.Drag=true;
 		diag.Title ="保存为套餐";
@@ -401,7 +407,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="areaCode" id="areaCode" value="1"/>
 	<input type="hidden" name="platType" id="platType" value="vmware"/>
 	<input type="hidden" name="deployType" id="deployType" value="1"/>
-	<input type="hidden" name="envCode" id="envCode" value="1"/>
+	<input type="hidden" name="envCode" id="envCode" value="${defaultEnvCode}"/>
 	<input type="hidden" name="resType" id="resType" value="1"/>
 	<input type="hidden" name="cpu" id="cpu" value="1"/>
 	<input type="hidden" name="memory" id="memory" value="1"/>
