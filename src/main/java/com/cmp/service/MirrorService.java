@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.cmp.entity.MirrorTemplateMap;
 import com.cmp.entity.UserGroupUserMap;
+import com.cmp.sid.CmpDict;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -118,4 +119,6 @@ public interface MirrorService {
 	 */
 	public void deleteByMirrorId(BigInteger id) throws Exception;
 
+	//模板列表查询
+	public List<CmpDict> getImgList() throws Exception;
 }

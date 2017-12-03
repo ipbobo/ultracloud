@@ -159,7 +159,7 @@
 		, g.name projectCodeName
 		, h.dictValue osTypeName
 		, i.dictValue osBitNumName
-		, j.dictValue imgCodeName
+		, j.name imgCodeName
 		from 
 		<include refid="tableName"/> a
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
@@ -170,7 +170,7 @@
 		left join t_project g on g.id=a.projectCode
 		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
 		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
-		left join cmp_dict j on j.dictType='img_code' and j.dictCode=a.imgCode
+		left join t_mirrortemplate j on j.id=a.imgCode
 		where status='T'
 	</select>
 	
@@ -185,7 +185,7 @@
 		, g.name projectCodeName
 		, h.dictValue osTypeName
 		, i.dictValue osBitNumName
-		, j.dictValue imgCodeName
+		, j.name imgCodeName
 		from 
 		<include refid="tableName"/> a
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
@@ -196,7 +196,7 @@
 		left join t_project g on g.id=a.projectCode
 		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
 		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
-		left join cmp_dict j on j.dictType='img_code' and j.dictCode=a.imgCode
+		left join t_mirrortemplate j on j.id=a.imgCode
 		where status='0'
 	</select>
 	
@@ -211,7 +211,7 @@
 		, g.name projectCodeName
 		, h.dictValue osTypeName
 		, i.dictValue osBitNumName
-		, j.dictValue imgCodeName
+		, j.name imgCodeName
 		from 
 		<include refid="tableName"/> a
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
@@ -222,7 +222,7 @@
 		left join t_project g on g.id=a.projectCode
 		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
 		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
-		left join cmp_dict j on j.dictType='img_code' and j.dictCode=a.imgCode
+		left join t_mirrortemplate j on j.id=a.imgCode
 		where status='1'
 	</select>
 	

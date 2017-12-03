@@ -156,6 +156,12 @@ function checkData(btnId){
 		return false;
 	}
 	
+	if($("#imgCode").val()==""){
+		$("#imgCode").tips({side:3, msg:'请选择镜像', bg:'#AE81FF', time:2});
+		$("#imgCode").focus();
+		return false;
+	}
+	
 	if($("#imgUserName").val()==""){
 		$("#imgUserName").tips({side:3, msg:'用户名不能为空', bg:'#AE81FF', time:2});
 		$("#imgUserName").focus();
@@ -476,14 +482,15 @@ $(window).scroll(function() {
 		</tr>
 		<tr class="tablecls">
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">项目：</td>
-			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;" colspan="6">
-				<select class="chosen-select form-control" name="projectCode" id="projectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;">
+			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
+				<select class="chosen-select form-control" name="projectCode" id="projectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 100%;">
 				<option value="">请选择</option>
 				<c:forEach items="${projectList}" var="var">
 					<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
 				</c:forEach>
 			  	</select>
 			</td>
+			<td align="left" style="width: 120px;padding:10px;" colspan="6">&nbsp;</td>
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
@@ -543,9 +550,9 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="3"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
-			<td align="left" style="width: 120px;padding:10px;">
+			<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 				<select class="chosen-select form-control" name="osType" id="osType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;">
 				<option value="">请选择</option>
 				<c:forEach items="${osTypeList}" var="var">
@@ -554,7 +561,7 @@ $(window).scroll(function() {
 			  	</select>
 			</td>
 			<td align="right" style="width: 120px;padding:10px;">位数：</td>
-			<td align="left" style="width: 120px;padding:10px;">
+			<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 				<select class="chosen-select form-control" name="osBitNum" id="osBitNum" data-placeholder="请选择位数" style="vertical-align:top;width: 100%;">
 				<option value="">请选择</option>
 				<c:forEach items="${osBitNumList}" var="var">
@@ -562,15 +569,19 @@ $(window).scroll(function() {
 				</c:forEach>
 			  	</select>
 			</td>
-			<td align="right" style="width: 120px;padding:10px;">镜像信息：</td>
-			<td align="left" style="padding:10px;" colspan="2">
-				<select class="chosen-select form-control" name="imgCode" id="imgCode" data-placeholder="请选择镜像" style="vertical-align:top;width: 120px;">
+			<td align="left" style="width: 120px;padding:10px;" colspan="3">&nbsp;</td>
+		</tr>
+		<tr class="tablecls">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">镜像信息：</td>
+			<td align="left" style="padding-left:10px;padding-bottom:10px;">
+				<select class="chosen-select form-control" name="imgCode" id="imgCode" data-placeholder="请选择镜像" style="vertical-align:top;width: 100%;">
 				<option value="">请选择</option>
 				<c:forEach items="${imgCodeList}" var="var">
 					<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
 				</c:forEach>
 			  	</select>
 			</td>
+			<td align="left" style="width: 120px;padding:10px;" colspan="6">&nbsp;</td>
 		</tr>
 		<tr class="tablecls">
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">用户名：</td>

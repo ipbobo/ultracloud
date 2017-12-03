@@ -13,7 +13,7 @@ function delPckg(obj, pckgId, pckgName){
 		    dataType: 'json',  
 		    success: function(data){
 			    if(data.retCode=="0"){//删除成功
-			    	$(obj).parent().parent().parent().parent().parent().remove();
+			    	$(obj).parent().parent().remove();
 			    }
 		    },
 		    error: function(data) {}
@@ -203,7 +203,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr class="tablecls">
 		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">项目：</td>
-		<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;" colspan="6">
+		<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
 			<select class="chosen-select form-control" name="tcprojectCode" id="tcprojectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;" disabled>
 			<option value="">请选择</option>
 			<c:forEach items="${projectList}" var="var">
@@ -211,6 +211,7 @@ function choosePckg(jsonStr){
 			</c:forEach>
 		  	</select>
 		</td>
+		<td align="left" style="width: 120px;padding:10px;" colspan="6">&nbsp;</td>
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
@@ -270,9 +271,9 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
+		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="3"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
 		<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
-		<td align="left" style="width: 120px;padding:10px;">
+		<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 			<select class="chosen-select form-control" name="tcosType" id="tcosType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;" disabled>
 			<option value="">请选择</option>
 			<c:forEach items="${osTypeList}" var="var">
@@ -281,7 +282,7 @@ function choosePckg(jsonStr){
 		  	</select>
 		</td>
 		<td align="right" style="width: 120px;padding:10px;">位数：</td>
-		<td align="left" style="width: 120px;padding:10px;">
+		<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 			<select class="chosen-select form-control" name="tcosBitNum" id="tcosBitNum" data-placeholder="请选择位数" style="vertical-align:top;width: 100%;" disabled>
 			<option value="">请选择</option>
 			<c:forEach items="${osBitNumList}" var="var">
@@ -289,15 +290,19 @@ function choosePckg(jsonStr){
 			</c:forEach>
 		  	</select>
 		</td>
-		<td align="right" style="width: 120px;padding:10px;">镜像信息：</td>
-		<td align="left" style="padding:10px;" colspan="2">
-			<select class="chosen-select form-control" name="tcimgCode" id="tcimgCode" data-placeholder="请选择镜像" style="vertical-align:top;width: 120px;" disabled>
+		<td align="left" style="width: 120px;padding:10px;" colspan="3">&nbsp;</td>
+	</tr>
+	<tr class="tablecls">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">镜像信息：</td>
+		<td align="left" style="padding-left:10px;padding-bottom:10px;">
+			<select class="chosen-select form-control" name="tcimgCode" id="tcimgCode" data-placeholder="请选择镜像" style="vertical-align:top;width: 100%;" disabled>
 			<option value="">请选择</option>
 			<c:forEach items="${imgCodeList}" var="var">
 				<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
 			</c:forEach>
 		  	</select>
 		</td>
+		<td align="left" style="width: 120px;padding:10px;" colspan="6">&nbsp;</td>
 	</tr>
 	<tr class="tablecls">
 		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">用户名：</td>

@@ -38,9 +38,7 @@
 										</span>
 									</div>
 								</td>
-								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -64,7 +62,6 @@
 							<!-- 开始循环 -->	
 							<c:choose>
 								<c:when test="${not empty varList}">
-									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
@@ -75,7 +72,7 @@
 											<td class='center'>${var.processInstanceId}</td>
 											<td class="center">${var.processDefinitionId}</td> 
 											<td class="center">
-												<a href='javascritp:void(0);' onclick="currentNode('${var.processDefinitionId}','${var.processInstanceId}');" >${var.name}</a>
+												dddd<a href='javascritp:void(0);' onclick="currentNode('${var.processDefinitionId}','${var.processInstanceId}');return false" >${var.name}</a>
 											</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
@@ -114,12 +111,6 @@
 											</td>
 										</tr>
 									</c:forEach>
-									</c:if>
-									<c:if test="${QX.cha == 0 }">
-										<tr>
-											<td colspan="100" class="center">您无权查看</td>
-										</tr>
-									</c:if>
 								</c:when>
 								<c:otherwise>
 									<tr class="main_info">
@@ -173,6 +164,9 @@
 	<script src="static/ace/js/ace/ace.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+	<!-- layer弹窗插件-->
+	<script src="plugins/layer/3.0/layer.js"></script>
+	<!--弹窗组件end-->
 	<script type="text/javascript">
 	$(top.hangge());//关闭加载状态
 	//检索
@@ -306,27 +300,18 @@
 		});
 	}
 	
-	//新增
-	function currentNode(pdId,pIId) {
-		 top.jzts();
-		 var diag = new top.Dialog();
-		 diag.Drag=true;
-		 diag.Title ="当前节点";
-		 diag.URL = '<%=basePath%>instance/goInstance.do?processDefinitionId='+pdId+'&processInstanceId='+pIId;
-		 diag.Width = 800;
-		 diag.Height = 600;
-		 diag.CancelEvent = function(){ //关闭事件
-			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-				 if('${page.currentPage}' == '0'){
-					 top.jzts();
-					 setTimeout("self.location=self.location",100);
-				 }else{
-					 nextPage(${page.currentPage});
-				 }
-			}
-			diag.close();
-		 };
-		 diag.show();
+	//工作流程图
+	function currentNode(pdId,pIId){
+		var width=document.documentElement.clientWidth * 0.85+"px";
+		var height=document.documentElement.clientHeight * 0.85+"px";
+		layer.open({
+		    type: 2,
+		    title: '当前节点',
+		    shadeClose: true,
+		    maxmin: true,
+		    area: [width, height],
+		    content: "<%=basePath%>act-process-editor/diagram-viewer/index.html?processDefinitionId="+pdId+"&processInstanceId="+pIId //iframe的url
+		});
 	}
 	</script>
 

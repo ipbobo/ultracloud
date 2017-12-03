@@ -194,4 +194,8 @@
 			mirror_id = #{id}
 	</delete>
 	
+	<!-- 模板列表查询 -->
+	<select id="getImgList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_mirrortemplate
+	</select>
 </mapper>

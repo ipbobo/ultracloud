@@ -530,7 +530,7 @@ DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role` (
   `ROLE_ID` varchar(100) NOT NULL,
   `ROLE_NAME` varchar(100) DEFAULT NULL,
-  `RIGHTS` varchar(255) DEFAULT NULL,
+  `RIGHTS` varchar(500) DEFAULT NULL,
   `PARENT_ID` varchar(100) DEFAULT NULL,
   `ADD_QX` varchar(255) DEFAULT NULL,
   `DEL_QX` varchar(255) DEFAULT NULL,
