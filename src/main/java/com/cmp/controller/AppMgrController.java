@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
@@ -191,6 +192,20 @@ public class AppMgrController extends BaseController {
 					variables.put("btnName", "提交");
 					String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动
 					cmpWorkOrderService.addWorkOrder(appNo, orderNo, applyUserId, procInstId);//提交申请
+					//添加任务拾取
+					List<Task> userTaskList = activitiService.findGroupList(applyUserId, 1, 100);
+					for (Task task : userTaskList) {
+						if (task.getProcessInstanceId().equals(procInstId)) {
+							activitiService.claimTask(task.getId(), applyUserId);
+						}
+					}
+					//更新工单状态
+					activitiService.handleTask(appNo, procInstId, applyUserId, null, null);
+					//更新工单(流程实例ID 和 工单状态)
+					Map<String, String> updateParams = new HashMap<String, String>();
+					updateParams.put("procInstId", procInstId);
+					updateParams.put("status", "1");
+					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 					cmpOrderService.updateCmpOrderStatus(orderNo);//更新清单状态
 				}
 			}

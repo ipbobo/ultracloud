@@ -139,34 +139,34 @@
 															<c:if test="${QX.check == 1  and var.status != '1'}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
-																	class="ace-icon fa fa-pencil-square-o bigger-120"
+																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="查看"></i>
 																</a>
 															</c:if>
 															<c:if test="${QX.check == 1  and var.status == '1'}">
 																<a class="btn btn-xs btn-danger"
 																	onclick="check('${var.appNo}');"> <i
-																	class="ace-icon fa fa-trash-o bigger-120" title="审核"></i>
+																	class="ace-icon fa fa-pencil-square-o bigger-120" title="审核"></i>
 																</a>
 															</c:if>
 															<c:if test="${QX.query == 1}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
-																	class="ace-icon fa fa-pencil-square-o bigger-120"
+																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="查看"></i>
 																</a>
 															</c:if>
 															<c:if test="${QX.execute == 1  and var.status != '2'}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
-																	class="ace-icon fa fa-pencil-square-o bigger-120"
+																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="查看"></i>
 																</a>
 															</c:if>
 															<c:if test="${QX.execute == 1  and var.status == '2'}">
 																<a class="btn btn-xs btn-danger"
 																	onclick="execute('${var.appNo}');"> <i
-																	class="ace-icon fa fa-trash-o bigger-120" title="实施"></i>
+																	class="ace-icon fa fa-wrench  bigger-120 icon-only" title="实施"></i>
 																</a>
 															</c:if>
 														</div>
@@ -329,51 +329,6 @@
 		window.location.href='<%=basePath%>workorderExcel.do';
 	}
 	
-	//批量操作
-	function makeAll(msg){
-		bootbox.confirm(msg, function(result) {
-			if(result) {
-				var str = '';
-				for(var i=0;i < document.getElementsByName('ids').length;i++){
-				  if(document.getElementsByName('ids')[i].checked){
-				  	if(str=='') str += document.getElementsByName('ids')[i].value;
-				  	else str += ',' + document.getElementsByName('ids')[i].value;
-				  }
-				}
-				if(str==''){
-					bootbox.dialog({
-						message: "<span class='bigger-110'>您没有选择任何内容!</span>",
-						buttons: 			
-						{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
-					});
-					$("#zcheckbox").tips({
-						side:1,
-			            msg:'点这里全选',
-			            bg:'#AE81FF',
-			            time:8
-			        });
-					return;
-				}else{
-					if(msg == '确定要删除选中的数据吗?'){
-						top.jzts();
-						$.ajax({
-							type: "POST",
-							url: '<%=basePath%>project/deleteAll.do?tm='+new Date().getTime(),
-					    	data: {DATA_IDS:str},
-							dataType:'json',
-							//beforeSend: validateData,
-							cache: false,
-							success: function(data){
-								 $.each(data.list, function(i, list){
-										nextPage(${page.currentPage});
-								 });
-							}
-						});
-					}
-				}
-			}
-		});
-	}
 
 	</script>
 
