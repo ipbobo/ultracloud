@@ -38,9 +38,7 @@
 										</span>
 									</div>
 								</td>
-								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -67,7 +65,6 @@
 							<!-- 开始循环 -->	
 							<c:choose>
 								<c:when test="${not empty varList}">
-									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
@@ -138,12 +135,6 @@
 											</td>
 										</tr>
 									</c:forEach>
-									</c:if>
-									<c:if test="${QX.cha == 0 }">
-										<tr>
-											<td colspan="100" class="center">您无权查看</td>
-										</tr>
-									</c:if>
 								</c:when>
 								<c:otherwise>
 									<tr class="main_info">
@@ -157,12 +148,8 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
 									<a class="btn btn-sm btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
 									<a class="btn btn-sm btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>

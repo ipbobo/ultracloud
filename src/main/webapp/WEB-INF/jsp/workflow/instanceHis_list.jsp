@@ -38,9 +38,7 @@
 										</span>
 									</div>
 								</td>
-								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -64,7 +62,6 @@
 							<!-- 开始循环 -->	
 							<c:choose>
 								<c:when test="${not empty varList}">
-									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
@@ -78,12 +75,6 @@
 											<td class='center'>${var.deleteReason}</td>
 										</tr>
 									</c:forEach>
-									</c:if>
-									<c:if test="${QX.cha == 0 }">
-										<tr>
-											<td colspan="100" class="center">您无权查看</td>
-										</tr>
-									</c:if>
 								</c:when>
 								<c:otherwise>
 									<tr class="main_info">
