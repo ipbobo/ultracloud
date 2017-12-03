@@ -16,7 +16,6 @@
 	</properties>
 
 	<dependencies>
-
 		<!-- spring start -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -599,6 +598,12 @@
 		    <groupId>org.activiti</groupId>
 		    <artifactId>activiti-mule</artifactId>
 		    <version>5.19.0</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<groupId>org.mule.tests</groupId>
+		    		<artifactId>mule-tests-functional</artifactId>
+		    	</exclusion>
+		    </exclusions>
 		</dependency>
         <dependency>
             <groupId>org.activiti</groupId>
