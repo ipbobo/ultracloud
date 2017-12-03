@@ -1,5 +1,6 @@
 package com.cmp.activiti.service;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,9 +17,16 @@ import org.activiti.engine.ManagementService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
@@ -322,4 +330,66 @@ public class ActivitiService {
 		//dbCenter.hqlUpdate(CmpAppList.class.getName(), hql);//更新审批表
 		return "任务处理成功"+appNo;
 	}
+	public HistoricProcessInstance findProcessInst(String ProcInstId) {
+		HistoricProcessInstance hpi = historyService.createHistoricProcessInstanceQuery().processInstanceId(ProcInstId).singleResult();
+		return hpi;
+	}
+	
+	/** 
+	 * 获取流程图并 显示 
+	 *  
+	 * @return 
+	 * @throws Exception 
+	 */  
+	public InputStream findProcessPic(String procDefId) throws Exception {  
+	    ProcessDefinition procDef = repositoryService  
+	            .createProcessDefinitionQuery().processDefinitionId(procDefId)  
+	            .singleResult();  
+	    String diagramResourceName = procDef.getDiagramResourceName();  
+	    InputStream imageStream = repositoryService.getResourceAsStream(  
+	            procDef.getDeploymentId(), diagramResourceName);  
+	    return imageStream;  
+	}  
+	
+	
+	/**
+	 * 获取历史节点信息
+	 */
+	public List<HistoricActivityInstance> getHisActInfo(String procInstId) {
+		List<HistoricActivityInstance> hisActInstList = historyService.createHistoricActivityInstanceQuery().processInstanceId(procInstId).list();
+		return hisActInstList;
+	}
+	
+	/** 
+	 * 获取流程信息 
+	 *  
+	 * @return 
+	 * @throws Exception 
+	 */  
+	public  ActivityImpl getProcessMap(String procDefId,  
+	        String executionId) throws Exception {  
+	    ProcessDefinition processDefinition = repositoryService  
+	            .createProcessDefinitionQuery().processDefinitionId(procDefId)  
+	            .singleResult();  
+	    ProcessDefinitionImpl pdImpl = (ProcessDefinitionImpl) processDefinition;  
+	    String processDefinitionId = pdImpl.getId();  
+	    ProcessDefinitionEntity def = 
+	    		(ProcessDefinitionEntity)((RepositoryServiceImpl) repositoryService)  
+	    		            .getDeployedProcessDefinition(processDefinitionId); 
+	    ActivityImpl actImpl = null;  
+	  
+	    ExecutionEntity execution = (ExecutionEntity) runtimeService  
+	            .createExecutionQuery().executionId(executionId).singleResult();  
+	    // 执行实例  
+	    String activitiId = execution.getActivityId();// 当前实例的执行到哪个节点  
+	    List<ActivityImpl> activitiList = def.getActivities();// 获得当前任务的所有节点  
+	    for (ActivityImpl activityImpl : activitiList) {  
+	        String id = activityImpl.getId();  
+	        if (id.equals(activitiId)) {// 获得执行到那个节点  
+	            actImpl = activityImpl;  
+	            break;  
+	        }  
+	    }  
+	    return actImpl;  
+	}  
 }

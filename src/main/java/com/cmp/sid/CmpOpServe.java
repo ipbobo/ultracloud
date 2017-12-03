@@ -15,7 +15,9 @@ public class CmpOpServe {
 	private String appmsg;//申请说明
 	private String createTime;//创建时间
 	private String status;//流程状态  0:启动   1:审核完成  2:工单完成
-	
+	private String serviceTypeName;
+	private String operTypeName;
+	private String operName; //操作
 	
 	
 	public String getId() {
@@ -77,6 +79,24 @@ public class CmpOpServe {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getServiceTypeName() {
+		return serviceTypeName;
+	}
+	public void setServiceTypeName(String serviceTypeName) {
+		this.serviceTypeName = serviceTypeName;
+	}
+	public String getOperTypeName() {
+		return operTypeName;
+	}
+	public void setOperTypeName(String operTypeName) {
+		this.operTypeName = operTypeName;
+	}
+	public String getOperName() {
+		return operName;
+	}
+	public void setOperName(String operName) {
+		this.operName = operName;
 	}
 	
 	
