@@ -89,7 +89,7 @@ function batchBuy(){
 				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.orderNo}')" class="img_close"></div></td>
 			</tr>
 			<tr>
-				<td align="left" style="width: 60px;">计s费方式：</td>
+				<td align="left" style="width: 60px;">计费方式：</td>
 				<td align="left">包年包月</td>
 			</tr>
 			<tr>
@@ -99,14 +99,6 @@ function batchBuy(){
 			<tr>
 				<td align="left" style="width: 60px;">实例规格：</td>
 				<td align="left">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
-			</tr>
-			<tr>
-				<td align="left">I/O优化：</td>
-				<td align="left">I/O优化实例</td>
-			</tr>
-			<tr>
-				<td align="left">网络：</td>
-				<td align="left">公网带宽&nbsp;4Mbps(专用网络)</td>
 			</tr>
 			<tr>
 				<td align="left">镜像：</td>
@@ -121,8 +113,12 @@ function batchBuy(){
 				<td align="left">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
 			</tr>
 			<tr>
+				<td align="left">到期时间：</td>
+				<td align="left">${var.expireDate}</td>
+			</tr>
+			<tr>
 				<td align="left">购买量：</td>
-				<td align="left">1&nbsp;个月&nbsp;${var.virNum}&nbsp;台</td>
+				<td align="left">${var.virNum}&nbsp;台</td>
 			</tr>
 			</table>
 		</td>

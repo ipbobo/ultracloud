@@ -168,16 +168,16 @@ function choosePckg(jsonStr){
 							<td align="left" style="width: 180px;">包年包月</td>
 							<td align="right" style="width: 120px;">实例规格：</td>
 							<td align="left" style="width: 180px;">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
-							<td align="right" style="width: 120px;">I/O优化：</td>
-							<td align="left" style="width: 180px;">I/O优化实例</td>
-						</tr>
-						<tr>
 							<td align="right" style="width: 120px;">镜像：</td>
 							<td align="left" style="width: 180px;">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
+						</tr>
+						<tr>
 							<td align="right" style="width: 120px;">数据盘：</td>
 							<td align="left" style="width: 180px;">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
+							<td align="right" style="width: 120px;">到期时间：</td>
+							<td align="left" style="width: 180px;">${var.expireDate}</td>
 							<td align="right" style="width: 120px;">购买量：</td>
-							<td align="left" style="width: 180px;">1&nbsp;个月&nbsp;${var.virNum}&nbsp;台</td>
+							<td align="left" style="width: 180px;">${var.virNum}&nbsp;台</td>
 						</tr>
 						</table>
 					</td>
