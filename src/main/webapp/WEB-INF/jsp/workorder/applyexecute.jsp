@@ -68,7 +68,7 @@
 			role="form">
 			<div class="col-md-offset-3 col-md-9">
 				<button class="btn btn-info" id="OK" name="OK" type="button"
-					onclick="doCheck('${workorder.appNo}');">
+					onclick="doExecute('${workorder.appNo}');">
 					<i class="ace-icon fa fa-check bigger-110"></i> 确定执行
 				</button>
 
@@ -154,20 +154,20 @@
 	});
 	
 	
-	function doCheck(appNo){
+	function doExecute(appNo){
 		top.jzts();
 		$.ajax({
 			type: "POST",
-			url: '<%=basePath%>doCheck.do?appNo=' + appNo,
-				dataType : 'json',
-				//beforeSend: validateData,
-				cache : false,
-				success : function(data) {
-					showDialog(data.result);
-					top.Dialog.close();
-				}
-			});
-		}
+			url: '<%=basePath%>doExecute.do?appNo='+appNo,
+			dataType:'json',
+			//beforeSend: validateData,
+			cache: false,
+			success: function(data){
+				showDialog(data.result);
+				 top.Dialog.close();
+			}
+		});
+	}
 	</script>
 
 </body>
