@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.cmp.entity.MirrorTemplateMap;
 import com.cmp.entity.UserGroupUserMap;
+import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -158,4 +159,9 @@ public class MirrorServiceImpl implements MirrorService {
 		dao.delete("MirrorMapper.deleteByMirrorId", id);
 	}
 
+	//模板列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpDict> getImgList() throws Exception {
+		return (List<CmpDict>) dao.findForList("MirrorMapper.getImgList", null);
+	}
 }

@@ -22,6 +22,7 @@ import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.EnvironmentService;
 import com.cmp.service.MediumService;
+import com.cmp.service.MirrorService;
 import com.cmp.service.ProjectService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOrder;
@@ -51,6 +52,8 @@ public class AppMgrController extends BaseController {
 	private EnvironmentService environmentService;
 	@Resource
 	private MediumService mediumService;
+	@Resource
+	private MirrorService mirrorService;
 	
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
@@ -75,7 +78,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
 		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
 		mv.addObject("osBitNumList", cmpDictService.getCmpDictList("os_bit_num"));//位数列表
-		mv.addObject("imgCodeList", cmpDictService.getCmpDictList("img_code"));//模板列表
+		mv.addObject("imgCodeList", mirrorService.getImgList());//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
@@ -103,7 +106,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
 		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
 		mv.addObject("osBitNumList", cmpDictService.getCmpDictList("os_bit_num"));//位数列表
-		mv.addObject("imgCodeList", cmpDictService.getCmpDictList("img_code"));//模板列表
+		mv.addObject("imgCodeList", mirrorService.getImgList());//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表

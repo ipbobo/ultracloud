@@ -9,8 +9,6 @@ INSERT INTO `cmp_dict` VALUES ('1', '2017-11-13 00:40:29', '2017-11-12 21:58:37'
 INSERT INTO `cmp_dict` VALUES ('2', '2017-11-13 00:40:44', '2017-11-12 21:58:42', 'plat_type', 'openstack', 'OpenStack', '平台类型', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('3', '2017-11-13 15:09:55', '2017-11-15 12:20:27', 'os_type', 'redhat65', 'ReadHat 6.5', 'OS类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES ('4', '2017-11-13 15:10:19', '2017-11-15 12:20:24', 'os_type', 'centos65', 'CentOS 6.5', 'OS类型', '0', '2');
-INSERT INTO `cmp_dict` VALUES ('7', '2017-11-13 15:21:55', '2017-11-15 21:04:04', 'img_code', '1', '模板1', '模板', '1', '1');
-INSERT INTO `cmp_dict` VALUES ('8', '2017-11-13 15:22:10', '2017-11-15 21:04:07', 'img_code', '2', '模板2', '模板', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('9', '2017-11-13 16:51:45', '2017-11-15 13:16:15', 'disk_type', '1', '高效云盘', '磁盘类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES ('10', '2017-11-13 16:52:25', '2017-11-15 13:16:18', 'disk_type', '2', 'SSD云盘', '磁盘类型', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('13', '2017-11-14 21:47:39', '2017-11-14 21:47:39', 'area_code', '1', '华东', '区域', '1', '1');
