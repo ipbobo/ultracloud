@@ -167,7 +167,7 @@
 			//beforeSend: validateData,
 			cache: false,
 			success: function(data){
-				showDialog(data.result);
+				alert(data.result);
 				 top.Dialog.close();
 			}
 		});

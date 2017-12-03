@@ -7,7 +7,7 @@ BEGIN
 	if v_count=0 THEN
 		insert into cmp_sequence(seqName, currVal, incrVal) value(i_seqName, 1, 1);
 	else
-		update cmp_sequence set currval=currval+incrVal where seqName=i_seqName;
+		update cmp_sequence set currval=if(currval=lpad(9, bitNum, 9), 0+incrVal, currval+incrVal) where seqName=i_seqName;
 	end if;
 	
 	return func_currVal(i_seqName);
