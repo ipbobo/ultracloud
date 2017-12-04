@@ -35,11 +35,21 @@
 		<c:forEach items="${menuList}" var="menu1">
 		<c:if test="${menu1.hasMenu && '1' == menu1.MENU_STATE}">
 		<li class="hover"  id="lm${menu1.MENU_ID}">
-			<a style="cursor:pointer;" class="dropdown-toggle">
+			<c:if test="${'[]' != menu1.subMenu}">
+				<a style="cursor:pointer;" class="dropdown-toggle">
 				<i class="${menu1.MENU_ICON == null ? 'menu-icon fa fa-leaf black' : menu1.MENU_ICON}"></i>
 				<span class="menu-text">${menu1.MENU_NAME}</span>
 				<c:if test="${'[]' != menu1.subMenu}"><b class="arrow fa fa-angle-down"></b></c:if>
 			</a>
+			</c:if>
+			<c:if test="${'[]' == menu1.subMenu}">
+				<a style="cursor:pointer;" target="mainFrame" onclick="siMenu('z${menu1.MENU_ID}','lm${menu1.MENU_ID}','${menu1.MENU_NAME}','${menu1.MENU_URL}')">
+					<i class="${menu1.MENU_ICON == null ? 'menu-icon fa fa-leaf black' : menu1.MENU_ICON}"></i>
+					<span class="menu-text">${menu1.MENU_NAME}</span>
+				</a>
+				<b class="arrow"></b>
+			</c:if>
+			
 			<b class="arrow"></b>
 			<c:if test="${'[]' != menu1.subMenu}">
 			<ul class="submenu">

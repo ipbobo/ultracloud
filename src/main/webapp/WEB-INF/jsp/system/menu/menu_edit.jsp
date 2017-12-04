@@ -66,7 +66,7 @@
 									<input type="text" name="MENU_URL" id="menuUrl" value="${pd.MENU_URL }" placeholder="这里输入菜单链接" class="col-xs-10 col-sm-5" />
 									</c:if>
 									<c:if test="${null == pds.MENU_NAME}">
-									<input type="text" name="MENU_URL" id="menuUrl" value="" readonly="readonly" placeholder="顶级菜单禁止输入" class="col-xs-10 col-sm-5" />
+									<input type="text" name="MENU_URL" id="menuUrl" value="" placeholder="顶级菜单禁止输入" class="col-xs-10 col-sm-5" />
 									</c:if>
 								</div>
 							</div>
