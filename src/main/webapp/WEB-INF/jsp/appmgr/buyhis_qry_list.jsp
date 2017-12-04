@@ -31,14 +31,6 @@
 				<td align="left">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
 			</tr>
 			<tr>
-				<td align="left">I/O优化：</td>
-				<td align="left">I/O优化实例</td>
-			</tr>
-			<tr>
-				<td align="left">网络：</td>
-				<td align="left">公网带宽&nbsp;4Mbps(专用网络)</td>
-			</tr>
-			<tr>
 				<td align="left">镜像：</td>
 				<td align="left">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
 			</tr>
@@ -51,8 +43,12 @@
 				<td align="left">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
 			</tr>
 			<tr>
+				<td align="left">到期时间：</td>
+				<td align="left">${var.expireDate}</td>
+			</tr>
+			<tr>
 				<td align="left">购买量：</td>
-				<td align="left">1&nbsp;个月&nbsp;${var.virNum}&nbsp;台</td>
+				<td align="left">${var.virNum}&nbsp;台</td>
 			</tr>
 			</table>
 		</td>
