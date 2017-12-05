@@ -129,6 +129,7 @@ public class CmpWorkOrderController extends BaseController{
 		mv.addObject("appTypeNameMap", getAppTypeNameMap());
 		mv.addObject("workorderStatusNameMap", getWorkorderStatusNameMap());
 		mv.addObject("QX", qxMap); // 右侧按钮权限
+		mv.addObject("pd", pd);
 		mv.setViewName("workorder/query_user_workorder");
 		return mv;
 	}

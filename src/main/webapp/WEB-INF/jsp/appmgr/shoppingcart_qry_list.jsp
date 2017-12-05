@@ -113,12 +113,12 @@ function batchBuy(){
 				<td align="left">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
 			</tr>
 			<tr>
-				<td align="left">到期时间：</td>
-				<td align="left">${var.expireDate}</td>
-			</tr>
-			<tr>
 				<td align="left">购买量：</td>
 				<td align="left">${var.virNum}&nbsp;台</td>
+			</tr>
+			<tr>
+				<td align="left">到期时间：</td>
+				<td align="left">${var.expireDate}</td>
 			</tr>
 			</table>
 		</td>

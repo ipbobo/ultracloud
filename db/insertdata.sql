@@ -15,7 +15,7 @@ INSERT INTO `cmp_dict` VALUES ('13', '2017-11-14 21:47:39', '2017-11-14 21:47:39
 INSERT INTO `cmp_dict` VALUES ('14', '2017-11-14 21:47:53', '2017-11-14 21:47:53', 'area_code', '2', '华北', '区域', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('15', '2017-11-14 22:37:24', '2017-11-14 23:19:43', 'deploy_type', '1', '常规部署', '部署类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES ('20', '2017-11-14 23:27:09', '2017-11-14 23:27:09', 'res_type', '1', '云主机', '资源类型', '1', '1');
-INSERT INTO `cmp_dict` VALUES ('21', '2017-11-14 23:27:26', '2017-11-14 23:27:26', 'res_type', '2', '小机', '资源类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('21', '2017-11-14 23:27:26', '2017-11-14 23:27:26', 'res_type', '2', 'X86物理机', '资源类型', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('22', '2017-11-14 23:29:37', '2017-11-15 14:00:41', 'recommend_type', '11', '1C1G', '推荐配置', '0', '1');
 INSERT INTO `cmp_dict` VALUES ('23', '2017-11-14 23:29:51', '2017-11-15 14:00:43', 'recommend_type', '22', '2C2G', '推荐配置', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('24', '2017-11-14 23:30:27', '2017-11-15 14:00:46', 'recommend_type', '24', '2C4G', '推荐配置', '0', '3');
@@ -70,7 +70,6 @@ INSERT INTO `cmp_dict` VALUES ('89', '2017-11-20 17:59:36', '2017-11-20 18:34:44
 
 
 INSERT INTO `cmp_sequence` VALUES ('cmp_order', '1', '1', '5', 'O');
-
 
 insert into `sys_dictionaries` (`DICTIONARIES_ID`, `NAME`, `NAME_EN`, `BIANMA`, `ORDER_BY`, `PARENT_ID`, `BZ`, `TBSNAME`) values('028d07972a1e498284548e9bd234f50a','一键安装WebSphere应用','A_key_to_install_websphere','A_key_to_install_websphere','2','854f23ca3f6f497eba6f6010e6373d2c','','');
 insert into `sys_dictionaries` (`DICTIONARIES_ID`, `NAME`, `NAME_EN`, `BIANMA`, `ORDER_BY`, `PARENT_ID`, `BZ`, `TBSNAME`) values('125f9fe3c8ca4b7e95ff32b4fce2b5d1','一键安装IBMMQ应用','A_key_to_install_IBMMQ','A_key_to_install_IBMMQ','6','854f23ca3f6f497eba6f6010e6373d2c','','');
