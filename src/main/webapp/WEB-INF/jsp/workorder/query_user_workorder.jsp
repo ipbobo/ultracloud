@@ -24,6 +24,7 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
+							
 							<div class="widget-box">
 								<div class="widget-header">
 									<h4 class="smaller">条件查询</h4>
@@ -36,25 +37,27 @@
 											<td style="width: 120px; text-align: right;">&nbsp;工单类型:</td>
 											<td style="width: 120px; text-align: left;"><select
 												name="workorder_type" id="workorder_type" title="选择工单类型">
-													<option value="" selected="selected">选择工单类型</option>
+													
+														<option value=""  <c:if test="${pd.workorder_type == null || pd.workorder_type == '' }">selected="selected"</c:if>>选择工单类型</option>
+													
 													<c:forEach items="${workorderTypeList}" var="var">
-														<option value="${var.dictCode}">${var.dictValue}</option>
+														<option value="${var.dictCode}" <c:if test="${pd.workorder_type !='' && var.dictCode == pd.workorder_type }">selected="selected"</c:if> >${var.dictValue}</option>
 													</c:forEach>
 											</select></td>
 											<td style="width: 120px; text-align: right;">&nbsp;工单状态:</td>
-											<td style="width: 120px; text-align: left;"><select
-												name="workorder_status" id="workorder_status" title="选择工单状态">
-													<option value="" selected="selected">选择工单类型</option>
+											<td style="width: 120px; text-align: left;">
+											<select name="workorder_status" id="workorder_status" title="选择工单状态">
+													<option value="" <c:if test="${pd.workorder_status == null || pd.workorder_status == '' }">selected="selected"</c:if>>选择工单类型</option>
 													<c:forEach items="${workorderStatusList}" var="var">
-														<option value="${var.dictCode}">${var.dictValue}</option>
+														<option value="${var.dictCode}" <c:if test="${pd.workorder_status !='' && var.dictCode == pd.workorder_status }">selected="selected"</c:if>>${var.dictValue}</option>
 													</c:forEach>
 											</select></td>
 											<td style="width: 80px; text-align: right;">&nbsp;项目:</td>
 											<td style="width: 120px; text-align: left;"><select
 												name="project" id="project" title="选择项目">
-													<option value="" selected="selected">选择项目</option>
+													<option value="" <c:if test="${pd.project == null || pd.project == '' }">selected="selected"</c:if>>选择项目</option>
 													<c:forEach items="${projectList}" var="var">
-														<option value="${var.id}">${var.shortname}</option>
+														<option value="${var.id}"  <c:if test="${pd.project !='' && var.id == pd.project }">selected="selected"</c:if>>${var.shortname}</option>
 													</c:forEach>
 											</select></td>
 											<td style="width: 120px; text-align: right;" rowspan="2">
@@ -71,14 +74,14 @@
 										<tr>
 											<td style="width: 120px; text-align: right;">&nbsp;工单号:</td>
 											<td style="width: 120px; text-align: left;"><input
-												type="text" name="workorder_id" id="workorder_id" /></td>
+												type="text" name="workorder_appNo" value="${pd.workorder_appNo}" id="workorder_appNo" /></td>
 											<td style="width: 120px; text-align: right;">&nbsp;时间选择:</td>
 											<td style="width: 120px; text-align: left;"><select
 												name="workorder_time" id="workorder_time" title="时间选择">
-													<option value="" selected="selected">全部</option>
-													<option value="1">近一周</option>
-													<option value="2">近一个月</option>
-													<option value="3">近一年</option>
+													<option value="" <c:if test="${pd.workorder_time == null || pd.workorder_time == '' }">selected="selected"</c:if>>全部</option>
+													<option value="1" <c:if test="${pd.workorder_time !='' && '1' == pd.workorder_time }">selected="selected"</c:if>>近一周</option>
+													<option value="2" <c:if test="${pd.workorder_time !='' && '2' == pd.workorder_time }">selected="selected"</c:if>>近一个月</option>
+													<option value="3" <c:if test="${pd.workorder_time !='' && '3' == pd.workorder_time }">selected="selected"</c:if>>近一年</option>
 											</select></td>
 
 
@@ -326,7 +329,8 @@
 	
 	//导出excel
 	function toExcel(){
-		window.location.href='<%=basePath%>workorderExcel.do';
+		window.location.href='<%=basePath%>workorderExcel.do?workorder_type='+$('#workorder_type').val()+'&workorder_status='+$('#workorder_status').val()+'&project='+$('#project').val()+
+		'&workorder_appNo='+$('#workorder_appNo').val()+'&workorder_time='+$('#workorder_time').val();
 	}
 	
 
