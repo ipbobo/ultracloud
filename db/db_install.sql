@@ -246,7 +246,7 @@ CREATE TABLE `t_mirrortemplate` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   INDEX idx_datacenter_id(`datacenter_id`),
-  INDEX idx_resourcepool_id(`resourcepool_id`),
+  INDEX idx_cloudplatform_id(`cloudplatform_id`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='镜像模板'; 

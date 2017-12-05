@@ -70,7 +70,6 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">编号</th>
 									<th class="center">用户名</th>
 									<th class="center">姓名</th>
 									<th class="center">所属角色</th>
@@ -95,7 +94,6 @@
 												<c:if test="${user.USERNAME == 'admin'}"><label><input type='checkbox' disabled="disabled" class="ace" /><span class="lbl"></span></label></c:if>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class="center">${user.NUMBER }</td>
 											<td class="center"><a onclick="viewUser('${user.USERNAME}')" style="cursor:pointer;">${user.USERNAME }</a></td>
 											<td class="center">${user.NAME }</td>
 											<td class="center">${user.ROLE_NAME }</td>
