@@ -55,7 +55,7 @@ import com.fh.util.Tools;
 @RequestMapping(value="/user")
 public class UserController extends BaseController {
 	
-	String menuUrl = "user/listUsers.do"; //菜单地址(权限用)
+	String menuUrl = "user/list.do"; //菜单地址(权限用)
 	@Resource(name="userService")
 	private UserManager userService;
 	@Resource(name="roleService")

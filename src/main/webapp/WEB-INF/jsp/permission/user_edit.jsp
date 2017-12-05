@@ -38,7 +38,6 @@
 									<input type="hidden" name="USER_ID" id="user_id" value="${pd.USER_ID }"/>
 									<div id="zhongxin" style="padding-top: 13px;">
 									<table id="table_report" class="table table-striped table-bordered table-hover">
-										<c:if test="${fx != 'head'}">
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;">角色:</td>
 											<td id="juese">
@@ -50,7 +49,6 @@
 											</select>
 											</td>
 										</tr>
-										</c:if>
 										<c:if test="${fx == 'head'}">
 											<input name="ROLE_ID" id="role_id" value="${pd.ROLE_ID }" type="hidden" />
 										</c:if>
