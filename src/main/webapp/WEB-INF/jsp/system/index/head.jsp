@@ -40,33 +40,12 @@
 								<span id="span_task_no" class="badge badge-grey"></span>
 							</a>
 
-							<ul  id="ul_tasks" class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+							<ul onmouseleave="ul_tasks_out();"  id="ul_tasks" class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
 								<li class="dropdown-header">
 									<i class="ace-icon fa fa-check"></i>
 									<span id="span_task_tital">目前无任务</span>
 								</li>
 							</ul>
-						</li>
-
-						<li title="即时聊天" class="purple"  onclick="creatw();"><!-- creatw()在 WebRoot\plugins\websocketInstantMsg\websocket.js中 -->
-							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-								<i class="ace-icon fa fa-bell icon-animated-bell"></i>
-								<span class="badge badge-important"></span>
-							</a>
-
-							<ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
-								<li class="dropdown-header">
-									<i class="ace-icon fa fa-bell-o"></i>
-									FH Aadmin 即时通讯
-								</li>
-							</ul>
-						</li>
-
-						<li title="站内信" class="green" onclick="fhsms();" id="fhsmstss"><!-- fhsms()在 WebRoot\static\js\myjs\head.js中 -->
-							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-								<i class="ace-icon fa fa-envelope icon-animated-vertical"></i>
-								<span class="badge badge-success" id="fhsmsCount"></span>
-							</a>
 						</li>
 
 						<!-- #section:basics/navbar.user_menu -->
@@ -78,12 +57,9 @@
 								<i class="ace-icon fa fa-caret-down"></i>
 							</a>
 
-							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+							<ul id="ul_userset" onmouseleave="ul_userset_out();" class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
 									<a onclick="editUserH();" style="cursor:pointer;"><i class="ace-icon fa fa-user"></i>用户设置</a><!-- editUserH()在 WebRoot\static\js\myjs\head.js中 -->
-								</li>
-								<li id="systemset">
-									<a onclick="help();" style="cursor:pointer;"><i class="ace-icon fa fa-cog"></i>帮助</a>
 								</li>
 								<li class="divider"></li>
 								<li>

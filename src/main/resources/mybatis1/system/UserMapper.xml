@@ -97,7 +97,7 @@
 	</sql>
 	
 	<sql id="FieldValue_new">
-		<include refid="FieldValue"></include>,#{DEPARTMENT_ID}
+		<include refid="FieldValue"></include>,#{DEPARTMENT_ID}, #{TEL}
 	</sql>
 	
 	<!-- 判断用户名和密码 -->
@@ -341,6 +341,9 @@
 				NUMBER					= #{NUMBER},
 				PHONE					= #{PHONE},
 				DEPARTMENT_ID 			= #{DEPARTMENT_ID}
+			<if test="TEL != null and TEL != ''">
+				,TEL 			= #{TEL}
+			</if>
 			<if test="PASSWORD != null and PASSWORD != ''">
 				,PASSWORD				= #{PASSWORD}
 			</if>

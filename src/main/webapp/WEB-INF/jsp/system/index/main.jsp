@@ -247,6 +247,14 @@
 			//alert("去执行任务" + taskId);
 			siMenu('z137','lm121','工单查询','queryUserApplyWorkOrderPre.do');
 		}
+		
+		function ul_tasks_out(){
+			$('#ul_tasks').dropdown('toggle');
+		}
+		
+		function ul_userset_out(){
+			$('#ul_userset').dropdown('toggle');
+		}
 	</script>
 	</body>
 </html>
