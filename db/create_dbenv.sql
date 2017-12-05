@@ -14,4 +14,8 @@ source ./db/activiti.mysql.delete.foreign.sql
 source ./db/db_init.sql
 source ./db/db_install.sql
 source ./db/cmp_dict.sql
+source ./db/cmp_op_serve.sql
+source ./db/cmp_order.sql
+source ./db/cmp_sequence.sql
+source ./db/cmp_workorder.sql
 source ./db/insertdata.sql
