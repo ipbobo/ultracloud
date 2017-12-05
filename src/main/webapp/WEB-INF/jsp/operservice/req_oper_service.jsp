@@ -60,7 +60,7 @@
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;选择虚拟机:</td>
 									<td id="tip_vm">
-									<button class="btn btn-info" id="btn_vm_add"  style="float:left;margin-left: 100px;" type="button" data-toggle="modal" data-target="#vm_modal">添加</button>
+									<button class="btn btn-info" id="btn_add_vm"  style="float:left;margin-left: 100px;" type="button" data-toggle="modal" data-target="#vm_modal">添加</button>
 									<div style="float:left; text-align: center;line-height:40px; padding-left: 40px;" id="v_vm"></div>
 									</td>
 								</tr>
@@ -110,7 +110,7 @@
 														<c:if test="${not empty vmList}">
 														<ul id="vmId" class="ullitab list-inline">
 															<c:forEach items="${vmList}" var="var" varStatus="st">
-															<li onclick="setFieldValue(this, 'vm', '${var.dictValue}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+															<li onclick="setFieldValue(this, 'vm', '${var.dictValue}')">${var.dictValue}</li>
 															</c:forEach>
 														</ul>
 														</c:if>
@@ -156,7 +156,7 @@
 														<c:if test="${not empty middlewareList}">
 														<ul id="middlewareId" class="ullitab list-inline">
 															<c:forEach items="${middlewareList}" var="var" varStatus="st">
-															<li onclick="setFieldValue(this, 'middleware', '${var.dictValue}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+															<li onclick="setFieldValue(this, 'middleware', '${var.dictValue}')">${var.dictValue}</li>
 															</c:forEach>
 														</ul>
 														</c:if>

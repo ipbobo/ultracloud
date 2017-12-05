@@ -266,8 +266,8 @@
 		<if test="pd.project != null and pd.project != ''">
 			and projectCode=#{pd.project} 
 		</if>
-		<if test="pd.workorder_id != null and pd.workorder_id != ''">
-			and id like %#{pd.workorder_id}% 
+		<if test="pd.workorder_appNo != null and pd.workorder_appNo != ''">
+			and appNo like CONCAT('%',#{pd.workorder_appNo},'%')   
 		</if>
 		<if test="pd.workorder_time != null and pd.workorder_time != ''">
 			<if test="pd.workorder_time=='1'">
@@ -298,7 +298,7 @@
 				select DISTINCT  r.PROC_INST_ID_ from <include refid="ru_task" />  r , <include refid="ru_identitylink" /> i where r.ID_ = i.TASK_ID_  and 
 						i.TYPE_ = 'candidate' and i.USER_ID_=#{pd.USERNAME}
 		)
-		 order by status asc
+		 order by appNo desc
 	</select>
 	
 </mapper>
