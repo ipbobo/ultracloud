@@ -75,7 +75,7 @@
 	</sql>
 	
 	<sql id="Field_new">
-		<include refid="Field"></include>,DEPARTMENT_ID   
+		<include refid="Field"></include>,DEPARTMENT_ID 
 	</sql>
 	
 	<!-- 字段值 -->
@@ -97,7 +97,7 @@
 	</sql>
 	
 	<sql id="FieldValue_new">
-		<include refid="FieldValue"></include>,#{DEPARTMENT_ID}, #{TEL}
+		<include refid="FieldValue"></include>,#{DEPARTMENT_ID}
 	</sql>
 	
 	<!-- 判断用户名和密码 -->

@@ -416,6 +416,7 @@ public class UserController extends BaseController {
 		pd.put("ROLE_ID", "1");
 		List<Role> roleList = roleService.listAllRolesByPId(pd);	//列出所有系统用户角色
 		pd.put("USERNAME", Jurisdiction.getUsername());
+		String userDeptName = departmentService.findById(pd).getString("NAME");
 		String userDeptNo = Jurisdiction.getDEPARTMENT_ID();
 		pd = userService.findByUsername(pd);						//根据用户名读取
 		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
