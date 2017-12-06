@@ -23,8 +23,10 @@
 		var msg = "${msg}";
 		if(msg=="success" || msg==""){
 			document.getElementById('zhongxin').style.display = 'none';
+			alert("操作成功");
 			top.Dialog.close();
 		}else{
+			alert("操作失败:" + msg);
 			top.Dialog.close();
 		}
 	</script>

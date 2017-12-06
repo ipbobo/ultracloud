@@ -58,7 +58,7 @@
 											<td style="width:79px;text-align: right;padding-top: 13px;">所在部门:</td>
 											<td>
 												<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
-												<div class="selectTree" id="selectTree"></div>
+												<input type="text" name="userDeptName" id="userDeptName"  value="${pd.userDeptName }"  title="机构名称" style="width:98%;"/>
 											</td>
 										</tr>
 										<tr>
@@ -131,6 +131,10 @@
 		if($("#name").val()!=""){
 			$("#name").attr("readonly","readonly");
 			$("#name").css("color","gray");
+		}
+		if($("#userDeptName").val()!=""){
+			$("#userDeptName").attr("readonly","readonly");
+			$("#userDeptName").css("color","gray");
 		}
 	});
 	//保存
@@ -340,22 +344,5 @@
 		}
 	});
 	
-	//下拉树
-	var defaultNodes = {"treeNodes":${zTreeNodes}};
-	function initComplete(){
-		//绑定change事件
-		$("#selectTree").bind("change",function(){
-			if(!$(this).attr("relValue")){
-		      //  top.Dialog.alert("没有选择节点");
-		    }else{
-				//alert("选中节点文本："+$(this).attr("relText")+"<br/>选中节点值："+$(this).attr("relValue"));
-				$("#DEPARTMENT_ID").val($(this).attr("relValue"));
-		    }
-		});
-		//赋给data属性
-		$("#selectTree").data("data",defaultNodes);  
-		$("#selectTree").render();
-		$("#selectTree2_input").val("${null==depname?'请选择':depname}");
-	}
 </script>
 </html>

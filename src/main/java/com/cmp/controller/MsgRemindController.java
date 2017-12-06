@@ -64,64 +64,21 @@ public class MsgRemindController extends BaseController{
 		page.setPd(pd);
 		page.setCurrentPage(1);
 		page.setShowCount(10000);
-		List<PageData> workOrderList = new ArrayList<PageData>();
-		workOrderList = cmpWorkOrderService.listUserWorkorderByPd(page);
+		List<PageData> currentdayWorkOrderList = new ArrayList<PageData>();
+		currentdayWorkOrderList = cmpWorkOrderService.queryUserCurrentdayWorkorder(page);
+		List<PageData> todoWorkOrderList = new ArrayList<PageData>();
+		todoWorkOrderList = cmpWorkOrderService.queryUserToDoWorkorder(page);
 		int toDoNum = 0;
 		int dealNum = 0;
-		int completeNum = 0;
+		int currentdayNum = 0;
 		//根据用户类型不同，查询不同的任务
-		if (workOrderList == null || workOrderList.size() == 0) {
-			outmap.put("roleType", userr.getRole().getTYPE());
-			//返回查询到的任务
-			outmap.put("totalTaskNo", totalTaskNo);
-			return outmap;
+		if (currentdayWorkOrderList != null & currentdayWorkOrderList.size() >0 ) {
+			currentdayNum = currentdayWorkOrderList.size();
 		}
-		for (PageData wopd : workOrderList) {
-			if (userr.getRole().getTYPE().equals(Role.TYPE_APPLICANT)) {
-				//获取退回任务数
-				if (wopd.get("status") != null && wopd.get("status").equals("3")) {
-					toDoNum++;
-				}
-				//获取处理中任务数
-				if (wopd.get("status") != null && !wopd.get("status").equals("3") & !wopd.get("status").equals("5")) {
-					dealNum++;
-				}
-				//获取工单完成任务数
-				if (wopd.get("status") != null && wopd.get("status").equals("5")) {
-					completeNum++;
-				}
-			}
-			if (userr.getRole().getTYPE().equals(Role.TYPE_AUDIT)) {
-				//获取待审批任务数
-				if (wopd.get("status") != null && wopd.get("status").equals("1")) {
-					toDoNum++;
-				}
-				//获取处理中任务数
-				if (wopd.get("status") != null && !wopd.get("status").equals("1") && !wopd.get("status").equals("5")) {
-					dealNum++;
-				}
-				//获取工单完成任务数
-				if (wopd.get("status") != null && wopd.get("status").equals("5")) {
-					completeNum++;
-				}
-			}
-			
-			if (userr.getRole().getTYPE().equals(Role.TYPE_EXECUTOR)) {
-				//获取待处理任务数
-				if (wopd.get("status") != null && wopd.get("status").equals("2")) {
-					toDoNum++;
-				}
-				//获取处理中任务
-				if (wopd.get("status") != null && wopd.get("status").equals("4")) {
-					dealNum++;
-				}
-				//获取工单完成任务数
-				if (wopd.get("status") != null && wopd.get("status").equals("5")) {
-					completeNum++;
-				}
-			}
-		}
-		totalTaskNo = workOrderList.size();
+		if (todoWorkOrderList != null & todoWorkOrderList.size() >0 ) {
+			toDoNum = todoWorkOrderList.size();
+		} 
+		
 		
 		
 		//根据用户类型不同，查询不同的任务
@@ -164,11 +121,9 @@ public class MsgRemindController extends BaseController{
 //		}
 	
 		outmap.put("toDoNum", toDoNum);
-		outmap.put("dealNum", dealNum);
-		outmap.put("completeNum", completeNum);
+		outmap.put("currentdayNum", currentdayNum);
 		outmap.put("roleType", userr.getRole().getTYPE());
 		//返回查询到的任务
-		outmap.put("totalTaskNo", totalTaskNo);
 		return outmap;
 	}
 	

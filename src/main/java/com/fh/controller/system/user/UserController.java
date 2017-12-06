@@ -18,6 +18,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.Role;
+import com.fh.entity.system.User;
 import com.fh.service.fhoa.department.DepartmentManager;
 import com.fh.service.system.fhlog.FHlogManager;
 import com.fh.service.system.menu.MenuManager;
@@ -415,13 +417,19 @@ public class UserController extends BaseController {
 		mv.addObject("fx", "head");
 		pd.put("ROLE_ID", "1");
 		List<Role> roleList = roleService.listAllRolesByPId(pd);	//列出所有系统用户角色
-		pd.put("USERNAME", Jurisdiction.getUsername());
+		Session session = Jurisdiction.getSession();
+		User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
+		if (user == null) {
+			mv.setViewName("system/index/login");
+			return mv;
+		}
+		pd.put("USERNAME", user.getUSERNAME());
+		pd = userService.findByUsernameForUpdate(pd);						//根据用户名读取
 		String userDeptName = departmentService.findById(pd).getString("NAME");
-		String userDeptNo = Jurisdiction.getDEPARTMENT_ID();
-		pd = userService.findByUsername(pd);						//根据用户名读取
-		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
-		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect(Jurisdiction.getDEPARTMENT_ID(),zdepartmentPdList));
-		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
+		pd.put("userDeptName", userDeptName);
+//		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
+//		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect(Jurisdiction.getDEPARTMENT_ID(),zdepartmentPdList));
+//		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
 		//String userDeptName = departmentService.findById(pd).getString("NAME");
 		//mv.addObject("depname", userDeptName == null ? "" : userDeptName);
 		mv.setViewName("system/user/user_edit");
@@ -568,7 +576,7 @@ public class UserController extends BaseController {
 		}
 		userService.edit(pd);	//执行修改
 		FHLOG.save(Jurisdiction.getUsername(), "修改系统用户："+pd.getString("USERNAME"));
-		mv.addObject("msg","success");
+		mv.addObject("msg","修改成功");
 		mv.setViewName("save_result");
 		return mv;
 	}
