@@ -499,6 +499,20 @@ create table `t_usergroup` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户组';
 
 -- ----------------------------
+-- 用户组与用户关联
+-- ----------------------------
+DROP TABLE IF EXISTS `t_usergroup_user_map`;
+CREATE TABLE `t_usergroup_user_map` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `usergroup_id` bigint(20) unsigned NOT NULL COMMENT '用户组id',
+  `USER_ID` varchar(100) NOT NULL COMMENT '用户id',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_usergroup_role` (`usergroup_id`,`USER_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='用户组与用户关联';
+
+-- ----------------------------
 -- 用户
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;

@@ -85,7 +85,6 @@
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
-													<a class="btn btn-mini btn-purple" onclick="listhis('${var.key}');"><i class="icon-pencil"></i>历史版本</a>
 													<c:if test="${QX.del == 1 }">
 													<a class="btn btn-xs btn-danger" onclick="del('${var.id}');">
 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>

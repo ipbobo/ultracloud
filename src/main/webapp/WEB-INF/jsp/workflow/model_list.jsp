@@ -56,7 +56,7 @@
 									<th class="center">Version</th>
 									<th class="center">创建时间</th>
 									<th class="center">更新时间</th>
-									<th class="center">元数据</th>
+									<th class="center">描述</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>

@@ -53,7 +53,7 @@ public class ProcessController  extends BaseController {
 	private RepositoryService repositoryService;
 
 	/**
-	 * 查找流程定义列表
+	 * 查找已定义部署流程列表
 	 * @return
 	 */
 	@RequestMapping(value = "/list")
@@ -67,12 +67,10 @@ public class ProcessController  extends BaseController {
 		ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
 		List<ProcessDefinition> processDefinitionList =new ArrayList<ProcessDefinition>();
 		if(StringUtils.isNotBlank(keywords)){
-			processDefinitionList = query.processDefinitionNameLike("%"+keywords+"%")
-					.orderByDeploymentId().desc()
-					.listPage(page.getCurrentPage(), page.getShowCount());
+			processDefinitionList = query.latestVersion().processDefinitionNameLike("%"+keywords+"%").orderByDeploymentId().desc()
+														.listPage(page.getCurrentPage(), page.getShowCount());
 		}else{
-			processDefinitionList = query.orderByDeploymentId().desc()
-					.listPage(page.getCurrentPage(), page.getShowCount());
+			processDefinitionList = query.latestVersion().orderByDeploymentId().desc().listPage(page.getCurrentPage(), page.getShowCount());
 		}
 		long count = query.count();
 		page.setTotalResult((int) count);
@@ -84,7 +82,7 @@ public class ProcessController  extends BaseController {
 			Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult();
 			pageDeta.put("id", processDef.getId());
 			pageDeta.put("deploymentId", deploymentId);
-			pageDeta.put("name", processDef.getName());
+			pageDeta.put("name", deployment.getName());
 			pageDeta.put("key", processDef.getKey());
 			pageDeta.put("version", processDef.getVersion());
 			pageDeta.put("deploymentTime", deployment.getDeploymentTime());
@@ -95,6 +93,48 @@ public class ProcessController  extends BaseController {
 		}
 	
 		mv.setViewName("workflow/process_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+	
+	/**
+	 * 查找已定义部署流程历史列表
+	 * @return
+	 */
+	@RequestMapping(value = "/listHis")
+	public ModelAndView listHis(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表ProcessInstanceVo");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String processDefinitionKey = pd.getString("processDefinitionKey");
+		
+		ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
+		List<ProcessDefinition> processDefinitionList =new ArrayList<ProcessDefinition>();
+		processDefinitionList = query.processDefinitionKey(processDefinitionKey).orderByProcessDefinitionVersion().desc().listPage(page.getCurrentPage(), page.getShowCount());
+		long count = query.count();
+		page.setTotalResult((int) count);
+		List<PageData> varList = new ArrayList<PageData>();
+		for (ProcessDefinition processDef : processDefinitionList) {
+			PageData pageDeta = new PageData();
+			
+			String deploymentId = processDef.getDeploymentId();
+			Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult();
+			pageDeta.put("id", processDef.getId());
+			pageDeta.put("deploymentId", deploymentId);
+			pageDeta.put("name", deployment.getName());
+			pageDeta.put("key", processDef.getKey());
+			pageDeta.put("version", processDef.getVersion());
+			pageDeta.put("deploymentTime", deployment.getDeploymentTime());
+			pageDeta.put("resourceName", processDef.getResourceName());
+			pageDeta.put("diagramResourceName", processDef.getDiagramResourceName());
+			
+			varList.add(pageDeta);
+		}
+	
+		mv.setViewName("workflow/process_listhis");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
