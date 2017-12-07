@@ -188,10 +188,12 @@
 				url: '<%=basePath%>main/queryTasks.do?1=1',
 				cache: false,
 				success: function(data){
+						
 						if (data.toDoNum != null && data.toDoNum != ''){
 							$("#span_task_tital").html("您有以下任务 :");
 						}
 						if (data.toDoNum != null &&data.toDoNum != '0'){
+							$("#span_task_no").html(data.toDoNum);
 							$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "待执行的工单:" + data.toDoNum +"</li>" );
 						}
 						//24H工单

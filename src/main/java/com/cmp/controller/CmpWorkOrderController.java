@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
@@ -155,6 +156,10 @@ public class CmpWorkOrderController extends BaseController{
 		mv.addObject("relateTaskList", relateTaskList);
 		mv.addObject("workorderImag", workorderImag);
 		mv.addObject("procDefId", hpi.getProcessDefinitionId());
+		
+		//获取流程注释
+		List<Comment> commentList = activitiService.getProcessComments(toCheckWorkorder.getProcInstId());
+		mv.addObject("commentList", commentList);
 		//是资源申请，跳资源申请审核页面或运维申请审核页面
 		String toCheckUrl = "";
 		if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("1")) {
@@ -199,6 +204,10 @@ public class CmpWorkOrderController extends BaseController{
 		mv.addObject("relateTaskList", relateTaskList);
 		mv.addObject("workorderImag", workorderImag);
 		mv.addObject("procDefId", hpi.getProcessDefinitionId());
+		
+		//获取流程注释
+		List<Comment> commentList = activitiService.getProcessComments(toExcuteWorkorder.getProcInstId());
+		mv.addObject("commentList", commentList);
 		//是资源申请，跳资源申请审核页面或运维申请审核页面
 		String toExecuteUrl = "";
 		if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("1")) {
@@ -244,6 +253,11 @@ public class CmpWorkOrderController extends BaseController{
 		mv.addObject("relateTaskList", relateTaskList);
 		mv.addObject("workorderImag", workorderImag);
 		mv.addObject("procDefId", hpi.getProcessDefinitionId());
+		
+		//获取流程注释
+		List<Comment> commentList = activitiService.getProcessComments(toViewWorkorder.getProcInstId());
+		mv.addObject("commentList", commentList);
+		
 		//是资源申请，跳资源申请审核页面或运维申请审核页面
 		String toViewUrl = "";
 		if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("1")) {

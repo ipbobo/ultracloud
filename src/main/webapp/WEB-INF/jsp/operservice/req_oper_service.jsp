@@ -16,7 +16,7 @@
 <!-- 下拉框 -->
 <link rel="stylesheet" href="static/ace/css/chosen.css" />
 <!-- jsp文件头和头部 -->
-<%@ include file="top.jsp"%>
+<%@ include file="../system/index/top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
 <jsp:include page="../msg/msg_dialog.jsp"></jsp:include>
