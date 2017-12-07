@@ -15,7 +15,6 @@
 <%@ include file="../system/index/top.jsp"%>
 </head>
 <body class="no-skin">
-
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<!-- /section:basics/sidebar -->

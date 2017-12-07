@@ -132,8 +132,11 @@ public class AppOperServiceController  extends BaseController {
 		for (Task task : userTaskList) {
 			if (task.getProcessInstanceId().equals(procInstId)) {
 				activitiService.claimTask(task.getId(), user.getUSERNAME());
+				//写入流程注释
+				activitiService.addComment(task.getId(), procInstId, user.getUSERNAME(), appmsg);
 			}
 		}
+		
 		//完成申请任务
 		//List<User> userList = userService.listAllUserByRoldId(pd)
 		activitiService.handleTask(workworder.getAppNo(), procInstId,  user.getUSERNAME(), null, null);

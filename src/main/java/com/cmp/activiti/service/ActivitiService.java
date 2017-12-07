@@ -21,6 +21,7 @@ import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -28,6 +29,7 @@ import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
@@ -246,6 +248,28 @@ public class ActivitiService {
   		taskService.claim(taskId, currUser);
 	}
 
+  	//添加流程注释
+  	public void addComment(String taskId, String procInstId,  String currUser, String msg) {
+  		 Authentication.setAuthenticatedUserId(currUser);
+  		taskService.addComment(taskId, procInstId, msg);
+  	}
+  	
+  	
+  	
+  	//获取历史活动注释
+  	public List<Comment> getProcessComments(String procInstId) {
+         List<Comment> historyCommnets = new ArrayList<>();
+         List<HistoricActivityInstance> hais = historyService.createHistoricActivityInstanceQuery().processInstanceId(procInstId).activityType("userTask").list();
+         for (HistoricActivityInstance hai : hais) {
+             String historytaskId = hai.getTaskId();
+             List<Comment> comments = taskService.getTaskComments(historytaskId);
+             if(comments!=null && comments.size()>0){
+                 historyCommnets.addAll(comments);
+             }
+         }
+         return historyCommnets;
+     }   
+  	
   	
   	//获取候选人及候选组
   	private Map<String, String> getCandidateMap(String taskId){

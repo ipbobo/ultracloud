@@ -26,3 +26,5 @@
 		<script src="static/ace/js/html5shiv.js"></script>
 		<script src="static/ace/js/respond.js"></script>
 		<![endif]-->
+		
+		<jsp:include page="/WEB-INF/jsp/msg/msg_dialog.jsp"></jsp:include>

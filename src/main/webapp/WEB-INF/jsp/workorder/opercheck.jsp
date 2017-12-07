@@ -14,7 +14,6 @@
 <base href="<%=basePath%>">
 <!-- jsp文件头和头部 -->
 <%@ include file="../system/index/top.jsp"%>
-<jsp:include page="../msg/msg_dialog.jsp"></jsp:include>
 </head>
 <body class="no-skin">
 
@@ -120,6 +119,36 @@
 		</table>
 
 	</div>
+	
+	<div class="alert alert-info">历史批复</div>
+						<div>
+						<table id="simple-table"
+								class="table table-striped table-bordered table-hover"
+								style="margin-top: 5px;">
+								<thead>
+									<tr>
+										<th class="center" width="20%">批复人</th>
+										<th class="center" width="80%">批复信息</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<!-- 开始循环 -->
+									<c:choose>
+										<c:when test="${not empty commentList}">
+											<c:forEach items="${commentList}" var="var" varStatus="vs">
+												<tr>
+													<td class='center' width="20%">${var.userId}</td>
+													<td class='center' width="80%">${var.fullMessage}</td>
+													</tr>
+													</c:forEach>
+												</c:when>
+											</c:choose>
+								</tbody>
+								
+								
+	</table>
+	</div>
 
 	<!-- 返回顶部 -->
 	<a href="#" id="btn-scroll-up"
@@ -167,8 +196,7 @@
 			//beforeSend: validateData,
 			cache: false,
 			success: function(data){
-				alert(data.result);
-				 top.Dialog.close();
+				showDialog(data.result);
 			}
 		});
 	}
