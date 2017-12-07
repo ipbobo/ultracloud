@@ -283,7 +283,7 @@ public class CacheQuery<E> {
 
 	public static void addCache(Class<?> entityClass, int size) {
 		cacheQueryMap.put(entityClass.getSimpleName(), new LinkedHashMap<String, Set<Object>>() {
-			private static final long serialVersionUID = 1L;
+			
 			protected boolean removeEldestEntry(Map.Entry<String, Set<Object>> eldest) {
 				CacheQuery.logger.debug("缓存大小=" + size() + "/" + values().size());
 				return size() > values().size();
