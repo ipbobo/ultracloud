@@ -39,6 +39,17 @@ public class CmpWorkOrderService {
 		return (List<PageData>)dao.findForList("CmpWorkOrderMapper.workorderlistPage", page);
 	}
 	
+	//查询个人可执行 工单
+	public List<PageData> queryUserToDoWorkorder(Page page) throws Exception{
+		return (List<PageData>)dao.findForList("CmpWorkOrderMapper.queryUserToDoWorkorder", page);
+	}
+	
+	
+	//查询个人当日 工单
+	public List<PageData> queryUserCurrentdayWorkorder(Page page) throws Exception{
+		return (List<PageData>)dao.findForList("CmpWorkOrderMapper.queryUserCurrentdayWorkorder", page);
+	}
+		
 	//查询个人所有 工单
 	public List<PageData> listAllUserWorkorderByPd(Page page) throws Exception{
 		return (List<PageData>)dao.findForList("CmpWorkOrderMapper.listAllWorkorder", page);

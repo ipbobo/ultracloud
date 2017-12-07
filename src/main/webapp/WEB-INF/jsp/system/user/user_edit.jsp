@@ -51,8 +51,31 @@
 											<td><input type="text" name="USERNAME" id="loginname" value="${pd.USERNAME }" maxlength="32" placeholder="这里输入用户名" title="用户名" style="width:98%;"/></td>
 										</tr>
 										<tr>
-											<td style="width:79px;text-align: right;padding-top: 13px;">编号:</td>
-											<td><input type="text" name="NUMBER" id="NUMBER" value="${pd.NUMBER }" maxlength="32" placeholder="这里输入编号" title="编号" onblur="hasN('${pd.USERNAME }')" style="width:98%;"/></td>
+											<td style="width:79px;text-align: right;padding-top: 13px;">姓名:</td>
+											<td><input type="text" name="NAME" id="name"  value="${pd.NAME }"  maxlength="32" placeholder="这里输入姓名" title="姓名" style="width:98%;"/></td>
+										</tr>
+										<tr>
+											<td style="width:79px;text-align: right;padding-top: 13px;">所在部门:</td>
+											<td>
+												<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
+												<input type="text" name="userDeptName" id="userDeptName"  value="${pd.userDeptName }"  title="机构名称" style="width:98%;"/>
+											</td>
+										</tr>
+										<tr>
+											<td style="width:79px;text-align: right;padding-top: 13px;">手机号:</td>
+											<td><input type="number" name="PHONE" id="PHONE"  value="${pd.PHONE }"  maxlength="32" placeholder="这里输入手机号" title="手机号" style="width:98%;"/></td>
+										</tr>
+										<tr>
+											<td style="width:79px;text-align: right;padding-top: 13px;">座机号:</td>
+											<td><input type="tel" name="TEL" id="TEL"  value="${pd.TEL }"  maxlength="32" placeholder="这里输入座机号" title="座机号" style="width:98%;"/></td>
+										</tr>
+										<tr>
+											<td style="width:79px;text-align: right;padding-top: 13px;">邮箱:</td>
+											<td><input type="email" name="EMAIL" id="EMAIL"  value="${pd.EMAIL }" maxlength="32" placeholder="这里输入邮箱" title="邮箱" onblur="hasE('${pd.USERNAME }')" style="width:98%;"/></td>
+										</tr>
+										<tr>
+											<td style="width:79px;text-align: right;padding-top: 13px;">旧密码:</td>
+											<td><input type="password" name="OLDPASSWORD" id="oldpassword"  maxlength="32" placeholder="输入旧密码" title="旧密码" style="width:98%;"/></td>
 										</tr>
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;">密码:</td>
@@ -61,18 +84,6 @@
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;">确认密码:</td>
 											<td><input type="password" name="chkpwd" id="chkpwd"  maxlength="32" placeholder="确认密码" title="确认密码" style="width:98%;"/></td>
-										</tr>
-										<tr>
-											<td style="width:79px;text-align: right;padding-top: 13px;">姓名:</td>
-											<td><input type="text" name="NAME" id="name"  value="${pd.NAME }"  maxlength="32" placeholder="这里输入姓名" title="姓名" style="width:98%;"/></td>
-										</tr>
-										<tr>
-											<td style="width:79px;text-align: right;padding-top: 13px;">手机号:</td>
-											<td><input type="number" name="PHONE" id="PHONE"  value="${pd.PHONE }"  maxlength="32" placeholder="这里输入手机号" title="手机号" style="width:98%;"/></td>
-										</tr>
-										<tr>
-											<td style="width:79px;text-align: right;padding-top: 13px;">邮箱:</td>
-											<td><input type="email" name="EMAIL" id="EMAIL"  value="${pd.EMAIL }" maxlength="32" placeholder="这里输入邮箱" title="邮箱" onblur="hasE('${pd.USERNAME }')" style="width:98%;"/></td>
 										</tr>
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;">备注:</td>
@@ -117,6 +128,14 @@
 			$("#loginname").attr("readonly","readonly");
 			$("#loginname").css("color","gray");
 		}
+		if($("#name").val()!=""){
+			$("#name").attr("readonly","readonly");
+			$("#name").css("color","gray");
+		}
+		if($("#userDeptName").val()!=""){
+			$("#userDeptName").attr("readonly","readonly");
+			$("#userDeptName").css("color","gray");
+		}
 	});
 	//保存
 	function save(){
@@ -145,17 +164,17 @@
 			$("#loginname").val(jQuery.trim($('#loginname').val()));
 		}
 		
-		if($("#NUMBER").val()==""){
-			$("#NUMBER").tips({
+		if($("#DEPARTMENT_ID").val()==""){
+			$("#DEPARTMENT_ID").tips({
 				side:3,
-	            msg:'输入编号',
+	            msg:'输入部门编号',
 	            bg:'#AE81FF',
 	            time:3
 	        });
-			$("#NUMBER").focus();
+			$("#DEPARTMENT_ID").focus();
 			return false;
 		}else{
-			$("#NUMBER").val($.trim($("#NUMBER").val()));
+			$("#DEPARTMENT_ID").val($.trim($("#DEPARTMENT_ID").val()));
 		}
 		if($("#user_id").val()=="" && $("#password").val()==""){
 			$("#password").tips({
@@ -207,6 +226,17 @@
 	            time:3
 	        });
 			$("#PHONE").focus();
+			return false;
+		}
+		if($("#TEL").val()==""){
+			
+			$("#TEL").tips({
+				side:3,
+	            msg:'输入座机号',
+	            bg:'#AE81FF',
+	            time:3
+	        });
+			$("#TEL").focus();
 			return false;
 		}
 		if($("#EMAIL").val()==""){
@@ -286,28 +316,6 @@
 		});
 	}
 	
-	//判断编码是否存在
-	function hasN(USERNAME){
-		var NUMBER = $.trim($("#NUMBER").val());
-		$.ajax({
-			type: "POST",
-			url: '<%=basePath%>user/hasN.do',
-	    	data: {NUMBER:NUMBER,USERNAME:USERNAME,tm:new Date().getTime()},
-			dataType:'json',
-			cache: false,
-			success: function(data){
-				 if("success" != data.result){
-					 $("#NUMBER").tips({
-							side:3,
-				            msg:'编号 '+NUMBER+' 已存在',
-				            bg:'#AE81FF',
-				            time:3
-				        });
-					 $("#NUMBER").val('');
-				 }
-			}
-		});
-	}
 	$(function() {
 		//下拉框
 		if(!ace.vars['touch']) {
@@ -335,5 +343,6 @@
 			});
 		}
 	});
+	
 </script>
 </html>

@@ -172,4 +172,11 @@ public interface UserManager {
 	 */
 	public List<PageData> listAllOutProjectByPdId(PageData pd) throws Exception;
 	
+	/**
+	 * 通过用户名查找用户
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public PageData findByUsernameForUpdate(PageData pd)throws Exception;
 }

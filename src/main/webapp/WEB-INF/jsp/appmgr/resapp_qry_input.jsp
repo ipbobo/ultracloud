@@ -424,10 +424,10 @@ $(window).scroll(function() {
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
 	<input type="hidden" name="status" id="status" value="0"/><!-- 状态：0-待提交；1-已提交；T-套餐 -->
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
-	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;" border=1>
 		<tr class="tablecls">
 			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;地域</td>
-			<td align="right" style="width: 120px;padding:10px;"></td>
+			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="areaCodeId" class="ullitab list-inline">
 					<c:if test="${not empty areaCodeList}">
@@ -490,7 +490,7 @@ $(window).scroll(function() {
 				</c:forEach>
 			  	</select>
 			</td>
-			<td align="left" style="width: 120px;padding:10px;" colspan="6">&nbsp;</td>
+			<td align="left" style="padding-right:10px;padding-bottom:10px;" colspan="5">&nbsp;</td>
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
@@ -508,9 +508,10 @@ $(window).scroll(function() {
 		</tr>
 		<tr class="tablecls">
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">虚拟机名称：</td>
-			<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="6">
-				<input type="text" name="virName" id="virName"  value=""/>
+			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
+				<input type="text" name="virName" id="virName" style="width: 100%;" value=""/>
 			</td>
+			<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="5">&nbsp;</td>
 		</tr>
 		<tr class="tablecls">
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">推荐配置：</td>
@@ -550,7 +551,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="3"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
 			<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 				<select class="chosen-select form-control" name="osType" id="osType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;">
@@ -569,11 +570,8 @@ $(window).scroll(function() {
 				</c:forEach>
 			  	</select>
 			</td>
-			<td align="left" style="width: 120px;padding:10px;" colspan="3">&nbsp;</td>
-		</tr>
-		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">镜像信息：</td>
-			<td align="left" style="padding-left:10px;padding-bottom:10px;">
+			<td align="right" style="width: 120px;padding:10px;">镜像信息：</td>
+			<td align="left" style="width: 180px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 				<select class="chosen-select form-control" name="imgCode" id="imgCode" data-placeholder="请选择镜像" style="vertical-align:top;width: 100%;">
 				<option value="">请选择</option>
 				<c:forEach items="${imgCodeList}" var="var">
@@ -581,20 +579,23 @@ $(window).scroll(function() {
 				</c:forEach>
 			  	</select>
 			</td>
-			<td align="left" style="width: 120px;padding:10px;" colspan="6">&nbsp;</td>
+			<td align="left" style="padding-left:10px;padding-bottom:10px;">&nbsp;</td>
 		</tr>
 		<tr class="tablecls">
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">用户名：</td>
 			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
-				<input type="text" name="imgUserName" id="imgUserName"  value=""/>
+				<input type="text" name="imgUserName" id="imgUserName" style="width: 100%;" value=""/>
 			</td>
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">密码：</td>
 			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
-				<input type="password" name="imgUserPass" id="imgUserPass"  value=""/>
+				<input type="password" name="imgUserPass" id="imgUserPass" style="width: 100%;" value=""/>
 			</td>
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">路径：</td>
-			<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="2">
-				<input type="text" name="imgPath" id="imgPath"  value="/opt"/>&nbsp;&nbsp;Linux系统必填
+			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
+				<input type="text" name="imgPath" id="imgPath" style="width: 100%;" value="/opt"/>
+			</td>
+			<td align="left" style="padding-left:10px;padding-bottom:10px;">
+				Linux系统必填
 			</td>
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
@@ -649,16 +650,9 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;数量</td>
-			<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
-			<td style="padding:10px;" colspan="6">
-				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onclick="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
-			</td>
-		</tr>
-		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">数量：</td>
-			<td style="width: 120px;padding-left:10px;padding-bottom:10px;" colspan="6">
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;数量</td>
+			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td style="width: 120px;padding:10px;" colspan="6">
 				<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 				    <input type="text" id="virNum" name="virNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1"> 
 				    <div class="input-group-addon"> 
@@ -670,13 +664,30 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;到期时间</td>
+			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td style="padding:10px;" colspan="6">
+				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onclick="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
+			</td>
+		</tr>
+		<tr><td colspan="8" height="10px"></td>
+		<tr class="tablecls">
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
 			<td align="right" style="width: 120px;padding:10px;">计费方式：</td>
-			<td align="left" style="width: 120px;padding:10px;">包年包月</td>
-			<td align="right" style="width: 120px;padding:10px;">地域：</td>
-			<td align="left" style="width: 120px;padding:10px;"><span id="areaCodeLbl"></span></td>
+			<td align="left" style="width: 180px;padding:10px;">包年包月</td>
 			<td align="right" style="width: 120px;padding:10px;">实例规格：</td>
-			<td align="left" style="width: 120px;padding:10px;" colspan="2"><span id="areaCodeLbl"></span></td>
+			<td align="left" style="width: 180px;padding:10px;">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
+			<td align="right" style="width: 120px;padding:10px;">镜像：</td>
+			<td align="left" style="width: 180px;padding:10px;" colspan="2">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
+		</tr>
+		<tr class="tablecls">
+			<td align="right" style="width: 120px;padding:10px;">数据盘：</td>
+			<td align="left" style="width: 180px;padding:10px;">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
+			<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
+			<td align="left" style="width: 180px;padding:10px;">${var.expireDate}</td>
+			<td align="right" style="width: 120px;padding:10px;">购买量：</td>
+			<td align="left" style="width: 180px;padding:10px;" colspan="2">${var.virNum}&nbsp;台</td>
 		</tr>
 	</table>
 	</form>

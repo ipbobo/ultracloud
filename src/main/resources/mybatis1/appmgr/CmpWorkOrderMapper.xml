@@ -286,7 +286,6 @@
 				]]>
 			</if>
 		</if>
-		
 		and procInstId in 
 		(
 				<!-- 获取完成的工单 -->
@@ -294,9 +293,50 @@
 				<include refid="hi_actinst" /> t 
 				where t.ASSIGNEE_=#{pd.USERNAME}
 				UNION
-				<!-- 获取未拾取的工单 -->
+				<!-- 获取未拾取的或未完成的工单 -->
 				select DISTINCT  r.PROC_INST_ID_ from <include refid="ru_task" />  r , <include refid="ru_identitylink" /> i where r.ID_ = i.TASK_ID_  and 
-						i.TYPE_ = 'candidate' and i.USER_ID_=#{pd.USERNAME}
+						(i.TYPE_ = 'candidate' or i.TYPE_='participant') and i.USER_ID_=#{pd.USERNAME}
+		)
+		 order by appNo desc
+	</select>
+	
+	<select id="queryUserToDoWorkorder" parameterType="page" resultType="pd">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where 1=1 
+		and procInstId in 
+		(
+				<!-- 获取未拾取或未完成的工单 -->
+				select DISTINCT  r.PROC_INST_ID_ from <include refid="ru_task" />  r , <include refid="ru_identitylink" /> i where 1=1
+				 and r.ID_ = i.TASK_ID_  
+				 and (i.TYPE_ = 'candidate' or i.TYPE_='participant')
+				 and i.USER_ID_=#{pd.USERNAME} 
+		)
+		 order by appNo desc
+	</select>
+	
+	<select id="queryUserCurrentdayWorkorder" parameterType="page" resultType="pd">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where 1=1 
+		and procInstId in 
+		(
+				<!-- 获取完成的工单 -->
+				select DISTINCT  PROC_INST_ID_ from 
+				<include refid="hi_actinst" /> t 
+				where t.ASSIGNEE_=#{pd.USERNAME} 
+				<![CDATA[
+				and date_sub(curdate(),interval 24 HOUR)<=date(t.START_TIME_) 
+				]]>
+				UNION
+				<!-- 获取未拾取的或未完成的工单 -->
+				select DISTINCT  r.PROC_INST_ID_ from <include refid="ru_task" />  r , <include refid="ru_identitylink" /> i where r.ID_ = i.TASK_ID_  and 
+						(i.TYPE_ = 'candidate' or i.TYPE_='participant') and i.USER_ID_=#{pd.USERNAME} 
+						<![CDATA[
+							and date_sub(curdate(),interval 24 HOUR)<=date(r.CREATE_TIME_) 
+						]]>
 		)
 		 order by appNo desc
 	</select>

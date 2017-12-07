@@ -75,7 +75,7 @@
 	</sql>
 	
 	<sql id="Field_new">
-		<include refid="Field"></include>,DEPARTMENT_ID   
+		<include refid="Field"></include>,DEPARTMENT_ID, TEL
 	</sql>
 	
 	<!-- 字段值 -->
@@ -97,7 +97,7 @@
 	</sql>
 	
 	<sql id="FieldValue_new">
-		<include refid="FieldValue"></include>,#{DEPARTMENT_ID}
+		<include refid="FieldValue"></include>,#{DEPARTMENT_ID}, #{TEL}
 	</sql>
 	
 	<!-- 判断用户名和密码 -->
@@ -147,6 +147,16 @@
 	<select id="findByUsername" parameterType="pd" resultType="pd" >
 		select 
 			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			USERNAME = #{USERNAME}
+	</select>
+	
+		<!-- 通过USERNAME获取数据 -->
+	<select id="findByUsernameForUpdate" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field_new"></include>
 		from 
 			<include refid="tableName"></include>
 		where 
@@ -341,6 +351,9 @@
 				NUMBER					= #{NUMBER},
 				PHONE					= #{PHONE},
 				DEPARTMENT_ID 			= #{DEPARTMENT_ID}
+			<if test="TEL != null and TEL != ''">
+				,TEL 			= #{TEL}
+			</if>
 			<if test="PASSWORD != null and PASSWORD != ''">
 				,PASSWORD				= #{PASSWORD}
 			</if>

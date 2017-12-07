@@ -89,41 +89,38 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
-									<th class="center">平台类型</th>
-									<th class="center">资源类型</th>
-									<th class="center">服务器名称</th>
+									<th class="center">名称</th>
 									<th class="center">IP</th>
-									<th class="center">CPU/内存</th>
-									<th class="center">数据盘大小</th>
-									<th class="center">操作系统</th>
-									<th class="center">所属系统</th>
-									<th class="center">到期时间</th>
-									<th class="center">最后登录时间</th>
+									<th class="center">CPU</th>
+									<th class="center">内存</th>
+									<th class="center">磁盘</th>
+									<th class="center">OS</th>
 									<th class="center">状态</th>
-									<th class="center">软件台帐</th>
+									<th class="center">所属平台</th>
+									<th class="center">到期时间</th>
+									<th class="center">远程控制台</th>
 								</tr>
 							</thead>
 													
 							<tbody>
-								<c:forEach items="${varList}" var="var" varStatus="vs">
+								<%-- <c:forEach items="${varList}" var="var" varStatus="vs"> --%>
+								<c:forEach begin="0" end="5" step="1" var="var">
 									<tr>
 										<td class='center'>
-											<label class="pos-rel"><input type='checkbox' name='ids' id="${var.TO_USERNAME}" value="${var.FHSMS_ID}" class="ace" /><span class="lbl"></span></label>
+											<label class="pos-rel"><input type='checkbox' name='ids' id="${var}" value="${var}" class="ace" /><span class="lbl"></span></label>
 										</td>
-										<td class='center'>VCenter资源管理平台</td>
-										<td class='center'>虚拟机</td>
 										<td class='center'><a>kf201710101244478817</a></td>
 										<td class='center'>192.168.153.201</td>
-										<td class='center'>8核/16G</td>
+										<td class='center'>8核</td>
+										<td class='center'>16G</td>
 										<td class='center'>500G</td>
 										<td class='center'>redhat6.5</td>
+										<td class='center'>运行中</td>
 										<td class='center'>开发系统</td>
 										<td class='center'>长期</td>
-										<td class='center'>2017-10-25 13:42:09</td>
-										<td class='center'>运行中</td>
-										<td class='center'><a>查看</a></td>
+										<td class='center'><a>SSH</a></td>
 									</tr>
-									<tr>
+									<%-- <tr>
 										<td class='center'>
 											<label class="pos-rel"><input type='checkbox' name='ids' id="${var.TO_USERNAME}" value="${var.FHSMS_ID}" class="ace" /><span class="lbl"></span></label>
 										</td>
@@ -156,7 +153,7 @@
 										<td class='center'>2017-11-01 15:30:20</td>
 										<td class='center'>运行中</td>
 										<td class='center'><a>查看</a></td>
-									</tr>
+									</tr> --%>
 								</c:forEach>
 							</tbody>
 						</table>

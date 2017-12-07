@@ -107,10 +107,10 @@ function choosePckg(jsonStr){
 <input type="hidden" name="tcplatType" id="tcplatType" value="vmware"/>
 <input type="hidden" name="tcdeployType" id="tcdeployType" value="1"/>
 <input type="hidden" name="pckgId" id="pckgId" value=""/>
-<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;" border=1>
 	<tr class="tablecls">
 		<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;地域</td>
-		<td align="right" style="width: 120px;padding:10px;"></td>
+		<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 		<td align="left" style="padding:10px;" colspan="6">
 			<ul id="tcareaCodeId" class="ullitab list-inline">
 				<c:if test="${not empty areaCodeList}">
@@ -164,20 +164,18 @@ function choosePckg(jsonStr){
 					<td style="border-bottom:1px solid #cccccc;">
 						<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
 						<tr>
-							<td align="right" style="width: 120px;">计费方式：</td>
-							<td align="left" style="width: 180px;">包年包月</td>
 							<td align="right" style="width: 120px;">实例规格：</td>
 							<td align="left" style="width: 180px;">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
 							<td align="right" style="width: 120px;">镜像：</td>
-							<td align="left" style="width: 180px;">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
+							<td align="left" style="width: 180px;" colspan="3">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
 						</tr>
 						<tr>
 							<td align="right" style="width: 120px;">数据盘：</td>
 							<td align="left" style="width: 180px;">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
-							<td align="right" style="width: 120px;">到期时间：</td>
-							<td align="left" style="width: 180px;">${var.expireDate}</td>
 							<td align="right" style="width: 120px;">购买量：</td>
 							<td align="left" style="width: 180px;">${var.virNum}&nbsp;台</td>
+							<td align="right" style="width: 120px;">到期时间：</td>
+							<td align="left" style="width: 180px;">${var.expireDate}</td>
 						</tr>
 						</table>
 					</td>
@@ -189,7 +187,7 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;项目</td>
+		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="3"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;项目</td>
 		<td align="right" style="width: 120px;padding:10px;">环境：</td>
 		<td align="left" style="padding:10px;" colspan="6">
 			<ul id="tcenvCodeId" class="ullitab list-inline">
@@ -204,14 +202,14 @@ function choosePckg(jsonStr){
 	<tr class="tablecls">
 		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">项目：</td>
 		<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
-			<select class="chosen-select form-control" name="tcprojectCode" id="tcprojectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;" disabled>
+			<select class="chosen-select form-control" name="tcprojectCode" id="tcprojectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 100%;" disabled>
 			<option value="">请选择</option>
 			<c:forEach items="${projectList}" var="var">
 				<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
 			</c:forEach>
 		  	</select>
 		</td>
-		<td align="left" style="width: 120px;padding:10px;" colspan="6">&nbsp;</td>
+		<td align="left" style="padding:10px;" colspan="5">&nbsp;</td>
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
@@ -229,9 +227,10 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr class="tablecls">
 		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">虚拟机名称：</td>
-		<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="6">
-			<input type="text" name="tcvirName" id="tcvirName"  value=""/>
+		<td align="left" style="padding-left:10px;padding-bottom:10px;">
+			<input type="text" name="tcvirName" id="tcvirName" style="width: 100%;" value=""/>
 		</td>
+		<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="5">&nbsp;</td>
 	</tr>
 	<tr class="tablecls">
 		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">推荐配置：</td>
@@ -290,11 +289,8 @@ function choosePckg(jsonStr){
 			</c:forEach>
 		  	</select>
 		</td>
-		<td align="left" style="width: 120px;padding:10px;" colspan="3">&nbsp;</td>
-	</tr>
-	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">镜像信息：</td>
-		<td align="left" style="padding-left:10px;padding-bottom:10px;">
+		<td align="right" style="width: 120px;padding:10px;">镜像信息：</td>
+		<td align="left" style="width: 180px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 			<select class="chosen-select form-control" name="tcimgCode" id="tcimgCode" data-placeholder="请选择镜像" style="vertical-align:top;width: 100%;" disabled>
 			<option value="">请选择</option>
 			<c:forEach items="${imgCodeList}" var="var">
@@ -302,20 +298,23 @@ function choosePckg(jsonStr){
 			</c:forEach>
 		  	</select>
 		</td>
-		<td align="left" style="width: 120px;padding:10px;" colspan="6">&nbsp;</td>
+		<td align="left" style="padding:10px;">&nbsp;</td>
 	</tr>
 	<tr class="tablecls">
 		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">用户名：</td>
 		<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
-			<input type="text" name="tcimgUserName" id="tcimgUserName" value="" disabled/>
+			<input type="text" name="tcimgUserName" id="tcimgUserName" style="width: 100%;" value="" disabled/>
 		</td>
 		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">密码：</td>
 		<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
-			<input type="text" name="tcimgUserPass" id="tcimgUserPass" value="" disabled/>
+			<input type="text" name="tcimgUserPass" id="tcimgUserPass" style="width: 100%;" value="" disabled/>
 		</td>
 		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">路径：</td>
-		<td align="left" style="padding-left:10px;padding-bottom:10px;" colspan="2">
-			<input type="text" name="tcimgPath" id="tcimgPath" value="" disabled/>&nbsp;&nbsp;Linux系统必填
+		<td align="left" style="padding-left:10px;padding-bottom:10px;">
+			<input type="text" name="tcimgPath" id="tcimgPath" style="width: 100%;" value="" disabled/>
+		</td>
+		<td align="left" style="padding-left:10px;padding-bottom:10px;">
+			Linux系统必填
 		</td>
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
@@ -388,13 +387,21 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
+		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
 		<td align="right" style="width: 120px;padding:10px;">计费方式：</td>
-		<td align="left" style="width: 120px;padding:10px;">包年包月</td>
-		<td align="right" style="width: 120px;padding:10px;">地域：</td>
-		<td align="left" style="width: 120px;padding:10px;"><span id="areaCode"></span></td>
+		<td align="left" style="width: 180px;padding:10px;">包年包月</td>
 		<td align="right" style="width: 120px;padding:10px;">实例规格：</td>
-		<td align="left" style="width: 120px;padding:10px;" colspan="2"><span id="areaCode"></span></td>
+		<td align="left" style="width: 180px;padding:10px;">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
+		<td align="right" style="width: 120px;padding:10px;">镜像：</td>
+		<td align="left" style="width: 180px;padding:10px;" colspan="2">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
+	</tr>
+	<tr class="tablecls">
+		<td align="right" style="width: 120px;padding:10px;">数据盘：</td>
+		<td align="left" style="width: 180px;padding:10px;">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
+		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
+		<td align="left" style="width: 180px;padding:10px;">${var.expireDate}</td>
+		<td align="right" style="width: 120px;padding:10px;">购买量：</td>
+		<td align="left" style="width: 180px;padding:10px;" colspan="2">${var.virNum}&nbsp;台</td>
 	</tr>
 </table>
 </form>
