@@ -83,9 +83,9 @@
 		<div id="loginbox" >
 			<form action="" method="post" name="loginForm" id="loginForm">
 				<div class="control-group normal_text">
-					<h3>
-						<img src="static/login/logo.png" alt="Logo" />
-					</h3>
+					<h2>
+						<img src="static/login/logo.png" alt="Logo" width="160" height="80" />TCMP
+					</h2>
 				</div>
 				<div class="control-group">
 					<div class="controls">
@@ -127,7 +127,7 @@
 							<i><img style="height:22px;" id="codeImg" alt="点击更换" title="点击更换" src="" /></i>
 						</div> -->
 						<c:if test="${pd.isZhuce == 'yes' }">
-						<span class="pull-right" style="padding-right:3%;"><a href="javascript:changepage(1);" class="btn btn-success">注册</a></span>
+						<!--  <span class="pull-right" style="padding-right:3%;"><a href="javascript:changepage(1);" class="btn btn-success">注册</a></span> -->
 						</c:if>
 						<span class="pull-right"><a onclick="severCheck();" class="flip-link btn btn-info" id="to-recover">登录</a></span>
 					</div>
@@ -135,7 +135,7 @@
 			</form>
 			<div class="controls">
 				<div class="main_input_box">
-					<font color="white"><span id="nameerr">Copyright © FHqq313596790 2100</span></font>
+					<font color="white"><span id="nameerr">Copyright © Tuo-Cloud</span></font>
 				</div>
 			</div>
 		</div>
@@ -214,7 +214,7 @@
 			</form>
 			<div class="controls">
 				<div class="main_input_box">
-					<font color="white"><span id="nameerr">Copyright © FHqq313596790 2100</span></font>
+					<font color="white"><span id="nameerr">Copyright © Copyright@Tuo-Cloud</span></font>
 				</div>
 			</div>
 		</div>
