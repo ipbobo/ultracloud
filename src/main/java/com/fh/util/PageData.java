@@ -15,7 +15,7 @@ import com.alibaba.druid.proxy.jdbc.ClobProxyImpl;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class PageData extends HashMap implements Map {
 
-	private static final long serialVersionUID = 1L;
+	
 
 	Map map = null;
 
