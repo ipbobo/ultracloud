@@ -2,7 +2,7 @@ package com.cmp.entity.tcc;
 
 import java.util.Date;
 
-public class TtccBillDay implements java.io.Serializable {
+public class TccBillDay implements java.io.Serializable {
 
 	private static final long serialVersionUID = 2927400781263153516L;
 

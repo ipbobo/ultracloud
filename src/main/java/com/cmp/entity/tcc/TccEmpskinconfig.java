@@ -2,7 +2,7 @@ package com.cmp.entity.tcc;
 
 import java.util.Date;
 
-public class TCcEmpskinconfig implements java.io.Serializable {
+public class TccEmpskinconfig implements java.io.Serializable {
 
 	private static final long serialVersionUID = -974289387159136969L;
 
@@ -25,16 +25,16 @@ public class TCcEmpskinconfig implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public TCcEmpskinconfig() {
+	public TccEmpskinconfig() {
 	}
 
 	/** minimal constructor */
-	public TCcEmpskinconfig(Long empskinId) {
+	public TccEmpskinconfig(Long empskinId) {
 		this.empskinId = empskinId;
 	}
 
 	/** full constructor */
-	public TCcEmpskinconfig(Long empskinId, Long skinId, Long userPartyId,
+	public TccEmpskinconfig(Long empskinId, Long skinId, Long userPartyId,
 			String skinDir, String skinDesc, String enableFlg, Date crtDate,
 			Date uptDate) {
 		this.empskinId = empskinId;
