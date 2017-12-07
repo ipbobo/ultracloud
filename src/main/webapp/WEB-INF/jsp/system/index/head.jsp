@@ -21,8 +21,9 @@
 				<div class="navbar-header pull-left">
 					<!-- #section:basics/navbar.layout.brand -->
 					<a class="navbar-brand">
-						<small> <i class="fa fa-leaf"></i> ${pd.SYSNAME} </small>
-					</a>
+						<!-- <small> <i class="fa fa-leaf"></i> ${pd.SYSNAME} </small> -->
+						<img src="static/login/cloud.png" alt="Logo" width="50" height="25" />
+					</a> 
 
 					<!-- /section:basics/navbar.layout.brand -->
 

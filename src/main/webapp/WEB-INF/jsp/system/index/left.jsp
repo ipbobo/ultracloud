@@ -5,7 +5,7 @@
 	<ul class="nav nav-list">
 		<li class="hover">
 			<a href="main/index">
-				<i class="menu-icon fa fa-tachometer"></i><span class="menu-text">&nbsp;仪表盘</span>
+				<i class="menu-icon fa fa-tachometer blue"></i><span class="menu-text">&nbsp;仪表盘</span>
 			</a>
 			<b class="arrow"></b>
 		</li>
