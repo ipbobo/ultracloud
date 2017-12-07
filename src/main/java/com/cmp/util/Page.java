@@ -5,7 +5,7 @@ import java.util.List;
  
 //分页
 public class Page<T> implements Serializable {
-	private static final long serialVersionUID = 1L;
+	
 	private int pageNo;//下一页
     private int pageSize =10; //每页个数
     private int totalCount = 0;//总条数

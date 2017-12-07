@@ -6,8 +6,8 @@ import org.springframework.data.annotation.Transient;
 
 //数据字典
 public class CmpDict implements Comparable<CmpDict> {
-	@Transient
-	private static final long serialVersionUID = 1L;
+	
+	
 	private Long id;//ID
 	private Date createTime;//创建时间
 	private Date lastUpdateTime;//最后修改时间

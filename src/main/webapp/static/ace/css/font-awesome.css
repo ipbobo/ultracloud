@@ -895,9 +895,9 @@
 .fa-angle-up:before {
   content: "\f106";
 }
-.fa-angle-down:before {
+/**.fa-angle-down:before {  delete by liuweixing
   content: "\f107";
-}
+} */
 .fa-desktop:before {
   content: "\f108";
 }
