@@ -87,9 +87,16 @@ public class CmpWorkOrderController extends BaseController{
 		page.setPd(pd);
 		
 		
-		//工单查询
+		//工单查询  根据传入的查询参数， 查询部分或者全部     queryType :  不传或者1 = 全部，  2=今日的工单    3 = 待执行工单
 		List<PageData> workOrderList = new ArrayList<PageData>();
-		workOrderList = cmpWorkOrderService.listUserWorkorderByPd(page);
+		if (pd.get("queryType") == null ||  pd.get("queryType")=="" || pd.get("queryType").equals("1")) {
+			workOrderList = cmpWorkOrderService.listUserWorkorderByPd(page);
+		}else if (pd.get("queryType").equals("2")){
+			workOrderList = cmpWorkOrderService.queryUserCurrentdayWorkorder(page);;
+		}else if (pd.get("queryType").equals("3")) {
+			workOrderList = cmpWorkOrderService.queryUserToDoWorkorder(page);;
+		}
+		
 		//中文转化
 		Map appTypeNameMap =  getAppTypeNameMap();
 		Map workStatusMap = getWorkorderStatusNameMap();
@@ -291,6 +298,7 @@ public class CmpWorkOrderController extends BaseController{
 		Map<String,String> map = new HashMap<String,String>();
 		String resultInfo = "审核失败";
 		String appNo = request.getParameter("appNo");
+		String comment = request.getParameter("comment") == null? "":request.getParameter("comment");
 		Session session = Jurisdiction.getSession();
 		
 		CmpWorkOrder toCheckWorkorder = cmpWorkOrderService.findByAppNo(appNo);
@@ -315,6 +323,8 @@ public class CmpWorkOrderController extends BaseController{
 		for (Task task : userTaskList) {
 			if (task.getProcessInstanceId().equals(toCheckWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
+				//写入流程注释
+				activitiService.addComment(task.getId(), toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
 				activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, null);
 				
 				//更新工单(流程实例ID 和 工单状态)
@@ -342,6 +352,7 @@ public class CmpWorkOrderController extends BaseController{
 		Map<String,String> map = new HashMap<String,String>();
 		String resultInfo = "执行失败";
 		String appNo = request.getParameter("appNo");
+		String comment = request.getParameter("comment") == null? "":request.getParameter("comment");
 		Session session = Jurisdiction.getSession();
 		
 		CmpWorkOrder toExecuteWorkorder = cmpWorkOrderService.findByAppNo(appNo);
@@ -366,6 +377,8 @@ public class CmpWorkOrderController extends BaseController{
 		for (Task task : userTaskList) {
 			if (task.getProcessInstanceId().equals(toExecuteWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
+				//写入流程注释
+				activitiService.addComment(task.getId(), toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
 				activitiService.handleTask(appNo, toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), null, null);
 				
 				//更新工单(流程实例ID 和 工单状态)

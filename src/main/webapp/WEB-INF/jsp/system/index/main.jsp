@@ -194,20 +194,21 @@
 						}
 						if (data.toDoNum != null &&data.toDoNum != '0'){
 							$("#span_task_no").html(data.toDoNum);
-							$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "待执行的工单:" + data.toDoNum +"</li>" );
+							$("#ul_tasks").html("");
+							$("#ul_tasks").append( "<li onclick=\"goTaskDetail(3)\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "待执行的工单:" + data.toDoNum +"</li>" );
 						}
 						//24H工单
 						if (data.currentdayNum != null &&data.currentdayNum != '0'){
-							$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ "今日新增工单:" + data.currentdayNum +"</li>" );
+							$("#ul_tasks").append( "<li onclick=\"goTaskDetail(2)\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ "今日新增工单:" + data.currentdayNum +"</li>" );
 						}
 				}
 			});
 		}
 		queryPersonalTask();
-		function goTaskDetail(){
+		function goTaskDetail(type){
 			//showDialog("去执行任务");
 			//alert("去执行任务" + taskId);
-			siMenu('z137','lm121','工单查询','queryUserApplyWorkOrderPre.do');
+			siMenu('z137','lm121','工单查询','queryUserApplyWorkOrderPre.do?queryType='+type);
 		}
 		
 		function ul_tasks_out(){
