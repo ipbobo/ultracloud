@@ -38,7 +38,7 @@ setTimeout("top.hangge()",500);
 									<i class="ace-icon fa fa-times"></i>
 								</button>
 								<i class="ace-icon fa fa-check green"></i>
-								欢迎使用 腾云管理平台&nbsp;&nbsp;
+								欢迎使用 拓云管理平台&nbsp;&nbsp;
 								<!-- <strong class="green">
 									&nbsp;QQ:313596790
 									<a href="http://www.fhadmin.org" target="_blank"><small>(&nbsp;www.fhadmin.org&nbsp;)</small></a>
@@ -74,7 +74,8 @@ setTimeout("top.hangge()",500);
 						                    orient : 'vertical',  
 						                    x : 'left',  
 						                    data:['正常','警告','危险','未知']  
-						                },  
+						                }, 
+						                color:['green', 'yellow','red','blueviolet'],
 						                toolbox: {  
 						                    show : false,  
 						                    feature : {  
@@ -134,6 +135,7 @@ setTimeout("top.hangge()",500);
 						                    x : 'left',  
 						                    data:['正常','警告','危险','未知']  
 						                },  
+						                color:['green', 'yellow','red','blueviolet'],
 						                toolbox: {  
 						                    show : false,  
 						                    feature : {  
@@ -193,6 +195,7 @@ setTimeout("top.hangge()",500);
 						                    x : 'left',  
 						                    data:['正常','警告','危险','未知']  
 						                },  
+						                color:['green', 'yellow','red','blueviolet'],
 						                toolbox: {  
 						                    show : false,  
 						                    feature : {  
