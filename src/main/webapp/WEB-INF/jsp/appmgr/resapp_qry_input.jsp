@@ -424,7 +424,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
 	<input type="hidden" name="status" id="status" value="0"/><!-- 状态：0-待提交；1-已提交；T-套餐 -->
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
-	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;" border=1>
+	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 		<tr class="tablecls">
 			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;地域</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
@@ -674,20 +674,20 @@ $(window).scroll(function() {
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
-			<td align="right" style="width: 120px;padding:10px;">计费方式：</td>
-			<td align="left" style="width: 180px;padding:10px;">包年包月</td>
+			<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
+			<td id="resTypeLabel" align="left" style="width: 180px;padding:10px;"></td>
 			<td align="right" style="width: 120px;padding:10px;">实例规格：</td>
-			<td align="left" style="width: 180px;padding:10px;">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
+			<td id="specLabel" align="left" style="width: 180px;padding:10px;"></td>
 			<td align="right" style="width: 120px;padding:10px;">镜像：</td>
-			<td align="left" style="width: 180px;padding:10px;" colspan="2">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
+			<td id="imgLabel" align="left" style="width: 180px;padding:10px;" colspan="2"></td>
 		</tr>
 		<tr class="tablecls">
 			<td align="right" style="width: 120px;padding:10px;">数据盘：</td>
-			<td align="left" style="width: 180px;padding:10px;">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
-			<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
-			<td align="left" style="width: 180px;padding:10px;">${var.expireDate}</td>
+			<td id="diskTypeLabel" align="left" style="width: 180px;padding:10px;"> </td>
 			<td align="right" style="width: 120px;padding:10px;">购买量：</td>
-			<td align="left" style="width: 180px;padding:10px;" colspan="2">${var.virNum}&nbsp;台</td>
+			<td id="virNumLabel" align="left" style="width: 180px;padding:10px;"></td>
+			<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
+			<td id="expireDateLabel" align="left" style="width: 180px;padding:10px;" colspan="2"></td>
 		</tr>
 	</table>
 	</form>

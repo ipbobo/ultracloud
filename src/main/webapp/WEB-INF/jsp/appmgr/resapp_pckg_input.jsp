@@ -107,7 +107,7 @@ function choosePckg(jsonStr){
 <input type="hidden" name="tcplatType" id="tcplatType" value="vmware"/>
 <input type="hidden" name="tcdeployType" id="tcdeployType" value="1"/>
 <input type="hidden" name="pckgId" id="pckgId" value=""/>
-<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;" border=1>
+<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 	<tr class="tablecls">
 		<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;地域</td>
 		<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
@@ -164,10 +164,12 @@ function choosePckg(jsonStr){
 					<td style="border-bottom:1px solid #cccccc;">
 						<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
 						<tr>
+							<td align="right" style="width: 120px;">资源类型：</td>
+							<td align="left" style="width: 180px;">${var.resTypeName}</td>
 							<td align="right" style="width: 120px;">实例规格：</td>
 							<td align="left" style="width: 180px;">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
 							<td align="right" style="width: 120px;">镜像：</td>
-							<td align="left" style="width: 180px;" colspan="3">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
+							<td align="left" style="width: 180px;">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
 						</tr>
 						<tr>
 							<td align="right" style="width: 120px;">数据盘：</td>
@@ -366,16 +368,9 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;数量</td>
-		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
-		<td style="padding:10px;" colspan="6">
-			<input type="text" name="tcexpireDate" id="tcexpireDate" value="" class="span10 date-picker" data-date-format="yyyy-mm-dd" style="width:120px;" placeholder="到期时间" disabled/>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="" disabled/>永久
-		</td>
-	</tr>
-	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">数量：</td>
-		<td style="width: 120px;padding-left:10px;padding-bottom:10px;" colspan="6">
+		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;数量</td>
+		<td align="right" style="width: 120px;padding:10px;">数量：</td>
+		<td style="width: 120px;padding:10px;" colspan="6">
 			<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 			    <input type="text" id="tcvirNum" name="tcvirNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1" disabled> 
 			    <div class="input-group-addon"> 
@@ -387,21 +382,30 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
+		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;到期时间</td>
+		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
+		<td style="padding:10px;" colspan="6">
+			<input type="text" name="tcexpireDate" id="tcexpireDate" value="" class="span10 date-picker" data-date-format="yyyy-mm-dd" style="width:120px;" placeholder="到期时间" disabled/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="" disabled/>永久
+		</td>
+	</tr>
+	<tr><td colspan="8" height="10px"></td>
+	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
-		<td align="right" style="width: 120px;padding:10px;">计费方式：</td>
-		<td align="left" style="width: 180px;padding:10px;">包年包月</td>
+		<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
+		<td id="resTypeLabel" align="left" style="width: 180px;padding:10px;"></td>
 		<td align="right" style="width: 120px;padding:10px;">实例规格：</td>
-		<td align="left" style="width: 180px;padding:10px;">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
+		<td id="specLabel" align="left" style="width: 180px;padding:10px;"></td>
 		<td align="right" style="width: 120px;padding:10px;">镜像：</td>
-		<td align="left" style="width: 180px;padding:10px;" colspan="2">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
+		<td id="imgLabel" align="left" style="width: 180px;padding:10px;" colspan="2"></td>
 	</tr>
 	<tr class="tablecls">
 		<td align="right" style="width: 120px;padding:10px;">数据盘：</td>
-		<td align="left" style="width: 180px;padding:10px;">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
-		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
-		<td align="left" style="width: 180px;padding:10px;">${var.expireDate}</td>
+		<td id="diskTypeLabel" align="left" style="width: 180px;padding:10px;"> </td>
 		<td align="right" style="width: 120px;padding:10px;">购买量：</td>
-		<td align="left" style="width: 180px;padding:10px;" colspan="2">${var.virNum}&nbsp;台</td>
+		<td id="virNumLabel" align="left" style="width: 180px;padding:10px;"></td>
+		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
+		<td id="expireDateLabel" align="left" style="width: 180px;padding:10px;" colspan="2"></td>
 	</tr>
 </table>
 </form>
