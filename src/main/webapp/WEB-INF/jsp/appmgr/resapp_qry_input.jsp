@@ -90,9 +90,10 @@ function addDiskRow(){
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-bottom:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\">"+$("#diskType").html()+"</select></td>"
-	    +"<td align=\"left\" style=\"width: 120px;padding-bottom:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\"/></td>"
-	    +"<td align=\"left\" style=\"width: 200x;padding-bottom:10px;\">GB&nbsp;&nbsp;&nbsp;<span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\">删除</a></td>";
+    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\">"+$("#diskType").html()+"</select></td>"
+	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\"/></td>"
+	    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
+	    +"<td align=\"right\" style=\"padding-top:10px;\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
     $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
@@ -104,8 +105,8 @@ function addSoftRow(){
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-bottom:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
-	    +"<td align=\"left\" style=\"width: 120x;padding-bottom:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\">删除</a></td>";
+    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
+	    +"<td align=\"right\" style=\"padding-top:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
 	$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
@@ -605,7 +606,7 @@ $(window).scroll(function() {
 			<td style="padding:10px;" colspan="6">
 				<table id="diskTableId">
 					<tr id="diskTrId">
-						<td align="left" style="width: 120px;padding-right:10px;padding-bottom:10px;">
+						<td align="left" style="width: 120px;padding-right:10px;">
 							<select class="chosen-select form-control" name="diskType" id="diskType" data-placeholder="请选择磁盘类型" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${diskTypeList}" var="var">
@@ -613,15 +614,18 @@ $(window).scroll(function() {
 							</c:forEach>
 						  	</select>
 						</td>
-						<td align="left" style="width: 120px;padding-bottom:10px;">
+						<td align="left" style="width: 120px;">
 							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')"/>
 						</td>
-						<td align="left" style="width: 200px;padding-bottom:10px;">
-						  	GB&nbsp;&nbsp;&nbsp;<span id="iopsId">1120</span>&nbsp;IOPS&nbsp;&nbsp;&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密
+						<td align="left" style="width: 20px;">GB</td>
+						<td align="right" style="padding-right:13px;">
+						  	<span id="iopsId">1120</span>&nbsp;IOPS&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密&nbsp;
+						</td>
+						<td align="left" valign="bottom" style="width: 200px;padding-bottom:8px;" rowspan="15">
+							&nbsp;<a href="javascript:void()" onclick="addDiskRow()"><span class="glyphicon glyphicon-plus"></span></a>增加磁盘，您可选配15块
 						</td>
 					</tr>
 				</table>
-				<a href="javascript:void()" onclick="addDiskRow()"><span class="glyphicon glyphicon-plus"></span></a>增加磁盘，您可选配15块
 			</td>
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
@@ -631,7 +635,7 @@ $(window).scroll(function() {
 			<td style="padding:10px;" colspan="6">
 				<table id="softTableId">
 					<tr id="softTrId">
-						<td align="left" style="width: 120px;padding-right:10px;padding-bottom:10px;">
+						<td align="left" style="width: 120px;padding-right:10px;">
 							<select class="chosen-select form-control" name="softCode" id="softCode" data-placeholder="请选择软件名称" style="vertical-align:top;width: 120px;">
 							<option value="">请选择</option>
 							<c:forEach items="${softCodeList}" var="var">
@@ -639,13 +643,14 @@ $(window).scroll(function() {
 							</c:forEach>
 						  	</select>
 						</td>
-						<td align="left" style="width: 120px;padding-bottom:10px;">
-							<input type="hidden" name="softParam" id="softParam" value=""/>
-						  	<a href="javascript:void()" onclick="setSoftParam(0)">设置参数</a>
+						<td align="right" style="padding-right:13px;">
+							<input type="hidden" name="softParam" id="softParam" value=""/><a href="javascript:void()" onclick="setSoftParam(0)">设置参数</a>&nbsp;
+						</td>
+						<td align="left" valign="bottom" style="width: 200px;padding-bottom:9px;" rowspan="15">
+							&nbsp;<a href="javascript:void()" onclick="addSoftRow()"><span class="glyphicon glyphicon-plus"></span></a>增加安装软件，您可选择15个
 						</td>
 					</tr>
 				</table>
-				<a href="javascript:void()" onclick="addSoftRow()"><span class="glyphicon glyphicon-plus"></span></a>增加安装软件，您可选择15个
 			</td>
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
