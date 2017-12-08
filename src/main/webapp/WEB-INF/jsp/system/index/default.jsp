@@ -8,6 +8,26 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
+<%
+				String strXML = "";
+
+				strXML += "<graph caption='CPU' xAxisName='月份' yAxisName='值' decimalPrecision='0' formatNumberScale='0'>";
+				strXML += "<set name='1' value='462' color='AFD8F8'/>";
+				strXML += "<set name='2' value='857' color='F6BD0F'/>";
+				strXML += "<set name='3' value='671' color='8BBA00'/>";
+				strXML += "<set name='4' value='494' color='FF8E46'/>";
+				strXML += "<set name='5' value='761' color='008E8E'/>";
+				strXML += "<set name='6' value='960' color='D64646'/>";
+				strXML += "<set name='7' value='629' color='8E468E'/>";
+				strXML += "<set name='8' value='622' color='588526'/>";
+				strXML += "<set name='9' value='376' color='B3AA00'/>";
+				strXML += "<set name='10' value='494' color='008ED6'/>";
+				strXML += "<set name='11' value='761' color='9D080D'/>";
+				strXML += "<set name='12' value='960' color='A186BE'/>";
+				strXML += "</graph>";
+				//Create the chart - Column 3D Chart with data from strXML variable using dataXML method
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,11 +35,7 @@
 
 <!-- jsp文件头和头部 -->
 <%@ include file="../index/top.jsp"%>
-<!-- 百度echarts -->
-<script src="plugins/echarts/echarts.min.js"></script>
-<script type="text/javascript">
-setTimeout("top.hangge()",500);
-</script>
+
 </head>
 <body class="no-skin">
 
@@ -29,60 +45,91 @@ setTimeout("top.hangge()",500);
 		<div class="main-content">
 			<div class="main-content-inner">
 				<div class="page-content">
-					<div class="hr hr-18 dotted hr-double"></div>
 					<div class="row">
 						<div class="col-xs-12">
 
-							<div class="alert alert-block alert-success">
-								<button type="button" class="close" data-dismiss="alert">
-									<i class="ace-icon fa fa-times"></i>
-								</button>
-								<i class="ace-icon fa fa-check green"></i>
-								欢迎使用 腾云管理平台&nbsp;&nbsp;
-								<!-- <strong class="green">
-									&nbsp;QQ:313596790
-									<a href="http://www.fhadmin.org" target="_blank"><small>(&nbsp;www.fhadmin.org&nbsp;)</small></a>
-								</strong> -->
-							</div>
-							
-							
-							<div id="main" style="width: 600px;height:300px;"></div>
-							<script type="text/javascript">
-						        // 基于准备好的dom，初始化echarts实例
-						        var myChart = echarts.init(document.getElementById('main'));
-						
-						        // 指定图表的配置项和数据
-								var option = {
-						            title: {
-						                text: '用户统计'
-						            },
-						            tooltip: {},
-						            xAxis: {
-						                data: ["系统用户","系统会员"]
-						            },
-						            yAxis: {},
-						            series: [
-						               {
-						                name: '',
-						                type: 'bar',
-						                data: [${pd.userCount},${pd.appUserCount}],
-						                itemStyle: {
-						                    normal: {
-						                        color: function(params) {
-						                            // build a color map as your need.
-						                            var colorList = ['#6FB3E0','#87B87F'];
-						                            return colorList[params.dataIndex];
-						                        }
-						                    }
-						                }
-						               }
-						            ]
-						        };	        
+ 						<div class="span6" style="padding-top: 13px;">
+									  <div id="home" class="tab-pane in active">
+										<table id="table_report" class="table table-striped table-bordered table-hover">
+											<tr>
+												<td>
+													<div style="float:left;">
+														<table border="0" width="50%">
+															<tr>
+																<td><jsp:include
+																		page="../../FusionChartsHTMLRenderer.jsp" flush="true">
+																		<jsp:param name="chartSWF"
+																			value="static/FusionCharts/Doughnut2D.swf" />
+																		<jsp:param name="strURL" value="" />
+																		<jsp:param name="strXML" value="<%=strXML%>" />
+																		<jsp:param name="chartId" value="myNext" />
+																		<jsp:param name="chartWidth" value="500" />
+																		<jsp:param name="chartHeight" value="300" />
+																		<jsp:param name="debugMode" value="false" />
+																	</jsp:include></td>
+															</tr>
+														</table>
+													</div>
+												
+													<div style="float:left;">
+														<table border="0" width="50%">
+															<tr>
+																<td><jsp:include
+																		page="../../FusionChartsHTMLRenderer.jsp" flush="true">
+																		<jsp:param name="chartSWF"
+																			value="static/FusionCharts/Doughnut3D.swf" />
+																		<jsp:param name="strURL" value="" />
+																		<jsp:param name="strXML" value="<%=strXML%>" />
+																		<jsp:param name="chartId" value="myNext" />
+																		<jsp:param name="chartWidth" value="500" />
+																		<jsp:param name="chartHeight" value="300" />
+																		<jsp:param name="debugMode" value="false" />
+																	</jsp:include></td>
+															</tr>
+														</table>
+													</div>
+													<div style="float:left;">
+														<table border="0" width="50%">
+															<tr>
+																<td><jsp:include
+																		page="../../FusionChartsHTMLRenderer.jsp" flush="true">
+																		<jsp:param name="chartSWF" value="static/FusionCharts/Pie3D.swf" />
+																		<jsp:param name="strURL" value="" />
+																		<jsp:param name="strXML" value="<%=strXML%>" />
+																		<jsp:param name="chartId" value="myNext" />
+																		<jsp:param name="chartWidth" value="500" />
+																		<jsp:param name="chartHeight" value="300" />
+																		<jsp:param name="debugMode" value="false" />
+																	</jsp:include></td>
+															</tr>
+														</table>
+													</div>
+													<div style="float:left;">
+														<table border="0" width="50%">
+															<tr>
+																<td><jsp:include
+																		page="../../FusionChartsHTMLRenderer.jsp" flush="true">
+																		<jsp:param name="chartSWF" value="static/FusionCharts/Pie2D.swf" />
+																		<jsp:param name="strURL" value="" />
+																		<jsp:param name="strXML" value="<%=strXML%>" />
+																		<jsp:param name="chartId" value="myNext" />
+																		<jsp:param name="chartWidth" value="500" />
+																		<jsp:param name="chartHeight" value="300" />
+																		<jsp:param name="debugMode" value="false" />
+																	</jsp:include></td>
+															</tr>
+														</table>
+													</div>
+												</td>
+											</tr>
+										</table>
+									  </div>
+									  
+									  <div style="display: none;" id="fhsmsobjsys"></div>
+									  
+						 </div><!--/span-->
+						</div>
 
-						        // 使用刚指定的配置项和数据显示图表。
-						        myChart.setOption(option);
-						    </script>
-							
 						</div>
 						<!-- /.col -->
 					</div>
@@ -110,7 +157,9 @@ setTimeout("top.hangge()",500);
 	<!-- inline scripts related to this page -->
 	<script type="text/javascript">
 		$(top.hangge());
+		
 	</script>
-<script type="text/javascript" src="static/ace/js/jquery.js"></script>
+
+
 </body>
 </html>
