@@ -8,26 +8,6 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
-<%
-				String strXML = "";
-
-				strXML += "<graph caption='CPU' xAxisName='月份' yAxisName='值' decimalPrecision='0' formatNumberScale='0'>";
-				strXML += "<set name='1' value='462' color='AFD8F8'/>";
-				strXML += "<set name='2' value='857' color='F6BD0F'/>";
-				strXML += "<set name='3' value='671' color='8BBA00'/>";
-				strXML += "<set name='4' value='494' color='FF8E46'/>";
-				strXML += "<set name='5' value='761' color='008E8E'/>";
-				strXML += "<set name='6' value='960' color='D64646'/>";
-				strXML += "<set name='7' value='629' color='8E468E'/>";
-				strXML += "<set name='8' value='622' color='588526'/>";
-				strXML += "<set name='9' value='376' color='B3AA00'/>";
-				strXML += "<set name='10' value='494' color='008ED6'/>";
-				strXML += "<set name='11' value='761' color='9D080D'/>";
-				strXML += "<set name='12' value='960' color='A186BE'/>";
-				strXML += "</graph>";
-				//Create the chart - Column 3D Chart with data from strXML variable using dataXML method
-%>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +15,11 @@
 
 <!-- jsp文件头和头部 -->
 <%@ include file="../index/top.jsp"%>
-
+<!-- 百度echarts -->
+<script src="plugins/echarts/echarts.min.js"></script>
+<script type="text/javascript">
+setTimeout("top.hangge()",500);
+</script>
 </head>
 <body class="no-skin">
 
@@ -45,91 +29,207 @@
 		<div class="main-content">
 			<div class="main-content-inner">
 				<div class="page-content">
+					<div class="hr hr-6 dotted hr-double"></div>
 					<div class="row">
 						<div class="col-xs-12">
 
- 						<div class="span6" style="padding-top: 13px;">
-									  <div id="home" class="tab-pane in active">
-										<table id="table_report" class="table table-striped table-bordered table-hover">
-											<tr>
-												<td>
-													<div style="float:left;">
-														<table border="0" width="50%">
-															<tr>
-																<td><jsp:include
-																		page="../../FusionChartsHTMLRenderer.jsp" flush="true">
-																		<jsp:param name="chartSWF"
-																			value="static/FusionCharts/Doughnut2D.swf" />
-																		<jsp:param name="strURL" value="" />
-																		<jsp:param name="strXML" value="<%=strXML%>" />
-																		<jsp:param name="chartId" value="myNext" />
-																		<jsp:param name="chartWidth" value="500" />
-																		<jsp:param name="chartHeight" value="300" />
-																		<jsp:param name="debugMode" value="false" />
-																	</jsp:include></td>
-															</tr>
-														</table>
-													</div>
-												
-													<div style="float:left;">
-														<table border="0" width="50%">
-															<tr>
-																<td><jsp:include
-																		page="../../FusionChartsHTMLRenderer.jsp" flush="true">
-																		<jsp:param name="chartSWF"
-																			value="static/FusionCharts/Doughnut3D.swf" />
-																		<jsp:param name="strURL" value="" />
-																		<jsp:param name="strXML" value="<%=strXML%>" />
-																		<jsp:param name="chartId" value="myNext" />
-																		<jsp:param name="chartWidth" value="500" />
-																		<jsp:param name="chartHeight" value="300" />
-																		<jsp:param name="debugMode" value="false" />
-																	</jsp:include></td>
-															</tr>
-														</table>
-													</div>
-													<div style="float:left;">
-														<table border="0" width="50%">
-															<tr>
-																<td><jsp:include
-																		page="../../FusionChartsHTMLRenderer.jsp" flush="true">
-																		<jsp:param name="chartSWF" value="static/FusionCharts/Pie3D.swf" />
-																		<jsp:param name="strURL" value="" />
-																		<jsp:param name="strXML" value="<%=strXML%>" />
-																		<jsp:param name="chartId" value="myNext" />
-																		<jsp:param name="chartWidth" value="500" />
-																		<jsp:param name="chartHeight" value="300" />
-																		<jsp:param name="debugMode" value="false" />
-																	</jsp:include></td>
-															</tr>
-														</table>
-													</div>
-													<div style="float:left;">
-														<table border="0" width="50%">
-															<tr>
-																<td><jsp:include
-																		page="../../FusionChartsHTMLRenderer.jsp" flush="true">
-																		<jsp:param name="chartSWF" value="static/FusionCharts/Pie2D.swf" />
-																		<jsp:param name="strURL" value="" />
-																		<jsp:param name="strXML" value="<%=strXML%>" />
-																		<jsp:param name="chartId" value="myNext" />
-																		<jsp:param name="chartWidth" value="500" />
-																		<jsp:param name="chartHeight" value="300" />
-																		<jsp:param name="debugMode" value="false" />
-																	</jsp:include></td>
-															</tr>
-														</table>
-													</div>
-												</td>
-											</tr>
-										</table>
-									  </div>
-									  
-									  <div style="display: none;" id="fhsmsobjsys"></div>
-									  
-						 </div><!--/span-->
-						</div>
+							<div class="alert alert-block alert-success">
+								<button type="button" class="close" data-dismiss="alert">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+								<i class="ace-icon fa fa-check green"></i>
+								欢迎使用 腾云管理平台&nbsp;&nbsp;
+								<!-- <strong class="green">
+									&nbsp;QQ:313596790
+									<a href="http://www.fhadmin.org" target="_blank"><small>(&nbsp;www.fhadmin.org&nbsp;)</small></a>
+								</strong> -->
+							</div>
+							
+							
+							<div id="main" style="width: 450px;height:400px;" class="col-xs-4 col-sm-4" ></div>
+							<div id="main2" style="width: 450px;height:400px;" class="col-xs-4 col-sm-4" ></div>
+							<div id="main3" style="width: 450px;height:400px;" class="col-xs-4 col-sm-4" ></div>
+							
+							<script type="text/javascript">
+						        // 基于准备好的dom，初始化echarts实例
+						        var myChart = echarts.init(document.getElementById('main'));
+						
+						        var json = [  
+						                    {value:65,name:'正常'},  
+						                    {value:20,name:'警告'},  
+						                    {value:5,name:'危险'},  
+						                    {value:10,name:'未知'}, 
+						                    ];  
+						        var option = {  
+						                title : {  
+						                    text: 'CPU',  
+						                    subtext: '使用情况',  
+						                    x:'center'  
+						                },  
+						                tooltip : {  
+						                    trigger: 'item',  
+						                    formatter: "{a} <br/>{b} : {c} %"  
+						                },  
+						                legend: {  
+						                    orient : 'vertical',  
+						                    x : 'left',  
+						                    data:['正常','警告','危险','未知']  
+						                },  
+						                toolbox: {  
+						                    show : false,  
+						                    feature : {  
+						                        mark : {show: true},  
+						                        dataView : {show: true, readOnly: false},  
+						                        magicType : {  
+						                            show: true,   
+						                            type: ['pie', 'funnel'],  
+						                            option: {  
+						                                funnel: {  
+						                                    x: '25%',  
+						                                    width: '50%',  
+						                                    funnelAlign: 'left',  
+						                                    max: 1548  
+						                                }  
+						                            }  
+						                        },  
+						                        restore : {show: true},  
+						                        saveAsImage : {show: true}  
+						                    }  
+						                },  
+						                calculable : true,  
+						                series : [  
+						                    {  
+						                        name:'CPU',  
+						                        type:'pie',  
+						                        radius : '55%',//饼图的半径大小  
+						                        center: ['50%', '60%'],//饼图的位置  
+						                        data:json  
+						                    }  
+						                ]  
+						            };        
 
+						        // 使用刚指定的配置项和数据显示图表。
+						        myChart.setOption(option);
+						        
+						        
+						        var myChart2 = echarts.init(document.getElementById('main2'));
+						        var json2 = [  
+						                    {value:35,name:'正常'},  
+						                    {value:45,name:'警告'},  
+						                    {value:15,name:'危险'},  
+						                    {value:5,name:'未知'}, 
+						                    ];  
+						        var option2 = {  
+						                title : {  
+						                    text: '内存',  
+						                    subtext: '使用情况',  
+						                    x:'center'  
+						                },  
+						                tooltip : {  
+						                    trigger: 'item',  
+						                    formatter: "{a} <br/>{b} : {c} %"  
+						                },  
+						                legend: {  
+						                    orient : 'vertical',  
+						                    x : 'left',  
+						                    data:['正常','警告','危险','未知']  
+						                },  
+						                toolbox: {  
+						                    show : false,  
+						                    feature : {  
+						                        mark : {show: true},  
+						                        dataView : {show: true, readOnly: false},  
+						                        magicType : {  
+						                            show: true,   
+						                            type: ['pie', 'funnel'],  
+						                            option: {  
+						                                funnel: {  
+						                                    x: '25%',  
+						                                    width: '50%',  
+						                                    funnelAlign: 'left',  
+						                                    max: 1548  
+						                                }  
+						                            }  
+						                        },  
+						                        restore : {show: true},  
+						                        saveAsImage : {show: true}  
+						                    }  
+						                },  
+						                calculable : true,  
+						                series : [  
+						                    {  
+						                        name:'内存',  
+						                        type:'pie',  
+						                        radius : '55%',//饼图的半径大小  
+						                        center: ['50%', '60%'],//饼图的位置  
+						                        data:json2  
+						                    }  
+						                ]  
+						            };        
+
+						        // 使用刚指定的配置项和数据显示图表。
+						        myChart2.setOption(option2);
+						        
+						        
+						        var myChart3 = echarts.init(document.getElementById('main3'));
+						        var json3 = [  
+						                    {value:15,name:'正常'},  
+						                    {value:15,name:'警告'},  
+						                    {value:5,name:'危险'},  
+						                    {value:65,name:'未知'}, 
+						                    ];  
+						        var option3 = {  
+						                title : {  
+						                    text: '磁盘',  
+						                    subtext: '使用情况',  
+						                    x:'center'  
+						                },  
+						                tooltip : {  
+						                    trigger: 'item',  
+						                    formatter: "{a} <br/>{b} : {c} %"  
+						                },  
+						                legend: {  
+						                    orient : 'vertical',  
+						                    x : 'left',  
+						                    data:['正常','警告','危险','未知']  
+						                },  
+						                toolbox: {  
+						                    show : false,  
+						                    feature : {  
+						                        mark : {show: true},  
+						                        dataView : {show: true, readOnly: false},  
+						                        magicType : {  
+						                            show: true,   
+						                            type: ['pie', 'funnel'],  
+						                            option: {  
+						                                funnel: {  
+						                                    x: '25%',  
+						                                    width: '50%',  
+						                                    funnelAlign: 'left',  
+						                                    max: 1548  
+						                                }  
+						                            }  
+						                        },  
+						                        restore : {show: true},  
+						                        saveAsImage : {show: true}  
+						                    }  
+						                },  
+						                calculable : true,  
+						                series : [  
+						                    {  
+						                        name:'磁盘',  
+						                        type:'pie',  
+						                        radius : '55%',//饼图的半径大小  
+						                        center: ['50%', '60%'],//饼图的位置  
+						                        data:json3  
+						                    }  
+						                ]  
+						            };        
+
+						        // 使用刚指定的配置项和数据显示图表。
+						        myChart3.setOption(option3);
+						    </script>
+							
 						</div>
 						<!-- /.col -->
 					</div>
@@ -157,9 +257,7 @@
 	<!-- inline scripts related to this page -->
 	<script type="text/javascript">
 		$(top.hangge());
-		
 	</script>
-
-
+<script type="text/javascript" src="static/ace/js/jquery.js"></script>
 </body>
 </html>
