@@ -19,12 +19,12 @@
 				<td align="right" style="padding: 10px;">${var.virNum}台</td>
 			</tr>
 			<tr>
-				<td align="left" style="width: 60px;">计费方式：</td>
-				<td align="left">包年包月</td>
-			</tr>
-			<tr>
 				<td align="left" style="width: 60px;">地域：</td>
 				<td align="left">${var.areaCodeName}</td>
+			</tr>
+			<tr>
+				<td align="left" style="width: 60px;">资源类型：</td>
+				<td align="left">${var.resTypeName}</td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">实例规格：</td>
@@ -33,10 +33,6 @@
 			<tr>
 				<td align="left">镜像：</td>
 				<td align="left">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
-			</tr>
-			<tr>
-				<td align="left">系统盘：</td>
-				<td align="left">默认</td>
 			</tr>
 			<tr>
 				<td align="left">数据盘：</td>
