@@ -68,14 +68,14 @@
 					<!-- /section:basics/content.breadcrumbs -->
 					<div class="page-content">
 						<!-- #section:settings.box -->
-						<div class="ace-settings-container" id="ace-settings-container">
+<!-- 						<div class="ace-settings-container" id="ace-settings-container">
 							<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
 								<i class="ace-icon fa fa-cog bigger-130"></i>
 							</div>
 
 							<div class="ace-settings-box clearfix" id="ace-settings-box">
 								<div class="pull-left width-300">
-									<!-- #section:settings.skins -->
+									#section:settings.skins
 									<div class="ace-settings-item">
 										<div class="pull-left">
 											<select id="skin-colorpicker" class="hide">
@@ -99,9 +99,9 @@
 										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
 										<label class="lbl" for="ace-settings-add-container">居中风格</label>
 									</div>
-								</div><!-- /.pull-left -->
-							</div><!-- /.ace-settings-box -->
-						</div><!-- /.ace-settings-container -->
+								</div>
+							</div>
+						</div> -->
 						<div class="row">	
 						<div id="jzts" style="display:none; width:100%; position:fixed; z-index:99999999;">
 						<div class="commitopacity" id="bkbgjz"></div>
@@ -192,22 +192,21 @@
 						if (data.toDoNum != null && data.toDoNum != ''){
 							$("#span_task_tital").html("您有以下任务 :");
 						}
+						$("#ul_tasks").html("");
+						$("#span_task_no").html(data.toDoNum);
 						if (data.toDoNum != null &&data.toDoNum != '0'){
-							$("#span_task_no").html(data.toDoNum);
-							$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "待执行的工单:" + data.toDoNum +"</li>" );
+							$("#ul_tasks").append( "<li onclick=\"goTaskDetail(3)\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "待执行的工单:" + data.toDoNum +"</li>" );
 						}
 						//24H工单
 						if (data.currentdayNum != null &&data.currentdayNum != '0'){
-							$("#ul_tasks").append( "<li onclick=\"goTaskDetail()\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ "今日新增工单:" + data.currentdayNum +"</li>" );
+							$("#ul_tasks").append( "<li onclick=\"goTaskDetail(2)\"><i class=\"ace-icon glyphicon glyphicon-ok\"></i>"+ "今日新增工单:" + data.currentdayNum +"</li>" );
 						}
 				}
 			});
 		}
 		queryPersonalTask();
-		function goTaskDetail(){
-			//showDialog("去执行任务");
-			//alert("去执行任务" + taskId);
-			siMenu('z137','lm121','工单查询','queryUserApplyWorkOrderPre.do');
+		function goTaskDetail(type){
+			siMenu('z137','lm121','工单查询','queryUserApplyWorkOrderPre.do?queryType='+type);
 		}
 		
 		function ul_tasks_out(){
