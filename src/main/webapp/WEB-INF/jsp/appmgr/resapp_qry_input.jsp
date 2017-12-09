@@ -355,6 +355,10 @@ function tabFunc(tabId){
 //点击遮罩层
 function maskLayerClick(id){
 	if(id=="shoppingCart"){//购物车
+		if(!$('#shoppingCartId').hasClass("open") && $("#shoppingCartNum").html()=='0'){
+			return;
+		}
+		
 		if($('#buyHisId').hasClass("open")){
 			maskLayerClick("buyHis");//点击遮罩层
 		}
@@ -371,6 +375,10 @@ function maskLayerClick(id){
 			$("#getShoppingCartList").load("getShoppingCartList.do");
 	  	}
 	}else if(id=="buyHis"){//已购历史
+		if(!$('#buyHisId').hasClass("open") && $("#buyHisNum").html()=='0'){
+			return;
+		}
+		
 		if($('#shoppingCartId').hasClass("open")){
 			maskLayerClick("shoppingCart");//点击遮罩层
 		}
