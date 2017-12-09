@@ -63,6 +63,14 @@
 				</tr>
 			</tbody>
 		</table>
+		<table>
+			<tr>
+			<td align="right" style="width: 120px;padding:10px;">批复：</td>
+			<td align="left" style="padding:10px;" width="90%">
+				<textarea class="form-control limited" id="comment" name="comment" style="width: 100%"></textarea>
+			</td>
+		</tr>
+		</table>
 		<form class="form-horizontal" id="checkform" name="checkform"
 			role="form">
 			<div class="col-md-offset-3 col-md-9">
@@ -182,9 +190,10 @@
 	
 	function doExecute(appNo){
 		top.jzts();
+		var comment = $("#comment").val();
 		$.ajax({
 			type: "POST",
-			url: '<%=basePath%>doExecute.do?appNo='+appNo,
+			url: '<%=basePath%>doExecute.do?appNo='+appNo +'&comment=' + comment,
 			dataType:'json',
 			//beforeSend: validateData,
 			cache: false,
