@@ -36,7 +36,7 @@
 			</tr>
 			<tr>
 				<td align="left">数据盘：</td>
-				<td align="left">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
+				<td align="left">${var.diskTypeName}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
 			</tr>
 			<tr>
 				<td align="left">购买量：</td>

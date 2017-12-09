@@ -160,11 +160,13 @@
 		, h.dictValue osTypeName
 		, i.dictValue osBitNumName
 		, j.name imgCodeName
+		, (SELECT GROUP_CONCAT(dictValue) FROM mysql.help_topic LEFT JOIN cmp_dict on dictType='disk_type' where (length(a.diskType)-length(REPLACE(a.diskType, ',', ''))+1)>help_topic_id and substring_index(substring_index(a.diskType, ',', help_topic_id + 1), ',' , -1)=dictCode) diskTypeName
+		, (SELECT GROUP_CONCAT(x.name) FROM mysql.help_topic LEFT JOIN t_medium x on 1=1 where (length(a.softCode)-length(REPLACE(a.softCode, ',', ''))+1)>help_topic_id and substring_index(substring_index(a.softCode, ',', help_topic_id + 1), ',' , -1)=x.id) softName
 		from 
 		<include refid="tableName"/> a
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
 		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
-		left join cmp_dict d on d.dictType='plat_type' and d.dictCode=a.deployType
+		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
 		left join t_environment e on e.id=a.projectCode
 		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
 		left join t_project g on g.id=a.projectCode
@@ -186,11 +188,13 @@
 		, h.dictValue osTypeName
 		, i.dictValue osBitNumName
 		, j.name imgCodeName
+		, (SELECT GROUP_CONCAT(dictValue) FROM mysql.help_topic LEFT JOIN cmp_dict on dictType='disk_type' where (length(a.diskType)-length(REPLACE(a.diskType, ',', ''))+1)>help_topic_id and substring_index(substring_index(a.diskType, ',', help_topic_id + 1), ',' , -1)=dictCode) diskTypeName
+		, (SELECT GROUP_CONCAT(x.name) FROM mysql.help_topic LEFT JOIN t_medium x on 1=1 where (length(a.softCode)-length(REPLACE(a.softCode, ',', ''))+1)>help_topic_id and substring_index(substring_index(a.softCode, ',', help_topic_id + 1), ',' , -1)=x.id) softName
 		from 
 		<include refid="tableName"/> a
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
 		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
-		left join cmp_dict d on d.dictType='plat_type' and d.dictCode=a.deployType
+		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
 		left join t_environment e on e.id=a.projectCode
 		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
 		left join t_project g on g.id=a.projectCode
@@ -212,11 +216,13 @@
 		, h.dictValue osTypeName
 		, i.dictValue osBitNumName
 		, j.name imgCodeName
+		, (SELECT GROUP_CONCAT(dictValue) FROM mysql.help_topic LEFT JOIN cmp_dict on dictType='disk_type' where (length(a.diskType)-length(REPLACE(a.diskType, ',', ''))+1)>help_topic_id and substring_index(substring_index(a.diskType, ',', help_topic_id + 1), ',' , -1)=dictCode) diskTypeName
+		, (SELECT GROUP_CONCAT(x.name) FROM mysql.help_topic LEFT JOIN t_medium x on 1=1 where (length(a.softCode)-length(REPLACE(a.softCode, ',', ''))+1)>help_topic_id and substring_index(substring_index(a.softCode, ',', help_topic_id + 1), ',' , -1)=x.id) softName
 		from 
 		<include refid="tableName"/> a
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
 		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
-		left join cmp_dict d on d.dictType='plat_type' and d.dictCode=a.deployType
+		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
 		left join t_environment e on e.id=a.projectCode
 		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
 		left join t_project g on g.id=a.projectCode
