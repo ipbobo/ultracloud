@@ -198,6 +198,7 @@
 			//beforeSend: validateData,
 			cache: false,
 			success: function(data){
+				window.top.queryPersonalTask();
 				showDialog(data.result);
 			}
 		});

@@ -192,9 +192,9 @@
 						if (data.toDoNum != null && data.toDoNum != ''){
 							$("#span_task_tital").html("您有以下任务 :");
 						}
+						$("#ul_tasks").html("");
+						$("#span_task_no").html(data.toDoNum);
 						if (data.toDoNum != null &&data.toDoNum != '0'){
-							$("#span_task_no").html(data.toDoNum);
-							$("#ul_tasks").html("");
 							$("#ul_tasks").append( "<li onclick=\"goTaskDetail(3)\"><i class=\"ace-icon glyphicon glyphicon-play\"></i>"+ "待执行的工单:" + data.toDoNum +"</li>" );
 						}
 						//24H工单
@@ -206,8 +206,6 @@
 		}
 		queryPersonalTask();
 		function goTaskDetail(type){
-			//showDialog("去执行任务");
-			//alert("去执行任务" + taskId);
 			siMenu('z137','lm121','工单查询','queryUserApplyWorkOrderPre.do?queryType='+type);
 		}
 		

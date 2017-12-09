@@ -205,6 +205,7 @@
 			//beforeSend: validateData,
 			cache: false,
 			success: function(data){
+				parent.queryPersonalTask();
 				showDialog(data.result);
 			}
 		});

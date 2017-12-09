@@ -209,8 +209,10 @@
 	$(top.hangge());
 	
 	$(document).ready(function(){
+		
 		var result = $('#ret_msg').val();
 		if (result != ''){
+			window.top.queryPersonalTask();
 			showDialog(result);
 		}
 	});
