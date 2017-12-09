@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.activiti.service.ActivitiService;
 import com.cmp.service.LeaveService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
@@ -40,7 +43,9 @@ public class LeaveController extends BaseController {
 	@Autowired
 	private LeaveService leaveService;
 	@Autowired
-	 private TaskService taskService; 
+	private TaskService taskService;
+	@Resource
+	private ActivitiService activitiService;
 
 	/**
 	 * 
@@ -85,30 +90,30 @@ public class LeaveController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
-	
-    /**
-     * 签收任务列表
-     */
+
+	/**
+	 * 签收任务列表
+	 */
 	@SuppressWarnings("finally")
-	@RequestMapping(value="/signtasklist")
+	@RequestMapping(value = "/signtasklist")
 	public ModelAndView signtasklist(Page page) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "列表TaskVo");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		
+
 		try {
-			String currentUserId = Jurisdiction.getUsername();			
+			String currentUserId = Jurisdiction.getUsername();
 			// 根据当前人的ID查询
-	        TaskQuery taskQuery = taskService.createTaskQuery().taskCandidateUser(currentUserId);	        
+			TaskQuery taskQuery = taskService.createTaskQuery().taskCandidateUser(currentUserId);
 			List<Task> tasks = taskQuery.listPage(page.getCurrentPage(), page.getShowCount());
-			
-			List<PageData>	varList = new ArrayList<PageData>();
+
+			List<PageData> varList = new ArrayList<PageData>();
 			long count = taskQuery.count();
 			page.setTotalResult((int) count);
-			for(Task task:tasks){
+			for (Task task : tasks) {
 				PageData pageDeta = new PageData();
-				
+
 				varList.add(pageDeta);
 				pageDeta.put("taskId", task.getId());
 				pageDeta.put("taskDefinitionKey", task.getTaskDefinitionKey());
@@ -121,25 +126,27 @@ public class LeaveController extends BaseController {
 				pageDeta.put("description", task.getDescription());
 				pageDeta.put("owner", task.getOwner());
 				pageDeta.put("assignee", task.getAssignee());
-			}	
-			
+			}
+
 			mv.setViewName("leave/signtask_list");
 			mv.addObject("varList", varList);
 			mv.addObject("pd", pd);
-			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
-					
+			mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
 		} finally {
 			return mv;
 		}
 	}
-	
-	/**签收任务
+
+	/**
+	 * 签收任务
+	 * 
 	 * @param out
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/signtask")
+	@RequestMapping(value = "/signtask")
 	public void signtask(PrintWriter out) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "签收任务claim");
 		PageData pd = new PageData();
@@ -150,30 +157,30 @@ public class LeaveController extends BaseController {
 		out.write("success");
 		out.close();
 	}
-    
-    /**
-     * 待办任务列表
-     */
+
+	/**
+	 * 待办任务列表
+	 */
 	@SuppressWarnings("finally")
-	@RequestMapping(value="/todotasklist")
+	@RequestMapping(value = "/todotasklist")
 	public ModelAndView todotasklist(Page page) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "列表TaskVo");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		
+
 		try {
-			String currentUserId = Jurisdiction.getUsername();			
+			String currentUserId = Jurisdiction.getUsername();
 			// 根据当前人的ID查询
-	        TaskQuery taskQuery = taskService.createTaskQuery().taskAssignee(currentUserId);	        
+			TaskQuery taskQuery = taskService.createTaskQuery().taskAssignee(currentUserId);
 			List<Task> tasks = taskQuery.listPage(page.getCurrentPage(), page.getShowCount());
-			
-			List<PageData>	varList = new ArrayList<PageData>();
+
+			List<PageData> varList = new ArrayList<PageData>();
 			long count = taskQuery.count();
 			page.setTotalResult((int) count);
-			for(Task task:tasks){
+			for (Task task : tasks) {
 				PageData pageDeta = new PageData();
-				
+
 				varList.add(pageDeta);
 				pageDeta.put("taskId", task.getId());
 				pageDeta.put("taskDefinitionKey", task.getTaskDefinitionKey());
@@ -186,27 +193,27 @@ public class LeaveController extends BaseController {
 				pageDeta.put("description", task.getDescription());
 				pageDeta.put("owner", task.getOwner());
 				pageDeta.put("assignee", task.getAssignee());
-			}	
-			
+			}
+
 			mv.setViewName("leave/todotask_list");
 			mv.addObject("varList", varList);
 			mv.addObject("pd", pd);
-			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
-					
+			mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
 		} finally {
 			return mv;
 		}
 	}
-	
 
-	
-	/**办理任务
+	/**
+	 * 办理任务
+	 * 
 	 * @param out
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/complete")
+	@RequestMapping(value = "/complete")
 	public void complete(PrintWriter out) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "办理任务complete");
 		PageData pd = new PageData();

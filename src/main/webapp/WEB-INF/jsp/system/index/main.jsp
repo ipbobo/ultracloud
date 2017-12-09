@@ -68,14 +68,14 @@
 					<!-- /section:basics/content.breadcrumbs -->
 					<div class="page-content">
 						<!-- #section:settings.box -->
-						<div class="ace-settings-container" id="ace-settings-container">
+<!-- 						<div class="ace-settings-container" id="ace-settings-container">
 							<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
 								<i class="ace-icon fa fa-cog bigger-130"></i>
 							</div>
 
 							<div class="ace-settings-box clearfix" id="ace-settings-box">
 								<div class="pull-left width-300">
-									<!-- #section:settings.skins -->
+									#section:settings.skins
 									<div class="ace-settings-item">
 										<div class="pull-left">
 											<select id="skin-colorpicker" class="hide">
@@ -99,9 +99,9 @@
 										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
 										<label class="lbl" for="ace-settings-add-container">居中风格</label>
 									</div>
-								</div><!-- /.pull-left -->
-							</div><!-- /.ace-settings-box -->
-						</div><!-- /.ace-settings-container -->
+								</div>
+							</div>
+						</div> -->
 						<div class="row">	
 						<div id="jzts" style="display:none; width:100%; position:fixed; z-index:99999999;">
 						<div class="commitopacity" id="bkbgjz"></div>
