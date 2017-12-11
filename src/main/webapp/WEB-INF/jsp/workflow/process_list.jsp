@@ -84,14 +84,12 @@
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
-												<div class="hidden-sm hidden-xs btn-group">
 													<a class="btn btn-mini btn-purple" onclick="listhis('${var.key}');"><i class="icon-pencil"></i>历史版本</a>
 													<c:if test="${QX.del == 1 }">
 													<a class="btn btn-xs btn-danger" onclick="del('${var.id}');">
 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
 													</a>
 													</c:if>
-												</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline pos-rel">
 														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
@@ -205,6 +203,21 @@
 				});
 			}
 		});
+	}
+	
+	//历史版本
+	function listhis(processDefinitionKey){
+		 top.jzts();
+		 var diag = new top.Dialog();
+		 diag.Drag=true;
+		 diag.Title ="历史版本";
+		 diag.URL = '<%=basePath%>process/listHis.do?processDefinitionKey='+processDefinitionKey;
+		 diag.Width = 800;
+		 diag.Height = 600;
+		 diag.CancelEvent = function(){ //关闭事件
+			 diag.close();
+		 };
+		 diag.show();
 	}
 	
 	//批量操作
