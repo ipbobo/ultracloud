@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="t" uri="/t-tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -173,12 +174,16 @@ function choosePckg(jsonStr){
 							<td align="left" style="width: 180px;">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
 						</tr>
 						<tr>
-							<td align="right" style="width: 120px;">数据盘：</td>
-							<td align="left" style="width: 180px;">${var.diskTypeName}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
-							<td align="right" style="width: 120px;">购买量：</td>
-							<td align="left" style="width: 180px;">${var.virNum}&nbsp;台</td>
-							<td align="right" style="width: 120px;">到期时间：</td>
-							<td align="left" style="width: 180px;">${var.expireDate}</td>
+							<td align="right" valign="top" style="width: 120px;">数据盘：</td>
+							<td align="left" valign="top" style="width: 180px;">
+								<t:list key="${var.diskTypeName}" val="${var.diskSize}" name="vars">
+									${vars.dictCode}&nbsp;(&nbsp;${vars.dictValue}&nbsp;GB)<br>
+								</t:list>
+							</td>
+							<td align="right" valign="top" style="width: 120px;">购买量：</td>
+							<td align="left" valign="top" style="width: 180px;">${var.virNum}&nbsp;台</td>
+							<td align="right" valign="top" style="width: 120px;">到期时间：</td>
+							<td align="left" valign="top" style="width: 180px;">${var.expireDate}</td>
 						</tr>
 						</table>
 					</td>

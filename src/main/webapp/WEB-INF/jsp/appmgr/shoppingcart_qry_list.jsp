@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="t" uri="/t-tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -105,8 +106,12 @@ function batchBuy(){
 				<td align="left">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
 			</tr>
 			<tr>
-				<td align="left">数据盘：</td>
-				<td align="left">${var.diskTypeName}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
+				<td align="left" valign="top">数据盘：</td>
+				<td align="left" valign="top">
+					<t:list key="${var.diskTypeName}" val="${var.diskSize}" name="vars">
+						${vars.dictCode}&nbsp;(&nbsp;${vars.dictValue}&nbsp;GB)<br>
+					</t:list>
+				</td>
 			</tr>
 			<tr>
 				<td align="left">购买量：</td>
