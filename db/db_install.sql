@@ -574,4 +574,22 @@ CREATE TABLE `sys_dictionaries` (
 
 
 
+-- ----------------------------
+-- 计算方案
+-- ----------------------------
+DROP TABLE IF EXISTS `t_numprocedure`;
+CREATE TABLE `t_numprocedure` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL COMMENT '计算方案名称',
+  `showname` varchar(1000) NOT NULL COMMENT '展示名称',
+  `cpu` varchar(20) NOT NULL COMMENT 'cpu',
+  `memory` varchar(2000) DEFAULT NULL COMMENT '内存',
+  `isRecommand` varchar(40) NOT NULL COMMENT '是否为推荐配置',
+  `USERNAME` varchar(20) NOT NULL COMMENT '创建人',
+  `ordernum` int(11) NOT NULL COMMENT '排序值',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  INDEX idx_username(`USERNAME`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计算方案'; 
 
