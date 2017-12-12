@@ -48,6 +48,21 @@ public class DictionariesService implements DictionariesManager{
 		dao.update("DictionariesMapper.edit", pd);
 	}
 	
+	/**修改
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void edit(Dictionaries dictionaries)throws Exception{
+		PageData pd = new PageData();
+		pd.put("BIANMA", dictionaries.getBIANMA());
+		pd.put("DICTIONARIES_ID", dictionaries.getDICTIONARIES_ID());
+		pd.put("NAME", dictionaries.getNAME());
+		pd.put("NAME_EN", dictionaries.getNAME_EN());
+		pd.put("ORDER_BY", dictionaries.getORDER_BY());
+		pd.put("PARENT_ID", dictionaries.getPARENT_ID());
+		dao.update("DictionariesMapper.edit", pd);
+	}
+	
 	/**列表
 	 * @param page
 	 * @throws Exception
