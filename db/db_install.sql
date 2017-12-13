@@ -171,6 +171,7 @@ CREATE TABLE `t_datacenter_network_map` (
 DROP TABLE IF EXISTS `t_virtualmachine`;
 CREATE TABLE `t_virtualmachine` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` varchar(20) NOT NULL COMMENT '项目名称',
   `name` varchar(20) NOT NULL COMMENT '名称',
   `ip` varchar(20) DEFAULT NULL COMMENT '虚拟机ip',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
@@ -180,6 +181,9 @@ CREATE TABLE `t_virtualmachine` (
   `hostmachine_id` bigint unsigned NOT NULL COMMENT '宿主机id',
   `platform` varchar(20) DEFAULT NULL COMMENT '平台',
   `os` varchar(20) DEFAULT NULL COMMENT '操作系统',
+  `os_status` varchar(20) DEFAULT NULL COMMENT '操作系统安装状态',
+  `soft` varchar(20) DEFAULT NULL COMMENT '软件',
+  `soft_status` varchar(20) DEFAULT NULL COMMENT '软件安装状态',
   `duedate` datetime DEFAULT NULL COMMENT '到期时间',
   `username` varchar(20) NOT NULL COMMENT '用户名',
   `password` varchar(20) NOT NULL COMMENT '密码',
