@@ -340,6 +340,12 @@ CREATE TABLE `t_project` (
   `detail` varchar(500) DEFAULT NULL COMMENT '描述',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `cpu_quota` int(11) DEFAULT NULL COMMENT 'cpu配额',
+  `memory_quota` int(11) DEFAULT NULL COMMENT '内存配额',
+  `disk_quota` int(11) DEFAULT NULL COMMENT '磁盘配额',
+  `cpu_used` int(11) DEFAULT NULL COMMENT '已使用cpu',
+  `memory_used` int(11) DEFAULT NULL COMMENT '已使用内存',
+  `disk_used` int(11) DEFAULT NULL COMMENT '已使用磁盘',
   INDEX idx_level(`level`),
   INDEX idx_parent_idd(`parent_id`),
   INDEX idx_DEPARTMENT_ID(`DEPARTMENT_ID`),
@@ -485,6 +491,9 @@ CREATE TABLE `oa_department` (
   `cpu_quota` int(11) DEFAULT NULL COMMENT 'cpu配额',
   `memory_quota` int(11) DEFAULT NULL COMMENT '内存配额',
   `disk_quota` int(11) DEFAULT NULL COMMENT '磁盘配额',
+  `cpu_used` int(11) DEFAULT NULL COMMENT '已使用cpu',
+  `memory_used` int(11) DEFAULT NULL COMMENT '已使用内存',
+  `disk_used` int(11) DEFAULT NULL COMMENT '已使用磁盘',
   PRIMARY KEY (`DEPARTMENT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='组织机构';
 

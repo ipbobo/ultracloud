@@ -39,6 +39,12 @@ public interface DepartmentManager{
 	 */
 	public void editQuota(PageData pd)throws Exception;
 	
+	/**修改已使用配额
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editUsedQuota(PageData pd)throws Exception;
+	
 	/**列表
 	 * @param page
 	 * @throws Exception

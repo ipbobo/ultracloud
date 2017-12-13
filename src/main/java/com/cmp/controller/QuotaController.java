@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.service.ProjectService;
 import com.cmp.sid.CmpOrder;
 import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
@@ -39,6 +40,9 @@ public class QuotaController extends BaseController {
 	
 	@Resource(name = "departmentService")
 	private DepartmentManager departmentService;
+	
+	@Resource(name = "projectService")
+	private ProjectService projectService;
 
 	/**
 	 * 列表
@@ -168,6 +172,62 @@ public class QuotaController extends BaseController {
 		pd.put("DEPARTMENT_ID", DEPARTMENT_ID); // 复原本ID
 		mv.setViewName("service/quota_department_edit");
 		mv.addObject("msg", "editDepartmentQuota");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/listProject")
+	public ModelAndView listProject(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表Project");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+		List<PageData> projectList = projectService.list(page); // 列出Attached列表
+		mv.setViewName("service/quota_project_list");
+		mv.addObject("projectList", projectList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+	
+	/**
+	 * 去修改项目配额页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goEditProjectQuota")
+	public ModelAndView goEditProjectQuota() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String id = pd.getString("id");
+		pd = projectService.findById(pd); // 根据ID读取
+		mv.addObject("pd", pd); // 放入视图容器
+		mv.setViewName("service/quota_project_edit");
+		mv.addObject("msg", "editProjectQuota");
+		return mv;
+	}
+	
+	/**
+	 * 修改项目配额
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/editProjectQuota")
+	public ModelAndView editProjectQuota() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "修改project");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		projectService.editQuota(pd);
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
 		return mv;
 	}
 

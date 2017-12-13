@@ -27,7 +27,10 @@
 		DEPARTMENT_ID,
 		cpu_quota,
 		memory_quota,
-		disk_quota
+		disk_quota,
+		cpu_used,
+		memory_used,
+		disk_used
 	</sql>
 	
 	<!-- 字段值 -->
@@ -44,7 +47,10 @@
 		#{DEPARTMENT_ID},
 		#{cpu_quota},
 		#{memory_quota},
-		#{disk_quota}
+		#{disk_quota},
+		#{cpu_used},
+		#{memory_used},
+		#{disk_used}
 	</sql>
 	
 	<!-- 新增-->
@@ -91,6 +97,18 @@
 			cpu_quota = #{cpu_quota},
 			memory_quota = #{memory_quota},
 			disk_quota = #{disk_quota}
+		where 
+		DEPARTMENT_ID = #{DEPARTMENT_ID}
+	</update>
+	
+	<!-- 修改已使用配额 -->
+	<update id="editUsedQuota" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			cpu_used = #{cpu_used},
+			memory_used = #{memory_used},
+			disk_used = #{disk_used}
 		where 
 		DEPARTMENT_ID = #{DEPARTMENT_ID}
 	</update>

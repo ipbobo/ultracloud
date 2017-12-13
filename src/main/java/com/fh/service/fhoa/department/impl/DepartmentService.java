@@ -58,6 +58,14 @@ public class DepartmentService implements DepartmentManager{
 		dao.update("DepartmentMapper.editQuota", pd);
 	}
 	
+	/**修改已使用配额
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editUsedQuota(PageData pd)throws Exception {
+		dao.update("DepartmentMapper.editUsedQuota", pd);
+	}
+	
 	/**列表
 	 * @param page
 	 * @throws Exception

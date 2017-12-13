@@ -37,7 +37,7 @@
 										<li><a data-toggle="tab" href="#department"><i class="green icon-cog bigger-110"></i>部门配额</a></li>
 										<li><a data-toggle="tab" href="#project"><i class="green icon-cog bigger-110"></i>项目配额</a></li>
 									</ul>
-									<div class="tab-content">
+									<div class="tab-content" style="height:100%;">
 										<div id="snapshoot" class="tab-pane in active">
 											<table id="table_snapshoot" class="table table-striped table-bordered table-hover" style="width:50%;">
 												<tr>
@@ -102,26 +102,23 @@
 												</tr>
 											</table>
 										</div>
-										<div id="department" class="tab-pane">
-											<table id="table_department" class="table table-striped table-bordered table-hover">
-												<table style="width:100%;" border="0">
+										<div id="department" class="tab-pane" style="height:500px;">
+											<table id="table_department" class="table table-striped table-bordered table-hover" border="0" style="height:100%;">
 													<tr>
-														<td style="width:30%;" valign="top" bgcolor="#F9F9F9">
-															<div style="width:30%;">
+														<td style="width:20%;" valign="top" bgcolor="#F9F9F9">
+															<div>
 																<ul id="leftTree" class="tree"></ul>
 															</div>
 														</td>
-														<td style="width:70%;" valign="top" >
+														<td style="width:80%;" valign="top" >
 															<iframe name="treeFrame" id="treeFrame" frameborder="0" src="<%=basePath%>/quota/listALLSubDepartment.do?DEPARTMENT_ID=0" style="margin:0 auto;width:100%;height:100%;"></iframe>
 														</td>
 													</tr>
-													</table>
 											</table>
 										</div>
-										<div id="project" class="tab-pane">
-											<table id="table_project"
-												class="table table-striped table-bordered table-hover">
-												ccccccccccccccccccc
+										<div id="project" class="tab-pane" style="height:500px;">
+											<table id="table_project" class="table table-striped table-bordered table-hover">
+												<iframe name="projectFrame" id="projectFrame" frameborder="0" src="<%=basePath%>/quota/listProject.do" style="margin:0 auto;width:100%;height:100%;"></iframe>
 											</table>
 										</div>
 									</div>
@@ -174,7 +171,7 @@
 			var hmainT = document.getElementById("treeFrame");
 			var bheightT = document.documentElement.clientHeight;
 			hmainT.style.width = '100%';
-			hmainT.style.height = (bheightT-26) + 'px';
+			hmainT.style.height = '100%';//(bheightT-200) + 'px';
 		}
 		treeFrameT();
 		window.onresize=function(){  
