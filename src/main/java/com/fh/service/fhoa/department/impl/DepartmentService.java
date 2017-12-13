@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.entity.system.Department;
+import com.fh.service.fhoa.department.DepartmentManager;
 import com.fh.util.PageData;
 import com.fh.util.Tools;
-import com.fh.service.fhoa.department.DepartmentManager;
 
 /** 
  * 说明： 组织机构
@@ -50,6 +50,22 @@ public class DepartmentService implements DepartmentManager{
 		dao.update("DepartmentMapper.edit", pd);
 	}
 	
+	/**修改配额
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editQuota(PageData pd)throws Exception {
+		dao.update("DepartmentMapper.editQuota", pd);
+	}
+	
+	/**修改已使用配额
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editUsedQuota(PageData pd)throws Exception {
+		dao.update("DepartmentMapper.editUsedQuota", pd);
+	}
+	
 	/**列表
 	 * @param page
 	 * @throws Exception
@@ -84,6 +100,34 @@ public class DepartmentService implements DepartmentManager{
 	@SuppressWarnings("unchecked")
 	public List<Department> listSubDepartmentByParentId(String parentId) throws Exception {
 		return (List<Department>) dao.findForList("DepartmentMapper.listSubDepartmentByParentId", parentId);
+	}
+	
+	/**
+	 * 获取所有数据并填充每条数据的子级列表(递归处理)
+	 * @param MENU_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Department> listAllDepartment2(String parentId) throws Exception {
+		List<Department> departmentList = this.listSubDepartmentByParentId(parentId);
+		for(Department depar : departmentList){
+			depar.setTreeurl("quota/listALLSubDepartment.do?DEPARTMENT_ID="+depar.getDEPARTMENT_ID());
+			depar.setSubDepartment(this.listAllDepartment2(depar.getDEPARTMENT_ID()));
+			depar.setTarget("treeFrame");
+			depar.setIcon("static/images/user.gif");
+		}
+		return departmentList;
+	}
+	
+	/**
+	 * 通过ID获取其子级列表(sql递归处理)
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listALLSubDepartmentByParentId(String parentId) throws Exception {
+		return (List<PageData>) dao.findForList("DepartmentMapper.listALLSubDepartmentByParentId", parentId);
 	}
 	
 	/**

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -16,7 +15,9 @@
 
 <!-- jsp文件头和头部 -->
 <%@ include file="../system/index/top.jsp"%>
-
+<script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
+<link type="text/css" rel="stylesheet" href="plugins/zTree/2.6/zTreeStyle.css"/>
+<script type="text/javascript" src="plugins/zTree/2.6/jquery.ztree-2.6.min.js"></script>
 </head>
 <body class="no-skin">
 	<input type="hidden" id="ret_msg" name="ret_msg" value="${requestScope.retMsg}" />
@@ -36,7 +37,7 @@
 										<li><a data-toggle="tab" href="#department"><i class="green icon-cog bigger-110"></i>部门配额</a></li>
 										<li><a data-toggle="tab" href="#project"><i class="green icon-cog bigger-110"></i>项目配额</a></li>
 									</ul>
-									<div class="tab-content">
+									<div class="tab-content" style="height:100%;">
 										<div id="snapshoot" class="tab-pane in active">
 											<table id="table_snapshoot" class="table table-striped table-bordered table-hover" style="width:50%;">
 												<tr>
@@ -96,21 +97,30 @@
 													</select></td>
 												</tr>
 												<tr>
-													<td style="text-align: center;" colspan="10"><a class="btn btn-mini btn-primary" onclick="save();">保存</a>
-														<a class="btn btn-mini btn-danger" onclick="flush();">取消</a></td>
+													<td style="text-align: center;" colspan="10">
+														<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
+														<a class="btn btn-mini btn-danger" onclick="flush();">取消</a>
+													</td>
 												</tr>
 											</table>
 										</div>
-										<div id="department" class="tab-pane">
-											<table id="table_department"
-												class="table table-striped table-bordered table-hover">
-												bbbbbbbbbbbbbbbbbbbb
+										<div id="department" class="tab-pane" style="height:500px;">
+											<table id="table_department" class="table table-striped table-bordered table-hover" border="0" style="height:100%;">
+													<tr>
+														<td style="width:20%;" valign="top" bgcolor="#F9F9F9">
+															<div>
+																<ul id="leftTree" class="tree"></ul>
+															</div>
+														</td>
+														<td style="width:80%;" valign="top" >
+															<iframe name="treeFrame" id="treeFrame" frameborder="0" src="<%=basePath%>/quota/listALLSubDepartment.do?DEPARTMENT_ID=0" style="margin:0 auto;width:100%;height:100%;"></iframe>
+														</td>
+													</tr>
 											</table>
 										</div>
-										<div id="project" class="tab-pane">
-											<table id="table_project"
-												class="table table-striped table-bordered table-hover">
-												ccccccccccccccccccc
+										<div id="project" class="tab-pane" style="height:500px;">
+											<table id="table_project" class="table table-striped table-bordered table-hover">
+												<iframe name="projectFrame" id="projectFrame" frameborder="0" src="<%=basePath%>/quota/listProject.do" style="margin:0 auto;width:100%;height:100%;"></iframe>
 											</table>
 										</div>
 									</div>
@@ -148,6 +158,28 @@
 	<script type="text/javascript">
 		$(top.hangge());
 		
+		var zTree;
+		$(document).ready(function(){
+			var setting = {
+			    showLine: true,
+			    checkable: false
+			};
+			var zn = '${zTreeNodes}';
+			var zTreeNodes = eval(zn);
+			zTree = $("#leftTree").zTree(setting, zTreeNodes);
+		});
+	
+		function treeFrameT(){
+			var hmainT = document.getElementById("treeFrame");
+			var bheightT = document.documentElement.clientHeight;
+			hmainT.style.width = '100%';
+			hmainT.style.height = '100%';//(bheightT-200) + 'px';
+		}
+		treeFrameT();
+		window.onresize=function(){  
+			treeFrameT();
+		};
+		
 		//发送Ajax请求
 		function ajaxHttpPost(url, jsonObj, tabId){
 		    $.ajax({
@@ -156,17 +188,29 @@
 			    data: jsonObj,
 			    dataType: 'json',  
 			    success: function(data){
-			    	$(top.hangge());//关闭加载状态
-			    	/* var result = $('#ret_msg').val();
-			    	debugger();
-					if (result != ''){
-						showDialog(result);
-					} */
+			    	$(top.hangge());
+			    	location.reload();
 			    },
 			    error: function(data) {
 			    	$(top.hangge());//关闭加载状态
+			    	location.reload();
 			    }
 			});
+		}
+		
+		//保存
+		function save(){
+			top.jzts();
+			var jsonObj={};//JSON请求数据
+			jsonObj.snapshoot_manual_num=$("#snapshoot_manual_num").val();            
+			jsonObj.snapshoot_auto_num=$("#snapshoot_auto_num").val();                       
+			ajaxHttpPost("quota/saveSnapshootMax.do", jsonObj, "snapshoot");//发送Ajax请求
+		}
+		
+		//取消
+		function flush() {
+			console.log("quota snapshoot flush----------------->");
+			location.reload();
 		}
 		
 		//点击tab页
@@ -178,15 +222,6 @@
 				$("#savePckgBtnId").hide();
 				$("#tcsq").load("pckgAppPre.do");
 			}
-		}
-		
-		//保存
-		function save(){
-			top.jzts();
-			var jsonObj={};//JSON请求数据
-			jsonObj.snapshoot_manual_num=$("#snapshoot_manual_num").val();            
-			jsonObj.snapshoot_auto_num=$("#snapshoot_auto_num").val();                       
-			ajaxHttpPost("quota/saveSnapshootMax.do", jsonObj, "snapshoot");//发送Ajax请求
 		}
 	</script>
 

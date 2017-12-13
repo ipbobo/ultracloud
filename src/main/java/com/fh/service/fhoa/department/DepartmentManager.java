@@ -32,6 +32,19 @@ public interface DepartmentManager{
 	 */
 	public void edit(PageData pd)throws Exception;
 	
+	
+	/**修改配额
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editQuota(PageData pd)throws Exception;
+	
+	/**修改已使用配额
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editUsedQuota(PageData pd)throws Exception;
+	
 	/**列表
 	 * @param page
 	 * @throws Exception
@@ -81,5 +94,20 @@ public interface DepartmentManager{
 	 */
 	public String getDEPARTMENT_IDS(String DEPARTMENT_ID) throws Exception;
 	
+	/**
+	 * 获取所有数据并填充每条数据的子级列表(递归处理)
+	 * @param MENU_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Department> listAllDepartment2(String parentId) throws Exception ;
+	
+	/**
+	 * 通过ID获取其子级列表(sql递归处理)
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listALLSubDepartmentByParentId(String parentId) throws Exception ;
 }
 
