@@ -605,3 +605,21 @@ CREATE TABLE `t_numprocedure` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计算方案'; 
 
+-- ----------------------------
+-- 虚拟机命名规则
+-- ----------------------------
+DROP TABLE IF EXISTS `t_virtualmachine_namerule`;
+CREATE TABLE `t_virtualmachine_namerule` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `name` varchar(20) NOT NULL COMMENT '规则名称',
+  `prefix` varchar(30) DEFAULT NULL COMMENT '前缀',
+  `suffix` varchar(30) DEFAULT NULL COMMENT '后缀',
+  `isDefault` tinyint unsigned NOT NULL COMMENT '是否是默认配置',
+  `USERNAME` varchar(20) NOT NULL COMMENT '创建者',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='虚拟机命名规则'; 
+
+
