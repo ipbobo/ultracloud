@@ -173,7 +173,7 @@
 		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
 		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
 		left join t_mirrortemplate j on j.id=a.imgCode
-		where status='T'
+		where status='T' and applyUserId=#{applyUserId}
 	</select>
 	
 	<!-- 购物车列表查询 -->
@@ -201,7 +201,15 @@
 		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
 		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
 		left join t_mirrortemplate j on j.id=a.imgCode
-		where status='0'
+		where status='0' and applyUserId=#{applyUserId}
+	</select>
+	
+	<!-- 购物车列表总数查询 -->
+	<select id="getShoppingCartNum" parameterType="String" resultType="Long">
+		select count(1)
+		from 
+		<include refid="tableName"/> a
+		where status='0' and applyUserId=#{applyUserId}
 	</select>
 	
 	<!-- 已购历史列表查询 -->
@@ -229,7 +237,15 @@
 		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
 		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
 		left join t_mirrortemplate j on j.id=a.imgCode
-		where status='1'
+		where status='1' and applyUserId=#{applyUserId}
+	</select>
+	
+	<!-- 已购历史列表总数查询 -->
+	<select id="getBuyHisNum" parameterType="String" resultType="Long">
+		select count(1)
+		from 
+		<include refid="tableName"/> a
+		where status='1' and applyUserId=#{applyUserId}
 	</select>
 	
 	<!-- 新增清单或套餐 -->
