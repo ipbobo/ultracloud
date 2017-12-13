@@ -1,9 +1,3 @@
-delete from sys_menu where menu_id in(121, 122, 123);
-INSERT INTO `sys_menu` VALUES ('121', '申请管理', '#', '0', '2', 'menu-icon fa fa-home blue', '2', '1');
-INSERT INTO `sys_menu` VALUES ('122', '资源申请', 'resAppPre.do', '121', '1', 'menu-icon fa fa-home blue', '1', '1');
-INSERT INTO `sys_menu` VALUES ('123', '运维服务申请', 'reqOperServicePre.do', '121', '2', 'menu-icon fa fa-home blue', '1', '1');
-INSERT INTO `sys_menu` VALUES ('137', '工单查询', 'queryUserApplyWorkOrderPre.do', '121', '3', 'menu-icon fa fa-home blue', '1', '1');
-
 truncate table cmp_dict;
 INSERT INTO `cmp_dict` VALUES ('1', '2017-11-13 00:40:29', '2017-11-12 21:58:37', 'plat_type', 'vmware', 'VMware', '平台类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES ('2', '2017-11-13 00:40:44', '2017-11-12 21:58:42', 'plat_type', 'openstack', 'OpenStack', '平台类型', '0', '2');
@@ -216,8 +210,7 @@ insert into `sys_menu` (`MENU_ID`, `MENU_NAME`, `MENU_URL`, `PARENT_ID`, `MENU_O
 insert into `sys_menu` (`MENU_ID`, `MENU_NAME`, `MENU_URL`, `PARENT_ID`, `MENU_ORDER`, `MENU_ICON`, `MENU_TYPE`, `MENU_STATE`) values('151','服务管理','#','0','6','menu-icon fa fa-leaf black','2','1');
 insert into `sys_menu` (`MENU_ID`, `MENU_NAME`, `MENU_URL`, `PARENT_ID`, `MENU_ORDER`, `MENU_ICON`, `MENU_TYPE`, `MENU_STATE`) values('152','环境服务','environment/list.do','151','1','menu-icon fa fa-leaf black','1','1');
 insert into `sys_menu` (`MENU_ID`, `MENU_NAME`, `MENU_URL`, `PARENT_ID`, `MENU_ORDER`, `MENU_ICON`, `MENU_TYPE`, `MENU_STATE`) values('153','镜像管理','mirror/list.do','151','3','menu-icon fa fa-leaf black','1','1');
-insert into `sys_menu` (`MENU_ID`, `MENU_NAME`, `MENU_URL`, `PARENT_ID`, `MENU_ORDER`, `MENU_ICON`, `MENU_TYPE`, `MENU_STATE`) values('999','测试菜单2','resAppPre.do?orderNo=O2017120100022','121','4','menu-icon fa fa-home blue','1','1');
-insert into `sys_menu` (`MENU_ID`, `MENU_NAME`, `MENU_URL`, `PARENT_ID`, `MENU_ORDER`, `MENU_ICON`, `MENU_TYPE`, `MENU_STATE`) values('1000','日志管理','fhlog/list.do','0','11','menu-icon fa fa-leaf black','2','1');
+insert into `sys_menu` (`MENU_ID`, `MENU_NAME`, `MENU_URL`, `PARENT_ID`, `MENU_ORDER`, `MENU_ICON`, `MENU_TYPE`, `MENU_STATE`) values('1000','日志管理','logmgr/list.do','0','11','menu-icon fa fa-leaf black','2','1');
 insert into `sys_menu` (`MENU_ID`, `MENU_NAME`, `MENU_URL`, `PARENT_ID`, `MENU_ORDER`, `MENU_ICON`, `MENU_TYPE`, `MENU_STATE`) values('1002','报表中心','#','0','9','menu-icon fa fa-leaf black','2','1');
 insert into `sys_menu` (`MENU_ID`, `MENU_NAME`, `MENU_URL`, `PARENT_ID`, `MENU_ORDER`, `MENU_ICON`, `MENU_TYPE`, `MENU_STATE`) values('1003','计费报表','billingchart/list.do','1002','1','menu-icon fa fa-leaf black','1','1');
 insert into `sys_menu` (`MENU_ID`, `MENU_NAME`, `MENU_URL`, `PARENT_ID`, `MENU_ORDER`, `MENU_ICON`, `MENU_TYPE`, `MENU_STATE`) values('1004','资源使用报表','resourcechart/list.do','1002','2','menu-icon fa fa-leaf black','1','1');
