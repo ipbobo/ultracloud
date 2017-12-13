@@ -97,8 +97,10 @@
 													</select></td>
 												</tr>
 												<tr>
-													<td style="text-align: center;" colspan="10"><a class="btn btn-mini btn-primary" onclick="save();">保存</a>
-														<a class="btn btn-mini btn-danger" onclick="flush();">取消</a></td>
+													<td style="text-align: center;" colspan="10">
+														<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
+														<a class="btn btn-mini btn-danger" onclick="flush();">取消</a>
+													</td>
 												</tr>
 											</table>
 										</div>
@@ -186,15 +188,12 @@
 			    data: jsonObj,
 			    dataType: 'json',  
 			    success: function(data){
-			    	$(top.hangge());//关闭加载状态
-			    	/* var result = $('#ret_msg').val();
-			    	debugger();
-					if (result != ''){
-						showDialog(result);
-					} */
+			    	$(top.hangge());
+			    	location.reload();
 			    },
 			    error: function(data) {
 			    	$(top.hangge());//关闭加载状态
+			    	location.reload();
 			    }
 			});
 		}
@@ -206,6 +205,12 @@
 			jsonObj.snapshoot_manual_num=$("#snapshoot_manual_num").val();            
 			jsonObj.snapshoot_auto_num=$("#snapshoot_auto_num").val();                       
 			ajaxHttpPost("quota/saveSnapshootMax.do", jsonObj, "snapshoot");//发送Ajax请求
+		}
+		
+		//取消
+		function flush() {
+			console.log("quota snapshoot flush----------------->");
+			location.reload();
 		}
 		
 		//点击tab页
