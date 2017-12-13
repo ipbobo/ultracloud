@@ -34,6 +34,8 @@ import com.cmp.sid.CmpOpServe;
 import com.cmp.sid.CmpOrder;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.RelateTask;
+import com.cmp.workorder.IWorkorderHandler;
+import com.cmp.workorder.WorkorderHelper;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
@@ -66,6 +68,9 @@ public class CmpWorkOrderController extends BaseController{
 	
 	@Resource
 	private CmpOrderService cmpOrderService;
+	
+	@Resource 
+	private WorkorderHelper  workorderHelper;
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
@@ -265,25 +270,41 @@ public class CmpWorkOrderController extends BaseController{
 		List<Comment> commentList = activitiService.getProcessComments(toViewWorkorder.getProcInstId());
 		mv.addObject("commentList", commentList);
 		
-		//是资源申请，跳资源申请审核页面或运维申请审核页面
+		//是资源申请，跳资源申请详情页面或运维申请详情页面
 		String toViewUrl = "";
-		if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("1")) {
-			CmpOrder orderInfo = null;
-			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toViewWorkorder.getOrderNo());
-			if (orderList != null && orderList.size() > 0) {
-				orderInfo = orderList.get(0);
-			}
-			mv.addObject("orderInfo", orderInfo);
-			toViewUrl = "workorder/applyview";
-		}else if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("2")) {
-			//查询工单关联的运维信息
-			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toViewWorkorder.getOrderNo());
-			cmpOpServeService.encase(opServe);  //中文填充
-			mv.addObject("opServe", opServe);
-			toViewUrl = "workorder/operview";
+		IWorkorderHandler workorderHandler = workorderHelper.instance(toViewWorkorder.getAppType());
+		if (workorderHandler == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
 		}
-		mv.addObject("workorder", toViewWorkorder);
-		mv.setViewName(toViewUrl);
+		Map<String, Object> pageViewMap = workorderHandler.toWorkorderView(toViewWorkorder);
+		if (pageViewMap == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
+		}
+		for (String key : pageViewMap.keySet()) {
+			mv.addObject(key, pageViewMap.get(key));
+		}
+		mv.setViewName((String)pageViewMap.get("toViewUrl"));
+//		if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("1")) {
+//			CmpOrder orderInfo = null;
+//			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toViewWorkorder.getOrderNo());
+//			if (orderList != null && orderList.size() > 0) {
+//				orderInfo = orderList.get(0);
+//			}
+//			mv.addObject("orderInfo", orderInfo);
+//			toViewUrl = "workorder/applyview";
+//		}else if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("2")) {
+//			//查询工单关联的运维信息
+//			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toViewWorkorder.getOrderNo());
+//			cmpOpServeService.encase(opServe);  //中文填充
+//			mv.addObject("opServe", opServe);
+//			toViewUrl = "workorder/operview";
+//		}
+		//mv.addObject("workorder", toViewWorkorder);
+		//mv.setViewName(toViewUrl);
 		return mv;
 	}
 	
