@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -16,7 +15,9 @@
 
 <!-- jsp文件头和头部 -->
 <%@ include file="../system/index/top.jsp"%>
-
+<script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
+<link type="text/css" rel="stylesheet" href="plugins/zTree/2.6/zTreeStyle.css"/>
+<script type="text/javascript" src="plugins/zTree/2.6/jquery.ztree-2.6.min.js"></script>
 </head>
 <body class="no-skin">
 	<input type="hidden" id="ret_msg" name="ret_msg" value="${requestScope.retMsg}" />
@@ -102,9 +103,19 @@
 											</table>
 										</div>
 										<div id="department" class="tab-pane">
-											<table id="table_department"
-												class="table table-striped table-bordered table-hover">
-												bbbbbbbbbbbbbbbbbbbb
+											<table id="table_department" class="table table-striped table-bordered table-hover">
+												<table style="width:100%;" border="0">
+													<tr>
+														<td style="width:30%;" valign="top" bgcolor="#F9F9F9">
+															<div style="width:30%;">
+																<ul id="leftTree" class="tree"></ul>
+															</div>
+														</td>
+														<td style="width:70%;" valign="top" >
+															<iframe name="treeFrame" id="treeFrame" frameborder="0" src="<%=basePath%>/quota/listALLSubDepartment.do?DEPARTMENT_ID=0" style="margin:0 auto;width:100%;height:100%;"></iframe>
+														</td>
+													</tr>
+													</table>
 											</table>
 										</div>
 										<div id="project" class="tab-pane">
@@ -148,6 +159,28 @@
 	<script type="text/javascript">
 		$(top.hangge());
 		
+		var zTree;
+		$(document).ready(function(){
+			var setting = {
+			    showLine: true,
+			    checkable: false
+			};
+			var zn = '${zTreeNodes}';
+			var zTreeNodes = eval(zn);
+			zTree = $("#leftTree").zTree(setting, zTreeNodes);
+		});
+	
+		function treeFrameT(){
+			var hmainT = document.getElementById("treeFrame");
+			var bheightT = document.documentElement.clientHeight;
+			hmainT.style.width = '100%';
+			hmainT.style.height = (bheightT-26) + 'px';
+		}
+		treeFrameT();
+		window.onresize=function(){  
+			treeFrameT();
+		};
+		
 		//发送Ajax请求
 		function ajaxHttpPost(url, jsonObj, tabId){
 		    $.ajax({
@@ -169,6 +202,15 @@
 			});
 		}
 		
+		//保存
+		function save(){
+			top.jzts();
+			var jsonObj={};//JSON请求数据
+			jsonObj.snapshoot_manual_num=$("#snapshoot_manual_num").val();            
+			jsonObj.snapshoot_auto_num=$("#snapshoot_auto_num").val();                       
+			ajaxHttpPost("quota/saveSnapshootMax.do", jsonObj, "snapshoot");//发送Ajax请求
+		}
+		
 		//点击tab页
 		function tabFunc(tabId){
 			if(tabId=="zdysq"){//自定义申请
@@ -178,15 +220,6 @@
 				$("#savePckgBtnId").hide();
 				$("#tcsq").load("pckgAppPre.do");
 			}
-		}
-		
-		//保存
-		function save(){
-			top.jzts();
-			var jsonObj={};//JSON请求数据
-			jsonObj.snapshoot_manual_num=$("#snapshoot_manual_num").val();            
-			jsonObj.snapshoot_auto_num=$("#snapshoot_auto_num").val();                       
-			ajaxHttpPost("quota/saveSnapshootMax.do", jsonObj, "snapshoot");//发送Ajax请求
 		}
 	</script>
 

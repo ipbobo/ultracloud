@@ -482,6 +482,9 @@ CREATE TABLE `oa_department` (
   `TEL` varchar(50) DEFAULT NULL COMMENT '电话',
   `FUNCTIONS` varchar(255) DEFAULT NULL COMMENT '部门职能',
   `ADDRESS` varchar(255) DEFAULT NULL COMMENT '地址',
+  `cpu_quota` int(11) DEFAULT NULL COMMENT 'cpu配额',
+  `memory_quota` int(11) DEFAULT NULL COMMENT '内存配额',
+  `disk_quota` int(11) DEFAULT NULL COMMENT '磁盘配额',
   PRIMARY KEY (`DEPARTMENT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='组织机构';
 

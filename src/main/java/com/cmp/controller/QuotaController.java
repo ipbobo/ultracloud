@@ -6,7 +6,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,6 +19,7 @@ import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.Dictionaries;
+import com.fh.service.fhoa.department.DepartmentManager;
 import com.fh.service.system.dictionaries.impl.DictionariesService;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
@@ -32,6 +36,9 @@ public class QuotaController extends BaseController {
 
 	@Resource(name = "dictionariesService")
 	private DictionariesService dictionariesService;
+	
+	@Resource(name = "departmentService")
+	private DepartmentManager departmentService;
 
 	/**
 	 * 列表
@@ -40,12 +47,11 @@ public class QuotaController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/list")
-	public ModelAndView list(Page page) throws Exception {
+	public ModelAndView list(Model model, String DEPARTMENT_ID) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "列表quota");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		page.setPd(pd);
 
 		// 查询快照配额
 		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("snapshoot_maxun");
@@ -57,9 +63,43 @@ public class QuotaController extends BaseController {
 				pd.put("snapshoot_auto_num", dictionaries.getNAME());
 			}
 		}
+		departmentService.listALLSubDepartmentByParentId("0");
+		//查询部门树
+		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartment2("0"));
+		String json = arr.toString();
+		json = json.replaceAll("DEPARTMENT_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("NAME", "name")
+				.replaceAll("subDepartment", "nodes").replaceAll("hasDepartment", "checked").replaceAll("treeurl", "url");
+		model.addAttribute("zTreeNodes", json);
+		mv.addObject("DEPARTMENT_ID", DEPARTMENT_ID);
 
 		mv.setViewName("service/quota_list");
 		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+	
+	/**
+	 * 指定组织的所有子组织列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listALLSubDepartment")
+	public ModelAndView listALLSubDepartment(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "子组织department");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String DEPARTMENT_ID = null == pd.get("DEPARTMENT_ID") ? "" : pd.get("DEPARTMENT_ID").toString();
+		if (null != pd.get("id") && !"".equals(pd.get("id").toString())) {
+			DEPARTMENT_ID = pd.get("id").toString();
+		}
+		pd.put("DEPARTMENT_ID", DEPARTMENT_ID); // 上级ID
+		page.setPd(pd);
+		List<PageData> varList = departmentService.listALLSubDepartmentByParentId(DEPARTMENT_ID);
+		mv.addObject("DEPARTMENT_ID", DEPARTMENT_ID); // 上级ID
+		mv.setViewName("service/quota_department_list");
+		mv.addObject("varList", varList);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
@@ -89,4 +129,46 @@ public class QuotaController extends BaseController {
 		}
 		return mv;
 	}
+	
+	/**
+	 * 修改部门配额
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/editDepartmentQuota")
+	public ModelAndView editDepartmentQuota() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "修改department");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		departmentService.editQuota(pd);
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+	
+	/**
+	 * 去修改部门配额页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goEditDepartmentQuota")
+	public ModelAndView goEditDepartmentQuota() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String DEPARTMENT_ID = pd.getString("DEPARTMENT_ID");
+		pd = departmentService.findById(pd); // 根据ID读取
+		mv.addObject("pd", pd); // 放入视图容器
+		pd.put("DEPARTMENT_ID", pd.get("PARENT_ID").toString()); // 用作上级信息
+		mv.addObject("pds", departmentService.findById(pd)); // 传入上级所有信息
+		mv.addObject("DEPARTMENT_ID", pd.get("PARENT_ID").toString()); // 传入上级ID，作为子ID用
+		pd.put("DEPARTMENT_ID", DEPARTMENT_ID); // 复原本ID
+		mv.setViewName("service/quota_department_edit");
+		mv.addObject("msg", "editDepartmentQuota");
+		return mv;
+	}
+
 }

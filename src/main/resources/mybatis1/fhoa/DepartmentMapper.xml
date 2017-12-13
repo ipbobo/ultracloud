@@ -24,7 +24,10 @@
 		FUNCTIONS,
 		ADDRESS,
 		BZ,	
-		DEPARTMENT_ID
+		DEPARTMENT_ID,
+		cpu_quota,
+		memory_quota,
+		disk_quota
 	</sql>
 	
 	<!-- 字段值 -->
@@ -38,7 +41,10 @@
 		#{FUNCTIONS},
 		#{ADDRESS},
 		#{BZ},	
-		#{DEPARTMENT_ID}
+		#{DEPARTMENT_ID},
+		#{cpu_quota},
+		#{memory_quota},
+		#{disk_quota}
 	</sql>
 	
 	<!-- 新增-->
@@ -73,6 +79,18 @@
 			FUNCTIONS = #{FUNCTIONS},
 			ADDRESS = #{ADDRESS},
 			DEPARTMENT_ID = DEPARTMENT_ID
+		where 
+		DEPARTMENT_ID = #{DEPARTMENT_ID}
+	</update>
+	
+	<!-- 修改配额 -->
+	<update id="editQuota" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			cpu_quota = #{cpu_quota},
+			memory_quota = #{memory_quota},
+			disk_quota = #{disk_quota}
 		where 
 		DEPARTMENT_ID = #{DEPARTMENT_ID}
 	</update>
@@ -131,5 +149,14 @@
 			PARENT_ID = #{parentId} order by NAME 
 	</select>
 	
-	<!-- fh313596790qq(青苔) -->
+	<!-- 通过ID获取其子级列表 (sql递归处理)-->
+	<select id="listALLSubDepartmentByParentId" parameterType="String" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			FIND_IN_SET(DEPARTMENT_ID,f_list_department(#{parentId}))
+	</select>
+	
 </mapper>
