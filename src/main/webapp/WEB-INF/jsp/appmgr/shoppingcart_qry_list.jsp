@@ -86,28 +86,28 @@ function batchBuy(){
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
 			<tr>
-				<td align="left" style="width: 60px;">ECS（${var.orderNo}）</td>
+				<td align="left" style="width: 60px;" colspan="2">ECS（${var.orderNo}）</td>
 				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.orderNo}')" class="img_close"></div></td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">地域：</td>
-				<td align="left">${var.areaCodeName}</td>
+				<td align="left" colspan="2">${var.areaCodeName}</td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">资源类型：</td>
-				<td align="left">${var.resTypeName}</td>
+				<td align="left" colspan="2">${var.resTypeName}</td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">实例规格：</td>
-				<td align="left">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
+				<td align="left" colspan="2">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
 			</tr>
 			<tr>
 				<td align="left">镜像：</td>
-				<td align="left">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
+				<td align="left" colspan="2">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
 			</tr>
 			<tr>
 				<td align="left" valign="top">数据盘：</td>
-				<td align="left" valign="top">
+				<td align="left" valign="top" colspan="2">
 					<t:list key="${var.diskTypeName}" val="${var.diskSize}" name="vars">
 						${vars.dictCode}&nbsp;(&nbsp;${vars.dictValue}&nbsp;GB)<br>
 					</t:list>
@@ -115,11 +115,11 @@ function batchBuy(){
 			</tr>
 			<tr>
 				<td align="left">购买量：</td>
-				<td align="left">${var.virNum}&nbsp;台</td>
+				<td align="left" colspan="2">${var.virNum}&nbsp;台</td>
 			</tr>
 			<tr>
 				<td align="left">到期时间：</td>
-				<td align="left">${var.expireDate}</td>
+				<td align="left" colspan="2">${var.expireDate}</td>
 			</tr>
 			</table>
 		</td>
