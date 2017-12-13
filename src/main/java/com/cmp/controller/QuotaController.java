@@ -67,6 +67,7 @@ public class QuotaController extends BaseController {
 				pd.put("snapshoot_auto_num", dictionaries.getNAME());
 			}
 		}
+		
 		departmentService.listALLSubDepartmentByParentId("0");
 		//查询部门树
 		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartment2("0"));
@@ -108,6 +109,13 @@ public class QuotaController extends BaseController {
 		return mv;
 	}
 
+	/**
+	 * 保存快照最大个数
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/saveSnapshootMax")
 	public ModelAndView saveSnapshootMax(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mv = new ModelAndView();
@@ -228,6 +236,68 @@ public class QuotaController extends BaseController {
 		projectService.editQuota(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
+		return mv;
+	}
+	
+	/**
+	 * 去修改项目配额页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goExpirationtimeEdit")
+	public ModelAndView goExpirationtimeEdit() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		
+		// 查询到期时间
+		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("expirationtime_config");
+		mv.addObject("dictionariesList", dictionariesList);
+		for (Dictionaries dictionaries : dictionariesList) {
+			if ("expirationtime_isforever".equals(dictionaries.getBIANMA())) {
+				pd.put("expirationtime_isforever", dictionaries.getNAME());
+			} else if ("expirationtime_day".equals(dictionaries.getBIANMA())) {
+				pd.put("expirationtime_day", dictionaries.getNAME());
+			}
+		}
+		
+		mv.addObject("pd", pd); // 放入视图容器
+		mv.setViewName("service/expirationtime_edit");
+		mv.addObject("msg", "");
+		return mv;
+	}
+	
+	/**
+	 * 保存到期时间
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/saveExpirationtime")
+	public ModelAndView saveExpirationtime(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		try {
+			String expirationtime_isforever = request.getParameter("expirationtime_isforever");
+			String expirationtime_day = request.getParameter("expirationtime_day");
+
+			List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("expirationtime_config");
+			for (Dictionaries dictionaries : dictionariesList) {
+				if ("expirationtime_isforever".equals(dictionaries.getBIANMA())) {
+					dictionaries.setNAME(expirationtime_isforever);
+					dictionariesService.edit(dictionaries);
+				} else if ("expirationtime_day".equals(dictionaries.getBIANMA())) {
+					dictionaries.setNAME(expirationtime_day);
+					dictionariesService.edit(dictionaries);
+				}
+			}
+
+			mv.addObject("retMsg", "保存成功!");
+		} catch (Exception e) {
+			logger.error("保存快照配额错误：" + e);
+			mv.addObject("retMsg", "保存失败!");
+		}
 		return mv;
 	}
 
