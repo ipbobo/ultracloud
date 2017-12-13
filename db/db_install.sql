@@ -45,6 +45,7 @@ CREATE TABLE `t_datacenter` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
   `cpf_id` bigint unsigned NOT NULL COMMENT '云平台id',
+  `type` varchar(20) NOT NULL COMMENT '类型',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   INDEX idx_cpf_id(`cpf_id`),
@@ -59,6 +60,8 @@ DROP TABLE IF EXISTS `t_cluster`;
 CREATE TABLE `t_cluster` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
+  `cpf_id` bigint unsigned NOT NULL COMMENT '云平台id',
+  `type` varchar(20) NOT NULL COMMENT '类型',
   `datacenter_id` bigint unsigned DEFAULT NULL COMMENT '数据中心id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
@@ -595,7 +598,7 @@ CREATE TABLE `sys_dictionaries` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_numprocedure`;
 CREATE TABLE `t_numprocedure` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(20) NOT NULL COMMENT '计算方案名称',
   `showname` varchar(1000) NOT NULL COMMENT '展示名称',
   `cpu` varchar(20) NOT NULL COMMENT 'cpu',
@@ -610,20 +613,22 @@ CREATE TABLE `t_numprocedure` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计算方案'; 
 
 -- ----------------------------
--- 虚拟机命名规则
+-- 自动安装规则
 -- ----------------------------
-DROP TABLE IF EXISTS `t_virtualmachine_namerule`;
-CREATE TABLE `t_virtualmachine_namerule` (
-  `id` varchar(32) NOT NULL COMMENT '主键',
-  `name` varchar(20) NOT NULL COMMENT '规则名称',
-  `prefix` varchar(30) DEFAULT NULL COMMENT '前缀',
-  `suffix` varchar(30) DEFAULT NULL COMMENT '后缀',
-  `isDefault` tinyint unsigned NOT NULL COMMENT '是否是默认配置',
+DROP TABLE IF EXISTS `t_autoinstall_rule`;
+CREATE TABLE `t_autoinstall_rule` (
+  `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `cluster_id` bigint unsigned  NOT NULL COMMENT '集群id',
+  `type` varchar(20) NOT NULL COMMENT '集群类型',
+  `num_rule` varchar(40) DEFAULT NULL COMMENT '计算规则',
+  `storage_rule` varchar(40) DEFAULT NULL COMMENT '存储规则',
+  `ip_rule` varchar(40) DEFAULT NULL COMMENT 'ip规则',
+  `openstack_rule` varchar(40) DEFAULT NULL COMMENT 'openstack规则',
   `USERNAME` varchar(20) NOT NULL COMMENT '创建者',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='虚拟机命名规则'; 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='自动安装规则'; 
 
 

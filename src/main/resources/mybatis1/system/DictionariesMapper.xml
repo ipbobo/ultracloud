@@ -135,6 +135,17 @@
 			PARENT_ID = (select DICTIONARIES_ID from <include refid="tableName"></include> where BIANMA = #{BIANMA}) order by ORDER_BY 
 	</select>
 	
+	<!-- 通过编码获取其孙子列表 -->
+	<select id="listGrandsonDictByBianma" parameterType="String" resultMap="dictResultMap">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where PARENT_ID IN
+			(select DICTIONARIES_ID from <include refid="tableName"></include> where PARENT_ID in
+				(select DICTIONARIES_ID from <include refid="tableName"></include> where BIANMA = #{BIANMA}) )
+	</select>
+	
 	<!-- 排查表检查是否被占用 -->
 	<select id="findFromTbs" parameterType="pd" resultType="pd">
 		select
