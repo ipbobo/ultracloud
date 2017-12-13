@@ -344,6 +344,12 @@ CREATE TABLE `t_project` (
   `detail` varchar(500) DEFAULT NULL COMMENT '描述',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `cpu_quota` int(11) DEFAULT NULL COMMENT 'cpu配额',
+  `memory_quota` int(11) DEFAULT NULL COMMENT '内存配额',
+  `disk_quota` int(11) DEFAULT NULL COMMENT '磁盘配额',
+  `cpu_used` int(11) DEFAULT NULL COMMENT '已使用cpu',
+  `memory_used` int(11) DEFAULT NULL COMMENT '已使用内存',
+  `disk_used` int(11) DEFAULT NULL COMMENT '已使用磁盘',
   INDEX idx_level(`level`),
   INDEX idx_parent_idd(`parent_id`),
   INDEX idx_DEPARTMENT_ID(`DEPARTMENT_ID`),
@@ -486,6 +492,12 @@ CREATE TABLE `oa_department` (
   `TEL` varchar(50) DEFAULT NULL COMMENT '电话',
   `FUNCTIONS` varchar(255) DEFAULT NULL COMMENT '部门职能',
   `ADDRESS` varchar(255) DEFAULT NULL COMMENT '地址',
+  `cpu_quota` int(11) DEFAULT NULL COMMENT 'cpu配额',
+  `memory_quota` int(11) DEFAULT NULL COMMENT '内存配额',
+  `disk_quota` int(11) DEFAULT NULL COMMENT '磁盘配额',
+  `cpu_used` int(11) DEFAULT NULL COMMENT '已使用cpu',
+  `memory_used` int(11) DEFAULT NULL COMMENT '已使用内存',
+  `disk_used` int(11) DEFAULT NULL COMMENT '已使用磁盘',
   PRIMARY KEY (`DEPARTMENT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='组织机构';
 
@@ -577,5 +589,41 @@ CREATE TABLE `sys_dictionaries` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据字典';
 
 
+
+-- ----------------------------
+-- 计算方案
+-- ----------------------------
+DROP TABLE IF EXISTS `t_numprocedure`;
+CREATE TABLE `t_numprocedure` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL COMMENT '计算方案名称',
+  `showname` varchar(1000) NOT NULL COMMENT '展示名称',
+  `cpu` varchar(20) NOT NULL COMMENT 'cpu',
+  `memory` varchar(2000) DEFAULT NULL COMMENT '内存',
+  `isRecommand` varchar(40) NOT NULL COMMENT '是否为推荐配置',
+  `USERNAME` varchar(20) NOT NULL COMMENT '创建人',
+  `ordernum` int(11) NOT NULL COMMENT '排序值',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  INDEX idx_username(`USERNAME`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计算方案'; 
+
+-- ----------------------------
+-- 虚拟机命名规则
+-- ----------------------------
+DROP TABLE IF EXISTS `t_virtualmachine_namerule`;
+CREATE TABLE `t_virtualmachine_namerule` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `name` varchar(20) NOT NULL COMMENT '规则名称',
+  `prefix` varchar(30) DEFAULT NULL COMMENT '前缀',
+  `suffix` varchar(30) DEFAULT NULL COMMENT '后缀',
+  `isDefault` tinyint unsigned NOT NULL COMMENT '是否是默认配置',
+  `USERNAME` varchar(20) NOT NULL COMMENT '创建者',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='虚拟机命名规则'; 
 
 

@@ -21,10 +21,10 @@ import com.cmp.service.CmpCommonService;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
-import com.cmp.service.EnvironmentService;
 import com.cmp.service.MediumService;
 import com.cmp.service.MirrorService;
 import com.cmp.service.ProjectService;
+import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOrder;
 import com.cmp.util.StringUtil;
@@ -84,10 +84,9 @@ public class AppMgrController extends BaseController {
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
 		mv.addObject("cmpOrder", StringUtils.isBlank(orderNo)?null:cmpOrderService.getOrderDtl(orderNo));//清单详细信息
-		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList();//购物车列表查询
-		mv.addObject("shoppingCartNum", shoppingCartList!=null?shoppingCartList.size():0);//购物车列表大小
-		List<CmpOrder> buyHisList=cmpOrderService.getBuyHisList();//已购历史列表查询
-		mv.addObject("buyHisNum", buyHisList!=null?buyHisList.size():0);//已购历史列表大小
+		String applyUserId=getUserId();//申请者
+		mv.addObject("shoppingCartNum", cmpOrderService.getShoppingCartNum(applyUserId));//购物车列表大小
+		mv.addObject("buyHisNum", cmpOrderService.getBuyHisNum(applyUserId));//已购历史列表大小
 		mv.setViewName("appmgr/resapp_qry_input");
 		return mv;
 	}
@@ -111,7 +110,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
-		mv.addObject("pckgList", cmpOrderService.getPckgList());//套餐列表查询
+		mv.addObject("pckgList", cmpOrderService.getPckgList(getUserId()));//套餐列表查询
 		mv.setViewName("appmgr/resapp_pckg_input");
 		return mv;
 	}
@@ -119,7 +118,7 @@ public class AppMgrController extends BaseController {
 	//购物车列表查询
 	@RequestMapping(value="/getShoppingCartList")
 	public ModelAndView getShoppingCartList() throws Exception{
-		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList();//购物车列表查询
+		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList(getUserId());//购物车列表查询
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("shoppingCartList", shoppingCartList);//软件版本列表
 		mv.addObject("shoppingCartNum", shoppingCartList!=null?shoppingCartList.size():0);//软件版本列表大小
@@ -130,7 +129,7 @@ public class AppMgrController extends BaseController {
 	//已购历史列表查询
 	@RequestMapping(value="/getBuyHisList")
 	public ModelAndView getBuyHisList() throws Exception{
-		List<CmpOrder> buyHisList=cmpOrderService.getBuyHisList();//已购历史列表查询
+		List<CmpOrder> buyHisList=cmpOrderService.getBuyHisList(getUserId());//已购历史列表查询
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("buyHisList", buyHisList);//已购历史列表
 		mv.addObject("buyHisNum", buyHisList!=null?buyHisList.size():0);//已购历史列表大小

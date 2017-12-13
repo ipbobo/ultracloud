@@ -32,6 +32,22 @@ public class ProjectServiceImpl implements ProjectService {
 	public void edit(PageData pd) throws Exception {
 		dao.update("ProjectMapper.edit", pd);
 	}
+	
+	/**修改配额
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editQuota(PageData pd)throws Exception {
+		dao.update("ProjectMapper.editQuota", pd);
+	}
+	
+	/**修改已使用配额
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editUsedQuota(PageData pd)throws Exception {
+		dao.update("ProjectMapper.editUsedQuota", pd);
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {

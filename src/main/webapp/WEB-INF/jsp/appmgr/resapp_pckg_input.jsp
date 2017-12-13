@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="t" uri="/t-tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -99,6 +100,24 @@ function choosePckg(jsonStr){
 	$("#tcvirNum").val(jsonObj.virNum);
 	addPckgDiskRow(jsonObj.diskType, jsonObj.diskSize, jsonObj.diskEncrypt);//新增套餐磁盘行
 	addPckgSoftRow(jsonObj.softCode, jsonObj.softParam);//新增套餐软件安装行
+	getCurrConf(jsonObj);//获取当前配置
+}
+
+//获取当前配置
+function getCurrConf(jsonObj){
+	$("#tcresTypeLabel").html(jsonObj.resTypeName);
+	$("#tcspecLabel").html(jsonObj.cpu+"&nbsp;核&nbsp;"+jsonObj.memory+"&nbsp;GB");
+	$("#tcimgLabel").html(jsonObj.osTypeName+"&nbsp;"+jsonObj.osBitNumName);
+	var tcdiskTypeLabel="";
+	var diskTypeNames=jsonObj.diskTypeName.split(",");
+	var diskSizes=jsonObj.diskSize.split(",");
+	for (var i=0;i<diskTypeNames.length;i++){
+		tcdiskTypeLabel+=diskTypeNames[i]+"&nbsp;(&nbsp;"+diskSizes[i]+"&nbsp;GB)<br>";
+	}
+	
+	$("#tcdiskTypeLabel").html(tcdiskTypeLabel);
+	$("#tcvirNumLabel").html(jsonObj.virNum+"&nbsp;台");
+	$("#tcexpireDateLabel").html(jsonObj.expireDate);
 }
 </script>
 </head>
@@ -159,7 +178,7 @@ function choosePckg(jsonStr){
 				<c:forEach items="${pckgList}" var="var" varStatus="st">
 				<tr>
 					<td align="left" style="width: 120px;padding:10px;border-right:1px solid #cccccc;border-bottom:1px solid #cccccc;">
-						<span style="float: left;"><input type="radio" name="tcName" id="tctableId" onclick='choosePckg("{\"id\":\"${var.orderNo}\",\"envCode\":\"${var.envCode}\",\"projectCode\":\"${var.projectCode}\",\"resType\":\"${var.resType}\",\"virName\":\"${var.virName}\",\"cpu\":\"${var.cpu}\",\"memory\":\"${var.memory}\",\"osType\":\"${var.osType}\",\"osBitNum\":\"${var.osBitNum}\",\"imgCode\":\"${var.imgCode}\",\"imgUserName\":\"${var.imgUserName}\",\"imgUserPass\":\"${var.imgUserPass}\",\"imgPath\":\"${var.imgPath}\",\"diskType\":\"${var.diskType}\",\"diskSize\":\"${var.diskSize}\",\"diskEncrypt\":\"${var.diskEncrypt}\",\"softCode\":\"${var.softCode}\",\"softParam\":\"${var.softParam}\",\"expireDate\":\"${var.expireDate}\",\"virNum\":\"${var.virNum}\"}	")'/>${var.pckgName}</span>
+						<span style="float: left;"><input type="radio" name="tcName" id="tctableId" onclick='choosePckg("{\"id\":\"${var.orderNo}\",\"envCode\":\"${var.envCode}\",\"projectCode\":\"${var.projectCode}\",\"resType\":\"${var.resType}\",\"resTypeName\":\"${var.resTypeName}\",\"virName\":\"${var.virName}\",\"cpu\":\"${var.cpu}\",\"memory\":\"${var.memory}\",\"osType\":\"${var.osType}\",\"osTypeName\":\"${var.osTypeName}\",\"osBitNum\":\"${var.osBitNum}\",\"osBitNumName\":\"${var.osBitNumName}\",\"imgCode\":\"${var.imgCode}\",\"imgUserName\":\"${var.imgUserName}\",\"imgUserPass\":\"${var.imgUserPass}\",\"imgPath\":\"${var.imgPath}\",\"diskType\":\"${var.diskType}\",\"diskTypeName\":\"${var.diskTypeName}\",\"diskSize\":\"${var.diskSize}\",\"diskEncrypt\":\"${var.diskEncrypt}\",\"softCode\":\"${var.softCode}\",\"softParam\":\"${var.softParam}\",\"expireDate\":\"${var.expireDate}\",\"virNum\":\"${var.virNum}\"}	")'/>${var.pckgName}</span>
 						<div style="float: left;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delPckg(this, '${var.orderNo}', '${var.pckgName}')" class="img_close"></div>
 					</td>
 					<td style="border-bottom:1px solid #cccccc;">
@@ -173,12 +192,16 @@ function choosePckg(jsonStr){
 							<td align="left" style="width: 180px;">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
 						</tr>
 						<tr>
-							<td align="right" style="width: 120px;">数据盘：</td>
-							<td align="left" style="width: 180px;">${var.diskType}&nbsp;(&nbsp;${var.diskSize}&nbsp;GB)</td>
-							<td align="right" style="width: 120px;">购买量：</td>
-							<td align="left" style="width: 180px;">${var.virNum}&nbsp;台</td>
-							<td align="right" style="width: 120px;">到期时间：</td>
-							<td align="left" style="width: 180px;">${var.expireDate}</td>
+							<td align="right" valign="top" style="width: 120px;">数据盘：</td>
+							<td align="left" valign="top" style="width: 180px;">
+								<t:list key="${var.diskTypeName}" val="${var.diskSize}" name="vars">
+									${vars.dictCode}&nbsp;(&nbsp;${vars.dictValue}&nbsp;GB)<br>
+								</t:list>
+							</td>
+							<td align="right" valign="top" style="width: 120px;">购买量：</td>
+							<td align="left" valign="top" style="width: 180px;">${var.virNum}&nbsp;台</td>
+							<td align="right" valign="top" style="width: 120px;">到期时间：</td>
+							<td align="left" valign="top" style="width: 180px;">${var.expireDate}</td>
 						</tr>
 						</table>
 					</td>
@@ -393,21 +416,21 @@ function choosePckg(jsonStr){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
-		<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
-		<td id="resTypeLabel" align="left" style="width: 180px;padding:10px;"></td>
-		<td align="right" style="width: 120px;padding:10px;">实例规格：</td>
-		<td id="specLabel" align="left" style="width: 180px;padding:10px;"></td>
-		<td align="right" style="width: 120px;padding:10px;">镜像：</td>
-		<td id="imgLabel" align="left" style="width: 180px;padding:10px;" colspan="2"></td>
+		<td align="left" valign="top" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
+		<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>
+		<td id="tcresTypeLabel" align="left" valign="top" style="width: 180px;padding:10px;"></td>
+		<td align="right" valign="top" style="width: 120px;padding:10px;">实例规格：</td>
+		<td id="tcspecLabel" align="left" valign="top" style="width: 180px;padding:10px;"></td>
+		<td align="right" valign="top" style="width: 120px;padding:10px;">镜像：</td>
+		<td id="tcimgLabel" align="left" valign="top" style="width: 180px;padding:10px;" colspan="2"></td>
 	</tr>
 	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding:10px;">数据盘：</td>
-		<td id="diskTypeLabel" align="left" style="width: 180px;padding:10px;"> </td>
-		<td align="right" style="width: 120px;padding:10px;">购买量：</td>
-		<td id="virNumLabel" align="left" style="width: 180px;padding:10px;"></td>
-		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
-		<td id="expireDateLabel" align="left" style="width: 180px;padding:10px;" colspan="2"></td>
+		<td align="right" valign="top" style="width: 120px;padding:10px;">数据盘：</td>
+		<td id="tcdiskTypeLabel" align="left" valign="top" style="width: 180px;padding:10px;"> </td>
+		<td align="right" valign="top" style="width: 120px;padding:10px;">购买量：</td>
+		<td id="tcvirNumLabel" align="left" valign="top" style="width: 180px;padding:10px;"></td>
+		<td align="right" valign="top" style="width: 120px;padding:10px;">到期时间：</td>
+		<td id="tcexpireDateLabel" align="left" valign="top" style="width: 180px;padding:10px;" colspan="2"></td>
 	</tr>
 </table>
 </form>

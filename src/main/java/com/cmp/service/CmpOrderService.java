@@ -18,14 +18,15 @@ public class CmpOrderService {
 	private CmpDictService cmpDictService;
 
 	//清单详细信息查询
+	@SuppressWarnings("unchecked")
 	public List<CmpOrder> getOrderDtl(String orderNo) throws Exception {
 		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getOrderDtl", orderNo);
 	}
 	
 	//套餐列表查询
 	@SuppressWarnings("unchecked")
-	public List<CmpOrder> getPckgList() throws Exception {
-		List<CmpOrder> list=(List<CmpOrder>)dao.findForList("CmpOrderMapper.getPckgList", null);
+	public List<CmpOrder> getPckgList(String applyUserId) throws Exception {
+		List<CmpOrder> list=(List<CmpOrder>)dao.findForList("CmpOrderMapper.getPckgList", applyUserId);
 		if(list!=null && !list.isEmpty()){
 			for(CmpOrder co: list){
 				Map<String, String> diskTypeMap=cmpDictService.getCmpDictMap("disk_type");
@@ -43,14 +44,24 @@ public class CmpOrderService {
 	
 	//购物车列表查询
 	@SuppressWarnings("unchecked")
-	public List<CmpOrder> getShoppingCartList() throws Exception {
-		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getShoppingCartList", null);
+	public List<CmpOrder> getShoppingCartList(String applyUserId) throws Exception {
+		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getShoppingCartList", applyUserId);
+	}
+	
+	//购物车列表总数查询
+	public Long getShoppingCartNum(String applyUserId) throws Exception {
+		return (Long)dao.findForObject("CmpOrderMapper.getShoppingCartNum", applyUserId);
 	}
 	
 	//已购历史列表查询
 	@SuppressWarnings("unchecked")
-	public List<CmpOrder> getBuyHisList() throws Exception {
-		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getBuyHisList", null);
+	public List<CmpOrder> getBuyHisList(String applyUserId) throws Exception {
+		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getBuyHisList", applyUserId);
+	}
+	
+	//已购历史列表总数查询
+	public Long getBuyHisNum(String applyUserId) throws Exception {
+		return (Long)dao.findForObject("CmpOrderMapper.getBuyHisNum", applyUserId);
 	}
 		
 	//新增清单或套餐

@@ -1,6 +1,7 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="t" uri="/t-tags"%>
 <% String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/"; %>
 <!DOCTYPE html>
 <html>
@@ -62,6 +63,7 @@ function setRecommendType(obj, fieldName, fieldValue){
 	var memoryCode=fieldValue.substring(1);
 	setFieldValue(document.getElementById("cpuId"+cpuCode), 'cpu', cpuCode);
 	setFieldValue(document.getElementById("memoryId"+memoryCode), 'memory', memoryCode);
+	specFunc(cpuCode, memoryCode);//实例规格改变时触发
 }
 
 //设置软件参数
@@ -80,6 +82,8 @@ function checkExpireDate(isChk){
 	}else{//非复选框选择
 		$("#expireDateChk").prop("checked", false);//不选择复选框
 	}
+	
+	expireDateFunc();//到期时间改变时触发
 }
 
 //新增磁盘行
@@ -90,8 +94,8 @@ function addDiskRow(){
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\">"+$("#diskType").html()+"</select></td>"
-	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\"/></td>"
+    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" onchange=\"diskTypeFunc()\">"+$("#diskType").html()+"</select></td>"
+	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\" onchange=\"diskTypeFunc()\"/></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
 	    +"<td align=\"right\" style=\"padding-top:10px;\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
     $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
@@ -154,6 +158,18 @@ function checkData(btnId){
 	if($("#virName").val()==""){
 		$("#virName").tips({side:3, msg:'虚拟机名称不能为空', bg:'#AE81FF', time:2});
 		$("#virName").focus();
+		return false;
+	}
+	
+	if($("#osType").val()==""){
+		$("#osType").tips({side:3, msg:'请选择操作系统', bg:'#AE81FF', time:2});
+		$("#osType").focus();
+		return false;
+	}
+	
+	if($("#osBitNum").val()==""){
+		$("#osBitNum").tips({side:3, msg:'请选择位数', bg:'#AE81FF', time:2});
+		$("#osBitNum").focus();
 		return false;
 	}
 	
@@ -355,6 +371,10 @@ function tabFunc(tabId){
 //点击遮罩层
 function maskLayerClick(id){
 	if(id=="shoppingCart"){//购物车
+		if(!$('#shoppingCartId').hasClass("open") && $("#shoppingCartNum").html()=='0'){
+			return;
+		}
+		
 		if($('#buyHisId').hasClass("open")){
 			maskLayerClick("buyHis");//点击遮罩层
 		}
@@ -371,6 +391,10 @@ function maskLayerClick(id){
 			$("#getShoppingCartList").load("getShoppingCartList.do");
 	  	}
 	}else if(id=="buyHis"){//已购历史
+		if(!$('#buyHisId').hasClass("open") && $("#buyHisNum").html()=='0'){
+			return;
+		}
+		
 		if($('#shoppingCartId').hasClass("open")){
 			maskLayerClick("shoppingCart");//点击遮罩层
 		}
@@ -388,6 +412,82 @@ function maskLayerClick(id){
 	}else{//遮罩层
 		maskLayerClick($('#shoppingCartId').hasClass("open")?"shoppingCart":"buyHis");//点击遮罩层
 	}
+}
+
+//资源类型改变时触发
+function resTypeFunc(val){
+	$("#resTypeLabel").html(val);
+}
+
+//实例规格改变时触发
+function specFunc(cpuVal, memoryVal){
+	cpuVal=(cpuVal==""?$("#cpu").val():cpuVal);//CPU                                 
+	memoryVal=(memoryVal==""?$("#memory").val():memoryVal);//内存
+	$("#specLabel").html(cpuVal+"&nbsp;核&nbsp;"+memoryVal+"&nbsp;GB");
+}
+
+//镜像改变时触发
+function imgFunc(){
+	var osTypeName="";
+	if($("#osType").val()!=''){
+		osTypeName=$("#osType").find("option:selected").text();
+	}
+	
+	var osBitNumName="";
+	if($("#osBitNum").val()!='' && $("#osBitNum").val()!=''){
+		osBitNumName=$("#osBitNum").find("option:selected").text();
+	}
+	
+	$("#imgLabel").html(osTypeName+"&nbsp;"+osBitNumName);
+}
+
+//数据盘改变时触发
+function diskTypeFunc(){
+	var diskTypeArr=new Array();
+	$("select[name='diskType']").each(function() {
+		var diskTypeName="";
+		if($(this).val()!=''){
+			diskTypeName=$(this).find("option:selected").text();
+		}
+		
+		diskTypeArr.push(diskTypeName);
+	});
+	var diskSizeArr=new Array();
+	$("input[name='diskSize']").each(function() {
+		diskSizeArr.push($(this).val());
+	});
+	
+	var diskTypeLabel="";
+	for (var i=0;i<diskTypeArr.length;i++){
+		diskTypeLabel+=diskTypeArr[i]+"&nbsp;(&nbsp;"+diskSizeArr[i]+"&nbsp;GB)<br>";
+	}
+	
+	$("#diskTypeLabel").html(diskTypeLabel);
+}
+
+//数量改变时触发
+function virNumFunc(operType){
+	var virNum=$("#virNum").val();
+	if(isNaN(virNum)){
+		virNum=virNum.match(new RegExp("^\\d+"));
+		if(virNum=='') virNum=1;
+	}
+	
+	virNum=virNum*1;
+	if(operType=='+'){
+		virNum++;
+	}else if(operType=='-'){
+		virNum--;
+	}
+	
+	if(virNum<1) virNum=1;
+	if(virNum>1000) virNum=1000;
+	$("#virNumLabel").html(virNum+"&nbsp;台");
+}
+
+//到期时间改变时触发
+function expireDateFunc(){
+	$("#expireDateLabel").html($("#expireDate").val());
 }
 
 //必须加<!DOCTYPE html>
@@ -501,7 +601,7 @@ $(window).scroll(function() {
 				<ul id="resTypeId" class="ullitab list-inline">
 					<c:if test="${not empty resTypeList}">
 					<c:forEach items="${resTypeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'resType', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li onclick="setFieldValue(this, 'resType', '${var.dictCode}');resTypeFunc('${var.dictValue}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>
@@ -532,7 +632,7 @@ $(window).scroll(function() {
 				<ul id="cpuId" class="ullitab list-inline">
 					<c:if test="${not empty cpuList}">
 					<c:forEach items="${cpuList}" var="var" varStatus="st">
-					<li id="cpuId${var.dictCode}" onclick="setFieldValue(this, 'cpu', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li id="cpuId${var.dictCode}" onclick="setFieldValue(this, 'cpu', '${var.dictCode}');specFunc('${var.dictCode}', '');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>
@@ -544,7 +644,7 @@ $(window).scroll(function() {
 				<ul id="memoryId" class="ullitab list-inline">
 					<c:if test="${not empty memoryList}">
 					<c:forEach items="${memoryList}" var="var" varStatus="st">
-					<li id="memoryId${var.dictCode}" onclick="setFieldValue(this, 'memory', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li id="memoryId${var.dictCode}" onclick="setFieldValue(this, 'memory', '${var.dictCode}');specFunc('', '${var.dictCode}');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>
@@ -555,19 +655,19 @@ $(window).scroll(function() {
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
 			<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
-				<select class="chosen-select form-control" name="osType" id="osType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;">
+				<select class="chosen-select form-control" name="osType" id="osType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;" onchange="imgFunc()">
 				<option value="">请选择</option>
 				<c:forEach items="${osTypeList}" var="var">
-					<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
+					<option value="${var.dictCode}">${var.dictValue}</option>
 				</c:forEach>
 			  	</select>
 			</td>
 			<td align="right" style="width: 120px;padding:10px;">位数：</td>
 			<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
-				<select class="chosen-select form-control" name="osBitNum" id="osBitNum" data-placeholder="请选择位数" style="vertical-align:top;width: 100%;">
+				<select class="chosen-select form-control" name="osBitNum" id="osBitNum" data-placeholder="请选择位数" style="vertical-align:top;width: 100%;" onchange="imgFunc()">
 				<option value="">请选择</option>
 				<c:forEach items="${osBitNumList}" var="var">
-					<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
+					<option value="${var.dictCode}">${var.dictValue}</option>
 				</c:forEach>
 			  	</select>
 			</td>
@@ -607,7 +707,7 @@ $(window).scroll(function() {
 				<table id="diskTableId">
 					<tr id="diskTrId">
 						<td align="left" style="width: 120px;padding-right:10px;">
-							<select class="chosen-select form-control" name="diskType" id="diskType" data-placeholder="请选择磁盘类型" style="vertical-align:top;width: 120px;">
+							<select class="chosen-select form-control" name="diskType" id="diskType" data-placeholder="请选择磁盘类型" style="vertical-align:top;width: 120px;" onchange="diskTypeFunc()">
 							<option value="">请选择</option>
 							<c:forEach items="${diskTypeList}" var="var">
 								<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
@@ -615,7 +715,7 @@ $(window).scroll(function() {
 						  	</select>
 						</td>
 						<td align="left" style="width: 120px;">
-							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')"/>
+							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')" onchange="diskTypeFunc()"/>
 						</td>
 						<td align="left" style="width: 20px;">GB</td>
 						<td align="right" style="padding-right:13px;">
@@ -659,10 +759,10 @@ $(window).scroll(function() {
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="width: 120px;padding:10px;" colspan="6">
 				<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
-				    <input type="text" id="virNum" name="virNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1"> 
+				    <input type="text" id="virNum" name="virNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1" onchange="virNumFunc()"> 
 				    <div class="input-group-addon"> 
-				        <a href="javascript:void();" class="spin-up" data-spin="up"><i class="icon-sort-up"></i></a> 
-				        <a href="javascript:void();" class="spin-down" data-spin="down"><i class="icon-sort-down"></i></a> 
+				        <a href="javascript:void();" onclick="virNumFunc('+')" class="spin-up" data-spin="up"><i class="icon-sort-up"></i></a> 
+				        <a href="javascript:void();" onclick="virNumFunc('-')" class="spin-down" data-spin="down"><i class="icon-sort-down"></i></a> 
 				    </div> 
 				</div>
 			</td>
@@ -672,27 +772,27 @@ $(window).scroll(function() {
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;到期时间</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="padding:10px;" colspan="6">
-				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onclick="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
+				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onclick="checkExpireDate(false)" onchange="expireDateFunc()" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
 			</td>
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
-			<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
-			<td id="resTypeLabel" align="left" style="width: 180px;padding:10px;"></td>
-			<td align="right" style="width: 120px;padding:10px;">实例规格：</td>
-			<td id="specLabel" align="left" style="width: 180px;padding:10px;"></td>
-			<td align="right" style="width: 120px;padding:10px;">镜像：</td>
-			<td id="imgLabel" align="left" style="width: 180px;padding:10px;" colspan="2"></td>
+			<td align="left" valign="top" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
+			<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>
+			<td id="resTypeLabel" align="left" valign="top" style="width: 180px;padding:10px;">云主机</td>
+			<td align="right" valign="top" style="width: 120px;padding:10px;">实例规格：</td>
+			<td id="specLabel" align="left" valign="top" style="width: 180px;padding:10px;">1&nbsp;核&nbsp;1&nbsp;GB</td>
+			<td align="right" valign="top" style="width: 120px;padding:10px;">镜像：</td>
+			<td id="imgLabel" align="left" valign="top" style="width: 180px;padding:10px;" colspan="2"></td>
 		</tr>
 		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding:10px;">数据盘：</td>
-			<td id="diskTypeLabel" align="left" style="width: 180px;padding:10px;"> </td>
-			<td align="right" style="width: 120px;padding:10px;">购买量：</td>
-			<td id="virNumLabel" align="left" style="width: 180px;padding:10px;"></td>
-			<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
-			<td id="expireDateLabel" align="left" style="width: 180px;padding:10px;" colspan="2"></td>
+			<td align="right" valign="top" style="width: 120px;padding:10px;">数据盘：</td>
+			<td id="diskTypeLabel" align="left" valign="top" style="width: 180px;padding:10px;">高效云盘&nbsp;(&nbsp;20&nbsp;GB)</td>
+			<td align="right" valign="top" style="width: 120px;padding:10px;">购买量：</td>
+			<td id="virNumLabel" align="left" valign="top" style="width: 180px;padding:10px;">1&nbsp;台</td>
+			<td align="right" valign="top" style="width: 120px;padding:10px;">到期时间：</td>
+			<td id="expireDateLabel" align="left" valign="top" style="width: 180px;padding:10px;" colspan="2"></td>
 		</tr>
 	</table>
 	</form>

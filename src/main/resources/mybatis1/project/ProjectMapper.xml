@@ -41,7 +41,13 @@
 		DEPARTMENT_ID,
 		USERNAME,
 		usergroup_id,
-		detail
+		detail,
+		cpu_quota,
+		memory_quota,
+		disk_quota,
+		cpu_used,
+		memory_used,
+		disk_used
 	</sql>
 	
 	<sql id="Field_time">
@@ -65,7 +71,13 @@
 		#{DEPARTMENT_ID},
 		#{USERNAME},
 		#{usergroup_id},
-		#{detail}
+		#{detail},
+		#{cpu_quota},
+		#{memory_quota},
+		#{disk_quota},
+		#{cpu_used},
+		#{memory_used},
+		#{disk_used}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -138,6 +150,30 @@
 		id = #{id}
 	</update>
 	
+	<!-- 修改配额 -->
+	<update id="editQuota" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			cpu_quota = #{cpu_quota},
+			memory_quota = #{memory_quota},
+			disk_quota = #{disk_quota}
+		where 
+		id = #{id}
+	</update>
+	
+	<!-- 修改已使用配额 -->
+	<update id="editUsedQuota" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			cpu_used = #{cpu_used},
+			memory_used = #{memory_used},
+			disk_used = #{disk_used}
+		where 
+		id = #{id}
+	</update>
+	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select p.id,
@@ -152,7 +188,13 @@
                p.gmt_create,
                p.gmt_modified,
 			   d.NAME as DEPARTMENT_NAME, 
-			   ug.name as usergroup_name
+			   ug.name as usergroup_name,
+			   p.cpu_quota,
+			   p.memory_quota,
+			   p.disk_quota,
+			   p.cpu_used,
+			   p.memory_used,
+			   p.disk_used
 		from <include refid="tableName"></include> p, <include refid="departmentTableName"></include> d, <include refid="usergrouptableName"></include> ug
 		where p.DEPARTMENT_ID = d.DEPARTMENT_ID
 		and   p.usergroup_id = ug.id
