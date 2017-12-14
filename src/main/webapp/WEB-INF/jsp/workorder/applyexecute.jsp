@@ -40,29 +40,103 @@
 
 	<div class="alert alert-info">申请工单详情</div>
 	<div>
-		<table id="simple-table"
-			class="table table-striped table-bordered table-hover"
-			style="margin-top: 5px;">
-			<thead>
-				<tr>
-					<th class="center">虚拟机名称</th>
-					<th class="center">地区代码</th>
-					<th class="center">平台</th>
-					<th class="center">部署类型</th>
-					<th class="center">操作系统类型</th>
-				</tr>
-			</thead>
+					<table id="simple-table"
+								class="table table-striped table-bordered table-hover"
+								style="margin-top: 5px;">
+								<thead>
+									<tr>
+										<th class="center">实例</th>
+										<th class="center">类型</th>
+										<th class="center">版本</th>
+										<th class="center">CPU/内存</th>
+										<th class="center">存储</th>
+										<th class="center">访问地址</th>
+										<th class="center">端口</th>
+										<th class="center">操作</th>
+									</tr>
+								</thead>
 
-			<tbody>
-				<tr>
-					<td class='center'>${orderInfo.virName}</td>
-					<td class='center'>${orderInfo.areaCode}</td>
-					<td class='center'>${orderInfo.platType}</td>
-					<td class='center'>${orderInfo.deployType}</td>
-					<td class='center'>${orderInfo.osType}</td>
-				</tr>
-			</tbody>
-		</table>
+								<tbody>
+												<tr>
+													<td class='center'></td>
+													<td class='center'>虚拟机</td>
+													<td class='center'>
+														${cmpCloudInfo.cpu}核/${cmpCloudInfo.memory}G
+													</td>
+													<td class='center'>${cmpCloudInfo.dataDiskInfo}</td>
+													<td class='center'></td>
+													<td class='center'></td>
+													<td class='center'></td>
+													<td class='center'>
+													<button  style="float:left;margin-left: 100px;" type="button">安装</button>
+													</td>
+													</tr>
+								</tbody>
+						</table>
+							<div class="alert alert-info">部署执行详情</div>
+							<div style="height: 150px; width: 100%"></div>
+						
+						<div class="alert alert-info">服务目录</div>
+						<div>
+						<table id="simple-table"
+								class="table table-striped table-bordered table-hover"
+								style="margin-top: 5px;">
+								<tbody>
+									<thead>
+										<tr>
+											<th class='center'>云资源申请总览</th>
+										</tr>
+									</thead>
+									
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">申请云主机数量</td>
+										<td class='center'>${cloudInfoCollect.vmCount}台</td>
+										<td class='center' style="background-color: rgb(244,244,244);">cpu/内存总量</td>
+										<td class='center'>${cloudInfoCollect.cpuTotal}核/${cloudInfoCollect.memoryTotal}G</td>
+										<td class='center' style="background-color: rgb(244,244,244);">数据盘总量</td>
+										<td class='center'>${cloudInfoCollect.diskTotal}G</td>
+									</tr>
+								</tbody>
+						</table>
+						<h2></h2>
+						<table id="simple-table"
+								class="table table-striped table-bordered table-hover"
+								style="margin-top: 5px;">
+								<tbody>
+									<thead>
+										<tr>
+											<th class='center'>申请详情</th>
+										</tr>
+									</thead>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">操作系统</td>
+										<td class='center'>${cmpCloudInfo.osTypeName}</td>
+										<td class='center' style="background-color: rgb(244,244,244);">系统盘/数据盘</td>
+										<td class='center'>系统盘${cmpCloudInfo.sysDiskSize}G; 数据盘${cmpCloudInfo.dataDiskSize}G</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">CPU/内存</td>
+										<td class='center'>${cmpCloudInfo.cpu}核/${cmpCloudInfo.memory}G</td>
+										<td class='center' style="background-color: rgb(244,244,244);">安装状态</td>
+										<td class='center'>${cmpCloudInfo.osStatus}</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">软件安装</td>
+										<td class='center'>${cmpCloudInfo.softStatus}</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">数据盘信息</td>
+										<td class='center'>${cmpCloudInfo.dataDiskInfo}</td>
+										<td class='center' style="background-color: rgb(244,244,244);">使用期限</td>
+										<td class='center'>${cmpCloudInfo.expireDate}</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">电子钥匙</td>
+										<td class='center'></td>
+									</tr>
+								</tbody>
+						</table>
+			<div class="alert alert-info">后续任务处理</div>
 		<table>
 			<tr>
 			<td align="right" style="width: 120px;padding:10px;">批复：</td>
@@ -73,22 +147,25 @@
 		</table>
 		<form class="form-horizontal" id="checkform" name="checkform"
 			role="form">
-			<div class="col-md-offset-3 col-md-9">
+		<table style="margin-left: 30%">
+			<tr>
+					<td>
 				<button class="btn btn-info" id="OK" name="OK" type="button"
 					onclick="doExecute('${workorder.appNo}');">
 					<i class="ace-icon fa fa-check bigger-110"></i> 确定执行
 				</button>
-
-				&nbsp; &nbsp; &nbsp;
+				</td>
+					<td style="padding-left: 20px">
 				<button class="btn" id="cancel" name="cancel" type="reset"
 					onclick="top.Dialog.close();">
 					<i class="ace-icon fa fa-undo bigger-110"></i> 取消
 				</button>
-			</div>
+				</td>
+				</tr>
+		</table>
 		</form>
 	</div>
-	<div class="alert alert-info">部署执行详情</div>
-	<div style="height: 150px; width: 100%"></div>
+
 
 	<div class="alert alert-info">关联任务</div>
 	<div>
