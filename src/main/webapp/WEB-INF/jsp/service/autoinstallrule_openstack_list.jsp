@@ -26,7 +26,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							
-						<form action="autoinstallrule/listVmware.do" method="post" name="Form" id="Form">
+						<form action="autoinstallrule/listOpenStack.do" method="post" name="Form" id="Form">
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
@@ -61,6 +61,11 @@
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
+													</a>
+													</c:if>
+													<c:if test="${QX.del == 1 }">
+													<a class="btn btn-xs btn-danger" onclick="del('${var.id}');">
+														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
 													</a>
 													</c:if>
 												</div>
@@ -229,7 +234,66 @@
 		 };
 		 diag.show();
 	}
+	
+	//批量操作
+	function makeAll(msg){
+		bootbox.confirm(msg, function(result) {
+			if(result) {
+				var str = '';
+				for(var i=0;i < document.getElementsByName('ids').length;i++){
+				  if(document.getElementsByName('ids')[i].checked){
+				  	if(str=='') str += document.getElementsByName('ids')[i].value;
+				  	else str += ',' + document.getElementsByName('ids')[i].value;
+				  }
+				}
+				if(str==''){
+					bootbox.dialog({
+						message: "<span class='bigger-110'>您没有选择任何内容!</span>",
+						buttons: 			
+						{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
+					});
+					$("#zcheckbox").tips({
+						side:1,
+			            msg:'点这里全选',
+			            bg:'#AE81FF',
+			            time:8
+			        });
+					return;
+				}else{
+					if(msg == '确定要删除选中的数据吗?'){
+						top.jzts();
+						$.ajax({
+							type: "POST",
+							url: '<%=basePath%>autoinstallrule/deleteAll.do?tm='+new Date().getTime(),
+					    	data: {DATA_IDS:str},
+							dataType:'json',
+							//beforeSend: validateData,
+							cache: false,
+							success: function(data){
+								 $.each(data.list, function(i, list){
+										nextPage(${page.currentPage});
+								 });
+							}
+						});
+					}
+				}
+			}
+		});
+	}
 
+	//删除
+	function del(Id){
+		console.log(Id);
+		bootbox.confirm("确定要删除吗?", function(result) {
+			if(result) {
+				top.jzts();
+				var url = "<%=basePath%>autoinstallrule/delete.do?id="+Id;
+				$.get(url,function(data){
+					nextPage(${page.currentPage});
+				});
+			}
+		});
+	}
 	</script>
 
 </body>

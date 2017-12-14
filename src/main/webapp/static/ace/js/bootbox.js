@@ -323,7 +323,7 @@
   exports.confirm = function() {
     var options;
 
-    options = mergeDialogOptions("confirm", ["cancel", "confirm"], ["message", "callback"], arguments);
+    options = mergeDialogOptions("confirm", ["confirm", "cancel"], ["message", "callback"], arguments);
 
     /**
      * overrides; undo anything the user tried to set they shouldn't have
@@ -366,14 +366,14 @@
     // just because of 'value' and 'inputType' - can we refactor?
     defaults = {
       className: "bootbox-prompt",
-      buttons: createLabels("cancel", "confirm"),
+      buttons: createLabels("confirm", "cancel"),
       value: "",
       inputType: "text"
     };
 
     options = validateButtons(
       mergeArguments(defaults, arguments, ["title", "callback"]),
-      ["cancel", "confirm"]
+      ["confirm", "cancel"]
     );
 
     // capture the user's show value; we always set this to false before

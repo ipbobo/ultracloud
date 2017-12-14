@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="AutoInstallRuleMapper">
+<mapper namespace="ProductMapper">
 	
 	<!--表名 -->
 	<sql id="tableName">
-		t_autoinstall_rule
-	</sql>
-	<sql id="clusterTableName">
-		t_cluster
+		t_product
 	</sql>
 	
 	<!-- 字段 -->
@@ -17,12 +14,14 @@
 	</sql>
 	
 	<sql id="Field_main">
-		cluster_id,
+		name,
 		type,
-		num_rule,
-		storage_rule,
-		ip_rule,
-		openstack_rule,
+  		unit,
+  		price_old,
+  		price_cur,
+  		price_new,
+  		isImediate,
+  		clockTime,
 		USERNAME
 	</sql>
 	
@@ -39,12 +38,14 @@
 		
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
-		#{cluster_id},
+		#{name},
 		#{type},
-		#{num_rule},
-		#{storage_rule},
-		#{ip_rule},
-		#{openstack_rule},
+  		#{unit},
+  		#{price_old},
+  		#{price_cur},
+  		#{price_new},
+  		#{isImediate},
+  		#{clockTime},
 		#{USERNAME}
 	</sql>
 	
@@ -77,24 +78,17 @@
 		update
 		<include refid="tableName"></include>
 		set 
-			cluster_id = #{cluster_id},
-			num_rule = #{num_rule},
-			storage_rule = #{storage_rule},
-			ip_rule = #{ip_rule},
-			openstack_rule = #{openstack_rule},
+			name = #{name},
+			type = #{type},
+  			unit = #{unit},
+  			price_old = #{price_old},
+  			price_cur = #{price_cur},
+  			price_new = #{price_new},
+  			isImediate = #{isImediate},
+  			clockTime = #{clockTime},
 			USERNAME = #{USERNAME}
 		where 
 			id = #{id}
-	</update>
-	
-	<!-- 修改 -->
-	<update id="udpateDefaultData" parameterType="pd">
-		update
-		<include refid="tableName"></include>
-		set 
-			isDefault = 0
-		where 
-			id != #{id}
 	</update>
 	
 	<!-- 通过ID获取数据 -->
@@ -108,49 +102,19 @@
 	</select>
 	
 	<!-- 列表 -->
-	<select id="datalistPage" parameterType="page" resultType="pd" >
-		select  a.id,
-		a.cluster_id,
-		a.gmt_create,
-		a.gmt_modified,
-		a.ip_rule,
-		a.num_rule,
-		a.openstack_rule,
-		a.storage_rule,
-		a.type,
-		a.USERNAME,
-		c.name AS cluster_name
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
 		from 
-		<include refid="tableName"></include> a,<include refid="clusterTableName"></include> c
-		where 1 = 1
-		and a.cluster_id=c.id
-		<if test="pd.type != null and pd.type != ''"><!-- 按集群类型检索 -->
-			and a.type = #{pd.type} 
-		</if>
-		order by a.gmt_modified desc
+		<include refid="tableName"></include>
 	</select>
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select  a.id,
-		a.cluster_id,
-		a.gmt_create,
-		a.gmt_modified,
-		a.ip_rule,
-		a.num_rule,
-		a.openstack_rule,
-		a.storage_rule,
-		a.type,
-		a.USERNAME,
-		c.name AS cluster_name
+		select
+		<include refid="Field"></include>
 		from 
-		<include refid="tableName"></include> a,<include refid="clusterTableName"></include> c
-		where 1 = 1
-		and a.cluster_id=c.id
-		<if test="pd.type != null and pd.type != ''"><!-- 按集群类型检索 -->
-			and a.type = #{pd.type} 
-		</if>
-		order by a.gmt_modified desc
+		<include refid="tableName"></include>
 	</select>
 	
 	<!-- 批量删除 -->

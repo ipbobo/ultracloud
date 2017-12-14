@@ -46,9 +46,9 @@ setTimeout("top.hangge()",500);
 							</div>
 							
 							
-							<div id="main" style="width: 450px;height:400px;" class="col-xs-4 col-sm-4" ></div>
-							<div id="main2" style="width: 450px;height:400px;" class="col-xs-4 col-sm-4" ></div>
-							<div id="main3" style="width: 450px;height:400px;" class="col-xs-4 col-sm-4" ></div>
+							<div id="main" style="width: 400px;height:400px;" class="col-xs-4 col-sm-4" ></div>
+							<div id="main2" style="width: 400px;height:400px;" class="col-xs-4 col-sm-4" ></div>
+							<div id="main3" style="width: 400px;height:400px;" class="col-xs-4 col-sm-4" ></div>
 							
 							<script type="text/javascript">
 						        // 基于准备好的dom，初始化echarts实例
@@ -75,7 +75,7 @@ setTimeout("top.hangge()",500);
 						                    x : 'left',  
 						                    data:['正常','警告','危险','未知']  
 						                }, 
-						                color:['green', 'yellow','red','blueviolet'],
+						                color:['green', '#f5b031','red','blueviolet'],
 						                toolbox: {  
 						                    show : false,  
 						                    feature : {  
@@ -135,7 +135,7 @@ setTimeout("top.hangge()",500);
 						                    x : 'left',  
 						                    data:['正常','警告','危险','未知']  
 						                },  
-						                color:['green', 'yellow','red','blueviolet'],
+						                color:['green', '#f5b031','red','blueviolet'],
 						                toolbox: {  
 						                    show : false,  
 						                    feature : {  
@@ -195,7 +195,7 @@ setTimeout("top.hangge()",500);
 						                    x : 'left',  
 						                    data:['正常','警告','危险','未知']  
 						                },  
-						                color:['green', 'yellow','red','blueviolet'],
+						                color:['green', '#f5b031','red','blueviolet'],
 						                toolbox: {  
 						                    show : false,  
 						                    feature : {  

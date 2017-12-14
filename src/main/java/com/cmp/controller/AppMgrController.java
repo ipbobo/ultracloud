@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmp.activiti.service.ActivitiService;
 import com.cmp.service.CmpCommonService;
 import com.cmp.service.CmpDictService;
+import com.cmp.service.CmpLogService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.MediumService;
@@ -55,6 +56,8 @@ public class AppMgrController extends BaseController {
 	private MediumService mediumService;
 	@Resource
 	private MirrorService mirrorService;
+	@Resource
+	private CmpLogService cmpLogService;
 	
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
@@ -151,9 +154,11 @@ public class AppMgrController extends BaseController {
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
 			cmpOrder.setApplyUserId(getUserId());//获取登录用户
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
+			cmpLogService.addCmpLog("1", "加入清单", "加入清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "加入清单成功");
 		} catch (Exception e) {
 	    	logger.error("加入清单时错误："+e);
+	    	cmpLogService.addCmpLog("1", "加入清单", "加入清单时错误："+e, "-1", StringUtil.getClientIp(request));//新增日志
 	    	return StringUtil.getRetStr("-1", "加入清单时错误："+e);
 	    }
 	}
@@ -172,9 +177,11 @@ public class AppMgrController extends BaseController {
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
 			cmpOrder.setApplyUserId(getUserId());//获取登录用户
 			cmpOrderService.addPckgList(cmpOrder);//新增套餐清单
+			cmpLogService.addCmpLog("1", "加入套餐清单", "加入套餐清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "加入套餐清单成功");
 		} catch (Exception e) {
 	    	logger.error("加入套餐清单时错误："+e);
+	    	cmpLogService.addCmpLog("1", "加入套餐清单", "加入套餐清单时错误："+e, "-1", StringUtil.getClientIp(request));//新增日志
 	    	return StringUtil.getRetStr("-1", "加入套餐清单时错误："+e);
 	    }
 	}
@@ -212,9 +219,11 @@ public class AppMgrController extends BaseController {
 				}
 			}
 			
+			cmpLogService.addCmpLog("1", "提交申请", "提交申请成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "提交申请成功");
 		} catch (Exception e) {
 	    	logger.error("提交申请时错误："+e);
+	    	cmpLogService.addCmpLog("1", "提交申请", "提交申请时错误："+e, "-1", StringUtil.getClientIp(request));//新增日志
 	    	return StringUtil.getRetStr("-1", "提交申请时错误："+e);
 	    }
 	}
@@ -240,9 +249,11 @@ public class AppMgrController extends BaseController {
 			
 			cmpOrder.setApplyUserId(getUserId());//获取登录用户
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
+			cmpLogService.addCmpLog("1", "保存套餐", "保存套餐成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "保存套餐成功");
 		} catch (Exception e) {
 	    	logger.error("保存套餐时错误："+e);
+	    	cmpLogService.addCmpLog("1", "保存套餐", "保存套餐时错误："+e, "-1", StringUtil.getClientIp(request));//新增日志
 	    	return StringUtil.getRetStr("-1", "保存套餐时错误："+e);
 	    }
 	}
@@ -253,9 +264,11 @@ public class AppMgrController extends BaseController {
 	public String clearShoppingCart(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		try{
 			cmpOrderService.clearShoppingCart(getUserId());//清空购物车
+			cmpLogService.addCmpLog("3", "清空购物车", "清空购物车成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "清空购物车成功");
 		} catch (Exception e) {
 			logger.error("清空购物车时错误："+e);
+			cmpLogService.addCmpLog("3", "清空购物车", "清空购物车时错误："+e, "-1", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("-1", "清空购物车时错误："+e);
 		}
 	}
@@ -267,9 +280,11 @@ public class AppMgrController extends BaseController {
 		try{
 			String orderNo=request.getParameter("orderNo");//清单ID
 			cmpOrderService.delCmpOrder(orderNo);//删除清单
+			cmpLogService.addCmpLog("3", "删除清单", "删除清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "删除清单成功");
 		} catch (Exception e) {
 			logger.error("删除清单时错误："+e);
+			cmpLogService.addCmpLog("3", "删除清单", "删除清单时错误："+e, "-1", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("-1", "删除清单时错误："+e);
 		}
 	}
@@ -281,9 +296,11 @@ public class AppMgrController extends BaseController {
 		try{
 			String pckgId=request.getParameter("pckgId");//套餐ID
 			cmpOrderService.delPckg(pckgId);//删除套餐
+			cmpLogService.addCmpLog("3", "删除套餐", "删除套餐成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "删除套餐成功");
 		} catch (Exception e) {
 			logger.error("删除套餐时错误："+e);
+			cmpLogService.addCmpLog("3", "删除套餐", "删除套餐时错误："+e, "-1", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("-1", "删除套餐时错误："+e);
 		}
 	}
