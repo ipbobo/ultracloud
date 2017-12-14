@@ -32,7 +32,7 @@ public class CmpLogService {
 		cmpLog.setDetail(detail);//操作详细描述
 		cmpLog.setOptStatus(optStatus);//操作状态：0-成功；-1-失败
 		cmpLog.setIp(requestIp);//操作者ip
-		dao.save("CmpOrderMapper.addCmpLog", cmpLog);
+		dao.save("CmpLogMapper.addCmpLog", cmpLog);
 	}
 	
 	//删除日志
