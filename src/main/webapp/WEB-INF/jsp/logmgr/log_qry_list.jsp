@@ -113,7 +113,7 @@ function del(ids, msg){
 			<th class="center">操作详细描述</th>
 			<th class="center">操作状态</th>
 			<th class="center">操作者IP</th>
-			<th class="center">创建时间</th>
+			<th class="center" style="width: 140px;">创建时间</th>
 			<th class="center">操作</th>
 		</tr>
 	</thead>
