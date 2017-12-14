@@ -54,7 +54,7 @@ function deleteAll(msg){
 	}
 	
 	if(str==''){
-		bootbox.dialog({message: "<span class='bigger-110'>您没有选择任何内容!</span>", buttons: { "button":{ "label":"确定", "className":"btn-sm btn-success"}}});
+		bootbox.dialog({message: "<span class='bigger-110'>请先选择待删除的记录！</span>", buttons: { "button":{ "label":"确定", "className":"btn-sm btn-success"}}});
 		$("#zcheckbox").tips({side:1, msg:'点这里全选', bg:'#AE81FF', time:8});
 		return;
 	}
