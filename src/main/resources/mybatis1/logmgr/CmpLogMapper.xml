@@ -53,9 +53,31 @@
 	
 	<!-- 日志列表查询 -->
 	<select id="getLogPageList" parameterType="page" resultType="pd">
-		select <include refid="fieldName"/>
-		from  <include refid="tableName"/>
-		where username=#{pd.applyUserId}
-		order by gmt_create desc
+		select a.id, a.username, a.type operType, b.dictValue operTypeName, a.opt_object, a.opt_status, c.dictValue optStatusName, a.ip, a.detail, DATE_FORMAT(a.gmt_create, '%Y-%m-%d %H:%i:%s') gmt_create, a.gmt_modified
+		from  <include refid="tableName"/> a
+		left join cmp_dict b on b.dictType='oper_type' and b.dictCode=a.type
+		left join cmp_dict c on c.dictType='oper_type' and c.dictCode=a.opt_status
+		where a.username=#{pd.applyUserId}
+		<if test="pd.beginDate != null and pd.beginDate != ''">
+			and DATE_FORMAT(a.gmt_create, '%Y-%m-%d') >= #{pd.beginDate}
+		</if>
+		<if test="pd.endDate != null and pd.endDate != ''">
+			and #{pd.endDate} >= DATE_FORMAT(a.gmt_create, '%Y-%m-%d')
+		</if>
+		order by a.gmt_create desc
+	</select>
+	
+	<!-- 新增日志 -->
+	<insert id="saveCmpLog" parameterType="com.cmp.sid.CmpLog" >
+		insert into <include refid="tableName"/> (
+			<include refid="saveFieldName"/>
+		) values (
+			<include refid="saveFieldValue"/>
+		)
+	</insert>
+	
+	<!-- 删除日志 -->
+	<select id="delCmpLog" parameterType="String">
+		delete from <include refid="tableName"/> where find_in_set(id, #{ids})
 	</select>
 </mapper>
