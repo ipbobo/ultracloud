@@ -631,4 +631,22 @@ CREATE TABLE `t_autoinstall_rule` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='自动安装规则'; 
 
-
+-- ----------------------------
+-- 产品
+-- ----------------------------
+DROP TABLE IF EXISTS `t_product`;
+CREATE TABLE `t_product` (
+  `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(20) NOT NULL COMMENT '产品名称',
+  `type` varchar(20) NOT NULL COMMENT '产品类型',
+  `unit` int(11)  NOT NULL COMMENT '计价单位',
+  `price_old` int(11)  NOT NULL COMMENT '旧价格',
+  `price_cur` int(11)  NOT NULL COMMENT '当前价格',
+  `price_new` int(11)  NOT NULL COMMENT '新价格',
+  `isImediate` varchar(10) NOT NULL COMMENT '是否立即生效',
+  `clockTime` varchar(20) DEFAULT NULL COMMENT '定时时间',
+  `USERNAME` varchar(20) NOT NULL COMMENT '创建者',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品'; 
