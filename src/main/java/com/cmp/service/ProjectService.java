@@ -16,6 +16,18 @@ public interface ProjectService {
 	public void delete(PageData pd) throws Exception;
 
 	public void edit(PageData pd) throws Exception;
+	
+	/**修改配额
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editQuota(PageData pd)throws Exception ;
+	
+	/**修改已使用配额
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editUsedQuota(PageData pd)throws Exception ;
 
 	public List<PageData> list(Page page) throws Exception;
 

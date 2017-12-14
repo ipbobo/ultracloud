@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AutoInstallRuleMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		t_autoinstall_rule
+	</sql>
+	<sql id="clusterTableName">
+		t_cluster
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,	
+		<include refid="Field_main"></include>,<include refid="Field_time"></include>
+	</sql>
+	
+	<sql id="Field_main">
+		cluster_id,
+		type,
+		num_rule,
+		storage_rule,
+		ip_rule,
+		openstack_rule,
+		USERNAME
+	</sql>
+	
+	<sql id="Field_time">
+		gmt_create,
+		gmt_modified
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},	
+		<include refid="FieldValue_main"></include>,<include refid="FieldValue_time"></include>
+	</sql>
+		
+	<!-- 字段值 -->
+	<sql id="FieldValue_main">	
+		#{cluster_id},
+		#{type},
+		#{num_rule},
+		#{storage_rule},
+		#{ip_rule},
+		#{openstack_rule},
+		#{USERNAME}
+	</sql>
+	
+	<sql id="FieldValue_time">	
+		#{gmt_create},
+		#{gmt_modified}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field_main"></include>
+		) values (
+	<include refid="FieldValue_main"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			cluster_id = #{cluster_id},
+			num_rule = #{num_rule},
+			storage_rule = #{storage_rule},
+			ip_rule = #{ip_rule},
+			openstack_rule = #{openstack_rule},
+			USERNAME = #{USERNAME}
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 修改 -->
+	<update id="udpateDefaultData" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			isDefault = 0
+		where 
+			id != #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd" >
+		select  a.id,
+		a.cluster_id,
+		a.gmt_create,
+		a.gmt_modified,
+		a.ip_rule,
+		a.num_rule,
+		a.openstack_rule,
+		a.storage_rule,
+		a.type,
+		a.USERNAME,
+		c.name AS cluster_name
+		from 
+		<include refid="tableName"></include> a,<include refid="clusterTableName"></include> c
+		where 1 = 1
+		and a.cluster_id=c.id
+		<if test="pd.type != null and pd.type != ''"><!-- 按集群类型检索 -->
+			and a.type = #{pd.type} 
+		</if>
+		order by a.gmt_modified desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select  a.id,
+		a.cluster_id,
+		a.gmt_create,
+		a.gmt_modified,
+		a.ip_rule,
+		a.num_rule,
+		a.openstack_rule,
+		a.storage_rule,
+		a.type,
+		a.USERNAME,
+		c.name AS cluster_name
+		from 
+		<include refid="tableName"></include> a,<include refid="clusterTableName"></include> c
+		where 1 = 1
+		and a.cluster_id=c.id
+		<if test="pd.type != null and pd.type != ''"><!-- 按集群类型检索 -->
+			and a.type = #{pd.type} 
+		</if>
+		order by a.gmt_modified desc
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 项目列表查询 -->
+	<select id="getEnvList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_environment
+	</select>
+</mapper>

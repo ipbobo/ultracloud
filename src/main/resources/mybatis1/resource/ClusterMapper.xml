@@ -18,6 +18,8 @@
 	
 	<sql id="Field_main">
 		name,
+		cpf_id,
+		type,
 		datacenter_id
 	</sql>
 	
@@ -35,6 +37,8 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
 		#{name},
+		#{cpf_id},
+		#{type},
 		#{datacenter_id}
 	</sql>
 	
@@ -68,7 +72,9 @@
 		<include refid="tableName"></include>
 		set 
 			name = #{name},
-			datacenter_id = #{datacenter_id}
+			datacenter_id = #{datacenter_id},
+			cpf_id = #{cpf_id},
+			type = #{type}
 		 where 
 		    id = #{id}
 	</update>
@@ -87,6 +93,8 @@
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,
 				s.name,
+				s.cpf_id
+				s.type,
 				s.datacenter_id
 		from <include refid="tableName"></include> s    
 		where 1 = 1
@@ -106,13 +114,18 @@
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select c.id,
 		       c.name,
+		       c.type,
+		       c.cpf_id,
 		       c.datacenter_id,
 		       dc.name as dc_name,
 		       c.gmt_create,
 		       c.gmt_modified
 		from 
 		<include refid="tableName"></include> c LEFT JOIN <include refid="dctableName"></include> dc
-		on c.datacenter_id=dc.id
+		on c.datacenter_id=dc.id 
+		<if test="type!=null and type!=''"><!-- 根据类型 -->
+			WHERE c.type = #{type}
+		</if>
 	</select>
 	
 	<!-- 批量删除 -->
