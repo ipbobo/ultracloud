@@ -7,96 +7,113 @@
 <head>
 <base href="<%=basePath%>">
 <%@ include file="../system/index/top.jsp"%>
+<link rel="stylesheet" href="static/ace/css/datepicker.css" />
+<link rel="stylesheet" href="static/ace/css/chosen.css" />
+<script type="text/javascript" src="static/js/jquery.tips.js"></script><!--提示框-->
+<script type="text/javascript" src="static/ace/js/ace/ace.js"></script><!-- ace scripts -->
+<script type="text/javascript" src="static/ace/js/chosen.jquery.js"></script><!-- 下拉框 -->
+<script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript">
 //查询
-function search(){
+function doSearch(){
+	var beginDate=$("#beginDate").val();
+	var endDate=$("#endDate").val();
+	if(beginDate!="" && !isDate(beginDate)){
+    	alert("开始日期不正确，请重新输入！");
+        $("#beginDate").focus();
+        return;
+    }
+    
+    if(endDate!="" && !isDate(endDate)){
+    	alert("结束日期不正确，请重新输入！");
+        $("#endDate").focus();
+        return;
+    }
+    
+    //比较起始日期是否大于等于结束日期
+	if(beginDate!="" && endDate!=""){
+	    if(beginDate>endDate){
+	    	alert("结束日期必须大于等于开始日期，请重新输入！");
+	       	$("#endDate").focus();
+	        return;
+	    }
+	}
+	
 	top.jzts();
-	$("#queryForm").submit();
+	$("#mainForm").submit();
+}
+
+//批量删除日志
+function deleteAll(msg){
+	var str = '';
+	for(var i=0; i<document.getElementsByName('ids').length;i++){
+	  	if(document.getElementsByName('ids')[i].checked){
+		  	if(str=='') str += document.getElementsByName('ids')[i].value;
+		  	else str += ',' + document.getElementsByName('ids')[i].value;
+	  	}
+	}
+	
+	if(str==''){
+		bootbox.dialog({message: "<span class='bigger-110'>请先选择待删除的记录！</span>", buttons: { "button":{ "label":"确定", "className":"btn-sm btn-success"}}});
+		$("#zcheckbox").tips({side:1, msg:'点这里全选', bg:'#AE81FF', time:8});
+		return;
+	}
+	
+	del(str, msg);//删除日志
+}
+
+//删除日志
+function del(ids, msg){
+	bootbox.confirm(msg, function(result) {
+		if(result) {
+			top.jzts();
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>log/deleteAll.do?tm='+new Date().getTime(),
+		    	data: {"ids": ids},
+				dataType:'json',
+				cache: false,
+				success: function(data){
+					$(top.hangge());//关闭加载状态
+					bootbox.dialog({message: "<span class='bigger-110'>"+data.retMsg+"</span>", buttons: { "button":{ "label":"确定", "className":"btn-sm btn-success"}}});
+					if(data.retCode=="0"){//返回成功
+						$("#mainForm").submit();
+					}
+				}
+			});
+		}
+	});
 }
 </script>
 </head>
-<body class="no-skin">
+<body>
 <div class="widget-box">
-	<div class="widget-header">
-		<h4 class="smaller">条件查询</h4>
-	</div>
-	<form action="queryUserApplyWorkOrderPre.do" method="post"
-		name="queryForm" id="queryForm">
-		<table style="margin-top: 5px;">
+	<div class="widget-header"><h4 class="smaller">条件查询</h4></div>
+	<form action="log/list.do" method="post" name="mainForm" id="mainForm">
+		<table style="border-collapse:separate;border-spacing:0px 5px;">
 			<tr>
-				<td style="width: 120px; text-align: right;">&nbsp;工单类型:</td>
-				<td style="width: 120px; text-align: left;"><select
-					name="workorder_type" id="workorder_type" title="选择工单类型">
-						
-							<option value=""  <c:if test="${pd.workorder_type == null || pd.workorder_type == '' }">selected="selected"</c:if>>选择工单类型</option>
-						
-						<c:forEach items="${workorderTypeList}" var="var">
-							<option value="${var.dictCode}" <c:if test="${pd.workorder_type !='' && var.dictCode == pd.workorder_type }">selected="selected"</c:if> >${var.dictValue}</option>
-						</c:forEach>
-				</select></td>
-				<td style="width: 120px; text-align: right;">&nbsp;工单状态:</td>
-				<td style="width: 120px; text-align: left;">
-				<select name="workorder_status" id="workorder_status" title="选择工单状态">
-						<option value="" <c:if test="${pd.workorder_status == null || pd.workorder_status == '' }">selected="selected"</c:if>>选择工单类型</option>
-						<c:forEach items="${workorderStatusList}" var="var">
-							<option value="${var.dictCode}" <c:if test="${pd.workorder_status !='' && var.dictCode == pd.workorder_status }">selected="selected"</c:if>>${var.dictValue}</option>
-						</c:forEach>
-				</select></td>
-				<td style="width: 80px; text-align: right;">&nbsp;项目:</td>
-				<td style="width: 120px; text-align: left;"><select
-					name="project" id="project" title="选择项目">
-						<option value="" <c:if test="${pd.project == null || pd.project == '' }">selected="selected"</c:if>>选择项目</option>
-						<c:forEach items="${projectList}" var="var">
-							<option value="${var.id}"  <c:if test="${pd.project !='' && var.id == pd.project }">selected="selected"</c:if>>${var.shortname}</option>
-						</c:forEach>
-				</select></td>
-				<td style="width: 120px; text-align: right;" rowspan="2">
-					<button class="btn btn-info" id="btn_query" type="submit">查询</button>
-				</td>
-				<td style="width: 80px; text-align: right;" rowspan="2">&nbsp;导出:</td>
-				<td style="width: 120px; text-align: left;" rowspan="2">
-					&nbsp;&nbsp;<a class="btn btn-light btn-xs"
-					onclick="toExcel();" title="导出到EXCEL"><i
-						id="nav-search-icon"
-						class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a>
-				</td>
-			</tr>
-			<tr>
-				<td style="width: 120px; text-align: right;">&nbsp;工单号:</td>
-				<td style="width: 120px; text-align: left;"><input
-					type="text" name="workorder_appNo" value="${pd.workorder_appNo}" id="workorder_appNo" /></td>
-				<td style="width: 120px; text-align: right;">&nbsp;时间选择:</td>
-				<td style="width: 120px; text-align: left;"><select
-					name="workorder_time" id="workorder_time" title="时间选择">
-						<option value="" <c:if test="${pd.workorder_time == null || pd.workorder_time == '' }">selected="selected"</c:if>>全部</option>
-						<option value="1" <c:if test="${pd.workorder_time !='' && '1' == pd.workorder_time }">selected="selected"</c:if>>近一周</option>
-						<option value="2" <c:if test="${pd.workorder_time !='' && '2' == pd.workorder_time }">selected="selected"</c:if>>近一个月</option>
-						<option value="3" <c:if test="${pd.workorder_time !='' && '3' == pd.workorder_time }">selected="selected"</c:if>>近一年</option>
-				</select></td>
-
-
-
-
-			</tr>
-			<tr>
-
+				<td>开始日期：<input class="span10 date-picker" name="beginDate" id="beginDate"  value="${pd.beginDate}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
+				<td style="padding-left:10px;">结束日期：<input class="span10 date-picker" name="endDate" id="endDate"  value="${pd.endDate}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
+				<td style="padding-left:10px"><a class="btn btn-light btn-xs" onclick="doSearch();" title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 			</tr>
 		</table>
 	</form>
 </div>
-<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top: 5px;">
+<div class="widget-box widget-header" style="margin:0px">
+	<a class="btn btn-mini btn-danger" onclick="deleteAll('确定要删除选中的记录吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
+</div>
+<table id="simple-table" class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
 			<th class="center" style="width: 35px;"><label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label></th>
 			<th class="center" style="width: 50px;">序号</th>
-			<th class="center">ID</th>
 			<th class="center">操作者</th>
 			<th class="center">操作类型</th>
 			<th class="center">操作对象</th>
+			<th class="center">操作详细描述</th>
 			<th class="center">操作状态</th>
 			<th class="center">操作者IP</th>
-			<th class="center">操作详细描述</th>
-			<th class="center">创建时间</th>
+			<th class="center" style="width: 140px;">创建时间</th>
 			<th class="center">操作</th>
 		</tr>
 	</thead>
@@ -106,17 +123,14 @@ function search(){
 		<tr>
 			<td class='center'><label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace"/><span class="lbl"></span></label></td>
 			<td class='center' style="width: 30px;">${vs.index+1}</td>
-			<td class='center'>${var.id}</td>
 			<td class='center'>${var.username}</td>
-			<td class='center'>${var.type}</td>
+			<td class='center'>${var.operTypeName}</td>
 			<td class='center'>${var.opt_object}</td>
-			<td class='center'>${var.opt_status}</td>
-			<td class='center'>${var.ip}</td>
 			<td class='center'>${var.detail}</td>
+			<td class='center'>${var.optStatusName}</td>
+			<td class='center'>${var.ip}</td>
 			<td class='center'>${var.gmt_create}</td>
-			<td class="center">
-				<a class="btn btn-xs btn-success" onclick="del('${var.id}');"><i class="ace-icon fa fa-print  align-top bigger-125" title="删除"></i></a>
-			</td>
+			<td class="center"><a class="btn btn-xs btn-danger" onclick="del('${var.id}', '确定要删除该条记录吗?');"><i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i></a></td>
 		</tr>
 	</c:forEach>
 	</c:when>
@@ -136,14 +150,11 @@ function search(){
 </div>
 <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a><!-- 返回顶部 -->
 <%@ include file="../system/index/foot.jsp"%>
-<!-- 删除时确认窗口 -->
-<script src="static/ace/js/bootbox.js"></script>
-<!-- ace scripts -->
-<script src="static/ace/js/ace/ace.js"></script>
-<!--提示框-->
-<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+<script type="text/javascript" src="static/ace/js/date-time/bootstrap-datepicker.js"></script><!-- 日期框 -->
+<script type="text/javascript" src="static/ace/js/bootbox.js"></script><!-- 删除时确认窗口 -->
 <script type="text/javascript">
 $(top.hangge());//关闭加载状态
+$('.date-picker').datepicker({autoclose: true,todayHighlight: true});//datepicker
 //复选框全选控制
 $(function() {
 	var active_class = 'active';

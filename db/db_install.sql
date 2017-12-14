@@ -466,9 +466,9 @@ DROP TABLE IF EXISTS `t_system_log`;
 create table `t_system_log` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(40) NOT NULL COMMENT '操作者',
-  `type` tinyint unsigned NOT NULL COMMENT '操作类型',
+  `type` tinyint unsigned NOT NULL COMMENT '操作类型：1-新增；2-修改；3-删除',
   `opt_object` varchar(20) NOT NULL COMMENT '操作对象',
-  `opt_status` tinyint unsigned NOT NULL COMMENT '操作状态',
+  `opt_status` varchar(5) NOT NULL COMMENT '操作状态：0-成功；-1-失败',
   `ip` varchar(20) NOT NULL COMMENT '操作者ip',
   `detail` varchar(2000) DEFAULT NULL COMMENT '操作详细描述',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -478,7 +478,7 @@ create table `t_system_log` (
   INDEX idx_opt_object(`opt_object`),
   INDEX idx_opt_status(`opt_status`),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统日志'; 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统日志';
 
 -- ----------------------------
 -- 组织机构
