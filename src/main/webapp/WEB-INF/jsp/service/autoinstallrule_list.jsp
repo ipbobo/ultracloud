@@ -30,13 +30,13 @@
 							<div class="span6" style="padding-top: 13px;">
 								<div class="tabbable">
 									<ul class="nav nav-tabs" id="myTab">
-										<li  class="active" id="vmware_li"><a id="vmware_a" data-toggle="tab" href="#vmware"><i class="green icon-cog bigger-110"></i>vmware</a></li>
+										<li id="vmware_li"><a id="vmware_a" data-toggle="tab" href="#vmware"><i class="green icon-cog bigger-110"></i>vmware</a></li>
 										<li id="OpenStack_li"><a id="OpenStack_a" data-toggle="tab" href="#OpenStack"><i class="green icon-cog bigger-110"></i>OpenStack</a></li>
 									</ul>
 									<div class="tab-content" style="height:100%;">
 										<div id="vmware" class="tab-pane" style="height:500px;">
 											<table id="table_vmware" class="table table-striped table-bordered table-hover">
-												<iframe name="vmwareFrame" id="vmwareFrame" frameborder="0" src="<%=basePath%>/autoinstallrule/listVmware.do" style="margin:0 auto;width:100%;height:100%;"></iframe>
+												<iframe name="vmwareFrame" id="vmwareFrame" frameborder="0" style="margin:0 auto;width:100%;height:100%;"></iframe>
 											</table>
 										</div>
 										<div id="OpenStack" class="tab-pane" style="height:500px;">
@@ -80,9 +80,9 @@
 		$(top.hangge());
 		
 		$(function() {
-			$("#vmware_a").click(function(){ 
-				//adding your code here 
-			});
+			console.log("autoinstallrule_list onload---------------->")
+			$("#vmwareFrame").attr("src", "<%=basePath%>/autoinstallrule/listVmware.do");
+			$("#vmware_li").attr("class", "active");
 		});
 		
 		//发送Ajax请求
