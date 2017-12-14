@@ -251,7 +251,7 @@ public class AutoInstallRuleController extends BaseController {
 					realDList.add(grandsonD);
 				}
 			}
-			mv.addObject(subD.getBIANMA() + "List", realDList);
+			mv.addObject(subD.getBIANMA() + "_List", realDList);
 		}
 		
 		List<PageData> clusterList = clusterService.listAll(pd);

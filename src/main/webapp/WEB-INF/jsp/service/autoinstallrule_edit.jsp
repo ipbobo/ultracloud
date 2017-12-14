@@ -45,7 +45,7 @@
 									<td id="js">
 										<select class="chosen-select form-control" name="num_rule" id="num_rule"  style="vertical-align:top;" style="width:98%;" >
 										<c:forEach items="${autoinstall_rule_num_List}" var="dictionaries">
-											<option value="${dictionaries.BIANMA }" <c:if test="${dictionaries.BIANMA == pd.openstack_rule }">selected</c:if>>${dictionaries.NAME }</option>
+											<option value="${dictionaries.BIANMA }" <c:if test="${dictionaries.BIANMA == pd.num_rule }">selected</c:if>>${dictionaries.NAME }</option>
 										</c:forEach>
 										</select>
 									</td>
@@ -55,7 +55,7 @@
 									<td id="js">
 										<select class="chosen-select form-control" name="storage_rule" id="storage_rule"  style="vertical-align:top;" style="width:98%;" >
 										<c:forEach items="${autoinstall_rule_storage_List}" var="dictionaries">
-											<option value="${dictionaries.BIANMA }" <c:if test="${dictionaries.BIANMA == pd.openstack_rule }">selected</c:if>>${dictionaries.NAME }</option>
+											<option value="${dictionaries.BIANMA }" <c:if test="${dictionaries.BIANMA == pd.storage_rule }">selected</c:if>>${dictionaries.NAME }</option>
 										</c:forEach>
 										</select>
 									</td>
@@ -65,7 +65,7 @@
 									<td id="js">
 										<select class="chosen-select form-control" name="ip_rule" id="ip_rule"  style="vertical-align:top;" style="width:98%;" >
 										<c:forEach items="${autoinstall_rule_ip_List}" var="dictionaries">
-											<option value="${dictionaries.BIANMA }" <c:if test="${dictionaries.BIANMA == pd.openstack_rule }">selected</c:if>>${dictionaries.NAME }</option>
+											<option value="${dictionaries.BIANMA }" <c:if test="${dictionaries.BIANMA == pd.ip_rule }">selected</c:if>>${dictionaries.NAME }</option>
 										</c:forEach>
 										</select>
 									</td>

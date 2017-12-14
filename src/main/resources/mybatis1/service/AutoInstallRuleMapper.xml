@@ -6,6 +6,9 @@
 	<sql id="tableName">
 		t_autoinstall_rule
 	</sql>
+	<sql id="clusterTableName">
+		t_cluster
+	</sql>
 	
 	<!-- 字段 -->
 	<sql id="Field">
@@ -106,24 +109,48 @@
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
-		select  *
+		select  a.id,
+		a.cluster_id,
+		a.gmt_create,
+		a.gmt_modified,
+		a.ip_rule,
+		a.num_rule,
+		a.openstack_rule,
+		a.storage_rule,
+		a.type,
+		a.USERNAME,
+		c.name AS cluster_name
 		from 
-		<include refid="tableName"></include> 
+		<include refid="tableName"></include> a,<include refid="clusterTableName"></include> c
+		where 1 = 1
+		and a.cluster_id=c.id
 		<if test="pd.type != null and pd.type != ''"><!-- 按集群类型检索 -->
-			where type = #{pd.type} 
+			and a.type = #{pd.type} 
 		</if>
-		order by gmt_modified desc
+		order by a.gmt_modified desc
 	</select>
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select  *
+		select  a.id,
+		a.cluster_id,
+		a.gmt_create,
+		a.gmt_modified,
+		a.ip_rule,
+		a.num_rule,
+		a.openstack_rule,
+		a.storage_rule,
+		a.type,
+		a.USERNAME,
+		c.name AS cluster_name
 		from 
-		<include refid="tableName"></include>
+		<include refid="tableName"></include> a,<include refid="clusterTableName"></include> c
+		where 1 = 1
+		and a.cluster_id=c.id
 		<if test="pd.type != null and pd.type != ''"><!-- 按集群类型检索 -->
-			where type = #{pd.type} 
+			and a.type = #{pd.type} 
 		</if>
-		order by gmt_modified desc
+		order by a.gmt_modified desc
 	</select>
 	
 	<!-- 批量删除 -->
