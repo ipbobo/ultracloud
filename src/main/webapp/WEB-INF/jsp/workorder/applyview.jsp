@@ -37,34 +37,118 @@
 				       	 	<div style="position: absolute; border:2px solid red;left:${workorderImag.x}px;top:${workorderImag.y + 153}px;width:${workorderImag.width }px;height:${workorderImag.height }px;"></div> 
 						</c:if>
 						</div>
-				         
-						<div class="alert alert-info">申请工单详情</div>
+						
 						<div>
 						<table id="simple-table"
 								class="table table-striped table-bordered table-hover"
 								style="margin-top: 5px;">
 								<thead>
 									<tr>
-										<th class="center">虚拟机名称</th>
-										<th class="center">地区代码</th>
-										<th class="center">平台</th>
-										<th class="center">部署类型</th>
-										<th class="center">操作系统类型</th>
+										<th class="center">项目名称</th>
+										<th class="center">项目等级</th>
+										<th class="center">资源申请标准</th>
+										<th class="center">项目已用资源(cpu/内存/存储)</th>
+										<th class="center">项目剩余资源(cpu/内存/存储)</th>
+										<th class="center">负责人</th>
+										<th class="center">操作</th>
 									</tr>
 								</thead>
 
 								<tbody>
 												<tr>
-													<td class='center'>${orderInfo.virName}</td>
-													<td class='center'>${orderInfo.areaCode}</td>
-													<td class='center'>${orderInfo.platType}</td>
-													<td class='center'>${orderInfo.deployType}</td>
-													<td class='center'>${orderInfo.osType}</td>
+													<td class='center'>${project.name}</td>
+													<td class='center'>${project.level}</td>
+													<td class='center'>
+														<c:if test="${(project.cpu_quota-project.cpu_used) > 0 && (project.memory_quota-project.memory_used) >0 &&(project.disk_quota-project.disk_used) > 0}">符合</c:if>
+														<c:if test="${(project.cpu_quota-project.cpu_used) <= 0 || (project.memory_quota-project.memory_used) <= 0 || (project.disk_quota-project.disk_used) <= 0}">不符合</c:if>
+													</td>
+													<td class='center'>${project.cpu_used}/${project.memory_used}/${project.disk_used}</td>
+													<td class='center'>${project.cpu_quota-project.cpu_used}/${project.memory_quota-project.memory_used}/${project.disk_quota-project.disk_used}</td>
+													<td class='center'>${project.USERNAME}</td>
+													<td class='center'>分析报告</td>
 													</tr>
 								</tbody>
 						</table>
-						
 						</div>
+						<h1></h1>
+						<div>
+						<table id="simple-table"
+								class="table table-striped table-bordered table-hover"
+								style="margin-top: 5px;">
+								<thead>
+									<tr>
+										<th class="center">部门名称</th>
+										<th class="center">资源申请标准</th>
+										<th class="center">项目已用资源(cpu/内存/存储)</th>
+										<th class="center">项目剩余资源(cpu/内存/存储)</th>
+										<th class="center">申请人</th>
+									</tr>
+								</thead>
+
+								<tbody>
+												<tr>
+													<td class='center'>${department.NAME}</td>
+													<td class='center'>
+														<c:if test="${department.cpu_quota-department.cpu_used > 0} && ${department.memory_quota-department.memory_used >0} && ${department.disk_quota-department.disk_used > 0}">符合</c:if>
+														<c:if test="${department.cpu_quota-department.cpu_used <= 0} && ${department.memory_quota-department.memory_used <= 0} && ${department.disk_quota-department.disk_used<= 0}">不符合</c:if>
+													</td>
+													<td class='center'>${department.cpu_used}/${department.memory_used}/${department.disk_used}</td>
+													<td class='center'>${department.cpu_quota-department.cpu_used}/${department.memory_quota-department.memory_used}/${department.disk_quota-department.disk_used}</td>
+													<td class='center'>${department.HEADMAN}</td>
+													</tr>
+								</tbody>
+						</table>
+						</div>
+						
+						<div class="alert alert-info">服务目录</div>
+						<div>
+						<table id="simple-table"
+								class="table table-striped table-bordered table-hover"
+								style="margin-top: 5px;">
+								<tbody>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">云资源申请总览</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">申请云主机数量</td>
+										<td class='center'>1台</td>
+										<td class='center' style="background-color: rgb(244,244,244);">cpu/内存总量</td>
+										<td class='center'>1核/100G</td>
+										<td class='center' style="background-color: rgb(244,244,244);">数据盘总量</td>
+										<td class='center'>0G</td>
+									</tr>
+									<tr>
+										<td class='center'>申请详情</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">操作系统</td>
+										<td class='center'>redhat</td>
+										<td class='center' style="background-color: rgb(244,244,244);">系统盘/数据盘</td>
+										<td class='center'>系统盘500G; 数据盘500G</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">CPU/内存</td>
+										<td class='center'>.......</td>
+										<td class='center' style="background-color: rgb(244,244,244);">安装状态</td>
+										<td class='center'>......</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">软件安装</td>
+										<td class='center' style="color: red;">.......</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">数据盘信息</td>
+										<td class='center'>.......</td>
+										<td class='center' style="background-color: rgb(244,244,244);">使用期限</td>
+										<td class='center'>......</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">电子钥匙</td>
+										<td class='center'>.......</td>
+									</tr>
+								</tbody>
+						</table>
+				        </div>
 						<div class="alert alert-info">关联任务</div>
 						<div>
 						<table id="simple-table"
@@ -97,7 +181,6 @@
 											</c:choose>
 								</tbody>
 						</table>
-						
 						</div>
 						
 	<div class="alert alert-info">历史批复</div>

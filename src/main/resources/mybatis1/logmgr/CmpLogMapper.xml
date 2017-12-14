@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CmpLogMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		t_system_log
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="fieldName">
+		id,
+		username,
+		type,
+		opt_object,
+		opt_status,
+		ip,
+		detail,
+		gmt_create,
+		gmt_modified
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="fieldValue">
+		#{id},
+		#{username},
+		#{type},
+		#{optObject},
+		#{optStatus},
+		#{ip},
+		#{detail},
+		#{gmtCreate},
+		#{gmtModified}
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="saveFieldName">
+		username,
+		type,
+		opt_object,
+		opt_status,
+		ip,
+		detail
+	</sql>
+	
+	<sql id="saveFieldValue">
+		#{username},
+		#{type},
+		#{optObject},
+		#{optStatus},
+		#{ip},
+		#{detail}
+	</sql>
+	
+	<!-- 日志列表查询 -->
+	<select id="getLogPageList" parameterType="page" resultType="pd">
+		select <include refid="fieldName"/>
+		from  <include refid="tableName"/>
+		where username=#{pd.applyUserId}
+		order by gmt_create desc
+	</select>
+</mapper>

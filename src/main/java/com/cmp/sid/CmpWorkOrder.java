@@ -33,6 +33,7 @@ public class CmpWorkOrder {
 	private String expireDate;//到期时间
 	private String virNum;//虚拟机数量
 	private String applyUserName; //申请者用户名
+	private String virtualMachineId; //虚拟机ID
 
 	public String getAppNo() {
 		return appNo;
@@ -288,6 +289,12 @@ public class CmpWorkOrder {
 
 	public void setApplyUserName(String applyUserName) {
 		this.applyUserName = applyUserName;
+	}
+	public String getVirtualMachineId() {
+		return virtualMachineId;
+	}
+	public void setVirtualMachineId(String virtualMachineId) {
+		this.virtualMachineId = virtualMachineId;
 	}
 	
 	
