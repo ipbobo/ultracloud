@@ -22,7 +22,7 @@
 	<!-- 字段值 -->
 	<sql id="fieldValue">
 		#{id},
-		#{username},
+		#{userName},
 		#{type},
 		#{optObject},
 		#{optStatus},
@@ -56,7 +56,7 @@
 		select a.id, a.username, a.type operType, b.dictValue operTypeName, a.opt_object, a.opt_status, c.dictValue optStatusName, a.ip, a.detail, DATE_FORMAT(a.gmt_create, '%Y-%m-%d %H:%i:%s') gmt_create, a.gmt_modified
 		from  <include refid="tableName"/> a
 		left join cmp_dict b on b.dictType='oper_type' and b.dictCode=a.type
-		left join cmp_dict c on c.dictType='oper_type' and c.dictCode=a.opt_status
+		left join cmp_dict c on c.dictType='opt_status' and c.dictCode=a.opt_status
 		where a.username=#{pd.applyUserId}
 		<if test="pd.beginDate != null and pd.beginDate != ''">
 			and DATE_FORMAT(a.gmt_create, '%Y-%m-%d') >= #{pd.beginDate}
