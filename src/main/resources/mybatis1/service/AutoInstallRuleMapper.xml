@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="ClusterMapper">
+<mapper namespace="AutoInstallRuleMapper">
 	
 	<!--表名 -->
 	<sql id="tableName">
-		t_cluster
-	</sql>
-	<sql id="dctableName">
-		t_datacenter
+		t_autoinstall_rule
 	</sql>
 	
 	<!-- 字段 -->
@@ -17,10 +14,13 @@
 	</sql>
 	
 	<sql id="Field_main">
-		name,
-		cpf_id,
+		cluster_id,
 		type,
-		datacenter_id
+		num_rule,
+		storage_rule,
+		ip_rule,
+		openstack_rule,
+		USERNAME
 	</sql>
 	
 	<sql id="Field_time">
@@ -36,10 +36,13 @@
 		
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
-		#{name},
-		#{cpf_id},
+		#{cluster_id},
 		#{type},
-		#{datacenter_id}
+		#{num_rule},
+		#{storage_rule},
+		#{ip_rule},
+		#{openstack_rule},
+		#{USERNAME}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -71,12 +74,24 @@
 		update
 		<include refid="tableName"></include>
 		set 
-			name = #{name},
-			datacenter_id = #{datacenter_id},
-			cpf_id = #{cpf_id},
-			type = #{type}
-		 where 
-		    id = #{id}
+			cluster_id = #{cluster_id},
+			num_rule = #{num_rule},
+			storage_rule = #{storage_rule},
+			ip_rule = #{ip_rule},
+			openstack_rule = #{openstack_rule},
+			USERNAME = #{USERNAME}
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 修改 -->
+	<update id="udpateDefaultData" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			isDefault = 0
+		where 
+			id != #{id}
 	</update>
 	
 	<!-- 通过ID获取数据 -->
@@ -89,43 +104,26 @@
 			id = #{id}
 	</select>
 	
-	<!-- 脚本列表 -->
+	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
-		select  s.id,
-				s.name,
-				s.cpf_id
-				s.type,
-				s.datacenter_id
-		from <include refid="tableName"></include> s    
-		where 1 = 1
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-				(
-					s.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-				)
+		select  *
+		from 
+		<include refid="tableName"></include> 
+		<if test="pd.type != null and pd.type != ''"><!-- 按集群类型检索 -->
+			where type = #{pd.type} 
 		</if>
-		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
-			and id in ${pd.item}
-		</if>
-		order by s.gmt_modified desc
+		order by gmt_modified desc
 	</select>
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select c.id,
-		       c.name,
-		       c.type,
-		       c.cpf_id,
-		       c.datacenter_id,
-		       dc.name as dc_name,
-		       c.gmt_create,
-		       c.gmt_modified
+		select  *
 		from 
-		<include refid="tableName"></include> c LEFT JOIN <include refid="dctableName"></include> dc
-		on c.datacenter_id=dc.id 
-		<if test="type!=null and type!=''"><!-- 根据类型 -->
-			WHERE c.type = #{type}
+		<include refid="tableName"></include>
+		<if test="pd.type != null and pd.type != ''"><!-- 按集群类型检索 -->
+			where type = #{pd.type} 
 		</if>
+		order by gmt_modified desc
 	</select>
 	
 	<!-- 批量删除 -->
@@ -139,4 +137,8 @@
 		</foreach>
 	</delete>
 	
+	<!-- 项目列表查询 -->
+	<select id="getEnvList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_environment
+	</select>
 </mapper>

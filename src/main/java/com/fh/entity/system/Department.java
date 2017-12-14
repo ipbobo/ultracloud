@@ -30,6 +30,12 @@ public class Department {
 	private boolean hasDepartment = false;
 	private String treeurl;
 	private String icon;
+	private int cpu_quota;
+	private int memory_quota;
+	private int disk_quota;
+	private int  cpu_used = 0;
+	private int memory_used = 0;
+	private int disk_used = 0;
 	
 	public String getIcon() {
 		return icon;
@@ -127,5 +133,42 @@ public class Department {
 	public void setTreeurl(String treeurl) {
 		this.treeurl = treeurl;
 	}
+	public int getCpu_quota() {
+		return cpu_quota;
+	}
+	public void setCpu_quota(int cpu_quota) {
+		this.cpu_quota = cpu_quota;
+	}
+	public int getMemory_quota() {
+		return memory_quota;
+	}
+	public void setMemory_quota(int memory_quota) {
+		this.memory_quota = memory_quota;
+	}
+	public int getDisk_quota() {
+		return disk_quota;
+	}
+	public void setDisk_quota(int disk_quota) {
+		this.disk_quota = disk_quota;
+	}
+	public int getCpu_used() {
+		return cpu_used;
+	}
+	public void setCpu_used(int cpu_used) {
+		this.cpu_used = cpu_used;
+	}
+	public int getMemory_used() {
+		return memory_used;
+	}
+	public void setMemory_used(int memory_used) {
+		this.memory_used = memory_used;
+	}
+	public int getDisk_used() {
+		return disk_used;
+	}
+	public void setDisk_used(int disk_used) {
+		this.disk_used = disk_used;
+	}
+	
 	
 }
