@@ -68,7 +68,7 @@
 	</select>
 	
 	<!-- 新增日志 -->
-	<insert id="saveCmpLog" parameterType="com.cmp.sid.CmpLog" >
+	<insert id="addCmpLog" parameterType="com.cmp.sid.CmpLog" >
 		insert into <include refid="tableName"/> (
 			<include refid="saveFieldName"/>
 		) values (
