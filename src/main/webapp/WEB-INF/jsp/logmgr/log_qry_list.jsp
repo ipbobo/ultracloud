@@ -107,7 +107,6 @@ function del(ids, msg){
 		<tr>
 			<th class="center" style="width: 35px;"><label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label></th>
 			<th class="center" style="width: 50px;">序号</th>
-			<th class="center">ID</th>
 			<th class="center">操作者</th>
 			<th class="center">操作类型</th>
 			<th class="center">操作对象</th>
@@ -124,7 +123,6 @@ function del(ids, msg){
 		<tr>
 			<td class='center'><label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace"/><span class="lbl"></span></label></td>
 			<td class='center' style="width: 30px;">${vs.index+1}</td>
-			<td class='center'>${var.id}</td>
 			<td class='center'>${var.username}</td>
 			<td class='center'>${var.operTypeName}</td>
 			<td class='center'>${var.opt_object}</td>
