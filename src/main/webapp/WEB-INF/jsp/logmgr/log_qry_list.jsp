@@ -110,9 +110,9 @@ function del(ids, msg){
 			<th class="center">操作者</th>
 			<th class="center">操作类型</th>
 			<th class="center">操作对象</th>
+			<th class="center">操作详细描述</th>
 			<th class="center">操作状态</th>
 			<th class="center">操作者IP</th>
-			<th class="center">操作详细描述</th>
 			<th class="center">创建时间</th>
 			<th class="center">操作</th>
 		</tr>
@@ -126,9 +126,9 @@ function del(ids, msg){
 			<td class='center'>${var.username}</td>
 			<td class='center'>${var.operTypeName}</td>
 			<td class='center'>${var.opt_object}</td>
+			<td class='center'>${var.detail}</td>
 			<td class='center'>${var.optStatusName}</td>
 			<td class='center'>${var.ip}</td>
-			<td class='center'>${var.detail}</td>
 			<td class='center'>${var.gmt_create}</td>
 			<td class="center"><a class="btn btn-xs btn-danger" onclick="del('${var.id}', '确定要删除该条记录吗?');"><i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i></a></td>
 		</tr>
