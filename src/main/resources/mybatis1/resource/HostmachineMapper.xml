@@ -130,9 +130,10 @@
 				s.password,
 				s.gmt_create,
 				s.gmt_modified,
-				s.cluster_id
-		from <include refid="tableName"></include> s    
-		where 1 = 1
+				s.cluster_id,
+				c.name AS cluster_name
+		from <include refid="tableName"></include> s,<include refid="clustertableName"></include> c
+		where s.cluster_id=c.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -141,6 +142,9 @@
 		</if>
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
 			and id in ${pd.item}
+		</if>
+		<if test="pd.type != null and pd.type != ''"><!-- 按云平台类型检索 -->
+			and s.type = #{pd.type} 
 		</if>
 		order by s.gmt_modified desc
 	</select>

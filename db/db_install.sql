@@ -77,7 +77,7 @@ DROP TABLE IF EXISTS `t_hostmachine`;
 CREATE TABLE `t_hostmachine` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
-  `type` tinyint unsigned NOT NULL COMMENT '类型',
+  `type` varchar(20) NOT NULL COMMENT '类型',
   `status` tinyint unsigned NOT NULL COMMENT '状态',
   `ip` varchar(20) DEFAULT NULL COMMENT '宿主机ip',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
