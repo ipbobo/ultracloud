@@ -36,9 +36,9 @@
 							<tr>
 								<td style="width:140px;text-align: right;padding-top: 13px;">类型:</td>
 								<td id="js">
-									<select class="chosen-select form-control" name="type" id="type" data-placeholder="请选择类型" style="vertical-align:top;"  title="类型"  >
-									<option value="vmware">vmware</option>
-									<option value="OpenStack">OpenStack</option>
+									<select disabled="disabled" class="chosen-select form-control" name="type" id="type" value="${pd.type}" data-placeholder="请选择类型" style="vertical-align:top;"  title="类型"  >
+									<option <c:if test="${pd.type == 'vmware' }">selected="selected"</c:if> value="vmware">vmware</option>
+									<option <c:if test="${pd.type == 'OpenStack' }">selected="selected"</c:if>  value="OpenStack">OpenStack</option>
 									</select>
 								</td>
 							</tr>
@@ -158,7 +158,8 @@
 				$("#password").focus();
 			return false;
 			}
-			
+
+			$("#type").removeAttr("disabled", "disabled");
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();

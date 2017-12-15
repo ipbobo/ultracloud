@@ -110,6 +110,9 @@
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
 			and id in ${pd.item}
 		</if>
+		<if test="pd.type != null and pd.type != ''"><!-- 按云平台类型检索 -->
+			and s.type = #{pd.type} 
+		</if>
 		order by s.gmt_modified desc
 	</select>
 	
