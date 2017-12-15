@@ -28,7 +28,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="hostmachine/listVmware.do" method="post" name="Form" id="Form">
+						<form action="hostmachine/listType.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>

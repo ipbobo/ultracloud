@@ -36,12 +36,12 @@
 									<div class="tab-content" style="height:100%;">
 										<div id="vmware" class="tab-pane in active" style="height:500px;">
 											<table id="table_vmware" class="table table-striped table-bordered table-hover">
-												<iframe name="vmwareFrame" id="vmwareFrame" frameborder="0" style="margin:0 auto;width:100%;height:100%;"></iframe>
+												<iframe name="vmwareFrame" id="vmwareFrame" frameborder="0" src="<%=basePath%>/hostmachine/listType.do?type=vmware" style="margin:0 auto;width:100%;height:100%;"></iframe>
 											</table>
 										</div>
 										<div id="OpenStack" class="tab-pane" style="height:500px;">
 											<table id="table_OpenStack" class="table table-striped table-bordered table-hover">
-												<iframe name="OpenStackFrame" id="OpenStackFrame" frameborder="0" src="<%=basePath%>/hostmachine/listOpenStack.do" style="margin:0 auto;width:100%;height:100%;"></iframe>
+												<iframe name="OpenStackFrame" id="OpenStackFrame" frameborder="0" src="<%=basePath%>/hostmachine/listType.do?type=OpenStack" style="margin:0 auto;width:100%;height:100%;"></iframe>
 											</table>
 										</div>
 									</div>
@@ -80,7 +80,6 @@
 		$(top.hangge());
 		
 		$(function() {
-			$("#vmwareFrame").attr("src", "<%=basePath%>/hostmachine/listVmware.do");
 			$("#vmware_li").attr("class", "active");
 		});
 	</script>

@@ -70,13 +70,13 @@ public class HostmachineController extends BaseController {
 	}
 	
 	/**
-	 * Vmware集群列表
+	 * 按类型查询列表
 	 * 
 	 * @param page
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/listVmware")
-	public ModelAndView listVmware(Page page) throws Exception {
+	@RequestMapping(value = "/listType")
+	public ModelAndView listType(Page page) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "列表Hostmachine");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
@@ -85,41 +85,14 @@ public class HostmachineController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
-		pd.put("type", "vmware");
 		page.setPd(pd);
 		// 分页查询宿主机
 		List<PageData> varList = hostmachineService.list(page);
-		mv.setViewName("resource/hostmachine_vmware_list");
+		mv.setViewName("resource/hostmachine_type_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
 
-	/**
-	 * Openstack集群列表
-	 * 
-	 * @param page
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/listOpenStack")
-	public ModelAndView listOpenStack(Page page) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "列表Cloudplatform");
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
-		}
-		pd.put("type", "OpenStack");
-		page.setPd(pd);
-		// 分页查询宿主机
-		List<PageData> varList = hostmachineService.list(page);
-		mv.setViewName("resource/hostmachine_openstack_list");
-		mv.addObject("varList", varList);
-		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
-		return mv;
-	}
 }
