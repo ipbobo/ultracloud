@@ -114,9 +114,6 @@ public class CmpWorkOrderController extends BaseController{
 			workorderpd.put("createTime", workorderpd.get("createTime") == null ? "" : df.format(workorderpd.get("createTime")));
 			
 		}
-		
-		
-		
 		//工单类型
 		List<CmpDict> workorderTypeList =  cmpDictService.getCmpDictList("workorder_type");
 		//工单状态
@@ -172,25 +169,45 @@ public class CmpWorkOrderController extends BaseController{
 		//获取流程注释
 		List<Comment> commentList = activitiService.getProcessComments(toCheckWorkorder.getProcInstId());
 		mv.addObject("commentList", commentList);
-		//是资源申请，跳资源申请审核页面或运维申请审核页面
-		String toCheckUrl = "";
-		if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("1")) {
-			CmpOrder orderInfo = null;
-			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toCheckWorkorder.getOrderNo());
-			if (orderList != null && orderList.size() > 0) {
-				orderInfo = orderList.get(0);
-			}
-			mv.addObject("orderInfo", orderInfo);
-			toCheckUrl = "workorder/applycheck";
-		}else if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("2")) {
-			//查询工单关联的运维信息
-			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toCheckWorkorder.getOrderNo());
-			cmpOpServeService.encase(opServe);  //中文填充
-			mv.addObject("opServe", opServe);
-			toCheckUrl = "workorder/opercheck";
+		
+		//是资源申请，跳资源申请详情页面或运维申请审核页面
+		String toViewUrl = "";
+		IWorkorderHandler workorderHandler = workorderHelper.instance(toCheckWorkorder.getAppType());
+		if (workorderHandler == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
 		}
-		mv.addObject("workorder", toCheckWorkorder);
-		mv.setViewName(toCheckUrl);
+		Map<String, Object> pageViewMap = workorderHandler.toWorkorderCheck(toCheckWorkorder);
+		if (pageViewMap == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
+		}
+		for (String key : pageViewMap.keySet()) {
+			mv.addObject(key, pageViewMap.get(key));
+		}
+		mv.setViewName((String)pageViewMap.get("toPageUrl"));
+		
+		//是资源申请，跳资源申请审核页面或运维申请审核页面
+//		String toCheckUrl = "";
+//		if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("1")) {
+//			CmpOrder orderInfo = null;
+//			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toCheckWorkorder.getOrderNo());
+//			if (orderList != null && orderList.size() > 0) {
+//				orderInfo = orderList.get(0);
+//			}
+//			mv.addObject("orderInfo", orderInfo);
+//			toCheckUrl = "workorder/applycheck";
+//		}else if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("2")) {
+//			//查询工单关联的运维信息
+//			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toCheckWorkorder.getOrderNo());
+//			cmpOpServeService.encase(opServe);  //中文填充
+//			mv.addObject("opServe", opServe);
+//			toCheckUrl = "workorder/opercheck";
+//		}
+//		mv.addObject("workorder", toCheckWorkorder);
+//		mv.setViewName(toCheckUrl);
 		return mv;
 	}
 	
@@ -220,26 +237,46 @@ public class CmpWorkOrderController extends BaseController{
 		//获取流程注释
 		List<Comment> commentList = activitiService.getProcessComments(toExcuteWorkorder.getProcInstId());
 		mv.addObject("commentList", commentList);
-		//是资源申请，跳资源申请审核页面或运维申请审核页面
-		String toExecuteUrl = "";
-		if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("1")) {
-			CmpOrder orderInfo = null;
-			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toExcuteWorkorder.getOrderNo());
-			if (orderList != null && orderList.size() > 0) {
-				orderInfo = orderList.get(0);
-			}
-			mv.addObject("orderInfo", orderInfo);
-			toExecuteUrl = "workorder/applyexecute";
-		}else if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("2")) {
-			//查询工单关联的运维信息
-			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toExcuteWorkorder.getOrderNo());
-			cmpOpServeService.encase(opServe);  //中文填充
-			mv.addObject("opServe", opServe);
-			toExecuteUrl = "workorder/operexecute";
+		
+		//是资源申请，跳资源申请详情页面或运维申请执行页面
+		String toViewUrl = "";
+		IWorkorderHandler workorderHandler = workorderHelper.instance(toExcuteWorkorder.getAppType());
+		if (workorderHandler == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
 		}
-
-		mv.addObject("workorder", toExcuteWorkorder);
-		mv.setViewName(toExecuteUrl);
+		Map<String, Object> pageViewMap = workorderHandler.toWorkorderExecute(toExcuteWorkorder);
+		if (pageViewMap == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
+		}
+		for (String key : pageViewMap.keySet()) {
+			mv.addObject(key, pageViewMap.get(key));
+		}
+		mv.setViewName((String)pageViewMap.get("toPageUrl"));
+		
+//		//是资源申请，跳资源申请审核页面或运维申请审核页面
+//		String toExecuteUrl = "";
+//		if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("1")) {
+//			CmpOrder orderInfo = null;
+//			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toExcuteWorkorder.getOrderNo());
+//			if (orderList != null && orderList.size() > 0) {
+//				orderInfo = orderList.get(0);
+//			}
+//			mv.addObject("orderInfo", orderInfo);
+//			toExecuteUrl = "workorder/applyexecute";
+//		}else if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("2")) {
+//			//查询工单关联的运维信息
+//			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toExcuteWorkorder.getOrderNo());
+//			cmpOpServeService.encase(opServe);  //中文填充
+//			mv.addObject("opServe", opServe);
+//			toExecuteUrl = "workorder/operexecute";
+//		}
+//
+//		mv.addObject("workorder", toExcuteWorkorder);
+//		mv.setViewName(toExecuteUrl);
 		return mv;
 	}
 	
@@ -287,7 +324,7 @@ public class CmpWorkOrderController extends BaseController{
 		for (String key : pageViewMap.keySet()) {
 			mv.addObject(key, pageViewMap.get(key));
 		}
-		mv.setViewName((String)pageViewMap.get("toViewUrl"));
+		mv.setViewName((String)pageViewMap.get("toPageUrl"));
 //		if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("1")) {
 //			CmpOrder orderInfo = null;
 //			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toViewWorkorder.getOrderNo());

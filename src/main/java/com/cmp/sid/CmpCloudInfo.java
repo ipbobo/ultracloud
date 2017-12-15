@@ -8,11 +8,13 @@ public class CmpCloudInfo {
 	private String osTypeName;	//系统名称
 	private String sysDiskSize; //系统盘大小
 	private String dataDiskSize; //数据盘大小
+	private String dataDiskInfo; //数据盘信息
 	private String cpu;			//cpu
 	private String memory;      //内存
 	private String osStatus; //系统安装状态
 	private String soft; 		//软件安装
 	private String softStatus;	//软件安装状态
+	private String expireDate;  //使用期限
 	
 	public String getOsTypeName() {
 		return osTypeName;
@@ -61,6 +63,18 @@ public class CmpCloudInfo {
 	}
 	public void setSoftStatus(String softStatus) {
 		this.softStatus = softStatus;
+	}
+	public String getDataDiskInfo() {
+		return dataDiskInfo;
+	}
+	public void setDataDiskInfo(String dataDiskInfo) {
+		this.dataDiskInfo = dataDiskInfo;
+	}
+	public String getExpireDate() {
+		return expireDate;
+	}
+	public void setExpireDate(String expireDate) {
+		this.expireDate = expireDate;
 	}
 	
 	

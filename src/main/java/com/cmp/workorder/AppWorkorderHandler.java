@@ -14,11 +14,13 @@ import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.VirtualMachineService;
+import com.cmp.sid.CloudInfoCollect;
 import com.cmp.sid.CmpCloudInfo;
 import com.cmp.sid.CmpOrder;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.VirtualMachine;
 import com.cmp.util.PageDataUtil;
+import com.cmp.util.StringUtil;
 import com.fh.entity.system.Department;
 import com.fh.service.fhoa.department.impl.DepartmentService;
 import com.fh.util.PageData;
@@ -47,6 +49,28 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	@Override
 	public Map<String, Object> toWorkorderView(CmpWorkOrder cmpWorkorder) throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
+		resMap = buildViewInfo(cmpWorkorder, resMap);
+		resMap.put("toPageUrl", "workorder/applyview");
+		return resMap;
+	}
+	
+	@Override
+	public Map<String, Object> toWorkorderCheck(CmpWorkOrder cmpWorkorder) throws Exception {
+		Map<String, Object> resMap = new HashMap<String, Object>();
+		resMap = buildViewInfo(cmpWorkorder, resMap);
+		resMap.put("toPageUrl", "workorder/applycheck");
+		return resMap;
+	}
+
+	@Override
+	public Map<String, Object> toWorkorderExecute(CmpWorkOrder cmpWorkorder) throws Exception {
+		Map<String, Object> resMap = new HashMap<String, Object>();
+		resMap = buildViewInfo(cmpWorkorder, resMap);
+		resMap.put("toPageUrl", "workorder/applyexecute");
+		return resMap;
+	}
+	
+	public Map<String, Object> buildViewInfo(CmpWorkOrder cmpWorkorder, Map<String, Object> resMap) throws Exception {
 		//工单信息
 		CmpOrder orderInfo = null;
 		List<CmpOrder> orderList = null;
@@ -79,31 +103,56 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		Department dept = (Department) PageDataUtil.mapToObject(d_pd, Department.class);
 		resMap.put("department", dept);
 		
+		//虚拟机汇总信息
+		if (cmpWorkorder.getVirNum() != null) {
+			CloudInfoCollect cloudInfoCollect = new CloudInfoCollect();
+			int vmNum = Integer.parseInt(orderInfo.getVirNum());
+			cloudInfoCollect.setVmCount(vmNum);
+			cloudInfoCollect.setCpuTotal(orderInfo.getCpu() == null ? 
+					0 : vmNum*Integer.parseInt(StringUtil.getInteger(cmpDictService.getCmpDict("cpu", orderInfo.getCpu()).getDictValue())));
+			cloudInfoCollect.setMemoryTotal(orderInfo.getMemory() == null ? 
+					0 : vmNum*Integer.parseInt(StringUtil.getInteger(cmpDictService.getCmpDict("memory", orderInfo.getMemory()).getDictValue())));
+			if (orderInfo.getDiskSize() == null) {
+				cloudInfoCollect.setDiskTotal(0);
+			}else {
+				int diskTotal = 0;
+				String[] disks = orderInfo.getDiskSize().split(",");
+				for (String oneDiskSize : disks) {
+					diskTotal += Integer.parseInt(oneDiskSize);
+				}
+				cloudInfoCollect.setDiskTotal(diskTotal);
+			}
+			resMap.put("cloudInfoCollect", cloudInfoCollect);
+		}
 		//虚拟机信息
 		CmpCloudInfo cmpCloudInfo = getCmpCloudInfo(cmpWorkorder, orderInfo);
 		resMap.put("cmpCloudInfo", cmpCloudInfo);
-		resMap.put("toViewUrl", "workorder/applyview");
 		return resMap;
 	}
 
-	@Override
-	public Map<String, Object>  toWorkorderCheck(CmpWorkOrder cmpWorkorder) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<String, Object> toWorkorderExecute(CmpWorkOrder cmpWorkorder) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	
 	
 	public CmpCloudInfo getCmpCloudInfo(CmpWorkOrder cmpWorkorder, CmpOrder orderInfo) throws Exception {
 		CmpCloudInfo cloudInfo = new CmpCloudInfo();
 		cloudInfo.setOsTypeName(cmpDictService.getCmpDict("os_type", orderInfo.getOsType()).getDictValue());
-		cloudInfo.setSysDiskSize(cmpWorkorder.getDiskSize());
-		cloudInfo.setDataDiskSize(CmpCloudInfo.SYS_DISK_SIZE);
+		
+		
+		if (orderInfo.getDiskSize() == null) {
+			cloudInfo.setDataDiskInfo("");
+		}else {
+			StringBuffer deskInfo = new StringBuffer();
+			int diskTotal = 0;
+			String[] diskTypes = orderInfo.getDiskType().split(",");
+			String[] disks = orderInfo.getDiskSize().split(",");
+			int index = 0;
+			for (String oneDiskSize : disks) {
+				deskInfo.append(cmpDictService.getCmpDict("disk_type", diskTypes[index]).getDictValue() + ":" +oneDiskSize+"G ");
+				index++;
+			}
+			cloudInfo.setDataDiskInfo(deskInfo.toString());
+		}
+		cloudInfo.setSysDiskSize(CmpCloudInfo.SYS_DISK_SIZE);
 		cloudInfo.setCpu(orderInfo.getCpu());
 		cloudInfo.setMemory(orderInfo.getMemory());
 		if (cmpWorkorder.getVirtualMachineId() == null || cmpWorkorder.getVirtualMachineId().length() == 0) {
@@ -114,6 +163,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			cloudInfo.setSoftStatus(vm.getSoftStatus());
 			cloudInfo.setOsStatus(vm.getOsStatus());
 		}
+		cloudInfo.setExpireDate(orderInfo.getExpireDate());
 		//......................................................
 		return cloudInfo;
 	}
