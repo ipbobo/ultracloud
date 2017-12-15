@@ -103,7 +103,8 @@ DROP TABLE IF EXISTS `t_storage`;
 CREATE TABLE `t_storage` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
-  `type` tinyint unsigned NOT NULL COMMENT '类型',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `datacenter_id` bigint unsigned DEFAULT NULL COMMENT '数据中心id',
   `allspace` int unsigned DEFAULT NULL COMMENT '所有空间',
   `freespace` int unsigned DEFAULT NULL COMMENT '可用空间',
   `threshold` tinyint unsigned NOT NULL COMMENT '阈值',

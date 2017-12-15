@@ -6,6 +6,9 @@
 	<sql id="tableName">
 		t_storage
 	</sql>
+	<sql id="dcTableName">
+		t_datacenter
+	</sql>
 	
 	<!-- 字段 -->
 	<sql id="Field">
@@ -18,7 +21,8 @@
 		type,
 		allspace,
 		freespace,
-		threshold
+		threshold,
+		datacenter_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -38,7 +42,8 @@
 		#{type},
 		#{allspace},
 		#{freespace},
-		#{threshold}
+		#{threshold},
+		#{datacenter_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -75,6 +80,7 @@
 			allspace = #{allspace},
 			freespace = #{freespace},
 			threshold = #{threshold}
+			datacenter_id = #{datacenter_id}
 		 where 
 		    id = #{id}
 	</update>
@@ -98,9 +104,11 @@
 				s.freespace,
 				s.threshold,
 				s.gmt_create,
-				s.gmt_modified
-		from <include refid="tableName"></include> s    
-		where 1 = 1
+				s.gmt_modified,
+				s.datacenter_id,
+				d.name as datacenter_name
+		from <include refid="tableName"></include> s,<include refid="dcTableName"></include> d
+		where s.datacenter_id = d.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -109,6 +117,9 @@
 		</if>
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
 			and id in ${pd.item}
+		</if>
+		<if test="pd.type != null and pd.type != ''"><!-- 按云平台类型检索 -->
+			and s.type = #{pd.type} 
 		</if>
 		order by s.gmt_modified desc
 	</select>
