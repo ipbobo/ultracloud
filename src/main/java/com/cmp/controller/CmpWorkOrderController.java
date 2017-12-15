@@ -34,6 +34,7 @@ import com.cmp.sid.CmpOpServe;
 import com.cmp.sid.CmpOrder;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.RelateTask;
+import com.cmp.sid.VirtualMachine;
 import com.cmp.workorder.IWorkorderHandler;
 import com.cmp.workorder.WorkorderHelper;
 import com.fh.controller.base.BaseController;
@@ -444,6 +445,20 @@ public class CmpWorkOrderController extends BaseController{
 				updateParams.put("status", "5");  //进入运维执行状态
 				updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
 				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+				
+				
+				//测试添加虚拟机
+//				VirtualMachine vm = new VirtualMachine();
+//				vm.setCpu("2");
+//				vm.setProjectId("1");
+//				vm.setName("测试虚拟机");
+//				vm.setIp("192.168.1.101");
+//				vm.setUsername("test");
+//				vm.setPassword("pwd123");
+//				vm.setStatus("0");
+//				vm.setHostmachineId(182837323);
+//				virtualMachineService.add(vm);
+				
 				
 				resultInfo = "执行成功";
 				map.put("result", resultInfo);	

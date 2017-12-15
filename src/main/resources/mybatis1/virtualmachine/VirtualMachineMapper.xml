@@ -9,6 +9,7 @@
 	<!-- 字段 -->
 	<sql id="fieldName">
 		id,
+		user,
 		project_id,
 		name,
 		ip,
@@ -33,6 +34,7 @@
 	<!-- 字段值 -->
 	<sql id="fieldValue">
 		#{id},
+		#{user},
 		#{projectId},
 		#{name},
 		#{ip},
@@ -55,6 +57,7 @@
 	
 	<!-- 字段 -->
 	<sql id="saveFieldName">
+		user,
 		project_id,
 		name,
 		ip,
@@ -70,12 +73,11 @@
 		soft_status,
 		duedate,
 		username,
-		password,
-		gmt_create,
-		gmt_modified
+		password
 	</sql>
 	
 	<sql id="saveFieldValue">
+		#{user},
 		#{projectId},
 		#{name},
 		#{ip},
@@ -91,9 +93,7 @@
 		#{softStatus},
 		#{duedate},
 		#{username},
-		#{password},
-		#{gmt_create},
-		#{gmt_modified}
+		#{password}
 	</sql>
 	
 	<!-- 新增 -->
@@ -108,6 +108,11 @@
 	<!-- 通过ID 查询 -->
 	<select id="findById" resultType="com.cmp.sid.VirtualMachine" parameterType="String">
 		select * from  <include refid="tableName"/> where id = #{id}
+	</select>
+	
+	<!-- 通过ID 查询 -->
+	<select id="findByUser" resultType="com.cmp.sid.VirtualMachine" parameterType="String">
+		select * from  <include refid="tableName"/> where user = #{user}
 	</select>
 	
 </mapper>
