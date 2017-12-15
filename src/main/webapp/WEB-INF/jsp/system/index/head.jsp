@@ -52,7 +52,7 @@
 						<!-- #section:basics/navbar.user_menu -->
 						<li class="light-blue">
 							<a data-toggle="dropdown"  class="dropdown-toggle" href="#">
-								<img class="nav-user-photo" src="static/ace/avatars/user.jpg" alt="Jason's Photo" id="userPhoto" />
+								<!-- <img class="nav-user-photo" src="static/ace/avatars/user.jpg" alt="Jason's Photo" id="userPhoto" /> -->
 								<span class="user-info" id="user_info">
 								</span>
 								<i class="ace-icon fa fa-caret-down"></i>
