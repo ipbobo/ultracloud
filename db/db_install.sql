@@ -78,16 +78,17 @@ CREATE TABLE `t_hostmachine` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
   `type` varchar(20) NOT NULL COMMENT '类型',
-  `status` tinyint unsigned NOT NULL COMMENT '状态',
+  `status` tinyint unsigned DEFAULT NULL COMMENT '状态',
   `ip` varchar(20) DEFAULT NULL COMMENT '宿主机ip',
+  `port` INT UNSIGNED DEFAULT NULL COMMENT '端口',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
   `memory` int unsigned DEFAULT NULL COMMENT '内存',
   `localdisk` int unsigned DEFAULT NULL COMMENT '本地磁盘',
   `devicenum` varchar(30) DEFAULT NULL COMMENT '设备号',
   `duedate` datetime DEFAULT NULL COMMENT '到期时间',
-  `username` varchar(20) NOT NULL COMMENT '用户名',
-  `password` varchar(20) NOT NULL COMMENT '密码',
-  `cluster_id` bigint unsigned NOT NULL COMMENT '集群id',
+  `account` varchar(20) NOT NULL COMMENT '用户名',
+  `password_ssh` varchar(20) NOT NULL COMMENT '密码',
+  `cluster_id` bigint unsigned DEFAULT NULL COMMENT '集群id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   INDEX idx_type(`type`),
@@ -621,3 +622,4 @@ CREATE TABLE `t_product` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品'; 
+

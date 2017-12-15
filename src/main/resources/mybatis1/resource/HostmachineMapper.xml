@@ -27,9 +27,10 @@
 		localdisk,
 		devicenum,
 		duedate,
-		username,
-		password,
-		cluster_id
+		account,
+		password_ssh,
+		cluster_id,
+		port
 	</sql>
 	
 	<sql id="Field_time">
@@ -54,9 +55,10 @@
 		#{localdisk},
 		#{devicenum},
 		#{duedate},
-		#{username},
-		#{password},
-		#{cluster_id}
+		#{account},
+		#{password_ssh},
+		#{cluster_id},
+		#{port}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -97,9 +99,10 @@
 			localdisk = #{localdisk},
 			devicenum = #{devicenum},
 			duedate = #{duedate},
-			username = #{username},
-			password = #{password},
-			cluster_id = #{cluster_id}
+			account = #{account},
+			password_ssh = #{password_ssh},
+			cluster_id = #{cluster_id},
+			port = #{port}
 		 where 
 		    id = #{id}
 	</update>
@@ -114,7 +117,7 @@
 			id = #{id}
 	</select>
 	
-	<!-- 脚本列表 -->
+	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,
 				s.name,
@@ -126,14 +129,50 @@
 				s.localdisk,
 				s.devicenum,
 				s.duedate,
-				s.username,
-				s.password,
+				s.account,
+				s.password_ssh,
 				s.gmt_create,
 				s.gmt_modified,
 				s.cluster_id,
+				s.port,
 				c.name AS cluster_name
 		from <include refid="tableName"></include> s,<include refid="clustertableName"></include> c
 		where s.cluster_id=c.id
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					s.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
+			and id in ${pd.item}
+		</if>
+		<if test="pd.type != null and pd.type != ''"><!-- 按云平台类型检索 -->
+			and s.type = #{pd.type} 
+		</if>
+		order by s.gmt_modified desc
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPageKVM" parameterType="page" resultType="pd" >
+		select  s.id,
+				s.name,
+				s.type,
+				s.status,
+				s.ip,
+				s.cpu,
+				s.memory,
+				s.localdisk,
+				s.devicenum,
+				s.duedate,
+				s.account,
+				s.password_ssh,
+				s.gmt_create,
+				s.gmt_modified,
+				s.cluster_id,
+				s.port
+		from <include refid="tableName"></include> s
+		where 1 = 1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -161,11 +200,12 @@
 				s.localdisk,
 				s.devicenum,
 				s.duedate,
-				s.username,
-				s.password,
+				s.account,
+				s.password_ssh,
 				s.gmt_create,
 				s.gmt_modified,
 				s.cluster_id,
+				s.port,
 				cl.name as cluster_name
 		from 
 		<include refid="tableName"></include> s LEFT JOIN <include refid="clustertableName"></include> cl
