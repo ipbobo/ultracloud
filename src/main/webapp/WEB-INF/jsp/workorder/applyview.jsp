@@ -106,7 +106,7 @@
 										<td class='center' style="background-color: rgb(244,244,244);">操作系统</td>
 										<td class='center'>${cmpCloudInfo.osTypeName}</td>
 										<td class='center' style="background-color: rgb(244,244,244);">系统盘/数据盘</td>
-										<td class='center'>系统盘${cmpCloudInfo.sysDiskSize}G; 数据盘${cmpCloudInfo.dataDiskSize}G</td>
+										<td class='center'>系统盘${cmpCloudInfo.sysDiskSize}; 数据盘${cloudInfoCollect.diskTotal}G</td>
 									</tr>
 									<tr>
 										<td class='center' style="background-color: rgb(244,244,244);">CPU/内存</td>

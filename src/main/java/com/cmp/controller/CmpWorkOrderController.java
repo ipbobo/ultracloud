@@ -401,6 +401,9 @@ public class CmpWorkOrderController extends BaseController{
 		return map;
 	}
 	
+	
+	
+	
 	/**工单执行
 	 * @return
 	 * @throws Exception 
@@ -447,17 +450,7 @@ public class CmpWorkOrderController extends BaseController{
 				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 				
 				
-				//测试添加虚拟机
-//				VirtualMachine vm = new VirtualMachine();
-//				vm.setCpu("2");
-//				vm.setProjectId("1");
-//				vm.setName("测试虚拟机");
-//				vm.setIp("192.168.1.101");
-//				vm.setUsername("test");
-//				vm.setPassword("pwd123");
-//				vm.setStatus("0");
-//				vm.setHostmachineId(182837323);
-//				virtualMachineService.add(vm);
+
 				
 				
 				resultInfo = "执行成功";
@@ -468,6 +461,59 @@ public class CmpWorkOrderController extends BaseController{
 		map.put("result", resultInfo);				//返回结果
 		return map;
 	}
+	
+	
+
+	/**执行任务
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/executeWork")
+	@ResponseBody
+	public Object executeWork() throws Exception{
+		Map<String,String> map = new HashMap<String,String>();
+		String resultInfo = "";
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		
+		Session session = Jurisdiction.getSession();
+		User userr = (User)session.getAttribute(Const.SESSION_USERROL);				//读取session中的用户信息(含角色信息)
+		if (userr == null) {
+			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
+			if (user == null) {
+				resultInfo = "执行失败,请重新登录";
+				map.put("result", resultInfo);	
+				return map;
+			}
+			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
+			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
+		}
+		pd = this.getPageData();
+		pd.put("USERNAME", userr.getUSERNAME());
+		CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo((String)pd.get("appNo"));
+		if (workorder == null) {
+			resultInfo = "执行失败,工单不存在";
+			map.put("result", resultInfo);	
+			return map;
+		}
+		
+		IWorkorderHandler workorderHandler = workorderHelper.instance(workorder.getAppType());
+		if (workorderHandler == null) {
+			resultInfo = "执行失败,工单不存在";
+			map.put("result", resultInfo);	
+			return map;
+		}
+		Map<String, Object> pageViewMap = workorderHandler.executeWork(pd, workorder);
+		if (pageViewMap == null) {
+			resultInfo = "执行失败";
+			map.put("result", resultInfo);	
+			return map;
+		}
+		map.put("result", (String)pageViewMap.get("result"));				//返回结果
+		return map;
+	}
+	
+	
 	
 	
 	/**导出工单信息到EXCEL
