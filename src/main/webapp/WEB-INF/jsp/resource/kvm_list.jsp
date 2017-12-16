@@ -89,6 +89,7 @@
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
+													<a class="btn btn-mini btn-purple" onclick="listVirtual('${var.id}');"><i class="icon-pencil"></i>虚拟机管理</a>
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
@@ -310,6 +311,22 @@
 					}
 				}
 			});
+		}
+		
+		
+		//打开虚拟机管理窗口
+		function listVirtual(id){
+				top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="虚拟机管理";
+			 diag.URL = '<%=basePath%>kvm/goListVirtualmachine.do?hostmachine_id='+id;
+			 diag.Width = 800;
+			 diag.Height = 400;
+			 diag.CancelEvent = function(){ //关闭事件
+				 diag.close();
+			 };
+			 diag.show();
 		}
 	</script>
 
