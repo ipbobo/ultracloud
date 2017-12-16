@@ -23,8 +23,7 @@ public class CmpLogController extends BaseController {
 	
 	@RequestMapping(value="/log/list")
 	public ModelAndView getLogList(Page page) throws Exception{
-		PageData pd = new PageData();
-		pd=getPageData();
+		PageData pd=getPageData();
 		pd.put("applyUserId", StringUtil.getUserId());//获取登录用户
 		page.setPd(pd);
 		ModelAndView mv = new ModelAndView();
