@@ -54,6 +54,9 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover"  style="margin-top:5px;">
 							<thead>
 								<tr>
+									<th class="center" style="width:35px;">
+									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
+									</th>
 									<th class="center">服务器名称</th>
 									<th class="center">ip</th>
 									<th class="center">状态</th>
@@ -66,13 +69,15 @@
 							<c:choose>
 								<c:when test="${not empty varList}">
 									<c:if test="${QX.cha == 1 }">
-									<c:forEach items="${varList}" var="virtual" varStatus="vs">
+									<c:forEach items="${varList}" var="var" varStatus="vs">
 												
 										<tr>
-											<td class="center">${virtual.name }</td>
-											<td class="center">${virtual.ip }</td>
-											<td class="center">${virtual.status }</td>
-										</td>
+											<td class='center'>
+												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
+											</td>
+											<td class="center">${var.name }</td>
+											<td class="center">${var.ip }</td>
+											<td class="center">${var.status }</td>
 										</tr>
 									
 									</c:forEach>
@@ -96,7 +101,7 @@
 					<table style="width:100%;">
 						<tr>
 							<td style="vertical-align:top;">
-								<a class="btn btn-mini btn-primary" onclick="save();">确定</a>
+								<a class="btn btn-mini btn-primary" onclick="select();">确定</a>
 								<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
 							</td>
 							<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -147,32 +152,45 @@ function searchs(){
 	$("#userForm").submit();
 }
 
-//选择
-function select(value){
-	$("#xzvalue").val(value);
-	top.Dialog.close();
-}
-
-
 $(function() {
-	//
+	//复选框全选控制
+	var active_class = 'active';
+	$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
+		var th_checked = this.checked;//checkbox inside "TH" table header
+		$(this).closest('table').find('tbody > tr').each(function(){
+			var row = this;
+			if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+			else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+		});
+	});
 });
 
-//确定
-function save(){
-	if($("#name").val()==""){
-		$("#name").tips({
-			side:3,
-            msg:'请输入名称',
-            bg:'#AE81FF',
-            time:2
-        });
-		$("#name").focus();
-	return false;
+//选择确定
+function select(){
+	var str = '';
+	for(var i=0;i < document.getElementsByName('ids').length;i++){
+	  if(document.getElementsByName('ids')[i].checked){
+	  	if(str=='') str += document.getElementsByName('ids')[i].value;
+	  	else str += ',' + document.getElementsByName('ids')[i].value;
+	  }
 	}
-	$("#Form").submit();
-	$("#zhongxin").hide();
-	$("#zhongxin2").show();
+	if(str==''){
+		bootbox.dialog({
+			message: "<span class='bigger-110'>您没有选择任何内容!</span>",
+			buttons: 			
+			{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
+		});
+		$("#zcheckbox").tips({
+			side:1,
+            msg:'点这里全选',
+            bg:'#AE81FF',
+            time:8
+        });
+		return;
+	}else{
+		$("#xzvalue").val(str);
+		top.Dialog.close();
+	}
 }
 	
 </script>
