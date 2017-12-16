@@ -3,6 +3,8 @@ package com.cmp.controller;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,6 +66,38 @@ public class VirtualBindingController extends BaseController {
 		mv.setViewName("resource/virtualbinding_list_virtual");
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		return mv;
+	}
+	
+	/**
+	 * 保存存量资源绑定
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/binding")
+	public ModelAndView binding(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		try {
+			String cluster_id = request.getParameter("cluster_id");
+			String project_id = request.getParameter("project_id");
+			String USERNAME = request.getParameter("USERNAME");
+			String virtualmachines = request.getParameter("virtualmachines");
+
+			if(null != virtualmachines && !"".equals(virtualmachines)){
+				String ArrayDATA_IDS[] = virtualmachines.split(",");
+				PageData pd = new PageData();
+				pd.put("project_id", project_id);
+				pd.put("user", USERNAME);
+				pd.put("ids", ArrayDATA_IDS);
+				virtualBindingService.edit(pd);
+			}
+			mv.addObject("retMsg", "保存成功!");
+		} catch (Exception e) {
+			logger.error("保存错误：" + e);
+			mv.addObject("retMsg", "保存失败!");
+		}
 		return mv;
 	}
 

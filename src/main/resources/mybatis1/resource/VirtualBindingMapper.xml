@@ -32,5 +32,19 @@
 		AND c.id=#{pd.cluster_id}
 		ORDER BY a.gmt_modified desc
 	</select>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="virtualTableName"></include>
+		set 
+			project_id = #{project_id},
+			user = #{user}
+		where 
+			id in
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</update>
 
 </mapper>

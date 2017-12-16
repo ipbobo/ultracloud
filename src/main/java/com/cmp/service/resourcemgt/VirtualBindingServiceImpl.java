@@ -1,6 +1,5 @@
 package com.cmp.service.resourcemgt;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -54,26 +53,6 @@ public class VirtualBindingServiceImpl implements VirtualBindingService {
 	}
 
 	/**
-	 * 新增
-	 * 
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void save(PageData pd) throws Exception {
-		dao.save("VirtualBindingMapper.save", pd);
-	}
-
-	/**
-	 * 删除
-	 * 
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void delete(PageData pd) throws Exception {
-		dao.delete("VirtualBindingMapper.delete", pd);
-	}
-
-	/**
 	 * 修改
 	 * 
 	 * @param pd
@@ -93,36 +72,4 @@ public class VirtualBindingServiceImpl implements VirtualBindingService {
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("VirtualBindingMapper.datalistPage", page);
 	}
-
-	/**
-	 * 列表(全部)
-	 * 
-	 * @param pd
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("VirtualBindingMapper.listAll", pd);
-	}
-
-	/**
-	 * 通过id获取数据
-	 * 
-	 * @param pd
-	 * @throws Exception
-	 */
-	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("VirtualBindingMapper.findById", pd);
-	}
-
-	/**
-	 * 批量删除
-	 * 
-	 * @param ArrayDATA_IDS
-	 * @throws Exception
-	 */
-	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("VirtualBindingMapper.deleteAll", ArrayDATA_IDS);
-	}
-
 }

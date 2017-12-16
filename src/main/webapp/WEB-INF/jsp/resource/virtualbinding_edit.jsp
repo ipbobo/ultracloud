@@ -69,14 +69,15 @@
 									<tr>
 										<td style="width:120px;text-align: right;padding-top: 13px;">云主机:</td>
 										<td id="juese" colspan="10">
-											<textarea rows="3" cols="10" id="virtualmachines" name="virtualmachines" style="width:98%;"></textarea>
+											<textarea readonly="readonly"  rows="3" cols="10" id="virtualmachines" name="virtualmachines" style="width:98%;"></textarea>
 											<a class="btn btn-mini btn-primary" onclick="selectHostmachine();">选择云主机</a>
 										</td>
 									</tr>
 									<tr>
-										<td style="text-align: center;" colspan="10"><a
-											class="btn btn-mini btn-primary" onclick="save();">绑定</a> <a
-											class="btn btn-mini btn-danger" onclick="flush();">取消</a></td>
+										<td style="text-align: center;" colspan="10">
+											<a class="btn btn-mini btn-primary" onclick="binding();">绑定</a> 
+											<a class="btn btn-mini btn-danger" onclick="flush();">取消</a>
+										</td>
 									</tr>
 								</table>
 							</div>
@@ -153,15 +154,13 @@
 		 diag.Title ="选择云主机";
 		 diag.URL = '<%=basePath%>virtualbinding/goListVirtualmachine.do?cluster_id='+cluster_id;
 		 diag.Width = 800;
-		 diag.Height = 600;
+		 diag.Height = 500;
 		 diag.CancelEvent = function(){ //关闭事件
-			 $("#"+USERNAME).val(diag.innerFrame.contentWindow.document.getElementById('xzvalue').value);
+			 $("#virtualmachines").val(diag.innerFrame.contentWindow.document.getElementById('xzvalue').value);
 			 diag.close();
 		 };
 		 diag.show();
 	}
-	
-	
 	
 		$(function(){ 
 		 	if($("#expirationtime_isforever").val() == 'yes'){
@@ -215,17 +214,18 @@
 		}
 
 		//保存
-		function save() {
+		function binding() {
 			top.jzts();
 			var jsonObj = {};//JSON请求数据
-			jsonObj.expirationtime_isforever = $("#expirationtime_isforever").val();
-			jsonObj.expirationtime_day = $("#expirationtime_day").val();
-			ajaxHttpPost("quota/saveExpirationtime.do", jsonObj);//发送Ajax请求
+			jsonObj.cluster_id = $("#cluster_id").val();
+			jsonObj.project_id = $("#project_id").val();
+			jsonObj.USERNAME = $("#USERNAME").val();
+			jsonObj.virtualmachines = $("#virtualmachines").val();
+			ajaxHttpPost("virtualbinding/binding.do", jsonObj);//发送Ajax请求
 		}
 
 		//取消
 		function flush() {
-			console.log("quota snapshoot flush----------------->");
 			location.reload();
 		}
 	</script>
