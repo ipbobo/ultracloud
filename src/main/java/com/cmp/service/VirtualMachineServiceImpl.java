@@ -29,4 +29,9 @@ public class VirtualMachineServiceImpl implements VirtualMachineService {
 	public List<VirtualMachine> findByUser(String user) throws Exception {
 		return (List)dao.findForList("VirtualMachineMapper.findByUser", user);
 	}
+
+	@Override
+	public List<VirtualMachine> findByAppNo(String appNo) throws Exception {
+		return (List)dao.findForList("VirtualMachineMapper.findByAppNo", appNo);
+	}
 }

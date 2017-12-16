@@ -11,5 +11,7 @@ public interface VirtualMachineService {
 	public VirtualMachine findById(String id) throws Exception;
 
 	public List<VirtualMachine> findByUser(String user) throws Exception;
+	
+	public List<VirtualMachine> findByAppNo(String appNo) throws Exception;
 
 }

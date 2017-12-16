@@ -60,15 +60,16 @@
 												<tr>
 													<td class='center'></td>
 													<td class='center'>虚拟机</td>
+													<td class='center'></td>
 													<td class='center'>
 														${cmpCloudInfo.cpu}核/${cmpCloudInfo.memory}G
 													</td>
 													<td class='center'>${cmpCloudInfo.dataDiskInfo}</td>
 													<td class='center'></td>
 													<td class='center'></td>
-													<td class='center'></td>
 													<td class='center'>
-													<button  style="float:left;margin-left: 100px;" type="button">安装</button>
+													<button  style="float:left;margin-left: 100px;" type="button" 
+														onclick="execute('${workorder.appNo}','${cmpCloudInfo.cpu}','${cmpCloudInfo.memory}','${cloudInfoCollect.diskTotal}');">安装</button>
 													</td>
 													</tr>
 								</tbody>
@@ -112,7 +113,7 @@
 										<td class='center' style="background-color: rgb(244,244,244);">操作系统</td>
 										<td class='center'>${cmpCloudInfo.osTypeName}</td>
 										<td class='center' style="background-color: rgb(244,244,244);">系统盘/数据盘</td>
-										<td class='center'>系统盘${cmpCloudInfo.sysDiskSize}G; 数据盘${cmpCloudInfo.dataDiskSize}G</td>
+										<td class='center'>系统盘${cmpCloudInfo.sysDiskSize}G; 数据盘${cloudInfoCollect.diskTotal}G</td>
 									</tr>
 									<tr>
 										<td class='center' style="background-color: rgb(244,244,244);">CPU/内存</td>
@@ -276,6 +277,19 @@
 			cache: false,
 			success: function(data){
 				window.top.queryPersonalTask();
+				showDialog(data.result);
+			}
+		});
+	}
+	
+	function execute(appNo, cpu, memory, diskSize){
+		$.ajax({
+			type: "POST",
+			url: '<%=basePath%>executeWork.do?appNo='+appNo +'&CPU=' + cpu +'&memory=' + memory + '&diskSize=' + diskSize,
+			dataType:'json',
+			//beforeSend: validateData,
+			cache: false,
+			success: function(data){
 				showDialog(data.result);
 			}
 		});

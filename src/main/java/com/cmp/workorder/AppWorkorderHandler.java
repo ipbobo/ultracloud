@@ -23,6 +23,7 @@ import com.cmp.util.PageDataUtil;
 import com.cmp.util.StringUtil;
 import com.fh.entity.system.Department;
 import com.fh.service.fhoa.department.impl.DepartmentService;
+import com.fh.util.Logger;
 import com.fh.util.PageData;
 
 @Service("appWorkorderHandler")
@@ -143,7 +144,6 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			cloudInfo.setDataDiskInfo("");
 		}else {
 			StringBuffer deskInfo = new StringBuffer();
-			int diskTotal = 0;
 			String[] diskTypes = orderInfo.getDiskType().split(",");
 			String[] disks = orderInfo.getDiskSize().split(",");
 			int index = 0;
@@ -156,17 +156,78 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		cloudInfo.setSysDiskSize(CmpCloudInfo.SYS_DISK_SIZE);
 		cloudInfo.setCpu(orderInfo.getCpu());
 		cloudInfo.setMemory(orderInfo.getMemory());
-		if (cmpWorkorder.getVirtualMachineId() == null || cmpWorkorder.getVirtualMachineId().length() == 0) {
+		
+		List<VirtualMachine> vmList = virtualMachineService.findByAppNo(cmpWorkorder.getAppNo());
+		if (vmList == null || vmList.size() == 0) {
 			cloudInfo.setSoftStatus("未安装");
 			cloudInfo.setOsStatus("未安装");
 		}else {
-			VirtualMachine vm = virtualMachineService.findById(cmpWorkorder.getVirtualMachineId());
+			VirtualMachine vm = vmList.get(0);
 			cloudInfo.setSoftStatus(vm.getSoftStatus());
 			cloudInfo.setOsStatus(vm.getOsStatus());
 		}
 		cloudInfo.setExpireDate(orderInfo.getExpireDate());
 		//......................................................
 		return cloudInfo;
+	}
+
+	@Override
+	public Map<String, Object> executeWork(PageData pd, CmpWorkOrder workOrder) throws Exception {
+		Map<String, Object> resMap = new HashMap<String, Object>();
+		
+		//获取项目信息，修改项目中的资源使用额度
+		PageData p_pd = new PageData();
+		p_pd.put("id", workOrder.getProjectCode());
+		p_pd = ProjectService.findById(p_pd);
+		int pCpuUsed = (p_pd.get("cpu_used") == null? 0 : (Integer)p_pd.get("cpu_used")) + Integer.parseInt(pd.getString("CPU"));
+		int pMemoryUsed = (p_pd.get("memory_used") == null? 0 : (Integer)p_pd.get("memory_used")) + Integer.parseInt(pd.getString("memory"));
+		int pDiskUsed = (p_pd.get("disk_used") == null? 0 : (Integer)p_pd.get("disk_used"))+ Integer.parseInt(pd.getString("diskSize"));
+		p_pd.put("cpu_used", pCpuUsed);
+		p_pd.put("memory_used", pMemoryUsed);
+		p_pd.put("disk_used", pDiskUsed);
+		
+		Project project = (Project) PageDataUtil.mapToObject(p_pd, Project.class);
+		String deptId = project.getDEPARTMENT_ID();
+		if (deptId == null) {
+			resMap.put("result", "执行异常! 工单对应的部门信息异常");
+			return resMap;
+		}
+		ProjectService.editUsedQuota(p_pd);
+		
+		//获取部门信息，修改部门资源使用额度
+		
+		PageData d_pd = new PageData();
+		d_pd.put("DEPARTMENT_ID", deptId);
+		d_pd = departmentService.findById(d_pd);
+		int dCpuUsed = (d_pd.get("cpu_used") == null ? 0: (Integer)d_pd.get("cpu_used"))+ Integer.parseInt(pd.getString("CPU"));
+		int dMemoryUsed = (d_pd.get("memory_used") == null ? 0: (Integer)d_pd.get("memory_used")) + Integer.parseInt(pd.getString("memory"));
+		int dDiskUsed = (d_pd.get("disk_used") == null ? 0: (Integer)d_pd.get("disk_used"))  + Integer.parseInt(pd.getString("diskSize"));
+		d_pd.put("cpu_used", dCpuUsed);
+		d_pd.put("memory_used", dMemoryUsed);
+		d_pd.put("disk_used", dDiskUsed);
+		departmentService.editUsedQuota(d_pd);
+		
+		
+		//测试添加虚拟机
+		VirtualMachine vm = new VirtualMachine();
+		vm.setCpu(pd.getString("CPU"));
+		vm.setMemory(pd.getString("memory"));
+		vm.setDatadisk(pd.getString("diskSize"));
+		vm.setProjectId(workOrder.getProjectCode());
+		vm.setOs("redhat6");
+		vm.setOsStatus("已安装");
+		vm.setSoft("TOMCAT8");
+		vm.setSoftStatus("已安装");
+		vm.setName("测试虚拟机");
+		vm.setIp("192.168.1.101");
+		vm.setUsername("test");
+		vm.setPassword("pwd123");
+		vm.setStatus("0");
+		vm.setHostmachineId(182837323);
+		vm.setAppNo(workOrder.getAppNo());
+		virtualMachineService.add(vm);
+		resMap.put("result", "执行成功!");
+		return resMap;
 	}
 
 }

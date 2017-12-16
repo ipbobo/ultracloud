@@ -146,7 +146,9 @@ CREATE TABLE `t_datacenter_network` (
 DROP TABLE IF EXISTS `t_virtualmachine`;
 CREATE TABLE `t_virtualmachine` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `project_id` varchar(20) NOT NULL COMMENT '项目名称',
+  `user` varchar(20) NOT NULL COMMENT '虚拟机用户',
+  `appNo` varchar(20) NOT NULL COMMENT '虚拟机用户',
+  `project_id` varchar(32) NOT NULL COMMENT '项目名称',
   `name` varchar(20) NOT NULL COMMENT '名称',
   `ip` varchar(20) DEFAULT NULL COMMENT '虚拟机ip',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',

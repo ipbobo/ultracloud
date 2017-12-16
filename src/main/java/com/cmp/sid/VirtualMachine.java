@@ -21,6 +21,7 @@ public class VirtualMachine {
 	private String osStatus;   //操作系统安装状态
 	private String soft;	  //软件
 	private String softStatus;	//软件安装状态
+	private String appNo;	//工单号
 	
 	public String getId() {
 		return id;
@@ -113,6 +114,9 @@ public class VirtualMachine {
 		this.gmt_modified = gmt_modified;
 	}
 	public String getOsStatus() {
+		if (osStatus == null) {
+			return "未安装";
+		}
 		return osStatus;
 	}
 	public void setOsStatus(String osStatus) {
@@ -125,6 +129,9 @@ public class VirtualMachine {
 		this.soft = soft;
 	}
 	public String getSoftStatus() {
+		if (softStatus == null) {
+			return "未安装";
+		}
 		return softStatus;
 	}
 	public void setSoftStatus(String softStatus) {
@@ -141,6 +148,12 @@ public class VirtualMachine {
 	}
 	public void setUser(String user) {
 		this.user = user;
+	}
+	public String getAppNo() {
+		return appNo;
+	}
+	public void setAppNo(String appNo) {
+		this.appNo = appNo;
 	}
 	
 	
