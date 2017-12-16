@@ -62,6 +62,17 @@ public class HostmachineServiceImpl implements HostmachineService {
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("HostmachineMapper.datalistPage", page);
 	}
+	
+	/**
+	 * KVM列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listKVM(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageKVM", page);
+	}
 
 	/**
 	 * 列表(全部)

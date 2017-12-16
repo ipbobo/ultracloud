@@ -169,19 +169,65 @@ public class CloudplatformController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+
+		mv.setViewName("resource/cloudplatform_list");
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+
+	/**
+	 * Vmware集群列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listVmware")
+	public ModelAndView listVmware(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表Cloudplatform");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
 		String keywords = pd.getString("keywords"); // 关键词检索条件
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
+		pd.put("type", "vmware");
 		page.setPd(pd);
 		List<PageData> varList = cloudplatformService.list(page); // 列出列表
-		mv.setViewName("resource/cloudplatform_list");
+		mv.setViewName("resource/cloudplatform_vmware_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
 
+	/**
+	 * Openstack集群列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listOpenStack")
+	public ModelAndView listOpenStack(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表Cloudplatform");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		pd.put("type", "OpenStack");
+		page.setPd(pd);
+		List<PageData> varList = cloudplatformService.list(page); // 列出列表
+		mv.setViewName("resource/cloudplatform_openstack_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+	
 	/**
 	 * 去新增页面
 	 * 

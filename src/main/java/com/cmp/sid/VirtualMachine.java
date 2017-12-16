@@ -3,12 +3,14 @@ package com.cmp.sid;
 public class VirtualMachine {
 	private String id;		//ID
 	private String projectId; //项目ID
+	private String name;    //虚拟机名称
+	private String user;	//虚拟机用户
 	private String ip;		//ip	
 	private String cpu;		//CPU
 	private String memory;  //内存
 	private String datadisk; //系统盘大小
 	private String status;	//虚拟机状态
-	private String hostmachineId; //宿主机ID
+	private long hostmachineId; //宿主机ID
 	private String platform;  //平台
 	private String os;		//操作系统
 	private String duedate;	//到期时间
@@ -19,6 +21,7 @@ public class VirtualMachine {
 	private String osStatus;   //操作系统安装状态
 	private String soft;	  //软件
 	private String softStatus;	//软件安装状态
+	private String appNo;	//工单号
 	
 	public String getId() {
 		return id;
@@ -62,10 +65,10 @@ public class VirtualMachine {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getHostmachineId() {
+	public long getHostmachineId() {
 		return hostmachineId;
 	}
-	public void setHostmachineId(String hostmachineId) {
+	public void setHostmachineId(long hostmachineId) {
 		this.hostmachineId = hostmachineId;
 	}
 	public String getPlatform() {
@@ -111,6 +114,9 @@ public class VirtualMachine {
 		this.gmt_modified = gmt_modified;
 	}
 	public String getOsStatus() {
+		if (osStatus == null) {
+			return "未安装";
+		}
 		return osStatus;
 	}
 	public void setOsStatus(String osStatus) {
@@ -123,10 +129,31 @@ public class VirtualMachine {
 		this.soft = soft;
 	}
 	public String getSoftStatus() {
+		if (softStatus == null) {
+			return "未安装";
+		}
 		return softStatus;
 	}
 	public void setSoftStatus(String softStatus) {
 		this.softStatus = softStatus;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
+	}
+	public String getAppNo() {
+		return appNo;
+	}
+	public void setAppNo(String appNo) {
+		this.appNo = appNo;
 	}
 	
 	

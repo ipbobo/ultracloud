@@ -28,6 +28,20 @@ public class StringUtil {
         return retObj.toString();
 	}
 	
+	
+	//字符串中提取数字
+	public static String getInteger(String str) {
+		String str2 = "";
+		if(str != null && !"".equals(str)){
+			for(int i=0;i<str.length();i++){
+				if(str.charAt(i)>=48 && str.charAt(i)<=57){
+				str2+=str.charAt(i);
+				}
+			}
+		}
+		return str2;
+	}
+	
 	//获取登录用户
 	public static String getUserId() {
 		Session session = Jurisdiction.getSession();

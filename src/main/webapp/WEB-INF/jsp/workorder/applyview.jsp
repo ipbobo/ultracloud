@@ -20,7 +20,7 @@
 						<div class="page-header">
 						
 								<button class="btn btn-success" id="cancel" name="cancel" type="reset" onclick="top.Dialog.close();">
-												返回
+									返回
 								</button>
 								<small>
 								<button class="btn disabled btn-success">工单号：${workorder.appNo}</button>
@@ -50,7 +50,6 @@
 										<th class="center">项目已用资源(cpu/内存/存储)</th>
 										<th class="center">项目剩余资源(cpu/内存/存储)</th>
 										<th class="center">负责人</th>
-										<th class="center">操作</th>
 									</tr>
 								</thead>
 
@@ -65,40 +64,11 @@
 													<td class='center'>${project.cpu_used}/${project.memory_used}/${project.disk_used}</td>
 													<td class='center'>${project.cpu_quota-project.cpu_used}/${project.memory_quota-project.memory_used}/${project.disk_quota-project.disk_used}</td>
 													<td class='center'>${project.USERNAME}</td>
-													<td class='center'>分析报告</td>
 													</tr>
 								</tbody>
 						</table>
 						</div>
 						<h1></h1>
-						<div>
-						<table id="simple-table"
-								class="table table-striped table-bordered table-hover"
-								style="margin-top: 5px;">
-								<thead>
-									<tr>
-										<th class="center">部门名称</th>
-										<th class="center">资源申请标准</th>
-										<th class="center">项目已用资源(cpu/内存/存储)</th>
-										<th class="center">项目剩余资源(cpu/内存/存储)</th>
-										<th class="center">申请人</th>
-									</tr>
-								</thead>
-
-								<tbody>
-												<tr>
-													<td class='center'>${department.NAME}</td>
-													<td class='center'>
-														<c:if test="${department.cpu_quota-department.cpu_used > 0} && ${department.memory_quota-department.memory_used >0} && ${department.disk_quota-department.disk_used > 0}">符合</c:if>
-														<c:if test="${department.cpu_quota-department.cpu_used <= 0} && ${department.memory_quota-department.memory_used <= 0} && ${department.disk_quota-department.disk_used<= 0}">不符合</c:if>
-													</td>
-													<td class='center'>${department.cpu_used}/${department.memory_used}/${department.disk_used}</td>
-													<td class='center'>${department.cpu_quota-department.cpu_used}/${department.memory_quota-department.memory_used}/${department.disk_quota-department.disk_used}</td>
-													<td class='center'>${department.HEADMAN}</td>
-													</tr>
-								</tbody>
-						</table>
-						</div>
 						
 						<div class="alert alert-info">服务目录</div>
 						<div>
@@ -106,45 +76,57 @@
 								class="table table-striped table-bordered table-hover"
 								style="margin-top: 5px;">
 								<tbody>
-									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">云资源申请总览</td>
-									</tr>
+									<thead>
+										<tr>
+											<th class='center'>云资源申请总览</th>
+										</tr>
+									</thead>
+									
 									<tr>
 										<td class='center' style="background-color: rgb(244,244,244);">申请云主机数量</td>
-										<td class='center'>1台</td>
+										<td class='center'>${cloudInfoCollect.vmCount}台</td>
 										<td class='center' style="background-color: rgb(244,244,244);">cpu/内存总量</td>
-										<td class='center'>1核/100G</td>
+										<td class='center'>${cloudInfoCollect.cpuTotal}核/${cloudInfoCollect.memoryTotal}G</td>
 										<td class='center' style="background-color: rgb(244,244,244);">数据盘总量</td>
-										<td class='center'>0G</td>
+										<td class='center'>${cloudInfoCollect.diskTotal}G</td>
 									</tr>
-									<tr>
-										<td class='center'>申请详情</td>
-									</tr>
+								</tbody>
+						</table>
+						<h2></h2>
+						<table id="simple-table"
+								class="table table-striped table-bordered table-hover"
+								style="margin-top: 5px;">
+								<tbody>
+									<thead>
+										<tr>
+											<th class='center'>申请详情</th>
+										</tr>
+									</thead>
 									<tr>
 										<td class='center' style="background-color: rgb(244,244,244);">操作系统</td>
-										<td class='center'>redhat</td>
+										<td class='center'>${cmpCloudInfo.osTypeName}</td>
 										<td class='center' style="background-color: rgb(244,244,244);">系统盘/数据盘</td>
-										<td class='center'>系统盘500G; 数据盘500G</td>
+										<td class='center'>系统盘${cmpCloudInfo.sysDiskSize}; 数据盘${cloudInfoCollect.diskTotal}G</td>
 									</tr>
 									<tr>
 										<td class='center' style="background-color: rgb(244,244,244);">CPU/内存</td>
-										<td class='center'>.......</td>
+										<td class='center'>${cmpCloudInfo.cpu}核/${cmpCloudInfo.memory}G</td>
 										<td class='center' style="background-color: rgb(244,244,244);">安装状态</td>
-										<td class='center'>......</td>
+										<td class='center'>${cmpCloudInfo.osStatus}</td>
 									</tr>
 									<tr>
 										<td class='center' style="background-color: rgb(244,244,244);">软件安装</td>
-										<td class='center' style="color: red;">.......</td>
+										<td class='center'>${cmpCloudInfo.softStatus}</td>
 									</tr>
 									<tr>
 										<td class='center' style="background-color: rgb(244,244,244);">数据盘信息</td>
-										<td class='center'>.......</td>
+										<td class='center'>${cmpCloudInfo.dataDiskInfo}</td>
 										<td class='center' style="background-color: rgb(244,244,244);">使用期限</td>
-										<td class='center'>......</td>
+										<td class='center'>${cmpCloudInfo.expireDate}</td>
 									</tr>
 									<tr>
 										<td class='center' style="background-color: rgb(244,244,244);">电子钥匙</td>
-										<td class='center'>.......</td>
+										<td class='center'></td>
 									</tr>
 								</tbody>
 						</table>

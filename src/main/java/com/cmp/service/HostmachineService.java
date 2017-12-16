@@ -44,6 +44,14 @@ public interface HostmachineService {
 	 * @throws Exception
 	 */
 	public List<PageData> list(Page page) throws Exception;
+	
+	/**
+	 * KVM列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	public List<PageData> listKVM(Page page) throws Exception;
 
 	/**
 	 * 列表(全部)

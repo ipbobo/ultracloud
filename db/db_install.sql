@@ -77,17 +77,18 @@ DROP TABLE IF EXISTS `t_hostmachine`;
 CREATE TABLE `t_hostmachine` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
-  `type` tinyint unsigned NOT NULL COMMENT '类型',
-  `status` tinyint unsigned NOT NULL COMMENT '状态',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `status` tinyint unsigned DEFAULT NULL COMMENT '状态',
   `ip` varchar(20) DEFAULT NULL COMMENT '宿主机ip',
+  `port` INT UNSIGNED DEFAULT NULL COMMENT '端口',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
   `memory` int unsigned DEFAULT NULL COMMENT '内存',
   `localdisk` int unsigned DEFAULT NULL COMMENT '本地磁盘',
   `devicenum` varchar(30) DEFAULT NULL COMMENT '设备号',
   `duedate` datetime DEFAULT NULL COMMENT '到期时间',
-  `username` varchar(20) NOT NULL COMMENT '用户名',
-  `password` varchar(20) NOT NULL COMMENT '密码',
-  `cluster_id` bigint unsigned NOT NULL COMMENT '集群id',
+  `account` varchar(20) NOT NULL COMMENT '用户名',
+  `password_ssh` varchar(20) NOT NULL COMMENT '密码',
+  `cluster_id` bigint unsigned DEFAULT NULL COMMENT '集群id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   INDEX idx_type(`type`),
@@ -103,7 +104,8 @@ DROP TABLE IF EXISTS `t_storage`;
 CREATE TABLE `t_storage` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
-  `type` tinyint unsigned NOT NULL COMMENT '类型',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `datacenter_id` bigint unsigned DEFAULT NULL COMMENT '数据中心id',
   `allspace` int unsigned DEFAULT NULL COMMENT '所有空间',
   `freespace` int unsigned DEFAULT NULL COMMENT '可用空间',
   `threshold` tinyint unsigned NOT NULL COMMENT '阈值',
@@ -114,29 +116,15 @@ CREATE TABLE `t_storage` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='存储'; 
 
-
 -- ----------------------------
--- 存储与宿主机关联
+-- 数据中心网络
 -- ----------------------------
-DROP TABLE IF EXISTS `t_storage_hm_map`;
-CREATE TABLE `t_storage_hm_map` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `storage_id` bigint unsigned NOT NULL COMMENT '存储id',
-  `hostmachine_id` bigint unsigned NOT NULL COMMENT '宿主机id',
-  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  UNIQUE INDEX uk_storage_hostmachine(`storage_id`,`hostmachine_id`),
-  PRIMARY KEY (`id`)
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='存储与宿主机关联'; 
-
--- ----------------------------
--- 网络
--- ----------------------------
-DROP TABLE IF EXISTS `t_network`;
-CREATE TABLE `t_network` (
+DROP TABLE IF EXISTS `t_datacenter_network`;
+CREATE TABLE `t_datacenter_network` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `datacenter_id` bigint unsigned NOT NULL COMMENT '数据中心id',
   `ippool` varchar(40) DEFAULT NULL COMMENT 'ip池',
   `mask` varchar(20) DEFAULT NULL COMMENT '掩码',
   `gateway` varchar(20) DEFAULT NULL COMMENT '网关',
@@ -146,27 +134,11 @@ CREATE TABLE `t_network` (
   `freeip` int unsigned DEFAULT NULL COMMENT 'ip剩余量',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`id`)
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网络'; 
-
--- ----------------------------
--- 数据中心与网络关联
--- ----------------------------
-DROP TABLE IF EXISTS `t_datacenter_network_map`;
-CREATE TABLE `t_datacenter_network_map` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL COMMENT '名称',
-  `datacenter_id` bigint unsigned NOT NULL COMMENT '数据中心id',
-  `network_id` bigint unsigned NOT NULL COMMENT '网络id',
-  `ippool` varchar(40) DEFAULT NULL COMMENT 'ip池',
-  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   INDEX idx_datacenter_id(`datacenter_id`),
   INDEX idx_network_id(`network_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心与网络关联'; 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心网络'; 
 
 -- ----------------------------
 -- 虚拟机
@@ -174,7 +146,9 @@ CREATE TABLE `t_datacenter_network_map` (
 DROP TABLE IF EXISTS `t_virtualmachine`;
 CREATE TABLE `t_virtualmachine` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `project_id` varchar(20) NOT NULL COMMENT '项目名称',
+  `user` varchar(20) NOT NULL COMMENT '虚拟机用户',
+  `appNo` varchar(20) NOT NULL COMMENT '虚拟机用户',
+  `project_id` varchar(32) NOT NULL COMMENT '项目名称',
   `name` varchar(20) NOT NULL COMMENT '名称',
   `ip` varchar(20) DEFAULT NULL COMMENT '虚拟机ip',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
@@ -650,3 +624,4 @@ CREATE TABLE `t_product` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品'; 
+

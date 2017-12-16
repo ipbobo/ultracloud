@@ -1,5 +1,7 @@
 package com.cmp.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -16,7 +18,6 @@ public class VirtualMachineServiceImpl implements VirtualMachineService {
 	@Override
 	public void add(VirtualMachine vm) throws Exception {
 		dao.save("VirtualMachineMapper.save", vm);
-
 	}
 
 	@Override
@@ -24,4 +25,13 @@ public class VirtualMachineServiceImpl implements VirtualMachineService {
 		return (VirtualMachine)dao.findForObject("VirtualMachineMapper.findById", id);
 	}
 
+	@Override
+	public List<VirtualMachine> findByUser(String user) throws Exception {
+		return (List)dao.findForList("VirtualMachineMapper.findByUser", user);
+	}
+
+	@Override
+	public List<VirtualMachine> findByAppNo(String appNo) throws Exception {
+		return (List)dao.findForList("VirtualMachineMapper.findByAppNo", appNo);
+	}
 }

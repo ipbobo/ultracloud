@@ -207,6 +207,14 @@
 		order by p.gmt_modified desc
 	</select>
 	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
 	<select id="listAllProject" resultType="com.cmp.entity.Project">
 		select * from <include refid="tableName"></include>
 	</select>

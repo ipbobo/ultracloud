@@ -6,9 +6,38 @@
 		t_virtualmachine
 	</sql>
 	
+	
+	<resultMap type="vm" id="virtualMachine">
+		<id column="id" property="id"/>
+		<result column="appNo" property="appNo"/>
+		<result column="user" property="user"/>
+		<result column="project_id " property="projectId"/>
+		<result column="name" property="name"/>
+		<result column="ip" property="ip"/>
+		<result column="cpu" property="cpu"/>
+		<result column="memory" property="memory"/>
+		<result column="datadisk" property="datadisk"/>
+		<result column="status" property="status"/>
+		<result column="hostmachine_id" property="hostmachineId"/>
+		<result column="platform" property="platform"/>
+		<result column="os" property="os"/>
+		<result column="os_status" property="osStatus"/>
+		<result column="soft" property="soft"/>
+		<result column="soft_status" property="softStatus"/>
+		<result column="duedate" property="duedate"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+		<result column="gmt_create" property="gmt_create"/>
+		<result column="gmt_modified" property="gmt_modified"/>
+		
+		
+		<result column="appNo" property="appNo"/>
+	</resultMap>
+	
 	<!-- 字段 -->
 	<sql id="fieldName">
 		id,
+		user,
 		project_id,
 		name,
 		ip,
@@ -22,6 +51,7 @@
 		os_status,
 		soft,
 		soft_status,
+		appNo,
 		duedate,
 		username,
 		password,
@@ -33,6 +63,7 @@
 	<!-- 字段值 -->
 	<sql id="fieldValue">
 		#{id},
+		#{user},
 		#{projectId},
 		#{name},
 		#{ip},
@@ -46,6 +77,7 @@
 		#{osStatus},
 		#{soft},
 		#{softStatus},
+		#{appNo},
 		#{duedate},
 		#{username},
 		#{password},
@@ -55,6 +87,7 @@
 	
 	<!-- 字段 -->
 	<sql id="saveFieldName">
+		user,
 		project_id,
 		name,
 		ip,
@@ -68,14 +101,14 @@
 		os_status,
 		soft,
 		soft_status,
+		appNo,
 		duedate,
 		username,
-		password,
-		gmt_create,
-		gmt_modified
+		password
 	</sql>
 	
 	<sql id="saveFieldValue">
+		#{user},
 		#{projectId},
 		#{name},
 		#{ip},
@@ -89,11 +122,10 @@
 		#{osStatus},
 		#{soft},
 		#{softStatus},
+		#{appNo},
 		#{duedate},
 		#{username},
-		#{password},
-		#{gmt_create},
-		#{gmt_modified}
+		#{password}
 	</sql>
 	
 	<!-- 新增 -->
@@ -106,8 +138,18 @@
 	</insert>
 	
 	<!-- 通过ID 查询 -->
-	<select id="findById" resultType="com.cmp.sid.VirtualMachine" parameterType="String">
+	<select id="findById" resultMap="virtualMachine" parameterType="String">
 		select * from  <include refid="tableName"/> where id = #{id}
+	</select>
+	
+	<!-- 通过用户 查询 -->
+	<select id="findByUser" resultMap="virtualMachine" parameterType="String">
+		select * from  <include refid="tableName"/> where user = #{user}
+	</select>
+	
+	<!-- 通过工单号 查询 -->
+	<select id="findByAppNo" resultMap="virtualMachine" parameterType="String">
+		select * from  <include refid="tableName"/> where appNo = #{appNo}
 	</select>
 	
 </mapper>

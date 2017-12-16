@@ -34,6 +34,7 @@ import com.cmp.sid.CmpOpServe;
 import com.cmp.sid.CmpOrder;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.RelateTask;
+import com.cmp.sid.VirtualMachine;
 import com.cmp.workorder.IWorkorderHandler;
 import com.cmp.workorder.WorkorderHelper;
 import com.fh.controller.base.BaseController;
@@ -114,9 +115,6 @@ public class CmpWorkOrderController extends BaseController{
 			workorderpd.put("createTime", workorderpd.get("createTime") == null ? "" : df.format(workorderpd.get("createTime")));
 			
 		}
-		
-		
-		
 		//工单类型
 		List<CmpDict> workorderTypeList =  cmpDictService.getCmpDictList("workorder_type");
 		//工单状态
@@ -172,25 +170,45 @@ public class CmpWorkOrderController extends BaseController{
 		//获取流程注释
 		List<Comment> commentList = activitiService.getProcessComments(toCheckWorkorder.getProcInstId());
 		mv.addObject("commentList", commentList);
-		//是资源申请，跳资源申请审核页面或运维申请审核页面
-		String toCheckUrl = "";
-		if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("1")) {
-			CmpOrder orderInfo = null;
-			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toCheckWorkorder.getOrderNo());
-			if (orderList != null && orderList.size() > 0) {
-				orderInfo = orderList.get(0);
-			}
-			mv.addObject("orderInfo", orderInfo);
-			toCheckUrl = "workorder/applycheck";
-		}else if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("2")) {
-			//查询工单关联的运维信息
-			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toCheckWorkorder.getOrderNo());
-			cmpOpServeService.encase(opServe);  //中文填充
-			mv.addObject("opServe", opServe);
-			toCheckUrl = "workorder/opercheck";
+		
+		//是资源申请，跳资源申请详情页面或运维申请审核页面
+		String toViewUrl = "";
+		IWorkorderHandler workorderHandler = workorderHelper.instance(toCheckWorkorder.getAppType());
+		if (workorderHandler == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
 		}
-		mv.addObject("workorder", toCheckWorkorder);
-		mv.setViewName(toCheckUrl);
+		Map<String, Object> pageViewMap = workorderHandler.toWorkorderCheck(toCheckWorkorder);
+		if (pageViewMap == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
+		}
+		for (String key : pageViewMap.keySet()) {
+			mv.addObject(key, pageViewMap.get(key));
+		}
+		mv.setViewName((String)pageViewMap.get("toPageUrl"));
+		
+		//是资源申请，跳资源申请审核页面或运维申请审核页面
+//		String toCheckUrl = "";
+//		if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("1")) {
+//			CmpOrder orderInfo = null;
+//			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toCheckWorkorder.getOrderNo());
+//			if (orderList != null && orderList.size() > 0) {
+//				orderInfo = orderList.get(0);
+//			}
+//			mv.addObject("orderInfo", orderInfo);
+//			toCheckUrl = "workorder/applycheck";
+//		}else if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("2")) {
+//			//查询工单关联的运维信息
+//			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toCheckWorkorder.getOrderNo());
+//			cmpOpServeService.encase(opServe);  //中文填充
+//			mv.addObject("opServe", opServe);
+//			toCheckUrl = "workorder/opercheck";
+//		}
+//		mv.addObject("workorder", toCheckWorkorder);
+//		mv.setViewName(toCheckUrl);
 		return mv;
 	}
 	
@@ -220,26 +238,46 @@ public class CmpWorkOrderController extends BaseController{
 		//获取流程注释
 		List<Comment> commentList = activitiService.getProcessComments(toExcuteWorkorder.getProcInstId());
 		mv.addObject("commentList", commentList);
-		//是资源申请，跳资源申请审核页面或运维申请审核页面
-		String toExecuteUrl = "";
-		if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("1")) {
-			CmpOrder orderInfo = null;
-			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toExcuteWorkorder.getOrderNo());
-			if (orderList != null && orderList.size() > 0) {
-				orderInfo = orderList.get(0);
-			}
-			mv.addObject("orderInfo", orderInfo);
-			toExecuteUrl = "workorder/applyexecute";
-		}else if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("2")) {
-			//查询工单关联的运维信息
-			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toExcuteWorkorder.getOrderNo());
-			cmpOpServeService.encase(opServe);  //中文填充
-			mv.addObject("opServe", opServe);
-			toExecuteUrl = "workorder/operexecute";
+		
+		//是资源申请，跳资源申请详情页面或运维申请执行页面
+		String toViewUrl = "";
+		IWorkorderHandler workorderHandler = workorderHelper.instance(toExcuteWorkorder.getAppType());
+		if (workorderHandler == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
 		}
-
-		mv.addObject("workorder", toExcuteWorkorder);
-		mv.setViewName(toExecuteUrl);
+		Map<String, Object> pageViewMap = workorderHandler.toWorkorderExecute(toExcuteWorkorder);
+		if (pageViewMap == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
+		}
+		for (String key : pageViewMap.keySet()) {
+			mv.addObject(key, pageViewMap.get(key));
+		}
+		mv.setViewName((String)pageViewMap.get("toPageUrl"));
+		
+//		//是资源申请，跳资源申请审核页面或运维申请审核页面
+//		String toExecuteUrl = "";
+//		if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("1")) {
+//			CmpOrder orderInfo = null;
+//			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toExcuteWorkorder.getOrderNo());
+//			if (orderList != null && orderList.size() > 0) {
+//				orderInfo = orderList.get(0);
+//			}
+//			mv.addObject("orderInfo", orderInfo);
+//			toExecuteUrl = "workorder/applyexecute";
+//		}else if (toExcuteWorkorder.getAppType()!= null && toExcuteWorkorder.getAppType().equals("2")) {
+//			//查询工单关联的运维信息
+//			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toExcuteWorkorder.getOrderNo());
+//			cmpOpServeService.encase(opServe);  //中文填充
+//			mv.addObject("opServe", opServe);
+//			toExecuteUrl = "workorder/operexecute";
+//		}
+//
+//		mv.addObject("workorder", toExcuteWorkorder);
+//		mv.setViewName(toExecuteUrl);
 		return mv;
 	}
 	
@@ -287,7 +325,7 @@ public class CmpWorkOrderController extends BaseController{
 		for (String key : pageViewMap.keySet()) {
 			mv.addObject(key, pageViewMap.get(key));
 		}
-		mv.setViewName((String)pageViewMap.get("toViewUrl"));
+		mv.setViewName((String)pageViewMap.get("toPageUrl"));
 //		if (toViewWorkorder.getAppType()!= null && toViewWorkorder.getAppType().equals("1")) {
 //			CmpOrder orderInfo = null;
 //			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toViewWorkorder.getOrderNo());
@@ -363,6 +401,9 @@ public class CmpWorkOrderController extends BaseController{
 		return map;
 	}
 	
+	
+	
+	
 	/**工单执行
 	 * @return
 	 * @throws Exception 
@@ -408,6 +449,10 @@ public class CmpWorkOrderController extends BaseController{
 				updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
 				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 				
+				
+
+				
+				
 				resultInfo = "执行成功";
 				map.put("result", resultInfo);	
 				return map;
@@ -416,6 +461,59 @@ public class CmpWorkOrderController extends BaseController{
 		map.put("result", resultInfo);				//返回结果
 		return map;
 	}
+	
+	
+
+	/**执行任务
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/executeWork")
+	@ResponseBody
+	public Object executeWork() throws Exception{
+		Map<String,String> map = new HashMap<String,String>();
+		String resultInfo = "";
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		
+		Session session = Jurisdiction.getSession();
+		User userr = (User)session.getAttribute(Const.SESSION_USERROL);				//读取session中的用户信息(含角色信息)
+		if (userr == null) {
+			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
+			if (user == null) {
+				resultInfo = "执行失败,请重新登录";
+				map.put("result", resultInfo);	
+				return map;
+			}
+			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
+			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
+		}
+		pd = this.getPageData();
+		pd.put("USERNAME", userr.getUSERNAME());
+		CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo((String)pd.get("appNo"));
+		if (workorder == null) {
+			resultInfo = "执行失败,工单不存在";
+			map.put("result", resultInfo);	
+			return map;
+		}
+		
+		IWorkorderHandler workorderHandler = workorderHelper.instance(workorder.getAppType());
+		if (workorderHandler == null) {
+			resultInfo = "执行失败,工单不存在";
+			map.put("result", resultInfo);	
+			return map;
+		}
+		Map<String, Object> pageViewMap = workorderHandler.executeWork(pd, workorder);
+		if (pageViewMap == null) {
+			resultInfo = "执行失败";
+			map.put("result", resultInfo);	
+			return map;
+		}
+		map.put("result", (String)pageViewMap.get("result"));				//返回结果
+		return map;
+	}
+	
+	
 	
 	
 	/**导出工单信息到EXCEL

@@ -4,7 +4,7 @@
 	
 	<!--表名 -->
 	<sql id="tableName">
-		t_datacenter_network_map
+		t_datacenter_network
 	</sql>
 	<sql id="dctableName">
 		t_datacenter
@@ -19,8 +19,14 @@
 	<sql id="Field_main">
 	    name,
 		datacenter_id,
-		network_id,
-		ippool
+		ippool,
+		type,
+		mask,
+		gateway,
+		dns1,
+		dns2,
+		totalip,
+		freeip
 	</sql>
 	
 	<sql id="Field_time">
@@ -38,8 +44,14 @@
 	<sql id="FieldValue_main">	
 	    #{name},
 		#{datacenter_id},
-		#{network_id},
-		#{ippool}
+		#{ippool},
+		#{type},
+		#{mask},
+		#{gateway},
+		#{dns1},
+		#{dns2},
+		#{totalip},
+		#{freeip}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -73,8 +85,14 @@
 		set 
 		    name = #{name},
 			datacenter_id = #{datacenter_id},
-			network_id = #{network_id},
-			ippool = #{ippool}
+			ippool = #{ippool},
+			type = #{type},
+			mask = #{mask},
+			gateway = #{gateway},
+			dns1 = #{dns1},
+			dns2 = #{dns2},
+			totalip = #{totalip},
+			freeip = #{freeip}
 		 where 
 		    id = #{id}
 	</update>
@@ -94,12 +112,19 @@
 		select  s.id,
 		        s.name,
 				s.datacenter_id,
-				s.network_id,
 				s.ippool,
 				s.gmt_modified,
-				s.gmt_create
-		from <include refid="tableName"></include> s    
-		where 1 = 1
+				s.gmt_create,
+				s.type,
+				s.mask,
+				s.gateway,
+				s.dns1,
+				s.dns2,
+				s.totalip,
+				s.freeip,
+				c.name as datacenter_name
+		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c
+		where s.datacenter_id=c.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -109,6 +134,9 @@
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
 			and id in ${pd.item}
 		</if>
+		<if test="pd.type != null and pd.type != ''"><!-- 按云平台类型检索 -->
+			and s.type = #{pd.type} 
+		</if>
 		order by s.gmt_modified desc
 	</select>
 	
@@ -117,7 +145,6 @@
 		select dcn.id,
 		       dcn.name,
 		       dcn.datacenter_id,
-		       dcn.network_id,
 		       dcn.ippool,
 		       dcn.gmt_create,
 		       dcn.gmt_modified,

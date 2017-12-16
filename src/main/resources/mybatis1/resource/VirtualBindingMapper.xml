@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VirtualBindingMapper">
+	
+	<!--表名 -->
+	<sql id="virtualTableName">
+		t_virtualmachine
+	</sql>  
+	<!--表名 -->
+	<sql id="workorderTableName">
+		t_workorder
+	</sql>
+	<!--表名 -->
+	<sql id="hostmachineTableName">
+		t_hostmachine
+	</sql>
+	<!--表名 -->
+	<sql id="clusterTableName">
+		t_cluster
+	</sql>
+		
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		SELECT  a.id,
+				a.name,
+				a.status,
+				a.ip
+		from <include refid="virtualTableName"></include> a, <include refid="hostmachineTableName"></include> b, <include refid="clusterTableName"></include> c
+		WHERE a.hostmachine_id=b.id
+		AND   b.cluster_id=c.id
+		AND a.user IS NULL AND a.project_id IS NULL
+		AND c.id=#{pd.cluster_id}
+		ORDER BY a.gmt_modified desc
+	</select>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="virtualTableName"></include>
+		set 
+			project_id = #{project_id},
+			user = #{user}
+		where 
+			id in
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</update>
+
+</mapper>

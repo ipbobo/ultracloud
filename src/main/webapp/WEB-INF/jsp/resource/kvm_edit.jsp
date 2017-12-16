@@ -24,39 +24,30 @@
 				<div class="row">
 					<div class="col-xs-12">
 					
-					<form action="cloudplatform/${msg }.do" name="Form" id="Form" method="post">
+					<form action="kvm/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" value="no" id="hasTp1" />
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:140px;text-align: right;padding-top: 13px;">名称:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">KVM主机名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:140px;text-align: right;padding-top: 13px;">类型:</td>
-								<td id="js">
-									<select disabled="disabled" class="chosen-select form-control" name="type" id="type" value="${pd.type}" data-placeholder="请选择类型" style="vertical-align:top;"  title="类型"  >
-									<option <c:if test="${pd.type == 'vmware' }">selected="selected"</c:if> value="vmware">vmware</option>
-									<option <c:if test="${pd.type == 'OpenStack' }">selected="selected"</c:if>  value="OpenStack">OpenStack</option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td style="width:140px;text-align: right;padding-top: 13px;">主机名(地址或域名):</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">IP地址:</td>
 								<td><input type="text" name="ip" id="ip" value="${pd.ip}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:140px;text-align: right;padding-top: 13px;">用户名:</td>
-								<td><input type="text" name="username" id="username" value="${pd.username}" maxlength="30"  style="width:100%;"/></td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">帐号:</td>
+								<td><input type="text" name="account" id="account" value="${pd.account}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:140;text-align: right;padding-top: 13px;">密码:</td>
-								<td><input type="password" name="password" id="password" value="${pd.password}" maxlength="30"  style="width:100%;"/></td>
+								<td style="width:120;text-align: right;padding-top: 13px;">密码:</td>
+								<td><input type="password" name="password_ssh" id="password_ssh" value="${pd.password_ssh}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:140px;text-align: right;padding-top: 13px;">确认密码:</td>
-								<td><input type="password" name="confirmpassword" id="confirmpassword" value="${pd.confirmpassword}" maxlength="30" style="width:100%;"/></td>
+								<td style="width:120px;text-align: right;padding-top: 13px;">端口:</td>
+								<td><input type="text" name="port" id="port" value="${pd.port}" maxlength="30" style="width:100%;"/></td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
@@ -101,35 +92,25 @@
 			if($("#name").val()==""){
 				$("#name").tips({
 					side:3,
-		            msg:'请输入名称',
+		            msg:'请输入KVM主机名称',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#name").focus();
 			return false;
 			}
-			if($("#type").val()==""){
-				$("#type").tips({
-					side:3,
-		            msg:'请选择类型',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#type").focus();
-			return false;
-			}
 			if($("#ip").val()==""){
 				$("#ip").tips({
 					side:3,
-		            msg:'请输入地址或域名',
+		            msg:'请输入IP',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#ip").focus();
 			return false;
 			}
-			if($("#password").val()==""){
-				$("#password").tips({
+			if($("#password_ssh").val()==""){
+				$("#password_ssh").tips({
 					side:3,
 		            msg:'请输入密码',
 		            bg:'#AE81FF',
@@ -138,28 +119,7 @@
 				$("#password").focus();
 			return false;
 			}
-			if($("#confirmpassword").val()==""){
-				$("#confirmpassword").tips({
-					side:3,
-		            msg:'请确认密码',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#confirmpassword").focus();
-			return false;
-			}
-			if($("#confirmpassword").val()!=$("#password").val()){
-				$("#confirmpassword").tips({
-					side:3,
-		            msg:'二次输入的密码不一致',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#password").focus();
-			return false;
-			}
 
-			$("#type").removeAttr("disabled", "disabled");
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
