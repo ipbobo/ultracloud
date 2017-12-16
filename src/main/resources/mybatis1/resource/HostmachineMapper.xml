@@ -10,6 +10,10 @@
 	<sql id="clustertableName">
 		t_cluster
 	</sql>
+	<!--表名 -->
+	<sql id="virtualTableName">
+		t_virtualmachine
+	</sql> 
 	
 	<!-- 字段 -->
 	<sql id="Field">
@@ -222,5 +226,13 @@
                  #{item}
 		</foreach>
 	</delete>
+	
+	<!-- 查询虚拟机列表 -->
+	<select id="datalistPageVirtual" parameterType="page" resultType="pd" >
+		select  *
+		from <include refid="virtualTableName"></include> 
+		where hostmachine_id=#{pd.hostmachine_id} 
+		order by gmt_modified desc
+	</select>
 	
 </mapper>

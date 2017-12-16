@@ -104,5 +104,16 @@ public class HostmachineServiceImpl implements HostmachineService {
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("HostmachineMapper.deleteAll", ArrayDATA_IDS);
 	}
+	
+	/**
+	 * 查询虚拟机列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listVirtual(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageVirtual", page);
+	}
 
 }

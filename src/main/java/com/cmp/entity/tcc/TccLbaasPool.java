@@ -78,7 +78,7 @@ public class TccLbaasPool implements java.io.Serializable {
 
 	private String statusDescription;
 
-	private TccCloudplatform	cloudplatform;
+	private TccCloudPlatform	cloudplatform;
 	/**
 	 * 子网名称
 	 */
@@ -210,11 +210,11 @@ public class TccLbaasPool implements java.io.Serializable {
 		this.statusDescription = statusDescription;
 	}
 
-	public TccCloudplatform getCloudplatform() {
+	public TccCloudPlatform getCloudplatform() {
 		return cloudplatform;
 	}
 
-	public void setCloudplatform(TccCloudplatform cloudplatform) {
+	public void setCloudplatform(TccCloudPlatform cloudplatform) {
 		this.cloudplatform = cloudplatform;
 	}
 

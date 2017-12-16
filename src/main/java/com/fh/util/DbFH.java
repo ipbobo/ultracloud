@@ -103,12 +103,11 @@ public class DbFH{
 	 */
 	public static Object[] getTables(PageData pd) throws ClassNotFoundException, SQLException{
 		String dbtype = pd.getString("dbtype");				//数据库类型
+		String url = pd.getString("url");			//URL
 		String username = pd.getString("username");			//用户名
 		String password = pd.getString("password");			//密码
-		String address = pd.getString("dbAddress");			//数据库连接地址
-		String dbport = pd.getString("dbport");				//端口
 		String databaseName = pd.getString("databaseName");	//数据库名
-		Connection conn = DbFH.getCon(dbtype,username,password,address+":"+dbport,databaseName);
+		Connection conn = DbFH.getCon(dbtype, url, username, password);
 		if("oracle".equals(dbtype)){databaseName = username;}
 		Object[] arrOb = {databaseName,DbFH.getTablesByCon(conn, "sqlserver".equals(dbtype)?null:databaseName),dbtype};
 		return arrOb;
@@ -121,15 +120,16 @@ public class DbFH{
 	 */
 	public static Object[] getTables() throws ClassNotFoundException, SQLException{
 		String dbtype = pros.getProperty("dbtype");				//数据库类型
+		String url = pros.getProperty("url");			//URL
 		String username = pros.getProperty("username");			//用户名
 		String password = pros.getProperty("password");			//密码
-		String address = pros.getProperty("dbAddress");			//数据库连接地址
-		String dbport = pros.getProperty("dbport");				//端口
-		String databaseName = pros.getProperty("databaseName");	//数据库名
-		Connection conn = DbFH.getCon(dbtype,username,password,address+":"+dbport,databaseName);
-		if("oracle".equals(dbtype)){databaseName = username;}
-		Object[] arrOb = {databaseName,DbFH.getTablesByCon(conn, "sqlserver".equals(dbtype)?null:databaseName),dbtype};
-		return arrOb;
+		String dbName=pros.getProperty("dbName");
+		Connection conn = DbFH.getCon(dbtype, url, username, password);
+		if("oracle".equals(dbtype)){
+			dbName = username;
+		}
+		
+		return new Object[]{dbName, DbFH.getTablesByCon(conn, "sqlserver".equals(dbtype)?null:dbName), dbtype};
 	}
 
 	/**
@@ -139,12 +139,10 @@ public class DbFH{
 	 */
 	public static Connection getFHCon() throws ClassNotFoundException, SQLException{
 		String dbtype = pros.getProperty("dbtype");				//数据库类型
+		String url = pros.getProperty("url");			//URL
 		String username = pros.getProperty("username");			//用户名
 		String password = pros.getProperty("password");			//密码
-		String address = pros.getProperty("dbAddress");			//数据库连接地址
-		String dbport = pros.getProperty("dbport");				//端口
-		String databaseName = pros.getProperty("databaseName");	//数据库名
-		return DbFH.getCon(dbtype,username,password,address+":"+dbport,databaseName);
+		return DbFH.getCon(dbtype, url, username, password);
 	}
 	
 	/**
@@ -154,12 +152,10 @@ public class DbFH{
 	 */
 	public static Connection getFHCon(PageData pd) throws ClassNotFoundException, SQLException{
 		String dbtype = pd.getString("dbtype");				//数据库类型
+		String url = pd.getString("url");			//URL
 		String username = pd.getString("username");			//用户名
 		String password = pd.getString("password");			//密码
-		String address = pd.getString("dbAddress");			//数据库连接地址
-		String dbport = pd.getString("dbport");				//端口
-		String databaseName = pd.getString("databaseName");	//数据库名
-		return DbFH.getCon(dbtype,username,password,address+":"+dbport,databaseName);
+		return DbFH.getCon(dbtype, url, username, password);
 	}
 	
 	/**
@@ -172,16 +168,16 @@ public class DbFH{
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public static Connection getCon(String dbtype,String username,String password,String dburl,String databaseName) throws SQLException, ClassNotFoundException{
+	public static Connection getCon(String dbtype, String url, String username, String password) throws SQLException, ClassNotFoundException{
 		if("mysql".equals(dbtype)){
 			Class.forName("com.mysql.jdbc.Driver");
-			return DriverManager.getConnection("jdbc:mysql://"+dburl+"/"+databaseName+"?user="+username+"&password="+password);
+			return DriverManager.getConnection(url, username, password);
 		}else if("oracle".equals(dbtype)){
 			Class.forName("oracle.jdbc.driver.OracleDriver"); 
-			return DriverManager.getConnection("jdbc:oracle:thin:@"+dburl+":"+databaseName, username, password);
+			return DriverManager.getConnection(url, username, password);
 		}else if("sqlserver".equals(dbtype)){
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			return DriverManager.getConnection("jdbc:sqlserver://"+dburl+"; DatabaseName="+databaseName, username, password);
+			return DriverManager.getConnection(url, username, password);
 		}else{
 			return null;
 		}
@@ -545,7 +541,7 @@ public class DbFH{
 	 * @throws IOException
 	 */
 	public static Properties getPprVue() {
-		InputStream inputStream = DbFH.class.getClassLoader().getResourceAsStream("conf/db.properties");
+		InputStream inputStream = DbFH.class.getClassLoader().getResourceAsStream("conf/env.properties");
 		Properties p = new Properties();
 		try {
 			p.load(inputStream);

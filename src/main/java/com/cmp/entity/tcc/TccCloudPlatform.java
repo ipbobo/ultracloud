@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TccCloudplatform implements java.io.Serializable {
+public class TccCloudPlatform implements java.io.Serializable {
 
 	private static final long serialVersionUID = 382566707496973339L;
 
@@ -72,7 +72,7 @@ public class TccCloudplatform implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public TccCloudplatform() {
+	public TccCloudPlatform() {
 	}
 
 	// Property accessors
