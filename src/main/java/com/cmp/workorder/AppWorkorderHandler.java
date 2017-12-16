@@ -8,10 +8,12 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.entity.DeployedSoft;
 import com.cmp.entity.Project;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
+import com.cmp.service.DeployedSoftService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.VirtualMachineService;
 import com.cmp.sid.CloudInfoCollect;
@@ -47,6 +49,8 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	@Resource
 	private DepartmentService departmentService;
 	
+	@Resource
+	private DeployedSoftService deployedSoftService;
 	
 	@Override
 	public Map<String, Object> toWorkorderView(CmpWorkOrder cmpWorkorder) throws Exception {
@@ -208,6 +212,8 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		departmentService.editUsedQuota(d_pd);
 		
 		
+		
+		
 		//测试添加虚拟机
 		VirtualMachine vm = new VirtualMachine();
 		vm.setCpu(pd.getString("CPU"));
@@ -225,7 +231,20 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		vm.setStatus("0");
 		vm.setHostmachineId(182837323);
 		vm.setAppNo(workOrder.getAppNo());
+		vm.setUser(workOrder.getApplyUserId());
 		virtualMachineService.add(vm);
+		
+		//添加虚拟机中间件
+		DeployedSoft deployedSoft = new DeployedSoft();
+		deployedSoft.setVirtualmachineId(String.valueOf(vm.getId()));
+		deployedSoft.setSoftName("TOMCAT8");
+		deployedSoftService.add(deployedSoft);
+		
+		DeployedSoft deployedSoft2 = new DeployedSoft();
+		deployedSoft2.setVirtualmachineId(String.valueOf(vm.getId()));
+		deployedSoft2.setSoftName("JDK8");
+		deployedSoftService.add(deployedSoft2);
+		
 		resMap.put("result", "执行成功!");
 		return resMap;
 	}

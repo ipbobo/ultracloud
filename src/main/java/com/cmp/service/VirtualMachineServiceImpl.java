@@ -16,8 +16,8 @@ public class VirtualMachineServiceImpl implements VirtualMachineService {
 	private DaoSupport dao;
 	
 	@Override
-	public void add(VirtualMachine vm) throws Exception {
-		dao.save("VirtualMachineMapper.save", vm);
+	public int add(VirtualMachine vm) throws Exception {
+		return (Integer)dao.save("VirtualMachineMapper.save", vm);
 	}
 
 	@Override
