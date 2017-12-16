@@ -76,5 +76,13 @@ public interface HostmachineService {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
+	
+	/**
+	 * 查询虚拟机列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	public List<PageData> listVirtual(Page page) throws Exception;
 
 }
