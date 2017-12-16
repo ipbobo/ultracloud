@@ -213,7 +213,7 @@ function getCurrConf(jsonObj){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="3"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;项目</td>
+		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;项目</td>
 		<td align="right" style="width: 120px;padding:10px;">环境：</td>
 		<td align="left" style="padding:10px;" colspan="6">
 			<ul id="tcenvCodeId" class="ullitab list-inline">
@@ -296,7 +296,7 @@ function getCurrConf(jsonObj){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="3"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
+		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;镜像</td>
 		<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
 		<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 			<select class="chosen-select form-control" name="tcosType" id="tcosType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;" disabled>
@@ -416,7 +416,7 @@ function getCurrConf(jsonObj){
 	</tr>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
-		<td align="left" valign="top" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
+		<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;当前配置</td>
 		<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>
 		<td id="tcresTypeLabel" align="left" valign="top" style="width: 180px;padding:10px;"></td>
 		<td align="right" valign="top" style="width: 120px;padding:10px;">实例规格：</td>
