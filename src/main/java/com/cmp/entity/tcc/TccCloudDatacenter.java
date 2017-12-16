@@ -48,7 +48,7 @@ public class TccCloudDatacenter implements java.io.Serializable {
 
 	private String enableFlg; // 逻辑删除标识符号
 
-	private TccCloudplatform cloudplatform;
+	private TccCloudPlatform cloudplatform;
 
 	private Set<TccCloudPod> tccCloudPods = new HashSet<TccCloudPod>(0);
 
@@ -82,11 +82,11 @@ public class TccCloudDatacenter implements java.io.Serializable {
 		this.tccPhysiscResourceInfos = tccPhysiscResourceInfos;
 	}
 
-	public TccCloudplatform getCloudplatform() {
+	public TccCloudPlatform getCloudplatform() {
 		return cloudplatform;
 	}
 
-	public void setCloudplatform(TccCloudplatform cloudplatform) {
+	public void setCloudplatform(TccCloudPlatform cloudplatform) {
 		this.cloudplatform = cloudplatform;
 	}
 
