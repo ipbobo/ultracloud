@@ -122,7 +122,7 @@ function del(ids, msg){
 	<c:forEach items="${list}" var="var" varStatus="vs">
 		<tr>
 			<td class='center'><label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace"/><span class="lbl"></span></label></td>
-			<td class='center' style="width: 30px;">${vs.index+1}</td>
+			<td class='center' style="width: 30px;">${vs.index+1+page.currentResult}</td>
 			<td class='center'>${var.username}</td>
 			<td class='center'>${var.operTypeName}</td>
 			<td class='center'>${var.opt_object}</td>
