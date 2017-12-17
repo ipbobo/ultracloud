@@ -18,6 +18,7 @@ public class CmpOpServe {
 	private String serviceTypeName;
 	private String operTypeName;
 	private String operName; //操作
+	private String workflow; //工作流
 	
 	
 	public String getId() {
@@ -97,6 +98,12 @@ public class CmpOpServe {
 	}
 	public void setOperName(String operName) {
 		this.operName = operName;
+	}
+	public String getWorkflow() {
+		return workflow;
+	}
+	public void setWorkflow(String workflow) {
+		this.workflow = workflow;
 	}
 	
 	

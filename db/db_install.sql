@@ -625,3 +625,16 @@ CREATE TABLE `t_product` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品'; 
 
+DROP TABLE IF EXISTS `t_deployed_soft`;
+CREATE TABLE `t_deployed_soft` (
+`id`  int(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+`virtualmachineId`  varchar(32) DEFAULT NULL COMMENT '虚拟机ID',
+`virtualmachineName`  varchar(50) DEFAULT NULL COMMENT '虚拟机名称' ,
+`softName`  varchar(50) DEFAULT NULL COMMENT '软件名称' ,
+`softParams`  varchar(200) DEFAULT NULL COMMENT '软件参数' ,
+`status`  varchar(10) DEFAULT NULL COMMENT '部署状态' ,
+`remark`  varchar(50) DEFAULT NULL COMMENT '其他' ,
+PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='软件部署表';
+
+

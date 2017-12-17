@@ -488,7 +488,6 @@ public class CmpWorkOrderController extends BaseController{
 			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
-		pd = this.getPageData();
 		pd.put("USERNAME", userr.getUSERNAME());
 		CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo((String)pd.get("appNo"));
 		if (workorder == null) {
