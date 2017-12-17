@@ -62,3 +62,19 @@ function trim(str) {
 	returnstr = str.substring(0, i + 1);
 	return returnstr;
 }
+
+//发送Http请求
+function sendHttpPost(url, jsonObj, func){
+    $.ajax({
+	    type: 'post',  
+	    url: url,
+	    data: jsonObj,
+	    dataType: 'json',  
+	    success: function(data){
+	    	func(data, true);//回调函数，即执行传递进来函数
+	    },
+	    error: function(data) {
+	    	func(data, false);//回调函数，即执行传递进来函数
+	    }
+	});
+}
