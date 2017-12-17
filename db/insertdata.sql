@@ -63,6 +63,9 @@ INSERT INTO `cmp_dict` VALUES ('95', '2017-11-20 17:59:36', '2017-11-20 18:34:44
 INSERT INTO `cmp_dict` VALUES ('96', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'oper_type', '3', '删除', '操作类型', '0', '3');
 INSERT INTO `cmp_dict` VALUES ('97', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'opt_status', '0', '成功', '操作状态', '0', '1');
 INSERT INTO `cmp_dict` VALUES ('98', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'opt_status', '-1', '失败', '操作状态', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('99', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'bizview_type', 'env', '环境', '业务视图总览类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('100', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'bizview_type', 'dept', '部门', '业务视图总览类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('101', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'bizview_type', 'proj', '项目', '业务视图总览类型', '0', '3');
 
 INSERT INTO `cmp_sequence` VALUES ('cmp_order', '1', '1', '5', 'O');
 
