@@ -18,7 +18,8 @@
 		type,
 		ip,
 		username,
-		password
+		password,
+		version
 	</sql>
 	
 	<sql id="Field_time">
@@ -38,7 +39,8 @@
 		#{type},
 		#{ip},
 		#{username},
-		#{password}
+		#{password},
+		#{version}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -74,7 +76,8 @@
 			type = #{type},
 			ip = #{ip},
 		    username = #{username},
-		    password = #{password}
+		    password = #{password},
+		    version = #{version}
 		 where 
 		    id = #{id}
 	</update>
@@ -97,6 +100,7 @@
 				s.ip,
 				s.username,
 				s.password,
+				s.version,
 				s.gmt_create,
 				s.gmt_modified
 		from <include refid="tableName"></include> s    

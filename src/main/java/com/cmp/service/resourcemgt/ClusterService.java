@@ -1,4 +1,4 @@
-package com.cmp.service;
+package com.cmp.service.resourcemgt;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import com.fh.util.PageData;
  * @author liuweixing
  *
  */
-public interface DatacenternetworkService {
+public interface ClusterService {
 
 	/**
 	 * 新增

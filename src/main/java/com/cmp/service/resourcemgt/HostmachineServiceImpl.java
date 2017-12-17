@@ -1,4 +1,4 @@
-package com.cmp.service;
+package com.cmp.service.resourcemgt;
 
 import java.util.List;
 
@@ -11,13 +11,13 @@ import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /**
- * 集群业务层实现类
+ * 宿主机业务层实现类
  * 
  * @author liuweixing
  *
  */
-@Service("clusterService")
-public class ClusterServiceImpl implements ClusterService {
+@Service("hostmachineService")
+public class HostmachineServiceImpl implements HostmachineService {
 
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
@@ -29,7 +29,7 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @throws Exception
 	 */
 	public void save(PageData pd) throws Exception {
-		dao.save("ClusterMapper.save", pd);
+		dao.save("HostmachineMapper.save", pd);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @throws Exception
 	 */
 	public void delete(PageData pd) throws Exception {
-		dao.delete("ClusterMapper.delete", pd);
+		dao.delete("HostmachineMapper.delete", pd);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @throws Exception
 	 */
 	public void edit(PageData pd) throws Exception {
-		dao.update("ClusterMapper.edit", pd);
+		dao.update("HostmachineMapper.edit", pd);
 	}
 
 	/**
@@ -60,7 +60,18 @@ public class ClusterServiceImpl implements ClusterService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("ClusterMapper.datalistPage", page);
+		return (List<PageData>) dao.findForList("HostmachineMapper.datalistPage", page);
+	}
+	
+	/**
+	 * KVM列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listKVM(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageKVM", page);
 	}
 
 	/**
@@ -71,7 +82,7 @@ public class ClusterServiceImpl implements ClusterService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("ClusterMapper.listAll", pd);
+		return (List<PageData>) dao.findForList("HostmachineMapper.listAll", pd);
 	}
 
 	/**
@@ -81,7 +92,7 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("ClusterMapper.findById", pd);
+		return (PageData) dao.findForObject("HostmachineMapper.findById", pd);
 	}
 
 	/**
@@ -91,7 +102,18 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("ClusterMapper.deleteAll", ArrayDATA_IDS);
+		dao.delete("HostmachineMapper.deleteAll", ArrayDATA_IDS);
+	}
+	
+	/**
+	 * 查询虚拟机列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listVirtual(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageVirtual", page);
 	}
 
 }

@@ -5,12 +5,12 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.cmp.service.CloudplatformService;
-import com.cmp.service.ClusterService;
-import com.cmp.service.DatacenterService;
-import com.cmp.service.DatacenternetworkService;
-import com.cmp.service.HostmachineService;
 import com.cmp.service.StorageService;
+import com.cmp.service.resourcemgt.CloudplatformService;
+import com.cmp.service.resourcemgt.ClusterService;
+import com.cmp.service.resourcemgt.DatacenterService;
+import com.cmp.service.resourcemgt.DatacenternetworkService;
+import com.cmp.service.resourcemgt.HostmachineService;
 import com.fh.controller.base.BaseController;
 
 /**

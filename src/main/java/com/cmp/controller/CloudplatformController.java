@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cmp.service.CloudplatformService;
-import com.cmp.service.ClusterService;
-import com.cmp.service.DatacenterService;
-import com.cmp.service.DatacenternetworkService;
-import com.cmp.service.HostmachineService;
 import com.cmp.service.ResourceService;
 import com.cmp.service.StorageService;
+import com.cmp.service.resourcemgt.CloudplatformService;
+import com.cmp.service.resourcemgt.ClusterService;
+import com.cmp.service.resourcemgt.DatacenterService;
+import com.cmp.service.resourcemgt.DatacenternetworkService;
+import com.cmp.service.resourcemgt.HostmachineService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
@@ -95,6 +95,27 @@ public class CloudplatformController extends BaseController {
 		out.write("success");
 		out.close();
 	}
+	
+	/**
+	 * 确认初始化
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/init")
+	public void init(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "确认初始化Cloudplatform");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		//ToDo
+		out.write("success");
+		out.close();
+	}
+	
+	
 
 	/**
 	 * 跳云平台数据初始化页面
@@ -102,8 +123,8 @@ public class CloudplatformController extends BaseController {
 	 * @param out
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/init")
-	public ModelAndView init() throws Exception {
+	@RequestMapping(value = "/goInit")
+	public ModelAndView goInit() throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "数据初始化Cloudplatform");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
@@ -175,59 +196,32 @@ public class CloudplatformController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-
-	/**
-	 * Vmware集群列表
-	 * 
-	 * @param page
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/listVmware")
-	public ModelAndView listVmware(Page page) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "列表Cloudplatform");
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
-		}
-		pd.put("type", "vmware");
-		page.setPd(pd);
-		List<PageData> varList = cloudplatformService.list(page); // 列出列表
-		mv.setViewName("resource/cloudplatform_vmware_list");
-		mv.addObject("varList", varList);
-		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
-		return mv;
-	}
-
-	/**
-	 * Openstack集群列表
-	 * 
-	 * @param page
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/listOpenStack")
-	public ModelAndView listOpenStack(Page page) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "列表Cloudplatform");
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
-		}
-		pd.put("type", "OpenStack");
-		page.setPd(pd);
-		List<PageData> varList = cloudplatformService.list(page); // 列出列表
-		mv.setViewName("resource/cloudplatform_openstack_list");
-		mv.addObject("varList", varList);
-		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
-		return mv;
-	}
 	
+	/**
+	 * 按类型查询列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listType")
+	public ModelAndView listType(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表Cloudplatform");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+		List<PageData> varList = cloudplatformService.list(page); // 列出列表
+		mv.setViewName("resource/cloudplatform_type_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+
 	/**
 	 * 去新增页面
 	 * 
