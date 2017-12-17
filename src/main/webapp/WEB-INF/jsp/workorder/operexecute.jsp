@@ -42,29 +42,7 @@
 
 	<div class="alert alert-info">申请工单详情</div>
 	<div>
-		<table id="simple-table"
-			class="table table-striped table-bordered table-hover"
-			style="margin-top: 5px;">
-			<thead>
-				<tr>
-					<th class="center">服务类型</th>
-					<th class="center">操作类型</th>
-					<th class="center">虚拟机</th>
-					<th class="center">中间件</th>
-					<th class="center">操作</th>
-				</tr>
-			</thead>
-
-			<tbody>
-				<tr>
-					<td class='center'>${opServe.serviceTypeName}</td>
-					<td class='center'>${opServe.operTypeName}</td>
-					<td class='center'>${opServe.vm}</td>
-					<td class='center'>${opServe.middleware}</td>
-					<td class='center'>${opServe.operName}</td>
-				</tr>
-			</tbody>
-		</table>
+		<jsp:include page="operview_pv.jsp"></jsp:include>
 		<table>
 			<tr>
 			<td align="right" style="width: 120px;padding:10px;">批复：</td>

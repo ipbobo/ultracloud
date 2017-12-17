@@ -238,11 +238,13 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		DeployedSoft deployedSoft = new DeployedSoft();
 		deployedSoft.setVirtualmachineId(String.valueOf(vm.getId()));
 		deployedSoft.setSoftName("TOMCAT8");
+		deployedSoft.setVirtualmachineName(String.valueOf(vm.getName()));
 		deployedSoftService.add(deployedSoft);
 		
 		DeployedSoft deployedSoft2 = new DeployedSoft();
 		deployedSoft2.setVirtualmachineId(String.valueOf(vm.getId()));
 		deployedSoft2.setSoftName("JDK8");
+		deployedSoft2.setVirtualmachineName(String.valueOf(vm.getName()));
 		deployedSoftService.add(deployedSoft2);
 		
 		resMap.put("result", "执行成功!");

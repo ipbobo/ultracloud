@@ -6,6 +6,8 @@
 		cmp_op_serve
 	</sql>
 	
+	
+	
 	<!-- 字段 -->
 	<sql id="fieldName">
 		id,
@@ -16,7 +18,17 @@
 		middleware,
 		middlewareMsg,
 		appmsg,
-		createTime
+		createTime,
+		deploySoftId,
+		breakdownTime,
+		breakdownInfo,
+		exceptSolveTime,
+		exceptResult,
+		breakdownLevel,
+		partitionInfo,
+		directory,
+		expTime,
+		vipNum
 	</sql>
 	
 	<!-- 字段值 -->
@@ -29,7 +41,17 @@
 		#{middleware},
 		#{middlewareMsg},
 		#{appmsg},
-		#{createTime}
+		#{createTime},
+		#{deploySoftId},
+		#{breakdownTime},
+		#{breakdownInfo},
+		#{exceptSolveTime},
+		#{exceptResult},
+		#{breakdownLevel},
+		#{partitionInfo},
+		#{directory},
+		#{expTime},
+		#{vipNum}
 	</sql>
 	
 	<!-- 字段 -->
@@ -41,7 +63,17 @@
 		vmMsg,
 		middleware,
 		middlewareMsg,
-		appmsg
+		appmsg,
+		deploySoftId,
+		breakdownTime,
+		breakdownInfo,
+		exceptSolveTime,
+		exceptResult,
+		breakdownLevel,
+		partitionInfo,
+		directory,
+		expTime,
+		vipNum
 	</sql>
 	
 	<sql id="saveFieldValue">
@@ -52,7 +84,17 @@
 		#{vmMsg},
 		#{middleware},
 		#{middlewareMsg},
-		#{appmsg}
+		#{appmsg},
+		#{deploySoftId},
+		#{breakdownTime},
+		#{breakdownInfo},
+		#{exceptSolveTime},
+		#{exceptResult},
+		#{breakdownLevel},
+		#{partitionInfo},
+		#{directory},
+		#{expTime},
+		#{vipNum}
 	</sql>
 	
 	<!-- 新增 -->

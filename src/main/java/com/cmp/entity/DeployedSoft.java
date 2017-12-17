@@ -6,10 +6,17 @@ public class DeployedSoft {
 	private String virtualmachineName;
 	private String softName;
 	private String softParams;
+	private String softVersion;
 	private String status;
 	private String remark;
 	
 	
+	public String getSoftVersion() {
+		return softVersion;
+	}
+	public void setSoftVersion(String softVersion) {
+		this.softVersion = softVersion;
+	}
 	public String getId() {
 		return id;
 	}

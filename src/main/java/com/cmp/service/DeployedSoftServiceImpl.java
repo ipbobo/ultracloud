@@ -26,4 +26,9 @@ public class DeployedSoftServiceImpl implements DeployedSoftService {
 		return (List<DeployedSoft>)dao.findForList("DeployedSoftMapper.findByVmId", vmId);
 	}
 
+	@Override
+	public DeployedSoft findById(String id) throws Exception {
+		return (DeployedSoft)dao.findForObject("DeployedSoftMapper.findById", id);
+	}
+
 }
