@@ -34,6 +34,7 @@
 						<!-- 检索  -->
 						<form action="kvm/goListVirtualmachine.do" method="post" name="userForm" id="userForm">
 						<input name="xzvalue" id="xzvalue" value="" type="hidden" />
+						<input name="hostmachine_id" id="hostmachine_id" value="${pd.hostmachine_id} }" type="hidden" />
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
@@ -227,6 +228,7 @@ function handle(type) {
 			top.jzts();
 			var url = "<%=basePath%>virtualhandle/" + type + ".do";
 			$.get(url,function(data){
+				console.log(data + '-------------->');
 				nextPage(${page.currentPage});
 			});
 		}
