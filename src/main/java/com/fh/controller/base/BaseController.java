@@ -18,6 +18,19 @@ public class BaseController {
 	public PageData getPageData() {
 		return new PageData(this.getRequest());
 	}
+	
+	//简化Page赋值操作，采用key/value，add by kfzx-chenwm
+	public PageData getPageData(Page page, Object ... params) {
+		PageData pd=new PageData(this.getRequest());
+		if(params!=null && params.length>0 && params.length%2==0){//key/value
+    		for(int i=0;i<params.length/2;i++){
+    			pd.put(params[i*2], params[i*2+1]);
+    		}
+    	}
+		
+		page.setPd(pd);
+		return pd;
+	}
 
 	public ModelAndView getModelAndView() {
 		return new ModelAndView();
