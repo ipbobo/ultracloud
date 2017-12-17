@@ -217,22 +217,15 @@
 					top.jzts();
 					var url = "<%=basePath%>cloudplatform/init.do?id="+id;
 					$.get(url,function(data){
+						console.log(data + '-------------->');
 						 var diag = new top.Dialog();
 						 diag.Drag=true;
 						 diag.Title ="已同步资源选择";
-						 diag.URL = '<%=basePath%>cloudplatform/goInit.do';
+						 diag.URL = '<%=basePath%>cloudplatform/goInit.do?id=' + id;
 						 diag.Width = 800;
 						 diag.Height = 600;
 						 diag.CancelEvent = function(){ //关闭事件
-							 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-								 if('${page.currentPage}' == '0'){
-									 top.jzts();
-									 setTimeout("self.location=self.location",100);
-								 }else{
-									 nextPage(${page.currentPage});
-								 }
-							}
-							diag.close();
+							 diag.close();
 						 };
 						 diag.show();
 					});

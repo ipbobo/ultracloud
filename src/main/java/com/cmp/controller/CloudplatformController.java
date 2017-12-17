@@ -2,6 +2,7 @@ package com.cmp.controller;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,10 +17,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmp.service.ResourceService;
 import com.cmp.service.StorageService;
 import com.cmp.service.resourcemgt.CloudplatformService;
+import com.cmp.service.resourcemgt.CloudplatformSyncService;
 import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.service.resourcemgt.DatacenternetworkService;
 import com.cmp.service.resourcemgt.HostmachineService;
+import com.cmp.util.DateUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
@@ -37,6 +40,9 @@ public class CloudplatformController extends BaseController {
 
 	@Resource(name = "cloudplatformService")
 	private CloudplatformService cloudplatformService;
+	
+	@Resource(name = "cloudplatformSyncService")
+	private CloudplatformSyncService cloudplatformSyncService;
 
 	@Resource(name = "resourceService")
 	private ResourceService resourceService;
@@ -110,7 +116,12 @@ public class CloudplatformController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//ToDo
+		
+		pd = cloudplatformService.findById(pd);
+		pd.remove("id");
+		pd.put("version", DateUtil.dateToString(new Date(), DateUtil.TIMESTAMP_FORMAT));
+		cloudplatformSyncService.save(pd);
+		
 		out.write("success");
 		out.close();
 	}
@@ -129,7 +140,6 @@ public class CloudplatformController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String id = pd.getString("id");
 		pd = cloudplatformService.findById(pd);
 
 		// 同步云平台数据 Todo

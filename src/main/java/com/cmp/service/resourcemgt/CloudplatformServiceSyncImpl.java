@@ -11,13 +11,13 @@ import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /**
- * 云平台   业务层实现类
+ * 云平台同步 业务层实现类
  * 
  * @author liuweixing
  *
  */
-@Service("cloudplatformService")
-public class CloudplatformServiceImpl implements CloudplatformService {
+@Service("cloudplatformSyncService")
+public class CloudplatformServiceSyncImpl implements CloudplatformSyncService {
 
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
@@ -29,7 +29,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	public void save(PageData pd) throws Exception {
-		dao.save("CloudplatformMapper.save", pd);
+		dao.save("CloudplatformSyncMapper.save", pd);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	public void delete(PageData pd) throws Exception {
-		dao.delete("CloudplatformMapper.delete", pd);
+		dao.delete("CloudplatformSyncMapper.delete", pd);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	public void edit(PageData pd) throws Exception {
-		dao.update("CloudplatformMapper.edit", pd);
+		dao.update("CloudplatformSyncMapper.edit", pd);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("CloudplatformMapper.datalistPage", page);
+		return (List<PageData>) dao.findForList("CloudplatformSyncMapper.datalistPage", page);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("CloudplatformMapper.listAll", pd);
+		return (List<PageData>) dao.findForList("CloudplatformSyncMapper.listAll", pd);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("CloudplatformMapper.findById", pd);
+		return (PageData) dao.findForObject("CloudplatformSyncMapper.findById", pd);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("CloudplatformMapper.deleteAll", ArrayDATA_IDS);
+		dao.delete("CloudplatformSyncMapper.deleteAll", ArrayDATA_IDS);
 	}
 
 }

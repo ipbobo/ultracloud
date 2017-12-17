@@ -6,12 +6,12 @@ import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /**
- * 云平台  业务层接口
+ * 云平台同步 业务层接口
  * 
  * @author liuweixing
  *
  */
-public interface CloudplatformService {
+public interface CloudplatformSyncService {
 
 	/**
 	 * 新增
