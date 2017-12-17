@@ -39,6 +39,9 @@ public class DateUtil {
 	 */
 	public static final String DATE_FORMAT_RYN_SFM = "MM/dd/yy HH:mm:ss";
 	
+	/** 默认时间格式 */
+	public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmss";
+	
 	/**
 	 * 将字符串转换为时间格式java.util.Date
 	 * 

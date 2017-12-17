@@ -1,4 +1,4 @@
-package com.cmp.service;
+package com.cmp.service.resourcemgt;
 
 import java.util.List;
 

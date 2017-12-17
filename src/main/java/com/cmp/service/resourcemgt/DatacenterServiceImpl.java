@@ -1,4 +1,4 @@
-package com.cmp.service;
+package com.cmp.service.resourcemgt;
 
 import java.util.List;
 
@@ -11,13 +11,13 @@ import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /**
- * 集群业务层实现类
+ * 数据中心业务层实现类
  * 
  * @author liuweixing
  *
  */
-@Service("datacenternetworkService")
-public class DatacenternetworkServiceImpl implements DatacenternetworkService {
+@Service("datacenterService")
+public class DatacenterServiceImpl implements DatacenterService {
 
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
@@ -29,7 +29,7 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @throws Exception
 	 */
 	public void save(PageData pd) throws Exception {
-		dao.save("DatacenternetworkMapper.save", pd);
+		dao.save("DatacenterMapper.save", pd);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @throws Exception
 	 */
 	public void delete(PageData pd) throws Exception {
-		dao.delete("DatacenternetworkMapper.delete", pd);
+		dao.delete("DatacenterMapper.delete", pd);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @throws Exception
 	 */
 	public void edit(PageData pd) throws Exception {
-		dao.update("DatacenternetworkMapper.edit", pd);
+		dao.update("DatacenterMapper.edit", pd);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("DatacenternetworkMapper.datalistPage", page);
+		return (List<PageData>) dao.findForList("DatacenterMapper.datalistPage", page);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("DatacenternetworkMapper.listAll", pd);
+		return (List<PageData>) dao.findForList("DatacenterMapper.listAll", pd);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("DatacenternetworkMapper.findById", pd);
+		return (PageData) dao.findForObject("DatacenterMapper.findById", pd);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("DatacenternetworkMapper.deleteAll", ArrayDATA_IDS);
+		dao.delete("DatacenterMapper.deleteAll", ArrayDATA_IDS);
 	}
 
 }
