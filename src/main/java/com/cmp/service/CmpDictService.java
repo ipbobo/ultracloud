@@ -54,6 +54,16 @@ public class CmpDictService extends AbstractDao<CmpDict, Long> {
 			return null;
 		}
 	}
+	
+	//获取数据字典名称
+	public String getDictValue(String dictType, String dictCode) {
+		CmpDict cmpDict=getCmpDict(dictType, dictCode);
+		if(cmpDict!=null){
+			return cmpDict.getDictValue();
+		}
+		
+		return null;
+	}
 
 	//重新加载缓存
 	public void reloadCache() {
