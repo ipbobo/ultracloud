@@ -150,6 +150,7 @@ CREATE TABLE `t_virtualmachine` (
   `appNo` varchar(20) NOT NULL COMMENT '虚拟机用户',
   `project_id` varchar(32) NOT NULL COMMENT '项目名称',
   `name` varchar(20) NOT NULL COMMENT '名称',
+  `envCode` varchar(20) DEFAULT NULL COMMENT '环境代码',
   `ip` varchar(20) DEFAULT NULL COMMENT '虚拟机ip',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
   `memory` int unsigned DEFAULT NULL COMMENT '内存',
