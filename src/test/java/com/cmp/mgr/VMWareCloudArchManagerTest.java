@@ -1,15 +1,21 @@
 package com.cmp.mgr;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.mgr.impl.VMWareCloudArchManager;
+import com.vmware.vim25.mo.ClusterComputeResource;
+import com.vmware.vim25.mo.Datacenter;
+import com.vmware.vim25.mo.Datastore;
+import com.vmware.vim25.mo.HostSystem;
+import com.vmware.vim25.mo.VirtualMachine;
 
 public class VMWareCloudArchManagerTest {
 
-	private CloudArchManager cloudArchManager;
+	private VMWareCloudArchManager cloudArchManager;
 
 	@Before
 	public void setup() {
@@ -21,24 +27,65 @@ public class VMWareCloudArchManagerTest {
 		cloudArchManager = new VMWareCloudArchManager(platform);
 	}
 
+	public void execute(String flag, Runnable runnable) {
+		String info = String.format("== Action: %s ", flag);
+		info = StringUtils.rightPad(info, 50, "=");
+
+		System.err.println(info);
+		try {
+			runnable.run();
+			Thread.sleep(1000);
+		} catch (Exception e) {
+			// ignore
+		}
+		System.out.println();
+	}
+
 	@Test
 	public void testGetDatacenters() {
-		cloudArchManager.getDatacenters().forEach(datacenter -> {
-			System.out.println(datacenter.getName());
+		execute("GetDatacenters", () -> {
+			cloudArchManager.getDatacenters().stream()
+					.map(Datacenter::getName).forEach(System.out::println);
 		});
 	}
 
 	@Test
 	public void testGetClusters() {
-		cloudArchManager.getClusters().forEach(cluster -> {
-			System.out.println(cluster.getName());
+		execute("GetClusters", () -> {
+			cloudArchManager.getClusters().stream()
+					.map(ClusterComputeResource::getName).forEach(System.out::println);
+		});
+	}
+
+	@Test
+	public void testGetHostMachines() {
+		execute("GetHostMachines", () -> {
+			cloudArchManager.getHostMachines().stream()
+					.map(HostSystem::getName).forEach(System.out::println);
 		});
 	}
 
 	@Test
 	public void testGetVirtualMachines() {
-		cloudArchManager.getVirtualMachines().forEach(virtualMachine -> {
-			System.out.println(virtualMachine.getName());
+		execute("GetVirtualMachines", () -> {
+			cloudArchManager.getVirtualMachines().stream()
+					.map(VirtualMachine::getName).forEach(System.out::println);
+		});
+	}
+
+	@Test
+	public void testGetTemplates() {
+		execute("GetTemplates", () -> {
+			cloudArchManager.getVmTemplates().stream()
+					.map(VirtualMachine::getName).forEach(System.out::println);
+		});
+	}
+
+	@Test
+	public void testGetDatastores() {
+		execute("GetDatastores", () -> {
+			cloudArchManager.getDatastores().stream()
+					.map(Datastore::getName).forEach(System.out::println);
 		});
 	}
 

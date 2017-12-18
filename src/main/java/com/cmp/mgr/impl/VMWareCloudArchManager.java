@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
@@ -76,8 +77,17 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				.collect(toList());
 	}
 
-	@SuppressWarnings("deprecation")
 	public List<VirtualMachine> getVirtualMachines() {
+		List<VirtualMachine> vms = getVirtualMachinesNoVerify();
+		if (CollectionUtils.isEmpty(vms)) {
+			return Collections.emptyList();
+		}
+
+		return vms.stream().filter(this::isVirtualMachine).collect(toList());
+	}
+
+	@SuppressWarnings("deprecation")
+	public List<VirtualMachine> getVirtualMachinesNoVerify() {
 		try {
 			String type = VirtualMachine.class.getSimpleName();
 			String[][] typeinfo = new String[][] { new String[] { type, "name", }, };
@@ -122,9 +132,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				ManagedObjectReference mor = ocs.getObj();
 				VirtualMachine vm = (VirtualMachine) MorUtil.createExactManagedEntity(
 						rootEntity.getServerConnection(), mor);
-				if (vm.getConfig() != null && !vm.getConfig().isTemplate()) {
-					vmList.add(vm);
-				}
+				vmList.add(vm);
 			}
 
 			return vmList;
@@ -221,7 +229,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 		List<VirtualMachine> ls = new ArrayList<>();
 		for (VirtualMachine vm : vms) {
-			if (vm == null || vm.getConfig() == null || vm.getConfig().isTemplate()) {
+			if (!isVirtualMachine(vm)) {
 				continue;
 			}
 
@@ -232,8 +240,8 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<VirtualMachine> getHostMachines() {
-		return null;
+	public List<HostSystem> getHostMachines() {
+		return searchManagedEntities(HostSystem.class);
 	}
 
 	@Override
@@ -242,8 +250,13 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<Datastore> getVmTemplates() {
-		return null;
+	public List<VirtualMachine> getVmTemplates() {
+		List<VirtualMachine> vms = getVirtualMachinesNoVerify();
+		if (CollectionUtils.isEmpty(vms)) {
+			return Collections.emptyList();
+		}
+
+		return vms.stream().filter(this::isTemplate).collect(toList());
 	}
 
 	@Override
@@ -289,6 +302,22 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	@Override
 	public void revertToSnapshot() {
 
+	}
+
+	private boolean isVirtualMachine(VirtualMachine vm) {
+		return vm != null && vm.getConfig() != null && !vm.getConfig().isTemplate();
+	}
+
+	private boolean isTemplate(VirtualMachine vm) {
+		if (vm == null) {
+			return false;
+		}
+
+		if (vm.getConfig() == null) {
+			return false;
+		}
+
+		return vm.getConfig().isTemplate();
 	}
 
 }

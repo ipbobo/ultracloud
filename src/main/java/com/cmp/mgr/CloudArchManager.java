@@ -5,6 +5,7 @@ import java.util.List;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
+import com.vmware.vim25.mo.HostSystem;
 import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.VirtualMachine;
 import com.vmware.vim25.mo.VirtualMachineSnapshot;
@@ -15,7 +16,7 @@ public interface CloudArchManager {
 
 	public List<ClusterComputeResource> getClusters();
 
-	public List<VirtualMachine> getHostMachines();
+	public List<HostSystem> getHostMachines();
 
 	public List<VirtualMachine> getVirtualMachines();
 
@@ -23,7 +24,7 @@ public interface CloudArchManager {
 
 	public List<Network> getNetWorks();
 
-	public List<Datastore> getVmTemplates();
+	public List<VirtualMachine> getVmTemplates();
 
 	public List<VirtualMachineSnapshot> getVmSnapshots();
 
