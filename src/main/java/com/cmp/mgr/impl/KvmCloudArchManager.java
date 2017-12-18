@@ -1,8 +1,11 @@
 package com.cmp.mgr.impl;
 
+import java.util.List;
+
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
+import com.vmware.vim25.mo.HostSystem;
 import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.VirtualMachine;
 import com.vmware.vim25.mo.VirtualMachineSnapshot;
@@ -10,81 +13,76 @@ import com.vmware.vim25.mo.VirtualMachineSnapshot;
 public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
-	public java.util.List<Datacenter> getDatacenters() {
+	public List<Datacenter> getDatacenters() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public java.util.List<ClusterComputeResource> getClusters() {
+	public List<ClusterComputeResource> getClusters() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public java.util.List<VirtualMachine> getHostMachines() {
+	public List<HostSystem> getHostMachines() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public java.util.List<VirtualMachine> getVirtualMachines() {
+	public List<VirtualMachine> getVirtualMachines() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public java.util.List<Datastore> getDatastores() {
+	public List<Datastore> getDatastores() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public java.util.List<Network> getNetWorks() {
+	public List<Network> getNetworks() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public java.util.List<Datastore> getVmTemplates() {
+	public List<VirtualMachine> getVmTemplates() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public java.util.List<VirtualMachineSnapshot> getVmSnapshots() {
+	public List<VirtualMachineSnapshot> getVmSnapshots() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public java.util.List<VirtualMachine> startVirtualMachine(String name) {
+	public void startVirtualMachine(String name) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public java.util.List<VirtualMachine> stopVirtualMachine(String name) {
+	public void stopVirtualMachine(String name) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public java.util.List<VirtualMachine> rebootVirtualMachine(String name) {
+	public void rebootVirtualMachine(String name) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public java.util.List<VirtualMachine> resetVirtualMachine(String name) {
+	public void resetVirtualMachine(String name) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public java.util.List<VirtualMachine> deleteVirtualMachine(String name) {
+	public void deleteVirtualMachine(String name) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
