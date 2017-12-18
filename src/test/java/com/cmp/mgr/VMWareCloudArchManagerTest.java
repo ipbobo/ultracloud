@@ -35,7 +35,7 @@ public class VMWareCloudArchManagerTest {
 		System.err.println(info);
 		try {
 			runnable.run();
-			Thread.sleep(1000);
+			Thread.sleep(200);
 		} catch (Exception e) {
 			// ignore
 		}
