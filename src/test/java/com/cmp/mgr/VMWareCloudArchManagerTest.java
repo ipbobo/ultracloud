@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.mgr.impl.VMWareCloudArchManager;
+import com.vmware.vim25.VirtualMachineSnapshotInfo;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
@@ -89,12 +90,20 @@ public class VMWareCloudArchManagerTest {
 					.map(Datastore::getName).forEach(System.out::println);
 		});
 	}
-	
+
 	@Test
 	public void testGetNetWorks() {
 		execute("GetNetWorks", () -> {
 			cloudArchManager.getNetworks().stream()
 					.map(Network::getName).forEach(System.out::println);
+		});
+	}
+
+	@Test
+	public void testGetVmSnapshots() {
+		execute("GetVmSnapshots", () -> {
+			cloudArchManager.getVmSnapshots().stream()
+					.map(VirtualMachineSnapshotInfo::getDynamicType).forEach(System.out::println);
 		});
 	}
 
