@@ -2,13 +2,13 @@ package com.cmp.mgr.impl;
 
 import java.util.List;
 
+import com.vmware.vim25.VirtualMachineSnapshotInfo;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
 import com.vmware.vim25.mo.HostSystem;
 import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.VirtualMachine;
-import com.vmware.vim25.mo.VirtualMachineSnapshot;
 
 public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
@@ -55,7 +55,7 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<VirtualMachineSnapshot> getVmSnapshots() {
+	public List<VirtualMachineSnapshotInfo> getVmSnapshots() {
 		// TODO Auto-generated method stub
 		return null;
 	}

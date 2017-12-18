@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
@@ -25,6 +24,7 @@ import com.vmware.vim25.ObjectSpec;
 import com.vmware.vim25.PropertyFilterSpec;
 import com.vmware.vim25.PropertySpec;
 import com.vmware.vim25.SelectionSpec;
+import com.vmware.vim25.VirtualMachineSnapshotInfo;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
@@ -37,7 +37,6 @@ import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.PropertyCollector;
 import com.vmware.vim25.mo.ServiceInstance;
 import com.vmware.vim25.mo.VirtualMachine;
-import com.vmware.vim25.mo.VirtualMachineSnapshot;
 import com.vmware.vim25.mo.util.MorUtil;
 import com.vmware.vim25.mo.util.PropertyCollectorUtil;
 
@@ -78,12 +77,8 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	public List<VirtualMachine> getVirtualMachines() {
-		List<VirtualMachine> vms = getVirtualMachinesNoVerify();
-		if (CollectionUtils.isEmpty(vms)) {
-			return Collections.emptyList();
-		}
-
-		return vms.stream().filter(this::isVirtualMachine).collect(toList());
+		return getVirtualMachinesNoVerify().stream()
+				.filter(this::isVirtualMachine).collect(toList());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -251,17 +246,12 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public List<VirtualMachine> getVmTemplates() {
-		List<VirtualMachine> vms = getVirtualMachinesNoVerify();
-		if (CollectionUtils.isEmpty(vms)) {
-			return Collections.emptyList();
-		}
-
-		return vms.stream().filter(this::isTemplate).collect(toList());
+		return getVirtualMachinesNoVerify().stream().filter(this::isTemplate).collect(toList());
 	}
 
 	@Override
-	public List<VirtualMachineSnapshot> getVmSnapshots() {
-		return null;
+	public List<VirtualMachineSnapshotInfo> getVmSnapshots() {
+		return getVirtualMachines().stream().map(VirtualMachine::getSnapshot).collect(toList());
 	}
 
 	@Override
