@@ -15,15 +15,15 @@
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript">
 //业务视图总览类型改变时触发
-function bizviewTypeFunc(){
-	var bizviewType=$("#bizviewType").val();//业务视图总览类型
+function bizviewTypeFunc(bizviewTypeId){
+	var bizviewType=$("#"+bizviewTypeId).val();//业务视图总览类型
 	loadData(bizviewType, "");//数据加载
 }
 
 //业务视图总览类型改变时触发
-function subBizviewTypeFunc(){
-	var bizviewType=$("#bizviewType").val();//业务视图总览类型
-	var subBizviewType=$("#subBizviewType").val();//子业务视图总览类型
+function subBizviewTypeFunc(bizviewTypeId, subBizviewTypeId){
+	var bizviewType=$("#"+bizviewTypeId).val();//业务视图总览类型
+	var subBizviewType=$("#"+subBizviewTypeId).val();//子业务视图总览类型
 	loadData(bizviewType, subBizviewType);//数据加载
 }
 
@@ -42,23 +42,33 @@ function subBizviewTypeFunc(){
 	}
 } */
 
+//计算数据加载
+function loadJstabData(bizviewType, subBizviewType){
+	$("#jstab").load("bizview/callist.do?bizviewType="+(bizviewType?bizviewType:"")+"&subBizviewType="+(subBizviewType?subBizviewType:""));
+}
+
+//存储数据加载
+function loadCctabData(bizviewType, subBizviewType){
+	$("#cctab").load("bizview/storelist.do?bizviewType="+(bizviewType?bizviewType:"")+"&subBizviewType="+(subBizviewType?subBizviewType:""));
+}
+
 //数据加载
 function loadData(bizviewType, subBizviewType){
 	if($("#jstab").is(".active")){//计算
-		$("#jstab").load("bizview/callist.do?bizviewType="+(bizviewType?bizviewType:"")+"&subBizviewType="+(subBizviewType?subBizviewType:""));
+		loadJstabData(bizviewType, subBizviewType);//计算数据加载
 	}else{//存储
-		$("#cctab").load("bizview/memlist.do");
+		loadCctabData(bizviewType, subBizviewType);//存储数据加载
 	}
 }
 
 //点击tab页
+var isCctabOpen=false;//存储Tab是否打开
 function tabFunc(tabId){
-	if(tabId=="zdysq"){//自定义申请
-		$("#savePckgBtnId").show();
-		return;
-	}else{//套餐申请
-		$("#savePckgBtnId").hide();
-		$("#tcsq").load("pckgAppPre.do");
+	if(tabId=="cctab" && !isCctabOpen){//存储
+		var bizviewType=$("#bizviewType").val();//业务视图总览类型
+		var subBizviewType=$("#subBizviewType").val();//子业务视图总览类型
+		loadCctabData(bizviewType, subBizviewType);//存储数据加载
+		isCctabOpen=true;
 	}
 }
 </script>

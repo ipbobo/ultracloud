@@ -16,18 +16,18 @@
 </script>
 </head>
 <body>
-<form id="mainForm" name="mainForm" action="bizview/callist.do" enctype="multipart/form-data" method="post">
+<form id="mainForm" name="mainForm" action="bizview/storelist.do" enctype="multipart/form-data" method="post">
 	<table style="margin-top: 0px;margin-left: 0px;margin-bottom: 10px;">
 		<tr class="tablecls">
 			<td align="left" style="width: 120px;padding-right: 10px;">
-				<select class="chosen-select form-control" name="bizviewType" id="bizviewType" data-placeholder="请选择业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="bizviewTypeFunc('bizviewType')">
+				<select class="chosen-select form-control" name="ccbizviewType" id="ccbizviewType" data-placeholder="请选择业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="bizviewTypeFunc('ccbizviewType')">
 				<c:forEach items="${bizviewTypeList}" var="var">
 					<option value="${var.dictCode}" <c:if test="${bizviewType==var.dictCode || (bizviewType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 				</c:forEach>
 			  	</select>
 			</td>
 			<td align="left" style="width: 120px;">
-				<select class="chosen-select form-control" name="subBizviewType" id="subBizviewType" data-placeholder="请选择子业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="subBizviewTypeFunc('bizviewType', 'subBizviewType')">
+				<select class="chosen-select form-control" name="ccsubBizviewType" id="ccsubBizviewType" data-placeholder="请选择子业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="subBizviewTypeFunc('ccbizviewType', 'ccsubBizviewType')">
 				<option value="">全部${cmpRes.bizviewTypeName}</option>
 				<c:forEach items="${subBizviewTypeList}" var="var">
 					<option value="${var.dictCode}"<c:if test="${subBizviewType==var.dictCode}">selected</c:if>>${var.dictValue}</option>
@@ -49,36 +49,20 @@
 					<td align="left" style="width: 180px;padding-top: 10px;">${cmpRes.subBizviewTypeName}</td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 120px;">CPU总量：</td>
-					<td align="left" style="width: 180px;">${cmpRes.cpuTotalNum}&nbsp;核</td>
+					<td align="right" style="width: 120px;">存储总量：</td>
+					<td align="left" style="width: 180px;">${cmpRes.storeTotalNum}&nbsp;GB</td>
 				</tr>
 				<tr>
 					<td align="right" style="width: 120px;">已分配：</td>
-					<td align="left" style="width: 180px;">${cmpRes.cpuUseNum}&nbsp;核</td>
+					<td align="left" style="width: 180px;">${cmpRes.storeUseNum}&nbsp;GB</td>
 				</tr>
 				<tr>
 					<td align="right" style="width: 120px;">申请中：</td>
-					<td align="left" style="width: 180px;">${cmpRes.cpuAppNum}&nbsp;核</td>
+					<td align="left" style="width: 180px;">${cmpRes.storeAppNum}&nbsp;GB</td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 120px;">CPU剩余：</td>
-					<td align="left" style="width: 180px;">${cmpRes.cpuRestNum}&nbsp;核</td>
-				</tr>
-				<tr>
-					<td align="right" style="width: 120px;">内存总量：</td>
-					<td align="left" style="width: 180px;">${cmpRes.memTotalNum}&nbsp;GB</td>
-				</tr>
-				<tr>
-					<td align="right" style="width: 120px;">已分配：</td>
-					<td align="left" style="width: 180px;">${cmpRes.memUseNum}&nbsp;GB</td>
-				</tr>
-				<tr>
-					<td align="right" style="width: 120px;">申请中：</td>
-					<td align="left" style="width: 180px;">${cmpRes.memAppNum}&nbsp;GB</td>
-				</tr>
-				<tr>
-					<td align="right" style="width: 120px;">内存剩余：</td>
-					<td align="left" style="width: 180px;">${cmpRes.memRestNum}&nbsp;GB</td>
+					<td align="right" style="width: 120px;">存储剩余：</td>
+					<td align="left" style="width: 180px;">${cmpRes.storeRestNum}&nbsp;GB</td>
 				</tr>
 			</table>
 		</td>
@@ -101,7 +85,7 @@
 				</td>
 				<td align="right" valign="top" style="width: 120px;">购买量：</td>
 				<td align="left" valign="top" style="width: 180px;">${var.virNum}&nbsp;台</td>
-				<td align="right" valign="top" style="width: 120px;">到期时间：</td>
+				<td align="right" valign="top" style="width: 120px;">到期时间：${bizviewType}-${subBizviewType}</td>
 				<td align="left" valign="top" style="width: 180px;">${var.expireDate}</td>
 			</tr>
 			</table>
