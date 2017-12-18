@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.entity.system.Department;
@@ -207,5 +208,10 @@ public class DepartmentService implements DepartmentManager{
 		return sb.toString();
 	}
 	
+	//部门列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpDict> getDeptList() throws Exception {
+		return (List<CmpDict>) dao.findForList("DepartmentMapper.getDeptList", null);
+	}
 }
 

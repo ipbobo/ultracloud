@@ -2,6 +2,7 @@ package com.fh.service.fhoa.department;
 
 import java.util.List;
 
+import com.cmp.sid.CmpDict;
 import com.fh.entity.Page;
 import com.fh.entity.system.Department;
 import com.fh.util.PageData;
@@ -109,5 +110,8 @@ public interface DepartmentManager{
 	 * @throws Exception
 	 */
 	public List<PageData> listALLSubDepartmentByParentId(String parentId) throws Exception ;
+	
+	//部门列表查询
+	public List<CmpDict> getDeptList() throws Exception;
 }
 

@@ -177,4 +177,8 @@
 			FIND_IN_SET(DEPARTMENT_ID,f_list_department(#{parentId}))
 	</select>
 	
+	<!-- 部门列表查询 -->
+	<select id="getDeptList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select DEPARTMENT_ID dictCode, NAME dictValue from OA_DEPARTMENT
+	</select>
 </mapper>

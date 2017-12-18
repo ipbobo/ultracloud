@@ -167,7 +167,7 @@
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
 		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
 		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
-		left join t_environment e on e.id=a.projectCode
+		left join t_environment e on e.id=a.envCode
 		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
 		left join t_project g on g.id=a.projectCode
 		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
@@ -195,7 +195,7 @@
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
 		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
 		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
-		left join t_environment e on e.id=a.projectCode
+		left join t_environment e on e.id=a.envCode
 		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
 		left join t_project g on g.id=a.projectCode
 		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
@@ -231,7 +231,7 @@
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
 		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
 		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
-		left join t_environment e on e.id=a.projectCode
+		left join t_environment e on e.id=a.envCode
 		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
 		left join t_project g on g.id=a.projectCode
 		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
