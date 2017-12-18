@@ -29,6 +29,7 @@ public class CmpOpServe {
 	private String directory; //挂载磁盘指定目录
 	private String expTime;	//期限
 	private String vipNum; //VIP数量
+	private String breakdownLevelName; //故障级别名称
 	
 	
 	
@@ -175,6 +176,22 @@ public class CmpOpServe {
 	}
 	public void setVipNum(String vipNum) {
 		this.vipNum = vipNum;
+	}
+	public String getBreakdownLevelName() {
+		if (breakdownLevel != null && breakdownLevel.equals("1")) {
+			return "一般";
+		}
+		if (breakdownLevel != null && breakdownLevel.equals("2")) {
+			return "中等";
+		}
+		if (breakdownLevel != null && breakdownLevel.equals("3")) {
+			return "严重";
+		}
+		return breakdownLevelName;
+	}
+	public void setBreakdownLevelName(String breakdownLevelName) {
+		
+		this.breakdownLevelName = breakdownLevelName;
 	}
 	
 	
