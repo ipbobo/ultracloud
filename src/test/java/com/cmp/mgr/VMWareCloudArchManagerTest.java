@@ -7,13 +7,14 @@ import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.mgr.impl.VMWareCloudArchManager;
-import com.vmware.vim25.VirtualMachineSnapshotInfo;
+import com.vmware.vim25.VirtualMachineConfigInfo;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
 import com.vmware.vim25.mo.HostSystem;
 import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.VirtualMachine;
+import com.vmware.vim25.mo.VirtualMachineSnapshot;
 
 public class VMWareCloudArchManagerTest {
 
@@ -103,7 +104,9 @@ public class VMWareCloudArchManagerTest {
 	public void testGetVmSnapshots() {
 		execute("GetVmSnapshots", () -> {
 			cloudArchManager.getVmSnapshots().stream()
-					.map(VirtualMachineSnapshotInfo::getDynamicType).forEach(System.out::println);
+					.map(VirtualMachineSnapshot::getConfig)
+					.map(VirtualMachineConfigInfo::getName)
+					.forEach(System.out::println);
 		});
 	}
 

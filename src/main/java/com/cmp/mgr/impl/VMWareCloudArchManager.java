@@ -24,7 +24,6 @@ import com.vmware.vim25.ObjectSpec;
 import com.vmware.vim25.PropertyFilterSpec;
 import com.vmware.vim25.PropertySpec;
 import com.vmware.vim25.SelectionSpec;
-import com.vmware.vim25.VirtualMachineSnapshotInfo;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
@@ -37,6 +36,7 @@ import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.PropertyCollector;
 import com.vmware.vim25.mo.ServiceInstance;
 import com.vmware.vim25.mo.VirtualMachine;
+import com.vmware.vim25.mo.VirtualMachineSnapshot;
 import com.vmware.vim25.mo.util.MorUtil;
 import com.vmware.vim25.mo.util.PropertyCollectorUtil;
 
@@ -250,8 +250,9 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<VirtualMachineSnapshotInfo> getVmSnapshots() {
-		return getVirtualMachines().stream().map(VirtualMachine::getSnapshot).collect(toList());
+	public List<VirtualMachineSnapshot> getVmSnapshots() {
+		return getVirtualMachines().stream().map(VirtualMachine::getRootSnapshot)
+				.flatMap(Arrays::stream).collect(toList());
 	}
 
 	@Override
