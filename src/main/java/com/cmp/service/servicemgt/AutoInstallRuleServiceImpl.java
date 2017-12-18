@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.cmp.service.ClusterService;
+import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;

@@ -1,4 +1,4 @@
-package com.cmp.service;
+package com.cmp.service.resourcemgt;
 
 import java.util.List;
 
@@ -6,12 +6,12 @@ import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /**
- * 资源管理业务层接口
+ * 集群管理业务层接口
  * 
  * @author liuweixing
  *
  */
-public interface CloudplatformService {
+public interface ClusterService {
 
 	/**
 	 * 新增

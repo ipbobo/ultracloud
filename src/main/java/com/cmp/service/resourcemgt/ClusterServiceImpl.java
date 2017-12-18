@@ -1,4 +1,4 @@
-package com.cmp.service;
+package com.cmp.service.resourcemgt;
 
 import java.util.List;
 
@@ -11,13 +11,13 @@ import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /**
- * 资源业务层实现类
+ * 集群业务层实现类
  * 
  * @author liuweixing
  *
  */
-@Service("cloudplatformService")
-public class CloudplatformServiceImpl implements CloudplatformService {
+@Service("clusterService")
+public class ClusterServiceImpl implements ClusterService {
 
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
@@ -29,7 +29,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	public void save(PageData pd) throws Exception {
-		dao.save("CloudplatformMapper.save", pd);
+		dao.save("ClusterMapper.save", pd);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	public void delete(PageData pd) throws Exception {
-		dao.delete("CloudplatformMapper.delete", pd);
+		dao.delete("ClusterMapper.delete", pd);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	public void edit(PageData pd) throws Exception {
-		dao.update("CloudplatformMapper.edit", pd);
+		dao.update("ClusterMapper.edit", pd);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("CloudplatformMapper.datalistPage", page);
+		return (List<PageData>) dao.findForList("ClusterMapper.datalistPage", page);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("CloudplatformMapper.listAll", pd);
+		return (List<PageData>) dao.findForList("ClusterMapper.listAll", pd);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("CloudplatformMapper.findById", pd);
+		return (PageData) dao.findForObject("ClusterMapper.findById", pd);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("CloudplatformMapper.deleteAll", ArrayDATA_IDS);
+		dao.delete("ClusterMapper.deleteAll", ArrayDATA_IDS);
 	}
 
 }

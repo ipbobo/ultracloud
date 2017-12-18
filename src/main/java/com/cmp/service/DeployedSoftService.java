@@ -9,4 +9,6 @@ public interface DeployedSoftService {
 	public int add(DeployedSoft deployedSoft) throws Exception;
 	
 	public List<DeployedSoft> findByVmId(String vmId) throws Exception;
+	
+	public DeployedSoft findById(String id) throws Exception;
 }

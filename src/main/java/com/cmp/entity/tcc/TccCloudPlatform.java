@@ -2,6 +2,7 @@ package com.cmp.entity.tcc;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class TccCloudPlatform implements java.io.Serializable {
@@ -26,6 +27,8 @@ public class TccCloudPlatform implements java.io.Serializable {
 
 	private String cloudplatformType;// 平台名称(0表示：cloudstack 1:表示vcenter
 										// 2:表示xenserver 3表示：openstack)
+
+	private String platformManagerType;
 
 	private String cloudplatformKey;// 平台，如果是venter则为vcenter的指纹信息
 
@@ -182,6 +185,14 @@ public class TccCloudPlatform implements java.io.Serializable {
 		this.cloudplatformType = cloudplatformType;
 	}
 
+	public String getPlatformManagerType() {
+		return platformManagerType;
+	}
+
+	public void setPlatformManagerType(String platformManagerType) {
+		this.platformManagerType = platformManagerType;
+	}
+
 	public String getCloudplatformKey() {
 		return cloudplatformKey;
 	}
@@ -268,6 +279,29 @@ public class TccCloudPlatform implements java.io.Serializable {
 
 	public void setTenantName(String tenantName) {
 		this.tenantName = tenantName;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (obj instanceof TccCloudPlatform) {
+			TccCloudPlatform that = (TccCloudPlatform) obj;
+			// @formatter:off
+			return this.cloudplatformId != null &&
+				   that.cloudplatformId != null &&
+				   this.cloudplatformId.equals(that.cloudplatformId);
+			// @formatter:on
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(cloudplatformId);
 	}
 
 }

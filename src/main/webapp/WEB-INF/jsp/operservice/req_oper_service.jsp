@@ -19,6 +19,8 @@
 <%@ include file="../system/index/top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
+<link rel="stylesheet" href="static/ace/css/datepicker.css" />
+<link rel="stylesheet" href="static/ace/css/bootstrap-datetimepicker.css" />
 <jsp:include page="../msg/msg_dialog.jsp"></jsp:include>
 </head>
 <body class="no-skin">
@@ -51,12 +53,12 @@
 									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;操作类型:</td>
 									<td id="tip_oper_type">
 									<select name="oper_type" id="oper_type" title="清选择操作类型" style="width:20%;margin-left: 100px;">
-										<option value="#">请选择操作类型</option>
 									</select>
 									</td>
 								</tr>
 							</table>
 							<div id="op_1" style="display: none;">
+							<!-- 中间件启停 -->
 								<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 									<tr>
 										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;选择虚拟机:</td>
@@ -67,11 +69,86 @@
 									</tr>
 								</table>
 							</div>
+							<div id="op_vm_select">
+								<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;选择虚拟机:</td>
+										<td id="tip_vm">
+										<button class="btn btn-info" id="btn_add_vm_2"  style="float:left;margin-left: 100px;" type="button" data-toggle="modal" data-target="#vm_select_modal">添加</button>
+										<div style="float:left; text-align: center;line-height:40px; padding-left: 40px;" id="v_vm_2"></div>
+										</td>
+									</tr>
+								</table>
+							</div>
+							
+							</div>
+							<div id="op_2" style="display: none;">
+							<!-- 安装软件 -->
+								<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;选择软件:</td>
+										<td id="tip_oper_soft">
+										<select name="install_soft" id="install_soft" title="清选择软件" style="width:20%;margin-left: 100px;" onchange="selectSoftVersion(this.value)">
+											  <option value="#">请选择软件</option>
+											  <c:forEach items="${softName}" var="var">
+					                  				 <option value="${var}">${var}</option>
+				                     		  </c:forEach>
+										</select>
+										</td>
+									</tr>
+									<tr>
+									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;软件版本:</td>
+									<td>
+									<select name="soft_version" id="soft_version" title="请选择软件版本" style="width:20%;margin-left: 100px;">
+									</select>
+									</td>
+								</tr>
+								</table>
+							</div>
+							
+							<div id="op_3" style="display: none;">
+							<!-- 故障处理 -->
+								<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;故障发生时间:</td>
+										<td>
+											<input id="breakdown_time" name="breakdown_time" type="text"  style="width:20%;margin-left: 100px;"/>
+										</td>
+									</tr>
+									<tr>
+									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;故障描述:</td>
+									<td>
+										<textarea class="form-control limited" name="breakdown_info" id="breakdown_info" style="width: 70%;margin-left: 100px;"></textarea>
+									</td>
+									</tr>
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;期望解决时间:</td>
+										<td>
+											<input id="except_solve_time" name="except_solve_time" type="text"  style="width:20%;margin-left: 100px;"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;期望结果:</td>
+										<td>
+											<textarea class="form-control limited" name="except_result" id="except_result" style="width: 70%;margin-left: 100px;"></textarea>
+										</td>
+									</tr>
+									<tr>
+									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;故障级别:</td>
+									<td>
+										<select name="breakdown_level" id="breakdown_level" title="故障级别" style="width:20%;margin-left: 100px;">
+											  <option value="1">一般</option>
+											  <option value="2">中等</option>
+											  <option value="3">严重</option>
+										</select>
+									</td>
+								</table>
+							</div>
 							<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;申请说明:</td>
 									<td id="tip_appmsg">
-										<textarea class="form-control limited" name="app_msg" id="app_msg" style="width: 70%"></textarea>
+										<textarea class="form-control limited" name="app_msg" id="app_msg" style="width: 70%;margin-left: 100px;"></textarea>
 									</td>
 								</tr>
 								
@@ -130,6 +207,7 @@
 														<td class='center'><input type="button" id="softChoiceBtn" value="选择中间件" onclick="softChoice('${var.id}');"></td>
 														<td style="display: none;"><input type="hidden" id="soft_${var.id}" name="soft_${var.id}"></td>
 														<td id="span_${var.id}"></td>
+														
 														</tr>
 											</c:forEach>
 										</c:when>
@@ -210,6 +288,74 @@
 								</div><!-- /.modal-content -->
 							</div><!-- /.modal -->
 						</div>
+						
+						
+<!-- OP2-8 选择虚拟机(纯选择虚拟机，不联动)（Modal） -->
+		<div class="modal fade" id="vm_select_modal" tabindex="-1" role="dialog" aria-labelledby="vm_modalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="vm_modalLabel">
+							虚拟机
+						</h4>
+					</div>
+					<div class="modal-body">	
+						<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+							<tr class="tablecls">
+								<td align="right" style="width: 120px;padding:10px;">虚拟机：</td>
+								<td align="left" style="padding:10px;">
+									<table id="simple-table"
+								class="table table-striped table-bordered table-hover"
+								style="margin-top: 5px;">
+								
+									<thead>
+									<tr>
+										<th class="center" style="width: 35px;"><label
+											class="pos-rel"><input type="checkbox" class="ace"
+												id="zcheckbox" /><span class="lbl"></span></label></th>
+										<th class="center">虚拟机编号</th>
+										<th class="center">虚拟机名称</th>
+									</tr>
+								</thead>
+								
+									<c:choose>
+										<c:when test="${not empty vmList}">
+											<c:forEach items="${vmList}" var="var" varStatus="vs">
+												<tr>
+											<td class='center'><label class="pos-rel"><input
+															type='checkbox' id='vmcheckbox_${var.id}' name='vmcheckbox' value="${var.id}" class="ace" /><span
+															class="lbl"></span></label></td>
+														<td class='center'>${var.id}</td>
+														<td class='center'>${var.name}</td>
+														
+														</tr>
+											</c:forEach>
+										</c:when>
+										<c:otherwise>
+											<tr class="main_info">
+												<td colspan="100" class="center">没有相关数据</td>
+											</tr>
+										</c:otherwise>
+									</c:choose>
+									
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default"  data-dismiss="modal">关闭
+						</button>
+						<button type="button" class="btn btn-primary" id="vm_modal_ok_btn" onclick="vmSelectModalOK();">
+							确定
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
 						<!-- /.col -->
 					</div>
 					<!-- /.row -->
@@ -229,7 +375,9 @@
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
+	<script src="static/ace/js/date-time/moment.js"></script>
 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="static/ace/js/date-time/bootstrap-datetimepicker.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 </body>						
@@ -237,12 +385,20 @@
 	$(top.hangge());
 	
 	$(document).ready(function(){
-		
 		var result = $('#ret_msg').val();
 		if (result != ''){
 			window.top.queryPersonalTask();
 			showDialog(result);
 		}
+		$('#breakdown_time').datetimepicker({
+			format: 'YYYY-MM-DD hh:mm:ss',  
+	        locale: moment.locale('zh-cn')
+			});
+		$('#except_solve_time').datetimepicker({
+			format: 'YYYY-MM-DD hh:mm:ss',  
+	        locale: moment.locale('zh-cn')
+			});
+		
 	});
 	
 	function ismail(mail){
@@ -255,7 +411,6 @@
 				$(this).removeClass("active");
 			}
 		});
-		
 		$(obj).addClass("active");
 	}
 
@@ -292,7 +447,7 @@
 			 		return "";
 			 	}
 			 	vm_select_count = vm_select_count +1;
-	            return $(vm_selected).val() + ':' + $('#'+m_soft_id).val();
+	            return $('#'+m_soft_id).val();
 	        }).get().join('|');
 		 
 		//var checkbox = $('#middleware_checkbox');
@@ -301,11 +456,37 @@
 		$('#v_vm').html("<b>你已经选择: "+ vm_select_count+ "台虚拟机</b>");
 		$('#vm_modal').modal('hide');
 	}
+	
+	function vmSelectModalOK(){
+		var vm_select_count = 0;
+		 text = $("input:checkbox[name='vmcheckbox']:checked").map(function(index,vm_selected) {
+			 vm_select_count = vm_select_count +1;
+	         return $(vm_selected).val();
+	        }).get().join(',');
+		 
+		//var checkbox = $('#middleware_checkbox');
+		$('#vm').val(text);
+		$('#btn_add_vm_2').text('修改');
+		$('#v_vm_2').html("<b>你已经选择: "+ vm_select_count+ "台虚拟机</b>");
+		$('#vm_select_modal').modal('hide');
+	}
 
 	//保存
 	function save(){
+		
+		var vm =  $("#vm").val();
+		var vm_msg = $("#vm_msg").val();
+		var app_msg = $("#app_msg").val();
+		var oper_type = $("#oper_type").val();
+		var install_soft= $("#install_soft").val();
 		var service_type = $("#service_type").val();
-		if($("#service_type").val()==""){
+		var soft_version = $("#soft_version").val();
+		var breakdown_time = $("#breakdown_time").val();
+		var except_solve_time = $("#except_solve_time").val();
+		var except_result = $("#except_result").val();
+		var breakdown_level = $("#breakdown_level").val();
+		var breakdown_info = $("#breakdown_info").val();
+		if( service_type ==""){
 			$("#tip_service_type").tips({
 				side:3,
 	            msg:'选择服务类型',
@@ -315,26 +496,56 @@
 			$("#service_type").focus();
 			return false;
 		}
-		
-		if (service_type == 1){
-			//中间件启停
-			var vm =  $("#vm").val();
-			var vm_msg = $("#vm_msg").val();
-			var app_msg = $("#app_msg").val();
-			var oper_type = $("#oper_type").val();
-			
-			jQuery.ajax({  
-				url : "subOperService.do",  
-				data : {'service_type': service_type,'vm' : vm, 'vm_msg':vm_msg, 'app_msg':app_msg, 'oper_type':oper_type},  
-				type : "post",  
-				cache : false,  
-				dataType : "json",  
-				success:function(data){
-					showDialog(data.result);
-				}
-			});  
-			
+		if (service_type == 2){
+			if (vm == null){
+				showDialog("请选择虚拟机");
+				return false;
+			}
+			if (install_soft == null){
+				showDialog("请选择需安装的软件");
+				return false;
+			}
+			if (soft_version == null){
+				showDialog("请选择软件版本");
+				return false;
+			}
 		}
+		if (service_type == 3){
+			if (breakdown_time == null){
+				showDialog("请输入故障时间");
+				return false;
+			}
+			if (breakdown_info == null){
+				showDialog("请输入故障信息");
+				return false;
+			}
+			if (except_solve_time == null){
+				showDialog("请输入期望解决故障时间");
+				return false;
+			}
+			if (breakdown_level == null){
+				showDialog("请选择故障级别");
+				return false;
+			}
+		}
+		
+		
+		//递交
+		jQuery.ajax({  
+			url : "subOperService.do",  
+			data : {'service_type': service_type,'vm' : vm, 'vm_msg':vm_msg, 'app_msg':app_msg,
+						'oper_type':oper_type, 'install_soft':install_soft, 'soft_version':soft_version,
+						'breakdown_time':breakdown_time, 'breakdown_info':breakdown_info, 'except_solve_time':except_solve_time,
+						'except_result':except_result,'breakdown_level':breakdown_level
+					},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				showDialog(data.result);
+			}
+		});  
+		
 	}
 	
 	
@@ -350,6 +561,27 @@
 			success:onchangecallback  
 		});  
 	}  
+	
+	function selectSoftVersion(soft_name){
+		jQuery.ajax({  
+			url : "querySoftVersion.do",  
+			data : {softName : soft_name},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				   var select_root=document.getElementById('soft_version');  
+				    select_root.options.length=0;
+				    for(var i=0;i<data.length;i++){  
+				            var xValue=data[i];  
+				             var xText=data[i];
+				             var option=new Option(xText,xValue);  
+				             select_root.add(option);  
+				    }
+			} 
+		});  
+	}
+	
 	function onchangecallback(data){   
 	    var select_root=document.getElementById('oper_type');  
 	    select_root.options.length=0;
@@ -360,6 +592,14 @@
 	             select_root.add(option);  
 	    }
 	    var serviceType = $("#service_type").val();
+	    for (i = 1; i<9; i++){
+	    	$("#op_" + i).attr("style", "display:none;");
+	    }
+	    if (serviceType != 1){
+	    	$("#op_vm_select").attr("style", "display:block;");
+	    }else{
+	    	$("#op_vm_select").attr("style", "display:none;");
+	    }
 	    $("#op_" + serviceType).attr("style", "display:block;");
 	    
 	}  

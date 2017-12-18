@@ -1,12 +1,11 @@
 package com.cmp.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.task.Task;
 import org.apache.shiro.session.Session;
@@ -17,15 +16,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.activiti.service.ActivitiService;
 import com.cmp.entity.DeployedSoft;
+import com.cmp.entity.Medium;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.DeployedSoftService;
+import com.cmp.service.MediumService;
 import com.cmp.service.VirtualMachineService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOpServe;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.VirtualMachine;
+import com.cmp.util.PageDataUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.system.User;
 import com.fh.service.system.user.impl.UserService;
@@ -62,6 +64,9 @@ public class AppOperServiceController  extends BaseController {
 	@Resource
 	private VirtualMachineService virtualMachineService;
 	
+	@Resource
+	private MediumService mediumService;
+	
 	//运维服务申请表单查询
 	@RequestMapping(value="/reqOperServicePre")
 	public ModelAndView reqOperServicePre() throws Exception{
@@ -91,6 +96,14 @@ public class AppOperServiceController  extends BaseController {
 //			deployedSoftMap.put(vm.getId(), softList);
 //		}
 //		mv.addObject("deployedSoftMap", deployedSoftMap);
+		//查询所有的可安装软件
+		Map<String, Medium> mediumMap = new HashMap<String, Medium>();
+		List<PageData> mpdList = mediumService.listAll(new PageData());
+		for (PageData spd : mpdList) {
+			Medium medium = (Medium) PageDataUtil.mapToObject(spd, Medium.class);
+			mediumMap.put(medium.getName(), medium);
+		}
+		mv.addObject("softName", mediumMap.keySet());
 		mv.addObject("serviceTypeList", serviceTypeList);
 		mv.addObject("vmList", vmList);
 		mv.setViewName("operservice/req_oper_service");
@@ -107,6 +120,24 @@ public class AppOperServiceController  extends BaseController {
 		List<DeployedSoft> softList = deployedSoftService.findByVmId(vmId);
 		return softList;
 	}
+	
+	//通过虚拟机ID 查询部署的软件
+		@RequestMapping(value="/querySoftVersion")
+		@ResponseBody
+	public List<String> querySoftVersion(String softName) throws Exception{
+			if (softName == null || softName.length() == 0) {
+				return null;
+			}
+			List<String> softVersions = new ArrayList<String>();
+			List<PageData> mpdList = mediumService.listAll(new PageData());
+			for (PageData spd : mpdList) {
+				Medium medium = (Medium) PageDataUtil.mapToObject(spd, Medium.class);
+				if (medium.getName() != null && medium.getName().equals(softName)) {
+					softVersions.add(medium.getVersion());
+				}
+			}
+			return softVersions;
+		}
 	
 	
 	@RequestMapping(value="/onServiceTypeSelected")
@@ -134,29 +165,78 @@ public class AppOperServiceController  extends BaseController {
 			map.put("result", resultInfo);
 			return map;
 		}
+		String operType = pd.getString("oper_type");
+		if (operType == null || operType.length() == 0) {
+			resultInfo = "操作类型不正确";
+			map.put("result", resultInfo);
+			return map;
+		}
 		String appmsg = pd.getString("app_msg"); //申请说明
+		String vm = pd.getString("vm");
+		String vmMsg = pd.getString("vm_msg");
+		String install_soft = pd.getString("install_soft");
+		String soft_version = pd.getString("soft_version");
+		String breakdown_time = pd.getString("breakdown_time");
+		String except_solve_time = pd.getString("except_solve_time");
+		String except_result = pd.getString("except_result");
+		String breakdown_level = pd.getString("breakdown_level");
+		String breakdown_info = pd.getString("breakdown_info");
 		
 		CmpOpServe opServe = new CmpOpServe();
 		if (serviceType.equals("1")) {
 			//虚拟机启停
-			String operType = pd.getString("oper_type");
-			String vm = pd.getString("vm");
-			String vmMsg = pd.getString("vm_msg");
-			
-			
-			if (operType == null || operType.length() == 0) {
-				resultInfo = "操作类型不正确";
-				map.put("result", resultInfo);
-				return map;
+			opServe.setAppmsg(appmsg);
+			opServe.setMiddleware("");
+			opServe.setMiddlewareMsg("");
+			opServe.setOperType(operType);
+			opServe.setServiceType(serviceType);
+			opServe.setVm(vm);		//启停的而虚拟机及软件   软件1，软件2|软件1,软件2|
+			opServe.setVmMsg(vmMsg); //虚拟机启停说明
+			opServe.setWorkflow("oper_workflow");
+			cmpOpServeService.saveCmpOpServe(opServe);
+		}else if (serviceType.equals("2")) {
+			String[] vmIds = vm.split(",");
+			String deploySoftIds = "";
+			for (String vmId: vmIds) {
+				if (vmId == null) {
+					continue;
+				}
+				VirtualMachine virtualMachine = virtualMachineService.findById(vmId);
+				DeployedSoft deployedSoft = new DeployedSoft();
+				deployedSoft.setVirtualmachineName(virtualMachine.getName());
+				deployedSoft.setVirtualmachineId(virtualMachine.getId());
+				deployedSoft.setSoftName(install_soft);
+				deployedSoft.setSoftVersion(soft_version);
+				deployedSoft.setStatus("未安装");
+				deployedSoftService.add(deployedSoft);
+				if (deploySoftIds.length() > 0) {
+					deploySoftIds = deploySoftIds + "," + deployedSoft.getId();
+				}else {
+					deploySoftIds = deployedSoft.getId();
+				}
 			}
 			opServe.setAppmsg(appmsg);
 			opServe.setMiddleware("");
 			opServe.setMiddlewareMsg("");
 			opServe.setOperType(operType);
 			opServe.setServiceType(serviceType);
-			opServe.setVm(vm);		//启停的而虚拟机及软件   虚拟机:软件1，软件2|虚拟机2:软件1,软件2|
-			opServe.setVmMsg(vmMsg); //虚拟机启停说明
+			opServe.setVm(vm);		//虚拟机列表  虚拟机1，虚拟机2
 			opServe.setWorkflow("oper_workflow");
+			opServe.setDeploySoftId(deploySoftIds);
+			cmpOpServeService.saveCmpOpServe(opServe);
+		}else if (serviceType.equals("3")) {
+			opServe.setAppmsg(appmsg);
+			opServe.setMiddleware("");
+			opServe.setMiddlewareMsg("");
+			opServe.setOperType(operType);
+			opServe.setServiceType(serviceType);
+			opServe.setVm(vm);		//虚拟机列表  虚拟机1，虚拟机2
+			opServe.setWorkflow("oper_workflow");
+			opServe.setBreakdownTime(breakdown_time);
+			opServe.setBreakdownInfo(breakdown_info);
+			opServe.setBreakdownLevel(breakdown_level);
+			opServe.setExceptSolveTime(except_solve_time);
+			opServe.setExceptResult(except_result);
 			cmpOpServeService.saveCmpOpServe(opServe);
 		}
 		

@@ -14,10 +14,8 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.stereotype.Component;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
-import com.cmp.mgr.CloudArchManager;
 import com.vmware.vim25.AboutInfo;
 import com.vmware.vim25.DynamicProperty;
 import com.vmware.vim25.ManagedObjectReference;
@@ -34,25 +32,34 @@ import com.vmware.vim25.mo.HostDatastoreBrowser;
 import com.vmware.vim25.mo.HostSystem;
 import com.vmware.vim25.mo.InventoryNavigator;
 import com.vmware.vim25.mo.ManagedEntity;
+import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.PropertyCollector;
 import com.vmware.vim25.mo.ServiceInstance;
 import com.vmware.vim25.mo.VirtualMachine;
+import com.vmware.vim25.mo.VirtualMachineSnapshot;
 import com.vmware.vim25.mo.util.MorUtil;
 import com.vmware.vim25.mo.util.PropertyCollectorUtil;
 
-@Component
-public class VMWareCloudArchManager implements CloudArchManager {
+@SuppressWarnings({ "unused" })
+public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
+
+	public VMWareCloudArchManager() {
+	}
+
+	public VMWareCloudArchManager(TccCloudPlatform platform) {
+		setPlatform(platform);
+	}
 
 	@Override
-	public List<Datacenter> getDatacenters(TccCloudPlatform platform) {
-		return searchManagedEntities(platform, Datacenter.class);
+	public List<Datacenter> getDatacenters() {
+		return searchManagedEntities(Datacenter.class);
 	}
 
-	public List<ClusterComputeResource> getClusters(TccCloudPlatform platform) {
-		return searchManagedEntities(platform, ClusterComputeResource.class);
+	public List<ClusterComputeResource> getClusters() {
+		return searchManagedEntities(ClusterComputeResource.class);
 	}
 
-	public List<Datastore> getDatastores(TccCloudPlatform platform) {
+	public List<Datastore> getDatastores() {
 		Function<HostSystem, HostDatastoreBrowser> getDatastoreBrowser = host -> {
 			try {
 				return host.getDatastoreBrowser();
@@ -61,7 +68,7 @@ public class VMWareCloudArchManager implements CloudArchManager {
 			}
 		};
 
-		return searchManagedEntities(platform, HostSystem.class).stream()
+		return searchManagedEntities(HostSystem.class).stream()
 				.map(getDatastoreBrowser)
 				.map(HostDatastoreBrowser::getDatastores)
 				.filter(ArrayUtils::isNotEmpty)
@@ -70,12 +77,12 @@ public class VMWareCloudArchManager implements CloudArchManager {
 	}
 
 	@SuppressWarnings("deprecation")
-	public List<VirtualMachine> getVirtualMachines(TccCloudPlatform platform) {
+	public List<VirtualMachine> getVirtualMachines() {
 		try {
 			String type = VirtualMachine.class.getSimpleName();
 			String[][] typeinfo = new String[][] { new String[] { type, "name", }, };
 
-			Folder rootEntity = getServiceInstance(platform).getRootFolder();
+			Folder rootEntity = getServiceInstance().getRootFolder();
 			ServiceInstance serviceInstance = rootEntity.getServerConnection().getServiceInstance();
 
 			PropertyCollector pc = serviceInstance.getPropertyCollector();
@@ -126,9 +133,9 @@ public class VMWareCloudArchManager implements CloudArchManager {
 		}
 	}
 
-	public <T> List<T> searchManagedEntities(TccCloudPlatform platform, Class<T> clazz) {
+	public <T> List<T> searchManagedEntities(Class<T> clazz) {
 		try {
-			ServiceInstance serviceInstance = getServiceInstance(platform);
+			ServiceInstance serviceInstance = getServiceInstance();
 			ManagedEntity[] managedEntities = new InventoryNavigator(
 					serviceInstance.getRootFolder()).searchManagedEntities(clazz.getSimpleName());
 
@@ -142,8 +149,7 @@ public class VMWareCloudArchManager implements CloudArchManager {
 		}
 	}
 
-	private ServiceInstance getServiceInstance(TccCloudPlatform platform)
-			throws MalformedURLException, RemoteException {
+	private ServiceInstance getServiceInstance() throws MalformedURLException, RemoteException {
 		URL url = new URL("https://" + platform.getCloudplatformIp() + "/sdk");
 
 		return new ServiceInstance(url, platform.getCloudplatformUser(),
@@ -225,17 +231,64 @@ public class VMWareCloudArchManager implements CloudArchManager {
 		return ls;
 	}
 
-	public static void main(String[] args) {
-		TccCloudPlatform platform = new TccCloudPlatform();
-		platform.setCloudplatformUser("administrator@vsphere.local");
-		platform.setCloudplatformPassword("123.comM");
-		platform.setCloudplatformIp("118.242.40.216");
+	@Override
+	public List<VirtualMachine> getHostMachines() {
+		return null;
+	}
 
-		List<Datacenter> datacenters = new VMWareCloudArchManager().getDatacenters(platform);
+	@Override
+	public List<Network> getNetWorks() {
+		return null;
+	}
 
-		datacenters.forEach(datacenter -> {
-			System.out.println(datacenter.getName());
-		});
+	@Override
+	public List<Datastore> getVmTemplates() {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachineSnapshot> getVmSnapshots() {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachine> startVirtualMachine(String name) {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachine> stopVirtualMachine(String name) {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachine> rebootVirtualMachine(String name) {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachine> resetVirtualMachine(String name) {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachine> deleteVirtualMachine(String name) {
+		return null;
+	}
+
+	@Override
+	public void createSnapshot() {
+
+	}
+
+	@Override
+	public void deleteSnapshot() {
+
+	}
+
+	@Override
+	public void revertToSnapshot() {
+
 	}
 
 }

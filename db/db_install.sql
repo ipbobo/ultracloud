@@ -38,11 +38,29 @@ CREATE TABLE `t_cloudplatform` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='云平台'; 
 
 -- ----------------------------
+-- 云平台同步表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_cloudplatform_sync`;
+CREATE TABLE `t_cloudplatform_sync` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL COMMENT '名称',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `ip` varchar(20) DEFAULT NULL COMMENT '虚拟机ip',
+  `username` varchar(20) NOT NULL COMMENT '用户名',
+  `password` varchar(20) NOT NULL COMMENT '密码',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `version` varchar(20) NOT NULL COMMENT '同步版本号',
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='云平台同步表'; 
+
+-- ----------------------------
 -- 数据中心
 -- ----------------------------
 DROP TABLE IF EXISTS `t_datacenter`;
 CREATE TABLE `t_datacenter` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL,
   `name` varchar(20) NOT NULL COMMENT '名称',
   `cpf_id` bigint unsigned NOT NULL COMMENT '云平台id',
   `type` varchar(20) NOT NULL COMMENT '类型',
@@ -54,10 +72,45 @@ CREATE TABLE `t_datacenter` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心'; 
 
 -- ----------------------------
+-- 数据中心同步表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_datacenter_sync`;
+CREATE TABLE `t_datacenter_sync` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL COMMENT '名称',
+  `cpf_id` bigint unsigned NOT NULL COMMENT '云平台id',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `version` varchar(20) NOT NULL COMMENT '同步版本号',
+  INDEX idx_cpf_id(`cpf_id`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心同步表'; 
+
+
+-- ----------------------------
 -- 集群
 -- ----------------------------
 DROP TABLE IF EXISTS `t_cluster`;
 CREATE TABLE `t_cluster` (
+  `id` bigint unsigned NOT NULL,
+  `name` varchar(20) NOT NULL COMMENT '名称',
+  `cpf_id` bigint unsigned NOT NULL COMMENT '云平台id',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `datacenter_id` bigint unsigned DEFAULT NULL COMMENT '数据中心id',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  INDEX idx_datacenter_id(`datacenter_id`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='集群'; 
+
+-- ----------------------------
+-- 集群同步表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_cluster_sync`;
+CREATE TABLE `t_cluster_sync` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
   `cpf_id` bigint unsigned NOT NULL COMMENT '云平台id',
@@ -65,6 +118,7 @@ CREATE TABLE `t_cluster` (
   `datacenter_id` bigint unsigned DEFAULT NULL COMMENT '数据中心id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `version` varchar(20) NOT NULL COMMENT '同步版本号',
   INDEX idx_datacenter_id(`datacenter_id`),
   PRIMARY KEY (`id`)
 
@@ -98,6 +152,34 @@ CREATE TABLE `t_hostmachine` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='宿主机'; 
 
 -- ----------------------------
+-- 宿主机同步表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_hostmachine_sync`;
+CREATE TABLE `t_hostmachine_sync` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL COMMENT '名称',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `status` tinyint unsigned DEFAULT NULL COMMENT '状态',
+  `ip` varchar(20) DEFAULT NULL COMMENT '宿主机ip',
+  `port` INT UNSIGNED DEFAULT NULL COMMENT '端口',
+  `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
+  `memory` int unsigned DEFAULT NULL COMMENT '内存',
+  `localdisk` int unsigned DEFAULT NULL COMMENT '本地磁盘',
+  `devicenum` varchar(30) DEFAULT NULL COMMENT '设备号',
+  `duedate` datetime DEFAULT NULL COMMENT '到期时间',
+  `account` varchar(20) NOT NULL COMMENT '用户名',
+  `password_ssh` varchar(20) NOT NULL COMMENT '密码',
+  `cluster_id` bigint unsigned DEFAULT NULL COMMENT '集群id',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `version` varchar(20) NOT NULL COMMENT '同步版本号',
+  INDEX idx_type(`type`),
+  INDEX idx_status(`status`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='宿主机同步表'; 
+
+-- ----------------------------
 -- 存储
 -- ----------------------------
 DROP TABLE IF EXISTS `t_storage`;
@@ -115,6 +197,26 @@ CREATE TABLE `t_storage` (
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='存储'; 
+
+-- ----------------------------
+-- 存储同步表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_storage_sync`;
+CREATE TABLE `t_storage_sync` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL COMMENT '名称',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `datacenter_id` bigint unsigned DEFAULT NULL COMMENT '数据中心id',
+  `allspace` int unsigned DEFAULT NULL COMMENT '所有空间',
+  `freespace` int unsigned DEFAULT NULL COMMENT '可用空间',
+  `threshold` tinyint unsigned NOT NULL COMMENT '阈值',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `version` varchar(20) NOT NULL COMMENT '同步版本号',
+  INDEX idx_type(`type`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='存储同步表'; 
 
 -- ----------------------------
 -- 数据中心网络
@@ -135,10 +237,33 @@ CREATE TABLE `t_datacenter_network` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   INDEX idx_datacenter_id(`datacenter_id`),
-  INDEX idx_network_id(`network_id`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心网络'; 
+
+-- ----------------------------
+-- 数据中心网络同步表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_datacenter_network_sync`;
+CREATE TABLE `t_datacenter_network_sync` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL COMMENT '名称',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `datacenter_id` bigint unsigned NOT NULL COMMENT '数据中心id',
+  `ippool` varchar(40) DEFAULT NULL COMMENT 'ip池',
+  `mask` varchar(20) DEFAULT NULL COMMENT '掩码',
+  `gateway` varchar(20) DEFAULT NULL COMMENT '网关',
+  `dns1` varchar(20) DEFAULT NULL COMMENT 'DNS1',
+  `dns2` varchar(20) DEFAULT NULL COMMENT 'DNS2',
+  `totalip` int unsigned DEFAULT NULL COMMENT 'ip总数',
+  `freeip` int unsigned DEFAULT NULL COMMENT 'ip剩余量',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `version` varchar(20) NOT NULL COMMENT '同步版本号',
+  INDEX idx_datacenter_id(`datacenter_id`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心网络同步表'; 
 
 -- ----------------------------
 -- 虚拟机
@@ -633,6 +758,7 @@ CREATE TABLE `t_deployed_soft` (
 `virtualmachineName`  varchar(50) DEFAULT NULL COMMENT '虚拟机名称' ,
 `softName`  varchar(50) DEFAULT NULL COMMENT '软件名称' ,
 `softParams`  varchar(200) DEFAULT NULL COMMENT '软件参数' ,
+`softVersion`  varchar(30) DEFAULT NULL COMMENT '软件版本' ,
 `status`  varchar(10) DEFAULT NULL COMMENT '部署状态' ,
 `remark`  varchar(50) DEFAULT NULL COMMENT '其他' ,
 PRIMARY KEY (`id`)
