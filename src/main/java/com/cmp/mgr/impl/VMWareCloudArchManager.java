@@ -35,6 +35,7 @@ import com.vmware.vim25.mo.InventoryNavigator;
 import com.vmware.vim25.mo.ManagedEntity;
 import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.PropertyCollector;
+import com.vmware.vim25.mo.ServerConnection;
 import com.vmware.vim25.mo.ServiceInstance;
 import com.vmware.vim25.mo.VirtualMachine;
 import com.vmware.vim25.mo.VirtualMachineSnapshot;
@@ -56,10 +57,12 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		return searchManagedEntities(Datacenter.class);
 	}
 
+	@Override
 	public List<ClusterComputeResource> getClusters() {
 		return searchManagedEntities(ClusterComputeResource.class);
 	}
 
+	@Override
 	public List<Datastore> getDatastores() {
 		Function<HostSystem, HostDatastoreBrowser> getDatastoreBrowser = host -> {
 			try {
@@ -77,6 +80,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				.collect(toList());
 	}
 
+	@Override
 	public List<VirtualMachine> getVirtualMachines() {
 		return getVirtualMachinesNoVerify().stream()
 				.filter(this::isVirtualMachine).collect(toList());
@@ -325,18 +329,52 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void createSnapshot() {
-
+	public void createSnapshot(String name, String vmName, String desc, boolean memoryFlag) {
+		searchManagedEntity(VirtualMachine.class, vmName).ifPresent(vm -> {
+			try {
+				vm.createSnapshot_Task(name, desc, memoryFlag, false);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
 	}
 
 	@Override
-	public void deleteSnapshot() {
+	public void deleteSnapshot(String snapshotUUID) {
+		try {
+			ManagedObjectReference mor = new ManagedObjectReference();
+			mor.setType(VirtualMachineSnapshot.class.getSimpleName());
+			mor.set_value(snapshotUUID);
 
+			VirtualMachineSnapshot snapshot = new VirtualMachineSnapshot(
+					getServiceInstance().getServerConnection(), mor);
+
+			snapshot.removeSnapshot_Task(false);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
-	public void revertToSnapshot() {
+	public void revertToSnapshot(String snapshotUUID, String hostMachineUUID) {
+		try {
+			ServerConnection connection = getServiceInstance().getServerConnection();
 
+			ManagedObjectReference hostSystemMor = new ManagedObjectReference();
+			hostSystemMor.setType(HostSystem.class.getSimpleName());
+			hostSystemMor.setVal(hostMachineUUID);
+
+			ManagedObjectReference snapshotMor = new ManagedObjectReference();
+			snapshotMor.setType(VirtualMachineSnapshot.class.getSimpleName());
+			snapshotMor.setVal(snapshotUUID);
+
+			VirtualMachineSnapshot snapshot = new VirtualMachineSnapshot(connection, snapshotMor);
+			HostSystem hostSystem = new HostSystem(connection, hostSystemMor);
+
+			snapshot.revertToSnapshot_Task(hostSystem, false);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private boolean isVirtualMachine(VirtualMachine vm) {
