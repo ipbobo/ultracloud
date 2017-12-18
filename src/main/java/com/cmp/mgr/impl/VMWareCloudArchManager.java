@@ -309,15 +309,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	private boolean isTemplate(VirtualMachine vm) {
-		if (vm == null) {
-			return false;
-		}
-
-		if (vm.getConfig() == null) {
-			return false;
-		}
-
-		return vm.getConfig().isTemplate();
+		return vm != null && vm.getConfig() != null && vm.getConfig().isTemplate();
 	}
 
 }
