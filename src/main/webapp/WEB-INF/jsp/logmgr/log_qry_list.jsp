@@ -141,13 +141,7 @@ function del(ids, msg){
 	</c:otherwise>
 	</c:choose>
 </table>
-<div class="page-header position-relative">
-	<table style="width: 100%;">
-		<tr>
-			<td style="vertical-align: top;"><div class="pagination" style="float: right; padding-top: 0px; margin-top: 0px;">${page.pageStr}</div></td>
-		</tr>
-	</table>
-</div>
+<table style="width: 100%;"><tr><td style="vertical-align: top;"><div class="pagination" style="float: right; padding-top: 0px; margin-top: 0px;">${page.pageStr}</div></td></tr></table>
 <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a><!-- 返回顶部 -->
 <%@ include file="../system/index/foot.jsp"%>
 <script type="text/javascript" src="static/ace/js/date-time/bootstrap-datepicker.js"></script><!-- 日期框 -->
