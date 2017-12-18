@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -152,6 +153,19 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		}
 	}
 
+	public <T> Optional<T> searchManagedEntity(Class<T> clazz, String name) {
+		try {
+			ServiceInstance serviceInstance = getServiceInstance();
+			ManagedEntity managedEntity = new InventoryNavigator(
+					serviceInstance.getRootFolder()).searchManagedEntity(
+							clazz.getSimpleName(), name);
+
+			return Optional.ofNullable(managedEntity).map(clazz::cast);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private ServiceInstance getServiceInstance() throws MalformedURLException, RemoteException {
 		URL url = new URL("https://" + platform.getCloudplatformIp() + "/sdk");
 
@@ -256,28 +270,58 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<VirtualMachine> startVirtualMachine(String name) {
-		return null;
+	public void startVirtualMachine(String name) {
+		searchManagedEntity(VirtualMachine.class, name).ifPresent(vm -> {
+			try {
+				vm.powerOnVM_Task(null);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
 	}
 
 	@Override
-	public List<VirtualMachine> stopVirtualMachine(String name) {
-		return null;
+	public void stopVirtualMachine(String name) {
+		searchManagedEntity(VirtualMachine.class, name).ifPresent(vm -> {
+			try {
+				vm.powerOffVM_Task();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
 	}
 
 	@Override
-	public List<VirtualMachine> rebootVirtualMachine(String name) {
-		return null;
+	public void rebootVirtualMachine(String name) {
+		searchManagedEntity(VirtualMachine.class, name).ifPresent(vm -> {
+			try {
+				vm.rebootGuest();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
 	}
 
 	@Override
-	public List<VirtualMachine> resetVirtualMachine(String name) {
-		return null;
+	public void resetVirtualMachine(String name) {
+		searchManagedEntity(VirtualMachine.class, name).ifPresent(vm -> {
+			try {
+				vm.resetVM_Task();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
 	}
 
 	@Override
-	public List<VirtualMachine> deleteVirtualMachine(String name) {
-		return null;
+	public void deleteVirtualMachine(String name) {
+		searchManagedEntity(VirtualMachine.class, name).ifPresent(vm -> {
+			try {
+				vm.destroy_Task();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
 	}
 
 	@Override

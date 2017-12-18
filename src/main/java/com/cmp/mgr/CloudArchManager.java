@@ -28,15 +28,15 @@ public interface CloudArchManager {
 
 	public List<VirtualMachineSnapshot> getVmSnapshots();
 
-	public List<VirtualMachine> startVirtualMachine(String name);
+	public void startVirtualMachine(String name);
 
-	public List<VirtualMachine> stopVirtualMachine(String name);
+	public void stopVirtualMachine(String name);
 
-	public List<VirtualMachine> rebootVirtualMachine(String name);
+	public void rebootVirtualMachine(String name);
 
-	public List<VirtualMachine> resetVirtualMachine(String name);
+	public void resetVirtualMachine(String name);
 
-	public List<VirtualMachine> deleteVirtualMachine(String name);
+	public void deleteVirtualMachine(String name);
 
 	public void createSnapshot();
 

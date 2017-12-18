@@ -61,33 +61,28 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<VirtualMachine> startVirtualMachine(String name) {
+	public void startVirtualMachine(String name) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public List<VirtualMachine> stopVirtualMachine(String name) {
+	public void stopVirtualMachine(String name) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public List<VirtualMachine> rebootVirtualMachine(String name) {
+	public void rebootVirtualMachine(String name) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public List<VirtualMachine> resetVirtualMachine(String name) {
+	public void resetVirtualMachine(String name) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public List<VirtualMachine> deleteVirtualMachine(String name) {
+	public void deleteVirtualMachine(String name) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
