@@ -34,13 +34,16 @@ import com.vmware.vim25.mo.HostDatastoreBrowser;
 import com.vmware.vim25.mo.HostSystem;
 import com.vmware.vim25.mo.InventoryNavigator;
 import com.vmware.vim25.mo.ManagedEntity;
+import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.PropertyCollector;
 import com.vmware.vim25.mo.ServiceInstance;
 import com.vmware.vim25.mo.VirtualMachine;
+import com.vmware.vim25.mo.VirtualMachineSnapshot;
 import com.vmware.vim25.mo.util.MorUtil;
 import com.vmware.vim25.mo.util.PropertyCollectorUtil;
 
 @Component
+@SuppressWarnings({ "unused" })
 public class VMWareCloudArchManager implements CloudArchManager {
 
 	@Override
@@ -236,6 +239,66 @@ public class VMWareCloudArchManager implements CloudArchManager {
 		datacenters.forEach(datacenter -> {
 			System.out.println(datacenter.getName());
 		});
+	}
+
+	@Override
+	public List<VirtualMachine> getHostMachines(TccCloudPlatform platform) {
+		return null;
+	}
+
+	@Override
+	public List<Network> getNetWorks(TccCloudPlatform platform) {
+		return null;
+	}
+
+	@Override
+	public List<Datastore> getVmTemplates(TccCloudPlatform platform) {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachineSnapshot> getVmSnapshots(TccCloudPlatform platform) {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachine> startVirtualMachine(TccCloudPlatform platform, String name) {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachine> stopVirtualMachine(TccCloudPlatform platform, String name) {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachine> rebootVirtualMachine(TccCloudPlatform platform, String name) {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachine> resetVirtualMachine(TccCloudPlatform platform, String name) {
+		return null;
+	}
+
+	@Override
+	public List<VirtualMachine> deleteVirtualMachine(TccCloudPlatform platform, String name) {
+		return null;
+	}
+
+	@Override
+	public void createSnapshot() {
+
+	}
+
+	@Override
+	public void deleteSnapshot() {
+
+	}
+
+	@Override
+	public void revertToSnapshot() {
+
 	}
 
 }
