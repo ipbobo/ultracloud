@@ -22,7 +22,7 @@ public interface CloudArchManager {
 
 	public List<Datastore> getDatastores();
 
-	public List<Network> getNetWorks();
+	public List<Network> getNetworks();
 
 	public List<VirtualMachine> getVmTemplates();
 

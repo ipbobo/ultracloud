@@ -43,7 +43,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<Network> getNetWorks() {
+	public List<Network> getNetworks() {
 		// TODO Auto-generated method stub
 		return null;
 	}

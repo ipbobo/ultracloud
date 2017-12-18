@@ -245,8 +245,8 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<Network> getNetWorks() {
-		return null;
+	public List<Network> getNetworks() {
+		return searchManagedEntities(Network.class);
 	}
 
 	@Override

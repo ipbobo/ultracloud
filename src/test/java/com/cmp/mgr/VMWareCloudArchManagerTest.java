@@ -11,6 +11,7 @@ import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
 import com.vmware.vim25.mo.HostSystem;
+import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.VirtualMachine;
 
 public class VMWareCloudArchManagerTest {
@@ -86,6 +87,14 @@ public class VMWareCloudArchManagerTest {
 		execute("GetDatastores", () -> {
 			cloudArchManager.getDatastores().stream()
 					.map(Datastore::getName).forEach(System.out::println);
+		});
+	}
+	
+	@Test
+	public void testGetNetWorks() {
+		execute("GetNetWorks", () -> {
+			cloudArchManager.getNetworks().stream()
+					.map(Network::getName).forEach(System.out::println);
 		});
 	}
 
