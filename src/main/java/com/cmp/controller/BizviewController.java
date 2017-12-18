@@ -50,7 +50,7 @@ public class BizviewController extends BaseController {
 	
 	//计算列表查询
 	@RequestMapping(value="/bizview/callist")
-	public ModelAndView getcalList(HttpServletRequest request, HttpServletResponse response, Page page) throws Exception{
+	public ModelAndView getCalList(HttpServletRequest request, HttpServletResponse response, Page page) throws Exception{
 		String bizviewType=request.getParameter("bizviewType");//业务视图总览类型
 		String subBizviewType=request.getParameter("subBizviewType");//子业务视图总览类型
 		if(StringUtils.isBlank(bizviewType)){
@@ -76,6 +76,37 @@ public class BizviewController extends BaseController {
 		mv.addObject("cloudHostList", bizviewService.getCloudHostPageList(page));//云主机列表分页查询
 		mv.addObject("pd", pd);
 		mv.setViewName("bizview/cal_qry_list");
+		return mv;
+	}
+	
+	//存储列表查询
+	@RequestMapping(value="/bizview/storelist")
+	public ModelAndView getStoreList(HttpServletRequest request, HttpServletResponse response, Page page) throws Exception{
+		String bizviewType=request.getParameter("bizviewType");//业务视图总览类型
+		String subBizviewType=request.getParameter("subBizviewType");//子业务视图总览类型
+		if(StringUtils.isBlank(bizviewType)){
+			bizviewType="env";//默认环境
+		}
+		
+		List<CmpDict> subBizviewTypeList=new ArrayList<CmpDict>();
+		if("env".equals(bizviewType)){//环境
+			subBizviewTypeList=environmentService.getEnvList();//环境列表
+		}else if("dept".equals(bizviewType)){//部门
+			subBizviewTypeList=departmentService.getDeptList();//部门列表
+		}else if("proj".equals(bizviewType)){//项目
+			subBizviewTypeList=projectService.getProjectList();//项目列表
+		}
+		
+		PageData pd=getPageData(page, "applyUserId", StringUtil.getUserId());
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("bizviewType", bizviewType);//业务视图总览类型
+		mv.addObject("subBizviewType", subBizviewType);//子业务视图总览类型
+		mv.addObject("bizviewTypeList", cmpDictService.getCmpDictList("bizview_type"));//业务视图总览类型列表
+		mv.addObject("subBizviewTypeList", subBizviewTypeList);//子业务视图总览类型列表
+		mv.addObject("cmpRes", bizviewService.getCmpResDtl(bizviewType, subBizviewType));//资源详细信息
+		mv.addObject("cloudHostList", bizviewService.getCloudHostPageList(page));//云主机列表分页查询
+		mv.addObject("pd", pd);
+		mv.setViewName("bizview/store_qry_list");
 		return mv;
 	}
 	

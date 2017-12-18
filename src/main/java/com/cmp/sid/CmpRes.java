@@ -14,6 +14,10 @@ public class CmpRes {
 	private String memUseNum;//内存已分配
 	private String memAppNum;//内存申请中
 	private String memRestNum;//内存剩余
+	private String storeTotalNum;//存储总量
+	private String storeUseNum;//存储已分配
+	private String storeAppNum;//存储申请中
+	private String storeRestNum;//存储剩余
 
 	public String getBizviewType() {
 		return bizviewType;
@@ -109,5 +113,37 @@ public class CmpRes {
 
 	public void setMemRestNum(String memRestNum) {
 		this.memRestNum = memRestNum;
+	}
+
+	public String getStoreTotalNum() {
+		return storeTotalNum;
+	}
+
+	public void setStoreTotalNum(String storeTotalNum) {
+		this.storeTotalNum = storeTotalNum;
+	}
+
+	public String getStoreUseNum() {
+		return storeUseNum;
+	}
+
+	public void setStoreUseNum(String storeUseNum) {
+		this.storeUseNum = storeUseNum;
+	}
+
+	public String getStoreAppNum() {
+		return storeAppNum;
+	}
+
+	public void setStoreAppNum(String storeAppNum) {
+		this.storeAppNum = storeAppNum;
+	}
+
+	public String getStoreRestNum() {
+		return storeRestNum;
+	}
+
+	public void setStoreRestNum(String storeRestNum) {
+		this.storeRestNum = storeRestNum;
 	}
 }
