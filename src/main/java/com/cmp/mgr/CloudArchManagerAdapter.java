@@ -36,8 +36,9 @@ public class CloudArchManagerAdapter {
 
 		lock.lock();
 		try {
-			if (map.get(platform) == null) {
-				return null;
+			cloudArchManager = map.get(platform);
+			if (cloudArchManager != null) {
+				return cloudArchManager;
 			}
 
 			String qualifiedClassName = platform.getPlatformManagerType();
