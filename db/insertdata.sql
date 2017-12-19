@@ -67,6 +67,9 @@ INSERT INTO `cmp_dict` VALUES ('99', '2017-11-20 17:59:36', '2017-11-20 18:34:44
 INSERT INTO `cmp_dict` VALUES ('100', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'bizview_type', 'dept', '部门', '业务视图总览类型', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('101', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'bizview_type', 'proj', '项目', '业务视图总览类型', '0', '3');
 
+INSERT INTO `cmp_dict` VALUES ('111', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'install_OS', 'ReadHat 6.5_64', 'rhel6_64Guest', 'ReadHat 6.5 64位系统', '0', '1');
+INSERT INTO `cmp_dict` VALUES ('112', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'install_OS', 'CentOS 6.5_64', 'centos64Guest', 'CentOS 6.5 64位系统', '0', '1');
+
 INSERT INTO `cmp_sequence` VALUES ('cmp_order', '1', '1', '5', 'O');
 
 -- 数据字典初始化数据 start --
