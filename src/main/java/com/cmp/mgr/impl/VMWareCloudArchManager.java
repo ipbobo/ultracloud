@@ -27,6 +27,7 @@ import com.vmware.vim25.ObjectSpec;
 import com.vmware.vim25.PropertyFilterSpec;
 import com.vmware.vim25.PropertySpec;
 import com.vmware.vim25.SelectionSpec;
+import com.vmware.vim25.VirtualDevice;
 import com.vmware.vim25.VirtualDeviceConfigSpec;
 import com.vmware.vim25.VirtualDeviceConfigSpecFileOperation;
 import com.vmware.vim25.VirtualDeviceConfigSpecOperation;
@@ -76,6 +77,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	@Override
 	public List<ClusterComputeResource> getClusters() {
 		return searchManagedEntities(ClusterComputeResource.class);
+	}
+
+	@Override
+	public List<ResourcePool> getResourcePools() {
+		return searchManagedEntities(ResourcePool.class);
 	}
 
 	@Override
@@ -175,7 +181,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 			Datacenter dc = searchManagedEntity(Datacenter.class, dcName).get();
 
-			List<ResourcePool> mes = searchManagedEntities(ResourcePool.class);
+			List<ResourcePool> mes = getResourcePools();
 
 			ResourcePool rp = null;
 			for (ResourcePool tmp : mes) {
@@ -276,6 +282,10 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		nicSpec.setDevice(nic);
 
 		return nicSpec;
+	}
+
+	public List<VirtualDevice> getVirtualDevices() {
+		return searchManagedEntities(VirtualDevice.class);
 	}
 
 	public <T> List<T> searchManagedEntities(Class<T> clazz) {
