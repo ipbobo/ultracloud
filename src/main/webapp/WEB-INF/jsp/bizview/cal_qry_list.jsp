@@ -14,64 +14,12 @@
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">
-var option = {
-    title : {text: 'CPU', subtext: '使用情况', x:'center'},  
-    tooltip : {
-        trigger: 'item',  
-        formatter: "{a} <br/>{b} : {c} %"  
-    },  
-    legend: {  
-        orient : 'vertical',  
-        x : 'left',  
-        data:['正常','警告','危险','未知']  
-    }, 
-    color:['green', '#f5b031','red','blueviolet'],
-    toolbox: {  
-        show : false,  
-        feature : {  
-            mark : {show: true},  
-            dataView : {show: true, readOnly: false},  
-            magicType : {  
-                show: true,   
-                type: ['pie', 'funnel'],  
-                option: {  
-                    funnel: {  
-                        x: '25%',  
-                        width: '50%',  
-                        funnelAlign: 'left',  
-                        max: 1548  
-                    }  
-                }  
-            },  
-            restore : {show: true},  
-            saveAsImage : {show: true}  
-        }  
-    },  
-    calculable : true,  
-    series : [
-        {
-            name:'CPU',  
-            type:'pie',  
-            radius : '55%',//饼图的半径大小  
-            center: ['50%', '60%'],//饼图的位置  
-            data: [
-          {value:65, name:'正常'},  
-          {value:20, name:'警告'},  
-          {value:5, name:'危险'},  
-          {value:10, name:'未知'}, 
-         ] 
-        }  
-    ]  
-};
-
-var cpuChart = echarts.init(document.getElementById('cpuChart'));//基于准备好的dom，初始化echarts实例
-var memChart = echarts.init(document.getElementById('memChart'));//基于准备好的dom，初始化echarts实例
-cpuChart.setOption(option);//使用刚指定的配置项和数据显示图表
-memChart.setOption(option);//使用刚指定的配置项和数据显示图表
+getBarChart('cpuChart', ['CPU容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuAppNum}', '${cmpRes.cpuUseNum}', '${cmpRes.cpuRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "核");//获取图表
+getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.memTotalNum}', '${cmpRes.memAppNum}', '${cmpRes.memUseNum}', '${cmpRes.memRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "GB");//获取图表
 </script>
 </head>
 <body>
-<form id="mainForm" name="mainForm" action="bizview/callist.do" enctype="multipart/form-data" method="post">
+<form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
 	<table style="margin-top: 0px;margin-left: 0px;margin-bottom: 10px;">
 		<tr class="tablecls">
 			<td align="left" style="width: 120px;padding-right: 10px;">
@@ -143,10 +91,10 @@ memChart.setOption(option);//使用刚指定的配置项和数据显示图表
 					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>容量视图</b></td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 120px;padding-top: 10px;">
+					<td align="left" style="width: 100%;padding-top: 10px;">
 						<div class="col-xs-12">
-							<div id="cpuChart" style="width: 400px;height:400px;" class="col-xs-4 col-sm-4" ></div>
-							<div id="memChart" style="width: 400px;height:400px;" class="col-xs-4 col-sm-4" ></div>
+							<div id="cpuChart" style="width: 300px;height:200px;" class="col-xs-4 col-sm-4"></div>
+							<div id="memChart" style="width: 300px;height:200px;" class="col-xs-4 col-sm-4"></div>
 						</div>
 					</td>
 				</tr>

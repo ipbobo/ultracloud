@@ -15,7 +15,7 @@ import com.fh.service.fhoa.department.impl.DepartmentService;
 import com.fh.util.PageData;
 
 @Service
-public class BizviewService {
+public class ResviewService {
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
 	@Resource
@@ -73,7 +73,7 @@ public class BizviewService {
 	
 	//云主机列表分页查询
 	@SuppressWarnings("unchecked")
-	public List<PageData> getCloudHostPageList(Page page) throws Exception {
+	public List<PageData> getHostPageList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", page);
 	}
 }

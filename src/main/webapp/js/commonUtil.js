@@ -63,6 +63,102 @@ function trim(str) {
 	return returnstr;
 }
 
+
+//获取饼状图，必须先引入echarts.min.js
+function getPieChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
+	var dataArr=[];
+	if(keyArr.length==valArr.length && keyArr.length==colorArr.length){
+		for(var i=0;i<keyArr.length;i++){
+			dataArr.push({name: keyArr[i], value: valArr[i]});
+		}
+	}
+	
+	var option = {
+	    title : {text: titleArr[0], subtext: titleArr[1], x:'center'},  
+	    tooltip : {trigger: 'item', formatter: "{a}<br>{b}: {c}"+unit, textStyle:{align:'left'}},//item或axis
+	    legend: {orient : 'vertical', x : 'left', data: keyArr}, 
+	    color: colorArr,
+	    toolbox: {
+	        show : false,  
+	        feature : {  
+	            mark : {show: true},  
+	            dataView : {show: true, readOnly: false},  
+	            restore : {show: true},  
+	            saveAsImage : {show: true}  
+	        }
+	    },  
+	    calculable : true,  
+	    series : [
+	        {
+	            name: titleArr[0],  
+	            type: 'pie',  
+	            radius: '35%',//饼图的半径大小  
+	            center: ['50%', '50%'],//饼图的位置  
+	            data: dataArr
+	        }
+	    ]
+	};
+	
+	var myChart = echarts.init(document.getElementById(chartId));
+	myChart.setOption(option);//加载图表
+}
+
+//获取柱状图，必须先引入echarts.min.js
+function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
+	var option = {
+		title : {text: titleArr[0], subtext: titleArr[1], x: 'center', y: 'bottom'},
+	    tooltip : {trigger: 'item', formatter: "{a}<br>{b}: {c}"+unit, textStyle:{align:'left'}},//item或axis
+	    legend: {data: keyArr},
+	    toolbox: {
+	        show : false,
+	        feature : {
+	            mark : {show: true},
+	            dataView : {show: true, readOnly: false},
+	            restore : {show: true},
+	            saveAsImage : {show: true}
+	        }
+	    },
+	    calculable : true,
+	    grid: {borderWidth: 0, y: 20, y2: 50},
+	    xAxis : [
+	        {
+	            type : 'category',
+	            show: true,
+	            data : keyArr
+	        }
+	    ],
+	    yAxis : [
+	        {
+	            type : 'value',
+            	show: true
+	        }
+	    ],
+	    series : [
+	        {
+	            name: titleArr[0],
+	            type: 'bar',
+	            itemStyle: {
+	                normal: {
+	                    color: function(params) {
+	                        return colorArr[params.dataIndex]
+	                    },
+	                    label: {
+	                        show: true,
+	                        position: 'top',
+	                        formatter: '{c}'+unit
+	                    }
+	                }
+	            },
+	            //barWidth : 30,//柱图宽度
+	            data: valArr
+	        }
+	    ]
+	};
+	
+	var myChart = echarts.init(document.getElementById(chartId));
+	myChart.setOption(option);//加载图表
+}
+
 //发送Http请求
 function sendHttpPost(url, jsonObj, func){
     $.ajax({
