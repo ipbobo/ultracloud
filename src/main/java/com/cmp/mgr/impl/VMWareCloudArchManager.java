@@ -17,7 +17,9 @@ import java.util.function.Function;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.mgr.bean.CreateVmRequest;
 import com.vmware.vim25.AboutInfo;
+import com.vmware.vim25.Description;
 import com.vmware.vim25.DynamicProperty;
 import com.vmware.vim25.ManagedObjectReference;
 import com.vmware.vim25.ObjectContent;
@@ -25,6 +27,18 @@ import com.vmware.vim25.ObjectSpec;
 import com.vmware.vim25.PropertyFilterSpec;
 import com.vmware.vim25.PropertySpec;
 import com.vmware.vim25.SelectionSpec;
+import com.vmware.vim25.VirtualDeviceConfigSpec;
+import com.vmware.vim25.VirtualDeviceConfigSpecFileOperation;
+import com.vmware.vim25.VirtualDeviceConfigSpecOperation;
+import com.vmware.vim25.VirtualDisk;
+import com.vmware.vim25.VirtualDiskFlatVer2BackingInfo;
+import com.vmware.vim25.VirtualEthernetCard;
+import com.vmware.vim25.VirtualEthernetCardNetworkBackingInfo;
+import com.vmware.vim25.VirtualLsiLogicController;
+import com.vmware.vim25.VirtualMachineConfigSpec;
+import com.vmware.vim25.VirtualMachineFileInfo;
+import com.vmware.vim25.VirtualPCNet32;
+import com.vmware.vim25.VirtualSCSISharing;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
@@ -35,8 +49,10 @@ import com.vmware.vim25.mo.InventoryNavigator;
 import com.vmware.vim25.mo.ManagedEntity;
 import com.vmware.vim25.mo.Network;
 import com.vmware.vim25.mo.PropertyCollector;
+import com.vmware.vim25.mo.ResourcePool;
 import com.vmware.vim25.mo.ServerConnection;
 import com.vmware.vim25.mo.ServiceInstance;
+import com.vmware.vim25.mo.Task;
 import com.vmware.vim25.mo.VirtualMachine;
 import com.vmware.vim25.mo.VirtualMachineSnapshot;
 import com.vmware.vim25.mo.util.MorUtil;
@@ -139,6 +155,127 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public void createVirtualMachine(CreateVmRequest request) {
+		try {
+			String dcName = request.getDcName();
+			String vmName = request.getVmName();
+			int cupCount = request.getCupCount();
+			long memSizeMB = request.getMemSizeMB();
+			String guestOsId = request.getGuestOs();
+			long diskSizeKB = request.getDiskSizeKB();
+
+			String diskMode = request.getDiskMode();
+			String datastoreName = request.getDsName();
+			String netName = request.getNetName();
+			String nicName = request.getNicName();
+			String rpName = request.getRpName();
+
+			Datacenter dc = searchManagedEntity(Datacenter.class, dcName).get();
+
+			List<ResourcePool> mes = searchManagedEntities(ResourcePool.class);
+
+			ResourcePool rp = null;
+			for (ResourcePool tmp : mes) {
+				if (tmp.getName().equalsIgnoreCase(rpName)) {
+					rp = tmp;
+					break;
+				}
+			}
+
+			Folder vmFolder = dc.getVmFolder();
+
+			VirtualMachineConfigSpec vmSpec = new VirtualMachineConfigSpec();
+			vmSpec.setName(vmName);
+			vmSpec.setAnnotation("VirtualMachine Annotation");
+			vmSpec.setMemoryMB(memSizeMB);
+			vmSpec.setNumCPUs(cupCount);
+			vmSpec.setGuestId(guestOsId);
+
+			int cKey = 1000;
+			VirtualDeviceConfigSpec scsiSpec = createScsiSpec(cKey);
+			VirtualDeviceConfigSpec diskSpec = createDiskSpec(datastoreName, cKey,
+					diskSizeKB, diskMode);
+			VirtualDeviceConfigSpec nicSpec = createNicSpec(netName, nicName);
+
+			vmSpec.setDeviceChange(new VirtualDeviceConfigSpec[] { scsiSpec,
+					diskSpec, nicSpec });
+
+			// create vm file info for the vmx file
+			VirtualMachineFileInfo vmfi = new VirtualMachineFileInfo();
+			vmfi.setVmPathName("[" + datastoreName + "]");
+			vmSpec.setFiles(vmfi);
+
+			// call the createVM_Task method on the vm folder
+			Task task = vmFolder.createVM_Task(vmSpec, rp, null);
+			task.waitForMe();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private VirtualDeviceConfigSpec createScsiSpec(int cKey) {
+		VirtualLsiLogicController scsiCtrl = new VirtualLsiLogicController();
+
+		VirtualDeviceConfigSpec scsiSpec = new VirtualDeviceConfigSpec();
+		scsiSpec.setOperation(VirtualDeviceConfigSpecOperation.add);
+		scsiCtrl.setKey(cKey);
+		scsiCtrl.setBusNumber(0);
+		scsiCtrl.setSharedBus(VirtualSCSISharing.noSharing);
+		scsiSpec.setDevice(scsiCtrl);
+
+		return scsiSpec;
+	}
+
+	private VirtualDeviceConfigSpec createDiskSpec(String dsName, int cKey,
+			long diskSizeKB, String diskMode) {
+
+		VirtualDeviceConfigSpec diskSpec = new VirtualDeviceConfigSpec();
+		diskSpec.setOperation(VirtualDeviceConfigSpecOperation.add);
+		diskSpec.setFileOperation(VirtualDeviceConfigSpecFileOperation.create);
+
+		VirtualDisk vd = new VirtualDisk();
+		vd.setCapacityInKB(diskSizeKB);
+		diskSpec.setDevice(vd);
+		vd.setKey(0);
+		vd.setUnitNumber(0);
+		vd.setControllerKey(cKey);
+
+		VirtualDiskFlatVer2BackingInfo diskfileBacking = new VirtualDiskFlatVer2BackingInfo();
+		String fileName = "[" + dsName + "]";
+		diskfileBacking.setFileName(fileName);
+		diskfileBacking.setDiskMode(diskMode);
+		diskfileBacking.setThinProvisioned(true);
+		vd.setBacking(diskfileBacking);
+
+		return diskSpec;
+	}
+
+	private VirtualDeviceConfigSpec createNicSpec(String netName, String nicName)
+			throws Exception {
+
+		VirtualDeviceConfigSpec nicSpec = new VirtualDeviceConfigSpec();
+		nicSpec.setOperation(VirtualDeviceConfigSpecOperation.add);
+
+		VirtualEthernetCard nic = new VirtualPCNet32();
+		VirtualEthernetCardNetworkBackingInfo nicBacking = new VirtualEthernetCardNetworkBackingInfo();
+		nicBacking.setDeviceName(netName);
+
+		Description info = new Description();
+		info.setLabel(nicName);
+		info.setSummary(netName);
+		nic.setDeviceInfo(info);
+
+		// type: "generated", "manual", "assigned" by VC
+		nic.setAddressType("generated");
+		nic.setBacking(nicBacking);
+		nic.setKey(0);
+
+		nicSpec.setDevice(nic);
+
+		return nicSpec;
 	}
 
 	public <T> List<T> searchManagedEntities(Class<T> clazz) {
