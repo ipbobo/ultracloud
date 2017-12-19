@@ -12,7 +12,62 @@
 <script type="text/javascript" src="static/ace/js/ace/ace.js"></script><!-- ace scripts -->
 <script type="text/javascript" src="static/ace/js/chosen.jquery.js"></script><!-- 下拉框 -->
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
+<script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">
+var option = {
+    title : {text: 'CPU', subtext: '使用情况', x:'center'},  
+    tooltip : {
+        trigger: 'item',  
+        formatter: "{a} <br/>{b} : {c} %"  
+    },  
+    legend: {  
+        orient : 'vertical',  
+        x : 'left',  
+        data:['正常','警告','危险','未知']  
+    }, 
+    color:['green', '#f5b031','red','blueviolet'],
+    toolbox: {  
+        show : false,  
+        feature : {  
+            mark : {show: true},  
+            dataView : {show: true, readOnly: false},  
+            magicType : {  
+                show: true,   
+                type: ['pie', 'funnel'],  
+                option: {  
+                    funnel: {  
+                        x: '25%',  
+                        width: '50%',  
+                        funnelAlign: 'left',  
+                        max: 1548  
+                    }  
+                }  
+            },  
+            restore : {show: true},  
+            saveAsImage : {show: true}  
+        }  
+    },  
+    calculable : true,  
+    series : [
+        {
+            name:'CPU',  
+            type:'pie',  
+            radius : '55%',//饼图的半径大小  
+            center: ['50%', '60%'],//饼图的位置  
+            data: [
+          {value:65, name:'正常'},  
+          {value:20, name:'警告'},  
+          {value:5, name:'危险'},  
+          {value:10, name:'未知'}, 
+         ] 
+        }  
+    ]  
+};
+
+var cpuChart = echarts.init(document.getElementById('cpuChart'));//基于准备好的dom，初始化echarts实例
+var memChart = echarts.init(document.getElementById('memChart'));//基于准备好的dom，初始化echarts实例
+cpuChart.setOption(option);//使用刚指定的配置项和数据显示图表
+memChart.setOption(option);//使用刚指定的配置项和数据显示图表
 </script>
 </head>
 <body>
@@ -20,14 +75,14 @@
 	<table style="margin-top: 0px;margin-left: 0px;margin-bottom: 10px;">
 		<tr class="tablecls">
 			<td align="left" style="width: 120px;padding-right: 10px;">
-				<select class="chosen-select form-control" name="bizviewType" id="bizviewType" data-placeholder="请选择业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="bizviewTypeFunc()">
+				<select class="chosen-select form-control" name="bizviewType" id="bizviewType" data-placeholder="请选择业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="bizviewTypeFunc('bizviewType')">
 				<c:forEach items="${bizviewTypeList}" var="var">
 					<option value="${var.dictCode}" <c:if test="${bizviewType==var.dictCode || (bizviewType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 				</c:forEach>
 			  	</select>
 			</td>
 			<td align="left" style="width: 120px;">
-				<select class="chosen-select form-control" name="subBizviewType" id="subBizviewType" data-placeholder="请选择子业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="subBizviewTypeFunc()">
+				<select class="chosen-select form-control" name="subBizviewType" id="subBizviewType" data-placeholder="请选择子业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="subBizviewTypeFunc('bizviewType', 'subBizviewType')">
 				<option value="">全部${cmpRes.bizviewTypeName}</option>
 				<c:forEach items="${subBizviewTypeList}" var="var">
 					<option value="${var.dictCode}"<c:if test="${subBizviewType==var.dictCode}">selected</c:if>>${var.dictValue}</option>
@@ -82,28 +137,19 @@
 				</tr>
 			</table>
 		</td>
-		<td style="border-bottom:1px solid #cccccc;">
-			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
-			<tr>
-				<td align="right" style="width: 120px;">资源类型：</td>
-				<td align="left" style="width: 180px;">${var.resTypeName}</td>
-				<td align="right" style="width: 120px;">实例规格：</td>
-				<td align="left" style="width: 180px;">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
-				<td align="right" style="width: 120px;">镜像：</td>
-				<td align="left" style="width: 180px;">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
-			</tr>
-			<tr>
-				<td align="right" valign="top" style="width: 120px;">数据盘：</td>
-				<td align="left" valign="top" style="width: 180px;">
-					<t:list key="${var.diskTypeName}" val="${var.diskSize}" name="vars">
-						${vars.dictCode}&nbsp;(&nbsp;${vars.dictValue}&nbsp;GB)<br>
-					</t:list>
-				</td>
-				<td align="right" valign="top" style="width: 120px;">购买量：</td>
-				<td align="left" valign="top" style="width: 180px;">${var.virNum}&nbsp;台</td>
-				<td align="right" valign="top" style="width: 120px;">到期时间：</td>
-				<td align="left" valign="top" style="width: 180px;">${var.expireDate}</td>
-			</tr>
+		<td align="left" valign="top" style="padding:10px;border-right:1px solid #cccccc;border-bottom:1px solid #cccccc;">
+			<table style="width: 100%;">
+				<tr>
+					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>容量视图</b></td>
+				</tr>
+				<tr>
+					<td align="right" style="width: 120px;padding-top: 10px;">
+						<div class="col-xs-12">
+							<div id="cpuChart" style="width: 400px;height:400px;" class="col-xs-4 col-sm-4" ></div>
+							<div id="memChart" style="width: 400px;height:400px;" class="col-xs-4 col-sm-4" ></div>
+						</div>
+					</td>
+				</tr>
 			</table>
 		</td>
 	</tr>

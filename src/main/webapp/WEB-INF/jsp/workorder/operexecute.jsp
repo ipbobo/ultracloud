@@ -138,7 +138,82 @@
 								
 						</table>
 			</div>
+			
+						<div class="modal fade" id="breakdown_info_modal" tabindex="-1" role="dialog" aria-labelledby="breakdown_info_modalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+											&times;
+										</button>
+										<h4 class="modal-title">
+											故障详情
+										</h4>
+									</div>
+									<div class="modal-body">
+							<table  style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+							<tr class="tablecls">
+								<td style="width:70px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;故障描述:</td>
+									<td>
+										<textarea class="form-control limited" name="breakdown_info_show" id="breakdown_info_show" style="width: 70%; height:150px; margin-left: 30px;" readonly="readonly">
+											${opServe.breakdownInfo}
+										</textarea>
+									</td>
+							</tr>
+							<tr>
+								<td style="width:70px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;期望结果:</td>
+									<td>
+										<textarea class="form-control limited"  name="except_result" id="except_result" style="width: 70%; height:150px; margin-left: 30px;"  readonly="readonly">
+											${opServe.exceptResult}
+										</textarea>
+									</td>
+									</tr>
+									</table>
+										
+									</div>
+									<div class="modal-footer">
+										<button  id="middleware_btn_ok" type="button" class="btn btn-primary" onclick="breakdown_info_OK();" id="middleware_modal_ok_btn">
+											确定
+										</button>
+									</div>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal -->
+						</div>
 						
+						
+						<div class="modal fade" id="partition_info_modal" tabindex="-1" role="dialog" aria-labelledby="partition_info_modalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+											&times;
+										</button>
+										<h4 class="modal-title">
+											故障详情
+										</h4>
+									</div>
+									<div class="modal-body">
+							<table  style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+							<tr class="tablecls">
+								<td style="width:70px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;分区数量及大小:</td>
+									<td>
+										<textarea class="form-control limited" name="partition_info_show" id="partition_info_show" style="width: 70%; height:150px; margin-left: 30px;" readonly="readonly">
+											${opServe.partitionInfo}
+										</textarea>
+									</td>
+							</tr>
+							<tr>
+									</table>
+										
+									</div>
+									<div class="modal-footer">
+										<button  id="middleware_btn_ok" type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+											确定
+										</button>
+									</div>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal -->
+						</div>
 
 		<!-- 返回顶部 -->
 		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
@@ -192,7 +267,9 @@
 		});
 	}
 	
-
+	function breakdown_info_OK(){
+		$('#breakdown_info_modal').modal('hide');
+	}
 	</script>
 
 </body>

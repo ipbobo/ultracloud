@@ -86,21 +86,18 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void createSnapshot() {
+	public void createSnapshot(String name, String vmName, String desc, boolean memoryFlag) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public void deleteSnapshot() {
+	public void deleteSnapshot(String snapshotUUID) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public void revertToSnapshot() {
+	public void revertToSnapshot(String snapshotUUID, String hostMachineUUID) {
 		// TODO Auto-generated method stub
-
 	}
 
 }

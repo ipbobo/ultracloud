@@ -181,7 +181,12 @@ public class AppOperServiceController  extends BaseController {
 		String except_result = pd.getString("except_result");
 		String breakdown_level = pd.getString("breakdown_level");
 		String breakdown_info = pd.getString("breakdown_info");
-		
+		String partition_info = pd.getString("partition_info");
+		String directory = pd.getString("directory");
+		String directory2 = pd.getString("directory2");
+		String exp_time = pd.getString("exp_time");
+		String directory3 = pd.getString("directory3");
+		String vip_num = pd.getString("vip_num");
 		CmpOpServe opServe = new CmpOpServe();
 		if (serviceType.equals("1")) {
 			//虚拟机启停
@@ -193,7 +198,6 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setVm(vm);		//启停的而虚拟机及软件   软件1，软件2|软件1,软件2|
 			opServe.setVmMsg(vmMsg); //虚拟机启停说明
 			opServe.setWorkflow("oper_workflow");
-			cmpOpServeService.saveCmpOpServe(opServe);
 		}else if (serviceType.equals("2")) {
 			String[] vmIds = vm.split(",");
 			String deploySoftIds = "";
@@ -223,7 +227,6 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setVm(vm);		//虚拟机列表  虚拟机1，虚拟机2
 			opServe.setWorkflow("oper_workflow");
 			opServe.setDeploySoftId(deploySoftIds);
-			cmpOpServeService.saveCmpOpServe(opServe);
 		}else if (serviceType.equals("3")) {
 			opServe.setAppmsg(appmsg);
 			opServe.setMiddleware("");
@@ -237,9 +240,54 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setBreakdownLevel(breakdown_level);
 			opServe.setExceptSolveTime(except_solve_time);
 			opServe.setExceptResult(except_result);
-			cmpOpServeService.saveCmpOpServe(opServe);
+		}else if (serviceType.equals("4")) {
+			opServe.setAppmsg(appmsg);
+			opServe.setMiddleware("");
+			opServe.setMiddlewareMsg("");
+			opServe.setOperType(operType);
+			opServe.setServiceType(serviceType);
+			opServe.setVm(vm);		//虚拟机列表  虚拟机1，虚拟机2
+			opServe.setWorkflow("oper_workflow");
+			opServe.setPartitionInfo(partition_info);
+		}else if (serviceType.equals("5")) {
+			opServe.setAppmsg(appmsg);
+			opServe.setMiddleware("");
+			opServe.setMiddlewareMsg("");
+			opServe.setOperType(operType);
+			opServe.setServiceType(serviceType);
+			opServe.setVm(vm);			//虚拟机列表  虚拟机1，虚拟机2
+			opServe.setWorkflow("oper_workflow");
+		}else if (serviceType.equals("6")) {
+			opServe.setAppmsg(appmsg);
+			opServe.setMiddleware("");
+			opServe.setMiddlewareMsg("");
+			opServe.setOperType(operType);
+			opServe.setServiceType(serviceType);
+			opServe.setVm(vm);			//虚拟机列表  虚拟机1，虚拟机2
+			opServe.setDirectory(directory);
+			opServe.setWorkflow("oper_workflow");
+		}else if (serviceType.equals("7")) {
+			opServe.setAppmsg(appmsg);
+			opServe.setMiddleware("");
+			opServe.setMiddlewareMsg("");
+			opServe.setOperType(operType);
+			opServe.setServiceType(serviceType);
+			opServe.setVm(vm);			//虚拟机列表  虚拟机1，虚拟机2
+			opServe.setDirectory(directory2);
+			opServe.setExpTime(exp_time);
+			opServe.setWorkflow("oper_workflow");
+		}else if (serviceType.equals("8")) {
+			opServe.setAppmsg(appmsg);
+			opServe.setMiddleware("");
+			opServe.setMiddlewareMsg("");
+			opServe.setOperType(operType);
+			opServe.setServiceType(serviceType);
+			opServe.setVm(vm);			//虚拟机列表  虚拟机1，虚拟机2
+			opServe.setDirectory(directory3);
+			opServe.setVipNum(vip_num);
+			opServe.setWorkflow("oper_workflow");
 		}
-		
+		cmpOpServeService.saveCmpOpServe(opServe);
 		Session session = Jurisdiction.getSession();
 		User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
 		CmpWorkOrder workworder = new CmpWorkOrder();
