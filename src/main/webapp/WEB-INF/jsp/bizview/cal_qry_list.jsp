@@ -91,10 +91,10 @@ getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩
 					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>容量视图</b></td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 100%;padding-top: 10px;">
+					<td align="left" style="width: 100%;padding-top: 10px;">
 						<div class="col-xs-12">
-							<div id="cpuChart" style="width: 300px;height:200px;" class="col-xs-4 col-sm-4" ></div>
-							<div id="memChart" style="width: 300px;height:200px;" class="col-xs-4 col-sm-4" ></div>
+							<div id="cpuChart" style="width: 300px;height:200px;" class="col-xs-4 col-sm-4"></div>
+							<div id="memChart" style="width: 300px;height:200px;" class="col-xs-4 col-sm-4"></div>
 						</div>
 					</td>
 				</tr>

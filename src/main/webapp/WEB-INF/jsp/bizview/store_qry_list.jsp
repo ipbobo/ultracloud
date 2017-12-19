@@ -74,9 +74,9 @@ getBarChart('storeChart', ['存储容量'], ['总量','申请中','已分配','�
 					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>容量视图</b></td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 100%;padding-top: 10px;">
+					<td align="center" style="width: 100%;padding-top: 10px;">
 						<div class="col-xs-12">
-							<div id="storeChart" style="width: 300px;height:200px;" class="col-xs-4 col-sm-4" ></div>
+							<div align="center" id="storeChart" style="width: 300px;height:200px;"></div>
 						</div>
 					</td>
 				</tr>
