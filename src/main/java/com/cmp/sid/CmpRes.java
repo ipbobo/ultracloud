@@ -18,6 +18,7 @@ public class CmpRes {
 	private String storeUseNum;//存储已分配
 	private String storeAppNum;//存储申请中
 	private String storeRestNum;//存储剩余
+	private String storeAssignNum;//存储已分配
 
 	public String getBizviewType() {
 		return bizviewType;
@@ -145,5 +146,13 @@ public class CmpRes {
 
 	public void setStoreRestNum(String storeRestNum) {
 		this.storeRestNum = storeRestNum;
+	}
+
+	public String getStoreAssignNum() {
+		return storeAssignNum;
+	}
+
+	public void setStoreAssignNum(String storeAssignNum) {
+		this.storeAssignNum = storeAssignNum;
 	}
 }

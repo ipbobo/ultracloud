@@ -68,6 +68,7 @@ public class BizviewService {
 			cmpRes.setStoreUseNum("5");
 			cmpRes.setStoreRestNum("3");
 		}
+		
 		return cmpRes;
 	}
 	

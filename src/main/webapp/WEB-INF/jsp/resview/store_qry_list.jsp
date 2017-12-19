@@ -14,7 +14,7 @@
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">
-getBarChart('storeChart', ['存储容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.storeTotalNum}', '${cmpRes.storeAppNum}', '${cmpRes.storeUseNum}', '${cmpRes.storeRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "GB");//获取图表
+getBarChart('storeChart', ['存储容量'], ['总量','使用量','已分配'], ['${cmpRes.storeTotalNum}', '${cmpRes.storeUseNum}', '${cmpRes.storeAssignNum}'], ['#00E5EE', '#FF0000', '#CCCCCC'], "GB");//获取图表
 </script>
 </head>
 <body>
@@ -25,14 +25,6 @@ getBarChart('storeChart', ['存储容量'], ['总量','申请中','已分配','�
 				<select class="chosen-select form-control" name="ccbizviewType" id="ccbizviewType" data-placeholder="请选择业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="bizviewTypeFunc('ccbizviewType')">
 				<c:forEach items="${bizviewTypeList}" var="var">
 					<option value="${var.dictCode}" <c:if test="${bizviewType==var.dictCode || (bizviewType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
-				</c:forEach>
-			  	</select>
-			</td>
-			<td align="left" style="width: 120px;">
-				<select class="chosen-select form-control" name="ccsubBizviewType" id="ccsubBizviewType" data-placeholder="请选择子业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="subBizviewTypeFunc('ccbizviewType', 'ccsubBizviewType')">
-				<option value="">全部${cmpRes.bizviewTypeName}</option>
-				<c:forEach items="${subBizviewTypeList}" var="var">
-					<option value="${var.dictCode}"<c:if test="${subBizviewType==var.dictCode}">selected</c:if>>${var.dictValue}</option>
 				</c:forEach>
 			  	</select>
 			</td>
@@ -47,24 +39,20 @@ getBarChart('storeChart', ['存储容量'], ['总量','申请中','已分配','�
 					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>资源信息</b></td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 120px;padding-top: 10px;">${cmpRes.bizviewTypeName}：</td>
-					<td align="left" style="width: 180px;padding-top: 10px;">${cmpRes.subBizviewTypeName}</td>
+					<td align="right" style="width: 120px;padding-top: 10px;">数据中心：</td>
+					<td align="left" style="width: 180px;padding-top: 10px;">${cmpRes.bizviewTypeName}</td>
 				</tr>
 				<tr>
 					<td align="right" style="width: 120px;">存储总量：</td>
 					<td align="left" style="width: 180px;">${cmpRes.storeTotalNum}&nbsp;GB</td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 120px;">已分配：</td>
+					<td align="right" style="width: 120px;">存储使用量：</td>
 					<td align="left" style="width: 180px;">${cmpRes.storeUseNum}&nbsp;GB</td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 120px;">申请中：</td>
-					<td align="left" style="width: 180px;">${cmpRes.storeAppNum}&nbsp;GB</td>
-				</tr>
-				<tr>
-					<td align="right" style="width: 120px;">存储剩余：</td>
-					<td align="left" style="width: 180px;">${cmpRes.storeRestNum}&nbsp;GB</td>
+					<td align="right" style="width: 120px;">已分配：</td>
+					<td align="left" style="width: 180px;">${cmpRes.storeAssignNum}&nbsp;GB</td>
 				</tr>
 			</table>
 		</td>
@@ -84,7 +72,7 @@ getBarChart('storeChart', ['存储容量'], ['总量','申请中','已分配','�
 		</td>
 	</tr>
 </table>
-<iframe src="resview/hostlist.do?bizviewType=${bizviewType}&subBizviewType=${subBizviewType}" name="mainFrame" frameborder="0" marginheight="0" marginwidth="0" height="480px" width="100%"></iframe>
+<iframe src="resview/hostlist.do?bizviewType=${bizviewType}" name="mainFrame" frameborder="0" marginheight="0" marginwidth="0" height="480px" width="100%"></iframe>
 <%@ include file="../system/index/foot.jsp"%>
 <script type="text/javascript">
 $(top.hangge());//关闭加载状态

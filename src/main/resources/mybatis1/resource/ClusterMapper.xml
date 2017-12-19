@@ -123,8 +123,9 @@
 		from 
 		<include refid="tableName"></include> c LEFT JOIN <include refid="dctableName"></include> dc
 		on c.datacenter_id=dc.id 
+		where c.cpf_id=#{id}
 		<if test="type!=null and type!=''"><!-- 根据类型 -->
-			WHERE c.type = #{type}
+			and c.type = #{type}
 		</if>
 	</select>
 	
@@ -139,4 +140,9 @@
 		</foreach>
 	</delete>
 	
+	<!-- 集群列表查询 -->
+	<select id="getClusterList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_cluster
+		where datacenter_id=#{dataCenterId}
+	</select>
 </mapper>

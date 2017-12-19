@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -28,13 +29,8 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void save(PageData pd, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
-			dao.save("ClusterSyncMapper.save", pd);
-		} else {
-			dao.save("ClusterMapper.save", pd);
-		}
-		
+	public void save(PageData pd) throws Exception {
+		dao.save("ClusterMapper.save", pd);
 	}
 
 	/**
@@ -43,13 +39,8 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void delete(PageData pd, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
-			dao.delete("ClusterSyncMapper.delete", pd);
-		} else {
-			dao.delete("ClusterMapper.delete", pd);
-		}
-		
+	public void delete(PageData pd) throws Exception {
+		dao.delete("ClusterMapper.delete", pd);
 	}
 
 	/**
@@ -58,12 +49,8 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void edit(PageData pd, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
-			dao.update("ClusterSyncMapper.edit", pd);
-		} else {
-			dao.update("ClusterMapper.edit", pd);
-		}
+	public void edit(PageData pd) throws Exception {
+		dao.update("ClusterMapper.edit", pd);
 	}
 
 	/**
@@ -73,12 +60,8 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> list(Page page, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
-			return (List<PageData>) dao.findForList("ClusterSyncMapper.datalistPage", page);
-		} else {
-			return (List<PageData>) dao.findForList("ClusterMapper.datalistPage", page);
-		}
+	public List<PageData> list(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("ClusterMapper.datalistPage", page);
 	}
 
 	/**
@@ -88,12 +71,8 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
-			return (List<PageData>) dao.findForList("ClusterSyncMapper.listAll", pd);
-		} else {
-			return (List<PageData>) dao.findForList("ClusterMapper.listAll", pd);
-		}
+	public List<PageData> listAll(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("ClusterMapper.listAll", pd);
 	}
 
 	/**
@@ -102,12 +81,8 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findById(PageData pd, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
-			return (PageData) dao.findForObject("ClusterSyncMapper.findById", pd);
-		} else {
-			return (PageData) dao.findForObject("ClusterMapper.findById", pd);
-		}
+	public PageData findById(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("ClusterMapper.findById", pd);
 	}
 
 	/**
@@ -116,12 +91,13 @@ public class ClusterServiceImpl implements ClusterService {
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
-	public void deleteAll(String[] ArrayDATA_IDS, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
-			dao.delete("ClusterSyncMapper.deleteAll", ArrayDATA_IDS);
-		} else {
-			dao.delete("ClusterMapper.deleteAll", ArrayDATA_IDS);
-		}
+	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
+		dao.delete("ClusterMapper.deleteAll", ArrayDATA_IDS);
 	}
 
+	//集群列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpDict> getClusterList(String dataCenterId) throws Exception {
+		return (List<CmpDict>) dao.findForList("ClusterMapper.getClusterList", dataCenterId);
+	}
 }

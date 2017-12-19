@@ -14,8 +14,8 @@
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">
-getBarChart('cpuChart', ['CPU容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuAppNum}', '${cmpRes.cpuUseNum}', '${cmpRes.cpuRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "核");//获取图表
-getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.memTotalNum}', '${cmpRes.memAppNum}', '${cmpRes.memUseNum}', '${cmpRes.memRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "GB");//获取图表
+getBarChart('cpuChart', ['CPU容量'], ['总量','使用量'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuUseNum}'], ['#00E5EE','#FF0000'], "核");//获取图表
+getBarChart('memChart', ['内存容量'], ['总量','使用量'], ['${cmpRes.memTotalNum}', '${cmpRes.memUseNum}'], ['#00E5EE','#FF0000'], "GB");//获取图表
 </script>
 </head>
 <body>
@@ -31,7 +31,7 @@ getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩
 			</td>
 			<td align="left" style="width: 120px;">
 				<select class="chosen-select form-control" name="subBizviewType" id="subBizviewType" data-placeholder="请选择子业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="subBizviewTypeFunc('bizviewType', 'subBizviewType')">
-				<option value="">全部${cmpRes.bizviewTypeName}</option>
+				<option value="">全部集群</option>
 				<c:forEach items="${subBizviewTypeList}" var="var">
 					<option value="${var.dictCode}"<c:if test="${subBizviewType==var.dictCode}">selected</c:if>>${var.dictValue}</option>
 				</c:forEach>
@@ -48,15 +48,15 @@ getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩
 					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>资源信息</b></td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 120px;padding-top: 10px;">资源池：</td>
-					<td align="left" style="width: 180px;padding-top: 10px;">${cmpRes.subBizviewTypeName}</td>
+					<td align="right" style="width: 120px;padding-top: 10px;">数据中心：</td>
+					<td align="left" style="width: 180px;padding-top: 10px;">${cmpRes.bizviewTypeName}</td>
 				</tr>
 				<tr>
 					<td align="right" style="width: 120px;">物理CPU总量：</td>
 					<td align="left" style="width: 180px;">${cmpRes.cpuTotalNum}&nbsp;核</td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 120px;">已使用：</td>
+					<td align="right" style="width: 120px;">物理CPU使用量：</td>
 					<td align="left" style="width: 180px;">${cmpRes.cpuUseNum}&nbsp;核</td>
 				</tr>
 				<tr>
@@ -68,7 +68,7 @@ getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩
 					<td align="left" style="width: 180px;">${cmpRes.memTotalNum}&nbsp;GB</td>
 				</tr>
 				<tr>
-					<td align="right" style="width: 120px;">已使用：</td>
+					<td align="right" style="width: 120px;">物理内存使用量：</td>
 					<td align="left" style="width: 180px;">${cmpRes.memUseNum}&nbsp;GB</td>
 				</tr>
 			</table>

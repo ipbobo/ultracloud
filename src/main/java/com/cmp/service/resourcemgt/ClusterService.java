@@ -2,6 +2,7 @@ package com.cmp.service.resourcemgt;
 
 import java.util.List;
 
+import com.cmp.sid.CmpDict;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -19,7 +20,7 @@ public interface ClusterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void save(PageData pd, boolean isSyncTable) throws Exception;
+	public void save(PageData pd) throws Exception;
 
 	/**
 	 * 删除
@@ -27,7 +28,7 @@ public interface ClusterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void delete(PageData pd, boolean isSyncTable) throws Exception;
+	public void delete(PageData pd) throws Exception;
 
 	/**
 	 * 修改
@@ -35,7 +36,7 @@ public interface ClusterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void edit(PageData pd, boolean isSyncTable) throws Exception;
+	public void edit(PageData pd) throws Exception;
 
 	/**
 	 * 列表
@@ -43,7 +44,7 @@ public interface ClusterService {
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> list(Page page, boolean isSyncTable) throws Exception;
+	public List<PageData> list(Page page) throws Exception;
 
 	/**
 	 * 列表(全部)
@@ -51,7 +52,7 @@ public interface ClusterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listAll(PageData pd, boolean isSyncTable) throws Exception;
+	public List<PageData> listAll(PageData pd) throws Exception;
 
 	/**
 	 * 通过id获取数据
@@ -59,7 +60,7 @@ public interface ClusterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findById(PageData pd, boolean isSyncTable) throws Exception;
+	public PageData findById(PageData pd) throws Exception;
 
 	/**
 	 * 批量删除
@@ -67,6 +68,8 @@ public interface ClusterService {
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
-	public void deleteAll(String[] ArrayDATA_IDS, boolean isSyncTable) throws Exception;
+	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
 
+	//集群列表查询
+	public List<CmpDict> getClusterList(String dataCenterId) throws Exception;
 }

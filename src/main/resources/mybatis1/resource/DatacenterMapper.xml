@@ -118,6 +118,7 @@
 		from 
 		<include refid="tableName"></include> d,<include refid="cpftableName"></include> c
 		where d.cpf_id=c.id
+		and c.id=#{id}
 	</select>
 	
 	<!-- 批量删除 -->
@@ -131,4 +132,8 @@
 		</foreach>
 	</delete>
 	
+	<!-- 数据中心列表查询 -->
+	<select id="getDataCenterList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_datacenter
+	</select>
 </mapper>
