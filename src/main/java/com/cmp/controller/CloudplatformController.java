@@ -141,12 +141,8 @@ public class CloudplatformController extends BaseController {
 		pd = cloudplatformService.findById(pd, true);
 		
 		// 同步云平台数据 
-		resourceService.syncCloudData(pd.getString("type"), pd.getString("ip"), pd.getString("username"), pd.getString("password"), cpf_id, pd.getString("version"));
+		resourceService.syncCloudData(pd);
 
-		// 查询所有数据中心记录
-		List<PageData> datacenterList = datacenterService.listAll(pd, true);
-		// 查询所有集群记录
-		List<PageData> clusterList = clusterService.listAll(pd, true);
 		// 查询所有宿主机记录
 		List<PageData> hmList = hostmachineService.listAll(pd, true);
 		// 查询所有存储记录
@@ -154,14 +150,40 @@ public class CloudplatformController extends BaseController {
 		// 查询所有分配的网络记录
 		List<PageData> dcnList = datacenternetworkService.listAll(pd, true);
 
-		mv.addObject("datacenterList", datacenterList);
-		mv.addObject("clusterList", clusterList);
 		mv.addObject("hmList", hmList);
 		mv.addObject("storageList", storageList);
 		mv.addObject("dcnList", dcnList);
 		mv.setViewName("resource/cloudplatform_init");
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+	
+	
+	/**
+	 * 更新同步数据为选中并复制到正式表中
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateSelectData")
+	public ModelAndView updateSelectData() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "新增Cloudplatform");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			return null;
+		} // 校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		
+		String hostmachineIds = pd.getString("hostmachineIds");
+		String storageIds = pd.getString("storageIds");
+		String dcnIds = pd.getString("dcnIds");
+		
+		resourceService.updateSelectData(hostmachineIds, storageIds, dcnIds);
+		
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
 		return mv;
 	}
 

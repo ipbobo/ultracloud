@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.vmware.vim25.ClusterConfigInfo;
 import com.vmware.vim25.InvalidProperty;
 import com.vmware.vim25.RuntimeFault;
 import com.vmware.vim25.mo.ClusterComputeResource;
@@ -32,19 +33,19 @@ public class CloudInitTest {
 			
 			Datastore[] store = dc.getDatastores();
 			for(int i = 0; i< store.length; i++) {
-				System.out.println(store[i].getName());
+				//System.out.println(store[i].getName()+",");
 			}
 			
 			Network[] network = dc.getNetworks();
 			for(int i = 0; i< network.length; i++) {
-				System.out.println(network[i].getName());
+				//System.out.println(network[i].getName()+",");
 				
 			}
 		}
 		
 		List<ClusterComputeResource> clusterList = cloudArchManager.getClusters();
 		for(ClusterComputeResource cluster : clusterList) {
-			System.out.println("cluster="+cluster.getName()+",parent="+cluster.getParent().getParent().getName());
+			System.out.println("cluster="+cluster.getName()+",parent="+cluster.getParent().getParent().getName()+",");
 			
 			HostSystem[] host = cluster.getHosts();
 			for(int i = 0; i< host.length; i++) {

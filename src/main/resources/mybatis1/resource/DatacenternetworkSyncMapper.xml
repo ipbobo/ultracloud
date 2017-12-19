@@ -28,7 +28,8 @@
 		dns2,
 		totalip,
 		freeip,
-		version
+		version,
+		isSelected
 	</sql>
 	
 	<sql id="Field_time">
@@ -55,7 +56,8 @@
 		#{dns2},
 		#{totalip},
 		#{freeip},
-		#{version}
+		#{version},
+		#{isSelected}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -98,7 +100,8 @@
 			dns2 = #{dns2},
 			totalip = #{totalip},
 			freeip = #{freeip},
-			version= #{version}
+			version= #{version},
+			isSelected = #{isSelected}
 		 where 
 		    id = #{id}
 	</update>
@@ -130,6 +133,7 @@
 				s.totalip,
 				s.freeip,
 				s.version,
+				s.isSelected
 				c.name as datacenter_name
 		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c
 		where s.datacenter_id=c.id
@@ -158,17 +162,56 @@
 		       dcn.gmt_modified,
 		       dcn.version,
 		       dcn.cpf_id,
+		       dcn.isSelected,
 		       dc.name as dc_name
 		from 
 		<include refid="tableName"></include> dcn LEFT JOIN <include refid="dctableName"></include> dc
 		on dcn.datacenter_id=dc.id
 		where dcn.cpf_id=#{id}
+		and dcn.version=#{version}
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAllByArray" parameterType="String" resultType="pd">
+		select dcn.id,
+		       dcn.name,
+		       dcn.ippool,
+		       dcn.gmt_create,
+		       dcn.gmt_modified,
+		       dcn.version,
+		       dcn.isSelected,
+		       dcn.type,
+		       dcn.cpf_id,
+		       dcn.datacenter_id,
+		       dc.name as dc_name
+		from 
+		<include refid="tableName"></include> dcn LEFT JOIN <include refid="dctableName"></include> dc
+		on dcn.datacenter_id=dc.id
+		where 1 = 1
+		<if test="array != null and array != ''">
+			and dcn.id in
+			<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+	                 #{item}
+			</foreach>
+		</if>
 	</select>
 	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
 		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量更新为选中激活状态 -->
+	<delete id="updateSelectedAll" parameterType="String">
+		update 
+		<include refid="tableName"></include>
+		SET isSelected='selected'
 		where 
 			id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">

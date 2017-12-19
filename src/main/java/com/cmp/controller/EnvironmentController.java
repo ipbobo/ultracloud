@@ -140,7 +140,7 @@ public class EnvironmentController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 
-		List<PageData> dcList = datacenterService.listAll(pd, false);
+		List<PageData> dcList = datacenterService.listAll(pd);
 		mv.addObject("dcList", dcList);
 
 		mv.setViewName("service/environment_edit");
@@ -165,7 +165,7 @@ public class EnvironmentController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		
-		List<PageData> dcList = datacenterService.listAll(pd, false);
+		List<PageData> dcList = datacenterService.listAll(pd);
 		mv.addObject("dcList", dcList);
 		
 		pd = environmentService.findById(pd); // 根据ID读取

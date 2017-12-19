@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.cmp.entity.DeployedSoft;
 import com.cmp.entity.Project;
+import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
@@ -176,6 +177,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	}
 
 	@Override
+	//创建虚拟机
 	public Map<String, Object> executeWork(PageData pd, CmpWorkOrder workOrder) throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		
@@ -211,17 +213,35 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		d_pd.put("disk_used", dDiskUsed);
 		departmentService.editUsedQuota(d_pd);
 		
-		
-		
+	
 		
 		//测试添加虚拟机
+		
+		//rhel6_64Guest
+		//centos64Guest
+		CmpOrder orderInfo = null;
+		List<CmpOrder> orderList = null;
+		try {
+			orderList = cmpOrderService.getOrderDtl(workOrder.getOrderNo());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (orderList == null || orderList.size() == 0) {
+			return null;
+		}
+		orderInfo = orderList.get(0);
+		String osName = cmpDictService.getCmpDict("os_type", orderInfo.getOsType()).getDictValue();
+		String osBitNum = cmpDictService.getCmpDict("os_bit_num", orderInfo.getOsBitNum()).getDictValue();
+		String fullOS = osName +"_" +osBitNum;
+		String installOS = cmpDictService.getCmpDict("install_OS", fullOS).getDictValue();  //安装的系统软件
+		
 		VirtualMachine vm = new VirtualMachine();
 		vm.setCpu(pd.getString("CPU"));
 		vm.setMemory(pd.getString("memory"));
 		vm.setDatadisk(pd.getString("diskSize"));
 		vm.setProjectId(workOrder.getProjectCode());
-		vm.setOs("redhat6");
-		vm.setOsStatus("已安装");
+		vm.setOs(fullOS);
+		vm.setOsStatus("未安装");
 		vm.setSoft("TOMCAT8");
 		vm.setSoftStatus("已安装");
 		vm.setName("测试虚拟机");
@@ -233,6 +253,13 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		vm.setAppNo(workOrder.getAppNo());
 		vm.setUser(workOrder.getApplyUserId());
 		virtualMachineService.add(vm);
+		
+		
+		//安装虚拟机
+		CreateVmRequest cvq = new CreateVmRequest();
+		
+		
+		
 		
 		//添加虚拟机中间件
 		DeployedSoft deployedSoft = new DeployedSoft();

@@ -177,6 +177,7 @@ CREATE TABLE `t_hostmachine_sync` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `version` varchar(20) NOT NULL COMMENT '同步版本号',
+  `isSelected` varchar(20) DEFAULT NULL COMMENT '选中并激活',
   INDEX idx_type(`type`),
   INDEX idx_status(`status`),
   PRIMARY KEY (`id`)
@@ -218,6 +219,7 @@ CREATE TABLE `t_storage_sync` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `version` varchar(20) NOT NULL COMMENT '同步版本号',
+  `isSelected` varchar(20) DEFAULT NULL COMMENT '选中并激活',
   INDEX idx_type(`type`),
   PRIMARY KEY (`id`)
 
@@ -267,6 +269,7 @@ CREATE TABLE `t_datacenter_network_sync` (
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `version` varchar(20) NOT NULL COMMENT '同步版本号',
+  `isSelected` varchar(20) DEFAULT NULL COMMENT '选中并激活',
   INDEX idx_datacenter_id(`datacenter_id`),
   PRIMARY KEY (`id`)
 

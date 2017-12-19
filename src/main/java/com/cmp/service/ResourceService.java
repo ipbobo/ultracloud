@@ -22,7 +22,16 @@ public interface ResourceService {
 	 * @param password
 	 * @throws Exception
 	 */
-	public void syncCloudData(String type, String ip, String useranme, String password,String cpf_id, String version) throws Exception;
+	public void syncCloudData(PageData pd) throws Exception;
+	
+	/**
+	 * 更新同步数据为选中并复制到正式表中
+	 * @param hostmachineIds
+	 * @param storageIds
+	 * @param dcnIds
+	 * @throws Exception
+	 */
+	public void updateSelectData(String hostmachineIds, String storageIds, String dcnIds) throws Exception;
 
 	/**
 	 * 新增

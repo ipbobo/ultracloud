@@ -1163,126 +1163,19 @@
 </head>
 <body>
 	<div class="container">
+	<div id="zhongxin" style="padding-top: 13px;">
 		<div id="wizard" style="text-align:left">
 			<ol>
-				<li>数据中心</li>
-				<li>集群</li>
 				<li>宿主机</li>
 				<li>存储</li>
 				<li>网络</li>
 			</ol>
+
 			<div>
-				<form action="" method="post" name="datacenterForm" id="datacenterForm">
-						<table id="datacenter-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
-							<thead>
-								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
-									<th class="center" style="width:50px;">序号</th>
-									<th class="center">名称</th>
-									<th class="center">所属云平台</th>
-									<th class="center">创建时间</th>
-									<th class="center">修改时间</th>
-									<th class="center">操作</th>
-								</tr>
-							</thead>
-													
-							<tbody>
-							<!-- 开始循环 -->	
-							<c:choose>
-								<c:when test="${not empty datacenterList}">
-									<c:if test="${QX.cha == 1 }">
-									<c:forEach items="${datacenterList}" var="var" varStatus="vs">
-										<tr>
-											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
-											</td>
-											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.name}</td>
-											<td class='center'>${var.cpf_name}</td>
-											<td class='center' style="width: 170px;">${var.gmt_create}</td>
-											<td class='center' style="width: 170px;">${var.gmt_modified}</td>
-											<td class="center">
-												<!-- Todo -->
-											</td>
-										</tr>
-									
-									</c:forEach>
-									</c:if>
-									<c:if test="${QX.cha == 0 }">
-										<tr>
-											<td colspan="100" class="center">您无权查看</td>
-										</tr>
-									</c:if>
-								</c:when>
-								<c:otherwise>
-									<tr class="main_info">
-										<td colspan="100" class="center" >没有相关数据</td>
-									</tr>
-								</c:otherwise>
-							</c:choose>
-							</tbody>
-						</table>
-						</form>
-			</div>
-			<div>
-				<form action="" method="post" name="clusterForm" id="clusterForm">
-						<table id="cluster-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
-							<thead>
-								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
-									<th class="center" style="width:50px;">序号</th>
-									<th class="center">名称</th>
-									<th class="center">所属数据中心</th>
-									<th class="center">创建时间</th>
-									<th class="center">修改时间</th>
-									<th class="center">操作</th>
-								</tr>
-							</thead>
-													
-							<tbody>
-							<!-- 开始循环 -->	
-							<c:choose>
-								<c:when test="${not empty clusterList}">
-									<c:if test="${QX.cha == 1 }">
-									<c:forEach items="${clusterList}" var="var" varStatus="vs">
-										<tr>
-											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
-											</td>
-											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.name}</td>
-											<td class='center'>${var.dc_name}</td>
-											<td class='center' style="width: 170px;">${var.gmt_create}</td>
-											<td class='center' style="width: 170px;">${var.gmt_modified}</td>
-											<td class="center">
-												<!-- Todo -->
-											</td>
-										</tr>
-									
-									</c:forEach>
-									</c:if>
-									<c:if test="${QX.cha == 0 }">
-										<tr>
-											<td colspan="100" class="center">您无权查看</td>
-										</tr>
-									</c:if>
-								</c:when>
-								<c:otherwise>
-									<tr class="main_info">
-										<td colspan="100" class="center" >没有相关数据</td>
-									</tr>
-								</c:otherwise>
-							</c:choose>
-							</tbody>
-						</table>
-				</form>
-			</div>
-			<div>
-				<form action="" method="post" name="hostmachineForm" id="hostmachineForm">
+				<form action="cloudplatform/updateSelectData.do" method="post" name="Form" id="Form">
+					<input type="hidden" name="hostmachineIds" id="hostmachineIds" />
+					<input type="hidden" name="storageIds" id="storageIds" />
+					<input type="hidden" name="dcnIds" id="dcnIds" />
 						<table id="hostmachine-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
@@ -1311,7 +1204,7 @@
 									<c:forEach items="${hmList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
+												<label class="pos-rel"><input type='checkbox' name='hostmachine_ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
@@ -1344,10 +1237,10 @@
 							</c:choose>
 							</tbody>
 						</table>
-				</form>
+					</form>
 			</div>
 			<div>
-				<form action="" method="post" name="storageForm" id="storageForm">
+				<form method="post">
 						<table id="storage-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
@@ -1372,7 +1265,7 @@
 									<c:forEach items="${storageList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
+												<label class="pos-rel"><input type='checkbox' name='storage_ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
@@ -1401,10 +1294,10 @@
 							</c:choose>
 							</tbody>
 						</table>
-						</form>
+					</form>
 			</div>
 			<div>
-				<form action="" method="post" name="dcnForm" id="dcnForm">
+				<form method="post">
 						<table id="dcn-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
@@ -1427,7 +1320,7 @@
 									<c:forEach items="${dcnList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
+												<label class="pos-rel"><input type='checkbox' name='dcn_ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
@@ -1455,8 +1348,11 @@
 							</tbody>
 						</table>
 					</form>
-			</div>
+				</div>
+			</form>
 		</div>
+	</div>
+	<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
 	</div>
 
 
@@ -1468,27 +1364,7 @@
 	   	$(function() {
 			//复选框全选控制
 			var active_class = 'active';
-			
-			$('#datacenter-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function() {
-				console.log('datacenter-table---------->>-------');
-				var th_checked = this.checked;//checkbox inside "TH" table header
-				$(this).closest('table').find('tbody > tr').each(function(){
-					var row = this;
-					if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-					else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-				});
-			});
-			
-			$('#cluster-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function() {
-				console.log('cluster-table---------->>-------');
-				var th_checked = this.checked;//checkbox inside "TH" table header
-				$(this).closest('table').find('tbody > tr').each(function(){
-					var row = this;
-					if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-					else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-				});
-			});
-			
+						
 			$('#hostmachine-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function() {
 				console.log('hostmachine-table---------->>-------');
 				var th_checked = this.checked;//checkbox inside "TH" table header
@@ -1519,13 +1395,43 @@
 				});
 			});
 		});
-	   	
-		//保存
-		function save(){
-			$("#Form").submit();
-			$("#zhongxin").hide();
-			$("#zhongxin2").show();
-		}
+		
+	   	//点击“下一步”或“完成”
+		$('#next_a').click(function(){
+			var next_a_text = $("#next_a").text();
+			if('完成' == next_a_text) {
+				var hostmachine_str = '';
+				for(var i=0;i < document.getElementsByName('hostmachine_ids').length;i++){
+				  if(document.getElementsByName('hostmachine_ids')[i].checked){
+				  	if(hostmachine_str=='') hostmachine_str += document.getElementsByName('hostmachine_ids')[i].value;
+				  	else hostmachine_str += ',' + document.getElementsByName('hostmachine_ids')[i].value;
+				  }
+				}
+				$("#hostmachineIds").val(hostmachine_str);
+				
+				var storage_str = '';
+				for(var i=0;i < document.getElementsByName('storage_ids').length;i++){
+				  if(document.getElementsByName('storage_ids')[i].checked){
+				  	if(storage_str=='') storage_str += document.getElementsByName('storage_ids')[i].value;
+				  	else storage_str += ',' + document.getElementsByName('storage_ids')[i].value;
+				  }
+				}
+				$("#storageIds").val(storage_str);
+				
+				var dcn_str = '';
+				for(var i=0;i < document.getElementsByName('dcn_ids').length;i++){
+				  if(document.getElementsByName('dcn_ids')[i].checked){
+				  	if(dcn_str=='') dcn_str += document.getElementsByName('dcn_ids')[i].value;
+				  	else dcn_str += ',' + document.getElementsByName('dcn_ids')[i].value;
+				  }
+				}
+				$("#dcnIds").val(dcn_str);
+				
+				$("#Form").submit();
+				$("#zhongxin").hide();
+				$("#zhongxin2").show();
+			}
+		});
 
 	</script>
 </body>

@@ -7,6 +7,7 @@ import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
 import com.vmware.vim25.mo.HostSystem;
 import com.vmware.vim25.mo.Network;
+import com.vmware.vim25.mo.ResourcePool;
 import com.vmware.vim25.mo.VirtualMachine;
 import com.vmware.vim25.mo.VirtualMachineSnapshot;
 
@@ -15,6 +16,8 @@ public interface CloudArchManager {
 	public List<Datacenter> getDatacenters();
 
 	public List<ClusterComputeResource> getClusters();
+	
+	public List<ResourcePool> getResourcePools();
 
 	public List<HostSystem> getHostMachines();
 
