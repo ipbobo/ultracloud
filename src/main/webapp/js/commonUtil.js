@@ -119,11 +119,7 @@ function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 	        }
 	    },
 	    calculable : true,
-	    grid: {
-	        borderWidth: 0,
-	        y: 50,
-	        y2: 50
-	    },
+	    grid: {borderWidth: 0, y: 20, y2: 50},
 	    xAxis : [
 	        {
 	            type : 'category',
@@ -153,6 +149,7 @@ function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 	                    }
 	                }
 	            },
+	            //barWidth : 30,//柱图宽度
 	            data: valArr
 	        }
 	    ]
