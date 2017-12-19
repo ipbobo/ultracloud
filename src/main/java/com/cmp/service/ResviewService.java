@@ -41,7 +41,7 @@ public class ResviewService {
 		String bizviewTypeName="全部数据中心";
 		if(!StringUtils.isBlank(bizviewType)){
 			pd.put("id", bizviewType);
-			bizviewTypeName=(String)datacenterService.findById(pd, false).get("name");
+			bizviewTypeName=(String)datacenterService.findById(pd).get("name");
 		}
 		
 		cmpRes.setBizviewTypeName(bizviewTypeName);
