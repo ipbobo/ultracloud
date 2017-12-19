@@ -12,17 +12,18 @@
 	
 	<!-- 字段 -->
 	<sql id="Field">
-		id,	
 		<include refid="Field_main"></include>,<include refid="Field_time"></include>
 	</sql>
 	
 	<sql id="Field_main">
+	    id,	
 		name,
 		type,
 		allspace,
 		freespace,
 		threshold,
-		datacenter_id
+		datacenter_id,
+		cpf_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -32,18 +33,19 @@
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-		#{id},	
 		<include refid="FieldValue_main"></include>,<include refid="FieldValue_time"></include>
 	</sql>
 		
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
+	    #{id},
 		#{name},
 		#{type},
 		#{allspace},
 		#{freespace},
 		#{threshold},
-		#{datacenter_id}
+		#{datacenter_id},
+		#{cpf_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -79,8 +81,9 @@
 			type = #{type},
 			allspace = #{allspace},
 			freespace = #{freespace},
-			threshold = #{threshold}
-			datacenter_id = #{datacenter_id}
+			threshold = #{threshold},
+			datacenter_id = #{datacenter_id},
+			cpf_id = #{cpf_id}
 		 where 
 		    id = #{id}
 	</update>
@@ -106,6 +109,7 @@
 				s.gmt_create,
 				s.gmt_modified,
 				s.datacenter_id,
+				s.cpf_id,
 				d.name as datacenter_name
 		from <include refid="tableName"></include> s,<include refid="dcTableName"></include> d
 		where s.datacenter_id = d.id

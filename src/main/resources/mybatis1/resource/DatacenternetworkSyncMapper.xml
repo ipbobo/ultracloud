@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="DatacenternetworkMapper">
+<mapper namespace="DatacenternetworkSyncMapper">
 	
 	<!--表名 -->
 	<sql id="tableName">
-		t_datacenter_network
+		t_datacenter_network_sync
 	</sql>
 	<sql id="dctableName">
-		t_datacenter
+		t_datacenter_sync
 	</sql>
 	
 	<!-- 字段 -->
@@ -18,6 +18,7 @@
 	<sql id="Field_main">
 	    id,	
 	    name,
+	    cpf_id,
 		datacenter_id,
 		ippool,
 		type,
@@ -26,7 +27,8 @@
 		dns1,
 		dns2,
 		totalip,
-		freeip
+		freeip,
+		version
 	</sql>
 	
 	<sql id="Field_time">
@@ -41,8 +43,9 @@
 		
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
-	    #{id},
+	    #{id},	
 	    #{name},
+	    #{cpf_id},
 		#{datacenter_id},
 		#{ippool},
 		#{type},
@@ -51,7 +54,8 @@
 		#{dns1},
 		#{dns2},
 		#{totalip},
-		#{freeip}
+		#{freeip},
+		#{version}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -84,6 +88,7 @@
 		<include refid="tableName"></include>
 		set 
 		    name = #{name},
+		    cpf_id = #{cpf_id},
 			datacenter_id = #{datacenter_id},
 			ippool = #{ippool},
 			type = #{type},
@@ -92,7 +97,8 @@
 			dns1 = #{dns1},
 			dns2 = #{dns2},
 			totalip = #{totalip},
-			freeip = #{freeip}
+			freeip = #{freeip},
+			version= #{version}
 		 where 
 		    id = #{id}
 	</update>
@@ -111,6 +117,7 @@
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,
 		        s.name,
+		        s.cpf_id,
 				s.datacenter_id,
 				s.ippool,
 				s.gmt_modified,
@@ -122,6 +129,7 @@
 				s.dns2,
 				s.totalip,
 				s.freeip,
+				s.version,
 				c.name as datacenter_name
 		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c
 		where s.datacenter_id=c.id
@@ -148,10 +156,13 @@
 		       dcn.ippool,
 		       dcn.gmt_create,
 		       dcn.gmt_modified,
+		       dcn.version,
+		       dcn.cpf_id,
 		       dc.name as dc_name
 		from 
 		<include refid="tableName"></include> dcn LEFT JOIN <include refid="dctableName"></include> dc
 		on dcn.datacenter_id=dc.id
+		where dcn.cpf_id=#{id}
 	</select>
 	
 	<!-- 批量删除 -->

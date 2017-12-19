@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmp.service.ResourceService;
 import com.cmp.service.StorageService;
 import com.cmp.service.resourcemgt.CloudplatformService;
-import com.cmp.service.resourcemgt.CloudplatformSyncService;
 import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.service.resourcemgt.DatacenternetworkService;
@@ -40,16 +39,13 @@ public class CloudplatformController extends BaseController {
 
 	@Resource(name = "cloudplatformService")
 	private CloudplatformService cloudplatformService;
-	
-	@Resource(name = "cloudplatformSyncService")
-	private CloudplatformSyncService cloudplatformSyncService;
 
 	@Resource(name = "resourceService")
 	private ResourceService resourceService;
 
 	@Resource(name = "datacenterService")
 	private DatacenterService datacenterService;
-
+	
 	@Resource(name = "clusterService")
 	private ClusterService clusterService;
 
@@ -77,7 +73,8 @@ public class CloudplatformController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		cloudplatformService.save(pd);
+		pd.put("id", this.get32UUID());
+		cloudplatformService.save(pd, false);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -97,7 +94,7 @@ public class CloudplatformController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		cloudplatformService.delete(pd);
+		cloudplatformService.delete(pd, false);
 		out.write("success");
 		out.close();
 	}
@@ -117,10 +114,10 @@ public class CloudplatformController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		
-		pd = cloudplatformService.findById(pd);
-		pd.remove("id");
+		pd = cloudplatformService.findById(pd, false);
+		cloudplatformService.delete(pd, true);
 		pd.put("version", DateUtil.dateToString(new Date(), DateUtil.TIMESTAMP_FORMAT));
-		cloudplatformSyncService.save(pd);
+		cloudplatformService.save(pd, true);
 		
 		out.write("success");
 		out.close();
@@ -140,21 +137,22 @@ public class CloudplatformController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = cloudplatformService.findById(pd);
-
-		// 同步云平台数据 Todo
-		resourceService.syncCloudData(pd.getString("type"), pd.getString("ip"), pd.getString("username"), pd.getString("password"));
+		String cpf_id = pd.getString("id");
+		pd = cloudplatformService.findById(pd, true);
+		
+		// 同步云平台数据 
+		resourceService.syncCloudData(pd.getString("type"), pd.getString("ip"), pd.getString("username"), pd.getString("password"), cpf_id, pd.getString("version"));
 
 		// 查询所有数据中心记录
-		List<PageData> datacenterList = datacenterService.listAll(pd);
+		List<PageData> datacenterList = datacenterService.listAll(pd, true);
 		// 查询所有集群记录
-		List<PageData> clusterList = clusterService.listAll(pd);
+		List<PageData> clusterList = clusterService.listAll(pd, true);
 		// 查询所有宿主机记录
-		List<PageData> hmList = hostmachineService.listAll(pd);
+		List<PageData> hmList = hostmachineService.listAll(pd, true);
 		// 查询所有存储记录
-		List<PageData> storageList = storageService.listAll(pd);
+		List<PageData> storageList = storageService.listAll(pd, true);
 		// 查询所有分配的网络记录
-		List<PageData> dcnList = datacenternetworkService.listAll(pd);
+		List<PageData> dcnList = datacenternetworkService.listAll(pd, true);
 
 		mv.addObject("datacenterList", datacenterList);
 		mv.addObject("clusterList", clusterList);
@@ -182,7 +180,7 @@ public class CloudplatformController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		cloudplatformService.edit(pd);
+		cloudplatformService.edit(pd, false);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -224,7 +222,7 @@ public class CloudplatformController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData> varList = cloudplatformService.list(page); // 列出列表
+		List<PageData> varList = cloudplatformService.list(page, false); // 列出列表
 		mv.setViewName("resource/cloudplatform_type_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -268,7 +266,7 @@ public class CloudplatformController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
-		pd = cloudplatformService.findById(pd); // 根据ID读取
+		pd = cloudplatformService.findById(pd, false); // 根据ID读取
 		mv.setViewName("resource/cloudplatform_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -295,7 +293,7 @@ public class CloudplatformController extends BaseController {
 		String DATA_IDS = pd.getString("DATA_IDS");
 		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			cloudplatformService.deleteAll(ArrayDATA_IDS);
+			cloudplatformService.deleteAll(ArrayDATA_IDS, false);
 			pd.put("msg", "ok");
 		} else {
 			pd.put("msg", "no");

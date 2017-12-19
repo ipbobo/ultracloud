@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="DatacenternetworkMapper">
+<mapper namespace="StorageSyncMapper">
 	
 	<!--表名 -->
 	<sql id="tableName">
-		t_datacenter_network
+		t_storage_sync
 	</sql>
-	<sql id="dctableName">
-		t_datacenter
+	<sql id="dcTableName">
+		t_datacenter_sync
 	</sql>
 	
 	<!-- 字段 -->
@@ -17,16 +17,14 @@
 	
 	<sql id="Field_main">
 	    id,	
-	    name,
-		datacenter_id,
-		ippool,
+		name,
 		type,
-		mask,
-		gateway,
-		dns1,
-		dns2,
-		totalip,
-		freeip
+		allspace,
+		freespace,
+		threshold,
+		datacenter_id,
+		cpf_id,
+		version
 	</sql>
 	
 	<sql id="Field_time">
@@ -41,17 +39,15 @@
 		
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
-	    #{id},
-	    #{name},
-		#{datacenter_id},
-		#{ippool},
+	    #{id},	
+		#{name},
 		#{type},
-		#{mask},
-		#{gateway},
-		#{dns1},
-		#{dns2},
-		#{totalip},
-		#{freeip}
+		#{allspace},
+		#{freespace},
+		#{threshold},
+		#{datacenter_id},
+		#{cpf_id},
+		#{version}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -83,16 +79,14 @@
 		update
 		<include refid="tableName"></include>
 		set 
-		    name = #{name},
-			datacenter_id = #{datacenter_id},
-			ippool = #{ippool},
+			name = #{name},
 			type = #{type},
-			mask = #{mask},
-			gateway = #{gateway},
-			dns1 = #{dns1},
-			dns2 = #{dns2},
-			totalip = #{totalip},
-			freeip = #{freeip}
+			allspace = #{allspace},
+			freespace = #{freespace},
+			threshold = #{threshold},
+			datacenter_id = #{datacenter_id},
+			cpf_id = #{cpf_id},
+			version = #{version}
 		 where 
 		    id = #{id}
 	</update>
@@ -110,21 +104,19 @@
 	<!-- 脚本列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,
-		        s.name,
-				s.datacenter_id,
-				s.ippool,
-				s.gmt_modified,
-				s.gmt_create,
+				s.name,
 				s.type,
-				s.mask,
-				s.gateway,
-				s.dns1,
-				s.dns2,
-				s.totalip,
-				s.freeip,
-				c.name as datacenter_name
-		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c
-		where s.datacenter_id=c.id
+				s.allspace,
+				s.freespace,
+				s.threshold,
+				s.gmt_create,
+				s.gmt_modified,
+				s.datacenter_id,
+				s.cpf_id,
+				s.version
+				d.name as datacenter_name
+		from <include refid="tableName"></include> s,<include refid="dcTableName"></include> d
+		where s.datacenter_id = d.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -142,16 +134,11 @@
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select dcn.id,
-		       dcn.name,
-		       dcn.datacenter_id,
-		       dcn.ippool,
-		       dcn.gmt_create,
-		       dcn.gmt_modified,
-		       dc.name as dc_name
+		select
+		<include refid="Field"></include>
 		from 
-		<include refid="tableName"></include> dcn LEFT JOIN <include refid="dctableName"></include> dc
-		on dcn.datacenter_id=dc.id
+		<include refid="tableName"></include>
+		where cpf_id=#{id}
 	</select>
 	
 	<!-- 批量删除 -->

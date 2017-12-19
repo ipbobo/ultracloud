@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="DatacenternetworkMapper">
+<mapper namespace="ClusterSyncMapper">
 	
 	<!--表名 -->
 	<sql id="tableName">
-		t_datacenter_network
+		t_cluster_sync
 	</sql>
 	<sql id="dctableName">
-		t_datacenter
+		t_datacenter_sync
 	</sql>
 	
 	<!-- 字段 -->
@@ -17,16 +17,11 @@
 	
 	<sql id="Field_main">
 	    id,	
-	    name,
-		datacenter_id,
-		ippool,
+		name,
+		cpf_id,
 		type,
-		mask,
-		gateway,
-		dns1,
-		dns2,
-		totalip,
-		freeip
+		datacenter_id,
+		version
 	</sql>
 	
 	<sql id="Field_time">
@@ -42,16 +37,11 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
 	    #{id},
-	    #{name},
-		#{datacenter_id},
-		#{ippool},
+		#{name},
+		#{cpf_id},
 		#{type},
-		#{mask},
-		#{gateway},
-		#{dns1},
-		#{dns2},
-		#{totalip},
-		#{freeip}
+		#{datacenter_id},
+		#{version}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -83,16 +73,11 @@
 		update
 		<include refid="tableName"></include>
 		set 
-		    name = #{name},
+			name = #{name},
 			datacenter_id = #{datacenter_id},
-			ippool = #{ippool},
-			type = #{type},
-			mask = #{mask},
-			gateway = #{gateway},
-			dns1 = #{dns1},
-			dns2 = #{dns2},
-			totalip = #{totalip},
-			freeip = #{freeip}
+			cpf_id = #{cpf_id},
+			type = #{type}
+			version = #{version}
 		 where 
 		    id = #{id}
 	</update>
@@ -110,21 +95,13 @@
 	<!-- 脚本列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,
-		        s.name,
-				s.datacenter_id,
-				s.ippool,
-				s.gmt_modified,
-				s.gmt_create,
+				s.name,
+				s.cpf_id
 				s.type,
-				s.mask,
-				s.gateway,
-				s.dns1,
-				s.dns2,
-				s.totalip,
-				s.freeip,
-				c.name as datacenter_name
-		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c
-		where s.datacenter_id=c.id
+				s.datacenter_id,
+				s.version
+		from <include refid="tableName"></include> s    
+		where 1 = 1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -134,24 +111,24 @@
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
 			and id in ${pd.item}
 		</if>
-		<if test="pd.type != null and pd.type != ''"><!-- 按云平台类型检索 -->
-			and s.type = #{pd.type} 
-		</if>
 		order by s.gmt_modified desc
 	</select>
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select dcn.id,
-		       dcn.name,
-		       dcn.datacenter_id,
-		       dcn.ippool,
-		       dcn.gmt_create,
-		       dcn.gmt_modified,
-		       dc.name as dc_name
+		select c.id,
+		       c.name,
+		       c.type,
+		       c.cpf_id,
+		       c.datacenter_id,
+		       dc.name as dc_name,
+		       c.gmt_create,
+		       c.gmt_modified,
+		       c.version
 		from 
-		<include refid="tableName"></include> dcn LEFT JOIN <include refid="dctableName"></include> dc
-		on dcn.datacenter_id=dc.id
+		<include refid="tableName"></include> c LEFT JOIN <include refid="dctableName"></include> dc
+		on c.datacenter_id=dc.id 
+		where c.cpf_id=#{id}
 	</select>
 	
 	<!-- 批量删除 -->

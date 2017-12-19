@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="HostmachineMapper">
+<mapper namespace="HostmachineSyncMapper">
 	
 	<!--表名 -->
 	<sql id="tableName">
-		t_hostmachine
+		t_hostmachine_sync
 	</sql>  
 	<!--表名 -->
 	<sql id="clustertableName">
-		t_cluster
+		t_cluster_sync
 	</sql>
 	<!--表名 -->
 	<sql id="virtualTableName">
-		t_virtualmachine
+		t_virtualmachine_sync
 	</sql> 
 	
 	<!-- 字段 -->
@@ -21,7 +21,7 @@
 	</sql>
 	
 	<sql id="Field_main">
-	    id,	
+	    id,
 		name,
 		type,
 		status,
@@ -35,6 +35,7 @@
 		password_ssh,
 		cluster_id,
 		port,
+		version,
 		cpf_id,
 		datacenter_id
 	</sql>
@@ -65,6 +66,7 @@
 		#{password_ssh},
 		#{cluster_id},
 		#{port},
+		#{version},
 		#{cpf_id},
 		#{datacenter_id}
 	</sql>
@@ -111,8 +113,7 @@
 			password_ssh = #{password_ssh},
 			cluster_id = #{cluster_id},
 			port = #{port},
-			cpf_id= #{cpf_id},
-		    datacenter_id = #{datacenter_id}
+			version = #{version}
 		 where 
 		    id = #{id}
 	</update>
@@ -145,8 +146,7 @@
 				s.gmt_modified,
 				s.cluster_id,
 				s.port,
-				s.cpf_id,
-				s.datacenter_id,
+				s.version,
 				c.name AS cluster_name
 		from <include refid="tableName"></include> s,<include refid="clustertableName"></include> c
 		where s.cluster_id=c.id
@@ -182,9 +182,8 @@
 				s.gmt_create,
 				s.gmt_modified,
 				s.cluster_id,
-				s.cpf_id,
-				s.datacenter_id,
-				s.port
+				s.port,
+				s.version
 		from <include refid="tableName"></include> s
 		where 1 = 1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
@@ -219,13 +218,14 @@
 				s.gmt_create,
 				s.gmt_modified,
 				s.cluster_id,
-				s.cpf_id,
-				s.datacenter_id,
 				s.port,
+				s.version,
+				s.cpf_id,
 				cl.name as cluster_name
 		from 
 		<include refid="tableName"></include> s LEFT JOIN <include refid="clustertableName"></include> cl
 		on s.cluster_id=cl.id
+		where s.cpf_id=#{id}
 	</select>
 	
 	<!-- 批量删除 -->

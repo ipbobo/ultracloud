@@ -28,8 +28,13 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void save(PageData pd) throws Exception {
-		dao.save("HostmachineMapper.save", pd);
+	public void save(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.save("HostmachineSyncMapper.save", pd);
+		} else {
+			dao.save("HostmachineMapper.save", pd);
+		}
+		
 	}
 
 	/**
@@ -38,8 +43,13 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void delete(PageData pd) throws Exception {
-		dao.delete("HostmachineMapper.delete", pd);
+	public void delete(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.delete("HostmachineSyncMapper.delete", pd);
+		} else {
+			dao.delete("HostmachineMapper.delete", pd);
+		}
+		
 	}
 
 	/**
@@ -48,8 +58,13 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void edit(PageData pd) throws Exception {
-		dao.update("HostmachineMapper.edit", pd);
+	public void edit(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.update("HostmachineSyncMapper.edit", pd);
+		} else {
+			dao.update("HostmachineMapper.edit", pd);
+		}
+		
 	}
 
 	/**
@@ -59,8 +74,12 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("HostmachineMapper.datalistPage", page);
+	public List<PageData> list(Page page, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (List<PageData>) dao.findForList("HostmachineSyncMapper.datalistPage", page);
+		} else {
+			return (List<PageData>) dao.findForList("HostmachineMapper.datalistPage", page);
+		}
 	}
 	
 	/**
@@ -70,8 +89,13 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listKVM(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageKVM", page);
+	public List<PageData> listKVM(Page page, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (List<PageData>) dao.findForList("HostmachineSyncMapper.datalistPageKVM", page);
+		} else {
+			return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageKVM", page);
+		}
+		
 	}
 
 	/**
@@ -81,8 +105,12 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("HostmachineMapper.listAll", pd);
+	public List<PageData> listAll(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (List<PageData>) dao.findForList("HostmachineSyncMapper.listAll", pd);
+		} else {
+			return (List<PageData>) dao.findForList("HostmachineMapper.listAll", pd);
+		}
 	}
 
 	/**
@@ -91,8 +119,12 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("HostmachineMapper.findById", pd);
+	public PageData findById(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (PageData) dao.findForObject("HostmachineSyncMapper.findById", pd);
+		} else {
+			return (PageData) dao.findForObject("HostmachineMapper.findById", pd);
+		}
 	}
 
 	/**
@@ -101,8 +133,12 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
-	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("HostmachineMapper.deleteAll", ArrayDATA_IDS);
+	public void deleteAll(String[] ArrayDATA_IDS, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.delete("HostmachineSyncMapper.deleteAll", ArrayDATA_IDS);
+		} else {
+			dao.delete("HostmachineMapper.deleteAll", ArrayDATA_IDS);
+		}
 	}
 	
 	/**
@@ -112,8 +148,12 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listVirtual(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageVirtual", page);
+	public List<PageData> listVirtual(Page page, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (List<PageData>) dao.findForList("HostmachineSyncMapper.datalistPageVirtual", page);
+		} else {
+			return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageVirtual", page);
+		}
 	}
 
 }
