@@ -12,10 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cmp.service.BizviewService;
 import com.cmp.service.CloudHostService;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.ProjectService;
+import com.cmp.service.ResviewService;
 import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.sid.CmpDict;
 import com.cmp.util.StringUtil;
@@ -26,11 +26,11 @@ import com.fh.util.PageData;
 
 //业务视图总览
 @Controller
-public class BizviewController extends BaseController {
+public class ResviewController extends BaseController {
 	@Resource
 	private CmpDictService cmpDictService;
 	@Resource
-	private BizviewService bizviewService;
+	private ResviewService resviewService;
 	@Resource
 	private EnvironmentService environmentService;
 	@Resource
@@ -41,15 +41,15 @@ public class BizviewController extends BaseController {
 	private CloudHostService cloudHostService;
 	
 	//业务视图总览列表查询
-	@RequestMapping(value="/bizview/list")
+	@RequestMapping(value="/resview/list")
 	public ModelAndView getBizviewList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("bizview/bizview_qry_list");
+		mv.setViewName("resview/resview_qry_list");
 		return mv;
 	}
 	
 	//计算列表查询
-	@RequestMapping(value="/bizview/callist")
+	@RequestMapping(value="/resview/callist")
 	public ModelAndView getCalList(HttpServletRequest request, HttpServletResponse response, Page page) throws Exception{
 		String bizviewType=request.getParameter("bizviewType");//业务视图总览类型
 		String subBizviewType=request.getParameter("subBizviewType");//子业务视图总览类型
@@ -72,14 +72,14 @@ public class BizviewController extends BaseController {
 		mv.addObject("subBizviewType", subBizviewType);//子业务视图总览类型
 		mv.addObject("bizviewTypeList", cmpDictService.getCmpDictList("bizview_type"));//业务视图总览类型列表
 		mv.addObject("subBizviewTypeList", subBizviewTypeList);//子业务视图总览类型列表
-		mv.addObject("cmpRes", bizviewService.getCmpResDtl("cal", bizviewType, subBizviewType));//资源详细信息
+		mv.addObject("cmpRes", resviewService.getCmpResDtl("cal", bizviewType, subBizviewType));//资源详细信息
 		mv.addObject("pd", pd);
-		mv.setViewName("bizview/cal_qry_list");
+		mv.setViewName("resview/cal_qry_list");
 		return mv;
 	}
 	
 	//存储列表查询
-	@RequestMapping(value="/bizview/storelist")
+	@RequestMapping(value="/resview/storelist")
 	public ModelAndView getStoreList(HttpServletRequest request, HttpServletResponse response, Page page) throws Exception{
 		String bizviewType=request.getParameter("bizviewType");//业务视图总览类型
 		String subBizviewType=request.getParameter("subBizviewType");//子业务视图总览类型
@@ -102,22 +102,22 @@ public class BizviewController extends BaseController {
 		mv.addObject("subBizviewType", subBizviewType);//子业务视图总览类型
 		mv.addObject("bizviewTypeList", cmpDictService.getCmpDictList("bizview_type"));//业务视图总览类型列表
 		mv.addObject("subBizviewTypeList", subBizviewTypeList);//子业务视图总览类型列表
-		mv.addObject("cmpRes", bizviewService.getCmpResDtl("store", bizviewType, subBizviewType));//资源详细信息
+		mv.addObject("cmpRes", resviewService.getCmpResDtl("store", bizviewType, subBizviewType));//资源详细信息
 		mv.addObject("pd", pd);
-		mv.setViewName("bizview/store_qry_list");
+		mv.setViewName("resview/store_qry_list");
 		return mv;
 	}
 	
-	//云主机列表查询
-	@RequestMapping(value="/bizview/cloudhostlist")
-	public ModelAndView getCloudHostlist(HttpServletRequest request, HttpServletResponse response, Page page) throws Exception{
+	//物理机列表查询
+	@RequestMapping(value="/resview/hostlist")
+	public ModelAndView getHostlist(HttpServletRequest request, HttpServletResponse response, Page page) throws Exception{
 		String bizviewType=request.getParameter("bizviewType");//业务视图总览类型
 		String subBizviewType=request.getParameter("subBizviewType");//子业务视图总览类型
 		PageData pd=getPageData(page, "bizviewType", bizviewType, "subBizviewType", subBizviewType);
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("cloudHostList", bizviewService.getCloudHostPageList(page));//云主机列表分页查询
+		mv.addObject("hostList", resviewService.getHostPageList(page));//云主机列表分页查询
 		mv.addObject("pd", pd);
-		mv.setViewName("bizview/cloudhost_qry_list");
+		mv.setViewName("resview/host_qry_list");
 		return mv;
 	}
 }

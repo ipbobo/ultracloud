@@ -19,7 +19,7 @@ getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩
 </script>
 </head>
 <body>
-<form id="mainForm" name="mainForm" action="bizview/callist.do" enctype="multipart/form-data" method="post">
+<form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
 	<table style="margin-top: 0px;margin-left: 0px;margin-bottom: 10px;">
 		<tr class="tablecls">
 			<td align="left" style="width: 120px;padding-right: 10px;">
