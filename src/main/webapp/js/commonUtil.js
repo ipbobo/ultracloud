@@ -64,8 +64,8 @@ function trim(str) {
 }
 
 
-//加载饼状图，必须先引入echarts.min.js
-function initPieChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
+//获取饼状图，必须先引入echarts.min.js
+function getPieChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 	var dataArr=[];
 	if(keyArr.length==valArr.length && keyArr.length==colorArr.length){
 		for(var i=0;i<keyArr.length;i++){
@@ -103,8 +103,8 @@ function initPieChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 	myChart.setOption(option);//加载图表
 }
 
-//加载柱状图，必须先引入echarts.min.js
-function initBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
+//获取柱状图，必须先引入echarts.min.js
+function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 	var option = {
 		title : {text: titleArr[0], subtext: titleArr[1], x: 'center', y: 'bottom'},
 	    tooltip : {trigger: 'item', formatter: "{a}<br>{b}: {c}"+unit, textStyle:{align:'left'}},//item或axis
