@@ -87,7 +87,7 @@ public class DatacenterNetworkController extends BaseController {
 		}
 		page.setPd(pd);
 		// 分页查询宿主机
-		List<PageData> varList = datacenternetworkService.list(page);
+		List<PageData> varList = datacenternetworkService.list(page, false);
 		mv.setViewName("resource/datacenternetwork_type_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);

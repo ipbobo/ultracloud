@@ -143,7 +143,7 @@ public class MirrorController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 
-		List<PageData> dcList = datacenterService.listAll(pd);
+		List<PageData> dcList = datacenterService.listAll(pd, false);
 		mv.addObject("dcList", dcList);
 
 		mv.setViewName("service/mirror_edit");
@@ -168,7 +168,7 @@ public class MirrorController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 
-		List<PageData> dcList = datacenterService.listAll(pd);
+		List<PageData> dcList = datacenterService.listAll(pd, false);
 		mv.addObject("dcList", dcList);
 
 		pd = mirrorService.findById(pd); // 根据ID读取

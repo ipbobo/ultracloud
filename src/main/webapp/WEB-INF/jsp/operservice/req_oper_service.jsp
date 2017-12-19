@@ -32,8 +32,8 @@
 			<div class="main-content-inner">
 				<div class="page-content">
 					<div class="row">
+					<form action="subOperService.do" name="subOperService" id="subOperService" method="post">
 						<div class="col-xs-12">
-						<form action="subOperService.do" name="subOperService" id="subOperService" method="post">
 						<input type="hidden" name="middleware" id="middleware" value=""/>
 						<input type="hidden" name="vm" id="vm" value="">
 							<div id="zhongxin" style="padding-top: 50px;">
@@ -144,6 +144,63 @@
 									</td>
 								</table>
 							</div>
+							<div id="op_4" style="display: none;">
+							<!-- 系统分区 -->
+								<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;分区数量及大小:</td>
+										<td id="tip_oper_soft">
+											<textarea class="form-control limited" name="partition_info" id="partition_info" style="width: 70%;margin-left: 100px;"></textarea>
+										</td>
+								</tr>
+								</table>
+							</div>
+							<div id="op_6" style="display: none;">
+							<!-- 挂载磁盘 -->
+								<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;指定目录:</td>
+										<td>
+											<input type="text" class="form-control limited" name="directory" id="directory" style="width: 70%;margin-left: 100px;"></input>
+										</td>
+								</tr>
+								<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;使用期限:</td>
+										<td>
+											<input id="exp_time" name="exp_time" type="text"  style="width:20%;margin-left: 100px;"/>
+										</td>
+								</tr>
+								</table>
+							</div>
+							<div id="op_7" style="display: none;">
+							<!-- ROOT权限申请 -->
+								<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;指定目录:</td>
+										<td>
+											<input type="text" class="form-control limited" name="directory2" id="directory2" style="width: 70%;margin-left: 100px;"></input>
+										</td>
+								</tr>
+								</table>
+							</div>
+							<div id="op_8" style="display: none;">
+							<!-- VIP申请 -->
+								<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+									<tr>
+											<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;VIP数量:</td>
+											<td>
+												<input type="text" class="form-control limited" name="vip_num" id="vip_num" style="width: 70%;margin-left: 100px;"></input>
+											</td>
+									</tr>
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;指定目录:</td>
+										<td>
+											<input type="text" class="form-control limited" name="directory3" id="directory3" style="width: 70%;margin-left: 100px;"></input>
+										</td>
+								</tr>
+								</table>
+							</div>
+							
 							<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;申请说明:</td>
@@ -310,7 +367,6 @@
 									<table id="simple-table"
 								class="table table-striped table-bordered table-hover"
 								style="margin-top: 5px;">
-								
 									<thead>
 									<tr>
 										<th class="center" style="width: 35px;"><label
@@ -398,7 +454,10 @@
 			format: 'YYYY-MM-DD hh:mm:ss',  
 	        locale: moment.locale('zh-cn')
 			});
-		
+		$('#exp_time').datetimepicker({
+			format: 'YYYY-MM-DD hh:mm:ss',  
+	        locale: moment.locale('zh-cn')
+			});
 	});
 	
 	function ismail(mail){
@@ -486,6 +545,12 @@
 		var except_result = $("#except_result").val();
 		var breakdown_level = $("#breakdown_level").val();
 		var breakdown_info = $("#breakdown_info").val();
+		var partition_info = $("#partition_info").val();
+		var directory = $("#directory").val();
+		var directory2 = $("#directory2").val();
+		var exp_time =  $("#exp_time").val();
+		var vip_num = $("#vip_num").val();
+		var directory3 = $("#directory3").val();
 		if( service_type ==""){
 			$("#tip_service_type").tips({
 				side:3,
@@ -528,20 +593,56 @@
 				return false;
 			}
 		}
+		if (service_type == 4){
+			if (partition_info == null){
+				showDialog("请输入分区数量及大小");
+				return false;
+			}
+		}
+		if (service_type == 6){
+			if (directory == null){
+				showDialog("请输入指定目录");
+				return false;
+			}
+		}
+		if (service_type == 7){
+			if (directory2 == null){
+				showDialog("请输入指定目录");
+				return false;
+			}
+			if (exp_time == null){
+				showDialog("请输入使用期限");
+				return false;
+			}
+		}
+		if (service_type == 8){
+			if (directory3 == null){
+				showDialog("请输入指定目录");
+				return false;
+			}
+			if (vip_num == null){
+				showDialog("请输入云主机数量");
+				return false;
+			}
+			
+		}
 		
 		
 		//递交
+		top.top.jzts();
 		jQuery.ajax({  
 			url : "subOperService.do",  
 			data : {'service_type': service_type,'vm' : vm, 'vm_msg':vm_msg, 'app_msg':app_msg,
 						'oper_type':oper_type, 'install_soft':install_soft, 'soft_version':soft_version,
 						'breakdown_time':breakdown_time, 'breakdown_info':breakdown_info, 'except_solve_time':except_solve_time,
-						'except_result':except_result,'breakdown_level':breakdown_level
+						'except_result':except_result,'breakdown_level':breakdown_level, 'partition_info':partition_info, 'directory':directory,
+						 'directory2':directory2, 'exp_time':exp_time, 'directory3':directory3, 'vip_num':vip_num
 					},  
 			type : "post",  
 			cache : false,  
 			dataType : "json",  
 			success:function(data){
+				top.hangge();
 				showDialog(data.result);
 			}
 		});  

@@ -28,8 +28,12 @@ public class DatacenterServiceImpl implements DatacenterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void save(PageData pd) throws Exception {
-		dao.save("DatacenterMapper.save", pd);
+	public void save(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.save("DatacenterSyncMapper.save", pd);
+		} else {
+			dao.save("DatacenterMapper.save", pd);
+		}
 	}
 
 	/**
@@ -38,8 +42,13 @@ public class DatacenterServiceImpl implements DatacenterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void delete(PageData pd) throws Exception {
-		dao.delete("DatacenterMapper.delete", pd);
+	public void delete(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.delete("DatacenterSyncMapper.delete", pd);
+		} else {
+			dao.delete("DatacenterMapper.delete", pd);
+		}
+		
 	}
 
 	/**
@@ -48,8 +57,13 @@ public class DatacenterServiceImpl implements DatacenterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void edit(PageData pd) throws Exception {
-		dao.update("DatacenterMapper.edit", pd);
+	public void edit(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.update("DatacenterSyncMapper.edit", pd);
+		} else {
+			dao.update("DatacenterMapper.edit", pd);
+		}
+		
 	}
 
 	/**
@@ -59,8 +73,12 @@ public class DatacenterServiceImpl implements DatacenterService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("DatacenterMapper.datalistPage", page);
+	public List<PageData> list(Page page, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (List<PageData>) dao.findForList("DatacenterSyncMapper.datalistPage", page);
+		} else {
+			return (List<PageData>) dao.findForList("DatacenterMapper.datalistPage", page);
+		}
 	}
 
 	/**
@@ -70,8 +88,12 @@ public class DatacenterServiceImpl implements DatacenterService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("DatacenterMapper.listAll", pd);
+	public List<PageData> listAll(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (List<PageData>) dao.findForList("DatacenterSyncMapper.listAll", pd);
+		} else {
+			return (List<PageData>) dao.findForList("DatacenterMapper.listAll", pd);
+		}
 	}
 
 	/**
@@ -80,8 +102,12 @@ public class DatacenterServiceImpl implements DatacenterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("DatacenterMapper.findById", pd);
+	public PageData findById(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (PageData) dao.findForObject("DatacenterSyncMapper.findById", pd);
+		} else {
+			return (PageData) dao.findForObject("DatacenterMapper.findById", pd);
+		}
 	}
 
 	/**
@@ -90,8 +116,12 @@ public class DatacenterServiceImpl implements DatacenterService {
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
-	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("DatacenterMapper.deleteAll", ArrayDATA_IDS);
+	public void deleteAll(String[] ArrayDATA_IDS, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.delete("DatacenterSyncMapper.deleteAll", ArrayDATA_IDS);
+		} else {
+			dao.delete("DatacenterMapper.deleteAll", ArrayDATA_IDS);
+		}
 	}
 
 }

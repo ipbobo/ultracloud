@@ -9,11 +9,11 @@
 	
 	<!-- 字段 -->
 	<sql id="Field">
-		id,	
 		<include refid="Field_main"></include>,<include refid="Field_time"></include>
 	</sql>
 	
 	<sql id="Field_main">
+	    id,	
 		name,
 		type,
 		ip,
@@ -29,12 +29,12 @@
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-		#{id},	
 		<include refid="FieldValue_main"></include>,<include refid="FieldValue_time"></include>
 	</sql>
 		
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
+	    #{id},
 		#{name},
 		#{type},
 		#{ip},

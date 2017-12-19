@@ -76,6 +76,7 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 	public Map<String, Object> buildViewInfo(CmpWorkOrder cmpWorkorder, Map<String, Object> resMap) throws Exception {
 		//工单信息
 		CmpOpServe opServe = cmpOpServeService.findByOrderNo(cmpWorkorder.getOrderNo());
+		String serviceType = opServe.getServiceType();
 		try {
 			cmpOpServeService.encase(opServe);  //中文填充
 		} catch (Exception e) {
@@ -83,7 +84,7 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 		}
 		resMap.put("opServe", opServe);
 		resMap.put("workorder", cmpWorkorder);
-		String serviceType = opServe.getServiceType();
+		resMap.put("serviceType", serviceType);
 		if (serviceType.equals("1")) {
 			List<DeployedSoft> rebootSoftMap = new ArrayList<DeployedSoft>();
 			String vm = opServe.getVm();  // 在此格式：虚拟机1:软件1，软件2|虚拟机2:软件1,软件2|
@@ -118,7 +119,7 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 		}
 		if (serviceType.equals("3")) {
 			List<VirtualMachine> vmList = new ArrayList<VirtualMachine>();
-			String vm = opServe.getDeploySoftId();  // 在此格式：虚拟机1，虚拟机2
+			String vm = opServe.getVm();  // 在此格式：虚拟机1，虚拟机2
 			String[] vmIds = vm.split(",");
 			for (String vmId : vmIds) {
 				if (vmId == null || vmId.length() == 0) {
@@ -129,7 +130,19 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 			}
 			resMap.put("vmList", vmList);
 		}
-		resMap.put("serviceType", serviceType);
+		if (serviceType.equals("3") || serviceType.equals("4") || serviceType.equals("5") || serviceType.equals("6") || serviceType.equals("7")|| serviceType.equals("8")) {
+			List<VirtualMachine> vmList = new ArrayList<VirtualMachine>();
+			String vm = opServe.getVm();  // 在此格式：虚拟机1，虚拟机2
+			String[] vmIds = vm.split(",");
+			for (String vmId : vmIds) {
+				if (vmId == null || vmId.length() == 0) {
+					continue;
+				}
+				VirtualMachine virtualMachine = virtualMachineService.findById(vmId);
+				vmList.add(virtualMachine);
+			}
+			resMap.put("vmList", vmList);
+		}
 		return resMap;
 	}
 

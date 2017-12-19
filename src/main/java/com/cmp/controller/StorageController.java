@@ -87,7 +87,7 @@ public class StorageController extends BaseController {
 		}
 		page.setPd(pd);
 		// 分页查询宿主机
-		List<PageData> varList = storageService.list(page);
+		List<PageData> varList = storageService.list(page, false);
 		mv.setViewName("resource/storage_type_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);

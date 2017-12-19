@@ -38,10 +38,10 @@ public interface CloudArchManager {
 
 	public void deleteVirtualMachine(String name);
 
-	public void createSnapshot();
+	public void createSnapshot(String name, String vmName, String desc, boolean memoryFlag);
 
-	public void deleteSnapshot();
+	public void deleteSnapshot(String snapshotUUID);
 
-	public void revertToSnapshot();
+	public void revertToSnapshot(String snapshotUUID, String hostMachineUUID);
 
 }

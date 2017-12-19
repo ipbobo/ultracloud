@@ -22,7 +22,7 @@ public interface ResourceService {
 	 * @param password
 	 * @throws Exception
 	 */
-	public void syncCloudData(String type, String ip, String useranme, String password) throws Exception;
+	public void syncCloudData(String type, String ip, String useranme, String password,String cpf_id, String version) throws Exception;
 
 	/**
 	 * 新增

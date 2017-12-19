@@ -28,8 +28,12 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void save(PageData pd) throws Exception {
-		dao.save("CloudplatformMapper.save", pd);
+	public void save(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.save("CloudplatformSyncMapper.save", pd);
+		} else {
+			dao.save("CloudplatformMapper.save", pd);
+		}
 	}
 
 	/**
@@ -38,8 +42,12 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void delete(PageData pd) throws Exception {
-		dao.delete("CloudplatformMapper.delete", pd);
+	public void delete(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.delete("CloudplatformSyncMapper.delete", pd);
+		} else {
+			dao.delete("CloudplatformMapper.delete", pd);
+		}
 	}
 
 	/**
@@ -48,8 +56,12 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void edit(PageData pd) throws Exception {
-		dao.update("CloudplatformMapper.edit", pd);
+	public void edit(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.update("CloudplatformSyncMapper.edit", pd);
+		} else {
+			dao.update("CloudplatformMapper.edit", pd);
+		}
 	}
 
 	/**
@@ -59,8 +71,12 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("CloudplatformMapper.datalistPage", page);
+	public List<PageData> list(Page page, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (List<PageData>) dao.findForList("CloudplatformSyncMapper.datalistPage", page);
+		} else {
+			return (List<PageData>) dao.findForList("CloudplatformMapper.datalistPage", page);
+		}
 	}
 
 	/**
@@ -70,8 +86,12 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("CloudplatformMapper.listAll", pd);
+	public List<PageData> listAll(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (List<PageData>) dao.findForList("CloudplatformSyncMapper.listAll", pd);
+		} else {
+			return (List<PageData>) dao.findForList("CloudplatformMapper.listAll", pd);
+		}
 	}
 
 	/**
@@ -80,8 +100,12 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("CloudplatformMapper.findById", pd);
+	public PageData findById(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (PageData) dao.findForObject("CloudplatformSyncMapper.findById", pd);
+		} else {
+			return (PageData) dao.findForObject("CloudplatformMapper.findById", pd);
+		}
 	}
 
 	/**
@@ -90,8 +114,12 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
-	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("CloudplatformMapper.deleteAll", ArrayDATA_IDS);
+	public void deleteAll(String[] ArrayDATA_IDS, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.delete("CloudplatformSyncMapper.deleteAll", ArrayDATA_IDS);
+		} else {
+			dao.delete("CloudplatformMapper.deleteAll", ArrayDATA_IDS);
+		}
 	}
 
 }

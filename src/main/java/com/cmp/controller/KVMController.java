@@ -50,7 +50,7 @@ public class KVMController extends BaseController {
 		}
 		page.setPd(pd);
 		// 分页查询kvm主机
-		List<PageData> varList = hostmachineService.listKVM(page);
+		List<PageData> varList = hostmachineService.listKVM(page, false);
 		mv.setViewName("resource/kvm_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -74,7 +74,7 @@ public class KVMController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("type", "kvm");
-		hostmachineService.save(pd);
+		hostmachineService.save(pd, false);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -94,7 +94,7 @@ public class KVMController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		hostmachineService.delete(pd);
+		hostmachineService.delete(pd, false);
 		out.write("success");
 		out.close();
 	}
@@ -115,7 +115,7 @@ public class KVMController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("type", "kvm");
-		hostmachineService.edit(pd);
+		hostmachineService.edit(pd, false);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -159,7 +159,7 @@ public class KVMController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		
-		pd = hostmachineService.findById(pd); // 根据ID读取
+		pd = hostmachineService.findById(pd, false); // 根据ID读取
 		mv.setViewName("resource/kvm_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -186,7 +186,7 @@ public class KVMController extends BaseController {
 		String DATA_IDS = pd.getString("DATA_IDS");
 		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			hostmachineService.deleteAll(ArrayDATA_IDS);
+			hostmachineService.deleteAll(ArrayDATA_IDS, false);
 			pd.put("msg", "ok");
 		} else {
 			pd.put("msg", "no");
@@ -212,7 +212,7 @@ public class KVMController extends BaseController {
 		}
 		page.setPd(pd);
 		
-		List<PageData> varList = hostmachineService.listVirtual(page); 
+		List<PageData> varList = hostmachineService.listVirtual(page, false); 
 		mv.addObject("varList", varList);
 		mv.setViewName("resource/virtual_list_windows");
 		mv.addObject("pd", pd);

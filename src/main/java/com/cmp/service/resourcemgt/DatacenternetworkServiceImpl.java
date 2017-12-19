@@ -28,8 +28,12 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void save(PageData pd) throws Exception {
-		dao.save("DatacenternetworkMapper.save", pd);
+	public void save(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.save("DatacenternetworkSyncMapper.save", pd);
+		} else {
+			dao.save("DatacenternetworkMapper.save", pd);
+		}
 	}
 
 	/**
@@ -38,8 +42,13 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void delete(PageData pd) throws Exception {
-		dao.delete("DatacenternetworkMapper.delete", pd);
+	public void delete(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.delete("DatacenternetworkSyncMapper.delete", pd);
+		} else{
+			dao.delete("DatacenternetworkMapper.delete", pd);
+		}
+		
 	}
 
 	/**
@@ -48,8 +57,12 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void edit(PageData pd) throws Exception {
-		dao.update("DatacenternetworkMapper.edit", pd);
+	public void edit(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.update("DatacenternetworkSyncMapper.edit", pd);
+		} else {
+			dao.update("DatacenternetworkMapper.edit", pd);
+		}
 	}
 
 	/**
@@ -59,8 +72,12 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("DatacenternetworkMapper.datalistPage", page);
+	public List<PageData> list(Page page, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (List<PageData>) dao.findForList("DatacenternetworkSyncMapper.datalistPage", page);
+		} else{
+			return (List<PageData>) dao.findForList("DatacenternetworkMapper.datalistPage", page);
+		}
 	}
 
 	/**
@@ -70,8 +87,12 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("DatacenternetworkMapper.listAll", pd);
+	public List<PageData> listAll(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (List<PageData>) dao.findForList("DatacenternetworkSyncMapper.listAll", pd);
+		} else{
+			return (List<PageData>) dao.findForList("DatacenternetworkMapper.listAll", pd);
+		}
 	}
 
 	/**
@@ -80,8 +101,12 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("DatacenternetworkMapper.findById", pd);
+	public PageData findById(PageData pd, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			return (PageData) dao.findForObject("DatacenternetworkSyncMapper.findById", pd);
+		} else{
+			return (PageData) dao.findForObject("DatacenternetworkMapper.findById", pd);
+		}
 	}
 
 	/**
@@ -90,8 +115,12 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
-	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("DatacenternetworkMapper.deleteAll", ArrayDATA_IDS);
+	public void deleteAll(String[] ArrayDATA_IDS, boolean isSyncTable) throws Exception {
+		if(isSyncTable) {
+			dao.delete("DatacenternetworkSyncMapper.deleteAll", ArrayDATA_IDS);
+		} else {
+			dao.delete("DatacenternetworkMapper.deleteAll", ArrayDATA_IDS);
+		}
 	}
 
 }

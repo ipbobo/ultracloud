@@ -28,7 +28,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="cloudplatform/listVmware.do" method="post" name="Form" id="Form">
+						<form action="cloudplatform/listType.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
@@ -222,8 +222,8 @@
 						 diag.Drag=true;
 						 diag.Title ="已同步资源选择";
 						 diag.URL = '<%=basePath%>cloudplatform/goInit.do?id=' + id;
-						 diag.Width = 800;
-						 diag.Height = 600;
+						 diag.Width = document.documentElement.clientWidth * 0.85+"px";
+						 diag.Height = 600;//document.documentElement.clientHeight * 0.85+"px";
 						 diag.CancelEvent = function(){ //关闭事件
 							 diag.close();
 						 };

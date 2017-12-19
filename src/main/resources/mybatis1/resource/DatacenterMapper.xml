@@ -12,13 +12,14 @@
 	
 	<!-- 字段 -->
 	<sql id="Field">
-		id,	
 		<include refid="Field_main"></include>,<include refid="Field_time"></include>
 	</sql>
 	
 	<sql id="Field_main">
+	    id,
 		name,
-		cpf_id
+		cpf_id,
+		type
 	</sql>
 	
 	<sql id="Field_time">
@@ -28,14 +29,15 @@
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-		#{id},	
 		<include refid="FieldValue_main"></include>,<include refid="FieldValue_time"></include>
 	</sql>
 		
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
+		#{id},	
 		#{name},
-		#{cpf_id}
+		#{cpf_id},
+		#{type}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -68,7 +70,8 @@
 		<include refid="tableName"></include>
 		set 
 			name = #{name},
-			cpf_id = #{cpf_id}
+			cpf_id = #{cpf_id},
+			type = #{type}
 		 where 
 		    id = #{id}
 	</update>
@@ -87,7 +90,8 @@
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,
 				s.name,
-				s.cpf_id
+				s.cpf_id,
+				s.type
 		from <include refid="tableName"></include> s    
 		where 1 = 1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
@@ -107,6 +111,7 @@
 		select d.id,
 		       d.name,
 		       d.cpf_id,
+		       d.type,
 		       c.name as cpf_name,
 		       d.gmt_create,
 		       d.gmt_modified
