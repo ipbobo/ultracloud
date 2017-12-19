@@ -12,7 +12,9 @@
 <script type="text/javascript" src="static/ace/js/ace/ace.js"></script><!-- ace scripts -->
 <script type="text/javascript" src="static/ace/js/chosen.jquery.js"></script><!-- 下拉框 -->
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
+<script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">
+getBarChart('storeChart', ['存储容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.storeTotalNum}', '${cmpRes.storeAppNum}', '${cmpRes.storeUseNum}', '${cmpRes.storeRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "GB");//获取图表
 </script>
 </head>
 <body>
@@ -66,28 +68,18 @@
 				</tr>
 			</table>
 		</td>
-		<td style="border-bottom:1px solid #cccccc;">
-			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
-			<tr>
-				<td align="right" style="width: 120px;">资源类型：</td>
-				<td align="left" style="width: 180px;">${var.resTypeName}</td>
-				<td align="right" style="width: 120px;">实例规格：</td>
-				<td align="left" style="width: 180px;">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
-				<td align="right" style="width: 120px;">镜像：</td>
-				<td align="left" style="width: 180px;">${var.osTypeName}&nbsp;${var.osBitNumName}</td>
-			</tr>
-			<tr>
-				<td align="right" valign="top" style="width: 120px;">数据盘：</td>
-				<td align="left" valign="top" style="width: 180px;">
-					<t:list key="${var.diskTypeName}" val="${var.diskSize}" name="vars">
-						${vars.dictCode}&nbsp;(&nbsp;${vars.dictValue}&nbsp;GB)<br>
-					</t:list>
-				</td>
-				<td align="right" valign="top" style="width: 120px;">购买量：</td>
-				<td align="left" valign="top" style="width: 180px;">${var.virNum}&nbsp;台</td>
-				<td align="right" valign="top" style="width: 120px;">到期时间：${bizviewType}-${subBizviewType}</td>
-				<td align="left" valign="top" style="width: 180px;">${var.expireDate}</td>
-			</tr>
+		<td align="left" valign="top" style="padding:10px;border-right:1px solid #cccccc;border-bottom:1px solid #cccccc;">
+			<table style="width: 100%;">
+				<tr>
+					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>容量视图</b></td>
+				</tr>
+				<tr>
+					<td align="right" style="width: 100%;padding-top: 10px;">
+						<div class="col-xs-12">
+							<div id="storeChart" style="width: 300px;height:200px;" class="col-xs-4 col-sm-4" ></div>
+						</div>
+					</td>
+				</tr>
 			</table>
 		</td>
 	</tr>

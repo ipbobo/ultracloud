@@ -72,7 +72,7 @@ public class BizviewController extends BaseController {
 		mv.addObject("subBizviewType", subBizviewType);//子业务视图总览类型
 		mv.addObject("bizviewTypeList", cmpDictService.getCmpDictList("bizview_type"));//业务视图总览类型列表
 		mv.addObject("subBizviewTypeList", subBizviewTypeList);//子业务视图总览类型列表
-		mv.addObject("cmpRes", bizviewService.getCmpResDtl(bizviewType, subBizviewType));//资源详细信息
+		mv.addObject("cmpRes", bizviewService.getCmpResDtl("cal", bizviewType, subBizviewType));//资源详细信息
 		mv.addObject("cloudHostList", bizviewService.getCloudHostPageList(page));//云主机列表分页查询
 		mv.addObject("pd", pd);
 		mv.setViewName("bizview/cal_qry_list");
@@ -103,7 +103,7 @@ public class BizviewController extends BaseController {
 		mv.addObject("subBizviewType", subBizviewType);//子业务视图总览类型
 		mv.addObject("bizviewTypeList", cmpDictService.getCmpDictList("bizview_type"));//业务视图总览类型列表
 		mv.addObject("subBizviewTypeList", subBizviewTypeList);//子业务视图总览类型列表
-		mv.addObject("cmpRes", bizviewService.getCmpResDtl(bizviewType, subBizviewType));//资源详细信息
+		mv.addObject("cmpRes", bizviewService.getCmpResDtl("store", bizviewType, subBizviewType));//资源详细信息
 		mv.addObject("cloudHostList", bizviewService.getCloudHostPageList(page));//云主机列表分页查询
 		mv.addObject("pd", pd);
 		mv.setViewName("bizview/store_qry_list");
