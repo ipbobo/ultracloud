@@ -42,7 +42,7 @@ public class AutoInstallRuleServiceImpl implements AutoInstallRuleService {
 	public void save(PageData pd) throws Exception {
 		PageData pd2 = new PageData();
 		pd2.put("id", pd.getString("cluster_id"));
-		pd2 = clusterService.findById(pd2, false);
+		pd2 = clusterService.findById(pd2);
 		pd.put("type", pd2.getString("type"));
 		
 		dao.save("AutoInstallRuleMapper.save", pd);

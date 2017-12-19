@@ -24,7 +24,8 @@
 		threshold,
 		datacenter_id,
 		cpf_id,
-		version
+		version,
+		isSelected
 	</sql>
 	
 	<sql id="Field_time">
@@ -47,7 +48,8 @@
 		#{threshold},
 		#{datacenter_id},
 		#{cpf_id},
-		#{version}
+		#{version},
+		#{isSelected}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -86,7 +88,8 @@
 			threshold = #{threshold},
 			datacenter_id = #{datacenter_id},
 			cpf_id = #{cpf_id},
-			version = #{version}
+			version = #{version},
+			isSelected = #{isSelected}
 		 where 
 		    id = #{id}
 	</update>
@@ -113,7 +116,8 @@
 				s.gmt_modified,
 				s.datacenter_id,
 				s.cpf_id,
-				s.version
+				s.version,
+				s.isSelected,
 				d.name as datacenter_name
 		from <include refid="tableName"></include> s,<include refid="dcTableName"></include> d
 		where s.datacenter_id = d.id
@@ -139,12 +143,40 @@
 		from 
 		<include refid="tableName"></include>
 		where cpf_id=#{id}
+		and version=#{version}
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAllByArray" parameterType="String" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1 = 1
+		<if test="array != null and array  != ''">
+			and id in
+			<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+	                 #{item}
+			</foreach>
+		</if>
 	</select>
 	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
 		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量更新为选中激活状态 -->
+	<delete id="updateSelectedAll" parameterType="String">
+		update 
+		<include refid="tableName"></include>
+		SET isSelected='selected'
 		where 
 			id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">

@@ -41,7 +41,7 @@ public class VirtualBindingServiceImpl implements VirtualBindingService {
 	 * @throws Exception
 	 */
 	public void loadInitData(ModelAndView mv, PageData pd) throws Exception {
-		List<PageData>	clusterList = clusterService.listAll(pd, false);
+		List<PageData>	clusterList = clusterService.listAll(pd);
 		mv.addObject("clusterList", clusterList);
 		
 		List<PageData>	projectList = projectService.listAll(pd);

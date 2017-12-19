@@ -118,6 +118,7 @@
 		from 
 		<include refid="tableName"></include> d,<include refid="cpftableName"></include> c
 		where d.cpf_id=c.id
+		and c.id=#{id}
 	</select>
 	
 	<!-- 批量删除 -->

@@ -149,7 +149,7 @@ public class AutoInstallRuleController extends BaseController {
 		List<PageData> varList = autoInstallRuleService.list(page); // 列出列表
 		mv.addObject("varList", varList);
 		
-		List<PageData> clusterList = clusterService.listAll(pd, false);
+		List<PageData> clusterList = clusterService.listAll(pd);
 		mv.addObject("clusterList", clusterList);
 		
 		mv.setViewName("service/autoinstallrule_vmware_list");
@@ -180,7 +180,7 @@ public class AutoInstallRuleController extends BaseController {
 		List<PageData> varList = autoInstallRuleService.list(page); // 列出列表
 		mv.addObject("varList", varList);
 		
-		List<PageData> clusterList = clusterService.listAll(pd, false);
+		List<PageData> clusterList = clusterService.listAll(pd);
 		mv.addObject("clusterList", clusterList);
 		
 		mv.setViewName("service/autoinstallrule_openstack_list");
@@ -217,7 +217,7 @@ public class AutoInstallRuleController extends BaseController {
 			mv.addObject(subD.getBIANMA() + "_List", realDList);
 		}
 		
-		List<PageData> clusterList = clusterService.listAll(pd, false);
+		List<PageData> clusterList = clusterService.listAll(pd);
 		mv.addObject("clusterList", clusterList);
 
 		mv.setViewName("service/autoinstallrule_edit");
@@ -254,7 +254,7 @@ public class AutoInstallRuleController extends BaseController {
 			mv.addObject(subD.getBIANMA() + "_List", realDList);
 		}
 		
-		List<PageData> clusterList = clusterService.listAll(pd, false);
+		List<PageData> clusterList = clusterService.listAll(pd);
 		mv.addObject("clusterList", clusterList);
 		
 		pd = autoInstallRuleService.findById(pd); // 根据ID读取
