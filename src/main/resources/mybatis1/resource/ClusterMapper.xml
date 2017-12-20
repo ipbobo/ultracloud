@@ -145,4 +145,9 @@
 		</foreach>
 	</delete>
 	
+	<!-- 集群列表查询 -->
+	<select id="getClusterList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_cluster
+		where datacenter_id=#{dataCenterId}
+	</select>
 </mapper>

@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -94,4 +95,9 @@ public class DatacenterServiceImpl implements DatacenterService {
 		dao.delete("DatacenterMapper.deleteAll", ArrayDATA_IDS);
 	}
 
+	//数据中心列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpDict> getDataCenterList() throws Exception {
+		return (List<CmpDict>) dao.findForList("DatacenterMapper.getDataCenterList", null);
+	}
 }

@@ -137,4 +137,8 @@
 		</foreach>
 	</delete>
 	
+	<!-- 数据中心列表查询 -->
+	<select id="getDataCenterList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_datacenter
+	</select>
 </mapper>

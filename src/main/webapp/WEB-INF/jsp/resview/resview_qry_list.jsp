@@ -34,7 +34,7 @@ function loadJstabData(bizviewType, subBizviewType){
 
 //存储数据加载
 function loadCctabData(bizviewType, subBizviewType){
-	$("#cctab").load("resview/storelist.do?bizviewType="+(bizviewType?bizviewType:"")+"&subBizviewType="+(subBizviewType?subBizviewType:""));
+	$("#cctab").load("resview/storelist.do?bizviewType="+(bizviewType?bizviewType:""));
 }
 
 //数据加载
@@ -50,8 +50,8 @@ function loadData(bizviewType, subBizviewType){
 var isCctabOpen=false;//存储Tab是否打开
 function tabFunc(tabId){
 	if(tabId=="cctab" && !isCctabOpen){//存储
-		var bizviewType=$("#bizviewType").val();//业务视图总览类型
-		var subBizviewType=$("#subBizviewType").val();//子业务视图总览类型
+		var bizviewType=$("#ccbizviewType").val();//业务视图总览类型
+		var subBizviewType=$("#ccsubBizviewType").val();//子业务视图总览类型
 		loadCctabData(bizviewType, subBizviewType);//存储数据加载
 		isCctabOpen=true;
 	}
