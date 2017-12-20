@@ -7,7 +7,7 @@
 		t_storage_sync
 	</sql>
 	<sql id="dcTableName">
-		t_datacenter_sync
+		t_datacenter
 	</sql>
 	
 	<!-- 字段 -->
@@ -25,7 +25,8 @@
 		datacenter_id,
 		cpf_id,
 		version,
-		isSelected
+		isSelected,
+		uuid
 	</sql>
 	
 	<sql id="Field_time">
@@ -49,7 +50,8 @@
 		#{datacenter_id},
 		#{cpf_id},
 		#{version},
-		#{isSelected}
+		#{isSelected},
+		#{uuid}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -89,7 +91,8 @@
 			datacenter_id = #{datacenter_id},
 			cpf_id = #{cpf_id},
 			version = #{version},
-			isSelected = #{isSelected}
+			isSelected = #{isSelected},
+			uuid = #{uuid}
 		 where 
 		    id = #{id}
 	</update>
@@ -118,6 +121,7 @@
 				s.cpf_id,
 				s.version,
 				s.isSelected,
+				s.uuid,
 				d.name as datacenter_name
 		from <include refid="tableName"></include> s,<include refid="dcTableName"></include> d
 		where s.datacenter_id = d.id

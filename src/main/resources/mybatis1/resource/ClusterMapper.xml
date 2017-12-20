@@ -20,7 +20,8 @@
 		name,
 		cpf_id,
 		type,
-		datacenter_id
+		datacenter_id,
+		uuid
 	</sql>
 	
 	<sql id="Field_time">
@@ -39,7 +40,8 @@
 		#{name},
 		#{cpf_id},
 		#{type},
-		#{datacenter_id}
+		#{datacenter_id},
+		#{uuid}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -74,7 +76,8 @@
 			name = #{name},
 			datacenter_id = #{datacenter_id},
 			cpf_id = #{cpf_id},
-			type = #{type}
+			type = #{type},
+			uuid = #{uuid}
 		 where 
 		    id = #{id}
 	</update>
@@ -95,7 +98,8 @@
 				s.name,
 				s.cpf_id
 				s.type,
-				s.datacenter_id
+				s.datacenter_id,
+				s.uuid
 		from <include refid="tableName"></include> s    
 		where 1 = 1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
@@ -119,7 +123,8 @@
 		       c.datacenter_id,
 		       dc.name as dc_name,
 		       c.gmt_create,
-		       c.gmt_modified
+		       c.gmt_modified,
+		       c.uuid
 		from 
 		<include refid="tableName"></include> c LEFT JOIN <include refid="dctableName"></include> dc
 		on c.datacenter_id=dc.id 
