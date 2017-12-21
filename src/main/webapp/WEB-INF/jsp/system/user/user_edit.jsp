@@ -124,18 +124,12 @@
 <script type="text/javascript">
 	$(top.hangge());
 	$(document).ready(function(){
-		if($("#user_id").val()!=""){
 			$("#loginname").attr("readonly","readonly");
 			$("#loginname").css("color","gray");
-		}
-		if($("#name").val()!=""){
 			$("#name").attr("readonly","readonly");
 			$("#name").css("color","gray");
-		}
-		if($("#userDeptName").val()!=""){
-			$("#userDeptName").attr("readonly","readonly");
-			$("#userDeptName").css("color","gray");
-		}
+		$("#userDeptName").attr("readonly","readonly");
+		$("#userDeptName").css("color","gray");
 	});
 	//保存
 	function save(){

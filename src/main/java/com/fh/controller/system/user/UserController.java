@@ -426,8 +426,8 @@ public class UserController extends BaseController {
 		}
 		pd.put("USERNAME", user.getUSERNAME());
 		pd = userService.findByUsernameForUpdate(pd);						//根据用户名读取
-		Object deptNameObj =   departmentService.findById(pd).get("NAME");
-		String userDeptName = deptNameObj == null ? "":(String)deptNameObj;
+		PageData deptNameObj =   departmentService.findById(pd);
+		String userDeptName = deptNameObj == null ? "":(String)deptNameObj.get("NAME");
 		pd.put("userDeptName", userDeptName);
 //		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
 //		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect(Jurisdiction.getDEPARTMENT_ID(),zdepartmentPdList));

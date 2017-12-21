@@ -599,6 +599,22 @@ create table `t_system_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统日志';
 
 -- ----------------------------
+-- 系统日志
+-- ----------------------------
+DROP TABLE IF EXISTS `cmp_sys_config`;
+create table `cmp_sys_config` (
+  `sys_name` varchar(100) NOT NULL COMMENT '系统名称',
+  `logo` varchar(200) DEFAULT NULL COMMENT '系统图标',
+  `company_name` varchar(100)DEFAULT NULL COMMENT '公司名称',
+  `company_shortName` varchar(100) DEFAULT NULL COMMENT '公司简称',
+  `tel` varchar(30) DEFAULT NULL COMMENT '技术支持热线',
+  `product_consultion` varchar(100) DEFAULT NULL COMMENT '产品咨询',
+  `website` varchar(100) DEFAULT NULL COMMENT '公司站点',
+  `copr` varchar(100) DEFAULT NULL COMMENT '版权信息',
+  PRIMARY KEY (`sys_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统配置表';
+
+-- ----------------------------
 -- 组织机构
 -- ----------------------------
 DROP TABLE IF EXISTS `oa_department`;

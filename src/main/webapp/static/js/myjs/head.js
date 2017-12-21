@@ -184,6 +184,21 @@ function help(){
 }
 
 //系统设置
+function editSystem(){
+	 jzts();
+	 var diag = new top.Dialog();
+	 diag.Drag=true;
+	 diag.Title ="系统设置";
+	 diag.URL = locat+'/sysconfig/updatePre.do';
+	 diag.Width = 600;
+	 diag.Height = 526;
+	 diag.CancelEvent = function(){ //关闭事件
+		diag.close();
+	 };
+	 diag.show();
+}
+
+//系统设置
 function editSys(){
 	 jzts();
 	 var diag = new top.Dialog();

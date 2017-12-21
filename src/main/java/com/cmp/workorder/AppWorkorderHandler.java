@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import com.cmp.entity.DeployedSoft;
 import com.cmp.entity.Medium;
 import com.cmp.entity.Project;
+import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.mgr.CloudArchManager;
+import com.cmp.mgr.CloudArchManagerAdapter;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.impl.VMWareCloudArchManager;
 import com.cmp.service.CmpDictService;
@@ -32,7 +34,6 @@ import com.cmp.util.PageDataUtil;
 import com.cmp.util.StringUtil;
 import com.fh.entity.system.Department;
 import com.fh.service.fhoa.department.impl.DepartmentService;
-import com.fh.util.Logger;
 import com.fh.util.PageData;
 
 @Service("appWorkorderHandler")
@@ -61,6 +62,9 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	
 	@Resource
 	private MediumService mediumService;
+	
+	@Resource
+	private CloudArchManagerAdapter cloudArchManagerAdapter;
 	
 	@Override
 	public Map<String, Object> toWorkorderView(CmpWorkOrder cmpWorkorder) throws Exception {
@@ -257,20 +261,20 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		
 		
 		//安装虚拟机
-		VMWareCloudArchManager cloudArchManager = new VMWareCloudArchManager();
-		CreateVmRequest cvq = new CreateVmRequest();
-		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
-		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));
-		cvq.setDiskSizeKB(Long.parseLong(diskInfoList.get(0).getDiskSize())*1024*1024);
-		cvq.setDiskMode("persistent");
-		cvq.setDcName("DC1");
-		cvq.setVmName(vmName);
-		cvq.setNetName("VM Network");
-		cvq.setRpName("Resources");
-		cvq.setNicName("VMXNET 3");
-		cvq.setDsName("datastore2-raid5-2.5t");
-		cvq.setGuestOs(installOS);
-		cloudArchManager.createVirtualMachine(cvq);
+//		CloudArchManager cloudArchManager = cloudArchManagerAdapter.getCloudArchManagerAdaptee(new TccCloudPlatform());
+//		CreateVmRequest cvq = new CreateVmRequest();
+//		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
+//		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));
+//		cvq.setDiskSizeKB(Long.parseLong(diskInfoList.get(0).getDiskSize())*1024*1024);
+//		cvq.setDiskMode("persistent");
+//		cvq.setDcName("DC1");
+//		cvq.setVmName(vmName);
+//		cvq.setNetName("VM Network");
+//		cvq.setRpName("Resources");
+//		cvq.setNicName("VMXNET 3");
+//		cvq.setDsName("datastore2-raid5-2.5t");
+//		cvq.setGuestOs(installOS);
+//		cloudArchManager.createVirtualMachine(cvq);
 		
 		String softCode = orderInfo.getSoftCode();
 		String[] softs = softCode.split(",");
