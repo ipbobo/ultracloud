@@ -232,3 +232,7 @@ function jzts(){
 function updateUserPhoto(value){
 	$("#userPhoto").attr("src",value);//用户头像
 }
+
+function logout(){
+	window.location.href='logout';
+}

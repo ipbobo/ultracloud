@@ -77,7 +77,7 @@
 								</li>
 								<li class="divider"></li>
 								<li>
-									<a href="logout"><i class="ace-icon fa fa-power-off"></i>退出登录</a>
+									<a onclick="logout();" style="cursor:pointer;"><i class="ace-icon fa fa-power-off"></i>退出登录</a>
 								</li>
 							</ul>
 						</li>
