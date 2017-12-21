@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -94,4 +95,9 @@ public class ClusterServiceImpl implements ClusterService {
 		dao.delete("ClusterMapper.deleteAll", ArrayDATA_IDS);
 	}
 
+	//集群列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpDict> getClusterList(String dataCenterId) throws Exception {
+		return (List<CmpDict>) dao.findForList("ClusterMapper.getClusterList", dataCenterId);
+	}
 }

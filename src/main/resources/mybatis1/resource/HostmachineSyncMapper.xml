@@ -8,7 +8,7 @@
 	</sql>  
 	<!--表名 -->
 	<sql id="clustertableName">
-		t_cluster_sync
+		t_cluster
 	</sql>
 	<!--表名 -->
 	<sql id="virtualTableName">
@@ -38,7 +38,8 @@
 		version,
 		cpf_id,
 		datacenter_id,
-		isSelected
+		isSelected,
+		uuid
 	</sql>
 	
 	<sql id="Field_time">
@@ -70,7 +71,8 @@
 		#{version},
 		#{cpf_id},
 		#{datacenter_id},
-		#{isSelected}
+		#{isSelected},
+		#{uuid}
 	</sql>
 	
 	<!-- 字段值 -->
@@ -92,7 +94,8 @@
 		#{item.version},
 		#{item.cpf_id},
 		#{item.datacenter_id},
-		#{item.isSelected}
+		#{item.isSelected},
+		#{item.uuid}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -138,7 +141,8 @@
 			cluster_id = #{cluster_id},
 			port = #{port},
 			version = #{version},
-			isSelected = #{isSelected}
+			isSelected = #{isSelected},
+			uuid = #{uuid}
 		 where 
 		    id = #{id}
 	</update>
@@ -172,7 +176,8 @@
 				s.cluster_id,
 				s.port,
 				s.version,
-				s.isSelected
+				s.isSelected,
+				s.uuid,
 				c.name AS cluster_name
 		from <include refid="tableName"></include> s,<include refid="clustertableName"></include> c
 		where s.cluster_id=c.id
@@ -210,7 +215,8 @@
 				s.cluster_id,
 				s.port,
 				s.version,
-				s.isSelected
+				s.isSelected,
+				s.uuid
 		from <include refid="tableName"></include> s
 		where 1 = 1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
@@ -249,6 +255,7 @@
 				s.version,
 				s.cpf_id,
 				s.isSelected,
+				s.uuid,
 				cl.name as cluster_name
 		from 
 		<include refid="tableName"></include> s LEFT JOIN <include refid="clustertableName"></include> cl
@@ -283,6 +290,7 @@
 				s.version,
 				s.cpf_id,
 				s.isSelected,
+				s.uuid,
 				cl.name as cluster_name
 		from 
 		<include refid="tableName"></include> s LEFT JOIN <include refid="clustertableName"></include> cl

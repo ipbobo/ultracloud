@@ -63,6 +63,7 @@ DROP TABLE IF EXISTS `t_datacenter`;
 CREATE TABLE `t_datacenter` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
+  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -73,53 +74,18 @@ CREATE TABLE `t_datacenter` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心'; 
 
 -- ----------------------------
--- 数据中心同步表
--- ----------------------------
-DROP TABLE IF EXISTS `t_datacenter_sync`;
-CREATE TABLE `t_datacenter_sync` (
-  `id` varchar(32) NOT NULL,
-  `name` varchar(50) NOT NULL COMMENT '名称',
-  `type` varchar(20) NOT NULL COMMENT '类型',
-  `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
-  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  `version` varchar(20) NOT NULL COMMENT '同步版本号',
-  INDEX idx_cpf_id(`cpf_id`),
-  PRIMARY KEY (`id`)
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心同步表'; 
-
-
--- ----------------------------
 -- 集群
 -- ----------------------------
 DROP TABLE IF EXISTS `t_cluster`;
 CREATE TABLE `t_cluster` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
+  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  INDEX idx_datacenter_id(`datacenter_id`),
-  PRIMARY KEY (`id`)
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='集群'; 
-
--- ----------------------------
--- 集群同步表
--- ----------------------------
-DROP TABLE IF EXISTS `t_cluster_sync`;
-CREATE TABLE `t_cluster_sync` (
-  `id` varchar(32) NOT NULL,
-  `name` varchar(50) NOT NULL COMMENT '名称',
-  `type` varchar(20) NOT NULL COMMENT '类型',
-  `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
-  `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
-  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  `version` varchar(20) NOT NULL COMMENT '同步版本号',
   INDEX idx_datacenter_id(`datacenter_id`),
   PRIMARY KEY (`id`)
 
@@ -132,6 +98,7 @@ DROP TABLE IF EXISTS `t_hostmachine`;
 CREATE TABLE `t_hostmachine` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
+  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
@@ -139,9 +106,9 @@ CREATE TABLE `t_hostmachine` (
   `status` tinyint unsigned DEFAULT NULL COMMENT '状态',
   `ip` varchar(20) DEFAULT NULL COMMENT '宿主机ip',
   `port` INT UNSIGNED DEFAULT NULL COMMENT '端口',
-  `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
-  `memory` int unsigned DEFAULT NULL COMMENT '内存',
-  `localdisk` int unsigned DEFAULT NULL COMMENT '本地磁盘',
+  `cpu` double DEFAULT NULL COMMENT 'cpu',
+  `memory` double DEFAULT NULL COMMENT '内存',
+  `localdisk` float DEFAULT NULL COMMENT '本地磁盘',
   `devicenum` varchar(30) DEFAULT NULL COMMENT '设备号',
   `duedate` datetime DEFAULT NULL COMMENT '到期时间',
   `account` varchar(20) DEFAULT NULL COMMENT '用户名',
@@ -160,6 +127,7 @@ DROP TABLE IF EXISTS `t_hostmachine_sync`;
 CREATE TABLE `t_hostmachine_sync` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
+  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
@@ -167,9 +135,9 @@ CREATE TABLE `t_hostmachine_sync` (
   `status` tinyint unsigned DEFAULT NULL COMMENT '状态',
   `ip` varchar(20) DEFAULT NULL COMMENT '宿主机ip',
   `port` INT UNSIGNED DEFAULT NULL COMMENT '端口',
-  `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
-  `memory` int unsigned DEFAULT NULL COMMENT '内存',
-  `localdisk` int unsigned DEFAULT NULL COMMENT '本地磁盘',
+  `cpu` double DEFAULT NULL COMMENT 'cpu',
+  `memory` double DEFAULT NULL COMMENT '内存',
+  `localdisk` float DEFAULT NULL COMMENT '本地磁盘',
   `devicenum` varchar(30) DEFAULT NULL COMMENT '设备号',
   `duedate` datetime DEFAULT NULL COMMENT '到期时间',
   `account` varchar(20) DEFAULT NULL COMMENT '用户名',
@@ -190,11 +158,12 @@ DROP TABLE IF EXISTS `t_storage`;
 CREATE TABLE `t_storage` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
+  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
-  `allspace` int unsigned DEFAULT NULL COMMENT '所有空间',
-  `freespace` int unsigned DEFAULT NULL COMMENT '可用空间',
+  `allspace` float DEFAULT NULL COMMENT '所有空间',
+  `freespace` float DEFAULT NULL COMMENT '可用空间',
   `threshold` tinyint unsigned DEFAULT NULL COMMENT '阈值',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
@@ -210,11 +179,12 @@ DROP TABLE IF EXISTS `t_storage_sync`;
 CREATE TABLE `t_storage_sync` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
+  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
-  `allspace` int unsigned DEFAULT NULL COMMENT '所有空间',
-  `freespace` int unsigned DEFAULT NULL COMMENT '可用空间',
+  `allspace` float DEFAULT NULL COMMENT '所有空间',
+  `freespace` float DEFAULT NULL COMMENT '可用空间',
   `threshold` tinyint unsigned DEFAULT NULL COMMENT '阈值',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
@@ -232,6 +202,7 @@ DROP TABLE IF EXISTS `t_datacenter_network`;
 CREATE TABLE `t_datacenter_network` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
+  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
@@ -256,6 +227,7 @@ DROP TABLE IF EXISTS `t_datacenter_network_sync`;
 CREATE TABLE `t_datacenter_network_sync` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
+  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
@@ -282,9 +254,9 @@ DROP TABLE IF EXISTS `t_virtualmachine`;
 CREATE TABLE `t_virtualmachine` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user` varchar(20) NOT NULL COMMENT '虚拟机用户',
-  `appNo` varchar(20) NOT NULL COMMENT '虚拟机用户',
+  `appNo` varchar(20) NOT NULL COMMENT '工单编号',
   `project_id` varchar(32) NOT NULL COMMENT '项目名称',
-  `name` varchar(20) NOT NULL COMMENT '名称',
+  `name` varchar(50) NOT NULL COMMENT '名称',
   `envCode` varchar(20) DEFAULT NULL COMMENT '环境代码',
   `ip` varchar(20) DEFAULT NULL COMMENT '虚拟机ip',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
@@ -302,12 +274,48 @@ CREATE TABLE `t_virtualmachine` (
   `password` varchar(20) NOT NULL COMMENT '密码',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `uuid` varchar(40) DEFAULT NULL COMMENT 'uuid',
+  `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   INDEX idx_status(`status`),
   INDEX idx_hostmachine_id(`hostmachine_id`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='虚拟机'; 
 
+-- ----------------------------
+-- 虚拟机同步表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_virtualmachine_sync`;
+CREATE TABLE `t_virtualmachine_sync` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user` varchar(20) NOT NULL COMMENT '虚拟机用户',
+  `appNo` varchar(20) NOT NULL COMMENT '工单编号',
+  `project_id` varchar(32) NOT NULL COMMENT '项目名称',
+  `name` varchar(50) NOT NULL COMMENT '名称',
+  `envCode` varchar(20) DEFAULT NULL COMMENT '环境代码',
+  `ip` varchar(20) DEFAULT NULL COMMENT '虚拟机ip',
+  `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
+  `memory` int unsigned DEFAULT NULL COMMENT '内存',
+  `datadisk` int unsigned DEFAULT NULL COMMENT '数据盘',
+  `status` tinyint unsigned NOT NULL COMMENT '状态',
+  `hostmachine_id` bigint unsigned NOT NULL COMMENT '宿主机id',
+  `platform` varchar(20) DEFAULT NULL COMMENT '平台',
+  `os` varchar(20) DEFAULT NULL COMMENT '操作系统',
+  `os_status` varchar(20) DEFAULT NULL COMMENT '操作系统安装状态',
+  `soft` varchar(20) DEFAULT NULL COMMENT '软件',
+  `soft_status` varchar(20) DEFAULT NULL COMMENT '软件安装状态',
+  `duedate` datetime DEFAULT NULL COMMENT '到期时间',
+  `username` varchar(20) NOT NULL COMMENT '用户名',
+  `password` varchar(20) NOT NULL COMMENT '密码',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `uuid` varchar(40) DEFAULT NULL COMMENT 'uuid',
+  `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
+  INDEX idx_status(`status`),
+  INDEX idx_hostmachine_id(`hostmachine_id`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='虚拟机同步表'; 
 
 -- ----------------------------
 -- 快照

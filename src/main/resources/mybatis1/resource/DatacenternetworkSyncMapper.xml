@@ -7,7 +7,7 @@
 		t_datacenter_network_sync
 	</sql>
 	<sql id="dctableName">
-		t_datacenter_sync
+		t_datacenter
 	</sql>
 	
 	<!-- 字段 -->
@@ -29,7 +29,8 @@
 		totalip,
 		freeip,
 		version,
-		isSelected
+		isSelected,
+		uuid
 	</sql>
 	
 	<sql id="Field_time">
@@ -57,7 +58,8 @@
 		#{totalip},
 		#{freeip},
 		#{version},
-		#{isSelected}
+		#{isSelected},
+		#{uuid}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -101,7 +103,8 @@
 			totalip = #{totalip},
 			freeip = #{freeip},
 			version= #{version},
-			isSelected = #{isSelected}
+			isSelected = #{isSelected},
+			uuid = #{uuid}
 		 where 
 		    id = #{id}
 	</update>
@@ -133,7 +136,8 @@
 				s.totalip,
 				s.freeip,
 				s.version,
-				s.isSelected
+				s.isSelected,
+				s.uuid,
 				c.name as datacenter_name
 		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c
 		where s.datacenter_id=c.id
@@ -163,6 +167,7 @@
 		       dcn.version,
 		       dcn.cpf_id,
 		       dcn.isSelected,
+		       dcn.uuid,
 		       dc.name as dc_name
 		from 
 		<include refid="tableName"></include> dcn LEFT JOIN <include refid="dctableName"></include> dc
@@ -183,6 +188,7 @@
 		       dcn.type,
 		       dcn.cpf_id,
 		       dcn.datacenter_id,
+		       dcn.uuid,
 		       dc.name as dc_name
 		from 
 		<include refid="tableName"></include> dcn LEFT JOIN <include refid="dctableName"></include> dc

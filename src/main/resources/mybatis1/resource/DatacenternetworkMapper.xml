@@ -19,6 +19,7 @@
 	    id,	
 	    name,
 		datacenter_id,
+		cpf_id,
 		ippool,
 		type,
 		mask,
@@ -26,7 +27,8 @@
 		dns1,
 		dns2,
 		totalip,
-		freeip
+		freeip,
+		uuid
 	</sql>
 	
 	<sql id="Field_time">
@@ -44,6 +46,7 @@
 	    #{id},
 	    #{name},
 		#{datacenter_id},
+		#{cpf_id},
 		#{ippool},
 		#{type},
 		#{mask},
@@ -51,7 +54,8 @@
 		#{dns1},
 		#{dns2},
 		#{totalip},
-		#{freeip}
+		#{freeip},
+		#{uuid}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -92,7 +96,8 @@
 			dns1 = #{dns1},
 			dns2 = #{dns2},
 			totalip = #{totalip},
-			freeip = #{freeip}
+			freeip = #{freeip},
+			uuid = #{uuid}
 		 where 
 		    id = #{id}
 	</update>
@@ -122,6 +127,7 @@
 				s.dns2,
 				s.totalip,
 				s.freeip,
+				s.uuid,
 				c.name as datacenter_name
 		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c
 		where s.datacenter_id=c.id
@@ -148,10 +154,15 @@
 		       dcn.ippool,
 		       dcn.gmt_create,
 		       dcn.gmt_modified,
+		       dcn.uuid,
 		       dc.name as dc_name
 		from 
 		<include refid="tableName"></include> dcn LEFT JOIN <include refid="dctableName"></include> dc
 		on dcn.datacenter_id=dc.id
+		where 1 = 1
+		<if test="id != null and id != ''">
+			and dcn.cpf_id=#{id}
+		</if>
 	</select>
 	
 	<!-- 批量删除 -->

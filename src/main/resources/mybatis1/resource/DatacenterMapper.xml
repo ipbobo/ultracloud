@@ -19,7 +19,8 @@
 	    id,
 		name,
 		cpf_id,
-		type
+		type,
+		uuid
 	</sql>
 	
 	<sql id="Field_time">
@@ -37,7 +38,8 @@
 		#{id},	
 		#{name},
 		#{cpf_id},
-		#{type}
+		#{type},
+		#{uuid}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -71,7 +73,8 @@
 		set 
 			name = #{name},
 			cpf_id = #{cpf_id},
-			type = #{type}
+			type = #{type},
+			uuid = #{uuid}
 		 where 
 		    id = #{id}
 	</update>
@@ -91,7 +94,8 @@
 		select  s.id,
 				s.name,
 				s.cpf_id,
-				s.type
+				s.type,
+				s.uuid
 		from <include refid="tableName"></include> s    
 		where 1 = 1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
@@ -114,7 +118,8 @@
 		       d.type,
 		       c.name as cpf_name,
 		       d.gmt_create,
-		       d.gmt_modified
+		       d.gmt_modified,
+		       d.uuid
 		from 
 		<include refid="tableName"></include> d,<include refid="cpftableName"></include> c
 		where d.cpf_id=c.id
@@ -132,4 +137,8 @@
 		</foreach>
 	</delete>
 	
+	<!-- 数据中心列表查询 -->
+	<select id="getDataCenterList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_datacenter
+	</select>
 </mapper>
