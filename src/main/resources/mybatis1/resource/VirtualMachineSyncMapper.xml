@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VirtualMachineSyncMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		t_virtualmachine_sync
+	</sql>  
+	<sql id="VMtableName">
+		t_virtualmachine
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+			    id,
+		<include refid="Field_main"></include>,<include refid="Field_time"></include>
+	</sql>
+	
+	<sql id="Field_main">
+		user,
+		project_id,
+		name,
+		ip,
+		cpu,
+		memory,
+		datadisk,
+		status,
+		hostmachine_id,
+		platform,
+		os,
+		os_status,
+		soft,
+		soft_status,
+		appNo,
+		duedate,
+		username,
+		password,
+		uuid,
+		cpf_id
+	</sql>
+	
+	<sql id="Field_time">
+		gmt_create,
+		gmt_modified
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+			    #{id},
+		<include refid="FieldValue_main"></include>,<include refid="FieldValue_time"></include>
+	</sql>
+		
+	<!-- 字段值 -->
+	<sql id="FieldValue_main">	
+		#{user},
+		#{projectId},
+		#{name},
+		#{ip},
+		#{cpu},
+		#{memory},
+		#{datadisk},
+		#{status},
+		#{hostmachine_id},
+		#{platform},
+		#{os},
+		#{osStatus},
+		#{soft},
+		#{softStatus},
+		#{appNo},
+		#{duedate},
+		#{username},
+		#{password},
+		#{uuid},
+		#{cpf_id}
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue_main_item">	
+	    #{item.id},
+		#{item.user},
+		#{item.projectId},
+		#{item.name},
+		#{item.ip},
+		#{item.cpu},
+		#{item.memory},
+		#{item.datadisk},
+		#{item.status},
+		#{item.hostmachineId},
+		#{item.platform},
+		#{item.os},
+		#{item.osStatus},
+		#{item.soft},
+		#{item.softStatus},
+		#{item.appNo},
+		#{item.duedate},
+		#{item.username},
+		#{item.password},
+		#{item.uuid},
+		#{item.cpf_id}
+	</sql>
+	
+	<sql id="FieldValue_time">	
+		#{gmt_create},
+		#{gmt_modified}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field_main"></include>
+		) values (
+	<include refid="FieldValue_main"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+		
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPageKVM" parameterType="page" resultType="pd" >
+		select  s.id,
+				s.name,
+				s.type,
+				s.status,
+				s.ip,
+				s.cpu,
+				s.memory,
+				s.localdisk,
+				s.devicenum,
+				s.duedate,
+				s.account,
+				s.password_ssh,
+				s.gmt_create,
+				s.gmt_modified,
+				s.cluster_id,
+				s.port,
+				s.version,
+				s.isSelected,
+				s.uuid
+		from <include refid="tableName"></include> s
+		where 1 = 1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					s.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
+			and id in ${pd.item}
+		</if>
+		<if test="pd.type != null and pd.type != ''"><!-- 按云平台类型检索 -->
+			and s.type = #{pd.type} 
+		</if>
+		order by s.gmt_modified desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAllVM" parameterType="pd" resultType="pd">
+		select id,
+			user,
+			project_id,
+			name,
+			ip,
+			cpu,
+			memory,
+			datadisk,
+			status,
+			hostmachine_id,
+			platform,
+			os,
+			os_status,
+			soft,
+			soft_status,
+			appNo,
+			duedate,
+			username,
+			password,
+			uuid,
+			cpf_id,
+			gmt_create,
+			gmt_modified
+		from 
+		<include refid="VMtableName"></include>
+		where 1 = 1
+		<if test="id != null and id != ''">
+			and cpf_id=#{id}
+		</if>
+	</select>
+		
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量更新为选中激活状态 -->
+	<delete id="updateSelectedAll" parameterType="String">
+		update 
+		<include refid="tableName"></include>
+		SET isSelected='selected'
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量插入 -->
+	<insert id="batchSave" parameterType="java.util.List">   
+    	insert into 
+    	<include refid="tableName"></include> ( <include refid="Field_main"></include>  )   
+    	values  
+    	<foreach collection="list" item="item" index="index" separator="," >  
+        	( <include refid="FieldValue_main_item"></include> )  
+    	</foreach>  
+	</insert> 
+	
+</mapper>

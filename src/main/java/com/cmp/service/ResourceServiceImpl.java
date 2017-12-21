@@ -21,6 +21,7 @@ import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.service.resourcemgt.DatacenternetworkService;
 import com.cmp.service.resourcemgt.HostmachineService;
+import com.cmp.service.resourcemgt.VirtualMachineSyncService;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -31,6 +32,7 @@ import com.vmware.vim25.mo.Datastore;
 import com.vmware.vim25.mo.HostSystem;
 import com.vmware.vim25.mo.ManagedEntity;
 import com.vmware.vim25.mo.Network;
+import com.vmware.vim25.mo.VirtualMachine;
 
 /**
  * 资源管理业务层实现类
@@ -51,6 +53,9 @@ public class ResourceServiceImpl implements ResourceService {
 
 	@Resource(name = "hostmachineService")
 	private HostmachineService hostmachineService;
+	
+	@Resource(name = "virtualMachineSyncService")
+	private VirtualMachineSyncService virtualMachineSyncService;
 
 	@Resource(name = "storageService")
 	private StorageService storageService;
@@ -73,6 +78,7 @@ public class ResourceServiceImpl implements ResourceService {
 			List<PageData> preDatacenterList = datacenterService.listAll(cloudPD);
 			List<PageData> preClusterList = clusterService.listAll(cloudPD);
 			List<PageData> preHostmachineList = hostmachineService.listAll(cloudPD, false);
+			List<PageData> preVirtualMachineList = virtualMachineSyncService.listAll(cloudPD, false);
 			List<PageData> preStorageList = storageService.listAll(cloudPD, false);
 			List<PageData> preDatacenterNetworkList = datacenternetworkService.listAll(cloudPD, false);
 			
@@ -91,6 +97,7 @@ public class ResourceServiceImpl implements ResourceService {
 			List<PageData> dcList = new ArrayList<PageData>();
 			List<PageData> cluList = new ArrayList<PageData>();
 			List<PageData> hostmachineList = new ArrayList<PageData>();
+			List<PageData> vmList = new ArrayList<PageData>();
 			List<PageData> storeList = new ArrayList<PageData>();
 			List<PageData> networkList = new ArrayList<PageData>();
 			Map<String, String> dcIdMap = new HashMap<String, String>();
@@ -128,6 +135,7 @@ public class ResourceServiceImpl implements ResourceService {
 						cluList.add(clusterPD);
 					}
 					
+					//同步宿主机
 					HostSystem[] host = cluster.getHosts();
 					for(int i = 0; i< host.length; i++) {
 						PageData hostmachinePD = new PageData();
@@ -154,6 +162,31 @@ public class ResourceServiceImpl implements ResourceService {
 							hostmachinePD.put("memory", memorySize);
 							hostmachineList.add(hostmachinePD);
 						}
+						
+						//同步虚拟机
+						VirtualMachine[] virtualMachine = host[i].getVms();
+						for(int j = 0; j< virtualMachine.length; j++) {
+							PageData vmPD = new PageData();
+							String vmUuid = virtualMachine[i].getMOR().get_value();
+							String vmId = this.existUuid(vmUuid, preVirtualMachineList);
+							if(null == vmId) {
+								vmId = UuidUtil.get32UUID();
+								vmPD.put("id", vmId);
+								vmPD.put("name", virtualMachine[i].getName());
+								vmPD.put("uuid", vmUuid);
+								vmPD.put("type", "vmware");
+								vmPD.put("cpf_id", cloudPD.getString("id"));
+								vmPD.put("datacenter_id", datacenterId);
+								vmPD.put("cluster_id", clusterId);
+								vmPD.put("hostmachine_id", hostmachineId);
+								vmPD.put("version", cloudPD.getString("version"));
+								vmPD.put("ip", virtualMachine[j].getGuest().getIpAddress());
+								vmPD.put("cpu", virtualMachine[j].getConfig().getHardware().getNumCPU());
+								vmPD.put("memory", virtualMachine[j].getConfig().getHardware().getMemoryMB());
+								vmList.add(vmPD);
+							}
+						}
+						
 					}
 					
 				}
@@ -199,7 +232,7 @@ public class ResourceServiceImpl implements ResourceService {
 				}
 			}
 			
-			this.initCloud(dcList, cluList, hostmachineList, storeList, networkList);
+			this.initCloud(dcList, cluList, hostmachineList, storeList, networkList, vmList);
 		} else if("OpenStack".equals(cloudPD.getString("type"))) {
 			platformManagerType = OpenstatckCloudArchManager.class.getName();
 			//ToDo
@@ -252,7 +285,7 @@ public class ResourceServiceImpl implements ResourceService {
 	 * @param networkList
 	 * @throws Exception 
 	 */
-	private void initCloud(List<PageData> dcList, List<PageData> cluList, List<PageData> hostmachineList, List<PageData> storeList, List<PageData> networkList) throws Exception {
+	private void initCloud(List<PageData> dcList, List<PageData> cluList, List<PageData> hostmachineList, List<PageData> storeList, List<PageData> networkList, List<PageData> vmList) throws Exception {
 		for(PageData pd : dcList) {
 			datacenterService.save(pd);
 		}
@@ -267,6 +300,9 @@ public class ResourceServiceImpl implements ResourceService {
 		}
 		for(PageData pd : networkList) {
 			datacenternetworkService.save(pd, true);
+		}
+		for(PageData pd : vmList) {
+			virtualMachineSyncService.save(pd, true);
 		}
 	}
 

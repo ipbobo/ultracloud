@@ -254,9 +254,9 @@ DROP TABLE IF EXISTS `t_virtualmachine`;
 CREATE TABLE `t_virtualmachine` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user` varchar(20) NOT NULL COMMENT '虚拟机用户',
-  `appNo` varchar(20) NOT NULL COMMENT '虚拟机用户',
+  `appNo` varchar(20) NOT NULL COMMENT '工单编号',
   `project_id` varchar(32) NOT NULL COMMENT '项目名称',
-  `name` varchar(20) NOT NULL COMMENT '名称',
+  `name` varchar(50) NOT NULL COMMENT '名称',
   `envCode` varchar(20) DEFAULT NULL COMMENT '环境代码',
   `ip` varchar(20) DEFAULT NULL COMMENT '虚拟机ip',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
@@ -274,12 +274,48 @@ CREATE TABLE `t_virtualmachine` (
   `password` varchar(20) NOT NULL COMMENT '密码',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `uuid` varchar(40) DEFAULT NULL COMMENT 'uuid',
+  `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   INDEX idx_status(`status`),
   INDEX idx_hostmachine_id(`hostmachine_id`),
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='虚拟机'; 
 
+-- ----------------------------
+-- 虚拟机同步表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_virtualmachine_sync`;
+CREATE TABLE `t_virtualmachine_sync` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user` varchar(20) NOT NULL COMMENT '虚拟机用户',
+  `appNo` varchar(20) NOT NULL COMMENT '工单编号',
+  `project_id` varchar(32) NOT NULL COMMENT '项目名称',
+  `name` varchar(50) NOT NULL COMMENT '名称',
+  `envCode` varchar(20) DEFAULT NULL COMMENT '环境代码',
+  `ip` varchar(20) DEFAULT NULL COMMENT '虚拟机ip',
+  `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
+  `memory` int unsigned DEFAULT NULL COMMENT '内存',
+  `datadisk` int unsigned DEFAULT NULL COMMENT '数据盘',
+  `status` tinyint unsigned NOT NULL COMMENT '状态',
+  `hostmachine_id` bigint unsigned NOT NULL COMMENT '宿主机id',
+  `platform` varchar(20) DEFAULT NULL COMMENT '平台',
+  `os` varchar(20) DEFAULT NULL COMMENT '操作系统',
+  `os_status` varchar(20) DEFAULT NULL COMMENT '操作系统安装状态',
+  `soft` varchar(20) DEFAULT NULL COMMENT '软件',
+  `soft_status` varchar(20) DEFAULT NULL COMMENT '软件安装状态',
+  `duedate` datetime DEFAULT NULL COMMENT '到期时间',
+  `username` varchar(20) NOT NULL COMMENT '用户名',
+  `password` varchar(20) NOT NULL COMMENT '密码',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `uuid` varchar(40) DEFAULT NULL COMMENT 'uuid',
+  `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
+  INDEX idx_status(`status`),
+  INDEX idx_hostmachine_id(`hostmachine_id`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='虚拟机同步表'; 
 
 -- ----------------------------
 -- 快照
