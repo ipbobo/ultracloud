@@ -17,6 +17,7 @@ import java.util.function.Function;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.vmware.vim25.AboutInfo;
 import com.vmware.vim25.Description;
@@ -36,8 +37,10 @@ import com.vmware.vim25.VirtualDiskFlatVer2BackingInfo;
 import com.vmware.vim25.VirtualEthernetCard;
 import com.vmware.vim25.VirtualEthernetCardNetworkBackingInfo;
 import com.vmware.vim25.VirtualLsiLogicController;
+import com.vmware.vim25.VirtualMachineCloneSpec;
 import com.vmware.vim25.VirtualMachineConfigSpec;
 import com.vmware.vim25.VirtualMachineFileInfo;
+import com.vmware.vim25.VirtualMachineRelocateSpec;
 import com.vmware.vim25.VirtualPCNet32;
 import com.vmware.vim25.VirtualSCSISharing;
 import com.vmware.vim25.mo.ClusterComputeResource;
@@ -473,6 +476,88 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				throw new RuntimeException(e);
 			}
 		});
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public void cloneVirtualMachine(CloneVmRequest req) {
+		try {
+			// VirtualMachine vm = searchManagedEntity(VirtualMachine.class, req.getTplName()).get();
+			// Datacenter dc = searchManagedEntity(Datacenter.class, req.getDcName()).get();
+			// ResourcePool rp = searchManagedEntity(ResourcePool.class, req.getRpName()).get();
+			// Datastore ds = searchManagedEntity(Datastore.class, "datastore2-raid5-2.5t").get();
+			// HostSystem hs = searchManagedEntity(HostSystem.class, "192.168.0.251").get();
+			//
+			// VirtualMachineRelocateSpec relocateSpec = new VirtualMachineRelocateSpec();
+			// relocateSpec.setDatastore(ds.getMOR());
+			// relocateSpec.setPool(rp.getMOR());
+			// relocateSpec.setHost(hs.getMOR());
+			//
+			// VirtualMachineCloneSpec cloneSpec = new VirtualMachineCloneSpec();
+			// cloneSpec.setLocation(relocateSpec);
+			// cloneSpec.setPowerOn(false);
+			// cloneSpec.setTemplate(false);
+			//
+			// vm.cloneVM_Task(dc.getVmFolder(), req.getVmName(), cloneSpec).waitForMe();
+
+			ClusterComputeResource cluster = searchManagedEntity(ClusterComputeResource.class, "")
+					.get();
+			Datacenter dc = searchManagedEntity(Datacenter.class, req.getDcName()).get();
+			VirtualMachine vm = searchManagedEntity(VirtualMachine.class, req.getTplName()).get();
+
+			VirtualMachineCloneSpec cloneSpec = new VirtualMachineCloneSpec();
+			VirtualMachineRelocateSpec relocateSpec = new VirtualMachineRelocateSpec();
+			relocateSpec.setPool(cluster.getResourcePool().getMOR());
+
+			Datastore datastoreT = null;
+			for (Datastore datasotre : vm.getDatastores()) {
+				if (null == datastoreT) {
+					datastoreT = datasotre;
+				} else {
+					if (datasotre.getSummary().accessible == true
+							&& "VMFS".equalsIgnoreCase(datasotre.getSummary().getType())) {
+						if (datasotre.getInfo().getFreeSpace() > datastoreT.getInfo()
+								.getFreeSpace()) {
+							datastoreT = datasotre;
+						}
+					}
+				}
+			}
+
+			double freeStore = Double.parseDouble(
+					Long.toString(datastoreT.getInfo().getFreeSpace())) / 1024 / 1024 / 1024;
+
+			relocateSpec.setDatastore(datastoreT.getMOR());
+
+			HostSystem hostSystemT = null;
+			for (HostSystem hostSystem : cluster.getHosts()) {
+				if (null == hostSystemT) {
+					for (Datastore store : hostSystem.getDatastores()) {
+						if (datastoreT.getMOR().getVal().equals(store.getMOR().getVal())) {
+							hostSystemT = hostSystem;
+						}
+					}
+				} else {
+					for (Datastore store : hostSystem.getDatastores()) {
+						if (datastoreT.getMOR().getVal().equals(store.getMOR().getVal())) {
+							if (hostSystem.getVms().length < hostSystemT.getVms().length) {
+								hostSystemT = hostSystem;
+							}
+						}
+					}
+				}
+			}
+
+			relocateSpec.setHost(hostSystemT.getMOR());
+
+			cloneSpec.setLocation(relocateSpec);
+			cloneSpec.setPowerOn(true);
+			cloneSpec.setTemplate(false);
+
+			vm.cloneVM_Task(dc.getVmFolder(), req.getVmName(), cloneSpec).waitForMe();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override

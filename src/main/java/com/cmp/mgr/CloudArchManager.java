@@ -2,6 +2,7 @@ package com.cmp.mgr;
 
 import java.util.List;
 
+import com.cmp.mgr.bean.CloneVmRequest;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
@@ -40,6 +41,8 @@ public interface CloudArchManager {
 	public void resetVirtualMachine(String name);
 
 	public void deleteVirtualMachine(String name);
+	
+	public void cloneVirtualMachine(CloneVmRequest request);
 
 	public void createSnapshot(String name, String vmName, String desc, boolean memoryFlag);
 

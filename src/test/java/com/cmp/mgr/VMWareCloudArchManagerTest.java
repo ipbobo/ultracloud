@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.impl.VMWareCloudArchManager;
 import com.vmware.vim25.Description;
@@ -43,7 +44,7 @@ public class VMWareCloudArchManagerTest {
 			runnable.run();
 			Thread.sleep(200);
 		} catch (Exception e) {
-			// ignore
+			e.printStackTrace();
 		}
 		System.out.println();
 	}
@@ -104,7 +105,7 @@ public class VMWareCloudArchManagerTest {
 		});
 	}
 
-	@Test
+//	@Test
 	public void testGetVirtualDevices() {
 		execute("GetVirtualDevices", () -> {
 			cloudArchManager.getVirtualDevices().stream()
@@ -132,7 +133,7 @@ public class VMWareCloudArchManagerTest {
 		});
 	}
 
-	@Test
+	// @Test
 	public void testCreateVM() {
 		execute("CreateVirtualMachine", () -> {
 			CreateVmRequest request = new CreateVmRequest();
@@ -149,6 +150,26 @@ public class VMWareCloudArchManagerTest {
 			request.setGuestOs("rhel6_64Guest");
 
 			cloudArchManager.createVirtualMachine(request);
+		});
+	}
+
+	@Test
+	public void testCloneVM() {
+		execute("CloneVirtualMachine", () -> {
+			CloneVmRequest request = new CloneVmRequest();
+			request.setVmName("TestVM2");
+			request.setTplName("rhel6.0_x64_template");
+			request.setDcName("DC1");
+			request.setRpName("Resources");
+
+			cloudArchManager.cloneVirtualMachine(request);
+		});
+	}
+
+	// @Test
+	public void testDeleteVM() {
+		execute("DeleteVirtualMachine", () -> {
+			cloudArchManager.deleteVirtualMachine("TestVM");
 		});
 	}
 

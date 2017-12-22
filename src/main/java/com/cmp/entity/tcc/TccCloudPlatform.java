@@ -69,7 +69,7 @@ public class TccCloudPlatform implements java.io.Serializable {
 
 	private String secretAccessKey;
 
-	private Set<TccCloudDatacenter> tccCloudDatacenters = new HashSet<TccCloudDatacenter>(
+	private Set<TccDatacenter> tccCloudDatacenters = new HashSet<TccDatacenter>(
 			0);
 
 	// Constructors
@@ -168,12 +168,12 @@ public class TccCloudPlatform implements java.io.Serializable {
 		this.enableFlg = enableFlg;
 	}
 
-	public Set<TccCloudDatacenter> getTccCloudDatacenters() {
+	public Set<TccDatacenter> getTccCloudDatacenters() {
 		return tccCloudDatacenters;
 	}
 
 	public void setTccCloudDatacenters(
-			Set<TccCloudDatacenter> tccCloudDatacenters) {
+			Set<TccDatacenter> tccCloudDatacenters) {
 		this.tccCloudDatacenters = tccCloudDatacenters;
 	}
 

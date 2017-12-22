@@ -3,7 +3,7 @@ package com.cmp.entity.tcc;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TccVlanNetwork implements Serializable {
+public class TccNetwork implements Serializable {
 
 	private static final long serialVersionUID = 4830920316790373592L;
 
@@ -187,11 +187,11 @@ public class TccVlanNetwork implements Serializable {
 		this.netWorkType = netWorkType;
 	}
 
-	public TccVlanNetwork() {
+	public TccNetwork() {
 		super();
 	}
 
-	public TccVlanNetwork(Long zoneId, String networkName, String zoneUuid) {
+	public TccNetwork(Long zoneId, String networkName, String zoneUuid) {
 		super();
 		this.zoneId = zoneId;
 		this.networkName = networkName;

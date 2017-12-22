@@ -1,10 +1,8 @@
 package com.cmp.entity.tcc;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-public class TccClusterConfig implements Serializable {
+public class TccCluster implements Serializable {
 
 	private static final long serialVersionUID = 6365135792006240699L;
 
@@ -36,17 +34,15 @@ public class TccClusterConfig implements Serializable {
 
 	private Integer storageExceedRate;
 
-	private Set<TccPhysiscResourceInfo> tccPh = new HashSet<TccPhysiscResourceInfo>();
-
 	private Long resourceGradeId;
 
-	private TccCloudDatacenter tccCloudDatacenter;
+	private TccDatacenter tccCloudDatacenter;
 
-	public TccCloudDatacenter getTccCloudDatacenter() {
+	public TccDatacenter getTccCloudDatacenter() {
 		return tccCloudDatacenter;
 	}
 
-	public void setTccCloudDatacenter(TccCloudDatacenter tccCloudDatacenter) {
+	public void setTccCloudDatacenter(TccDatacenter tccCloudDatacenter) {
 		this.tccCloudDatacenter = tccCloudDatacenter;
 	}
 
@@ -88,14 +84,6 @@ public class TccClusterConfig implements Serializable {
 
 	public void setOldFlag(String oldFlag) {
 		this.oldFlag = oldFlag;
-	}
-
-	public Set<TccPhysiscResourceInfo> getTccPh() {
-		return tccPh;
-	}
-
-	public void setTccPh(Set<TccPhysiscResourceInfo> tccPh) {
-		this.tccPh = tccPh;
 	}
 
 	public String getVtype() {

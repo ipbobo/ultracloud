@@ -40,10 +40,10 @@ public class TccCloudPod implements java.io.Serializable {
 
 	private String enableFlg; // 逻辑删除标识位
 
-	private Set<TccClusterConfig> tccClusterConfig = new HashSet<TccClusterConfig>(
+	private Set<TccCluster> tccClusterConfig = new HashSet<TccCluster>(
 			0);
 
-	private TccCloudDatacenter tccCloudDatacenter;
+	private TccDatacenter tccCloudDatacenter;
 
 	public Long getPodId() {
 		return this.podId;
@@ -173,19 +173,19 @@ public class TccCloudPod implements java.io.Serializable {
 		this.endIp = endIp;
 	}
 
-	public Set<TccClusterConfig> getTccClusterConfig() {
+	public Set<TccCluster> getTccClusterConfig() {
 		return tccClusterConfig;
 	}
 
-	public void setTccClusterConfig(Set<TccClusterConfig> tccClusterConfig) {
+	public void setTccClusterConfig(Set<TccCluster> tccClusterConfig) {
 		this.tccClusterConfig = tccClusterConfig;
 	}
 
-	public TccCloudDatacenter getTccCloudDatacenter() {
+	public TccDatacenter getTccCloudDatacenter() {
 		return tccCloudDatacenter;
 	}
 
-	public void setTccCloudDatacenter(TccCloudDatacenter tccCloudDatacenter) {
+	public void setTccCloudDatacenter(TccDatacenter tccCloudDatacenter) {
 		this.tccCloudDatacenter = tccCloudDatacenter;
 	}
 

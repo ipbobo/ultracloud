@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class TccCloudDatacenter implements java.io.Serializable {
+public class TccDatacenter implements java.io.Serializable {
 
 	private static final long serialVersionUID = -6328782863355405884L;
 
@@ -52,10 +52,7 @@ public class TccCloudDatacenter implements java.io.Serializable {
 
 	private Set<TccCloudPod> tccCloudPods = new HashSet<TccCloudPod>(0);
 
-	private Set<TccClusterConfig> tccClusterConfig = new HashSet<TccClusterConfig>(0);
-
-	private Set<TccPhysiscResourceInfo> tccPhysiscResourceInfos = new HashSet<TccPhysiscResourceInfo>(
-			0);
+	private Set<TccCluster> tccClusterConfig = new HashSet<TccCluster>(0);
 
 	public Set<TccCloudPod> getTccCloudPods() {
 		return tccCloudPods;
@@ -65,21 +62,12 @@ public class TccCloudDatacenter implements java.io.Serializable {
 		this.tccCloudPods = tccCloudPods;
 	}
 
-	public Set<TccClusterConfig> getTccClusterConfig() {
+	public Set<TccCluster> getTccClusterConfig() {
 		return tccClusterConfig;
 	}
 
-	public void setTccClusterConfig(Set<TccClusterConfig> tccClusterConfig) {
+	public void setTccClusterConfig(Set<TccCluster> tccClusterConfig) {
 		this.tccClusterConfig = tccClusterConfig;
-	}
-
-	public Set<TccPhysiscResourceInfo> getTccPhysiscResourceInfos() {
-		return tccPhysiscResourceInfos;
-	}
-
-	public void setTccPhysiscResourceInfos(
-			Set<TccPhysiscResourceInfo> tccPhysiscResourceInfos) {
-		this.tccPhysiscResourceInfos = tccPhysiscResourceInfos;
 	}
 
 	public TccCloudPlatform getCloudplatform() {

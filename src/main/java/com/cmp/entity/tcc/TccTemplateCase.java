@@ -96,7 +96,7 @@ public class TccTemplateCase implements java.io.Serializable {
 
 	private String osType;
 
-	private TccCloudDatacenter tccCloudDatacenter;
+	private TccDatacenter tccCloudDatacenter;
 
 	public String getOsType() {
 		return osType;
@@ -399,11 +399,11 @@ public class TccTemplateCase implements java.io.Serializable {
 		this.osId = osId;
 	}
 
-	public TccCloudDatacenter getTccCloudDatacenter() {
+	public TccDatacenter getTccCloudDatacenter() {
 		return tccCloudDatacenter;
 	}
 
-	public void setTccCloudDatacenter(TccCloudDatacenter tccCloudDatacenter) {
+	public void setTccCloudDatacenter(TccDatacenter tccCloudDatacenter) {
 		this.tccCloudDatacenter = tccCloudDatacenter;
 	}
 

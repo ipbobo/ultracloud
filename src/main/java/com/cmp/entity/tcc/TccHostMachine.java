@@ -2,7 +2,7 @@ package com.cmp.entity.tcc;
 
 import java.util.Date;
 
-public class TccCloudHost implements java.io.Serializable {
+public class TccHostMachine implements java.io.Serializable {
 
 	private static final long serialVersionUID = -8640265273888066357L;
 
