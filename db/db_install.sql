@@ -782,4 +782,97 @@ CREATE TABLE `t_deployed_soft` (
 PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='软件部署表';
 
+-- ----------------------------
+-- 计费统计报表(按天)
+-- ----------------------------
+DROP TABLE IF EXISTS `bi_bill_day`;
+CREATE TABLE `bi_bill_day` (
+  `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `DEPARTMENT_ID` varchar(32) DEFAULT NULL COMMENT '部门id',
+  `DEPARTMENT_NAME` varchar(50) DEFAULT NULL COMMENT '部门名称',
+  `project_id`varchar(32) DEFAULT NULL COMMENT '项目id',
+  `project_name`varchar(32) DEFAULT NULL COMMENT '项目名称',
+  `vm_id` bigint unsigned  DEFAULT NULL  COMMENT '虚拟机id',
+  `vm_name`varchar(50) DEFAULT NULL COMMENT '虚拟机名称',
+  `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
+  `memory` int unsigned DEFAULT NULL COMMENT '内存',
+  `disk` int unsigned DEFAULT NULL COMMENT '磁盘',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `user` varchar(32) NOT NULL COMMENT '虚拟机用户',
+  `date` varchar(20) DEFAULT NULL COMMENT '日期',
+  `account` int unsigned DEFAULT NULL COMMENT '费用',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  UNIQUE KEY `uk_vmid_date` (`vm_id`,`date`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计费统计报表(按天)'; 
+
+
+-- ----------------------------
+-- 计费统计报表(按月)
+-- ----------------------------
+DROP TABLE IF EXISTS `bi_bill_month`;
+CREATE TABLE `bi_bill_month` (
+  `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `DEPARTMENT_ID` varchar(32) DEFAULT NULL COMMENT '部门id',
+  `DEPARTMENT_NAME` varchar(50) DEFAULT NULL COMMENT '部门名称',
+  `project_id`varchar(32) DEFAULT NULL COMMENT '项目id',
+  `project_name`varchar(32) DEFAULT NULL COMMENT '项目名称',
+  `vm_id` bigint unsigned  DEFAULT NULL  COMMENT '虚拟机id',
+  `vm_name`varchar(50) DEFAULT NULL COMMENT '虚拟机名称',
+  `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
+  `memory` int unsigned DEFAULT NULL COMMENT '内存',
+  `disk` int unsigned DEFAULT NULL COMMENT '磁盘',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `user` varchar(32) NOT NULL COMMENT '虚拟机用户',
+  `month` varchar(20) DEFAULT NULL COMMENT '月份',
+  `account` int unsigned DEFAULT NULL COMMENT '费用',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  UNIQUE KEY `uk_vmid_month` (`vm_id`,`month`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计费统计报表(按月)'; 
+
+
+-- ----------------------------
+-- 软件台账报表
+-- ----------------------------
+DROP TABLE IF EXISTS `bi_software_bill`;
+CREATE TABLE `bi_software_bill` (
+  `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `DEPARTMENT_ID` varchar(32) DEFAULT NULL COMMENT '部门id',
+  `DEPARTMENT_NAME` varchar(50) DEFAULT NULL COMMENT '部门名称',
+  `project_id`varchar(32) DEFAULT NULL COMMENT '项目id',
+  `project_name`varchar(32) DEFAULT NULL COMMENT '项目名称',
+  `vm_id` bigint unsigned  DEFAULT NULL  COMMENT '虚拟机id',
+  `vm_name`varchar(50) DEFAULT NULL COMMENT '虚拟机名称',
+  `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
+  `memory` int unsigned DEFAULT NULL COMMENT '内存',
+  `disk` int unsigned DEFAULT NULL COMMENT '磁盘',
+  `type` varchar(20) NOT NULL COMMENT '类型',
+  `user` varchar(32) NOT NULL COMMENT '虚拟机用户',
+  `date` varchar(20) DEFAULT NULL COMMENT '日期',
+  `software_id` bigint unsigned DEFAULT NULL COMMENT '软件id',
+  `software_name` varchar(20) NOT NULL COMMENT '软件名称',
+  `software_version` varchar(20) NOT NULL COMMENT '软件版本号',
+  `software_type` varchar(30) DEFAULT NULL COMMENT '软件类型',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  UNIQUE KEY `uk_vmid_date` (`vm_id`,`date`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='软件台账报表'; 
+
+-- ----------------------------
+-- 定时任务表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_timetask`;
+CREATE TABLE `t_timetask` (
+  `TIMINGBACKUP_ID` varchar(32) NOT NULL,
+  `JOBNAME` varchar(50) DEFAULT NULL COMMENT '任务名称',
+  `CREATE_TIME` varchar(32) DEFAULT NULL COMMENT '创建时间',
+  `CLASSNAME` varchar(50) DEFAULT NULL COMMENT '任务执行类',
+  `STATUS` int(1) NOT NULL COMMENT '类型',
+  `FHTIME` varchar(30) DEFAULT NULL COMMENT '时间规则',
+  `TIMEEXPLAIN` varchar(100) DEFAULT NULL COMMENT '规则说明',
+  `BZ` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`TIMINGBACKUP_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='定时任务表'; 
+
 

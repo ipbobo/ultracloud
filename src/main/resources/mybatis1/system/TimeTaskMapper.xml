@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="TimingBackUpMapper">
+<mapper namespace="TimeTaskMapper">
 	
 	<!--表名 -->
-	<sql id="tableName">
-		DB_TIMINGBACKUP
+	<sql id="CLASSNAME">
+		t_timetask
 	</sql>
 	
 	<!-- 字段 -->
 	<sql id="Field">
 		JOBNAME,	
 		CREATE_TIME,	
-		TABLENAME,	
+		CLASSNAME,	
 		STATUS,	
 		FHTIME,	
 		TIMEEXPLAIN,	
@@ -23,7 +23,7 @@
 	<sql id="FieldValue">
 		#{JOBNAME},	
 		#{CREATE_TIME},	
-		#{TABLENAME},	
+		#{CLASSNAME},	
 		#{STATUS},	
 		#{FHTIME},	
 		#{TIMEEXPLAIN},	
@@ -34,7 +34,7 @@
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
 		insert into 
-	<include refid="tableName"></include>
+	<include refid="CLASSNAME"></include>
 		(
 	<include refid="Field"></include>
 		) values (
@@ -45,7 +45,7 @@
 	<!-- 删除-->
 	<delete id="delete" parameterType="pd">
 		delete from
-		<include refid="tableName"></include>
+		<include refid="CLASSNAME"></include>
 		where 
 			TIMINGBACKUP_ID = #{TIMINGBACKUP_ID}
 	</delete>
@@ -53,9 +53,9 @@
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
-		<include refid="tableName"></include>
+		<include refid="CLASSNAME"></include>
 		set 
-			TABLENAME = #{TABLENAME},
+			CLASSNAME = #{CLASSNAME},
 			FHTIME = #{FHTIME},
 			TIMEEXPLAIN = #{TIMEEXPLAIN},
 			JOBNAME = #{JOBNAME},
@@ -72,7 +72,7 @@
 		select 
 		<include refid="Field"></include>
 		from 
-		<include refid="tableName"></include>
+		<include refid="CLASSNAME"></include>
 		where 
 			TIMINGBACKUP_ID = #{TIMINGBACKUP_ID}
 	</select>
@@ -82,12 +82,12 @@
 		select
 		<include refid="Field"></include>
 		from 
-		<include refid="tableName"></include>
+		<include refid="CLASSNAME"></include>
 		where 1=1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
-					TABLENAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					CLASSNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 					 or 
 					TIMEEXPLAIN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
 					 or 
@@ -110,13 +110,13 @@
 		select
 		<include refid="Field"></include>
 		from 
-		<include refid="tableName"></include>
+		<include refid="CLASSNAME"></include>
 	</select>
 	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
-		<include refid="tableName"></include>
+		<include refid="CLASSNAME"></include>
 		where 
 			TIMINGBACKUP_ID in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
@@ -127,7 +127,7 @@
 	<!-- 切换状态 -->
 	<update id="changeStatus" parameterType="pd">
 		update
-		<include refid="tableName"></include>
+		<include refid="CLASSNAME"></include>
 		set 
 			STATUS = #{STATUS}
 		where 

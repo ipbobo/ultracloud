@@ -1,4 +1,4 @@
-package com.fh.service.fhdb.timingbackup.impl;
+package com.cmp.service.system;
 
 import java.util.List;
 
@@ -9,16 +9,14 @@ import org.springframework.stereotype.Service;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
-import com.fh.service.fhdb.timingbackup.TimingBackUpManager;
 
-/** 
- * 说明： 定时备份
- * 创建人：FH Q313596790
- * 创建时间：2016-04-09
- * @version
+/**
+ * 定时任务业务层实现类
+ * @author liuweixing
+ *
  */
-@Service("timingbackupService")
-public class TimingBackUpService implements TimingBackUpManager{
+@Service("timeTaskService")
+public class TimeTaskServiceImpl implements TimeTaskService{
 
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
@@ -28,7 +26,7 @@ public class TimingBackUpService implements TimingBackUpManager{
 	 * @throws Exception
 	 */
 	public void save(PageData pd)throws Exception{
-		dao.save("TimingBackUpMapper.save", pd);
+		dao.save("TimeTaskMapper.save", pd);
 	}
 	
 	/**删除
@@ -36,7 +34,7 @@ public class TimingBackUpService implements TimingBackUpManager{
 	 * @throws Exception
 	 */
 	public void delete(PageData pd)throws Exception{
-		dao.delete("TimingBackUpMapper.delete", pd);
+		dao.delete("TimeTaskMapper.delete", pd);
 	}
 	
 	/**修改
@@ -44,7 +42,7 @@ public class TimingBackUpService implements TimingBackUpManager{
 	 * @throws Exception
 	 */
 	public void edit(PageData pd)throws Exception{
-		dao.update("TimingBackUpMapper.edit", pd);
+		dao.update("TimeTaskMapper.edit", pd);
 	}
 	
 	/**列表
@@ -53,7 +51,7 @@ public class TimingBackUpService implements TimingBackUpManager{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page)throws Exception{
-		return (List<PageData>)dao.findForList("TimingBackUpMapper.datalistPage", page);
+		return (List<PageData>)dao.findForList("TimeTaskMapper.datalistPage", page);
 	}
 	
 	/**列表(全部)
@@ -62,7 +60,7 @@ public class TimingBackUpService implements TimingBackUpManager{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd)throws Exception{
-		return (List<PageData>)dao.findForList("TimingBackUpMapper.listAll", pd);
+		return (List<PageData>)dao.findForList("TimeTaskMapper.listAll", pd);
 	}
 	
 	/**通过id获取数据
@@ -70,7 +68,7 @@ public class TimingBackUpService implements TimingBackUpManager{
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd)throws Exception{
-		return (PageData)dao.findForObject("TimingBackUpMapper.findById", pd);
+		return (PageData)dao.findForObject("TimeTaskMapper.findById", pd);
 	}
 	
 	/**批量删除
@@ -78,7 +76,7 @@ public class TimingBackUpService implements TimingBackUpManager{
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
-		dao.delete("TimingBackUpMapper.deleteAll", ArrayDATA_IDS);
+		dao.delete("TimeTaskMapper.deleteAll", ArrayDATA_IDS);
 	}
 
 	/**切换状态
@@ -86,7 +84,7 @@ public class TimingBackUpService implements TimingBackUpManager{
 	 * @throws Exception
 	 */
 	public void changeStatus(PageData pd) throws Exception {
-		dao.update("TimingBackUpMapper.changeStatus", pd);
+		dao.update("TimeTaskMapper.changeStatus", pd);
 	}
 	
 }

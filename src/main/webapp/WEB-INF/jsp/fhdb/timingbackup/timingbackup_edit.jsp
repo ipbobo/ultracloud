@@ -32,17 +32,12 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备份对象:</td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="TABLENAME" id="TABLENAME" data-placeholder="请选择" style="vertical-align:top;width: 200px;">
-									<option value="all">整库</option>
-									<c:if test="${dbtype != 'sqlserver' }">
-									<c:forEach items="${varList}" var="varTab">
-										<option value="${varTab }" <c:if test="${pd.TABLENAME==varTab}">selected</c:if>>${varTab }</option>
-									</c:forEach>
-								 	</c:if>
-								  	</select>
-								</td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">任务名称:</td>
+								<td><input type="text" name="JOBNAME" id="JOBNAME" value="${pd.JOBNAME}" maxlength="255" placeholder="这里输入任务名称" title="任务名称" style="width:98%;"/></td>
+							</tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">任务执行类:</td>
+								<td><input type="text" name="CLASSNAME" id="CLASSNAME" value="${pd.CLASSNAME}" maxlength="255" placeholder="这里输入任务执行类" title="任务执行类" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">时间规则:</td>
@@ -278,14 +273,24 @@
 				$("#FHTIME").focus();
 			return false;
 			}
-			if($("#BZ").val()==""){
-				$("#BZ").tips({
+			if($("#JOBNAME").val()==""){
+				$("#JOBNAME").tips({
 					side:3,
-		            msg:'请输入备注',
+		            msg:'请输入任务名称',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#BZ").focus();
+				$("#JOBNAME").focus();
+			return false;
+			}
+			if($("#CLASSNAME").val()==""){
+				$("#CLASSNAME").tips({
+					side:3,
+		            msg:'请输入任务执行类',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#CLASSNAME").focus();
 			return false;
 			}
 			$("#Form").submit();

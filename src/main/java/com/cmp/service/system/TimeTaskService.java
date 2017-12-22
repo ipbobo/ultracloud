@@ -1,16 +1,15 @@
-package com.fh.service.fhdb.timingbackup;
+package com.cmp.service.system;
 
 import java.util.List;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
-/** 
- * 说明： 定时备份接口
- * 创建人：FH Q313596790
- * 创建时间：2016-04-09
- * @version
+/**
+ * 定时任务业务层接口 
+ * @author liuweixing
+ *
  */
-public interface TimingBackUpManager{
+public interface TimeTaskService{
 
 	/**新增
 	 * @param pd

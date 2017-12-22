@@ -128,7 +128,10 @@
 		from 
 		<include refid="tableName"></include> c LEFT JOIN <include refid="dctableName"></include> dc
 		on c.datacenter_id=dc.id 
-		where c.cpf_id=#{id}
+		where 1 = 1
+		<if test="id!=null and id!=''"><!-- 根据类型 -->
+			and c.cpf_id=#{id}
+		</if>
 		<if test="type!=null and type!=''"><!-- 根据类型 -->
 			and c.type = #{type}
 		</if>

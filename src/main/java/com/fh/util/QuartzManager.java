@@ -107,7 +107,7 @@ public class QuartzManager {
      * @param time	时间设置，参考quartz说明文档 
      */
     public static void addJob(String jobName, String jobGroupName,  
-            String triggerName, String triggerGroupName, Class<? extends Job> jobClass,  
+            String triggerName, String triggerGroupName, Class jobClass,  
             String time, Map<String,Object> parameter) {  
         try {  
             Scheduler sched = gSchedulerFactory.getScheduler();  

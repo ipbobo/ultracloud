@@ -69,7 +69,7 @@
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">任务名称</th>
 									<th class="center">创建时间</th>
-									<th class="center">备份对象</th>
+									<th class="center">任务执行类</th>
 									<th class="center">规则说明</th>
 									<th class="center">状态</th>
 									<th class="center">备注</th>
@@ -90,7 +90,7 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.JOBNAME}</td>
 											<td class='center'>${var.CREATE_TIME}</td>
-											<td class='center'>${var.TABLENAME == 'all' ? '整库' : var.TABLENAME }</td>
+											<td class='center'>${var.CLASSNAME}</td>
 											<td class='center'>${var.TIMEEXPLAIN}</td>
 											<td class='center' id="STATUS${vs.index+1}">${var.STATUS == '1' ? '<h7 class="green">正在运行</h7><img src="static/images/runing.gif" width="12px;" />' : '<h7 class="red">已经停止</h7>'}</td>
 											<td class='center'>${var.BZ}</td>
