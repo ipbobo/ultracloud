@@ -50,24 +50,14 @@ public class TccDatacenter implements java.io.Serializable {
 
 	private TccCloudPlatform cloudplatform;
 
-	private Set<TccCloudPod> tccCloudPods = new HashSet<TccCloudPod>(0);
+	private Set<TccCluster> tccCluster = new HashSet<TccCluster>(0);
 
-	private Set<TccCluster> tccClusterConfig = new HashSet<TccCluster>(0);
-
-	public Set<TccCloudPod> getTccCloudPods() {
-		return tccCloudPods;
+	public Set<TccCluster> getTccCluster() {
+		return tccCluster;
 	}
 
-	public void setTccCloudPods(Set<TccCloudPod> tccCloudPods) {
-		this.tccCloudPods = tccCloudPods;
-	}
-
-	public Set<TccCluster> getTccClusterConfig() {
-		return tccClusterConfig;
-	}
-
-	public void setTccClusterConfig(Set<TccCluster> tccClusterConfig) {
-		this.tccClusterConfig = tccClusterConfig;
+	public void setTccCluster(Set<TccCluster> tccCluster) {
+		this.tccCluster = tccCluster;
 	}
 
 	public TccCloudPlatform getCloudplatform() {
