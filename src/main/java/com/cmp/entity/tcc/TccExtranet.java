@@ -33,7 +33,7 @@ public class TccExtranet implements Serializable {
 	/**
 	 * 所属网络
 	 */
-	private TccVlanNetwork network;
+	private TccNetwork network;
 
 	/**
 	 * 合法的CIDR格式
@@ -116,11 +116,11 @@ public class TccExtranet implements Serializable {
 		this.ipVersion = ipVersion;
 	}
 
-	public TccVlanNetwork getNetwork() {
+	public TccNetwork getNetwork() {
 		return network;
 	}
 
-	public void setNetwork(TccVlanNetwork network) {
+	public void setNetwork(TccNetwork network) {
 		this.network = network;
 	}
 

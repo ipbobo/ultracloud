@@ -77,7 +77,11 @@
 								</li>
 								<li class="divider"></li>
 								<li>
-									<a href="logout"><i class="ace-icon fa fa-power-off"></i>退出登录</a>
+									<a onclick="editSystem();" style="cursor:pointer;"><i class="ace-icon fa fa-user"></i>系统设置</a><!-- editUserH()在 WebRoot\static\js\myjs\head.js中 -->
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a onclick="logout();" style="cursor:pointer;"><i class="ace-icon fa fa-power-off"></i>退出登录</a>
 								</li>
 							</ul>
 						</li>

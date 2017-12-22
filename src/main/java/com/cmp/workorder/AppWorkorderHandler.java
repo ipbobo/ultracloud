@@ -1,5 +1,6 @@
 package com.cmp.workorder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,24 +10,30 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.cmp.entity.DeployedSoft;
+import com.cmp.entity.Medium;
 import com.cmp.entity.Project;
+import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.mgr.CloudArchManager;
+import com.cmp.mgr.CloudArchManagerAdapter;
 import com.cmp.mgr.bean.CreateVmRequest;
+import com.cmp.mgr.impl.VMWareCloudArchManager;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.DeployedSoftService;
+import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.VirtualMachineService;
 import com.cmp.sid.CloudInfoCollect;
 import com.cmp.sid.CmpCloudInfo;
 import com.cmp.sid.CmpOrder;
 import com.cmp.sid.CmpWorkOrder;
+import com.cmp.sid.DiskInfo;
 import com.cmp.sid.VirtualMachine;
 import com.cmp.util.PageDataUtil;
 import com.cmp.util.StringUtil;
 import com.fh.entity.system.Department;
 import com.fh.service.fhoa.department.impl.DepartmentService;
-import com.fh.util.Logger;
 import com.fh.util.PageData;
 
 @Service("appWorkorderHandler")
@@ -52,6 +59,12 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	
 	@Resource
 	private DeployedSoftService deployedSoftService;
+	
+	@Resource
+	private MediumService mediumService;
+	
+	@Resource
+	private CloudArchManagerAdapter cloudArchManagerAdapter;
 	
 	@Override
 	public Map<String, Object> toWorkorderView(CmpWorkOrder cmpWorkorder) throws Exception {
@@ -201,7 +214,6 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		ProjectService.editUsedQuota(p_pd);
 		
 		//获取部门信息，修改部门资源使用额度
-		
 		PageData d_pd = new PageData();
 		d_pd.put("DEPARTMENT_ID", deptId);
 		d_pd = departmentService.findById(d_pd);
@@ -213,7 +225,6 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		d_pd.put("disk_used", dDiskUsed);
 		departmentService.editUsedQuota(d_pd);
 		
-	
 		
 		//测试添加虚拟机
 		
@@ -230,21 +241,54 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			return null;
 		}
 		orderInfo = orderList.get(0);
+		int currentVMNum = virtualMachineService.countByProject(project.getId());
+		String vmName = project.getName() + "_" + (currentVMNum+1); //虚拟机的名字为当前项目名称+项目拥有的虚拟机INDEX
 		String osName = cmpDictService.getCmpDict("os_type", orderInfo.getOsType()).getDictValue();
 		String osBitNum = cmpDictService.getCmpDict("os_bit_num", orderInfo.getOsBitNum()).getDictValue();
 		String fullOS = osName +"_" +osBitNum;
 		String installOS = cmpDictService.getCmpDict("install_OS", fullOS).getDictValue();  //安装的系统软件
+		String diskSize = orderInfo.getDiskSize();
+		String diskType = orderInfo.getDiskType();
+		String[] diskTypeList = diskType.split(",");
+		String[] diskSizeList = diskSize.split(",");
+		List<DiskInfo> diskInfoList = new ArrayList<DiskInfo>();
+		for (int i = 0; i < diskSizeList.length; i++) {
+			DiskInfo di = new DiskInfo();
+			di.setDiskSize(diskSizeList[i]);
+			di.setDiskType(diskTypeList[i] != null? cmpDictService.getCmpDict("disk_type", diskTypeList[i]).getDictValue() : "");
+			diskInfoList.add(di);
+		}
 		
+		
+		//安装虚拟机
+//		CloudArchManager cloudArchManager = cloudArchManagerAdapter.getCloudArchManagerAdaptee(new TccCloudPlatform());
+//		CreateVmRequest cvq = new CreateVmRequest();
+//		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
+//		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));
+//		cvq.setDiskSizeKB(Long.parseLong(diskInfoList.get(0).getDiskSize())*1024*1024);
+//		cvq.setDiskMode("persistent");
+//		cvq.setDcName("DC1");
+//		cvq.setVmName(vmName);
+//		cvq.setNetName("VM Network");
+//		cvq.setRpName("Resources");
+//		cvq.setNicName("VMXNET 3");
+//		cvq.setDsName("datastore2-raid5-2.5t");
+//		cvq.setGuestOs(installOS);
+//		cloudArchManager.createVirtualMachine(cvq);
+		
+		String softCode = orderInfo.getSoftCode();
+		String[] softs = softCode.split(",");
 		VirtualMachine vm = new VirtualMachine();
 		vm.setCpu(pd.getString("CPU"));
 		vm.setMemory(pd.getString("memory"));
-		vm.setDatadisk(pd.getString("diskSize"));
+		//暂时先设置第一个磁盘
+		vm.setDatadisk(diskInfoList.size() > 0 ? diskInfoList.get(0).getDiskSize() : "300");
 		vm.setProjectId(workOrder.getProjectCode());
 		vm.setOs(fullOS);
 		vm.setOsStatus("未安装");
-		vm.setSoft("TOMCAT8");
-		vm.setSoftStatus("已安装");
-		vm.setName("测试虚拟机");
+		vm.setSoft(softCode);
+		vm.setSoftStatus("未安装");
+		vm.setName(vmName);
 		vm.setIp("192.168.1.101");
 		vm.setUsername("test");
 		vm.setPassword("pwd123");
@@ -255,24 +299,21 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		virtualMachineService.add(vm);
 		
 		
-		//安装虚拟机
-		CreateVmRequest cvq = new CreateVmRequest();
-		
-		
-		
-		
 		//添加虚拟机中间件
-		DeployedSoft deployedSoft = new DeployedSoft();
-		deployedSoft.setVirtualmachineId(String.valueOf(vm.getId()));
-		deployedSoft.setSoftName("TOMCAT8");
-		deployedSoft.setVirtualmachineName(String.valueOf(vm.getName()));
-		deployedSoftService.add(deployedSoft);
+		for (String oneSoft : softs) {
+			PageData s_pd = new PageData();
+			s_pd.put("id", oneSoft);
+			s_pd = mediumService.findById(s_pd);
+			Medium medium = (Medium) PageDataUtil.mapToObject(s_pd, Medium.class);
+			DeployedSoft deployedSoft = new DeployedSoft();
+			deployedSoft.setVirtualmachineId(String.valueOf(vm.getId()));
+			deployedSoft.setSoftName(medium.getName());
+			deployedSoft.setStatus("0");
+			deployedSoft.setVirtualmachineName(String.valueOf(vm.getName()));
+			deployedSoftService.add(deployedSoft);
+		}
 		
-		DeployedSoft deployedSoft2 = new DeployedSoft();
-		deployedSoft2.setVirtualmachineId(String.valueOf(vm.getId()));
-		deployedSoft2.setSoftName("JDK8");
-		deployedSoft2.setVirtualmachineName(String.valueOf(vm.getName()));
-		deployedSoftService.add(deployedSoft2);
+
 		
 		resMap.put("result", "执行成功!");
 		return resMap;

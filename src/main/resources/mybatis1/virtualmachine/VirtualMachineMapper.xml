@@ -152,4 +152,9 @@
 		select * from  <include refid="tableName"/> where appNo = #{appNo}
 	</select>
 	
+	<!-- 通过项目号 查询虚拟机数量 -->
+	<select id="countByProject" resultType="java.lang.Integer" parameterType="String">
+		select count(*) from  <include refid="tableName"/> where project_id = #{projectId}
+	</select>
+	
 </mapper>

@@ -14,4 +14,6 @@ public interface VirtualMachineService {
 	
 	public List<VirtualMachine> findByAppNo(String appNo) throws Exception;
 
+	public int countByProject(String projectId) throws Exception;
+
 }

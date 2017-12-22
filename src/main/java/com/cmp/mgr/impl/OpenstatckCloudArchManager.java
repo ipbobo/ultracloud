@@ -2,6 +2,7 @@ package com.cmp.mgr.impl;
 
 import java.util.List;
 
+import com.cmp.mgr.bean.CloneVmRequest;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
@@ -89,6 +90,11 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public void deleteVirtualMachine(String name) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void cloneVirtualMachine(CloneVmRequest request) {
 		// TODO Auto-generated method stub
 	}
 
