@@ -57,7 +57,7 @@
 	</bean>  
 	<!-- 事物处理 -->
 	<aop:config>
-		<aop:pointcut id="pc" expression="execution(* com.fh.service..*(..))" />
+		<aop:pointcut id="pc" expression="(execution(* com.fh.service..*(..))) or (execution(* com.cmp.service..*(..)))" />
 		<aop:advisor pointcut-ref="pc" advice-ref="txAdvice" />
 	</aop:config>
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">

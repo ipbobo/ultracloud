@@ -156,4 +156,10 @@ public class VirtualMachineSyncServiceImpl implements VirtualMachineSyncService 
 		}
 	}
 
+	@Override
+	public List<PageData> listBIVirtualBillByDay() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

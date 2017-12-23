@@ -84,5 +84,12 @@ public interface VirtualMachineSyncService {
 	 * @throws Exception
 	 */
 	public List<PageData> listVirtual(Page page, boolean isSyncTable) throws Exception;
+	
+	/**
+	 *  查询虚拟机每天的费用数据
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listBIVirtualBillByDay() throws Exception;
 
 }

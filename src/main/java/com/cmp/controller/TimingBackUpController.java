@@ -11,7 +11,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.quartz.Job;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -25,9 +24,9 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
 import com.fh.util.DbFH;
+import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
-import com.fh.util.Jurisdiction;
 import com.fh.util.QuartzManager;
 import com.fh.util.Tools;
 
@@ -92,7 +91,7 @@ public class TimingBackUpController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/edit")
-	public ModelAndView edit() throws Exception{
+	public ModelAndView edit() throws Exception {
 		logBefore(logger, Jurisdiction.getUsername()+"修改TimingBackUp");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} 	//校验权限
 		ModelAndView mv = this.getModelAndView();
