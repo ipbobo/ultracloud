@@ -1,5 +1,4 @@
-﻿	
-		
+﻿		
 		<div id="navbar" class="navbar navbar-default" >
 			<script type="text/javascript">
 				try{ace.settings.check('navbar' , 'fixed');}catch(e){}
@@ -74,10 +73,6 @@
 							<ul id="ul_userset" onmouseleave="ul_userset_out();" class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
 									<a onclick="editUserH();" style="cursor:pointer;"><i class="ace-icon fa fa-user"></i>用户设置</a><!-- editUserH()在 WebRoot\static\js\myjs\head.js中 -->
-								</li>
-								<li class="divider"></li>
-								<li>
-									<a onclick="editSystem();" style="cursor:pointer;"><i class="ace-icon fa fa-user"></i>系统设置</a><!-- editUserH()在 WebRoot\static\js\myjs\head.js中 -->
 								</li>
 								<li class="divider"></li>
 								<li>

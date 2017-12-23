@@ -1,25 +1,25 @@
 package com.cmp.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.service.CmpDictService;
 import com.cmp.service.SysConfigService;
 import com.cmp.sid.SysConfigInfo;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.util.Const;
-import com.fh.util.DateUtil;
 import com.fh.util.FileUpload;
-import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
-import com.fh.util.PathUtil;
-import com.fh.util.Watermark;
 
 @Controller
 @RequestMapping(value = "/sysconfig")
@@ -27,6 +27,9 @@ public class SysConfigController extends BaseController{
 	
 	@Resource
 	private SysConfigService sysConfigService;
+	
+	@Resource
+	private CmpDictService cmpDictService;
 
 	@RequestMapping(value = "/updatePre")
 	public ModelAndView updatePre(Page page) throws Exception {
@@ -65,16 +68,18 @@ public class SysConfigController extends BaseController{
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		
-		String  ffile = DateUtil.getDays();
-		String fileName = "";
+		SysConfigInfo initConfig = SysConfigInfo.getInstance();
+		String newlogoPath = initConfig.getLogo();;
 		if (null != logo && !logo.isEmpty()) {
-			String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;	//文件上传路径
-			fileName = FileUpload.fileUp(logo, filePath, this.get32UUID());			//执行上传
-			pd.put("logo", ffile + "/" + fileName);									//路径
+			String filePath = "static/login";	//文件上传路径
+			String upfileName = logo.getOriginalFilename();
+			newlogoPath = filePath + "/" + upfileName;
+			FileUpload.fileUp(logo, filePath, upfileName);			//执行上传
+			pd.put("logo", newlogoPath);									//路径
 		}else{
 			//不修改图
+			pd.put("logo", initConfig.getLogo());	
 		}
-		
 		pd.put("sysName", sys_name);
 		pd.put("companyName", company_name);
 		pd.put("companyShortName", company_shortName);
@@ -82,11 +87,50 @@ public class SysConfigController extends BaseController{
 		pd.put("website", website);
 		pd.put("productConsultion", product_consultion);
 		pd.put("copr", copr);
-			
 		sysConfigService.update(pd);
+		
+		initConfig.setCompanyName(company_name);
+		initConfig.setCompanyShortName(company_shortName);
+		initConfig.setCopr(copr);
+		initConfig.setLogo(newlogoPath);
+		initConfig.setProductConsultion(product_consultion);
+		initConfig.setSysName(sys_name);
+		initConfig.setTel(tel);
+		initConfig.setWebsite(website);
+		
 		mv.addObject("result", "修改成功");
 		mv.addObject("pd", pd);
 		mv.setViewName("system/config/sysconfig");
 		return mv;
+	}
+	
+	
+	
+	
+	@RequestMapping(value = "/getSysConfig")
+	@ResponseBody
+	public Object getSysConfig() throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		String resultInfo = "";
+		if (SysConfigInfo.getInstance().getSysName() != null && SysConfigInfo.getInstance().getSysName().length() >0) {
+			map.put("sysConfigInfo", SysConfigInfo.getInstance());
+		}else {
+			//第一次访问，初始化
+			SysConfigInfo  sysConfigInfo = sysConfigService.getSysConfig();
+			SysConfigInfo initConfig = SysConfigInfo.getInstance();
+			initConfig.setCompanyName(sysConfigInfo.getCompanyName());
+			initConfig.setCompanyShortName(sysConfigInfo.getCompanyShortName());
+			initConfig.setCopr(sysConfigInfo.getCopr());
+			initConfig.setLogo(sysConfigInfo.getLogo());
+			initConfig.setProductConsultion(sysConfigInfo.getProductConsultion());
+			initConfig.setSysName(sysConfigInfo.getSysName());
+			initConfig.setTel(sysConfigInfo.getTel());
+			initConfig.setWebsite(sysConfigInfo.getWebsite());
+			map.put("sysConfigInfo", initConfig);
+		}
+		
+		resultInfo = "success";
+		map.put("result", resultInfo);	
+		return map;
 	}
 }

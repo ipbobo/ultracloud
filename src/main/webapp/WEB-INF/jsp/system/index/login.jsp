@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+		+ request.getServerName() + ":" + request.getServerPort()
+		+ path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,7 +87,7 @@
 			<form action="" method="post" name="loginForm" id="loginForm">
 				<div class="control-group normal_text">
 					<h2>
-						<img src="static/login/logo.png" alt="Logo" width="160" height="80" />TCMP
+						<img src="${pd.logo}" alt="Logo" width="160" height="80" />${pd.SYSNAME}
 					</h2>
 				</div>
 				<div class="control-group">
@@ -135,7 +138,7 @@
 			</form>
 			<div class="controls">
 				<div class="main_input_box">
-					<font color="white"><span id="nameerr">Copyright © Tuo-Cloud</span></font>
+					<font color="white"><span id="nameerr">${pd.copr}</span></font>
 				</div>
 			</div>
 		</div>

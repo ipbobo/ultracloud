@@ -36,7 +36,7 @@
 										</tr>
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;">系统LOGO:</td>
-											<td><img src="<%=basePath%>uploadFiles/uploadImgs/${pd.logo}" width="210"/> <input type="file" id="logo" name="logo" value="" /> </td>
+											<td><img src="<%=basePath%>${pd.logo}" width="210"/> <input type="file" id="logo" name="logo" value="" /> </td>
 										</tr>
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;">公司名称:</td>
