@@ -11,6 +11,17 @@ public class SysConfigInfo {
 	private String website;				//网站
 	private String copr;				//版权
 	
+	
+	private SysConfigInfo() {}
+	
+	private static SysConfigInfo sysConfigInfo = new SysConfigInfo();
+	
+	public static SysConfigInfo getInstance() {
+		return sysConfigInfo;
+	}
+	
+	
+	
 	public String getSysName() {
 		return sysName;
 	}

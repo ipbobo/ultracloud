@@ -22,6 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.activiti.bean.TaskBean;
 import com.cmp.activiti.service.ActivitiService;
+import com.cmp.service.SysConfigService;
+import com.cmp.sid.SysConfigInfo;
 import com.cmp.util.Page;
 import com.fh.controller.base.BaseController;
 import com.fh.service.fhoa.datajur.DatajurManager;
@@ -73,7 +75,8 @@ public class LoginController extends BaseController {
 	private FHlogManager FHLOG;
 	@Resource(name="loginimgService")
 	private LogInImgManager loginimgService;
-	
+	@Resource
+	private SysConfigService sysConfigService;
 	
 	/**访问登录页
 	 * @return
@@ -201,6 +204,8 @@ public class LoginController extends BaseController {
 			}else {
 				mv.setViewName("system/index/login");//session失效后跳转登录页面
 			}
+			SysConfigInfo  sysConfigInfo = SysConfigInfo.getInstance();
+			pd.put("logo", sysConfigInfo.getLogo());
 		} catch(Exception e){
 			mv.setViewName("system/index/login");
 			logger.error(e.getMessage(), e);
@@ -375,9 +380,26 @@ public class LoginController extends BaseController {
 	/**设置登录页面的配置参数
 	 * @param pd
 	 * @return
+	 * @throws Exception 
 	 */
-	public PageData setLoginPd(PageData pd){
-		pd.put("SYSNAME", Tools.readTxtFile(Const.SYSNAME)); 		//读取系统名称
+	public PageData setLoginPd(PageData pd) throws Exception{
+		SysConfigInfo  sysConfigInfo = SysConfigInfo.getInstance();
+		if (sysConfigInfo.getSysName() == null || sysConfigInfo.getSysName().length() == 0) {
+			//第一次访问，初始化
+			SysConfigInfo  dbSysConfigInfo = sysConfigService.getSysConfig();
+			sysConfigInfo.setCompanyName(dbSysConfigInfo.getCompanyName());
+			sysConfigInfo.setCompanyShortName(dbSysConfigInfo.getCompanyShortName());
+			sysConfigInfo.setCopr(dbSysConfigInfo.getCopr());
+			sysConfigInfo.setLogo(dbSysConfigInfo.getLogo());
+			sysConfigInfo.setProductConsultion(dbSysConfigInfo.getProductConsultion());
+			sysConfigInfo.setSysName(dbSysConfigInfo.getSysName());
+			sysConfigInfo.setTel(dbSysConfigInfo.getTel());
+			sysConfigInfo.setWebsite(dbSysConfigInfo.getWebsite());
+		}
+		
+		pd.put("SYSNAME", sysConfigInfo.getSysName()); 		//读取系统名称
+		pd.put("logo", sysConfigInfo.getLogo());
+		pd.put("copr", sysConfigInfo.getCopr()); 
 		String strLOGINEDIT = Tools.readTxtFile(Const.LOGINEDIT);	//读取登录页面配置
 		if(null != strLOGINEDIT && !"".equals(strLOGINEDIT)){
 			String strLo[] = strLOGINEDIT.split(",fh,");
@@ -443,4 +465,30 @@ public class LoginController extends BaseController {
 		userService.saveIP(pd);
 	}  
 	
+	@RequestMapping(value = "/getSysConfig")
+	@ResponseBody
+	public Object getSysConfig() throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		String resultInfo = "";
+		if (SysConfigInfo.getInstance().getSysName() != null && SysConfigInfo.getInstance().getSysName().length() >0) {
+			map.put("sysConfigInfo", SysConfigInfo.getInstance());
+		}else {
+			//第一次访问，初始化
+			SysConfigInfo  sysConfigInfo = sysConfigService.getSysConfig();
+			SysConfigInfo initConfig = SysConfigInfo.getInstance();
+			initConfig.setCompanyName(sysConfigInfo.getCompanyName());
+			initConfig.setCompanyShortName(sysConfigInfo.getCompanyShortName());
+			initConfig.setCopr(sysConfigInfo.getCopr());
+			initConfig.setLogo(sysConfigInfo.getLogo());
+			initConfig.setProductConsultion(sysConfigInfo.getProductConsultion());
+			initConfig.setSysName(sysConfigInfo.getSysName());
+			initConfig.setTel(sysConfigInfo.getTel());
+			initConfig.setWebsite(sysConfigInfo.getWebsite());
+			map.put("sysConfigInfo", initConfig);
+		}
+		
+		resultInfo = "success";
+		map.put("result", resultInfo);	
+		return map;
+	}
 }
