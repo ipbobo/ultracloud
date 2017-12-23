@@ -81,16 +81,16 @@ getBarChart('memChart', ['内存容量'], ['总量','使用量'], ['${cmpRes.mem
 					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>容量视图</b></td>
 				</tr>
 				<tr>
-					<td align="left" style="width: 100%;padding-top: 10px;">
+					<td align="center" style="width: 50%;padding-top: 10px;">
 						<div class="col-xs-12">
-							<div id="cpuGaugeChart" style="width: 300px;height:150px;" class="col-xs-4 col-sm-4"></div>
-							<div id="memGaugeChart" style="width: 300px;height:150px;" class="col-xs-4 col-sm-4"></div>
+							<div id="cpuGaugeChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
+							<div id="memGaugeChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
 						</div>
 					</td>
-					<td align="left" style="width: 100%;padding-top: 10px;">
+					<td align="center" style="width: 50%;padding-top: 10px;">
 						<div class="col-xs-12">
-							<div id="cpuChart" style="width: 300px;height:150px;" class="col-xs-4 col-sm-4"></div>
-							<div id="memChart" style="width: 300px;height:150px;" class="col-xs-4 col-sm-4"></div>
+							<div id="cpuChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
+							<div id="memChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
 						</div>
 					</td>
 				</tr>
