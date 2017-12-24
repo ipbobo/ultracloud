@@ -7,6 +7,5 @@
 		, b.name clusterName
 		from t_hostmachine a
 		left join t_cluster b on b.id=a.cluster_id
-		where a.appNo is not null
 	</select>
 </mapper>
