@@ -14,6 +14,8 @@
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">
+getGaugeChart('cpuGaugeChart', ['', 'CPU使用率'], '${(cmpRes.cpuUseNum/cmpRes.cpuTotalNum)*100}', [[0.6, '#228b22'],[0.8, '#48b'],[1, '#ff4500']], "%");//获取图表
+getGaugeChart('memGaugeChart', ['', '内存使用率'], '${(cmpRes.memUseNum/cmpRes.memTotalNum)*100}', [[0.6, '#228b22'],[0.8, '#48b'],[1, '#ff4500']], "%");//获取图表
 getBarChart('cpuChart', ['CPU容量'], ['总量','使用量'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuUseNum}'], ['#00E5EE','#FF0000'], "核");//获取图表
 getBarChart('memChart', ['内存容量'], ['总量','使用量'], ['${cmpRes.memTotalNum}', '${cmpRes.memUseNum}'], ['#00E5EE','#FF0000'], "GB");//获取图表
 </script>
@@ -79,10 +81,16 @@ getBarChart('memChart', ['内存容量'], ['总量','使用量'], ['${cmpRes.mem
 					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>容量视图</b></td>
 				</tr>
 				<tr>
-					<td align="left" style="width: 100%;padding-top: 10px;">
+					<td align="center" style="width: 50%;padding-top: 10px;">
 						<div class="col-xs-12">
-							<div id="cpuChart" style="width: 300px;height:200px;" class="col-xs-4 col-sm-4"></div>
-							<div id="memChart" style="width: 300px;height:200px;" class="col-xs-4 col-sm-4"></div>
+							<div id="cpuGaugeChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
+							<div id="memGaugeChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
+						</div>
+					</td>
+					<td align="center" style="width: 50%;padding-top: 10px;">
+						<div class="col-xs-12">
+							<div id="cpuChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
+							<div id="memChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
 						</div>
 					</td>
 				</tr>

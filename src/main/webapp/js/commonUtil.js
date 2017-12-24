@@ -162,7 +162,7 @@ function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 //获取仪表盘，必须先引入echarts.min.js
 function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	var option = {
-	    tooltip : {formatter: "{a}<br>{b}: {c}"+unit},
+	    tooltip : {formatter: "{b}: {c}"+unit},
 	    toolbox: {
 	        show : false,
 	        feature : {
@@ -175,7 +175,7 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	        {
 	            name: titleArr[0],
 	            type: 'gauge',
-	            splitNumber: 10,//分割段数，默认为5
+	            splitNumber: 5,//分割段数，默认为5
 	            axisLine: {//坐标轴线
 	                lineStyle: {//属性lineStyle控制线条样式
 	                    color: colorArr, 
@@ -183,7 +183,7 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	                }
 	            },
 	            axisTick: {//坐标轴小标记
-	                splitNumber: 10,//每份split细分多少段
+	                splitNumber: 5,//每份split细分多少段
 	                length: 12,//属性length控制线长
 	                lineStyle: {//属性lineStyle控制线条样式
 	                    color: 'auto'
@@ -196,7 +196,7 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	            },
 	            splitLine: {//分隔线
 	                show: true,//默认显示，属性show控制显示与否
-	                length: 30,//属性length控制线长
+	                length: 15,//属性length控制线长
 	                lineStyle: {//属性lineStyle（详见lineStyle）控制线条样式
 	                    color: 'auto'
 	                }
@@ -206,7 +206,7 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	            },
 	            title: {
 	                show: true,
-	                offsetCenter: [0, '-40%'],//x, y，单位px
+	                offsetCenter: [0, 60],//x, y，单位px
 	                textStyle: {//其余属性默认使用全局文本样式，详见TEXTSTYLE
 	                    fontWeight: 'bolder'
 	                }

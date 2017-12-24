@@ -75,7 +75,7 @@
 								</tbody>
 						</table>
 							<div class="alert alert-info">部署执行详情</div>
-							<div style="height: 150px; width: 100%"></div>
+							<div id="shell_msg_div" style="height: 150px; width: 100%; overflow-y: scroll; background: #333; color: #aaa; padding: 10px;"></div>
 						
 						<div class="alert alert-info">服务目录</div>
 						<div>
@@ -293,6 +293,44 @@
 				showDialog(data.result);
 			}
 		});
+		
+		
+		//查询，并同步更新控制台
+		var line = 0;
+		$.ajax({
+			type: "POST",
+			url: '<%=basePath%>queryShell.do?shellId='+appNo +'&currentLine=' + line,
+			dataType:'json',
+			//beforeSend: validateData,
+			cache: false,
+			success: function(data){
+				var shellMsgMap = data.shellMsgMap;
+				if (shellMsgMap[line] != null && shellMsgMap[line] == "-1"){
+					return 0;
+				}
+				$('#shell_msg_div').append('<p>'+shellMsgMap[line]+'</p>'); 
+				var res = setInterval(() => {
+					line++;
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>queryShell.do?shellId='+appNo +'&currentLine=' + line,
+						dataType:'json',
+						//beforeSend: validateData,
+						cache: false,
+						success: function(data){
+							var shellMsgMap = data.shellMsgMap;
+							if (shellMsgMap[line] != null && shellMsgMap[line] == "-1"){
+								clearInterval(t);
+							}else{
+								$('#shell_msg_div').append('<p>'+shellMsgMap[line]+'</p>'); 
+							}
+						}
+					});
+				}, 200);
+			}
+		});
+		
+		
 	}
 	</script>
 

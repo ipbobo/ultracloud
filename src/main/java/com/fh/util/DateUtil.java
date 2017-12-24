@@ -15,6 +15,7 @@ import java.util.Date;
 public class DateUtil {
 	
 	private final static SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
+	private final static SimpleDateFormat sdfMonth = new SimpleDateFormat("yyyy-MM");
 	private final static SimpleDateFormat sdfDay = new SimpleDateFormat("yyyy-MM-dd");
 	private final static SimpleDateFormat sdfDays = new SimpleDateFormat("yyyyMMdd");
 	private final static SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -34,6 +35,14 @@ public class DateUtil {
 	 */
 	public static String getYear() {
 		return sdfYear.format(new Date());
+	}
+	
+	/**
+	 * 获取YYYY-MM格式
+	 * @return
+	 */
+	public static String getMonth() {
+		return sdfMonth.format(new Date());
 	}
 
 	/**
