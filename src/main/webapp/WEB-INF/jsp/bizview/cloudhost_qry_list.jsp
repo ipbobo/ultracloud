@@ -29,11 +29,11 @@
 			<th class="center">IP</th>
 			<th class="center">项目</th>
 			<th class="center">环境</th>
-			<c:if test="pd.operType=='cal'">
+			<c:if test="${pd.operType=='cal'}">
 				<th class="center">CPU</th>
 				<th class="center">内存</th>
 			</c:if>
-			<c:if test="pd.operType=='store'">
+			<c:if test="${pd.operType=='store'}">
 				<th class="center">数据盘</th>
 				<th class="center">快照</th>
 			</c:if>
@@ -49,11 +49,11 @@
 			<td class='center'>${var.ip}</td>
 			<td class='center'>${var.projectCodeName}</td>
 			<td class='center'>${var.envCodeName}</td>
-			<c:if test="pd.operType=='cal'">
+			<c:if test="${pd.operType=='cal'}">
 				<td class='center'>${var.cpu}&nbsp;核</td>
 				<td class='center'>${var.memory}&nbsp;GB</td>
 			</c:if>
-			<c:if test="pd.operType=='store'">
+			<c:if test="${pd.operType=='store'}">
 				<td class='center'>${var.datadisk}&nbsp;核</td>
 				<td class='center'>${var.snapshoot}&nbsp;GB</td>
 			</c:if>
