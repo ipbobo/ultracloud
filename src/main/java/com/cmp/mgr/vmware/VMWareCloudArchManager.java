@@ -17,7 +17,14 @@ import java.util.function.Function;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.entity.tcc.TccCluster;
+import com.cmp.entity.tcc.TccDatacenter;
+import com.cmp.entity.tcc.TccDatastore;
+import com.cmp.entity.tcc.TccHostMachine;
+import com.cmp.entity.tcc.TccNetwork;
+import com.cmp.entity.tcc.TccResourcePool;
 import com.cmp.entity.tcc.TccVirtualMachine;
+import com.cmp.entity.tcc.TccVmSnapshot;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
@@ -67,6 +74,8 @@ import com.vmware.vim25.mo.util.PropertyCollectorUtil;
 @SuppressWarnings({ "unused" })
 public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
+	private VMWareConvertors converters;
+
 	public VMWareCloudArchManager() {
 	}
 
@@ -78,19 +87,27 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	public List<Datacenter> getDatacenters() {
 		return searchManagedEntities(Datacenter.class);
 	}
-
+	
 	@Override
-	public List<ClusterComputeResource> getClusters() {
-		return searchManagedEntities(ClusterComputeResource.class);
+	public List<TccDatacenter> getDatacenter() {
+		return searchManagedEntities(Datacenter.class).stream()
+				.map(converters.toDatacenter()).collect(toList());
 	}
 
 	@Override
-	public List<ResourcePool> getResourcePools() {
-		return searchManagedEntities(ResourcePool.class);
+	public List<TccCluster> getClusters() {
+		return searchManagedEntities(ClusterComputeResource.class)
+				.stream().map(converters.toCluster()).collect(toList());
 	}
 
 	@Override
-	public List<Datastore> getDatastores() {
+	public List<TccResourcePool> getResourcePools() {
+		return searchManagedEntities(ResourcePool.class).stream()
+				.map(converters.toResourcePool()).collect(toList());
+	}
+
+	@Override
+	public List<TccDatastore> getDatastores() {
 		Function<HostSystem, HostDatastoreBrowser> getDatastoreBrowser = host -> {
 			try {
 				return host.getDatastoreBrowser();
@@ -104,6 +121,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				.map(HostDatastoreBrowser::getDatastores)
 				.filter(ArrayUtils::isNotEmpty)
 				.flatMap(Arrays::stream)
+				.map(converters.toDatastore())
 				.collect(toList());
 	}
 
@@ -111,7 +129,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	public List<TccVirtualMachine> getVirtualMachines() {
 		return getVirtualMachinesNoVerify().stream()
 				.filter(this::isVirtualMachine)
-				.map(VMWareConvertors.vmConverter())
+				.map(converters.toVirtualMachine())
 				.collect(toList());
 	}
 
@@ -170,6 +188,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		}
 	}
 
+	@Override
 	@SuppressWarnings("deprecation")
 	public void createVirtualMachine(CreateVmRequest request) {
 		try {
@@ -187,8 +206,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			String rpName = request.getRpName();
 
 			Datacenter dc = searchManagedEntity(Datacenter.class, dcName).get();
-
-			List<ResourcePool> mes = getResourcePools();
+			List<ResourcePool> mes = searchManagedEntities(ResourcePool.class);
 
 			ResourcePool rp = null;
 			for (ResourcePool tmp : mes) {
@@ -407,26 +425,32 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<HostSystem> getHostMachines() {
-		return searchManagedEntities(HostSystem.class);
+	public List<TccHostMachine> getHostMachines() {
+		return searchManagedEntities(HostSystem.class).stream()
+				.map(converters.toHostMachine()).collect(toList());
 	}
 
 	@Override
-	public List<Network> getNetworks() {
-		return searchManagedEntities(Network.class);
+	public List<TccNetwork> getNetworks() {
+		return searchManagedEntities(Network.class).stream()
+				.map(converters.toNetwork()).collect(toList());
 	}
 
 	@Override
-	public List<VirtualMachine> getVmTemplates() {
-		return getVirtualMachinesNoVerify().stream().filter(this::isTemplate).collect(toList());
+	public List<TccVirtualMachine> getVmTemplates() {
+		return getVirtualMachinesNoVerify().stream()
+				.filter(this::isTemplate)
+				.map(converters.toVirtualMachine())
+				.collect(toList());
 	}
 
 	@Override
-	public List<VirtualMachineSnapshot> getVmSnapshots() {
+	public List<TccVmSnapshot> getVmSnapshots() {
 		return getVirtualMachinesNoVerify().stream()
 				.filter(this::isVirtualMachine)
 				.map(VirtualMachine::getRootSnapshot)
 				.flatMap(Arrays::stream)
+				.map(converters.toVmSnapshot())
 				.collect(toList());
 	}
 

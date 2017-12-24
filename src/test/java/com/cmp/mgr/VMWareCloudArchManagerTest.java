@@ -5,21 +5,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.entity.tcc.TccCluster;
+import com.cmp.entity.tcc.TccDatastore;
+import com.cmp.entity.tcc.TccHostMachine;
+import com.cmp.entity.tcc.TccNetwork;
+import com.cmp.entity.tcc.TccResourcePool;
 import com.cmp.entity.tcc.TccVirtualMachine;
+import com.cmp.entity.tcc.TccVmSnapshot;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.vmware.VMWareCloudArchManager;
 import com.vmware.vim25.Description;
 import com.vmware.vim25.VirtualDevice;
-import com.vmware.vim25.VirtualMachineConfigInfo;
-import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
-import com.vmware.vim25.mo.Datastore;
-import com.vmware.vim25.mo.HostSystem;
-import com.vmware.vim25.mo.Network;
-import com.vmware.vim25.mo.ResourcePool;
-import com.vmware.vim25.mo.VirtualMachine;
-import com.vmware.vim25.mo.VirtualMachineSnapshot;
 
 public class VMWareCloudArchManagerTest implements CloudArchTest {
 
@@ -47,7 +45,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	public void testGetClusters() {
 		execute("GetClusters", () -> {
 			cloudArchManager.getClusters().stream()
-					.map(ClusterComputeResource::getName).forEach(System.out::println);
+					.map(TccCluster::getClusterName).forEach(System.out::println);
 		});
 	}
 
@@ -55,7 +53,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	public void testGetHostMachines() {
 		execute("GetHostMachines", () -> {
 			cloudArchManager.getHostMachines().stream()
-					.map(HostSystem::getName).forEach(System.out::println);
+					.map(TccHostMachine::getHostName).forEach(System.out::println);
 		});
 	}
 
@@ -71,7 +69,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	public void testGetTemplates() {
 		execute("GetTemplates", () -> {
 			cloudArchManager.getVmTemplates().stream()
-					.map(VirtualMachine::getName).forEach(System.out::println);
+					.map(TccVirtualMachine::getName).forEach(System.out::println);
 		});
 	}
 
@@ -79,7 +77,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	public void testGetDatastores() {
 		execute("GetDatastores", () -> {
 			cloudArchManager.getDatastores().stream()
-					.map(Datastore::getName).forEach(System.out::println);
+					.map(TccDatastore::getName).forEach(System.out::println);
 		});
 	}
 
@@ -87,7 +85,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	public void testGetResourcePools() {
 		execute("GetResourcePools", () -> {
 			cloudArchManager.getResourcePools().stream()
-					.map(ResourcePool::getName).forEach(System.out::println);
+					.map(TccResourcePool::getName).forEach(System.out::println);
 		});
 	}
 
@@ -105,7 +103,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	public void testGetNetWorks() {
 		execute("GetNetWorks", () -> {
 			cloudArchManager.getNetworks().stream()
-					.map(Network::getName).forEach(System.out::println);
+					.map(TccNetwork::getNetworkName).forEach(System.out::println);
 		});
 	}
 
@@ -113,9 +111,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	public void testGetVmSnapshots() {
 		execute("GetVmSnapshots", () -> {
 			cloudArchManager.getVmSnapshots().stream()
-					.map(VirtualMachineSnapshot::getConfig)
-					.map(VirtualMachineConfigInfo::getName)
-					.forEach(System.out::println);
+					.map(TccVmSnapshot::getName).forEach(System.out::println);
 		});
 	}
 

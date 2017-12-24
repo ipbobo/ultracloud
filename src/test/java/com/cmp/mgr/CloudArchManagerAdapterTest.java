@@ -5,7 +5,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
-import com.vmware.vim25.mo.HostSystem;
+import com.cmp.entity.tcc.TccHostMachine;
 
 public class CloudArchManagerAdapterTest {
 
@@ -18,9 +18,9 @@ public class CloudArchManagerAdapterTest {
 		platform.setPlatformManagerType("com.cmp.mgr.impl.VMWareCloudArchManager");
 
 		CloudArchManagerAdapter adapter = new CloudArchManagerAdapter();
-		List<HostSystem> hosts = adapter.getCloudArchManagerAdaptee(platform).getHostMachines();
+		List<TccHostMachine> hosts = adapter.getCloudArchManagerAdaptee(platform).getHostMachines();
 
-		hosts.stream().map(HostSystem::getName).forEach(System.out::println);
+		hosts.stream().map(TccHostMachine::getHostName).forEach(System.out::println);
 	}
 
 }
