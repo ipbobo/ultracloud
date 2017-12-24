@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.vmware.VMWareCloudArchManager;
@@ -77,7 +78,7 @@ public class VMWareCloudArchManagerTest {
 	public void testGetVirtualMachines() {
 		execute("GetVirtualMachines", () -> {
 			cloudArchManager.getVirtualMachines().stream()
-					.map(VirtualMachine::getName).forEach(System.out::println);
+					.map(TccVirtualMachine::getUUID).forEach(System.out::println);
 		});
 	}
 
@@ -105,7 +106,7 @@ public class VMWareCloudArchManagerTest {
 		});
 	}
 
-//	@Test
+	// @Test
 	public void testGetVirtualDevices() {
 		execute("GetVirtualDevices", () -> {
 			cloudArchManager.getVirtualDevices().stream()
