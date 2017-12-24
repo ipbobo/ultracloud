@@ -3,7 +3,7 @@
 <mapper namespace="ResviewMapper">
 	<!-- 物理机列表分页查询 -->
 	<select id="getHostPageList" parameterType="page" resultType="pd">
-		select a.id, a.name, a.uuid, a.type, a.cpf_id, a.datacenter_id, a.cluster_id, a.status, a.ip, a.port, a.cpu, a.memory, a.localdisk, a.devicenum, a.duedate, a.account, a.password_ssh, a.gmt_create, a.gmt_modified
+		select a.id, a.name, a.uuid, a.type, a.cpf_id, a.datacenter_id, a.cluster_id, a.status, a.ip, a.port, ifnull(a.cpu, '0') cpu, ifnull(a.memory, '0') memory, a.localdisk, a.devicenum, a.duedate, a.account, a.password_ssh, DATE_FORMAT(a.gmt_create, '%Y-%m-%d %H:%i:%s') gmt_create, a.gmt_modified
 		, b.name clusterName
 		from t_hostmachine a
 		left join t_cluster b on b.id=a.cluster_id

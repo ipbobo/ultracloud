@@ -59,9 +59,9 @@
 			<c:if test="${pd.operType=='store'}">
 				<td class='center'>${var.name}</td>
 				<td class='center'>${var.ip}</td>
-				<td class='center'>${var.localdisk}</td>
-				<td class='center'></td>
-				<td class='center'>${clusterName}</td>
+				<td class='center'>${var.localdisk}&nbsp;GB</td>
+				<td class='center'>0&nbsp;GB</td>
+				<td class='center'>${var.clusterName}</td>
 			</c:if>
 			<td class='center'>${var.gmt_create}</td>
 		</tr>
