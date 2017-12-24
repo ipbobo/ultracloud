@@ -17,6 +17,7 @@
 </head>
 <body>
 <form id="mainForm" name="mainForm" action="bizview/cloudhostlist.do" enctype="multipart/form-data" method="post">
+<input type="hidden" name="operType" value="${pd.operType}">
 <input type="hidden" name="bizviewType" value="${pd.bizviewType}">
 <input type="hidden" name="subBizviewType" value="${pd.subBizviewType}">
 <div class="widget-box widget-header" style="margin:0px"><h4 class="smaller">云主机列表&nbsp;&nbsp;&nbsp;<font color="#ff0000" size="2">*此列表不包括从资源池同步过来,但未绑定的虚拟机</font></h4></div>
@@ -28,8 +29,14 @@
 			<th class="center">IP</th>
 			<th class="center">项目</th>
 			<th class="center">环境</th>
-			<th class="center">CPU</th>
-			<th class="center">内存</th>
+			<c:if test="${pd.operType=='cal'}">
+				<th class="center">CPU</th>
+				<th class="center">内存</th>
+			</c:if>
+			<c:if test="${pd.operType=='store'}">
+				<th class="center">数据盘</th>
+				<th class="center">快照</th>
+			</c:if>
 			<th class="center" style="width: 140px;">创建时间</th>
 		</tr>
 	</thead>
@@ -42,8 +49,14 @@
 			<td class='center'>${var.ip}</td>
 			<td class='center'>${var.projectCodeName}</td>
 			<td class='center'>${var.envCodeName}</td>
-			<td class='center'>${var.cpu}&nbsp;核</td>
-			<td class='center'>${var.memory}&nbsp;GB</td>
+			<c:if test="${pd.operType=='cal'}">
+				<td class='center'>${var.cpu}&nbsp;核</td>
+				<td class='center'>${var.memory}&nbsp;GB</td>
+			</c:if>
+			<c:if test="${pd.operType=='store'}">
+				<td class='center'>${var.datadisk}&nbsp;核</td>
+				<td class='center'>${var.snapshoot}&nbsp;GB</td>
+			</c:if>
 			<td class='center'>${var.gmt_create}</td>
 		</tr>
 	</c:forEach>
