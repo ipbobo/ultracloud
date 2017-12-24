@@ -25,7 +25,7 @@
 	<thead>
 		<tr>
 			<th class="center" style="width: 50px;">序号</th>
-			<c:if test="pd.operType=='cal'">
+			<c:if test="${pd.operType=='cal'}">
 				<th class="center">主机名称</th>
 				<th class="center">IP地址</th>
 				<th class="center">物理CPU/物理内存</th>
@@ -33,7 +33,7 @@
 				<th class="center">内存使用率</th>
 				<th class="center">已分配</th>
 			</c:if>
-			<c:if test="pd.operType=='store'">
+			<c:if test="${pd.operType=='store'}">
 				<th class="center">存储名称</th>
 				<th class="center">服务器地址</th>
 				<th class="center">存储总量</th>
@@ -48,7 +48,7 @@
 	<c:forEach items="${hostList}" var="var" varStatus="vs">
 		<tr>
 			<td class='center' style="width: 30px;">${vs.index+1+page.currentResult}</td>
-			<c:if test="pd.operType=='cal'">
+			<c:if test="${pd.operType=='cal'}">
 				<td class='center'>${var.name}</td>
 				<td class='center'>${var.ip}</td>
 				<td class='center'>${var.cpu}&nbsp;核/${var.memory}&nbsp;GB</td>
@@ -56,7 +56,7 @@
 				<td class='center'></td>
 				<td class='center'></td>
 			</c:if>
-			<c:if test="pd.operType=='store'">
+			<c:if test="${pd.operType=='store'}">
 				<td class='center'>${var.name}</td>
 				<td class='center'>${var.ip}</td>
 				<td class='center'>${var.localdisk}</td>
