@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
-import com.cmp.mgr.impl.VMWareCloudArchManager;
+import com.cmp.mgr.vmware.VMWareCloudArchManager;
 import com.vmware.vim25.Description;
 import com.vmware.vim25.VirtualDevice;
 import com.vmware.vim25.VirtualMachineConfigInfo;

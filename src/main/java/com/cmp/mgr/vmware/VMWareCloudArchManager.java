@@ -1,4 +1,4 @@
-package com.cmp.mgr.impl;
+package com.cmp.mgr.vmware;
 
 import static java.util.stream.Collectors.toList;
 
@@ -17,6 +17,7 @@ import java.util.function.Function;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.vmware.vim25.AboutInfo;
