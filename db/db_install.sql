@@ -813,9 +813,9 @@ CREATE TABLE `bi_bill_day` (
   `vm_name`varchar(50) DEFAULT NULL COMMENT '虚拟机名称',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
   `memory` int unsigned DEFAULT NULL COMMENT '内存',
-  `disk` int unsigned DEFAULT NULL COMMENT '磁盘',
-  `type` varchar(20) NOT NULL COMMENT '类型',
-  `user` varchar(32) NOT NULL COMMENT '虚拟机用户',
+  `datadisk` int unsigned DEFAULT NULL COMMENT '磁盘',
+  `type` varchar(20) DEFAULT NULL COMMENT '类型',
+  `user` varchar(32) DEFAULT NULL COMMENT '虚拟机用户',
   `date` varchar(20) DEFAULT NULL COMMENT '日期',
   `account` int unsigned DEFAULT NULL COMMENT '费用',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -838,9 +838,9 @@ CREATE TABLE `bi_bill_month` (
   `vm_name`varchar(50) DEFAULT NULL COMMENT '虚拟机名称',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
   `memory` int unsigned DEFAULT NULL COMMENT '内存',
-  `disk` int unsigned DEFAULT NULL COMMENT '磁盘',
-  `type` varchar(20) NOT NULL COMMENT '类型',
-  `user` varchar(32) NOT NULL COMMENT '虚拟机用户',
+  `datadisk` int unsigned DEFAULT NULL COMMENT '磁盘',
+  `type` varchar(20) DEFAULT NULL COMMENT '类型',
+  `user` varchar(32) DEFAULT NULL COMMENT '虚拟机用户',
   `month` varchar(20) DEFAULT NULL COMMENT '月份',
   `account` int unsigned DEFAULT NULL COMMENT '费用',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -863,13 +863,13 @@ CREATE TABLE `bi_software_bill` (
   `vm_name`varchar(50) DEFAULT NULL COMMENT '虚拟机名称',
   `cpu` tinyint unsigned DEFAULT NULL COMMENT 'cpu',
   `memory` int unsigned DEFAULT NULL COMMENT '内存',
-  `disk` int unsigned DEFAULT NULL COMMENT '磁盘',
-  `type` varchar(20) NOT NULL COMMENT '类型',
-  `user` varchar(32) NOT NULL COMMENT '虚拟机用户',
+  `datadisk` int unsigned DEFAULT NULL COMMENT '磁盘',
+  `type` varchar(20) DEFAULT NULL COMMENT '类型',
+  `user` varchar(32) DEFAULT NULL COMMENT '虚拟机用户',
   `date` varchar(20) DEFAULT NULL COMMENT '日期',
   `software_id` bigint unsigned DEFAULT NULL COMMENT '软件id',
-  `software_name` varchar(20) NOT NULL COMMENT '软件名称',
-  `software_version` varchar(20) NOT NULL COMMENT '软件版本号',
+  `software_name` varchar(20) DEFAULT NULL COMMENT '软件名称',
+  `software_version` varchar(20) DEFAULT NULL COMMENT '软件版本号',
   `software_type` varchar(30) DEFAULT NULL COMMENT '软件类型',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   UNIQUE KEY `uk_vmid_date` (`vm_id`,`date`),
@@ -893,3 +893,35 @@ CREATE TABLE `t_timetask` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='定时任务表'; 
 
 
+-- ---------------------------------------------------------------------------------------
+-- 创建虚拟机费用查询视图 start...
+-- ----------------------------------------------------------------------------------------
+DELIMITER $$
+
+USE `cmpdb`$$
+
+DROP VIEW IF EXISTS `v_bi_virtual_bill`$$
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `v_bi_virtual_bill` AS 
+SELECT
+  `b`.`DEPARTMENT_ID` AS `DEPARTMENT_ID`,
+  `b`.`NAME`          AS `DEPARTMENT_NAME`,
+  `c`.`id`            AS `project_id`,
+  `c`.`name`          AS `project_name`,
+  `a`.`id`            AS `vm_id`,
+  `a`.`name`          AS `vm_name`,
+  `a`.`cpu`           AS `cpu`,
+  `a`.`memory`        AS `memory`,
+  `a`.`datadisk`      AS `datadisk`,
+  `a`.`type`          AS `type`,
+  `a`.`user`          AS `user`
+FROM ((`t_virtualmachine` `a`
+    JOIN `oa_department` `b`)
+   JOIN `t_project` `c`)
+WHERE ((`a`.`project_id` = `c`.`id`)
+       AND (`c`.`DEPARTMENT_ID` = `b`.`DEPARTMENT_ID`))$$
+
+DELIMITER ;
+-- ---------------------------------------------------------------------------------------
+-- 创建虚拟机费用查询视图 end.
+-- ----------------------------------------------------------------------------------------
