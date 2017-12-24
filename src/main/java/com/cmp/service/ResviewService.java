@@ -62,9 +62,9 @@ public class ResviewService {
 		return cmpRes;
 	}
 	
-	//云主机列表分页查询
+	//物理机列表分页查询
 	@SuppressWarnings("unchecked")
 	public List<PageData> getHostPageList(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", page);
+		return (List<PageData>) dao.findForList("ResviewMapper.getHostPageList", page);
 	}
 }

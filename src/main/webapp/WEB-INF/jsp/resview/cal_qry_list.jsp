@@ -98,7 +98,7 @@ getBarChart('memChart', ['内存容量'], ['总量','使用量'], ['${cmpRes.mem
 		</td>
 	</tr>
 </table>
-<iframe src="resview/hostlist.do?bizviewType=${bizviewType}&subBizviewType=${subBizviewType}" name="mainFrame" frameborder="0" marginheight="0" marginwidth="0" height="480px" width="100%"></iframe>
+<iframe src="resview/hostlist.do?operType=cal&bizviewType=${bizviewType}&subBizviewType=${subBizviewType}" name="mainFrame" frameborder="0" marginheight="0" marginwidth="0" height="480px" width="100%"></iframe>
 <%@ include file="../system/index/foot.jsp"%>
 <script type="text/javascript">
 $(top.hangge());//关闭加载状态

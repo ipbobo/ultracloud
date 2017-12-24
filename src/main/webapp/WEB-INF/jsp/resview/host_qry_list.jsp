@@ -17,6 +17,7 @@
 </head>
 <body>
 <form id="mainForm" name="mainForm" action="resview/hostlist.do" enctype="multipart/form-data" method="post">
+<input type="hidden" name="operType" value="${pd.operType}">
 <input type="hidden" name="bizviewType" value="${pd.bizviewType}">
 <input type="hidden" name="subBizviewType" value="${pd.subBizviewType}">
 <div class="widget-box widget-header" style="margin:0px"><h4 class="smaller">物理机列表&nbsp;&nbsp;&nbsp;<font color="#ff0000" size="2">*此列表不包括从资源池同步过来,但未绑定的物理机</font></h4></div>
@@ -24,12 +25,21 @@
 	<thead>
 		<tr>
 			<th class="center" style="width: 50px;">序号</th>
-			<th class="center">云主机名称</th>
-			<th class="center">IP</th>
-			<th class="center">项目</th>
-			<th class="center">环境</th>
-			<th class="center">CPU</th>
-			<th class="center">内存</th>
+			<c:if test="pd.operType=='cal'">
+				<th class="center">主机名称</th>
+				<th class="center">IP地址</th>
+				<th class="center">物理CPU/物理内存</th>
+				<th class="center">CPU使用率</th>
+				<th class="center">内存使用率</th>
+				<th class="center">已分配</th>
+			</c:if>
+			<c:if test="pd.operType=='store'">
+				<th class="center">存储名称</th>
+				<th class="center">服务器地址</th>
+				<th class="center">存储总量</th>
+				<th class="center">使用量</th>
+				<th class="center">集群</th>
+			</c:if>
 			<th class="center" style="width: 140px;">创建时间</th>
 		</tr>
 	</thead>
@@ -38,12 +48,21 @@
 	<c:forEach items="${hostList}" var="var" varStatus="vs">
 		<tr>
 			<td class='center' style="width: 30px;">${vs.index+1+page.currentResult}</td>
-			<td class='center'>${var.name}</td>
-			<td class='center'>${var.ip}</td>
-			<td class='center'>${var.projectCodeName}</td>
-			<td class='center'>${var.envCodeName}</td>
-			<td class='center'>${var.cpu}&nbsp;核</td>
-			<td class='center'>${var.memory}&nbsp;GB</td>
+			<c:if test="pd.operType=='cal'">
+				<td class='center'>${var.name}</td>
+				<td class='center'>${var.ip}</td>
+				<td class='center'>${var.cpu}&nbsp;核/${var.memory}&nbsp;GB</td>
+				<td class='center'></td>
+				<td class='center'></td>
+				<td class='center'></td>
+			</c:if>
+			<c:if test="pd.operType=='store'">
+				<td class='center'>${var.name}</td>
+				<td class='center'>${var.ip}</td>
+				<td class='center'>${var.localdisk}</td>
+				<td class='center'></td>
+				<td class='center'>${clusterName}</td>
+			</c:if>
 			<td class='center'>${var.gmt_create}</td>
 		</tr>
 	</c:forEach>
