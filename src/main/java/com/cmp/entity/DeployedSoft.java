@@ -5,6 +5,7 @@ public class DeployedSoft {
 	private String virtualmachineId;
 	private String virtualmachineName;
 	private String softName;
+	private String softType;
 	private String softParams;
 	private String softVersion;
 	private String status;
@@ -58,6 +59,12 @@ public class DeployedSoft {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public String getSoftType() {
+		return softType;
+	}
+	public void setSoftType(String softType) {
+		this.softType = softType;
 	}
 	
 	

@@ -597,6 +597,9 @@ public class CmpWorkOrderController extends BaseController{
 	    }  
 	}  
 	
+	
+	
+	
 	public List<RelateTask> fetchRelateTaskList(String currentProcInstId){
 		List<RelateTask> relateTaskList = new ArrayList<RelateTask>();
 		List<HistoricActivityInstance> hisActInst = activitiService.getHisActInfo(currentProcInstId);
