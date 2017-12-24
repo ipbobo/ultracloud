@@ -13,7 +13,7 @@
 	}
 	function closeDialog(){
 		$('#msgModal').modal('hide');
-		top.Dialog.close();
+		//top.Dialog.close();
 	}
 </script>
 </head>

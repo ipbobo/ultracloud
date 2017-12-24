@@ -297,40 +297,29 @@
 		
 		//查询，并同步更新控制台
 		var line = 0;
-		$.ajax({
-			type: "POST",
-			url: '<%=basePath%>queryShell.do?shellId='+appNo +'&currentLine=' + line,
-			dataType:'json',
-			//beforeSend: validateData,
-			cache: false,
-			success: function(data){
-				var shellMsgMap = data.shellMsgMap;
-				if (shellMsgMap[line] != null && shellMsgMap[line] == "-1"){
-					return 0;
-				}
-				$('#shell_msg_div').append('<p>'+shellMsgMap[line]+'</p>'); 
-				var res = setInterval(() => {
-					line++;
-					$.ajax({
-						type: "POST",
-						url: '<%=basePath%>queryShell.do?shellId='+appNo +'&currentLine=' + line,
-						dataType:'json',
-						//beforeSend: validateData,
-						cache: false,
-						success: function(data){
-							var shellMsgMap = data.shellMsgMap;
-							if (shellMsgMap[line] != null && shellMsgMap[line] == "-1"){
-								clearInterval(t);
-							}else{
-								$('#shell_msg_div').append('<p>'+shellMsgMap[line]+'</p>'); 
+		var res = setInterval(function(){
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>queryShell.do?shellId='+appNo +'&currentLine=' + line,
+				dataType:'json',
+				//beforeSend: validateData,
+				cache: false,
+				success: function(data){
+					var maplen = data.length;
+					var shellMsgMap = data.currentShellMsg;
+					if (shellMsgMap[maplen] != null && shellMsgMap[maplen] == "-1"){
+						clearInterval(res);
+					}
+					for (var i = line; i <maplen; i++ ){
+							if (shellMsgMap[i] != null && shellMsgMap[i] != "-1" && shellMsgMap[i] != "undefined"){
+								$('#shell_msg_div').append(shellMsgMap[i]+'<br\>'); 
+								document.getElementById('shell_msg_div').scrollTop = document.getElementById('shell_msg_div').scrollHeight
 							}
-						}
-					});
-				}, 200);
-			}
-		});
-		
-		
+					}
+					line = maplen;
+				}
+			});
+		}, 5000);
 	}
 	</script>
 

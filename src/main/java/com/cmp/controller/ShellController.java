@@ -26,13 +26,14 @@ public class ShellController extends BaseController{
 		pd = this.getPageData();
 		Map<String , Object> resultMap = new HashMap<String , Object>();
 		Map<Integer, String> currentShellMsg =  (Map<Integer, String>) ShellUtil.getShellMsgMap().get(pd.get("shellId"));
-		int currentLine = (pd.get("currentLine") != null ? (Integer)pd.get("currentLine"): 0);
-		if (currentLine != 0) {
-			for (int i = 1; i < currentLine; i++) {
-				currentShellMsg.remove(i);
-			}
-		}
-		resultMap.put("shellMsgMap", currentShellMsg);
+		int currentLine = Integer.valueOf((pd.get("currentLine") != null ? String.valueOf(pd.get("currentLine")): "0"));
+//		if (currentLine != 0) {
+//			for (int i = 1; i < currentLine; i++) {
+//				currentShellMsg.remove(i);
+//			}
+//		}
+		resultMap.put("currentShellMsg", currentShellMsg);
+		resultMap.put("length", currentShellMsg.size());	
 		return resultMap;
 	}
 }

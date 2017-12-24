@@ -80,11 +80,13 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
     	try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in)); 
 			while (true) { 
-			   String line = br.readLine(); 
-			   if (line == null) 
+			   String line = br.readLine();
+			   Map currentMsgMap = shellMsgMap.get(logIndex);
+			   if (line == null) {
+				currentMsgMap.put(currentMsgMap.size() + 1, "-1");			//脚本执行完毕， -1作为结束标志
 			    break;
-			   Map currentMsgMap;
-			   if ((currentMsgMap = shellMsgMap.get(logIndex)) == null) {
+			   }
+			   if (currentMsgMap == null) {
 				   Map<Integer, String> message = new HashMap<Integer, String>();
 				   message.put(1, line);
 				   shellMsgMap.put(logIndex, message);

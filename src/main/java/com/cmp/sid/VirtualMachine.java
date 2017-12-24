@@ -22,6 +22,7 @@ public class VirtualMachine {
 	private String soft;	  //软件
 	private String softStatus;	//软件安装状态
 	private String appNo;	//工单号
+	private String type;    //类型
 	
 	public String getId() {
 		return id;

@@ -24,6 +24,7 @@ import com.cmp.service.DeployedSoftService;
 import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.VirtualMachineService;
+import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.sid.CloudInfoCollect;
 import com.cmp.sid.CmpCloudInfo;
 import com.cmp.sid.CmpOrder;
@@ -31,6 +32,7 @@ import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.DiskInfo;
 import com.cmp.sid.VirtualMachine;
 import com.cmp.util.PageDataUtil;
+import com.cmp.util.ShellUtil;
 import com.cmp.util.StringUtil;
 import com.fh.entity.system.Department;
 import com.fh.service.fhoa.department.impl.DepartmentService;
@@ -65,6 +67,9 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	
 	@Resource
 	private CloudArchManagerAdapter cloudArchManagerAdapter;
+	
+	@Resource
+	private CloudplatformService cloudplatformService;
 	
 	@Override
 	public Map<String, Object> toWorkorderView(CmpWorkOrder cmpWorkorder) throws Exception {
@@ -261,20 +266,44 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		
 		
 		//安装虚拟机
-//		CloudArchManager cloudArchManager = cloudArchManagerAdapter.getCloudArchManagerAdaptee(new TccCloudPlatform());
-//		CreateVmRequest cvq = new CreateVmRequest();
-//		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
-//		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));
-//		cvq.setDiskSizeKB(Long.parseLong(diskInfoList.get(0).getDiskSize())*1024*1024);
-//		cvq.setDiskMode("persistent");
-//		cvq.setDcName("DC1");
-//		cvq.setVmName(vmName);
-//		cvq.setNetName("VM Network");
-//		cvq.setRpName("Resources");
-//		cvq.setNicName("VMXNET 3");
-//		cvq.setDsName("datastore2-raid5-2.5t");
-//		cvq.setGuestOs(installOS);
-//		cloudArchManager.createVirtualMachine(cvq);
+		String cloudplatformId = pd.getString("cloudplatformId");
+		String datacenterId = pd.getString("datacenterId");
+		String clusterId = pd.getString("clusterId");
+		
+		//查询cloudplatform
+		PageData c_pd = new PageData();
+		c_pd.put("id", cloudplatformId);
+		PageData cloudplatformPd = cloudplatformService.findById(c_pd, false);
+		String platFormName = cloudplatformPd.getString("name");		//云平台名
+		
+		TccCloudPlatform platForm = new TccCloudPlatform();
+		platForm.setCloudplatformUser(cloudplatformPd.getString("username"));
+		platForm.setCloudplatformPassword(cloudplatformPd.getString("password"));
+		platForm.setCloudplatformIp(cloudplatformPd.getString("ip"));
+		String platformManagerType = "";
+		if (orderInfo.getPlatType() != null && orderInfo.getPlatType().equals("vmware")) {
+			platformManagerType="com.cmp.mgr.impl.VMWareCloudArchManager";
+		}else if (orderInfo.getPlatType() != null && orderInfo.getPlatType().equals("openstack")) {
+			platformManagerType="com.cmp.mgr.impl.OpenstatckCloudArchManager";
+		}else if (orderInfo.getPlatType() != null && orderInfo.getPlatType().equals("kvm")) {
+			platformManagerType="com.cmp.mgr.impl.KvmCloudArchManager";
+		}
+		platForm.setPlatformManagerType(platformManagerType);
+		
+		CloudArchManager cloudArchManager = cloudArchManagerAdapter.getCloudArchManagerAdaptee(platForm);
+		CreateVmRequest cvq = new CreateVmRequest();
+		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
+		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));
+		cvq.setDiskSizeKB(Long.parseLong(diskInfoList.get(0).getDiskSize())*1024*1024);
+		cvq.setDiskMode("persistent");					
+		cvq.setDcName("DC1");
+		cvq.setVmName(vmName);
+		cvq.setNetName("VM Network");					//网络名称  ---   datacenter_network表中根据 数据中心 ID获取 				
+		cvq.setRpName("Resources");						//资源池 --- 先写死
+		cvq.setNicName("VMXNET 3");						//写死先
+		cvq.setDsName("datastore2-raid5-2.5t");			//调接口获取
+		cvq.setGuestOs(installOS);
+		//cloudArchManager.createVirtualMachine(cvq);
 		
 		String softCode = orderInfo.getSoftCode();
 		String[] softs = softCode.split(",");
@@ -313,10 +342,12 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			deployedSoft.setSoftVersion(medium.getVersion());
 			deployedSoft.setVirtualmachineName(String.valueOf(vm.getName()));
 			deployedSoftService.add(deployedSoft);
+			
+			//执行软件安装脚本
+			ShellUtil shellUtil = new ShellUtil("118.242.40.216", 7001, "root",  
+	                "r00t0neio", "utf-8");
+			shellUtil.exec("./test.sh", workOrder.getAppNo());
 		}
-		
-
-		
 		resMap.put("result", "执行成功!");
 		return resMap;
 	}

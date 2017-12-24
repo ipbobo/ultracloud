@@ -29,8 +29,7 @@
 		<result column="password" property="password"/>
 		<result column="gmt_create" property="gmt_create"/>
 		<result column="gmt_modified" property="gmt_modified"/>
-		
-		
+		<result column="type" property="type"/>
 		<result column="appNo" property="appNo"/>
 	</resultMap>
 	
@@ -56,7 +55,8 @@
 		username,
 		password,
 		gmt_create,
-		gmt_modified
+		gmt_modified,
+		type
 	</sql>
 	
 	
@@ -83,6 +83,7 @@
 		#{password},
 		#{gmt_create},
 		#{gmt_modified}
+		#{type}
 	</sql>
 	
 	<!-- 字段 -->
@@ -104,7 +105,8 @@
 		appNo,
 		duedate,
 		username,
-		password
+		password,
+		type
 	</sql>
 	
 	<sql id="saveFieldValue">
@@ -125,7 +127,8 @@
 		#{appNo},
 		#{duedate},
 		#{username},
-		#{password}
+		#{password},
+		#{type}
 	</sql>
 	
 	<!-- 新增 -->
