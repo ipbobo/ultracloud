@@ -96,6 +96,13 @@ public class PageData extends HashMap implements Map {
 	public Object remove(Object key) {
 		return map.remove(key);
 	}
+	
+	@Override  
+    public PageData clone() {  
+        PageData pd = null;  
+        pd = (PageData)super.clone();  
+        return pd;  
+    }
 
 	public void clear() {
 		map.clear();

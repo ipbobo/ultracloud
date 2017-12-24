@@ -77,6 +77,14 @@ public interface MediumService {
 	 * @throws Exception
 	 */
 	public List<Medium> listAllMediumByPId(PageData pd) throws Exception;
+	
+	/**
+	 * 查询所有软件类型
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> listAllSoftType(PageData pd) throws Exception;
 
 	//软件列表查询
 	public List<CmpDict> getSoftList() throws Exception;

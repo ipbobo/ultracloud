@@ -9,7 +9,7 @@ import org.quartz.JobExecutionException;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.cmp.service.bi.BIDataGenerateService;
+import com.cmp.service.bi.BIDatacenterService;
 import com.cmp.service.system.TimeTaskServiceImpl;
 import com.fh.controller.base.BaseController;
 import com.fh.util.Logger;
@@ -36,7 +36,7 @@ public class BIDataGenerateJob extends BaseController implements Job {
 
 		// 普通类从spring容器中拿出service
 		WebApplicationContext webctx = ContextLoader.getCurrentWebApplicationContext();
-		BIDataGenerateService biDataGenerateService = (BIDataGenerateService) webctx.getBean("biDataGenerateService");
+		BIDatacenterService biDataGenerateService = (BIDatacenterService) webctx.getBean("biDataGenerateService");
 
 		try {
 			biDataGenerateService.biDataGenerateHandler();

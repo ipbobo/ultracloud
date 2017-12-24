@@ -101,7 +101,7 @@
 		<if test="date!= null and date != ''"><!-- 按时间检索-->
 			and
 				(
-					date LIKE CONCAT(#{month},'%')
+					month LIKE CONCAT(#{month},'%')
 				
 				
 				)

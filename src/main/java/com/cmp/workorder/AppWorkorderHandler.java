@@ -16,7 +16,7 @@ import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.mgr.CloudArchManager;
 import com.cmp.mgr.CloudArchManagerAdapter;
 import com.cmp.mgr.bean.CreateVmRequest;
-import com.cmp.mgr.impl.VMWareCloudArchManager;
+import com.cmp.mgr.vmware.VMWareCloudArchManager;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;

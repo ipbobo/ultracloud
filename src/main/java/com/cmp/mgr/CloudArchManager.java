@@ -2,6 +2,7 @@ package com.cmp.mgr;
 
 import java.util.List;
 
+import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
@@ -22,7 +23,7 @@ public interface CloudArchManager {
 
 	public List<HostSystem> getHostMachines();
 
-	public List<VirtualMachine> getVirtualMachines();
+	public List<TccVirtualMachine> getVirtualMachines();
 
 	public List<Datastore> getDatastores();
 

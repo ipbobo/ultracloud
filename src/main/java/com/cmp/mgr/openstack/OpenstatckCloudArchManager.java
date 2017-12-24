@@ -1,7 +1,9 @@
-package com.cmp.mgr.impl;
+package com.cmp.mgr.openstack;
 
 import java.util.List;
 
+import com.cmp.entity.tcc.TccVirtualMachine;
+import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
@@ -12,7 +14,7 @@ import com.vmware.vim25.mo.ResourcePool;
 import com.vmware.vim25.mo.VirtualMachine;
 import com.vmware.vim25.mo.VirtualMachineSnapshot;
 
-public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
+public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public List<Datacenter> getDatacenters() {
@@ -39,7 +41,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<VirtualMachine> getVirtualMachines() {
+	public List<TccVirtualMachine> getVirtualMachines() {
 		// TODO Auto-generated method stub
 		return null;
 	}

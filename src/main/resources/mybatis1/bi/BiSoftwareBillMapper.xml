@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="BiBillDayMapper">
+<mapper namespace="BiSoftwareBillMapper">
 	
 	<!--表名 -->
 	<sql id="viewName">
-		v_bi_virtual_bill
+		v_bi_soft_bill
 	</sql>
 		<sql id="tableName">
-		bi_bill_day
+		bi_software_bill
 	</sql>
 	
 	<sql id="Field_main">
@@ -23,7 +23,9 @@
         type,
         user,
         date,
-		account
+		soft_name,
+		soft_version,
+		soft_type
 	</sql>
 	
 	<sql id="Field_time">
@@ -50,7 +52,9 @@
         #{type},
         #{user},
         #{date},
-		#{account}
+		#{soft_name},
+		#{soft_version},
+		#{soft_type}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -73,9 +77,35 @@
 	<include refid="FieldValue_main"></include>
 		)
 	</insert>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="date!= null and date != ''"><!-- 按时间检索-->
+			and
+				(
+					date LIKE CONCAT(#{date},'%')
+				
+				
+				)
+		</if>
+		order by gmt_create desc
+	</select>
 	
-	<!-- 查询视图v_bi_virtual_bill的数据 -->
-	<select id="listVBiVirtualBill" parameterType="pd" resultType="pd">
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			date = #{date}
+	</delete>
+	
+	<!-- 查询视图v_bi_soft_bill的数据 -->
+	<select id="listVSoftwareBill" parameterType="pd" resultType="pd">
 		select DEPARTMENT_ID,
         	DEPARTMENT_NAME,
         	project_id,
@@ -87,46 +117,19 @@
         	datadisk,
         	type,
         	user,
-        	soft,
-        	status,
-        	gmt_create,
-        	duedate
+        	soft_type,
+        	soft_name,
+        	soft_version
 		from 
 		<include refid="viewName"></include>
-		where 1 = 1
-		<if test="DEPARTMENT_ID!= null and DEPARTMENT_ID != ''">
-			and DEPARTMENT_ID = #{DEPARTMENT_ID}
-		</if>
-		<if test="project_id!= null and project_id != ''">
-			and project_id = #{project_id}
-		</if>
-		<if test="USERNAME!= null and USERNAME != ''">
-			and user = #{USERNAME}
-		</if>
 	</select>
 	
-	<!-- 列表(全部) -->
-	<select id="listAll" parameterType="pd" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where 1=1
-		<if test="date!= null and date != ''"><!-- 按时间检索-->
-			and
-				(
-					date LIKE CONCAT(#{month},'%')
-				)
-		</if>
-		order by gmt_create desc
-	</select>
-	
-	<!-- 列表 -->
-	<select id="listBillGroupByVirtualId" parameterType="pd" resultType="pd">
+	<!-- 软件台帐查询列表 -->
+	<select id="listAllSoftwareBIData" parameterType="pd" resultType="pd">
 		select
 			id,
 			DEPARTMENT_ID,
-        	DEPARTMENT_NAME,
+	        DEPARTMENT_NAME,
 	        project_id,
 	        project_name,
 	        vm_id,
@@ -137,47 +140,9 @@
 	        type,
 	        user,
 	        date,
-			count(account) as account,
-			gmt_create
-		from 
-		<include refid="tableName"></include>
-		where 1=1
-		<if test="DEPARTMENT_ID!= null and DEPARTMENT_ID != ''">
-			and DEPARTMENT_ID = #{DEPARTMENT_ID}
-		</if>
-		<if test="project_id!= null and project_id != ''">
-			and project_id = #{project_id}
-		</if>
-		<if test="USERNAME!= null and USERNAME != ''">
-			and user = #{USERNAME}
-		</if>
-		<if test="startTime!= null and startTime != ''">
-			and date <![CDATA[>=]]> #{startTime}   
-		</if>
-		<if test="endTime!= null and endTime != ''">
-			and date <![CDATA[<=]]> #{endTime}
-		</if>
-		GROUP BY vm_id
-		order by gmt_create desc
-	</select>
-	
-	
-	<!-- 列表 -->
-	<select id="listResourceGroupByVirtualId" parameterType="pd" resultType="pd">
-		select
-			id,
-			DEPARTMENT_ID,
-        	DEPARTMENT_NAME,
-	        project_id,
-	        project_name,
-	        vm_id,
-	        vm_name,
-	        cpu,
-	        memory,
-	        datadisk,
-	        type,
-	        user,
-	        date,
+			soft_name,
+			soft_version,
+			soft_type,
 			gmt_create
 		from 
 		<include refid="tableName"></include>
@@ -190,6 +155,9 @@
 		</if>
 		<if test="USERNAME!= null and USERNAME != ''">
 			and user = #{USERNAME}
+		</if>
+		<if test="soft_type!= null and soft_typeE != ''">
+			and soft_type = #{soft_type}
 		</if>
 	</select>
 	

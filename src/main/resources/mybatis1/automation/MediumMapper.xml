@@ -155,6 +155,14 @@
 		ORDER BY id
 	</select>
 	
+	
+	<!-- 查询软件类型列表   -->
+	<select id="listAllSoftType" parameterType="pd" resultType="pd">
+		select distinct(type)
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
 	<!-- 软件列表查询 -->
 	<select id="getSoftList" parameterType="String" resultType="com.cmp.sid.CmpDict">
 		select id dictCode, concat(name, ' ', version) dictValue from t_medium order by name, version

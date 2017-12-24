@@ -98,7 +98,7 @@ DROP TABLE IF EXISTS `t_hostmachine`;
 CREATE TABLE `t_hostmachine` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
-  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
+  `uuid` varchar(40) DEFAULT COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
@@ -107,8 +107,11 @@ CREATE TABLE `t_hostmachine` (
   `ip` varchar(20) DEFAULT NULL COMMENT '宿主机ip',
   `port` INT UNSIGNED DEFAULT NULL COMMENT '端口',
   `cpu` double DEFAULT NULL COMMENT 'cpu',
+  `cpu_used` double DEFAULT NULL COMMENT '已使用cpu',
   `memory` double DEFAULT NULL COMMENT '内存',
+  `memory_used` double DEFAULT NULL COMMENT '已使用内存',
   `localdisk` float DEFAULT NULL COMMENT '本地磁盘',
+  `localdisk_used` float DEFAULT NULL COMMENT '已使用本地磁盘',
   `devicenum` varchar(30) DEFAULT NULL COMMENT '设备号',
   `duedate` datetime DEFAULT NULL COMMENT '到期时间',
   `account` varchar(20) DEFAULT NULL COMMENT '用户名',
@@ -127,7 +130,7 @@ DROP TABLE IF EXISTS `t_hostmachine_sync`;
 CREATE TABLE `t_hostmachine_sync` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
-  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
+  `uuid` varchar(40) DEFAULT COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
@@ -136,8 +139,11 @@ CREATE TABLE `t_hostmachine_sync` (
   `ip` varchar(20) DEFAULT NULL COMMENT '宿主机ip',
   `port` INT UNSIGNED DEFAULT NULL COMMENT '端口',
   `cpu` double DEFAULT NULL COMMENT 'cpu',
+  `cpu_used` double DEFAULT NULL COMMENT '已使用cpu',
   `memory` double DEFAULT NULL COMMENT '内存',
+  `memory_used` double DEFAULT NULL COMMENT '已使用内存',
   `localdisk` float DEFAULT NULL COMMENT '本地磁盘',
+  `localdisk_used` float DEFAULT NULL COMMENT '已使用本地磁盘',
   `devicenum` varchar(30) DEFAULT NULL COMMENT '设备号',
   `duedate` datetime DEFAULT NULL COMMENT '到期时间',
   `account` varchar(20) DEFAULT NULL COMMENT '用户名',
@@ -867,12 +873,11 @@ CREATE TABLE `bi_software_bill` (
   `type` varchar(20) DEFAULT NULL COMMENT '类型',
   `user` varchar(32) DEFAULT NULL COMMENT '虚拟机用户',
   `date` varchar(20) DEFAULT NULL COMMENT '日期',
-  `software_id` bigint unsigned DEFAULT NULL COMMENT '软件id',
-  `software_name` varchar(20) DEFAULT NULL COMMENT '软件名称',
-  `software_version` varchar(20) DEFAULT NULL COMMENT '软件版本号',
-  `software_type` varchar(30) DEFAULT NULL COMMENT '软件类型',
+  `soft_name` varchar(20) DEFAULT NULL COMMENT '软件名称',
+  `soft_version` varchar(20) DEFAULT NULL COMMENT '软件版本号',
+  `soft_type` varchar(30) DEFAULT NULL COMMENT '软件类型',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  UNIQUE KEY `uk_vmid_date` (`vm_id`,`date`),
+  UNIQUE KEY `uk_vmid_date` (`vm_id`,`soft_type`,`date`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='软件台账报表'; 
 
@@ -914,7 +919,11 @@ SELECT
   `a`.`memory`        AS `memory`,
   `a`.`datadisk`      AS `datadisk`,
   `a`.`type`          AS `type`,
-  `a`.`user`          AS `user`
+  `a`.`user`          AS `user`,
+  `a`.`soft`          AS `soft`,
+  `a`.`status`        AS `status`,
+  `a`.`gmt_create`    AS `gmt_create`,
+  `a`.`duedate`       AS `duedate`
 FROM ((`t_virtualmachine` `a`
     JOIN `oa_department` `b`)
    JOIN `t_project` `c`)
@@ -924,4 +933,43 @@ WHERE ((`a`.`project_id` = `c`.`id`)
 DELIMITER ;
 -- ---------------------------------------------------------------------------------------
 -- 创建虚拟机费用查询视图 end.
+-- ----------------------------------------------------------------------------------------
+
+
+-- ---------------------------------------------------------------------------------------
+-- 创建软件台帐查询视图 start...
+-- ----------------------------------------------------------------------------------------
+DELIMITER $$
+
+USE `cmpdb`$$
+
+DROP VIEW IF EXISTS `v_bi_soft_bill`$$
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `v_bi_soft_bill` AS 
+SELECT
+  `b`.`DEPARTMENT_ID` AS `DEPARTMENT_ID`,
+  `b`.`NAME`          AS `DEPARTMENT_NAME`,
+  `c`.`id`            AS `project_id`,
+  `c`.`name`          AS `project_name`,
+  `a`.`id`            AS `vm_id`,
+  `a`.`name`          AS `vm_name`,
+  `a`.`cpu`           AS `cpu`,
+  `a`.`memory`        AS `memory`,
+  `a`.`datadisk`      AS `datadisk`,
+  `a`.`type`          AS `type`,
+  `a`.`user`          AS `user`,
+  `d`.`softType`      AS `soft_type`,
+  `d`.`softName`      AS `soft_name`,
+  `d`.`softVersion`   AS `soft_version`
+FROM (((`t_virtualmachine` `a`
+     JOIN `oa_department` `b`)
+    JOIN `t_project` `c`)
+   JOIN `t_deployed_soft` `d`)
+WHERE ((`a`.`project_id` = `c`.`id`)
+       AND (`c`.`DEPARTMENT_ID` = `b`.`DEPARTMENT_ID`)
+       AND (`a`.`id` = `d`.`virtualmachineId`))$$
+
+DELIMITER ;
+-- ---------------------------------------------------------------------------------------
+-- 创建软件台帐查询视图 end.
 -- ----------------------------------------------------------------------------------------

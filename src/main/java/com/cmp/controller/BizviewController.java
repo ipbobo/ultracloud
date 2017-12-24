@@ -106,9 +106,10 @@ public class BizviewController extends BaseController {
 	//云主机列表查询
 	@RequestMapping(value="/bizview/cloudhostlist")
 	public ModelAndView getCloudHostlist(HttpServletRequest request, HttpServletResponse response, Page page) throws Exception{
+		String operType=request.getParameter("operType");//操作类型：cal-计算；store-存储
 		String bizviewType=request.getParameter("bizviewType");//业务视图总览类型
 		String subBizviewType=request.getParameter("subBizviewType");//子业务视图总览类型
-		PageData pd=getPageData(page, "bizviewType", bizviewType, "subBizviewType", subBizviewType);
+		PageData pd=getPageData(page, "operType", operType, "bizviewType", bizviewType, "subBizviewType", subBizviewType);
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("cloudHostList", bizviewService.getCloudHostPageList(page));//云主机列表分页查询
 		mv.addObject("pd", pd);
