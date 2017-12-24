@@ -28,9 +28,16 @@ public interface BiBillDayService {
 	 */
 	public List<PageData> listAll(PageData pd) throws Exception ;
 	
-	/**列表
+	/**费用报表列表
 	 * @param pd
 	 * @throws Exception
 	 */
 	public List<PageData> listBillGroupByVirtualId(PageData pd) throws Exception ;
+	
+	/**资源使用列表
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> listResourceGroupByVirtualId(PageData pd) throws Exception ;
+	
 }

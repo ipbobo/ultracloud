@@ -40,10 +40,18 @@ public interface BIDatacenterService {
 	public List<PageData> listAllBillMonth(PageData pd) throws Exception;
 	
 	/**
-	 * 按天查询虚拟机费用列表
+	 * 计费表报列表
 	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
 	public List<PageData> listBillGroupByVirtualId(PageData pd) throws Exception;
+	
+	/**
+	 * 资源使用表报列表
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> listResourceGroupByVirtualId(PageData pd) throws Exception;
 }
