@@ -9,7 +9,7 @@ import com.fh.util.PageData;
  * @author liuweixing
  *
  */
-public interface BiBillMonthService {
+public interface BiSoftwareBillService {
 
 	/**
 	 * 删除
@@ -27,9 +27,5 @@ public interface BiBillMonthService {
 	 */
 	public void save(PageData pd) throws Exception;
 	
-	/**列表
-	 * @param pd
-	 * @throws Exception
-	 */
-	public List<PageData> listAll(PageData pd) throws Exception ;
+	public List<PageData> listVSoftwareBill(PageData pd) throws Exception;
 }

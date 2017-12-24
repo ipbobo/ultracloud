@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="BiBillMonthMapper">
+<mapper namespace="BiSoftwareBillMapper">
 	
 	<!--表名 -->
 	<sql id="viewName">
-		v_bi_virtual_bill
+		v_bi_soft_bill
 	</sql>
 		<sql id="tableName">
-		bi_bill_month
+		bi_software_bill
 	</sql>
 	
 	<sql id="Field_main">
@@ -22,8 +22,10 @@
         datadisk,
         type,
         user,
-        month,
-		account
+        date,
+		soft_name,
+		soft_version,
+		soft_type
 	</sql>
 	
 	<sql id="Field_time">
@@ -49,8 +51,10 @@
         #{datadisk},
         #{type},
         #{user},
-        #{month},
-		#{account}
+        #{date},
+		#{soft_name},
+		#{soft_version},
+		#{soft_type}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -73,24 +77,7 @@
 	<include refid="FieldValue_main"></include>
 		)
 	</insert>
-	
-	<!-- 查询视图v_bi_virtual_bill的数据 -->
-	<select id="listVBiVirtualBill" parameterType="pd" resultType="pd">
-		select DEPARTMENT_ID,
-        	DEPARTMENT_NAME,
-        	project_id,
-        	project_name,
-        	vm_id,
-        	vm_name,
-        	cpu,
-        	memory,
-        	datadisk,
-        	type,
-        	user
-		from 
-		<include refid="viewName"></include>
-	</select>
-	
+
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select
@@ -101,7 +88,7 @@
 		<if test="date!= null and date != ''"><!-- 按时间检索-->
 			and
 				(
-					month LIKE CONCAT(#{month},'%')
+					date LIKE CONCAT(#{date},'%')
 				
 				
 				)
@@ -114,8 +101,29 @@
 		delete from
 		<include refid="tableName"></include>
 		where 
-			month = #{month}
+			date = #{date}
 	</delete>
+	
+	<!-- 查询视图v_bi_soft_bill的数据 -->
+	<select id="listVSoftwareBill" parameterType="pd" resultType="pd">
+		select DEPARTMENT_ID,
+        	DEPARTMENT_NAME,
+        	project_id,
+        	project_name,
+        	vm_id,
+        	vm_name,
+        	cpu,
+        	memory,
+        	datadisk,
+        	type,
+        	user,
+        	soft_type,
+        	soft_name,
+        	soft_version
+		from 
+		<include refid="viewName"></include>
+	</select>
+	
 
 	
 </mapper>

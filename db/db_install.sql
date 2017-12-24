@@ -98,7 +98,7 @@ DROP TABLE IF EXISTS `t_hostmachine`;
 CREATE TABLE `t_hostmachine` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
-  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
+  `uuid` varchar(40) DEFAULT COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
@@ -127,7 +127,7 @@ DROP TABLE IF EXISTS `t_hostmachine_sync`;
 CREATE TABLE `t_hostmachine_sync` (
   `id` varchar(32) NOT NULL,
   `name` varchar(50) NOT NULL COMMENT '名称',
-  `uuid` varchar(40) NOT NULL COMMENT 'uuid',
+  `uuid` varchar(40) DEFAULT COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
@@ -866,10 +866,9 @@ CREATE TABLE `bi_software_bill` (
   `type` varchar(20) DEFAULT NULL COMMENT '类型',
   `user` varchar(32) DEFAULT NULL COMMENT '虚拟机用户',
   `date` varchar(20) DEFAULT NULL COMMENT '日期',
-  `software_id` bigint unsigned DEFAULT NULL COMMENT '软件id',
-  `software_name` varchar(20) DEFAULT NULL COMMENT '软件名称',
-  `software_version` varchar(20) DEFAULT NULL COMMENT '软件版本号',
-  `software_type` varchar(30) DEFAULT NULL COMMENT '软件类型',
+  `soft_name` varchar(20) DEFAULT NULL COMMENT '软件名称',
+  `soft_version` varchar(20) DEFAULT NULL COMMENT '软件版本号',
+  `soft_type` varchar(30) DEFAULT NULL COMMENT '软件类型',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   UNIQUE KEY `uk_vmid_date` (`vm_id`,`date`),
   PRIMARY KEY (`id`)
@@ -913,7 +912,8 @@ SELECT
   `a`.`memory`        AS `memory`,
   `a`.`datadisk`      AS `datadisk`,
   `a`.`type`          AS `type`,
-  `a`.`user`          AS `user`
+  `a`.`user`          AS `user`,
+  `a`.`soft`          AS `soft`
 FROM ((`t_virtualmachine` `a`
     JOIN `oa_department` `b`)
    JOIN `t_project` `c`)

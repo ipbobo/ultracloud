@@ -86,7 +86,8 @@
         	memory,
         	datadisk,
         	type,
-        	user
+        	user,
+        	soft
 		from 
 		<include refid="viewName"></include>
 	</select>
@@ -106,7 +107,5 @@
 		</if>
 		order by gmt_create desc
 	</select>
-	
-
 	
 </mapper>

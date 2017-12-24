@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.service.MediumService;
 import com.cmp.service.StorageService;
 import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
@@ -26,8 +27,8 @@ import com.fh.util.PageData;
  * 
  * @version
  */
-@Service("biDataGenerateService")
-public class BIDataGenerateServiceImpl implements BIDataGenerateService {
+@Service("biDatacenterService")
+public class BIDatacenterServiceImpl implements BIDatacenterService {
 	protected Logger logger = Logger.getLogger(this.getClass());
 
 	@Resource(name = "daoSupport")
@@ -57,16 +58,42 @@ public class BIDataGenerateServiceImpl implements BIDataGenerateService {
 	@Resource(name = "biBillMonthService")
 	private BiBillMonthService biBillMonthService;
 	
+	@Resource(name = "biSoftwareBillService")
+	private BiSoftwareBillService biSoftwareBillService;
+	
 	@Resource(name = "productService")
 	private ProductService productService;
+	
+	@Resource(name = "mediumService")
+	private MediumService mediumService;
 
+	/**
+	 * 按天查询虚拟机费用列表
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> listAllBillDay(PageData pd) throws Exception {
+		return biBillDayService.listAll(pd);
+	}
+	
+	/**
+	 * 按月查询虚拟机费用列表
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> listAllBillMonth(PageData pd) throws Exception {
+		return biBillMonthService.listAll(pd);
+	}
+	
 	/**
 	 * BI数据生成
 	 */
 	@Override
 	public void biDataGenerateHandler() throws Exception {
 		logger.info("generateBillDayData start...---------------->>");
-		this.generateBillDayData();
+		List<PageData> vVirtualList = this.generateBillDayData();
 		logger.info("generateBillDayData end.------------------->>|");
 
 		logger.info("generateBillDayMonth start...---------------->>");
@@ -74,7 +101,7 @@ public class BIDataGenerateServiceImpl implements BIDataGenerateService {
 		logger.info("generateBillDayMonth end.------------------->>|");
 
 		logger.info("generateSoftwareBillData start...---------------->>");
-		this.generateSoftwareBillData();
+		this.generateSoftwareBillData(vVirtualList);
 		logger.info("generateSoftwareBillData end.------------------->>|");
 	}
 
@@ -83,7 +110,7 @@ public class BIDataGenerateServiceImpl implements BIDataGenerateService {
 	 * 
 	 * @throws Exception
 	 */
-	private void generateBillDayData() throws Exception {
+	private List<PageData> generateBillDayData() throws Exception {
 		PageData pd = new PageData();
 		Map<String, Integer> billMap = new HashMap<String, Integer>();
 		
@@ -119,6 +146,8 @@ public class BIDataGenerateServiceImpl implements BIDataGenerateService {
 		for(PageData vVirtualPD : vVirtualList) {
 			biBillDayService.save(vVirtualPD);
 		}
+		
+		return vVirtualList;
 	}
 
 	/**
@@ -142,7 +171,7 @@ public class BIDataGenerateServiceImpl implements BIDataGenerateService {
 				biBillDay.put("month", month);
 				map.put(vm_id, biBillDay);
 			} else {
-				Integer account = (Integer)monthPD.get("account") + (Integer)biBillDay.get("account") ;
+				Long account = (Long)monthPD.get("account") + (Long)biBillDay.get("account") ;
 				monthPD.put("month", month);
 				monthPD.put("account", account);
 				map.put(vm_id, monthPD);
@@ -160,8 +189,16 @@ public class BIDataGenerateServiceImpl implements BIDataGenerateService {
 
 	/**
 	 * 生成软件台帐数据
+	 * @throws Exception 
 	 */
-	private void generateSoftwareBillData() {
-
+	private void generateSoftwareBillData(List<PageData> vVirtualList) throws Exception {
+		//1、查询所有的软件列表
+		PageData pd = new PageData();
+		List<PageData> vSoftwareBillList = biSoftwareBillService.listVSoftwareBill(pd);
+		
+		//2、软件台帐数据入库
+		for(PageData softwareBillPD : vSoftwareBillList) {
+			biSoftwareBillService.save(softwareBillPD);
+		}
 	}
 }
