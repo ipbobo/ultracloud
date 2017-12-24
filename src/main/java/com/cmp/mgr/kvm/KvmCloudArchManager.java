@@ -8,6 +8,7 @@ import org.libvirt.Connect;
 import org.libvirt.Domain;
 import org.libvirt.LibvirtException;
 
+import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
@@ -22,6 +23,13 @@ import com.vmware.vim25.mo.VirtualMachine;
 import com.vmware.vim25.mo.VirtualMachineSnapshot;
 
 public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
+
+	public KvmCloudArchManager() {
+	}
+
+	public KvmCloudArchManager(TccCloudPlatform platform) {
+		setPlatform(platform);
+	}
 
 	@Override
 	public List<Datacenter> getDatacenters() {
@@ -169,6 +177,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public void resetVirtualMachine(String name) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
