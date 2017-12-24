@@ -40,11 +40,11 @@
 						<div class="col-xs-12">
 						
 						<!-- 检索  -->
-						<form action="bidatacenter/listBillDay.do" method="post" name="userForm" id="userForm">
+						<form action="bidatacenter/listBillDay.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="width:40px;">项目:</td>
-								<td style="padding-left:2px;width:150px;">
+								<td style="padding-left:2px;width:120px;">
 								 	<select class="chosen-select form-control" name="project_id" id="project_id" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;">
 									<option value=""></option>
 									<c:forEach items="${projectList}" var="project">
@@ -52,12 +52,12 @@
 									</c:forEach>
 								  	</select>
 								</td>
-								<td  style="padding-left:10px;width:40px;">部门:</td>
-								<td  style="padding-left:2px;width:120px;">
+								<td  style="padding-left:2px;width:40px;">部门:</td>
+								<td  style="padding-left:2px;width:150px;">
 									<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
 									<div class="selectTree" id="selectTree"></div>
 								</td>
-								<td style="padding-left:10px;width:60px;">申请人:</td>
+								<td style="padding-left:2px;width:60px;">申请人:</td>
 								<td style="padding-left:2px;width:100px;">
 								 	<select class="chosen-select form-control" name="USERNAME" id="USERNAME" data-placeholder="请选择申请人" style="vertical-align:top;width: 120px;">
 									<option value=""></option>
@@ -66,24 +66,12 @@
 									</c:forEach>
 								  	</select>
 								</td>
-								<td style="padding-left:10px;width:80px;">开始时间:</td>
-								<td style="padding-left:2px;width:80px;"><input class="span10 date-picker" name="startTime" id="startTime"  value="${pd.startTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始时间"/></td>
-								<td style="padding-left:10px;width:80px;">结束时间:</td>
-								<td  style="padding-left:2px;width:80px;"><input class="span10 date-picker" name="endTime" name="endTime"  value="${pd.endTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束时间"/></td>
-								<td  style="padding-left:10px;width:50px;" style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td>
-								
-								<td>
-									<div class="nav-search" style="float: right;padding-top: 0px;margin-top: 0px;">
-									<span class="input-icon" >
-										<input class="nav-search-input" autocomplete="off" id="nav-search-input" type="text" name="keywords" value="${pd.keywords }" placeholder="关键词搜索" />
-										<i class="ace-icon fa fa-search nav-search-icon"></i>
-									</span>
-									</div>
-								</td>
-								<c:if test="${QX.cha == 1 }">
+								<td style="padding-left:2px;width:60px;">时间范围:</td>
+								<td style="padding-left:2px;width:150px;"><input class="span10 date-picker" name="startTime" id="startTime"  value="${pd.startTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始时间"/>
+								&nbsp;-&nbsp;<input class="span10 date-picker" name="endTime" name="endTime"  value="${pd.endTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束时间"/></td>
 								<td style="vertical-align:top;padding-left:2px;width: 32px;"><a class="btn btn-light btn-xs" onclick="searchs();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
-								
+								<td  style="padding-left:10px;width:50px;" style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td>
+								<td style="padding-left:2px;width:120px;"></td>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -173,7 +161,7 @@ $(top.hangge());
 //检索
 function searchs(){
 	top.jzts();
-	$("#userForm").submit();
+	$("#Form").submit();
 }
 
 //下拉树

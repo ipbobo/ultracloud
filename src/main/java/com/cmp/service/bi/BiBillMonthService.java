@@ -32,4 +32,6 @@ public interface BiBillMonthService {
 	 * @throws Exception
 	 */
 	public List<PageData> listAll(PageData pd) throws Exception ;
+	
+
 }

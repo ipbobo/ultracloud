@@ -48,4 +48,6 @@ public class BiBillMonthServiceImpl implements BiBillMonthService {
 	public List<PageData> listAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("BiBillMonthMapper.listAll", pd);
 	}
+	
+
 }

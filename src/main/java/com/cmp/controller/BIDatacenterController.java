@@ -67,7 +67,7 @@ public class BIDatacenterController extends BaseController {
 		List<PageData> userList = userService.listAllUser(pd);
 		mv.addObject("userList", userList);
 		
-		List<PageData> varList = biDatacenterService.listAllBillDay(pd);
+		List<PageData> varList = biDatacenterService.listBillGroupByVirtualId(pd);
 		mv.setViewName("bi/bill_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);

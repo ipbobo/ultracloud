@@ -108,4 +108,44 @@
 		order by gmt_create desc
 	</select>
 	
+	<!-- 列表 -->
+	<select id="listBillGroupByVirtualId" parameterType="pd" resultType="pd">
+		select
+			id,
+			DEPARTMENT_ID,
+        	DEPARTMENT_NAME,
+	        project_id,
+	        project_name,
+	        vm_id,
+	        vm_name,
+	        cpu,
+	        memory,
+	        datadisk,
+	        type,
+	        user,
+	        date,
+			count(account) as account,
+			gmt_create
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="DEPARTMENT_ID!= null and DEPARTMENT_ID != ''">
+			and DEPARTMENT_ID = #{DEPARTMENT_ID}
+		</if>
+		<if test="project_id!= null and project_id != ''">
+			and project_id = #{project_id}
+		</if>
+		<if test="USERNAME!= null and USERNAME != ''">
+			and user = #{USERNAME}
+		</if>
+		<if test="startTime!= null and startTime != ''">
+			and date <![CDATA[>=]]> #{startTime}   
+		</if>
+		<if test="endTime!= null and endTime != ''">
+			and date <![CDATA[<=]]> #{endTime}
+		</if>
+		GROUP BY vm_id
+		order by gmt_create desc
+	</select>
+	
 </mapper>

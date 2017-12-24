@@ -39,5 +39,14 @@ public class BiBillDayServiceImpl implements BiBillDayService {
 	public List<PageData> listAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("BiBillDayMapper.listAll", pd);
 	}
+	
+	/**列表
+	 * @param pd
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listBillGroupByVirtualId(PageData pd) throws Exception {
+		return (List<PageData>)dao.findForList("BiBillDayMapper.listBillGroupByVirtualId", pd);
+	}
 
 }
