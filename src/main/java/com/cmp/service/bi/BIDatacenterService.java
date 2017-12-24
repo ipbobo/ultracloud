@@ -45,7 +45,7 @@ public interface BIDatacenterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listBillGroupByVirtualId(PageData pd) throws Exception;
+	public List<PageData> listBillBIData(PageData pd) throws Exception;
 	
 	/**
 	 * 资源使用表报列表
@@ -53,5 +53,13 @@ public interface BIDatacenterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listResourceGroupByVirtualId(PageData pd) throws Exception;
+	public List<PageData> listResourceBIData(PageData pd) throws Exception;
+	
+	/**
+	 * 软件台帐表报列表
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> listSoftwareBIData(PageData pd) throws Exception;
 }

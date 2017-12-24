@@ -27,5 +27,19 @@ public interface BiSoftwareBillService {
 	 */
 	public void save(PageData pd) throws Exception;
 	
+	/**
+	 * 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
 	public List<PageData> listVSoftwareBill(PageData pd) throws Exception;
+	
+	/**
+	 * 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAllSoftwareBIData(PageData pd) throws Exception;
 }

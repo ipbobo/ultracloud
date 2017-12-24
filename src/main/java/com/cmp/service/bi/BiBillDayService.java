@@ -12,6 +12,12 @@ import com.fh.util.PageData;
 public interface BiBillDayService {
 	
 
+	/**
+	 * 查询v_bi_virtual_bill视图
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
 	public List<PageData> listVBiVirtualBill(PageData pd) throws Exception;
 	
 	/**

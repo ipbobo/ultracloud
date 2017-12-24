@@ -44,4 +44,15 @@ public class BiSoftwareBillServiceImpl implements BiSoftwareBillService {
 	public List<PageData> listVSoftwareBill(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("BiSoftwareBillMapper.listVSoftwareBill", pd);
 	}
+	
+	/**
+	 * 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllSoftwareBIData(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("BiSoftwareBillMapper.listAllSoftwareBIData", pd);
+	}
 }

@@ -99,6 +99,17 @@ public class MediumServiceImpl implements MediumService {
 	public List<Medium> listAllMediumByPId(PageData pd) throws Exception {
 		return (List<Medium>) dao.findForList("MediumMapper.listAllMediumByPId", pd);
 	}
+	
+	/**
+	 * 查询所有软件类型
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllSoftType(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("MediumMapper.listAllSoftType", pd);
+	}
 
 	//软件列表查询
 	@SuppressWarnings("unchecked")

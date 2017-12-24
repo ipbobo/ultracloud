@@ -124,6 +124,41 @@
 		<include refid="viewName"></include>
 	</select>
 	
-
+	<!-- 软件台帐查询列表 -->
+	<select id="listAllSoftwareBIData" parameterType="pd" resultType="pd">
+		select
+			id,
+			DEPARTMENT_ID,
+	        DEPARTMENT_NAME,
+	        project_id,
+	        project_name,
+	        vm_id,
+	        vm_name,
+	        cpu,
+	        memory,
+	        datadisk,
+	        type,
+	        user,
+	        date,
+			soft_name,
+			soft_version,
+			soft_type,
+			gmt_create
+		from 
+		<include refid="tableName"></include>
+		where date=#{date}
+		<if test="DEPARTMENT_ID!= null and DEPARTMENT_ID != ''">
+			and DEPARTMENT_ID = #{DEPARTMENT_ID}
+		</if>
+		<if test="project_id!= null and project_id != ''">
+			and project_id = #{project_id}
+		</if>
+		<if test="USERNAME!= null and USERNAME != ''">
+			and user = #{USERNAME}
+		</if>
+		<if test="soft_type!= null and soft_typeE != ''">
+			and soft_type = #{soft_type}
+		</if>
+	</select>
 	
 </mapper>

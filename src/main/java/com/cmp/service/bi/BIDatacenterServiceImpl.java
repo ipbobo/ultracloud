@@ -198,6 +198,7 @@ public class BIDatacenterServiceImpl implements BIDatacenterService {
 		
 		//2、软件台帐数据入库
 		for(PageData softwareBillPD : vSoftwareBillList) {
+			softwareBillPD.put("date", DateUtil.getDay());
 			biSoftwareBillService.save(softwareBillPD);
 		}
 	}
@@ -206,7 +207,7 @@ public class BIDatacenterServiceImpl implements BIDatacenterService {
 	 * 计费表报列表
 	 */
 	@Override
-	public List<PageData> listBillGroupByVirtualId(PageData pd) throws Exception {
+	public List<PageData> listBillBIData(PageData pd) throws Exception {
 		return biBillDayService.listBillGroupByVirtualId(pd);
 	}
 	
@@ -216,7 +217,12 @@ public class BIDatacenterServiceImpl implements BIDatacenterService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listResourceGroupByVirtualId(PageData pd) throws Exception {
+	public List<PageData> listResourceBIData(PageData pd) throws Exception {
 		return biBillDayService.listResourceGroupByVirtualId(pd);
+	}
+
+	@Override
+	public List<PageData> listSoftwareBIData(PageData pd) throws Exception {
+		return biSoftwareBillService.listAllSoftwareBIData(pd);
 	}
 }

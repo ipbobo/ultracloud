@@ -87,9 +87,22 @@
         	datadisk,
         	type,
         	user,
-        	soft
+        	soft,
+        	status,
+        	gmt_create,
+        	duedate
 		from 
 		<include refid="viewName"></include>
+		where 1 = 1
+		<if test="DEPARTMENT_ID!= null and DEPARTMENT_ID != ''">
+			and DEPARTMENT_ID = #{DEPARTMENT_ID}
+		</if>
+		<if test="project_id!= null and project_id != ''">
+			and project_id = #{project_id}
+		</if>
+		<if test="USERNAME!= null and USERNAME != ''">
+			and user = #{USERNAME}
+		</if>
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -178,8 +191,6 @@
 		<if test="USERNAME!= null and USERNAME != ''">
 			and user = #{USERNAME}
 		</if>
-		GROUP BY vm_id
-		order by gmt_create desc
 	</select>
 	
 </mapper>
