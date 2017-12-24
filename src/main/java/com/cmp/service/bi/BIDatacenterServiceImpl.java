@@ -201,4 +201,22 @@ public class BIDatacenterServiceImpl implements BIDatacenterService {
 			biSoftwareBillService.save(softwareBillPD);
 		}
 	}
+
+	/**
+	 * 计费表报列表
+	 */
+	@Override
+	public List<PageData> listBillGroupByVirtualId(PageData pd) throws Exception {
+		return biBillDayService.listBillGroupByVirtualId(pd);
+	}
+	
+	/**
+	 * 资源使用表报列表
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> listResourceGroupByVirtualId(PageData pd) throws Exception {
+		return biBillDayService.listResourceGroupByVirtualId(pd);
+	}
 }

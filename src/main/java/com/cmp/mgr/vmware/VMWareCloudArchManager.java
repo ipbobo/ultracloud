@@ -17,6 +17,7 @@ import java.util.function.Function;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
@@ -107,9 +108,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<VirtualMachine> getVirtualMachines() {
+	public List<TccVirtualMachine> getVirtualMachines() {
 		return getVirtualMachinesNoVerify().stream()
-				.filter(this::isVirtualMachine).collect(toList());
+				.filter(this::isVirtualMachine)
+				.map(VMWareConvertors.vmConverter())
+				.collect(toList());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -420,8 +423,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public List<VirtualMachineSnapshot> getVmSnapshots() {
-		return getVirtualMachines().stream().map(VirtualMachine::getRootSnapshot)
-				.flatMap(Arrays::stream).collect(toList());
+		return getVirtualMachinesNoVerify().stream()
+				.filter(this::isVirtualMachine)
+				.map(VirtualMachine::getRootSnapshot)
+				.flatMap(Arrays::stream)
+				.collect(toList());
 	}
 
 	@Override

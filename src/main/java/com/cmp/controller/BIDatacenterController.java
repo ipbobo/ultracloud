@@ -17,6 +17,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.fhoa.department.DepartmentManager;
 import com.fh.service.system.user.impl.UserService;
+import com.fh.util.DateUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 
@@ -67,8 +68,46 @@ public class BIDatacenterController extends BaseController {
 		List<PageData> userList = userService.listAllUser(pd);
 		mv.addObject("userList", userList);
 		
-		List<PageData> varList = biDatacenterService.listAllBillDay(pd);
+		List<PageData> varList = biDatacenterService.listBillGroupByVirtualId(pd);
 		mv.setViewName("bi/bill_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+	
+	@RequestMapping(value = "/listResource")
+	public ModelAndView listResource(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表ResourceBI");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+		
+		//查询项目列表
+		List<PageData>	projectList = projectService.listAll(pd);
+		mv.addObject("projectList", projectList);
+		
+		//查询部门树
+		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
+		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect("0",zdepartmentPdList));
+		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
+		
+		//查询用户列表
+		List<PageData> userList = userService.listAllUser(pd);
+		mv.addObject("userList", userList);
+		
+		
+		String date = pd.getString("date");
+		if(null == date) {
+			pd.put("date", DateUtil.getDay());
+		}
+		List<PageData> varList = biDatacenterService.listResourceGroupByVirtualId(pd);
+		mv.setViewName("bi/resource_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限

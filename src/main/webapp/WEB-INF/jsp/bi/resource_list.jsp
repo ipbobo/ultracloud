@@ -40,7 +40,7 @@
 						<div class="col-xs-12">
 						
 						<!-- 检索  -->
-						<form action="bidatacenter/listBillDay.do" method="post" name="Form" id="Form">
+						<form action="bidatacenter/listResource.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="width:40px;">项目:</td>
@@ -66,9 +66,8 @@
 									</c:forEach>
 								  	</select>
 								</td>
-								<td style="padding-left:2px;width:60px;">时间范围:</td>
-								<td style="padding-left:2px;width:150px;"><input class="span10 date-picker" name="startTime" id="startTime"  value="${pd.startTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始时间"/>
-								&nbsp;-&nbsp;<input class="span10 date-picker" name="endTime" name="endTime"  value="${pd.endTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束时间"/></td>
+								<td style="padding-left:2px;width:60px;">时间:</td>
+								<td style="padding-left:2px;width:150px;"><input class="span10 date-picker" name="date" id="date"  value="${pd.date}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="日期" title="时间"/></td>
 								<td style="vertical-align:top;padding-left:2px;width: 32px;"><a class="btn btn-light btn-xs" onclick="searchs();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								<td  style="padding-left:10px;width:50px;" style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td>
 								<td style="padding-left:2px;width:120px;"></td>
@@ -81,11 +80,10 @@
 								<tr>
 									<th class="center">部门</th>
 									<th class="center">项目</th>
-									<th class="center">虚拟机名称</th>
-									<th class="center">虚拟机配置</th>
-									<th class="center">平台</th>
 									<th class="center">申请人</th>
-									<th class="center">计费</th>
+									<th class="center">虚拟机名称</th>
+									<th class="center">平台</th>
+									<th class="center">虚拟机配置</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -98,11 +96,10 @@
 										<tr>
 											<td class="center">${var.DEPARTMENT_NAME }</td>
 											<td class="center">${var.project_name }</td>
-											<td class="center">${var.vm_name}</td>
-											<td class="center">${var.cpu}C/${var.memory}G/${var.datadisk}G/</td>
-											<td class="center">${var.type}</td>
 											<td class="center">${var.USERNAME}</td>
-											<td class="center">${var.account}元</td>
+											<td class="center">${var.vm_name}</td>
+											<td class="center">${var.type}</td>
+											<td class="center">${var.cpu}C/${var.memory}G/${var.datadisk}G/</td>
 										</tr>
 									</c:forEach>
 									</c:if>
