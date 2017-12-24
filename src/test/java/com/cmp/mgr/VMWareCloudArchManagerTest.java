@@ -1,6 +1,5 @@
 package com.cmp.mgr;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +21,7 @@ import com.vmware.vim25.mo.ResourcePool;
 import com.vmware.vim25.mo.VirtualMachine;
 import com.vmware.vim25.mo.VirtualMachineSnapshot;
 
-public class VMWareCloudArchManagerTest {
+public class VMWareCloudArchManagerTest implements CloudArchTest {
 
 	private VMWareCloudArchManager cloudArchManager;
 
@@ -34,20 +33,6 @@ public class VMWareCloudArchManagerTest {
 		platform.setCloudplatformIp("118.242.40.216");
 
 		cloudArchManager = new VMWareCloudArchManager(platform);
-	}
-
-	public void execute(String flag, Runnable runnable) {
-		String info = String.format("== Action: %s ", flag);
-		info = StringUtils.rightPad(info, 50, "=");
-
-		System.err.println(info);
-		try {
-			runnable.run();
-			Thread.sleep(200);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println();
 	}
 
 	@Test
