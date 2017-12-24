@@ -135,7 +135,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 		});
 	}
 
-	@Test
+	// @Test
 	public void testCloneVM() {
 		execute("CloneVirtualMachine", () -> {
 			CloneVmRequest request = new CloneVmRequest();

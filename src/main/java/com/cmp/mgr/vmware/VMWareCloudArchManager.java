@@ -74,7 +74,7 @@ import com.vmware.vim25.mo.util.PropertyCollectorUtil;
 @SuppressWarnings({ "unused" })
 public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
-	private VMWareConvertors converters;
+	private VMWareConvertors converters = new VMWareConvertors();
 
 	public VMWareCloudArchManager() {
 	}
