@@ -5,17 +5,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.cmp.ehcache.AbstractDao;
+import com.cmp.entity.ShellMessage;
 
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.Session;
 
-public class ShellUtil {
+public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
 	private Connection conn;  
     private String ipAddr;  
     private String charset = Charset.defaultCharset().toString();  
     private String userName;  
     private String password;  
+    private static Map<String, Map<Integer, String>> shellMsgMap = new HashMap<String, Map<Integer, String>>();
     int port;
+    
   
  
     public ShellUtil(String ipAddr, int port, String userName, String password,  
@@ -35,7 +42,7 @@ public class ShellUtil {
         return conn.authenticateWithPassword(userName, password); // 认证  
     }  
   
-    public String exec(String cmds) {  
+    public String exec(String cmds, String logIndex) {  
         InputStream in = null;  
         String result = "";  
         try {  
@@ -44,7 +51,7 @@ public class ShellUtil {
                 session.execCommand(cmds);  
                   
                 in = session.getStdout();  
-                result = this.processStdout2(in, this.charset);  
+                result = this.processStdoutBuffLine(in, this.charset, logIndex);  
                 session.close();  
                 conn.close();  
             }  
@@ -69,14 +76,21 @@ public class ShellUtil {
     }  
     
     
-    public String processStdout2(InputStream in, String charset) throws IOException {  
+    public String processStdoutBuffLine(InputStream in, String charset, String logIndex) throws IOException {  
     	try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in)); 
 			while (true) { 
 			   String line = br.readLine(); 
 			   if (line == null) 
-			    break; 
-			   System.out.println(line);
+			    break;
+			   Map currentMsgMap;
+			   if ((currentMsgMap = shellMsgMap.get(logIndex)) == null) {
+				   Map<Integer, String> message = new HashMap<Integer, String>();
+				   message.put(1, line);
+				   shellMsgMap.put(logIndex, message);
+			   }else {
+				   currentMsgMap.put(currentMsgMap.size() + 1, line);
+			   }
 			}
 			return "OK";
 		} catch (Exception e) {
@@ -87,15 +101,26 @@ public class ShellUtil {
     	
     }
     
-    
+	@Override
+	public String getMybatisQryFunc() {
+		// TODO Auto-generated method stub
+		return null;
+	} 
+	
+	public static Map getShellMsgMap() {
+		return shellMsgMap;
+	}
+	
     
     public static void main(String[] args) {  
   
     	ShellUtil tool = new ShellUtil("118.242.40.216", 7001, "root",  
                 "r00t0neio", "utf-8");  
   
-        String result = tool.exec("./test.sh");  
+        String result = tool.exec("./test.sh", "231321321");  
         System.out.print(result);  
   
-    }  
+    }
+
+ 
 }

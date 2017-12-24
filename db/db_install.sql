@@ -792,6 +792,7 @@ CREATE TABLE `t_deployed_soft` (
 `virtualmachineName`  varchar(50) DEFAULT NULL COMMENT '虚拟机名称' ,
 `softName`  varchar(50) DEFAULT NULL COMMENT '软件名称' ,
 `softParams`  varchar(200) DEFAULT NULL COMMENT '软件参数' ,
+`softType`  varchar(50) DEFAULT NULL COMMENT '软件类型' ,
 `softVersion`  varchar(30) DEFAULT NULL COMMENT '软件版本' ,
 `status`  varchar(10) DEFAULT NULL COMMENT '部署状态' ,
 `remark`  varchar(50) DEFAULT NULL COMMENT '其他' ,

@@ -1,10 +1,9 @@
-package com.cmp.mgr.impl;
+package com.cmp.mgr;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
-import com.cmp.mgr.CloudArchManager;
 
 public abstract class PlatformBindedCloudArchManager implements CloudArchManager {
 

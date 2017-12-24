@@ -16,7 +16,7 @@ import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.mgr.CloudArchManager;
 import com.cmp.mgr.CloudArchManagerAdapter;
 import com.cmp.mgr.bean.CreateVmRequest;
-import com.cmp.mgr.impl.VMWareCloudArchManager;
+import com.cmp.mgr.vmware.VMWareCloudArchManager;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
@@ -309,6 +309,8 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			deployedSoft.setVirtualmachineId(String.valueOf(vm.getId()));
 			deployedSoft.setSoftName(medium.getName());
 			deployedSoft.setStatus("0");
+			deployedSoft.setSoftType(medium.getType());
+			deployedSoft.setSoftVersion(medium.getVersion());
 			deployedSoft.setVirtualmachineName(String.valueOf(vm.getName()));
 			deployedSoftService.add(deployedSoft);
 		}

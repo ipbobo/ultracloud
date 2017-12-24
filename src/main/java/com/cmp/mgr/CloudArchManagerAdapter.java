@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
-import com.cmp.mgr.impl.PlatformBindedCloudArchManager;
 
 @Component
 public class CloudArchManagerAdapter {
