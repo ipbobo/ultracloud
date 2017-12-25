@@ -4,12 +4,7 @@ $(function(){if('fhsms'== locat[3]){locat =  locat[0]+'//'+locat[2];}else{locat 
 $(top.hangge());
 //发送
 function sendSystemNotice(){
-	
-	if($("#TYPE").val()=="1"){
-		$("#CONTENT").val(getContentTxt());
-	}else{
-		$("#CONTENT").val(getContent());
-	}
+
 	if($("#title").val()==""){
 		$("#title").tips({
 			side:3,

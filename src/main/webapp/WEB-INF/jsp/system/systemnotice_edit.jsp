@@ -38,7 +38,6 @@
 		<div class="main-content">
 
 		<div id="zhongxin">
-		<textarea name="CONTENT" id="CONTENT" style="display:none" ></textarea>
 		<input type="hidden" name="TYPE" id="TYPE" value="1"/>
 		<table style="width:98%;margin-top: 10px;margin-left: 9px;" >
 			<tr>
@@ -48,15 +47,15 @@
 			</tr>
 			<tr>
 				<td style="padding-top: 3px;">
-					 <script id="editor" type="text/plain" style="width:643px;height:259px;"></script>
+					 <div style="float: left;" style="height:259px;width:100%;">
+					 <textarea style="height:259px;width:643px;" name="content" id="content" title="内容" placeholder="这里输入内容" rows="10" ></textarea>
+					 </div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align: center;padding-top: 15px;" id="nr">
 					<a class="btn btn-mini btn-primary" onclick="sendSystemNotice();">发送</a>
 					<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
-					<label style="float:left;padding-left: 32px;"><input name="form-field-radio" id="form-field-radio1" onclick="setType('1');" checked="checked" type="radio" class="ace" value="icon-edit"><span class="lbl">纯文本</span></label>
-					<label style="float:left;padding-left: 5px;"><input name="form-field-radio" id="form-field-radio2" onclick="setType('2');" type="radio" value="icon-edit" class="ace" ><span class="lbl">带标签</span></label>
 				</td>
 			</tr>
 		</table>
@@ -71,11 +70,6 @@
 	<%@ include file="../system/index/foot.jsp"%>
 	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
-	<!-- 编辑框-->
-	<script type="text/javascript" charset="utf-8">window.UEDITOR_HOME_URL = "<%=path%>/plugins/ueditor/";</script>
-	<script type="text/javascript" charset="utf-8" src="plugins/ueditor/ueditor.config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="plugins/ueditor/ueditor.all.js"></script>
-	<!-- 编辑框-->
 	<!--引入属于此页面的js -->
 	<script type="text/javascript" src="static/js/myjs/fhsms.js"></script>
 	<!--提示框-->

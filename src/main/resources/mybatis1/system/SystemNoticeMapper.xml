@@ -101,7 +101,7 @@
 		<if test="pd.STATUS != null and pd.STATUS != ''"><!-- 状态检索 -->
 			and STATUS = #{pd.STATUS} 
 		</if>
-		order by STATUS desc
+		order by STATUS asc,SEND_TIME desc
 	</select>
 	
 	<!-- 列表(全部) -->
