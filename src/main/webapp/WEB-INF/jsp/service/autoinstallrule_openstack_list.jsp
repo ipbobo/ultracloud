@@ -27,6 +27,17 @@
 						<div class="col-xs-12">
 							
 						<form action="autoinstallrule/listOpenStack.do" method="post" name="Form" id="Form">
+						<table style="margin-top:5px;width:100%;">
+								<td style="vertical-align:top;">
+									<c:if test="${QX.add == 1 }">
+									<a class="btn btn-sm btn-success" onclick="add();">新增</a>
+									</c:if>
+									<c:if test="${QX.del == 1 }">
+									<a class="btn btn-sm btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
+									</c:if>
+								</td>
+						</table>
+							
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
@@ -118,14 +129,6 @@
 						<div class="page-header position-relative">
 						<table style="width:100%;">
 							<tr>
-								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-sm btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-sm btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if>
-								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
 						</table>

@@ -758,7 +758,7 @@ CREATE TABLE `t_numprocedure` (
 DROP TABLE IF EXISTS `t_autoinstall_rule`;
 CREATE TABLE `t_autoinstall_rule` (
   `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `cluster_id` bigint unsigned  NOT NULL COMMENT '集群id',
+  `cluster_id` varchar(32)  NOT NULL COMMENT '集群id',
   `type` varchar(20) NOT NULL COMMENT '集群类型',
   `num_rule` varchar(40) DEFAULT NULL COMMENT '计算规则',
   `storage_rule` varchar(40) DEFAULT NULL COMMENT '存储规则',

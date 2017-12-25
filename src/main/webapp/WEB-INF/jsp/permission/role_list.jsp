@@ -27,8 +27,20 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-							<!-- 检索  -->
+							
 							<form action="project/list.do" method="post" name="Form" id="Form">
+								<!-- 检索  -->
+								<table style="margin-top:5px;width:100%;">
+									<tr>
+										<td style="vertical-align:top;">
+											<c:if test="${QX.add == 1 }">
+											<a class="btn btn-sm btn-success" onclick="addRole('${pd.ROLE_ID }');">新增角色</a>
+											</c:if>
+										</td>
+									</tr>
+								</table>
+								<!-- 检索  -->
+								
 							<table id="dynamic-table" class="table table-striped table-bordered table-hover" style="margin-top:7px;">
 								<thead>
 								<tr>
@@ -97,9 +109,6 @@
 								</c:choose>
 							</table>
 							<div>
-							<c:if test="${QX.add == 1 }">
-								&nbsp;&nbsp;<a class="btn btn-sm btn-success" onclick="addRole('${pd.ROLE_ID }');">新增角色</a>
-							</c:if>
 							</div>
 							</form>
 						</div>

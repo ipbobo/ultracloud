@@ -131,8 +131,8 @@ function fhsmsmsg(USERNAME){
 
 //读取站内信时减少未读总数
 function readFhsms(){
-	fhsmsCount = Number(fhsmsCount)-1;
-	$("#fhsmsCount").html(Number(fhsmsCount) <= 0 ?'0':fhsmsCount);
+	systemnoticeCount = Number(systemnoticeCount)-1;
+	$("#systemnoticeCount").html(Number(systemnoticeCount) <= 0 ?'0':systemnoticeCount);
 }
 
 //修改头像
