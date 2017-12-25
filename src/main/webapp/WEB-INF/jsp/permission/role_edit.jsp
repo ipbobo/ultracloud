@@ -27,14 +27,13 @@
 							<div id="zhongxin" style="padding-top:13px;">
 							<table  id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-									<td style="width:79px;text-align: right;padding-top: 13px;">名称:</td>
-									<td><input type="text" name="ROLE_NAME" id="roleName" placeholder="这里输入名称" value="${pd.ROLE_NAME}"  title="名称" style="width:98%;" maxlength="30" /></td>
+									<td style="width:100px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;名称:</td>
+									<td><input type="text" name="ROLE_NAME" id="roleName" placeholder="这里输入名称" value="${pd.ROLE_NAME}"  title="名称" style="width:100%;" maxlength="30" /></td>
 							</tr>
 							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">类型:</td>
+								<td style="width:100px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;角色类型:</td>
 								<td id="js">
 									<select class="chosen-select form-control" name="type" id=type data-placeholder="请选择类型" style="vertical-align:top;"  title="类型" style="width:98%;" >
-									<option value=""></option>
 									<c:forEach items="${dictionariesList}" var="dictionaries">
 										<option value="${dictionaries.BIANMA }" <c:if test="${dictionaries.BIANMA == pd.type }">selected</c:if>>${dictionaries.NAME }</option>
 									</c:forEach>

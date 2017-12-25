@@ -28,15 +28,14 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:85px;text-align: right;padding-top: 13px;">名称:</td>
-								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入用户组名称" title="名称" style="width:98%;"/></td>
+								<td style="width:85px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;名称:</td>
+								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入用户组名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<c:if test="${fx != 'head'}">
 										<tr>
-											<td style="width:79px;text-align: right;padding-top: 13px;">角色:</td>
-											<td id="juese">
+											<td style="width:79px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;角色:</td>
+											<td>
 											<select class="chosen-select form-control" name="ROLE_ID" id="role_id" data-placeholder="请选择角色" style="vertical-align:top;" style="width:98%;" >
-											<option value=""></option>
 											<c:forEach items="${roleList}" var="role">
 												<option value="${role.ROLE_ID }" <c:if test="${role.ROLE_ID == pd.ROLE_ID }">selected</c:if>>${role.ROLE_NAME }</option>
 											</c:forEach>

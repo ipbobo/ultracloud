@@ -223,7 +223,7 @@
 		 diag.Title ="新增";
 		 diag.URL = '<%=basePath%>usergroup/goAdd.do';
 		 diag.Width = 450;
-		 diag.Height = 358;
+		 diag.Height = 280;
 		 diag.CancelEvent = function(){ //关闭事件
 			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 				 if('${page.currentPage}' == '0'){
@@ -259,8 +259,8 @@
 		 diag.Drag=true;
 		 diag.Title ="编辑";
 		 diag.URL = '<%=basePath%>usergroup/goEdit.do?id='+Id;
-		 //diag.Width = 450;
-		 diag.Height = 358;
+		 diag.Width = 450;
+		 diag.Height = 280;
 		 diag.CancelEvent = function(){ //关闭事件
 			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 				 nextPage(${page.currentPage});

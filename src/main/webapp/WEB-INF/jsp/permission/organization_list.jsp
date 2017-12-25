@@ -66,7 +66,7 @@
 								<tr>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">名称</th>
-									<th class="center">英文</th>
+									<th class="center">英文名</th>
 									<th class="center">编码</th>
 									<th class="center">负责人</th>
 									<th class="center">操作</th>
