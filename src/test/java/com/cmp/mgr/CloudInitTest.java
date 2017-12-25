@@ -3,17 +3,12 @@ package com.cmp.mgr;
 import static java.util.stream.Collectors.toList;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
-import com.fh.util.PageData;
-import com.fh.util.UuidUtil;
 import com.vmware.vim25.InvalidProperty;
 import com.vmware.vim25.RuntimeFault;
 import com.vmware.vim25.mo.ClusterComputeResource;

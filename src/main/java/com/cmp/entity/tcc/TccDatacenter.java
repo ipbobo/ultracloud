@@ -12,6 +12,8 @@ public class TccDatacenter implements java.io.Serializable {
 
 	private static final long serialVersionUID = -6328782863355405884L;
 
+	private String name;
+
 	private Long zoneId; // 区域id
 
 	private String zoneName;// 区域名称
@@ -51,6 +53,14 @@ public class TccDatacenter implements java.io.Serializable {
 	private TccCloudPlatform cloudplatform;
 
 	private Set<TccCluster> tccCluster = new HashSet<TccCluster>(0);
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Set<TccCluster> getTccCluster() {
 		return tccCluster;
