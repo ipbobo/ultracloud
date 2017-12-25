@@ -897,6 +897,22 @@ CREATE TABLE `t_timetask` (
   PRIMARY KEY (`TIMINGBACKUP_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='定时任务表'; 
 
+-- ----------------------------
+-- 系统公告
+-- ----------------------------
+DROP TABLE IF EXISTS `t_systemnotice`;
+CREATE TABLE `t_systemnotice` (
+  `FHSMS_ID` varchar(100) NOT NULL,
+  `title` varchar(200) DEFAULT NULL COMMENT '标题',
+  `CONTENT` varchar(1000) DEFAULT NULL COMMENT '内容',
+  `TYPE` varchar(5) DEFAULT NULL COMMENT '类型',
+  `TO_USERNAME` varchar(255) DEFAULT NULL COMMENT '收信人',
+  `FROM_USERNAME` varchar(255) DEFAULT NULL COMMENT '发信人',
+  `SEND_TIME` varchar(100) DEFAULT NULL COMMENT '发信时间',
+  `STATUS` varchar(5) DEFAULT NULL COMMENT '状态',
+  `SANME_ID` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`FHSMS_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统公告'; 
 
 -- ---------------------------------------------------------------------------------------
 -- 创建虚拟机费用查询视图 start...

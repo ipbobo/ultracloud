@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.CloudHostService;
+import com.cmp.service.system.SystemNoticeService;
 import com.fh.controller.base.BaseController;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.user.UserManager;
@@ -49,6 +50,9 @@ public class HeadController extends BaseController {
 
 	@Resource(name = "userphotoService")
 	private UserPhotoManager userphotoService;
+	
+	@Resource(name = "systemNoticeService")
+	private SystemNoticeService systemNoticeService;
 
 	/**
 	 * 去编辑头像页面
@@ -92,8 +96,7 @@ public class HeadController extends BaseController {
 			PageData pdPhoto = userphotoService.findById(pds);
 			map.put("userPhoto",
 					null == pdPhoto ? "static/ace/avatars/user.jpg" : pdPhoto.getString("PHOTO2"));// 用户头像
-			map.put("fhsmsCount", fhsmsService.findFhsmsCount(Jurisdiction.getUsername())
-					.get("fhsmsCount").toString());// 站内信未读总数
+			map.put("systemnoticeCount", systemNoticeService.findSystemNoticeCount(Jurisdiction.getUsername()).get("systemnoticeCount").toString()); //用户未读系统公告总数
 			String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);// 读取WEBSOCKET配置
 			if (null != strWEBSOCKET && !"".equals(strWEBSOCKET)) {
 				String strIW[] = strWEBSOCKET.split(",fh,");
@@ -112,18 +115,17 @@ public class HeadController extends BaseController {
 	}
 
 	/**
-	 * 获取站内信未读总数
+	 * 获取系统公告未读总数
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/getFhsmsCount")
+	@RequestMapping(value = "/getSystemNoticeCount")
 	@ResponseBody
-	public Object getFhsmsCount() {
+	public Object getSystemNoticeCount() {
 		PageData pd = new PageData();
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			map.put("fhsmsCount", fhsmsService.findFhsmsCount(Jurisdiction.getUsername())
-					.get("fhsmsCount").toString());// 站内信未读总数
+			map.put("systemnoticeCount", systemNoticeService.findSystemNoticeCount(Jurisdiction.getUsername()).get("systemnoticeCount").toString());// 系统公告未读总数
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
 		} finally {
