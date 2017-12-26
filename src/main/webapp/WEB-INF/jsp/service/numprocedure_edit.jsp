@@ -30,23 +30,23 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">计算方案名称:</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;计算方案名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入计算方案名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">展示名称:</td>
-								<td><input type="text" name="showname" id="showname" value="${pd.showname}" maxlength="30" placeholder="这里输入展示名称" title="名称" style="width:100%;"/></td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;展示名称:</td>
+								<td><input type="text" name="showname" id="showname" value="${pd.showname}" maxlength="30" placeholder="这里输入展示名称,例如:1C1G" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">CPU:</td>
-								<td><input type="text" name="cpu" id="cpu" value="${pd.cpu}" maxlength="30" style="width:100%;"/>核</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;CPU:</td>
+								<td><input type="number" name="cpu" id="cpu" value="${pd.cpu}" maxlength="30" style="width:90%;"/>&nbsp;核</td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">内存:</td>
-								<td><input type="text" name="memory" id="memory" value="${pd.memory}" maxlength="30" style="width:100%;"/>MB</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;内存:</td>
+								<td><input type="number" name="memory" id="memory" value="${pd.memory}" maxlength="30" style="width:90%;"/>&nbsp;G</td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">是否为推荐配置:</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;是否为推荐配置:</td>
 								<td id="js">
 									<select class="chosen-select form-control" name="isRecommand" id="isRecommand"  style="vertical-align:top;"   >
 									<option value="1" <c:if test="${pd.isRecommand == 1 }">selected</c:if>>是</option>
@@ -106,6 +106,36 @@
 		            time:2
 		        });
 				$("#name").focus();
+			return false;
+			}
+			if($("#showname").val()==""){
+				$("#showname").tips({
+					side:3,
+		            msg:'请输入环境名称',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#showname").focus();
+			return false;
+			}
+			if($("#cpu").val()==""){
+				$("#cpu").tips({
+					side:3,
+		            msg:'请输入CPU',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#cpu").focus();
+			return false;
+			}
+			if($("#memory").val()==""){
+				$("#memory").tips({
+					side:3,
+		            msg:'请输入内存',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#memory").focus();
 			return false;
 			}
 			

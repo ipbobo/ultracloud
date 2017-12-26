@@ -31,16 +31,16 @@
 						<div id="zhongxin">
 						<table id="table_report" class="table table-striped table-bordered table-hover" style="margin-top:15px;">
 							<tr>
-								<td style="width:100px;text-align: right;padding-top: 13px;">cpu配额(核):</td>
-								<td><input type="text" name="cpu_quota" id="cpu_quota" value="${pd.cpu_quota}" maxlength="50"  style="width:98%;"/></td>
+								<td style="width:100px;text-align: right;padding-top: 13px;">cpu配额:</td>
+								<td><input type="number" name="cpu_quota" id="cpu_quota" value="${pd.cpu_quota}" maxlength="50"  style="width:90%;"/>&nbsp;核</td>
 							</tr>
 							<tr>
-								<td style="width:100px;text-align: right;padding-top: 13px;">内存配额(G):</td>
-								<td><input type="text" name="memory_quota" id="memory_quota" value="${pd.memory_quota}" maxlength="50"  style="width:98%;"/></td>
+								<td style="width:100px;text-align: right;padding-top: 13px;">内存配额:</td>
+								<td><input type="number" name="memory_quota" id="memory_quota" value="${pd.memory_quota}" maxlength="50"  style="width:90%;"/>&nbsp;G</td>
 							</tr>
 							<tr>
-								<td style="width:100px;text-align: right;padding-top: 13px;">磁盘配额(G):</td>
-								<td><input type="text" name="disk_quota" id="disk_quota" value="${pd.disk_quota}" maxlength="50"  style="width:98%;"/></td>
+								<td style="width:100px;text-align: right;padding-top: 13px;">磁盘配额:</td>
+								<td><input type="number" name="disk_quota" id="disk_quota" value="${pd.disk_quota}" maxlength="50"  style="width:90%;"/>&nbsp;G</td>
 							</tr>
 							<tr>
 								<td class="center" colspan="10">

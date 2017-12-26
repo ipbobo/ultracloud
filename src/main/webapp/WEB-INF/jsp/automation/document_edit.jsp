@@ -39,11 +39,11 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">文件名:</td>
+								<td style="width:75px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;文件名:</td>
 								<td><input type="text" name="name" id="name" value="" maxlength="30" placeholder="这里输入文件名" title="文件名" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;" id="FILEPATHn">文件:</td>
+								<td style="width:75px;text-align: right;padding-top: 13px;" id="FILEPATHn"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;文件:</td>
 								<td>
 									<input type="file" name="File_name" id="uploadify1" keepDefaultStyle = "true"/>
 									<input type="hidden" name="url" id="url" value=""/>

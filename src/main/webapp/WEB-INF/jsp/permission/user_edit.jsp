@@ -54,14 +54,14 @@
 										</c:if>
 										<tr>
 											<td style="width:100px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;所在部门:</td>
-											<td>
+											<td  id="department_td">
 												<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
 												<div class="selectTree" id="selectTree"></div>
 											</td>
 										</tr>
 										<tr>
 											<td style="width:100px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;用户名:</td>
-											<td><input type="text" name="USERNAME" id="loginname" value="${pd.USERNAME }" maxlength="32" placeholder="这里输入用户名" title="用户名" style="width:100%;"/></td>
+											<td id="username_td"><input type="text" name="USERNAME" id="loginname" value="${pd.USERNAME }" maxlength="32" placeholder="这里输入用户名" title="用户名" style="width:100%;"/></td>
 										</tr>
 										<tr>
 											<td style="width:100px;text-align: right;padding-top: 13px;">编号:</td>
@@ -143,6 +143,16 @@
 			$("#role_id").focus();
 			return false;
 		}
+		if($("#DEPARTMENT_ID").val()==""){
+			$("#department_td").tips({
+				side:3,
+	            msg:'选择部门',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#DEPARTMENT_ID").focus();
+			return false;
+		}
 		if($("#loginname").val()=="" || $("#loginname").val()=="此用户名已存在!"){
 			$("#loginname").tips({
 				side:3,
@@ -158,7 +168,7 @@
 			$("#loginname").val(jQuery.trim($('#loginname').val()));
 		}
 		
-		if($("#NUMBER").val()==""){
+/* 		if($("#NUMBER").val()==""){
 			$("#NUMBER").tips({
 				side:3,
 	            msg:'输入编号',
@@ -169,7 +179,7 @@
 			return false;
 		}else{
 			$("#NUMBER").val($.trim($("#NUMBER").val()));
-		}
+		} */
 		if($("#user_id").val()=="" && $("#password").val()==""){
 			$("#password").tips({
 				side:3,
@@ -201,7 +211,7 @@
 			$("#name").focus();
 			return false;
 		}
-		var myreg = /^(((13[0-9]{1})|159)+\d{8})$/;
+/* 		var myreg = /^(((13[0-9]{1})|159)+\d{8})$/;
 		if($("#PHONE").val()==""){
 			
 			$("#PHONE").tips({
@@ -241,7 +251,7 @@
 	        });
 			$("#EMAIL").focus();
 			return false;
-		}
+		} */
 		if($("#user_id").val()==""){
 			hasU();
 		}else{
@@ -269,8 +279,15 @@
 					$("#zhongxin").hide();
 					$("#zhongxin2").show();
 				 }else{
-					$("#loginname").css("background-color","#D16E6C");
-					setTimeout("$('#loginname').val('此用户名已存在!')",500);
+					//$("#loginname").css("background-color","#D16E6C");
+					$("#loginname").tips({
+						side:3,
+			            msg:'此用户名已存在!',
+			            bg:'#AE81FF',
+			            time:2
+			        });
+					$("#loginname").focus();
+					//setTimeout("$('#loginname').val('此用户名已存在!')",500);
 				 }
 			}
 		});

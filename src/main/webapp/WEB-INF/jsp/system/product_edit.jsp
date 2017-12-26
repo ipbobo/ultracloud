@@ -35,7 +35,7 @@
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 						<input type="hidden" name="isImediate" id="isImediate" value="${pd.isImediate}"/>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">产品名称:</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;产品名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
@@ -49,9 +49,9 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">计价单位:</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;计价单位:</td>
 								<td>
-								<input type="text" name="unit" id="unit" value="${pd.unit}" maxlength="30" style="width:70%;"/>
+								<input type="number" name="unit" id="unit" value="${pd.unit}" maxlength="30" style="width:70%;"/>
 								<c:if test="${pd.type == 'cpu' }">核</c:if>
 								<c:if test="${pd.type == 'memory' }">G</c:if>
 								<c:if test="${pd.type == 'disk' }">G</c:if>
@@ -60,16 +60,16 @@
 							<c:if test="${pd.price_cur != null}">
 								<tr>
 									<td style="width:130px;text-align: right;padding-top: 13px;">旧价格:</td>
-									<td><input  readonly="true" type="text" name="price_old" id="price_old" value="${pd.price_old}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
+									<td><input  readonly="true" type="number" name="price_old" id="price_old" value="${pd.price_old}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
 								</tr>
 								<tr>
 									<td style="width:130px;text-align: right;padding-top: 13px;">当前价格:</td>
-									<td><input readonly="true" type="text" name="price_cur" id="price_cur" value="${pd.price_cur}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
+									<td><input readonly="true" type="number" name="price_cur" id="price_cur" value="${pd.price_cur}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
 								</tr>
 							</c:if>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">新价格:</td>
-								<td><input type="text" name="price_new" id="price_new" value="${pd.price_new}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;新价格:</td>
+								<td><input type="number" name="price_new" id="price_new" value="${pd.price_new}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
 							</tr>
 							<tr>
 								<td style="width:130px;text-align: right;padding-top: 13px;">新价格生效日期:</td>
@@ -162,11 +162,31 @@
 			if($("#name").val()==""){
 				$("#name").tips({
 					side:3,
-		            msg:'请输入名称',
+		            msg:'请输入产品名称',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#name").focus();
+			return false;
+			}
+			if($("#unit").val()==""){
+				$("#unit").tips({
+					side:3,
+		            msg:'请输入计价单位',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#unit").focus();
+			return false;
+			}
+			if($("#price_new").val()==""){
+				$("#price_new").tips({
+					side:3,
+		            msg:'请输入新价格',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#price_new").focus();
 			return false;
 			}
 			

@@ -30,7 +30,7 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">规则名称:</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;规则名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
@@ -105,7 +105,7 @@
 			if($("#name").val()==""){
 				$("#name").tips({
 					side:3,
-		            msg:'请输入环境名称',
+		            msg:'请输入规则名称',
 		            bg:'#AE81FF',
 		            time:2
 		        });

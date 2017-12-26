@@ -34,8 +34,8 @@
 								<table class="table table-striped table-bordered table-hover" style="width:50%;">
 									<input type="hidden" name="expirationtime_isforever" id="expirationtime_isforever" value="${pd.expirationtime_isforever}"/>
 									<tr height="42px;">
-										<td style="width:120px;text-align: right;padding-top: 13px;">环境:</td>
-										<td id="juese">
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;环境:</td>
+										<td id="cluster_td">
 										<select class="chosen-select form-control" name="cluster_id" id="cluster_id" data-placeholder="请选择" style="vertical-align:top;" style="width:98%;" >
 										<option value="">请选择</option>
 										<c:forEach items="${clusterList}" var="cluster">
@@ -45,8 +45,8 @@
 										</td>
 									</tr>
 									<tr height="42px;">
-										<td style="width:120px;text-align: right;padding-top: 13px;">项目:</td>
-										<td id="juese">
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目:</td>
+										<td id="project_td">
 										<select class="chosen-select form-control" name="project_id" id="project_id" data-placeholder="请选择" style="vertical-align:top;" style="width:98%;" >
 										<option value="">请选择</option>
 										<c:forEach items="${projectList}" var="project">
@@ -56,8 +56,8 @@
 										</td>
 									</tr>
 									<tr height="42px;">
-										<td style="width:120px;text-align: right;padding-top: 13px;">使用人:</td>
-										<td id="juese">
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;使用人:</td>
+										<td id="USERNAME_td">
 										<select class="chosen-select form-control" name="USERNAME" id="USERNAME" data-placeholder="请选择" style="vertical-align:top;" style="width:98%;" >
 										<option value="">请选择</option>
 										<c:forEach items="${userList}" var="user">
@@ -67,7 +67,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td style="width:120px;text-align: right;padding-top: 13px;">云主机:</td>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;云主机:</td>
 										<td id="juese" colspan="10">
 											<textarea readonly="readonly"  rows="3" cols="10" id="virtualmachines" name="virtualmachines" style="width:98%;"></textarea>
 											<a class="btn btn-mini btn-primary" onclick="selectHostmachine();">选择云主机</a>
@@ -110,6 +110,8 @@
 	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
 	<!-- inline scripts related to this page -->
+	<!--提示框-->
+	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
 	//选择云主机
 	function selectHostmachine() {
@@ -118,36 +120,17 @@
 		 var USERNAME = $("#USERNAME").val();
 		 
 		 if($("#cluster_id").val()=="") {
-				$("#cluster_id").tips({
+				$("#cluster_td").tips({
 					side:3,
-		            msg:'请选择环境',
+		            msg:'请先选择环境',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#cluster_id").focus();
 			return false;
 		 }
-		 if($("#project_id").val()=="") {
-				$("#project_id").tips({
-					side:3,
-		            msg:'请选择项目',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#project_id").focus();
-			return false;
-		 }
-		 if($("#USERNAME").val()=="") {
-				$("#USERNAME").tips({
-					side:3,
-		            msg:'请选择使用人',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#USERNAME").focus();
-			return false;
-		 }
 		 
+		 var cluster_id = $("#cluster_id").val();
 		 top.jzts();
 		 var diag = new top.Dialog();
 		 diag.Drag=true;
@@ -215,6 +198,47 @@
 
 		//保存
 		function binding() {
+			if($("#cluster_id").val()=="") {
+				$("#cluster_td").tips({
+					side:3,
+		            msg:'请先选择环境',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#cluster_id").focus();
+			 	return false;
+		 	 }
+			 if($("#project_id").val()=="") {
+					$("#project_td").tips({
+						side:3,
+			            msg:'请选择项目',
+			            bg:'#AE81FF',
+			            time:2
+			        });
+					$("#project_id").focus();
+				return false;
+			 }
+			 if($("#USERNAME").val()=="") {
+					$("#USERNAME_td").tips({
+						side:3,
+			            msg:'请选择使用人',
+			            bg:'#AE81FF',
+			            time:2
+			        });
+					$("#USERNAME").focus();
+				return false;
+			 }
+			 if($("#virtualmachines").val()=="") {
+					$("#virtualmachines").tips({
+						side:3,
+			            msg:'请选择云主机',
+			            bg:'#AE81FF',
+			            time:2
+			        });
+					$("#virtualmachines").focus();
+				return false;
+			 }
+			 
 			top.jzts();
 			var jsonObj = {};//JSON请求数据
 			jsonObj.cluster_id = $("#cluster_id").val();

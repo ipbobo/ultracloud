@@ -134,7 +134,9 @@
 		from 
 		<include refid="tableName"></include> d,<include refid="cpftableName"></include> c
 		where d.cpf_id=c.id
-		and c.id=#{id}
+		<if test="id!=null and id!=''"><!-- 根据云平台的ID过滤 -->
+			and c.id=#{id}
+		</if>
 	</select>
 	
 	<!-- 批量删除 -->

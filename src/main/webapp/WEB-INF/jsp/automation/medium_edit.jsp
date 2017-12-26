@@ -38,11 +38,11 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">名称:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">版本:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;版本:</td>
 								<td><input type="text" name="version" id="version" value="${pd.version}" maxlength="30" placeholder="这里输入版本号" title="版本号" style="width:98%;"/></td>
 							</tr>
 							<tr>
@@ -120,14 +120,14 @@
 				$("#name").focus();
 			return false;
 			}
-			if($("#purpose").val()==""){
-				$("#purpose").tips({
+			if($("#version").val()==""){
+				$("#version").tips({
 					side:3,
-		            msg:'请输入用途',
+		            msg:'请输入版本',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#purpose").focus();
+				$("#version").focus();
 			return false;
 			}
 			if($("#url").val()=="" && $("#hasTp1").val()=="no"){

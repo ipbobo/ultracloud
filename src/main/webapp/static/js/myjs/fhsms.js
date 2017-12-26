@@ -15,19 +15,20 @@ function sendSystemNotice(){
 		$("#title").focus();
 		return false;
 	}
-	if($("#CONTENT").val()==""){
-		$("#nr").tips({
+	if($("#content").val()==""){
+		$("#content").tips({
 			side:1,
             msg:'请输入内容',
             bg:'#AE81FF',
             time:3
         });
+		$("#content").focus();
 		return false;
 	}
 	$("#zhongxin").hide();
 	$("#zhongxin2").show();
 	var title = $("#title").val();
-	var CONTENT = $("#CONTENT").val();
+	var CONTENT = $("#content").val();
 	$.ajax({
 		type: "POST",
 		url: locat+'/systemnotice/save.do?tm='+new Date().getTime(),

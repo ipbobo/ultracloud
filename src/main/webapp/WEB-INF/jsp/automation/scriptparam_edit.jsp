@@ -30,11 +30,11 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">名称:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">参数Key:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;参数Key:</td>
 								<td><input type="text" name="param_key" id="param_key" value="${pd.key}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
@@ -42,8 +42,8 @@
 								<td><input type="text" name="value" id="value" value="${pd.value}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">参数顺序:</td>
-								<td><input type="text" name="number" id="number" value="${pd.number}" maxlength="30" style="width:100%;"/></td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;参数顺序:</td>
+								<td><input type="number" name="number" id="number" value="${pd.number}" maxlength="30" style="width:100%;"/></td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
@@ -95,20 +95,20 @@
 				$("#name").focus();
 			return false;
 			}
-			if($("#key").val()==""){
-				$("#key").tips({
+			if($("#param_key").val()==""){
+				$("#param_key").tips({
 					side:3,
-		            msg:'请输入脚本key',
+		            msg:'请输入参数key',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#key").focus();
+				$("#param_key").focus();
 			return false;
 			}
 			if($("#number").val()==""){
 				$("#number").tips({
 					side:3,
-		            msg:'请输入用途',
+		            msg:'请输入参数顺序',
 		            bg:'#AE81FF',
 		            time:2
 		        });
