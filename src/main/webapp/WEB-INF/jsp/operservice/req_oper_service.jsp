@@ -311,30 +311,29 @@
 									</div>
 									<div class="modal-body">
 									<input type="hidden"   name="middleware_modal_vmId" id="middleware_modal_vmId">
-							<table  style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
-							<tr class="tablecls">
-								<td align="right" style="width: 120px;padding:10px;">中间件：</td>
-								<td align="left" style="padding:10px;">
-									<table id="deployed_soft_table"
-								class="table table-striped table-bordered table-hover"
-								style="margin-top: 5px;">
-								
-									<thead>
-									<tr>
-										<th class="center" style="width: 35px;"><label
-											class="pos-rel"><input type="checkbox" class="ace"
-												id="zcheckbox" /><span class="lbl"></span></label></th>
-										<th class="center">中间件部署序号</th>
-										<th class="center">中间件名称</th>
-									</tr>
-								</thead>
-									
-									</table>
-								</td>
-							</tr>
-						</table>
+									<table  style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+									<tr class="tablecls">
+										<td align="right" style="width: 120px;padding:10px;">中间件：</td>
+										<td align="left" style="padding:10px;">
+											<table id="deployed_soft_table"
+										class="table table-striped table-bordered table-hover"
+										style="margin-top: 5px;">
 										
-									</div>
+											<thead>
+											<tr>
+												<th class="center" style="width: 35px;"><label
+													class="pos-rel"><input type="checkbox" class="ace"
+														id="zcheckbox" /><span class="lbl"></span></label></th>
+												<th class="center">中间件部署序号</th>
+												<th class="center">中间件名称</th>
+											</tr>
+										</thead>
+											
+											</table>
+										</td>
+									</tr>
+								</table>
+								</div>
 									<div class="modal-footer">
 										<button id="middleware_btn_cancel" type="button" class="btn btn-default" onclick="middlewareModalCancel()"  data-dismiss="modal">取消
 										</button>
@@ -663,26 +662,6 @@
 		});  
 	}  
 	
-	function selectSoftVersion(soft_name){
-		jQuery.ajax({  
-			url : "querySoftVersion.do",  
-			data : {softName : soft_name},  
-			type : "post",  
-			cache : false,  
-			dataType : "json",  
-			success:function(data){
-				   var select_root=document.getElementById('soft_version');  
-				    select_root.options.length=0;
-				    for(var i=0;i<data.length;i++){  
-				            var xValue=data[i];  
-				             var xText=data[i];
-				             var option=new Option(xText,xValue);  
-				             select_root.add(option);  
-				    }
-			} 
-		});  
-	}
-	
 	function onchangecallback(data){   
 	    var select_root=document.getElementById('oper_type');  
 	    select_root.options.length=0;
@@ -704,6 +683,28 @@
 	    $("#op_" + serviceType).attr("style", "display:block;");
 	    
 	}  
+	
+	
+	function selectSoftVersion(soft_name){
+		jQuery.ajax({  
+			url : "querySoftVersion.do",  
+			data : {softName : soft_name},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				   var select_root=document.getElementById('soft_version');  
+				    select_root.options.length=0;
+				    for(var i=0;i<data.length;i++){  
+				            var xValue=data[i];  
+				             var xText=data[i];
+				             var option=new Option(xText,xValue);  
+				             select_root.add(option);  
+				    }
+			} 
+		});  
+	}
+	
 	
 	
 	function softChoice(vmId){

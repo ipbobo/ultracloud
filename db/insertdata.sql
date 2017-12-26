@@ -70,6 +70,8 @@ INSERT INTO `cmp_dict` VALUES ('101', '2017-11-20 17:59:36', '2017-11-20 18:34:4
 INSERT INTO `cmp_dict` VALUES ('111', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'install_OS', 'ReadHat 6.5_64', 'rhel6_64Guest', 'ReadHat 6.5 64位系统', '0', '1');
 INSERT INTO `cmp_dict` VALUES ('112', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'install_OS', 'CentOS 6.5_64', 'centos64Guest', 'CentOS 6.5 64位系统', '0', '1');
 
+INSERT INTO `cmp_dict` VALUES ('121', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'install_disk_size', 'default', '50', '默认磁盘大小', '0', '1');
+
 INSERT INTO `cmp_sequence` VALUES ('cmp_order', '1', '1', '5', 'O');
 
 -- 数据字典初始化数据 start --

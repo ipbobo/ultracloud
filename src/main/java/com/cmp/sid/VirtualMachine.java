@@ -10,6 +10,8 @@ public class VirtualMachine {
 	private String memory;  //内存
 	private String datadisk; //系统盘大小
 	private String status;	//虚拟机状态
+	private String mountDiskSize; //挂载磁盘
+	private String mountDiskType; //挂载磁盘类型
 	private long hostmachineId; //宿主机ID
 	private String platform;  //平台
 	private String os;		//操作系统
@@ -156,7 +158,23 @@ public class VirtualMachine {
 	public void setAppNo(String appNo) {
 		this.appNo = appNo;
 	}
-	
-	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getMountDiskSize() {
+		return mountDiskSize;
+	}
+	public void setMountDiskSize(String mountDiskSize) {
+		this.mountDiskSize = mountDiskSize;
+	}
+	public String getMountDiskType() {
+		return mountDiskType;
+	}
+	public void setMountDiskType(String mountDiskType) {
+		this.mountDiskType = mountDiskType;
+	}
 	
 }

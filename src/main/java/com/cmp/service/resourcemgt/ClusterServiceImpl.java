@@ -86,6 +86,15 @@ public class ClusterServiceImpl implements ClusterService {
 	}
 
 	/**
+	 * 通过datacenterId获取数据
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> findByDataCenterId(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("ClusterMapper.findByDataCenterId", pd);
+	}
+	/**
 	 * 批量删除
 	 * 
 	 * @param ArrayDATA_IDS

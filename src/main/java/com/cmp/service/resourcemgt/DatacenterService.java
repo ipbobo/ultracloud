@@ -61,6 +61,14 @@ public interface DatacenterService {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd) throws Exception;
+	
+	/**
+	 * 通过id获取数据
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> findBycpfId(PageData pd) throws Exception;
 
 	/**
 	 * 批量删除

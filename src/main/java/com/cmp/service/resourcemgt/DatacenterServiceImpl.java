@@ -84,6 +84,16 @@ public class DatacenterServiceImpl implements DatacenterService {
 	public PageData findById(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("DatacenterMapper.findById", pd);
 	}
+	
+	/**
+	 * 通过云平台id获取数据
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> findBycpfId(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("DatacenterMapper.findByCpfId", pd);
+	}
 
 	/**
 	 * 批量删除
@@ -100,4 +110,6 @@ public class DatacenterServiceImpl implements DatacenterService {
 	public List<CmpDict> getDataCenterList() throws Exception {
 		return (List<CmpDict>) dao.findForList("DatacenterMapper.getDataCenterList", null);
 	}
+
+	
 }

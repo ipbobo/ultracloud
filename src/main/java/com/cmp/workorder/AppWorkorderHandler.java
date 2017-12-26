@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.activiti.CustomGroupEntityManager;
 import com.cmp.entity.DeployedSoft;
 import com.cmp.entity.Medium;
 import com.cmp.entity.Project;
@@ -25,6 +26,7 @@ import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.VirtualMachineService;
 import com.cmp.service.resourcemgt.CloudplatformService;
+import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.sid.CloudInfoCollect;
 import com.cmp.sid.CmpCloudInfo;
 import com.cmp.sid.CmpOrder;
@@ -34,13 +36,17 @@ import com.cmp.sid.VirtualMachine;
 import com.cmp.util.PageDataUtil;
 import com.cmp.util.ShellUtil;
 import com.cmp.util.StringUtil;
+import com.fh.entity.Page;
 import com.fh.entity.system.Department;
 import com.fh.service.fhoa.department.impl.DepartmentService;
+import com.fh.util.Logger;
 import com.fh.util.PageData;
 
 @Service("appWorkorderHandler")
 public class AppWorkorderHandler implements IWorkorderHandler {
 
+	private static Logger logger = Logger.getLogger(AppWorkorderHandler.class);
+	
 	@Resource
 	private CmpWorkOrderService cmpWorkOrderService;
 	
@@ -71,6 +77,10 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	@Resource
 	private CloudplatformService cloudplatformService;
 	
+	@Resource
+	private DatacenterService datacenterService;
+	
+	
 	@Override
 	public Map<String, Object> toWorkorderView(CmpWorkOrder cmpWorkorder) throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
@@ -91,6 +101,9 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	public Map<String, Object> toWorkorderExecute(CmpWorkOrder cmpWorkorder) throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		resMap = buildViewInfo(cmpWorkorder, resMap);
+		//获取云平台信息
+		List<PageData> cloudplatformList =  cloudplatformService.list(new Page(), false);
+		resMap.put("cloudplatformList", cloudplatformList);
 		resMap.put("toPageUrl", "workorder/applyexecute");
 		return resMap;
 	}
@@ -274,8 +287,6 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		PageData c_pd = new PageData();
 		c_pd.put("id", cloudplatformId);
 		PageData cloudplatformPd = cloudplatformService.findById(c_pd, false);
-		String platFormName = cloudplatformPd.getString("name");		//云平台名
-		
 		TccCloudPlatform platForm = new TccCloudPlatform();
 		platForm.setCloudplatformUser(cloudplatformPd.getString("username"));
 		platForm.setCloudplatformPassword(cloudplatformPd.getString("password"));
@@ -288,33 +299,41 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		}else if (orderInfo.getPlatType() != null && orderInfo.getPlatType().equals("kvm")) {
 			platformManagerType="com.cmp.mgr.impl.KvmCloudArchManager";
 		}
-		platForm.setPlatformManagerType(platformManagerType);
 		
+		PageData datacenterPd = new PageData();
+		datacenterPd.put("id", datacenterId);
+		datacenterPd = datacenterService.findById(datacenterPd);
+		
+		platForm.setPlatformManagerType(platformManagerType);
 		CloudArchManager cloudArchManager = cloudArchManagerAdapter.getCloudArchManagerAdaptee(platForm);
 		CreateVmRequest cvq = new CreateVmRequest();
 		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
 		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));
-		cvq.setDiskSizeKB(Long.parseLong(diskInfoList.get(0).getDiskSize())*1024*1024);
+		int defaultDiskSize = Integer.parseInt(cmpDictService.getCmpDict("disk_type", "default").getDictValue());
+		cvq.setDiskSizeKB(defaultDiskSize*1024*1024);
 		cvq.setDiskMode("persistent");					
-		cvq.setDcName("DC1");
+		cvq.setDcName(datacenterPd.getString("name"));
 		cvq.setVmName(vmName);
 		cvq.setNetName("VM Network");					//网络名称  ---   datacenter_network表中根据 数据中心 ID获取 				
 		cvq.setRpName("Resources");						//资源池 --- 先写死
 		cvq.setNicName("VMXNET 3");						//写死先
 		cvq.setDsName("datastore2-raid5-2.5t");			//调接口获取
 		cvq.setGuestOs(installOS);
-		//cloudArchManager.createVirtualMachine(cvq);
+		cloudArchManager.createVirtualMachine(cvq);
+		logger.info("远程虚拟机创建完毕");
+		
 		
 		String softCode = orderInfo.getSoftCode();
 		String[] softs = softCode.split(",");
 		VirtualMachine vm = new VirtualMachine();
 		vm.setCpu(pd.getString("CPU"));
 		vm.setMemory(pd.getString("memory"));
-		//暂时先设置第一个磁盘
 		vm.setDatadisk(diskInfoList.size() > 0 ? diskInfoList.get(0).getDiskSize() : "300");
 		vm.setProjectId(workOrder.getProjectCode());
 		vm.setOs(fullOS);
 		vm.setOsStatus("未安装");
+		vm.setMountDiskSize(diskSize);
+		vm.setMountDiskType(diskType);
 		vm.setSoft(softCode);
 		vm.setSoftStatus("未安装");
 		vm.setName(vmName);
@@ -322,6 +341,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		vm.setUsername("test");
 		vm.setPassword("pwd123");
 		vm.setStatus("0");
+		vm.setType(workOrder.getPlatType());
 		vm.setHostmachineId(182837323);
 		vm.setAppNo(workOrder.getAppNo());
 		vm.setUser(workOrder.getApplyUserId());

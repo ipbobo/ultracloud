@@ -89,6 +89,17 @@
 			id = #{id}
 	</select>
 	
+	
+	<!-- 通过云平台ID查找 -->
+	<select id="findByCpfId" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			cpf_id = #{cpf_id}
+	</select>
+	
 	<!-- 脚本列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,

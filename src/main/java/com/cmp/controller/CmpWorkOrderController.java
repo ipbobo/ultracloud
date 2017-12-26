@@ -29,6 +29,8 @@ import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.ProjectService;
+import com.cmp.service.resourcemgt.ClusterService;
+import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOpServe;
 import com.cmp.sid.CmpOrder;
@@ -72,6 +74,12 @@ public class CmpWorkOrderController extends BaseController{
 	
 	@Resource 
 	private WorkorderHelper  workorderHelper;
+	
+	@Resource
+	private DatacenterService datacenterService;
+	
+	@Resource
+	private ClusterService clusterService;
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
@@ -597,7 +605,42 @@ public class CmpWorkOrderController extends BaseController{
 	    }  
 	}  
 	
+	/**
+	 * 平台选择级联查询数据中心
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/onCloudplatformSelected")
+	@ResponseBody
+	public List<PageData> queryDataCenter(String cloudplatformId) throws Exception{
+		if (cloudplatformId == null || cloudplatformId.length() == 0) {
+			return null;
+		}
+		PageData pd = new PageData();
+		pd.put("cpf_id", cloudplatformId);
+		List<PageData> cloudplatformList=datacenterService.findBycpfId(pd);
+		return cloudplatformList;
+	}
 	
+	
+	/**
+	 * 数据中心选择级联查询集群
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/onDataCenterSelected")
+	@ResponseBody
+	public List<PageData> queryCluster(String dataCenterId) throws Exception{
+		if (dataCenterId == null || dataCenterId.length() == 0) {
+			return null;
+		}
+		PageData pd = new PageData();
+		pd.put("datacenter_id", dataCenterId);
+		List<PageData> clusterList =  clusterService.findByDataCenterId(pd);
+		return clusterList;
+	}
 	
 	
 	public List<RelateTask> fetchRelateTaskList(String currentProcInstId){

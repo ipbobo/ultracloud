@@ -18,6 +18,8 @@
 		<result column="memory" property="memory"/>
 		<result column="datadisk" property="datadisk"/>
 		<result column="status" property="status"/>
+		<result column="mount_disk_size" property="mountDiskSize"/>
+		<result column="mount_disk_type" property="mountDiskType"/>
 		<result column="hostmachine_id" property="hostmachineId"/>
 		<result column="platform" property="platform"/>
 		<result column="os" property="os"/>
@@ -44,6 +46,8 @@
 		memory,
 		datadisk,
 		status,
+		mount_disk_size,
+		mount_disk_type,
 		hostmachine_id,
 		platform,
 		os,
@@ -71,6 +75,8 @@
 		#{memory},
 		#{datadisk},
 		#{status},
+		#{mountDiskSize},
+		#{mountDiskType},
 		#{hostmachineId},
 		#{platform},
 		#{os},
@@ -96,6 +102,8 @@
 		memory,
 		datadisk,
 		status,
+		mount_disk_size,
+		mount_disk_type,
 		hostmachine_id,
 		platform,
 		os,
@@ -118,6 +126,8 @@
 		#{memory},
 		#{datadisk},
 		#{status},
+		#{mountDiskSize},
+		#{mountDiskType},
 		#{hostmachineId},
 		#{platform},
 		#{os},
