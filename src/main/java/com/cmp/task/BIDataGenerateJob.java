@@ -34,16 +34,9 @@ public class BIDataGenerateJob extends BaseController implements Job {
 		JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 		Map<String, Object> parameter = (Map<String, Object>) dataMap.get("parameterList"); // 获取参数
 
-		// 普通类从spring容器中拿出service
 		WebApplicationContext webctx = ContextLoader.getCurrentWebApplicationContext();
 		BIDatacenterService biDataGenerateService = (BIDatacenterService) webctx.getBean("biDataGenerateService");
 
-		try {
-			biDataGenerateService.biDataGenerateHandler();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
 		try {
 			biDataGenerateService.biDataGenerateHandler();
 		} catch (Exception e) {

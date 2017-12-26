@@ -30,12 +30,12 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">环境名称:</td>
+								<td style="width:140px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;环境名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">挂载云磁盘数量:</td>
-								<td id="js">
+								<td style="width:140px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;挂载云磁盘数量:</td>
+								<td id="disknum_td">
 									<select class="chosen-select form-control" name="disknum" id="disknum"  style="vertical-align:top;"   >
 									<option value="1" <c:if test="${pd.disknum == 1 }">selected</c:if>>1块</option>
 									<option value="2" <c:if test="${pd.disknum == 2 }">selected</c:if>>2块</option>
@@ -46,8 +46,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">每块云磁盘最大值:</td>
-								<td id="js">
+								<td style="width:140px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;每块云磁盘最大值:</td>
+								<td id="diskmaximum_td">
 									<select class="chosen-select form-control" name="diskmaximum" id="diskmaximum"  style="vertical-align:top;"   >
 									<option value="600" <c:if test="${pd.diskmaximum == 600 }">selected</c:if>>600GB</option>
 									<option value="800" <c:if test="${pd.diskmaximum == 800 }">selected</c:if>>800GB</option>
@@ -58,8 +58,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">安装软件数量:</td>
-								<td id="js">
+								<td style="width:140px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;安装软件数量:</td>
+								<td id="softnum_td">
 									<select class="chosen-select form-control" name="softnum" id="softnum"  style="vertical-align:top;"   >
 									<option value="1" <c:if test="${pd.softnum == 1 }">selected</c:if>>1</option>
 									<option value="2" <c:if test="${pd.softnum == 2 }">selected</c:if>>2</option>
@@ -70,8 +70,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">数据中心:</td>
-								<td id="js">
+								<td style="width:140px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;数据中心:</td>
+								<td id="datacenter_td">
 									<select class="chosen-select form-control" name="datacenter_id" id="datacenter_id" data-placeholder="请选择" style="vertical-align:top;"  title="数据中心" >
 									<c:forEach items="${dcList}" var="datacenter">
 										<option value="${datacenter.id }" <c:if test="${datacenter.id == pd.datacenter_id }">selected</c:if>>${datacenter.name }</option>
@@ -80,8 +80,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">资源到期选择:</td>
-								<td id="js">
+								<td style="width:140px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;资源到期选择:</td>
+								<td id="duetopolicy_td">
 									<select class="chosen-select form-control" name="duetopolicy" id="duetopolicy"  style="vertical-align:top;"   >
 									<option value="auto_recycle" <c:if test="${pd.duetopolicy == 'auto_recycle' }">selected</c:if>>资源到期自动回收</option>
 									<option value="auto_shutdown" <c:if test="${pd.duetopolicy == 'auto_shutdown' }">selected</c:if>>资源到期自动关机</option>
@@ -89,8 +89,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">是否需要初始快照:</td>
-								<td id="js">
+								<td style="width:140px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;是否需要初始快照:</td>
+								<td id="is_initsnapshoot_td">
 									<select class="chosen-select form-control" name="is_initsnapshoot" id="is_initsnapshoot"  style="vertical-align:top;"   >
 									<option value="0" <c:if test="${pd.is_initsnapshoot == 0 }">selected</c:if>>否</option>
 									<option value="1" <c:if test="${pd.is_initsnapshoot == 1 }">selected</c:if>>是</option>
@@ -147,14 +147,64 @@
 				$("#name").focus();
 			return false;
 			}
+			if($("#disknum").val()==""){
+				$("#disknum_td").tips({
+					side:3,
+		            msg:'请选择挂载云磁盘数量',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#disknum").focus();
+			return false;
+			}
+			if($("#diskmaximum").val()==""){
+				$("#diskmaximum_td").tips({
+					side:3,
+		            msg:'请选择每块云磁盘最大值',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#diskmaximum").focus();
+			return false;
+			}
+			if($("#softnum").val()==""){
+				$("#softnum_td").tips({
+					side:3,
+		            msg:'请选择安装软件数量',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#softnum").focus();
+			return false;
+			}
 			if($("#datacenter_id").val()==""){
-				$("#datacenter_id").tips({
+				$("#datacenter_td").tips({
 					side:3,
 		            msg:'请选择数据中心',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#datacenter_id").focus();
+			return false;
+			}
+			if($("#duetopolicy").val()==""){
+				$("#duetopolicy_td").tips({
+					side:3,
+		            msg:'请选择资源到期策略',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#duetopolicy").focus();
+			return false;
+			}
+			if($("#is_initsnapshoot").val()==""){
+				$("#is_initsnapshoot_td").tips({
+					side:3,
+		            msg:'请选择是否需要初始快照',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#is_initsnapshoot").focus();
 			return false;
 			}
 			

@@ -46,7 +46,7 @@
 						<div id="zhongxin" style="padding-top: 13px;padding-left: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover" style="padding-left: 13px;">
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">项目名称:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30"  style="width:98%;"/></td>
 								<td style="width:120px;text-align: right;padding-top: 13px;">项目简称:</td>
 								<td><input type="text" name="shortname" id="shortname" value="${pd.shortname}" maxlength="30" style="width:98%;"/></td>

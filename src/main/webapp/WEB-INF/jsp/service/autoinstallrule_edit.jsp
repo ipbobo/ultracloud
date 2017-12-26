@@ -30,8 +30,8 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:79px;text-align: right;padding-top: 13px;">环境:</td>
-								<td id="juese">
+								<td style="width:79px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;环境:</td>
+								<td id="cluster_td">
 									<select class="chosen-select form-control" name="cluster_id" id="cluster_id" style="vertical-align:top;" style="width:98%;" >
 										<c:forEach items="${clusterList}" var="var">
 											<option value="${var.id }" <c:if test="${var.id  == pd.cluster_id }">selected</c:if>>${var.name }</option>
@@ -41,7 +41,7 @@
 							</tr>
 							<c:if test="${pd.type == 'vmware' }">
 								<tr>
-									<td style="width:130px;text-align: right;padding-top: 13px;">计算规则:</td>
+									<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;计算规则:</td>
 									<td id="js">
 										<select class="chosen-select form-control" name="num_rule" id="num_rule"  style="vertical-align:top;" style="width:98%;" >
 										<c:forEach items="${autoinstall_rule_num_List}" var="dictionaries">
@@ -51,7 +51,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td style="width:130px;text-align: right;padding-top: 13px;">存储规则:</td>
+									<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;存储规则:</td>
 									<td id="js">
 										<select class="chosen-select form-control" name="storage_rule" id="storage_rule"  style="vertical-align:top;" style="width:98%;" >
 										<c:forEach items="${autoinstall_rule_storage_List}" var="dictionaries">
@@ -61,7 +61,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td style="width:130px;text-align: right;padding-top: 13px;">IP规则:</td>
+									<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;IP规则:</td>
 									<td id="js">
 										<select class="chosen-select form-control" name="ip_rule" id="ip_rule"  style="vertical-align:top;" style="width:98%;" >
 										<c:forEach items="${autoinstall_rule_ip_List}" var="dictionaries">
@@ -73,7 +73,7 @@
 							</c:if>
 							<c:if test="${pd.type == 'OpenStack' }">
 								<tr>
-									<td style="width:130px;text-align: right;padding-top: 13px;">规则:</td>
+									<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;规则:</td>
 									<td id="js">
 										<select class="chosen-select form-control" name="openstack_rule" id="openstack_rule"  style="vertical-align:top;" style="width:98%;" >
 										<c:forEach items="${autoinstall_rule_openstack_List}" var="dictionaries">
@@ -123,14 +123,14 @@
 		});
 		//保存
 		function save(){
-			if($("#name").val()==""){
-				$("#name").tips({
+			if($("#cluster_id").val()=="" || $("#cluster_id").val()==null){
+				$("#cluster_td").tips({
 					side:3,
-		            msg:'请输入环境名称',
+		            msg:'请选择环境',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#name").focus();
+				$("#cluster_id").focus();
 			return false;
 			}
 			

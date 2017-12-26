@@ -32,19 +32,19 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">任务名称:</td>
+								<td style="width:110px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;任务名称:</td>
 								<td><input type="text" name="JOBNAME" id="JOBNAME" value="${pd.JOBNAME}" maxlength="255" placeholder="这里输入任务名称" title="任务名称" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">任务执行类:</td>
+								<td style="width:110px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;任务执行类:</td>
 								<td><input type="text" name="CLASSNAME" id="CLASSNAME" value="${pd.CLASSNAME}" maxlength="255" placeholder="这里输入任务执行类" title="任务执行类" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">时间规则:</td>
-								<td><input type="text" name="FHTIME" id="FHTIME" value="${pd.FHTIME}" maxlength="30" placeholder="这里输入时间规则" title="时间规则" style="width:98%;"/></td>
+								<td style="width:110px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;时间规则:</td>
+								<td><input readonly="readonly" type="text" name="FHTIME" id="FHTIME" value="${pd.FHTIME}" maxlength="30" placeholder="这里输入时间规则" title="时间规则" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注:</td>
+								<td style="width:110px;text-align: right;padding-top: 13px;">备注:</td>
 								<td><input type="text" name="BZ" id="BZ" value="${pd.BZ}" maxlength="255" placeholder="这里输入备注" title="备注" style="width:98%;"/></td>
 							</tr>
 						</table>
@@ -263,16 +263,6 @@
 		
 		//保存
 		function save(){
-			if($("#FHTIME").val()==""){
-				$("#setFHTIME").tips({
-					side:3,
-		            msg:'请设置时间规则',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#FHTIME").focus();
-			return false;
-			}
 			if($("#JOBNAME").val()==""){
 				$("#JOBNAME").tips({
 					side:3,
@@ -293,6 +283,17 @@
 				$("#CLASSNAME").focus();
 			return false;
 			}
+			if($("#FHTIME").val()==""){
+				$("#setFHTIME").tips({
+					side:3,
+		            msg:'请设置时间规则',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#FHTIME").focus();
+			return false;
+			}
+			
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();

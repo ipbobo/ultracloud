@@ -30,23 +30,23 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">KVM主机名称:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;KVM主机名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">IP地址:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;IP地址:</td>
 								<td><input type="text" name="ip" id="ip" value="${pd.ip}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">帐号:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;用户名:</td>
 								<td><input type="text" name="account" id="account" value="${pd.account}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120;text-align: right;padding-top: 13px;">密码:</td>
+								<td style="width:120;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;密码:</td>
 								<td><input type="password" name="password_ssh" id="password_ssh" value="${pd.password_ssh}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">端口:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;端口:</td>
 								<td><input type="text" name="port" id="port" value="${pd.port}" maxlength="30" style="width:100%;"/></td>
 							</tr>
 							<tr>
@@ -102,11 +102,21 @@
 			if($("#ip").val()==""){
 				$("#ip").tips({
 					side:3,
-		            msg:'请输入IP',
+		            msg:'请输入ip',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#ip").focus();
+			return false;
+			}
+			if($("#account").val()==""){
+				$("#account").tips({
+					side:3,
+		            msg:'请输入用户名',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#account").focus();
 			return false;
 			}
 			if($("#password_ssh").val()==""){
@@ -117,6 +127,16 @@
 		            time:2
 		        });
 				$("#password").focus();
+			return false;
+			}
+			if($("#port").val()==""){
+				$("#port").tips({
+					side:3,
+		            msg:'请输入端口',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#port").focus();
 			return false;
 			}
 

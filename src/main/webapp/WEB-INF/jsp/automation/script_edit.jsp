@@ -38,12 +38,12 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">名称:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">类型:</td>
-								<td id="js">
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;类型:</td>
+								<td id="type_td">
 									<select class="chosen-select form-control" name="type" id=type data-placeholder="请选择类型" style="vertical-align:top;"  title="类型"  >
 									<option value=""></option>
 									<c:forEach items="${dictionariesList}" var="dictionaries">
@@ -53,7 +53,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">脚本key:</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;脚本key:</td>
 								<td><input type="text" name="script_key" id="script_key" value="${pd.script_key}" maxlength="30" placeholder="这里输入脚本key" title="脚本key" style="width:100%;"/></td>
 							</tr>
 							<tr>
@@ -62,8 +62,8 @@
 							</tr>
 							
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">关联介质:</td>
-								<td id="js">
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;关联软件:</td>
+								<td id="medium_td">
 									<select class="chosen-select form-control" name="medium_id" id="medium_id" data-placeholder="请选择介质" style="vertical-align:top;"  title="介质" >
 									<option value=""></option>
 									<c:forEach items="${mediumList}" var="medium">
@@ -133,6 +133,16 @@
 				$("#name").focus();
 			return false;
 			}
+			if($("#type").val()=="" || $("#type").val()==null){
+				$("#type_td").tips({
+					side:3,
+		            msg:'请选择类型',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#type").focus();
+			return false;
+			}
 			if($("#script_key").val()==""){
 				$("#script_key").tips({
 					side:3,
@@ -143,16 +153,17 @@
 				$("#script_key").focus();
 			return false;
 			}
-			if($("#purpose").val()==""){
-				$("#purpose").tips({
+			if($("#medium_id").val()=="" || $("#medium_id").val()==null){
+				$("#medium_td").tips({
 					side:3,
-		            msg:'请输入用途',
+		            msg:'请关联软件',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#purpose").focus();
+				$("#medium_id").focus();
 			return false;
 			}
+
 			if($("#url").val()=="" && $("#hasTp1").val()=="no"){
 				$("#url").tips({
 					side:3,

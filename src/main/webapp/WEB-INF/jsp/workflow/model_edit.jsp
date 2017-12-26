@@ -28,11 +28,11 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:85px;text-align: right;padding-top: 13px;">名称:</td>
+								<td style="width:85px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:85px;text-align: right;padding-top: 13px;">KEY:</td>
+								<td style="width:85px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;KEY:</td>
 								<td><input type="text" name="key" id="key" value="${pd.key}" maxlength="30"  style="width:98%;"/></td>
 							</tr>
 							<tr>
@@ -92,6 +92,16 @@
 		            time:2
 		        });
 				$("#name").focus();
+			return false;
+			}
+			if($("#key").val()=="") {
+				$("#key").tips({
+					side:3,
+		            msg:'请输入KEY',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#key").focus();
 			return false;
 			}
 			$("#Form").submit();

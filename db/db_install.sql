@@ -9,7 +9,7 @@ CREATE TABLE `t_environment` (
   `disknum` int NOT NULL COMMENT '挂载云磁盘数量',
   `diskmaximum` int NOT NULL COMMENT '每块云磁盘最大值',
   `softnum` int NOT NULL COMMENT '安装软件数量',
-  `datacenter_id` bigint unsigned DEFAULT NULL COMMENT '数据中心id',
+  `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
   `duetopolicy` varchar(20) NOT NULL COMMENT '资源到期策略',
   `is_initsnapshoot` varchar(20) NOT NULL COMMENT '是否要初始快照   1 - 是; 0 - 否',
   `USERNAME` varchar(20) NOT NULL COMMENT '创建人',

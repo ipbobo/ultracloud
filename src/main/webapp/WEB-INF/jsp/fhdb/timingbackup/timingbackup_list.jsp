@@ -296,7 +296,7 @@
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>timingbackup/goAdd.do';
 			 diag.Width = 600;
-			 diag.Height = 380;
+			 diag.Height = 420;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
