@@ -46,14 +46,14 @@
 						<div id="zhongxin" style="padding-top: 13px;padding-left: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover" style="padding-left: 13px;">
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目名称:</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30"  style="width:98%;"/></td>
-								<td style="width:120px;text-align: right;padding-top: 13px;">项目简称:</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目简称:</td>
 								<td><input type="text" name="shortname" id="shortname" value="${pd.shortname}" maxlength="30" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">项目等级:</td>
-								<td id="js">
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目等级:</td>
+								<td id="level_td">
 									<select class="chosen-select form-control" name="level" id=level data-placeholder="请选择等级" style="vertical-align:top;"  title="等级" style="width:98%;" >
 									<option value=""></option>
 									<c:forEach items="${dictionariesList}" var="dictionaries">
@@ -61,8 +61,8 @@
 									</c:forEach>
 									</select>
 								</td>
-								<td style="width:120px;text-align: right;padding-top: 13px;">审核用户组:</td>
-								<td id="juese">
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;审核用户组:</td>
+								<td id="usergroup_td">
 								<select class="chosen-select form-control" name="usergroup_id" id="usergroup_id" data-placeholder="请选择用户组" style="vertical-align:top;" style="width:98%;" >
 								<option value=""></option>
 								<c:forEach items="${usergroupList}" var="usergroup">
@@ -72,19 +72,19 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">项目归属部门:</td>
-								<td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目归属部门:</td>
+								<td id="DEPARTMENT_td">
 									<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
 									<div class="selectTree" id="selectTree"></div>
 								</td>
-								<td style="width:120px;text-align: right;padding-top: 13px;">项目责任人:</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目责任人:</td>
 								<td>
 									<input type="text" name="USERNAME" id="USERNAME" value="${pd.USERNAME}" maxlength="30"  style="width:70%;"/>&nbsp;&nbsp;
 									<a class="btn btn-mini btn-primary" onclick="selectLeaderUser('USERNAME');">选择</a>
 								</td>
 							</tr>
  				 			<tr>
-								<td style="width:120px;height:130px;text-align: right;padding-top: 13px;">项目组成员:</td>
+								<td style="width:130px;height:130px;text-align: right;padding-top: 13px;">项目组成员:</td>
 								<div class="col-xs-12">
 								<td colspan="8">
 										<select multiple="multiple" size="5" name="duallistbox_demo1[]" class="demo2">
@@ -99,9 +99,9 @@
 								</div>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;">描述:</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;">描述:</td>
 								<td  colspan="10">
-									<textarea rows="3" cols="10" id="detail" name="detail" style="width:98%;"></textarea>
+									<textarea rows="2" cols="10" id="detail" name="detail" style="width:98%;"></textarea>
 								</td>
 							</tr>
 							<tr>
@@ -171,13 +171,64 @@
 			if($("#name").val()==""){
 				$("#name").tips({
 					side:3,
-		            msg:'请输入名称',
+		            msg:'请输入项目名称',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#name").focus();
 			return false;
 			}
+			if($("#shortname").val()==""){
+				$("#shortname").tips({
+					side:3,
+		            msg:'请输入项目简称',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#shortname").focus();
+			return false;
+			}
+			if($("#level").val()==""){
+				$("#level_td").tips({
+					side:3,
+		            msg:'请选择项目等级',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#level").focus();
+			return false;
+			}
+			if($("#usergroup_id").val()==""){
+				$("#usergroup_td").tips({
+					side:3,
+		            msg:'请选择审核用户组',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#usergroup_id").focus();
+			return false;
+			}
+			if($("#DEPARTMENT_ID").val()==""){
+				$("#DEPARTMENT_td").tips({
+					side:3,
+		            msg:'请选择项目归属部门',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#DEPARTMENT_ID").focus();
+			return false;
+			}
+			if($("#USERNAME").val()==""){
+				$("#USERNAME").tips({
+					side:3,
+		            msg:'请选择项目责任人',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#USERNAME").focus();
+			return false;
+			}
+			
 			$("#Form1").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
