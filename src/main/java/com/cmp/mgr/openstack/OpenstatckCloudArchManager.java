@@ -2,17 +2,18 @@ package com.cmp.mgr.openstack;
 
 import java.util.List;
 
+import com.cmp.entity.tcc.TccCluster;
+import com.cmp.entity.tcc.TccDatacenter;
+import com.cmp.entity.tcc.TccDatastore;
+import com.cmp.entity.tcc.TccHostMachine;
+import com.cmp.entity.tcc.TccNetwork;
+import com.cmp.entity.tcc.TccResourcePool;
 import com.cmp.entity.tcc.TccVirtualMachine;
+import com.cmp.entity.tcc.TccVmSnapshot;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
-import com.vmware.vim25.mo.ClusterComputeResource;
+import com.cmp.mgr.bean.CreateVmRequest;
 import com.vmware.vim25.mo.Datacenter;
-import com.vmware.vim25.mo.Datastore;
-import com.vmware.vim25.mo.HostSystem;
-import com.vmware.vim25.mo.Network;
-import com.vmware.vim25.mo.ResourcePool;
-import com.vmware.vim25.mo.VirtualMachine;
-import com.vmware.vim25.mo.VirtualMachineSnapshot;
 
 public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
@@ -21,21 +22,27 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public List<ClusterComputeResource> getClusters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	@Override
-	public List<ResourcePool> getResourcePools() {
+	public List<TccDatacenter> getDatacenter() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<HostSystem> getHostMachines() {
+	public List<TccCluster> getClusters() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TccResourcePool> getResourcePools() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TccHostMachine> getHostMachines() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -47,27 +54,32 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<Datastore> getDatastores() {
+	public List<TccDatastore> getDatastores() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Network> getNetworks() {
+	public List<TccNetwork> getNetworks() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<VirtualMachine> getVmTemplates() {
+	public List<TccVirtualMachine> getVmTemplates() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<VirtualMachineSnapshot> getVmSnapshots() {
+	public List<TccVmSnapshot> getVmSnapshots() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public void createVirtualMachine(CreateVmRequest request) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -94,7 +106,7 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 	public void deleteVirtualMachine(String name) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public void cloneVirtualMachine(CloneVmRequest request) {
 		// TODO Auto-generated method stub

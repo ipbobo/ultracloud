@@ -29,25 +29,34 @@
 							
 						<!-- 检索  -->
 						<form action="dictionaries/list.do" method="post" name="Form" id="Form">
-						<table style="margin-top:5px;">
+						<table style="margin-top:5px;width:100%;">
 							<tr>
-								<td>
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="keywords" name="keywords" autocomplete="off" value="${page.pd.keywords }" />
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
+								<td style="vertical-align:top;">
+									<c:if test="${QX.add == 1 }">
+									<a class="btn btn-sm btn-success" onclick="add('${DICTIONARIES_ID}');">新增</a>
+									</c:if>
+									<c:if test="${null != pd.DICTIONARIES_ID && pd.DICTIONARIES_ID != ''}">
+									<a class="btn btn-sm btn-success" onclick="goSondict('${pd.PARENT_ID}');">返回</a>
+									</c:if>
 								</td>
-								<td>&nbsp;
+								
+								<td  style="vertical-align:top;padding-left:5px;width:60px;">
+									<div style="float: right;padding-top: 0px;margin-top: 0px;">
 									<select name="DICTIONARIES_ID" id="DICTIONARIES_ID">
 										<option value="${DICTIONARIES_ID}" <c:if test="${DICTIONARIES_ID != ''}">selected</c:if>>本级</option>
 										<option value="" <c:if test="${DICTIONARIES_ID == ''}">selected</c:if>>全部</option>
 									</select>
+									</div>
 								</td>
-								<c:if test="${QX.cha == 1 }">
-								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="gsearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
+								<td style="vertical-align:top;padding-left:5px;width:150px;">
+									<div class="nav-search" style="float: right;padding-top: 0px;margin-top: 0px;">
+										<span class="input-icon">
+											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+											<i class="ace-icon fa fa-search nav-search-icon"></i>
+										</span>
+									</div>
+								</td>
+								<td style="vertical-align:top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -142,14 +151,6 @@
 						<div class="page-header position-relative">
 						<table style="width:100%;">
 							<tr>
-								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-sm btn-success" onclick="add('${DICTIONARIES_ID}');">新增</a>
-									</c:if>
-									<c:if test="${null != pd.DICTIONARIES_ID && pd.DICTIONARIES_ID != ''}">
-									<a class="btn btn-sm btn-success" onclick="goSondict('${pd.PARENT_ID}');">返回</a>
-									</c:if>
-								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
 						</table>

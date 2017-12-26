@@ -179,7 +179,7 @@ public class BIDatacenterController extends BaseController {
 			pd.put("date", DateUtil.getDay());
 		}
 		List<PageData> varList = biDatacenterService.listSoftwareBIData(pd);
-		mv.setViewName("bi/resource_list");
+		mv.setViewName("bi/software_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限

@@ -3,21 +3,16 @@ $(function(){if('fhsms'== locat[3]){locat =  locat[0]+'//'+locat[2];}else{locat 
 
 $(top.hangge());
 //发送
-function sendFhsms(){
-	
-	if($("#TYPE").val()=="1"){
-		$("#CONTENT").val(getContentTxt());
-	}else{
-		$("#CONTENT").val(getContent());
-	}
-	if($("#USERNAME").val()==""){
-		$("#USERNAME").tips({
+function sendSystemNotice(){
+
+	if($("#title").val()==""){
+		$("#title").tips({
 			side:3,
-            msg:'请输入用户名',
+            msg:'请输入标题',
             bg:'#AE81FF',
             time:2
         });
-		$("#USERNAME").focus();
+		$("#title").focus();
 		return false;
 	}
 	if($("#CONTENT").val()==""){
@@ -31,12 +26,12 @@ function sendFhsms(){
 	}
 	$("#zhongxin").hide();
 	$("#zhongxin2").show();
-	var USERNAME = $("#USERNAME").val();
+	var title = $("#title").val();
 	var CONTENT = $("#CONTENT").val();
 	$.ajax({
 		type: "POST",
-		url: locat+'/fhsms/save.do?tm='+new Date().getTime(),
-    	data: {USERNAME:USERNAME,CONTENT:CONTENT},
+		url: locat+'/systemnotice/save.do?tm='+new Date().getTime(),
+    	data: {title:title,CONTENT:CONTENT},
 		dataType:'json',
 		//beforeSend: validateData,
 		cache: false,
@@ -51,7 +46,7 @@ function sendFhsms(){
 			            bg:'#68B500',
 			            time:3
 				      });
-					 top.fhsmsmsg(USERNAME); //websocket即时通讯去通知收信人有站内信接收 ，fhsmsmsg()函数 editUserH()在 WebRoot\static\js\myjs\head.js
+					 top.fhsmsmsg(data.TO_USERNAME); //websocket即时通讯去通知收信人有站内信接收 ，fhsmsmsg()函数 editUserH()在 WebRoot\static\js\myjs\head.js
 				 }else{
 					 $("#msg").tips({
 							side:3,
@@ -85,7 +80,7 @@ function close(){
 
 //打开查看
 function dialog_open(){
-	$("#USERNAMES").val($("#USERNAME").val());
+	$("#title").val($("#title").val());
 	$("#dialog-add").css("display","block");
 }
 //关闭查看

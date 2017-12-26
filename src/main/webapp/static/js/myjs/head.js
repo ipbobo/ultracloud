@@ -3,7 +3,7 @@ $(function(){if('main'== locat[3]){locat =  locat[0]+'//'+locat[2];}else{locat =
 
 var fmid = "fhindex";	//菜单点中状态
 var mid = "fhindex";	//菜单点中状态
-var fhsmsCount = 0;		//站内信总数
+var systemnoticeCount = 0;		//站内信总数
 var USER_ID;			//用户ID
 var user = "FH";		//用于即时通讯（ 当前登录用户）
 var TFHsmsSound = '1';	//站内信提示音效
@@ -53,8 +53,8 @@ function getHeadMsg(){
 				 }
 			 });
 			 updateUserPhoto(data.userPhoto);			//用户头像
-			 fhsmsCount = Number(data.fhsmsCount);
-			 $("#fhsmsCount").html(Number(fhsmsCount));	//站内信未读总数
+			 systemnoticeCount = Number(data.systemnoticeCount);
+			 $("#systemnoticeCount").html(Number(systemnoticeCount));	//站内信未读总数
 			 TFHsmsSound = data.FHsmsSound;				//站内信提示音效
 			 wimadress = data.wimadress;				//即时聊天服务器IP和端口
 			 oladress = data.oladress;					//在线管理和站内信服务器IP和端口
@@ -63,17 +63,17 @@ function getHeadMsg(){
 	});
 }
 
-//获取站内信未读总数(在站内信删除未读新信件时调用此函数更新未读数)
-function getFhsmsCount(){
+//获取系统公告未读总数(在系统公告删除未读状态时调用此函数更新未读数)
+function getSystemNoticeCount(){
 	$.ajax({
 		type: "POST",
-		url: locat+'/head/getFhsmsCount.do?tm='+new Date().getTime(),
+		url: locat+'/head/getSystemNoticeCount.do?tm='+new Date().getTime(),
     	data: encodeURI(""),
 		dataType:'json',
 		cache: false,
 		success: function(data){
-			 fhsmsCount = Number(data.fhsmsCount);
-			 $("#fhsmsCount").html(Number(fhsmsCount));	//站内信未读总数
+			 systemnoticeCount = Number(data.systemnoticeCount);
+			 $("#systemnoticeCount").html(Number(systemnoticeCount));	//系统公告未读总数
 		}
 	});
 }
@@ -131,8 +131,8 @@ function fhsmsmsg(USERNAME){
 
 //读取站内信时减少未读总数
 function readFhsms(){
-	fhsmsCount = Number(fhsmsCount)-1;
-	$("#fhsmsCount").html(Number(fhsmsCount) <= 0 ?'0':fhsmsCount);
+	systemnoticeCount = Number(systemnoticeCount)-1;
+	$("#systemnoticeCount").html(Number(systemnoticeCount) <= 0 ?'0':systemnoticeCount);
 }
 
 //修改头像
@@ -213,17 +213,19 @@ function editSys(){
 	 diag.show();
 }
 
-//站内信
-function fhsms(){
+//系统公告
+function goSystemNoticWindows(){
 	 jzts();
 	 var diag = new top.Dialog();
 	 diag.Drag=true;
-	 diag.Title ="站内信";
-	 diag.URL = locat+'/fhsms/list.do?STATUS=2';
+	 diag.Title ="系统公告";
+	 diag.URL = locat+'/systemnotice/listSystemNotice.do?STATUS=0';
 	 diag.Width = 800;
 	 diag.Height = 500;
 	 diag.CancelEvent = function(){ //关闭事件
-		diag.close();
+		 getSystemNoticeCount();
+		 diag.close();
+		 
 	 };
 	 diag.show();
 }

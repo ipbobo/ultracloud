@@ -47,18 +47,12 @@
 								</li>
 							</ul>
 						</li>
-						<li title="即时聊天" class="purple"  onclick="creatw();"><!-- creatw()在 WebRoot\plugins\websocketInstantMsg\websocket.js中 -->
+						
+						<li title="系统公告" class="grey" onclick="goSystemNoticWindows();" id="fhsmstss"><!-- fhsms()在 WebRoot\static\js\myjs\head.js中 -->
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 								<i class="ace-icon fa fa-bell icon-animated-bell"></i>
-								<span class="badge badge-important"></span>
+								<span class="badge badge-grey" id="systemnoticeCount"></span>
 							</a>
-
-							<ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
-								<li class="dropdown-header">
-									<i class="ace-icon fa fa-bell-o"></i>
-									FH Aadmin 即时通讯
-								</li>
-							</ul>
 						</li>
 
 						<!-- #section:basics/navbar.user_menu -->

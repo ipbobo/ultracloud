@@ -29,25 +29,34 @@
 							
 						<!-- 检索  -->
 						<form action="organization/list.do" method="post" name="Form" id="Form">
-						<table style="margin-top:5px;">
+						<table style="margin-top:5px;width:100%;">
 							<tr>
-								<td>
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="keywords" name="keywords" autocomplete="off" value="${page.pd.keywords }" />
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
+								<td style="vertical-align:top;">
+									<c:if test="${QX.add == 1 }">
+									<a class="btn btn-sm btn-success" onclick="add('${DEPARTMENT_ID}');">新增</a>
+									</c:if>
+									<c:if test="${null != pd.DEPARTMENT_ID && pd.DEPARTMENT_ID != ''}">
+									<a class="btn btn-sm btn-success" onclick="goSondict('${pd.PARENT_ID}');">返回</a>
+									</c:if>
 								</td>
-								<td>&nbsp;
+								
+								<td  style="vertical-align:top;padding-left:5px;width:88px;">
+									<div style="float: right;padding-top: 0px;margin-top: 0px;">
 									<select name="DEPARTMENT_ID" id="DEPARTMENT_ID">
 										<option value="${DEPARTMENT_ID}" <c:if test="${DEPARTMENT_ID != ''}">selected</c:if>>本级</option>
 										<option value="" <c:if test="${DEPARTMENT_ID == ''}">selected</c:if>>全部</option>
 									</select>
+									</div>
 								</td>
-								<c:if test="${QX.cha == 1 }">
-								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="gsearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
+								<td style="vertical-align:top;padding-left:5px;width:150px;">
+									<div class="nav-search" style="float: right;padding-top: 0px;margin-top: 0px;">
+										<span class="input-icon">
+											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+											<i class="ace-icon fa fa-search nav-search-icon"></i>
+										</span>
+									</div>
+								</td>
+								<td style="vertical-align:top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -57,7 +66,7 @@
 								<tr>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">名称</th>
-									<th class="center">英文</th>
+									<th class="center">英文名</th>
 									<th class="center">编码</th>
 									<th class="center">负责人</th>
 									<th class="center">操作</th>
@@ -142,14 +151,6 @@
 						<div class="page-header position-relative">
 						<table style="width:100%;">
 							<tr>
-								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-sm btn-success" onclick="add('${DEPARTMENT_ID}');">新增</a>
-									</c:if>
-									<c:if test="${null != pd.DEPARTMENT_ID && pd.DEPARTMENT_ID != ''}">
-									<a class="btn btn-sm btn-success" onclick="goSondict('${pd.PARENT_ID}');">返回</a>
-									</c:if>
-								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
 						</table>
@@ -187,7 +188,7 @@
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		//检索
-		function gsearch(){
+		function tosearch(){
 			top.jzts();
 			$("#Form").submit();
 		}
