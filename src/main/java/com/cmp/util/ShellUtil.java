@@ -83,7 +83,6 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
 			   String line = br.readLine();
 			   Map currentMsgMap = shellMsgMap.get(logIndex);
 			   if (line == null) {
-				currentMsgMap.put(currentMsgMap.size() + 1, "-1");			//脚本执行完毕， -1作为结束标志
 			    break;
 			   }
 			   if (currentMsgMap == null) {

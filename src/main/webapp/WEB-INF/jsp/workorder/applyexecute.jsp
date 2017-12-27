@@ -69,7 +69,7 @@
 													<td class='center'></td>
 													<td class='center'>
 													<button  style="float:left;margin-left: 100px;" type="button" 
-														onclick="execute('${workorder.appNo}','${cmpCloudInfo.cpu}','${cmpCloudInfo.memory}','${cloudInfoCollect.diskTotal}');">安装</button>
+														onclick="toInstall('${workorder.appNo}','${cmpCloudInfo.cpu}','${cmpCloudInfo.memory}','${cloudInfoCollect.diskTotal}');">安装</button>
 													</td>
 													</tr>
 								</tbody>
@@ -257,7 +257,7 @@
 					<tr>
 						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;云平台</td>
 						<td id="tip_cloudplatform">
-						<select name="cloudplatform" id="cloudplatform" title="清选择云平台" style="width:20%;margin-left: 100px;" onchange="onCloudPlatformSelected(this.value)">
+						<select name="cloudplatform" id="cloudplatform" title="清选择云平台" style="width:40%;margin-left: 100px;" onchange="onCloudPlatformSelected(this.value)">
 							<option value="#" selected="selected">清选择服云平台</option>
 						   <c:forEach items="${cloudplatformList}" var="var">
 		                 	  <option value="${var.id}">${var.name}</option>
@@ -268,7 +268,7 @@
 					<tr>
 						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;数据中心:</td>
 						<td id="tip_datacenter">
-							<select name="datacenter" id="datacenter" title="清选择数据中心" style="width:20%;margin-left: 100px;" onchange="onDataCenterSelected(this.value)">
+							<select name="datacenter" id="datacenter" title="清选择数据中心" style="width:40%;margin-left: 100px;" onchange="onDataCenterSelected(this.value)">
 								<option value="#" selected="selected">清选择数据中心</option>
 							</select>
 						</td>
@@ -276,7 +276,7 @@
 					<tr>
 						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;集群:</td>
 						<td id="tip_cluster">
-							<select name="cluster" id="cluster" title="清选择集群" style="width:20%;margin-left: 100px;">
+							<select name="cluster" id="cluster" title="清选择集群" style="width:40%;margin-left: 100px;">
 								<option value="#" selected="selected">清选择集群</option>
 							</select>
 						</td>
@@ -354,12 +354,24 @@
 		var cpu =$("#h_cpu").val();
 		var memory = $("#h_memory").val();
 		var diskSize = $("#h_diskSize").val();
-		var cloudplatform = $("#cloudplatform").val();
+		var cloudPlatform = $("#cloudplatform").val();
 		var datacenter = $("#datacenter").val();
 		var cluster = $("#cluster").val();
+		if (cloudPlatform == null || cloudPlatform == '#' || cloudPlatform == ''){
+			showDialog("请选择云平台");
+			return false;
+		}
+		if (datacenter == null || datacenter == '#' || datacenter == ''){
+			showDialog("请选择数据中心");
+			return false;
+		}
+		if (cluster == null || cluster == '#' || cluster == ''){
+			showDialog("请选择集群");
+			return false;
+		}
 		$.ajax({
 			type: "POST",
-			url: '<%=basePath%>executeWork.do?appNo='+appNo +'&CPU=' + cpu +'&memory=' + memory + '&diskSize=' + diskSize + '&cloudplatform=' + cloudplatform + '&datacenter=' + datacenter + '&cluster=' + cluster ,
+			url: '<%=basePath%>executeWork.do?appNo='+appNo +'&CPU=' + cpu +'&memory=' + memory + '&diskSize=' + diskSize + '&cloudPlatformId=' + cloudPlatform + '&datacenterId=' + datacenter + '&clusterId=' + cluster ,
 			dataType:'json',
 			//beforeSend: validateData,
 			cache: false,
@@ -380,7 +392,7 @@
 				success: function(data){
 					var maplen = data.length;
 					var shellMsgMap = data.currentShellMsg;
-					if (shellMsgMap[maplen] != null && shellMsgMap[maplen] == "-1"){
+					if (shellMsgMap[maplen] != null && shellMsgMap[maplen] == "cmp:install finished"){
 						clearInterval(res);
 					}
 					for (var i = line; i <maplen; i++ ){
@@ -398,17 +410,19 @@
 	
 	function onCloudPlatformSelected(cloudPlatformId){
 		jQuery.ajax({  
-			url : "onCloudplatformSelected.do",  
-			data : {cloudPlatformId : cloudPlatformId},  
+			url : "<%=basePath%>onCloudplatformSelected.do",  
+			data : {'cloudPlatformId' : cloudPlatformId},  
 			type : "post",  
 			cache : false,  
 			dataType : "json",  
 			success:function(data){
 				var select_root=document.getElementById('datacenter');  
 			    select_root.options.length=0;
+			    var _option=new Option("请选择数据中心","#"); 
+			    select_root.add(_option);
 			    for(var i=0;i<data.length;i++){  
-			            var xValue=data[i].name;  
-			             var xText=data[i].id;
+			            var xValue=data[i].id;  
+			             var xText=data[i].name;
 			             var option=new Option(xText,xValue);  
 			             select_root.add(option);  
 			    }
@@ -418,19 +432,21 @@
 	
 	function onDataCenterSelected(dataCenterId){
 		jQuery.ajax({  
-			url : "onDataCenterSelected.do",  
-			data : {dataCenterId : dataCenterId},  
+			url : "<%=basePath%>onDataCenterSelected.do",  
+			data : {'dataCenterId' : dataCenterId},  
 			type : "post",  
 			cache : false,  
 			dataType : "json",  
 			success:function(data){
 				var select_root=document.getElementById('cluster');  
 			    select_root.options.length=0;
+			 	var _option=new Option("请选择集群","#"); 
+			    select_root.add(_option);
 			    for(var i=0;i<data.length;i++){  
-			            var xValue=data[i].name;  
-			             var xText=data[i].id;
-			             var option=new Option(xText,xValue);  
-			             select_root.add(option);  
+			    	var xValue=data[i].id;  
+		             var xText=data[i].name;
+		             var option=new Option(xText,xValue);  
+		             select_root.add(option);  
 			    }
 			}  
 		});  

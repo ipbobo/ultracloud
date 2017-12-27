@@ -279,25 +279,26 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		
 		
 		//安装虚拟机
-		String cloudplatformId = pd.getString("cloudplatformId");
+		String cloudPlatformId = pd.getString("cloudPlatformId");
 		String datacenterId = pd.getString("datacenterId");
 		String clusterId = pd.getString("clusterId");
 		
 		//查询cloudplatform
 		PageData c_pd = new PageData();
-		c_pd.put("id", cloudplatformId);
+		c_pd.put("id", cloudPlatformId);
 		PageData cloudplatformPd = cloudplatformService.findById(c_pd, false);
 		TccCloudPlatform platForm = new TccCloudPlatform();
 		platForm.setCloudplatformUser(cloudplatformPd.getString("username"));
 		platForm.setCloudplatformPassword(cloudplatformPd.getString("password"));
 		platForm.setCloudplatformIp(cloudplatformPd.getString("ip"));
 		String platformManagerType = "";
+		
 		if (orderInfo.getPlatType() != null && orderInfo.getPlatType().equals("vmware")) {
-			platformManagerType="com.cmp.mgr.impl.VMWareCloudArchManager";
+			platformManagerType="com.cmp.mgr.vmware.VMWareCloudArchManager";
 		}else if (orderInfo.getPlatType() != null && orderInfo.getPlatType().equals("openstack")) {
-			platformManagerType="com.cmp.mgr.impl.OpenstatckCloudArchManager";
+			platformManagerType="com.cmp.mgr.openstack.OpenstatckCloudArchManager";
 		}else if (orderInfo.getPlatType() != null && orderInfo.getPlatType().equals("kvm")) {
-			platformManagerType="com.cmp.mgr.impl.KvmCloudArchManager";
+			platformManagerType="com.cmp.mgr.KvmCloudArchManager";
 		}
 		
 		PageData datacenterPd = new PageData();
@@ -309,7 +310,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		CreateVmRequest cvq = new CreateVmRequest();
 		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
 		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));
-		int defaultDiskSize = Integer.parseInt(cmpDictService.getCmpDict("disk_type", "default").getDictValue());
+		int defaultDiskSize = Integer.parseInt(cmpDictService.getCmpDict("install_disk_size", "default").getDictValue());
 		cvq.setDiskSizeKB(defaultDiskSize*1024*1024);
 		cvq.setDiskMode("persistent");					
 		cvq.setDcName(datacenterPd.getString("name"));
@@ -319,7 +320,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		cvq.setNicName("VMXNET 3");						//写死先
 		cvq.setDsName("datastore2-raid5-2.5t");			//调接口获取
 		cvq.setGuestOs(installOS);
-		cloudArchManager.createVirtualMachine(cvq);
+		//cloudArchManager.createVirtualMachine(cvq);
 		logger.info("远程虚拟机创建完毕");
 		
 		
@@ -364,11 +365,20 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			deployedSoftService.add(deployedSoft);
 			
 			//执行软件安装脚本
+			String scriptUrl = medium.getUrl();
 			ShellUtil shellUtil = new ShellUtil("118.242.40.216", 7001, "root",  
 	                "r00t0neio", "utf-8");
-			shellUtil.exec("./test.sh", workOrder.getAppNo());
+			shellUtil.exec("./" + scriptUrl, workOrder.getAppNo());
 		}
+		//所有安装完毕设置结束标志
+		Map currentMsgMap = (Map) ShellUtil.getShellMsgMap().get(workOrder.getAppNo());
+		currentMsgMap.put(currentMsgMap.size() + 1,  "cmp:install finished");
 		resMap.put("result", "执行成功!");
+		
+		Map<String , String> exeParams = new HashMap<String , String>();
+		exeParams.put("executeStatus", "2");
+		cmpWorkOrderService.updateExecuteStatus(workOrder.getAppNo(), exeParams);
+		
 		return resMap;
 	}
 

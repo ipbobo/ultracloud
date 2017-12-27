@@ -61,6 +61,11 @@ public class CmpWorkOrderService {
 		dao.update("CmpWorkOrderMapper.updateWorkOrder", params);
 	}
 
+	public void updateExecuteStatus(String appNo, Map<String, String> params) throws Exception {
+		params.put("appNo", appNo);
+		dao.update("CmpWorkOrderMapper.updateExecuteStatus", params);
+	}
+	
 	public CmpWorkOrder findByAppNo(String appNo) throws Exception {
 		CmpWorkOrder workOrder = (CmpWorkOrder)dao.findForObject("CmpWorkOrderMapper.findByAppNo", appNo);
 		return workOrder;

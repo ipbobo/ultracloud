@@ -31,6 +31,7 @@ CREATE TABLE `cmp_workorder` (
   `imgPath` varchar(300) DEFAULT NULL COMMENT '镜像路径',
   `expireDate` varchar(19) DEFAULT NULL COMMENT '到期时间',
   `virNum` varchar(10) DEFAULT NULL COMMENT '虚拟机数量',
+  `executeStatus` varchar(10) DEFAULT NULL COMMENT '工单实施状态  0 未实施   1开始实施   2实施完毕   3 实施作废',
   `virtualMachineId` bigint unsigned DEFAULT NULL COMMENT '虚拟机ID',
   PRIMARY KEY (`appNo`),
   KEY `indx_cmp_workorder_status` (`status`) USING BTREE

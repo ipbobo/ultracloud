@@ -6,12 +6,9 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.cmp.entity.ShellMessage;
 import com.cmp.util.ShellUtil;
 import com.fh.controller.base.BaseController;
-import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 //SHELL执行查询
@@ -33,7 +30,7 @@ public class ShellController extends BaseController{
 //			}
 //		}
 		resultMap.put("currentShellMsg", currentShellMsg);
-		resultMap.put("length", currentShellMsg.size());	
+		resultMap.put("length", currentShellMsg == null ? "0" : currentShellMsg.size());	
 		return resultMap;
 	}
 }

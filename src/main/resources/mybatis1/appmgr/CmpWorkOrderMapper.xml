@@ -47,7 +47,8 @@
 		imgUserPass,
 		imgPath,
 		expireDate,
-		virNum
+		virNum,
+		executeStatus,
 	</sql>
 	
 	<!-- 字段值 -->
@@ -82,7 +83,8 @@
 		#{imgUserPass},
 		#{imgPath},
 		#{expireDate},
-		#{virNum}
+		#{virNum},
+		#{executeStatus},
 	</sql>
 	
 	<!-- 字段 -->
@@ -115,7 +117,8 @@
 		imgUserPass,
 		imgPath,
 		expireDate,
-		virNum
+		virNum,
+		executeStatus
 	</sql>
 	
 	<sql id="saveFieldValue">
@@ -147,7 +150,8 @@
 		#{imgUserPass},
 		#{imgPath},
 		#{expireDate},
-		#{virNum}
+		#{virNum},
+		#{executeStatus},
 	</sql>
 	
 	<!-- 获取申请编号 -->
@@ -187,6 +191,17 @@
 			status = #{status}
 			</if>
 			</set>  
+		where 
+		appNo = #{appNo}
+	</update>
+	
+		<!-- 更新工单执行状态 -->
+	<update id="updateExecuteStatus" parameterType="Map">
+			update
+			<include refid="tableName"></include>
+				<if test="executeStatus != null and executeStatus != ''">
+			    set	executeStatus = #{executeStatus},
+				</if> 
 		where 
 		appNo = #{appNo}
 	</update>

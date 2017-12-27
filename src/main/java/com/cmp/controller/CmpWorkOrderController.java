@@ -510,6 +510,11 @@ public class CmpWorkOrderController extends BaseController{
 			map.put("result", resultInfo);	
 			return map;
 		}
+		
+		//修改工单为执行状态
+		Map<String , String> exeParams = new HashMap<String , String>();
+		exeParams.put("executeStatus", "1");
+		cmpWorkOrderService.updateExecuteStatus(workorder.getAppNo(), exeParams);
 		Map<String, Object> pageViewMap = workorderHandler.executeWork(pd, workorder);
 		if (pageViewMap == null) {
 			resultInfo = "执行失败";
@@ -613,12 +618,12 @@ public class CmpWorkOrderController extends BaseController{
 	 */
 	@RequestMapping(value="/onCloudplatformSelected")
 	@ResponseBody
-	public List<PageData> queryDataCenter(String cloudplatformId) throws Exception{
-		if (cloudplatformId == null || cloudplatformId.length() == 0) {
+	public List<PageData> queryDataCenter(String cloudPlatformId) throws Exception{
+		if (cloudPlatformId == null || cloudPlatformId.length() == 0) {
 			return null;
 		}
 		PageData pd = new PageData();
-		pd.put("cpf_id", cloudplatformId);
+		pd.put("cpf_id", cloudPlatformId);
 		List<PageData> cloudplatformList=datacenterService.findBycpfId(pd);
 		return cloudplatformList;
 	}
