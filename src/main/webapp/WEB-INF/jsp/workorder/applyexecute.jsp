@@ -68,8 +68,15 @@
 													<td class='center'></td>
 													<td class='center'></td>
 													<td class='center'>
-													<button  style="float:left;margin-left: 100px;" type="button" 
-														onclick="toInstall('${workorder.appNo}','${cmpCloudInfo.cpu}','${cmpCloudInfo.memory}','${cloudInfoCollect.diskTotal}');">安装</button>
+														<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
+														<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
+															onclick="toInstall('${workorder.appNo}','${cmpCloudInfo.cpu}','${cmpCloudInfo.memory}','${cloudInfoCollect.diskTotal}');">安装</button>
+														<button id="executeStatus_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+															>安装中...</button>
+														<button id="executeStatus_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+															>安装完毕</button>
+														<button id="executeStatus_3"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+															>安装异常</button>
 													</td>
 													</tr>
 								</tbody>
@@ -305,6 +312,18 @@
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
+	$( document ).ready(function() {
+		var executeStatus = $("#executeStatus").val();
+		var appNo = $("#h_appNo").val();
+	    if (executeStatus == null || executeStatus == '' || executeStatus == '0'){
+	    	executeStatus = '0';
+	    }
+	    $("#executeStatus_" + executeStatus).css('display','block');
+	    if (executeStatus == null || executeStatus == '' || executeStatus == '1'){
+	    	queryExecuteStatus(appNo);
+	    }
+	});
+	
 	$(top.hangge());//关闭加载状态
 	//检索
 	function tosearch(){
@@ -369,6 +388,14 @@
 			showDialog("请选择集群");
 			return false;
 		}
+		
+		$('#platform_modal').modal('hide');
+		
+		$("#executeStatus_0").css('display','none');
+		$("#executeStatus_1").css('display','block');
+		 
+		queryExecuteStatus(appNo);
+		
 		$.ajax({
 			type: "POST",
 			url: '<%=basePath%>executeWork.do?appNo='+appNo +'&CPU=' + cpu +'&memory=' + memory + '&diskSize=' + diskSize + '&cloudPlatformId=' + cloudPlatform + '&datacenterId=' + datacenter + '&clusterId=' + cluster ,
@@ -376,10 +403,14 @@
 			//beforeSend: validateData,
 			cache: false,
 			success: function(data){
-				showDialog(data.result);
+				//showDialog(data.result);
 			}
 		});
 		
+		
+	}
+	
+	function queryExecuteStatus(appNo){
 		//查询，并同步更新控制台
 		var line = 0;
 		var res = setInterval(function(){
@@ -393,6 +424,8 @@
 					var maplen = data.length;
 					var shellMsgMap = data.currentShellMsg;
 					if (shellMsgMap[maplen] != null && shellMsgMap[maplen] == "cmp:install finished"){
+						$("#executeStatus_1").css('display','none');
+						$("#executeStatus_2").css('display','block');
 						clearInterval(res);
 					}
 					for (var i = line; i <maplen; i++ ){
@@ -404,7 +437,7 @@
 					line = maplen;
 				}
 			});
-		}, 5000);
+		}, 2500);
 	}
 	
 	

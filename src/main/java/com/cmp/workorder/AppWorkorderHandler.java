@@ -368,13 +368,14 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			String scriptUrl = medium.getUrl();
 			ShellUtil shellUtil = new ShellUtil("118.242.40.216", 7001, "root",  
 	                "r00t0neio", "utf-8");
-			shellUtil.exec("./" + scriptUrl, workOrder.getAppNo());
+			shellUtil.exec("." + scriptUrl, workOrder.getAppNo());
 		}
 		//所有安装完毕设置结束标志
 		Map currentMsgMap = (Map) ShellUtil.getShellMsgMap().get(workOrder.getAppNo());
-		currentMsgMap.put(currentMsgMap.size() + 1,  "cmp:install finished");
-		resMap.put("result", "执行成功!");
-		
+		if (currentMsgMap != null) {
+			currentMsgMap.put(currentMsgMap.size() + 1,  "cmp:install finished");
+			resMap.put("result", "执行成功!");
+		}
 		Map<String , String> exeParams = new HashMap<String , String>();
 		exeParams.put("executeStatus", "2");
 		cmpWorkOrderService.updateExecuteStatus(workOrder.getAppNo(), exeParams);
