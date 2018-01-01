@@ -32,11 +32,8 @@ import com.cmp.service.ProjectService;
 import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.sid.CmpDict;
-import com.cmp.sid.CmpOpServe;
-import com.cmp.sid.CmpOrder;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.RelateTask;
-import com.cmp.sid.VirtualMachine;
 import com.cmp.workorder.IWorkorderHandler;
 import com.cmp.workorder.WorkorderHelper;
 import com.fh.controller.base.BaseController;
@@ -80,6 +77,8 @@ public class CmpWorkOrderController extends BaseController{
 	
 	@Resource
 	private ClusterService clusterService;
+	
+	
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
@@ -646,6 +645,8 @@ public class CmpWorkOrderController extends BaseController{
 		List<PageData> clusterList =  clusterService.findByDataCenterId(pd);
 		return clusterList;
 	}
+	
+	
 	
 	
 	public List<RelateTask> fetchRelateTaskList(String currentProcInstId){

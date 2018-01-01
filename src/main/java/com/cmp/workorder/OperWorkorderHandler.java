@@ -13,6 +13,7 @@ import com.cmp.entity.DeployedSoft;
 import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.DeployedSoftService;
+import com.cmp.service.ScriptService;
 import com.cmp.service.VirtualMachineService;
 import com.cmp.sid.CmpOpServe;
 import com.cmp.sid.CmpWorkOrder;
@@ -34,6 +35,9 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 	
 	@Resource
 	private VirtualMachineService virtualMachineService;
+	
+	@Resource
+	private ScriptService scriptService;
 
 	@Override
 	public Map<String, Object> toWorkorderView(CmpWorkOrder cmpWorkorder) throws Exception {
@@ -103,6 +107,10 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 				}
 			}
 			resMap.put("rebootSoft", rebootSoftMap);
+			
+			//查询重启中间件script列表
+			List<PageData> scriptList = scriptService.listAll(new PageData());
+			resMap.put("scriptList", scriptList);
 		}
 		if (serviceType.equals("2")) {
 			List<DeployedSoft> installSoftList= new ArrayList<DeployedSoft>();

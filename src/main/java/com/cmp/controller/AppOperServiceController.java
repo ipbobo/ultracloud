@@ -22,6 +22,7 @@ import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.DeployedSoftService;
 import com.cmp.service.MediumService;
+import com.cmp.service.ScriptParamService;
 import com.cmp.service.VirtualMachineService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOpServe;
@@ -66,6 +67,9 @@ public class AppOperServiceController  extends BaseController {
 	
 	@Resource
 	private MediumService mediumService;
+	
+	@Resource
+	private ScriptParamService scriptParamService;
 	
 	//运维服务申请表单查询
 	@RequestMapping(value="/reqOperServicePre")
@@ -324,6 +328,49 @@ public class AppOperServiceController  extends BaseController {
 		resultInfo = "申请成功!";
 		map.put("result", resultInfo);
 		return map;
+	}
+	
+	
+	/**
+	 * 查询脚本参数
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/queryScriptParams")
+	@ResponseBody
+	public List<PageData> queryScriptParams(String scriptId) throws Exception{
+		if (scriptId == null || scriptId.length() == 0) {
+			return null;
+		}
+		PageData pd = new PageData();
+		pd.put("script_id", scriptId);
+		List<PageData> params =  scriptParamService.listAll(pd);;
+		return params;
+	}
+	
+	
+	/**
+	 * 执行重启中间件脚本
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/doRebootSoft")
+	@ResponseBody
+	public String doRebootSoft(String deploySoftId, String scriptId, String params) throws Exception{
+		if (scriptId == null || scriptId.length() == 0) {
+			return null;
+		}
+		if (deploySoftId == null || deploySoftId.length() == 0) {
+			return null;
+		}
+		if (params == null || params.length() == 0) {
+			return null;
+		}
+		PageData pd = new PageData();
+		
+		return "success";
 	}
 	
 }

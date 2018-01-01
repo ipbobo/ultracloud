@@ -214,6 +214,94 @@
 								</div><!-- /.modal-content -->
 							</div><!-- /.modal -->
 						</div>
+						
+						<div class="modal fade" id="reboot_modal" tabindex="-1" role="dialog" aria-labelledby="reboot_modalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+											&times;
+										</button>
+										<h4 class="modal-title">
+											中间件重启
+										</h4>
+									</div>
+									<div class="modal-body">
+											<input  type="hidden" id="rebootSoftId" />
+											<input  type="hidden" id="scriptId" />
+											<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+												<thead>
+													<tr>
+														<th class="center" style="width: 35px;"><label
+															class="pos-rel"><input type="checkbox" class="ace"
+																id="zcheckbox" /><span class="lbl"></span></label></th>
+														<th class="center">脚本名</th>
+														<th class="center">脚本路径</th>
+														<th class="center">脚本描述</th>
+														<th class="center">参数</th>
+													</tr>
+												</thead>
+												
+													<c:choose>
+														<c:when test="${not empty scriptList}">
+															<c:forEach items="${scriptList}" var="var" varStatus="vs">
+																<tr>
+															<td class='center'><label class="pos-rel"><input
+																			type='checkbox' id='vmcheckbox_${var.id}' name='vmcheckbox' value="${var.id}" class="ace" /><span
+																			class="lbl"></span></label></td>
+																		<td class='center'>${var.id}</td>
+																		<td class='center'>${var.url}</td>
+																		<td class='center'>${var.purpose}</td>
+																		<td class='center'><a href="#" onclick="showSetparams('${var.id}');"></a></td>
+																		</tr>
+															</c:forEach>
+														</c:when>
+														<c:otherwise>
+															<tr class="main_info">
+																<td colspan="100" class="center">没有相关数据</td>
+															</tr>
+														</c:otherwise>
+													</c:choose>
+											</table>
+									</div>
+									<div class="modal-footer">
+										<button  id="reboot_modal_ok" type="button" class="btn btn-primary" onclick="doReboot();" data-dismiss="modal" aria-hidden="true">
+											确定
+										</button>
+									</div>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal -->
+						</div>
+						
+						<div class="modal fade" id="reboot_params_modal" tabindex="-1" role="dialog" aria-labelledby="reboot_params_modalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+											&times;
+										</button>
+										<h4 class="modal-title">
+											脚本参数
+										</h4>
+									</div>
+									<div class="modal-body">
+											<table id="paramsTable" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+												<thead>
+													<tr>
+														<th class="center">参数名称</th>
+														<th class="center">参数值</th>
+													</tr>
+												</thead>
+											</table>
+									</div>
+									<div class="modal-footer">
+										<button  id="reboot_params_modal_ok" type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+											确定
+										</button>
+									</div>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal -->
+						</div>
 
 		<!-- 返回顶部 -->
 		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
@@ -250,6 +338,48 @@
 		});
 	});
 	
+	function rebootSoft(deploySoftId){
+		$('#rebootSoftId').val(deploySoftId);
+		$('#reboot_modal').modal('show');
+	}
+	
+	function showSetparams(scriptId){
+		$('#scriptId').val(scriptId);
+		$.ajax({
+			type: "POST",
+			url: '<%=basePath%>queryScriptParams.do?scriptId='+scriptId,
+			dataType:'json',
+			//beforeSend: validateData,
+			cache: false,
+			success: function(data){
+				 var paramsTable = ${"#paramsTable"};
+				 for(var i=0;i<data.length;i++){  
+					 paramsTable.append("<tr><td class='center'>" + data[i].name + "</td><td class='center'><input name='paramInput' value='"+ data[i].value +"' /></td></tr>");
+			    }
+			}
+		});
+		$('#reboot_modal').modal('hide');
+	    $('#reboot_params_modal').modal('show');
+	}
+	
+	function doReboot(){
+		var params = '';
+		 $('input[name="paramInput"]').each(function(){     
+			 params=params+ $(this).val() + ',';     
+		 });
+		 var scriptId = $('#scriptId').val();
+		 var deploySoftId = $('#rebootSoftId').val();
+		 $.ajax({
+				type: "POST",
+				url: '<%=basePath%>queryScriptParams.do?scriptId='+scriptId + '&deploySoftId=' + deploySoftId + '&params=' + params,
+				dataType:'json',
+				//beforeSend: validateData,
+				cache: false,
+				success: function(data){
+					
+				}
+		});
+	}
 	
 	function doExecute(appNo){
 		top.jzts();

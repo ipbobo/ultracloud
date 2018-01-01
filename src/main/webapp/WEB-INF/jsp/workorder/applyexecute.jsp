@@ -390,12 +390,9 @@
 		}
 		
 		$('#platform_modal').modal('hide');
-		
 		$("#executeStatus_0").css('display','none');
 		$("#executeStatus_1").css('display','block');
-		 
 		queryExecuteStatus(appNo);
-		
 		$.ajax({
 			type: "POST",
 			url: '<%=basePath%>executeWork.do?appNo='+appNo +'&CPU=' + cpu +'&memory=' + memory + '&diskSize=' + diskSize + '&cloudPlatformId=' + cloudPlatform + '&datacenterId=' + datacenter + '&clusterId=' + cluster ,
@@ -406,8 +403,6 @@
 				//showDialog(data.result);
 			}
 		});
-		
-		
 	}
 	
 	function queryExecuteStatus(appNo){
