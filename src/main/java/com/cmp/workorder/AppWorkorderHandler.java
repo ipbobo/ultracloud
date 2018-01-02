@@ -366,8 +366,8 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			
 			//执行软件安装脚本
 			String scriptUrl = medium.getUrl();
-			ShellUtil shellUtil = new ShellUtil("118.242.40.216", 7001, "root",  
-	                "r00t0neio", "utf-8");
+			ShellUtil shellUtil = new ShellUtil("118.242.40.216", ShellUtil.DEF_PORT, "root",  
+	                "r00t0neio", ShellUtil.DEF_CHARSET);
 			shellUtil.exec("." + scriptUrl, workOrder.getAppNo());
 		}
 		//所有安装完毕设置结束标志

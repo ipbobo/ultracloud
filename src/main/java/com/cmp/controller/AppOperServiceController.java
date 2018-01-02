@@ -9,6 +9,8 @@ import javax.annotation.Resource;
 
 import org.activiti.engine.task.Task;
 import org.apache.shiro.session.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,12 +25,14 @@ import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.DeployedSoftService;
 import com.cmp.service.MediumService;
 import com.cmp.service.ScriptParamService;
+import com.cmp.service.ScriptService;
 import com.cmp.service.VirtualMachineService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOpServe;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.VirtualMachine;
 import com.cmp.util.PageDataUtil;
+import com.cmp.util.ShellUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.system.User;
 import com.fh.service.system.user.impl.UserService;
@@ -44,6 +48,7 @@ import com.fh.util.PageData;
  */
 @Controller
 public class AppOperServiceController  extends BaseController {
+	
 	@Resource
 	private CmpDictService cmpDictService;
 	
@@ -70,6 +75,9 @@ public class AppOperServiceController  extends BaseController {
 	
 	@Resource
 	private ScriptParamService scriptParamService;
+	
+	@Resource
+	private ScriptService scriptService;
 	
 	//运维服务申请表单查询
 	@RequestMapping(value="/reqOperServicePre")
@@ -365,11 +373,33 @@ public class AppOperServiceController  extends BaseController {
 		if (deploySoftId == null || deploySoftId.length() == 0) {
 			return null;
 		}
-		if (params == null || params.length() == 0) {
-			return null;
+		DeployedSoft deployedSoft = deployedSoftService.findById(deploySoftId);
+		if (deployedSoft == null || deployedSoft.getVirtualmachineId() == null) {
+			logger.debug("doRebootSoft : 工单中的部署软件不存在");
+			return "工单中的部署软件不存在";
 		}
-		PageData pd = new PageData();
+		String vmId = deployedSoft.getVirtualmachineId();
+		VirtualMachine vm = virtualMachineService.findById(vmId);
+		if (vm == null) {
+			logger.debug("doRebootSoft:虚拟机不存在");
+			return "虚拟机不存在";
+		}
 		
+		PageData scriptPd = new PageData();
+		scriptPd.put("id", scriptId);
+		scriptPd = scriptService.findById(scriptPd);
+		String scriptUrl = scriptPd.getString("url");
+		String scriptName = scriptPd.getString("name");
+		
+		String userName = vm.getUsername();
+		String passwd = vm.getPassword();
+		String ip = vm.getIp();
+		
+		//执行脚本
+		String cmds = "." + scriptUrl + scriptName + " " + params;
+		ShellUtil shellUtil = new ShellUtil(cmds, ShellUtil.DEF_PORT, userName,  
+				passwd, ShellUtil.DEF_CHARSET);
+		shellUtil.exec("." + scriptUrl, "0");
 		return "success";
 	}
 	

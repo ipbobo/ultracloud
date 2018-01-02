@@ -15,6 +15,8 @@ import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.Session;
 
 public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
+	public static final int DEF_PORT = 7001;
+	public static final String DEF_CHARSET = "utf-8";
 	private Connection conn;  
     private String ipAddr;  
     private String charset = Charset.defaultCharset().toString();  
@@ -42,6 +44,11 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
         return conn.authenticateWithPassword(userName, password); // 认证  
     }  
   
+    /*
+     * params:
+     * cmds :命令
+     * 日志index :从0开始的日志记录，用于前台显示
+     */
     public String exec(String cmds, String logIndex) {  
         InputStream in = null;  
         String result = "";  

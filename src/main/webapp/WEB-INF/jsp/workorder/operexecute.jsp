@@ -70,9 +70,7 @@
 		</form>
 	</div>
 	<div class="alert alert-info">运维执行详情</div>
-	<div style="height: 150px; width: 100%">
-	
-	</div>
+	<div id="shell_msg_div" style="height: 150px; width: 100%; overflow-y: scroll; background: #333; color: #aaa; padding: 10px;"></div>
 
 
 	<div class="alert alert-info">关联任务</div>
@@ -247,12 +245,12 @@
 															<c:forEach items="${scriptList}" var="var" varStatus="vs">
 																<tr>
 															<td class='center'><label class="pos-rel"><input
-																			type='checkbox' id='vmcheckbox_${var.id}' name='vmcheckbox' value="${var.id}" class="ace" /><span
+																			type='checkbox' id='scriptcheckbox_${var.id}' readonly="readonly" name='vmcheckbox' value="${var.id}" class="ace" /><span
 																			class="lbl"></span></label></td>
-																		<td class='center'>${var.id}</td>
+																		<td class='center'>${var.name}</td>
 																		<td class='center'>${var.url}</td>
 																		<td class='center'>${var.purpose}</td>
-																		<td class='center'><a href="#" onclick="showSetparams('${var.id}');"></a></td>
+																		<td class='center'><a onclick="showSetparams('${var.id}');">设置参数</a></td>
 																		</tr>
 															</c:forEach>
 														</c:when>
@@ -265,8 +263,11 @@
 											</table>
 									</div>
 									<div class="modal-footer">
-										<button  id="reboot_modal_ok" type="button" class="btn btn-primary" onclick="doReboot();" data-dismiss="modal" aria-hidden="true">
+										<button  id="reboot_modal_ok" type="button" class="btn btn-danger" onclick="doReboot();" data-dismiss="modal" aria-hidden="true">
 											确定
+										</button>
+										<button  id="reboot_modal_cancel" type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+											取消
 										</button>
 									</div>
 								</div><!-- /.modal-content -->
@@ -295,7 +296,7 @@
 											</table>
 									</div>
 									<div class="modal-footer">
-										<button  id="reboot_params_modal_ok" type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+										<button  id="reboot_params_modal_ok" onclick="setParams();" type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
 											确定
 										</button>
 									</div>
@@ -338,7 +339,7 @@
 		});
 	});
 	
-	function rebootSoft(deploySoftId){
+	function showRebootSoft(deploySoftId){
 		$('#rebootSoftId').val(deploySoftId);
 		$('#reboot_modal').modal('show');
 	}
@@ -352,7 +353,7 @@
 			//beforeSend: validateData,
 			cache: false,
 			success: function(data){
-				 var paramsTable = ${"#paramsTable"};
+				 var paramsTable = $("#paramsTable");
 				 for(var i=0;i<data.length;i++){  
 					 paramsTable.append("<tr><td class='center'>" + data[i].name + "</td><td class='center'><input name='paramInput' value='"+ data[i].value +"' /></td></tr>");
 			    }
@@ -362,21 +363,38 @@
 	    $('#reboot_params_modal').modal('show');
 	}
 	
+	function setParams(){
+		var scriptId = $('#scriptId').val();
+		if (scriptId == null || scriptId == ''){
+			 showDialog("请先选择脚本，并设置脚本参数!");
+		}
+		document.getElementById("scriptcheckbox_"+scriptId).checked = true;
+		$('#reboot_params_modal').modal('hide');
+		$('#reboot_modal').modal('show');
+	}
+	
+	
 	function doReboot(){
 		var params = '';
 		 $('input[name="paramInput"]').each(function(){     
-			 params=params+ $(this).val() + ',';     
+			 params=params+ $(this).val() + ' ';     
 		 });
+		 if (params == ''){
+			 showDialog("请先选择脚本，并设置脚本参数!");
+			 return false;
+		 }
 		 var scriptId = $('#scriptId').val();
 		 var deploySoftId = $('#rebootSoftId').val();
 		 $.ajax({
 				type: "POST",
-				url: '<%=basePath%>queryScriptParams.do?scriptId='+scriptId + '&deploySoftId=' + deploySoftId + '&params=' + params,
+				url: '<%=basePath%>doRebootSoft.do?scriptId='+scriptId + '&deploySoftId=' + deploySoftId + '&params=' + params,
 				dataType:'json',
 				//beforeSend: validateData,
 				cache: false,
 				success: function(data){
-					
+					if (data != null && data != 'success'){
+						 showDialog(data);
+					}
 				}
 		});
 	}

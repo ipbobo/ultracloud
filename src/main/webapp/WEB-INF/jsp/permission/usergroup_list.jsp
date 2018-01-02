@@ -42,6 +42,7 @@
 								<td style="vertical-align:top;padding-left:5px;width:88px;">
 									<div style="float: right;padding-top: 0px;margin-top: 0px;">
 								 	<select class="chosen-select form-control" name="ROLE_ID" id="role_id" data-placeholder="请选择角色" style="vertical-align:top;width: 120px;">
+								 	<option value="">请选择角色</option>
 									<c:forEach items="${roleList}" var="role">
 										<option value="${role.ROLE_ID }" <c:if test="${pd.ROLE_ID==role.ROLE_ID}">selected</c:if>>${role.ROLE_NAME }</option>
 									</c:forEach>

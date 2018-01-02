@@ -30,7 +30,7 @@
 														<td class='center'>${var.virtualmachineName}</td>
 														<td class='center'>${var.softName}</td>
 														<c:if test="${userRole != null && userRole == 'execute'}">
-															<td class='center'><input type="button" onclick="rebootSoft('${var.id}');" value="操作"></td>
+															<td class='center'><input type="button" onclick="showRebootSoft('${var.id}');" value="操作"></td>
 														</c:if>
 													</tr>
 													</c:forEach>
