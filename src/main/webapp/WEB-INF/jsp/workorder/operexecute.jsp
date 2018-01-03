@@ -16,7 +16,7 @@
 <%@ include file="../system/index/top.jsp"%>
 </head>
 <body class="no-skin">
-
+	<input type="hidden"   name="h_appNo" id="h_appNo"  value="${workorder.appNo}">
 						<div class="page-header">
 
 		<button class="btn btn-success" id="cancel" name="cancel" type="reset"
@@ -57,7 +57,7 @@
 				<div class="col-md-offset-3 col-md-9">
 					<button class="btn btn-info" id="OK" name="OK" type="button" onclick="doExecute('${workorder.appNo}');">
 						<i class="ace-icon fa fa-check bigger-110"></i>
-						执行部署
+						确定
 					</button>
 
 					&nbsp; &nbsp; &nbsp;
@@ -320,6 +320,52 @@
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
+	
+	$( document ).ready(function() {
+		var executeStatus = $("#executeStatus").val();
+		var appNo = $("#h_appNo").val();
+	    if (executeStatus == null || executeStatus == '' || executeStatus == '0'){
+	    	executeStatus = '0';
+	    }
+	    $("#executeStatus_" + executeStatus).css('display','block');
+	    if (executeStatus == null || executeStatus == '' || executeStatus == '1'){
+	    	queryExecuteStatus(appNo);
+	    }
+	});
+	
+	
+	function queryExecuteStatus(appNo){
+		//查询，并同步更新控制台
+		var line = 0;
+		var res = setInterval(function(){
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>queryShell.do?shellId='+appNo +'&currentLine=' + line,
+				dataType:'json',
+				//beforeSend: validateData,
+				cache: false,
+				success: function(data){
+					var maplen = data.length;
+					var shellMsgMap = data.currentShellMsg;
+					if (shellMsgMap == null)
+						return;
+					if (shellMsgMap[maplen] != null && shellMsgMap[maplen] == "cmp:install finished"){
+						$("#executeStatus_1").css('display','none');
+						$("#executeStatus_2").css('display','block');
+						clearInterval(res);
+					}
+					for (var i = line; i <maplen; i++ ){
+							if (shellMsgMap[i] != null && shellMsgMap[i] != "-1" && shellMsgMap[i] != "undefined"){
+								$('#shell_msg_div').append(shellMsgMap[i]+'<br\>'); 
+								document.getElementById('shell_msg_div').scrollTop = document.getElementById('shell_msg_div').scrollHeight
+							}
+					}
+					line = maplen;
+				}
+			});
+		}, 2500);
+	}
+	
 	$(top.hangge());//关闭加载状态
 	//检索
 	function tosearch(){
@@ -385,9 +431,11 @@
 		 }
 		 var scriptId = $('#scriptId').val();
 		 var deploySoftId = $('#rebootSoftId').val();
+		 var appNo = $("#h_appNo").val();
+		 queryExecuteStatus(appNo);
 		 $.ajax({
 				type: "POST",
-				url: '<%=basePath%>doRebootSoft.do?scriptId='+scriptId + '&deploySoftId=' + deploySoftId + '&params=' + params,
+				url: '<%=basePath%>doRebootSoft.do?appNo='+ appNo + '&scriptId='+scriptId + '&deploySoftId=' + deploySoftId + '&params=' + params,
 				dataType:'json',
 				//beforeSend: validateData,
 				cache: false,

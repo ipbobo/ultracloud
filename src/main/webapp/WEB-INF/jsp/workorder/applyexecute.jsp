@@ -407,6 +407,7 @@
 	
 	function queryExecuteStatus(appNo){
 		//查询，并同步更新控制台
+		
 		var line = 0;
 		var res = setInterval(function(){
 			$.ajax({
@@ -418,6 +419,8 @@
 				success: function(data){
 					var maplen = data.length;
 					var shellMsgMap = data.currentShellMsg;
+					if (shellMsgMap == null)
+						return;
 					if (shellMsgMap[maplen] != null && shellMsgMap[maplen] == "cmp:install finished"){
 						$("#executeStatus_1").css('display','none');
 						$("#executeStatus_2").css('display','block');

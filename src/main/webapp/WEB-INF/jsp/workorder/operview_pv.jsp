@@ -19,8 +19,6 @@
 								</thead>
 
 								<tbody>
-									
-													
 										<c:choose>
 										<c:when test="${not empty rebootSoft}">
 											<c:forEach items="${rebootSoft}" var="var" varStatus="vs">
@@ -30,13 +28,22 @@
 														<td class='center'>${var.virtualmachineName}</td>
 														<td class='center'>${var.softName}</td>
 														<c:if test="${userRole != null && userRole == 'execute'}">
-															<td class='center'><input type="button" onclick="showRebootSoft('${var.id}');" value="操作"></td>
+														<td class='center'>
+															<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
+															<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
+																onclick="showRebootSoft('${var.id}');">操作</button>
+															<button id="executeStatus_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																>部署中...</button>
+															<button id="executeStatus_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																>部署完毕</button>
+															<button id="executeStatus_3"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																>部署异常</button>
+														</td>
 														</c:if>
 													</tr>
 													</c:forEach>
 												</c:when>
 											</c:choose>
-								
 								</tbody>
 						</table>
 	</c:if>

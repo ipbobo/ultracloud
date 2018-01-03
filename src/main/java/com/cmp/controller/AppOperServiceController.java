@@ -366,41 +366,68 @@ public class AppOperServiceController  extends BaseController {
 	 */
 	@RequestMapping(value="/doRebootSoft")
 	@ResponseBody
-	public String doRebootSoft(String deploySoftId, String scriptId, String params) throws Exception{
+	public String doRebootSoft(String appNo, String deploySoftId, String scriptId, String params) throws Exception{
 		if (scriptId == null || scriptId.length() == 0) {
 			return null;
 		}
 		if (deploySoftId == null || deploySoftId.length() == 0) {
 			return null;
 		}
+		if (appNo == null || appNo.length() == 0) {
+			return null;
+		}
 		DeployedSoft deployedSoft = deployedSoftService.findById(deploySoftId);
 		if (deployedSoft == null || deployedSoft.getVirtualmachineId() == null) {
-			logger.debug("doRebootSoft : 工单中的部署软件不存在");
+			logger.error("doRebootSoft : 工单中的部署软件不存在");
 			return "工单中的部署软件不存在";
 		}
 		String vmId = deployedSoft.getVirtualmachineId();
-		VirtualMachine vm = virtualMachineService.findById(vmId);
-		if (vm == null) {
-			logger.debug("doRebootSoft:虚拟机不存在");
-			return "虚拟机不存在";
-		}
+		
 		
 		PageData scriptPd = new PageData();
 		scriptPd.put("id", scriptId);
 		scriptPd = scriptService.findById(scriptPd);
 		String scriptUrl = scriptPd.getString("url");
 		String scriptName = scriptPd.getString("name");
+		String cmds = "." + scriptUrl + scriptName + " " + params;
+		int executeRet = 0;
+		if ((executeRet = executeShell(vmId, cmds, appNo)) != 0) {
+			logger.error("doRebootSoft : 中间件重启失败--" + executeRet);
+			return "中间件重启失败";
+		}
+		return "success";
+	}
+	
+	
+	public int  executeShell(String vmId, String cmds, String appNo) throws Exception {
+		
+		VirtualMachine vm = virtualMachineService.findById(vmId);
+		if (vm == null) {
+			logger.debug("doRebootSoft:虚拟机不存在");
+			return -1;
+		}
 		
 		String userName = vm.getUsername();
 		String passwd = vm.getPassword();
 		String ip = vm.getIp();
 		
-		//执行脚本
-		String cmds = "." + scriptUrl + scriptName + " " + params;
-		ShellUtil shellUtil = new ShellUtil(cmds, ShellUtil.DEF_PORT, userName,  
+		//***************执行脚本
+		//变更工单状态
+		Map<String , String> exeParams = new HashMap<String , String>();
+		exeParams.put("executeStatus", "1");
+		cmpWorkOrderService.updateExecuteStatus(appNo, exeParams);
+		ShellUtil shellUtil = new ShellUtil(ip, ShellUtil.DEF_PORT, userName,  
 				passwd, ShellUtil.DEF_CHARSET);
-		shellUtil.exec("." + scriptUrl, "0");
-		return "success";
+		shellUtil.exec("." + cmds, "0");
+		
+		//所有安装完毕设置结束标志
+		Map currentMsgMap = (Map) ShellUtil.getShellMsgMap().get(appNo);
+		if (currentMsgMap != null) {
+			currentMsgMap.put(currentMsgMap.size() + 1,  "cmp:install finished");
+		}
+		exeParams.put("executeStatus", "2");
+		cmpWorkOrderService.updateExecuteStatus(appNo, exeParams);
+		return 0;
 	}
 	
 }
