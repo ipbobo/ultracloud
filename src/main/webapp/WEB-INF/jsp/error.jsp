@@ -34,6 +34,7 @@
 <a href="javascript:history.back(-1)">返 回</a> 
     </p> 
     <div style="display:none;text-align: left;" id="err">${exception }</div>
+    <div id="zhongxin"></div>
   </div>
   
   <script type="text/javascript">

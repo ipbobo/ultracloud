@@ -94,6 +94,14 @@ function batchBuy(){
 				<td align="left" colspan="2">${var.areaCodeName}</td>
 			</tr>
 			<tr>
+				<td align="left" style="width: 60px;">环境：</td>
+				<td align="left" colspan="2">${var.envCodeName}</td>
+			</tr>
+			<tr>
+				<td align="left" style="width: 60px;">项目：</td>
+				<td align="left" colspan="2">${var.projectCodeName}</td>
+			</tr>
+			<tr>
 				<td align="left" style="width: 60px;">资源类型：</td>
 				<td align="left" colspan="2">${var.resTypeName}</td>
 			</tr>
@@ -116,6 +124,10 @@ function batchBuy(){
 			<tr>
 				<td align="left">购买量：</td>
 				<td align="left" colspan="2">${var.virNum}&nbsp;台</td>
+			</tr>
+			<tr>
+				<td align="left">申请时间：</td>
+				<td align="left" colspan="2">${var.createTime}</td>
 			</tr>
 			<tr>
 				<td align="left">到期时间：</td>

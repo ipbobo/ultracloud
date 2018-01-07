@@ -1,82 +1,67 @@
 package com.cmp.mgr;
 
-import static java.util.stream.Collectors.toList;
-
 import java.rmi.RemoteException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.entity.tcc.TccResourcePool;
+import com.cmp.mgr.vmware.VMWareCloudArchManager;
+import com.fh.util.PageData;
 import com.vmware.vim25.InvalidProperty;
 import com.vmware.vim25.RuntimeFault;
-import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
-import com.vmware.vim25.mo.Datastore;
-import com.vmware.vim25.mo.HostSystem;
+import com.vmware.vim25.mo.Folder;
 import com.vmware.vim25.mo.ManagedEntity;
-import com.vmware.vim25.mo.Network;
-import com.vmware.vim25.mo.VirtualMachine;
 
+//public class CloudInitTest extends BaseJunit4Test {
 public class CloudInitTest {
+
+	//@Resource(name = "resourceService")
+	//ResourceService resourceService;
+
+	// 标明是测试方法
 	@Test
-	public void testGetAdaptee() throws InvalidProperty, RuntimeFault, RemoteException {
+	public void testSyncCloudDataVmWare() throws Exception {
+		PageData pd = new PageData();
+		pd.put("type", "vmware");
+		pd.put("id", "bbb3512e75034c69ada0093265940852");
+		pd.put("username", "root");
+		pd.put("password", "12345678");
+		pd.put("ip", "118.242.40.216");
+		
+		try {
+			this.localSync(pd);
+			//resourceService.syncCloudData(pd);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void localSync(PageData cloudPD) throws InvalidProperty, RuntimeFault, RemoteException {
+		//初始化云平台帐号
+		String platformManagerType = VMWareCloudArchManager.class.getName();
 		TccCloudPlatform platform = new TccCloudPlatform();
-		platform.setCloudplatformUser("administrator@vsphere.local");
-		platform.setCloudplatformPassword("123.comM");
-		platform.setCloudplatformIp("118.242.40.216");
-		platform.setPlatformManagerType("com.cmp.mgr.impl.VMWareCloudArchManager");
+		platform.setCloudplatformUser(cloudPD.getString("username"));
+		platform.setCloudplatformPassword(cloudPD.getString("password"));
+		platform.setCloudplatformIp(cloudPD.getString("ip"));
+		platform.setPlatformManagerType(platformManagerType);
 
 		CloudArchManagerAdapter adapter = new CloudArchManagerAdapter();
 		CloudArchManager cloudArchManager = adapter.getCloudArchManagerAdaptee(platform);
 		List<Datacenter> datacenterList = cloudArchManager.getDatacenters();
-
-		for (Datacenter dc : datacenterList) {
-			System.out.println("datacenter name=" + dc.getName() + ",uuid=" + dc.getMOR().get_value());
-
-			ManagedEntity[] childEntitys = dc.getHostFolder().getChildEntity();
-			List<ClusterComputeResource> clusterList = Arrays.stream(childEntitys).map(ClusterComputeResource.class::cast).collect(toList());
-			for (ClusterComputeResource cluster : clusterList) {
-				System.out.println("--cluster name=" + cluster.getName() + ",uuid=" + cluster.getMOR().get_value());
-
-				HostSystem[] host = cluster.getHosts();
-				for (int i = 0; i < host.length; i++) {
-					String osVersionCdName = host[i].getSummary().getConfig().getProduct().getName()
-							+ host[i].getSummary().getConfig().getProduct().getVersion();
-					String hardwareTypeCd = host[i].getHardware().getSystemInfo().getVendor() + " "
-							+ host[i].getHardware().getSystemInfo().getModel();
-					double cpuTotal = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores())
-							* (host[i].getHardware().getCpuInfo().getHz() / 1000 / 1000 / 1000);
-					double cpuCoreRemainCount = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores());
-					System.out.println("----host name=" + host[i].getName() + ",uuid=" + host[i].getMOR().get_value() + "," + cpuCoreRemainCount);
-
-					// 同步虚拟机
-					VirtualMachine[] virtualMachine = host[i].getVms();
-					for (int j = 0; j < virtualMachine.length; j++) {
-						System.out.println("----virtualMachine name=" + virtualMachine[j].getName() + ",uuid="
-								+ virtualMachine[j].getMOR().get_value() + ",ip=" + virtualMachine[j].getGuest().getIpAddress() + ","
-								+ virtualMachine[j].getConfig().getGuestId() + "," + virtualMachine[j].getConfig().getGuestFullName() + ","
-								+ Double.valueOf(virtualMachine[j].getConfig().getHardware().getNumCPU()) + ","
-								+ Double.valueOf(virtualMachine[j].getConfig().getHardware().getMemoryMB()) + ","
-								+ virtualMachine[j].getRuntime().getPowerState().toString());
-					}
-				}
-
-			}
-
-			Datastore[] store = dc.getDatastores();
-			for (int i = 0; i < store.length; i++) {
-				double maxFileSize = store[i].getInfo().getMaxFileSize() / 1024 / 1024 / 1024;
-				double freeSpace = store[i].getInfo().getFreeSpace() / 1024 / 1024 / 1024;
-				System.out.println("--store name=" + store[i].getName() + ",uuid=" + store[i].getMOR().get_value() + ",maxFileSize=" + maxFileSize
-						+ ",freeSpace=" + freeSpace);
-			}
-
-			Network[] network = dc.getNetworks();
-			for (int i = 0; i < network.length; i++) {
-				System.out.println("--network name=" + network[i].getName() + ",uuid=" + network[i].getMOR().get_value());
+		for(Datacenter dc : datacenterList) {
+			Folder folder = dc.getHostFolder();
+			ManagedEntity[] mes = folder.getChildEntity();
+			for(int i = 0; i< mes.length; i++) {
+				this.p(mes[i].getName());
 			}
 		}
+		
+	}
+	
+	private void p(String str) {
+		System.out.println("-------->>" + str);
 	}
 }

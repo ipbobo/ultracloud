@@ -60,16 +60,16 @@
 							<c:if test="${pd.price_cur != null}">
 								<tr>
 									<td style="width:130px;text-align: right;padding-top: 13px;">旧价格:</td>
-									<td><input  readonly="true" type="number" name="price_old" id="price_old" value="${pd.price_old}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
+									<td><input  readonly="true" type="text" name="price_old" id="price_old" value="${pd.price_old / 100}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
 								</tr>
 								<tr>
 									<td style="width:130px;text-align: right;padding-top: 13px;">当前价格:</td>
-									<td><input readonly="true" type="number" name="price_cur" id="price_cur" value="${pd.price_cur}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
+									<td><input readonly="true" type="text" name="price_cur" id="price_cur" value="${pd.price_cur / 100}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
 								</tr>
 							</c:if>
 							<tr>
 								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;新价格:</td>
-								<td><input type="number" name="price_new" id="price_new" value="${pd.price_new}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
+								<td><input type="text" name="price_new" id="price_new" value="${pd.price_new / 100}" maxlength="30" style="width:70%;"/>&nbsp;元/天</td>
 							</tr>
 							<tr>
 								<td style="width:130px;text-align: right;padding-top: 13px;">新价格生效日期:</td>
@@ -79,6 +79,7 @@
 											<input name="form-field" type="radio" class="ace" id="form-field-radio-yes" onclick="isImediateRadio('yes');"/>
 											<span class="lbl">立即生效</span>
 										</label>
+										<!-- 
 										<label style="float:left;padding-left: 5px;padding-top:7px;">
 											<input name="form-field" type="radio" class="ace" id="form-field-radio-no" onclick="isImediateRadio('no');"/>
 											<span class="lbl">设定日期</span>
@@ -86,6 +87,7 @@
 										<label style="float:left;padding-left: 5px;padding-top:3px;">
 											<input class="span10 date-picker" name="clockTime" id="clockTime" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="日期" title="日期">
 										</label>
+										 -->
 									</div>
 								</td>
 							</tr>
@@ -189,6 +191,16 @@
 				$("#price_new").focus();
 			return false;
 			}
+			if(!checkFloat($("#price_new").val())){
+				$("#price_new").tips({
+					side:3,
+		            msg:'请输入0到99999.99之间的数字',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#price_new").focus();
+			return false;
+			}
 			
 			$("#type").removeAttr("disabled", "disabled");
 			$("#Form").submit();
@@ -196,6 +208,15 @@
 			$("#zhongxin2").show();
 		}
 
+		//校验价格
+		function checkFloat(floatStr) {
+			var isFloat = /^(([0-9]{1,5})|([0-9]{1,5}\.[0-9]{1,2}))$/;
+			if(isFloat.test(floatStr)) {  
+		        return true;  
+		    } else{  
+		        return false;  
+		    }
+		}
 		</script>
 </body>
 </html>

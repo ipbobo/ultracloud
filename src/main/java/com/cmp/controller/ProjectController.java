@@ -35,6 +35,11 @@ import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 
+/**
+ * 项目管理 控制层
+ * @author liuweixing
+ *
+ */
 @Controller
 @RequestMapping(value = "/project")
 public class ProjectController extends BaseController {

@@ -178,7 +178,7 @@
 	
 	<!-- 购物车列表查询 -->
 	<select id="getShoppingCartList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
-		select a.orderNo, a.createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
+		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
 		, b.dictValue areaCodeName
 		, c.dictValue platTypeName
 		, d.dictValue deployTypeName
@@ -214,7 +214,7 @@
 	
 	<!-- 已购历史列表查询 -->
 	<select id="getBuyHisList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
-		select a.orderNo, a.createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
+		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
 		, b.dictValue areaCodeName
 		, c.dictValue platTypeName
 		, d.dictValue deployTypeName
