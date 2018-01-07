@@ -28,7 +28,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="environment/list.do" method="post" name="Form" id="Form">
+						<form action="product/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="vertical-align: top;">
