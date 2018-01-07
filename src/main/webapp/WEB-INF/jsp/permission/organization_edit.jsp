@@ -40,7 +40,7 @@
 							</tr>
 							<tr>
 								<td style="width:70px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;名称:</td>
-								<td><input type="text" name="NAME" id="NAME" value="${pd.NAME}" maxlength="50" placeholder="这里输入名称" title="名称" style="width:98%;"/></td>
+								<td><input type="text" name="NAME" id="NAME" value="${pd.NAME}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:70px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;英文名:</td>
@@ -48,11 +48,11 @@
 							</tr>
 							<tr>
 								<td style="width:70px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;编码:</td>
-								<td><input type="text" name="BIANMA" id="BIANMA" value="${pd.BIANMA}" maxlength="32" placeholder="这里输入编码 (不重复, 禁止修改)" title="编码" style="width:76%;" <c:if test="${null == pd.BIANMA}">onblur="hasBianma();"</c:if>  <c:if test="${null != pd.BIANMA}">readonly="readonly"</c:if>/></td>
+								<td><input type="text" name="BIANMA" id="BIANMA" value="${pd.BIANMA}" maxlength="50" placeholder="这里输入编码 (不重复, 禁止修改)" title="编码" style="width:76%;" <c:if test="${null == pd.BIANMA}">onblur="hasBianma();"</c:if>  <c:if test="${null != pd.BIANMA}">readonly="readonly"</c:if>/></td>
 							</tr>
 							<tr>
 								<td style="width:70px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;负责人:</td>
-								<td><input type="text" name="HEADMAN" id="HEADMAN" value="${pd.HEADMAN}" maxlength="32" placeholder="这里输入负责人" title="负责人" style="width:66%;"/></td>
+								<td><input type="text" name="HEADMAN" id="HEADMAN" value="${pd.HEADMAN}" maxlength="30" placeholder="这里输入负责人" title="负责人" style="width:66%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:70px;text-align: right;padding-top: 13px;">电话:</td>
@@ -60,16 +60,16 @@
 							</tr>
 							<tr>
 								<td style="width:70px;text-align: right;padding-top: 13px;">部门职能:</td>
-								<td><input type="text" name="FUNCTIONS" id="FUNCTIONS" value="${pd.FUNCTIONS}" maxlength="32" placeholder="这里输入部门职能" title="部门职能" style="width:98%;"/></td>
+								<td><input type="text" name="FUNCTIONS" id="FUNCTIONS" value="${pd.FUNCTIONS}" maxlength="255" placeholder="这里输入部门职能" title="部门职能" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:70px;text-align: right;padding-top: 13px;">地址:</td>
-								<td><input type="text" name="ADDRESS" id="ADDRESS" value="${pd.ADDRESS}" maxlength="32" placeholder="这里输入地址" title="地址" style="width:98%;"/></td>
+								<td><input type="text" name="ADDRESS" id="ADDRESS" value="${pd.ADDRESS}" maxlength="255" placeholder="这里输入地址" title="地址" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:70px;text-align: right;padding-top: 13px;">备注:</td>
 								<td>
-									<textarea rows="3" cols="46" name="BZ" id="BZ" placeholder="这里输入备注" title="备注"  style="width:98%;">${pd.BZ}</textarea>
+									<textarea rows="3" cols="46" name="BZ" id="BZ" placeholder="这里输入备注" title="备注" maxlength="255"  style="width:98%;">${pd.BZ}</textarea>
 								</td>
 							</tr>
 							<tr>
@@ -147,6 +147,27 @@
 				$("#HEADMAN").focus();
 			return false;
 			}
+			if($("#TEL").val()!="" && !checkTel($("#TEL").val())){
+				$("#TEL").tips({
+					side:3,
+		            msg:'请输入正确的手机号或座机号',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#TEL").focus();
+			return false;
+			}
+			if($("#ADDRESS").val()!="" && !checkAddress($("#ADDRESS").val())){
+				$("#ADDRESS").tips({
+					side:3,
+		            msg:'请输入正确的地址',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#ADDRESS").focus();
+			return false;
+			}
+			
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
@@ -177,6 +198,29 @@
 				}
 			});
 		}
-		</script>
+		
+		//检测电话号码
+		function checkTel(tel) {  
+		    var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;  
+		    var isMob=/^((\+?86)|(\+86))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;  
+		    if(isMob.test(tel)||isPhone.test(tel)){  
+		        return true;  
+		    } else{  
+		        return false;  
+		    }  
+		} 
+		
+		//检测地址
+		function checkAddress(address) {
+			var isHanz = /[\u4e00-\u9fa5]/;
+			var isNumber = /[0-9]/;
+			var isEnglish = /[A-Za-z]/ ;
+			if(isHanz.test(address) || (isNumber.test(address) && isEnglish.test(address))) {  
+		        return true;  
+		    } else{  
+		        return false;  
+		    }
+		}
+	</script>
 </body>
 </html>
