@@ -30,6 +30,8 @@ public class CmpOpServe {
 	private String expTime;	//期限
 	private String vipNum; //VIP数量
 	private String breakdownLevelName; //故障级别名称
+	private String remark1;	//业务备用字段1
+	private String remark2; //业务备用字段2
 	
 	
 	
@@ -176,6 +178,18 @@ public class CmpOpServe {
 	}
 	public void setVipNum(String vipNum) {
 		this.vipNum = vipNum;
+	}
+	public String getRemark1() {
+		return remark1;
+	}
+	public void setRemark1(String remark1) {
+		this.remark1 = remark1;
+	}
+	public String getRemark2() {
+		return remark2;
+	}
+	public void setRemark2(String remark2) {
+		this.remark2 = remark2;
 	}
 	public String getBreakdownLevelName() {
 		if (breakdownLevel != null && breakdownLevel.equals("1")) {

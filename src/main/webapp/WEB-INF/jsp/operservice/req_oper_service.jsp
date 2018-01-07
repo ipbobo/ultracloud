@@ -175,10 +175,22 @@
 							<div id="op_7" style="display: none;">
 							<!-- ROOT权限申请 -->
 								<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
-									<tr>
+								<tr>
 										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;指定目录:</td>
 										<td>
 											<input type="text" class="form-control limited" name="directory2" id="directory2" style="width: 70%;margin-left: 100px;"></input>
+										</td>
+								</tr>
+								<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;ROOT密码:</td>
+										<td>
+											<input type="text" class="form-control limited" name="rootpwd" id="rootpwd" style="width: 70%;margin-left: 100px;"></input>
+										</td>
+								</tr>
+								<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;使用期限:</td>
+										<td>
+											<input id="exp_time_pwd" name="exp_time_pwd" type="text"  style="width:20%;margin-left: 100px;"/>
 										</td>
 								</tr>
 								</table>
@@ -220,7 +232,7 @@
 						</form>
 						</div>
 		<!-- OP1 选择虚拟机（Modal） -->
-		<div class="modal fade" id="vm_modal" tabindex="-1" role="dialog" aria-labelledby="vm_modalLabel" aria-hidden="true">
+		<div class="modal fade" id="vm_modal" tabindex="-1" role="dialog" aria-labelledby="vm_modalLabel" style="overflow: auto" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -347,7 +359,7 @@
 						
 						
 <!-- OP2-8 选择虚拟机(纯选择虚拟机，不联动)（Modal） -->
-		<div class="modal fade" id="vm_select_modal" tabindex="-1" role="dialog" aria-labelledby="vm_modalLabel" aria-hidden="true">
+		<div class="modal fade" id="vm_select_modal" tabindex="-1" role="dialog" style="overflow: auto" aria-labelledby="vm_modalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -457,6 +469,10 @@
 			format: 'YYYY-MM-DD hh:mm:ss',  
 	        locale: moment.locale('zh-cn')
 			});
+		$('#exp_time_pwd').datetimepicker({
+			format: 'YYYY-MM-DD hh:mm:ss',  
+	        locale: moment.locale('zh-cn')
+			});
 	});
 	
 	function ismail(mail){
@@ -494,7 +510,8 @@
 	    	document.getElementById("checkbox_"+vmId).checked = true;
 	    }
 		$('#middleware_modal').modal('hide');
-	    $('#vm_modal').modal('show');
+		$(document.body).addClass("modal-open");  
+	    //$('#vm_modal').modal('show');
 	}
 	
 	function vmModalOK(){
@@ -550,6 +567,8 @@
 		var exp_time =  $("#exp_time").val();
 		var vip_num = $("#vip_num").val();
 		var directory3 = $("#directory3").val();
+		var rootpwd = $("#rootpwd").val();
+		var exp_time_pwd =  $("#exp_time_pwd").val();
 		if( service_type ==""){
 			$("#tip_service_type").tips({
 				side:3,
@@ -575,7 +594,7 @@
 			}
 		}
 		if (service_type == 3){
-			if (breakdown_time == null){
+			if (breakdown_time == null || breakdown_time == ''){
 				showDialog("请输入故障时间");
 				return false;
 			}
@@ -583,7 +602,7 @@
 				showDialog("请输入故障信息");
 				return false;
 			}
-			if (except_solve_time == null){
+			if (except_solve_time == null || except_solve_time == ''){
 				showDialog("请输入期望解决故障时间");
 				return false;
 			}
@@ -609,8 +628,12 @@
 				showDialog("请输入指定目录");
 				return false;
 			}
-			if (exp_time == null){
+			if (exp_time_pwd == null || exp_time_pwd == ''){
 				showDialog("请输入使用期限");
+				return false;
+			}
+			if (rootpwd == null){
+				showDialog("请输入ROOT密码");
 				return false;
 			}
 		}
@@ -635,14 +658,14 @@
 						'oper_type':oper_type, 'install_soft':install_soft, 'soft_version':soft_version,
 						'breakdown_time':breakdown_time, 'breakdown_info':breakdown_info, 'except_solve_time':except_solve_time,
 						'except_result':except_result,'breakdown_level':breakdown_level, 'partition_info':partition_info, 'directory':directory,
-						 'directory2':directory2, 'exp_time':exp_time, 'directory3':directory3, 'vip_num':vip_num
+						 'directory2':directory2, 'exp_time':exp_time, 'rootpwd':rootpwd, 'exp_time_pwd':exp_time_pwd,'directory3':directory3, 'vip_num':vip_num
 					},  
 			type : "post",  
 			cache : false,  
 			dataType : "json",  
 			success:function(data){
 				top.hangge();
-				showDialog(data.result);
+				showDialog(data.result, true);
 			}
 		});  
 		
@@ -708,7 +731,7 @@
 	
 	
 	function softChoice(vmId){
-		$('#vm_modal').modal('hide');
+		//$('#vm_modal').modal('hide');
 		$('#middleware_modal').modal('show');
 		$('#middleware_modal_vmId').val(vmId);
 		jQuery.ajax({  

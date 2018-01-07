@@ -184,7 +184,7 @@
 			cache: false,
 			success: function(data){
 				parent.queryPersonalTask();
-				showDialog(data.result);
+				showDialog(data.result, true);
 			}
 		});
 	}

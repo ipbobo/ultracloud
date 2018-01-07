@@ -213,7 +213,7 @@
 							</div><!-- /.modal -->
 						</div>
 						
-						<div class="modal fade" id="reboot_modal" tabindex="-1" role="dialog" aria-labelledby="reboot_modalLabel" aria-hidden="true">
+						<div class="modal fade" id="reboot_modal" tabindex="-1" role="dialog" style="overflow: auto" aria-labelledby="reboot_modalLabel" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -225,7 +225,7 @@
 										</h4>
 									</div>
 									<div class="modal-body">
-											<input  type="hidden" id="rebootSoftId" />
+											<input  type="hidden" id="rebootSoftIds" />
 											<input  type="hidden" id="scriptId" />
 											<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 												<thead>
@@ -245,7 +245,7 @@
 															<c:forEach items="${scriptList}" var="var" varStatus="vs">
 																<tr>
 															<td class='center'><label class="pos-rel"><input
-																			type='checkbox' id='scriptcheckbox_${var.id}' readonly="readonly" name='vmcheckbox' value="${var.id}" class="ace" /><span
+																			type='checkbox' id='scriptcheckbox_reboot_${var.id}' readonly="readonly" name='vmcheckbox' value="${var.id}" class="ace" /><span
 																			class="lbl"></span></label></td>
 																		<td class='center'>${var.name}</td>
 																		<td class='center'>${var.url}</td>
@@ -274,7 +274,68 @@
 							</div><!-- /.modal -->
 						</div>
 						
-						<div class="modal fade" id="reboot_params_modal" tabindex="-1" role="dialog" aria-labelledby="reboot_params_modalLabel" aria-hidden="true">
+						<div class="modal fade" id="installSoft_modal" tabindex="-1" role="dialog" style="overflow: auto" aria-labelledby="installSoft_modalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+											&times;
+										</button>
+										<h4 class="modal-title">
+											软件安装
+										</h4>
+									</div>
+									<div class="modal-body">
+											<input  type="hidden" id="installSoftIds" />
+											<input  type="hidden" id="scriptId" />
+											<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+												<thead>
+													<tr>
+														<th class="center" style="width: 35px;"><label
+															class="pos-rel"><input type="checkbox" class="ace"
+																id="zcheckbox" /><span class="lbl"></span></label></th>
+														<th class="center">脚本名</th>
+														<th class="center">脚本路径</th>
+														<th class="center">脚本描述</th>
+														<th class="center">参数</th>
+													</tr>
+												</thead>
+												
+													<c:choose>
+														<c:when test="${not empty scriptList}">
+															<c:forEach items="${scriptList}" var="var" varStatus="vs">
+																<tr>
+															<td class='center'><label class="pos-rel"><input
+																			type='checkbox' id='scriptcheckbox_install_${var.id}' readonly="readonly" name='vmcheckbox' value="${var.id}" class="ace" /><span
+																			class="lbl"></span></label></td>
+																		<td class='center'>${var.name}</td>
+																		<td class='center'>${var.url}</td>
+																		<td class='center'>${var.purpose}</td>
+																		<td class='center'><a onclick="showSetparams('${var.id}');">设置参数</a></td>
+																		</tr>
+															</c:forEach>
+														</c:when>
+														<c:otherwise>
+															<tr class="main_info">
+																<td colspan="100" class="center">没有相关数据</td>
+															</tr>
+														</c:otherwise>
+													</c:choose>
+											</table>
+									</div>
+									<div class="modal-footer">
+										<button  id="install_modal_ok" type="button" class="btn btn-danger" onclick="doInstall();" data-dismiss="modal" aria-hidden="true">
+											确定
+										</button>
+										<button  id="install_modal_cancel" type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+											取消
+										</button>
+									</div>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal -->
+						</div>
+						
+						<div class="modal fade" id="script_params_modal" tabindex="-1" role="dialog" style="overflow: auto" aria-labelledby="script_params_modalLabel" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -296,7 +357,7 @@
 											</table>
 									</div>
 									<div class="modal-footer">
-										<button  id="reboot_params_modal_ok" onclick="setParams();" type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+										<button  id="script_params_modal_ok" onclick="setParams();" type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
 											确定
 										</button>
 									</div>
@@ -385,9 +446,14 @@
 		});
 	});
 	
-	function showRebootSoft(deploySoftId){
-		$('#rebootSoftId').val(deploySoftId);
+	function showRebootSoft(rebootSoftIds){
+		$('#rebootSoftIds').val(rebootSoftIds);
 		$('#reboot_modal').modal('show');
+	}
+	
+	function showInstallSoft(installSoftIds){
+		$('#installSoftIds').val(installSoftIds);
+		$('#installSoft_modal').modal('show');
 	}
 	
 	function showSetparams(scriptId){
@@ -405,8 +471,7 @@
 			    }
 			}
 		});
-		$('#reboot_modal').modal('hide');
-	    $('#reboot_params_modal').modal('show');
+	    $('#script_params_modal').modal('show');
 	}
 	
 	function setParams(){
@@ -414,9 +479,15 @@
 		if (scriptId == null || scriptId == ''){
 			 showDialog("请先选择脚本，并设置脚本参数!");
 		}
-		document.getElementById("scriptcheckbox_"+scriptId).checked = true;
-		$('#reboot_params_modal').modal('hide');
-		$('#reboot_modal').modal('show');
+		var rebootSoftIds = $('#rebootSoftIds').val();
+		if (rebootSoftIds != null && rebootSoftIds != ''){
+			document.getElementById("scriptcheckbox_reboot_"+scriptId).checked = true;
+		}
+		var installSoftIds = $('#installSoftIds').val();
+		if (installSoftIds != null && installSoftIds != ''){
+			document.getElementById("scriptcheckbox_install_"+scriptId).checked = true;
+		}
+		$('#script_params_modal').modal('hide');
 	}
 	
 	
@@ -430,12 +501,44 @@
 			 return false;
 		 }
 		 var scriptId = $('#scriptId').val();
-		 var deploySoftId = $('#rebootSoftId').val();
+		 var rebootSoftIds = $('#rebootSoftIds').val();
 		 var appNo = $("#h_appNo").val();
+		 
+		 $("#executeStatus_0").css('display','none');
+		 $("#executeStatus_1").css('display','block');
 		 queryExecuteStatus(appNo);
 		 $.ajax({
 				type: "POST",
-				url: '<%=basePath%>doRebootSoft.do?appNo='+ appNo + '&scriptId='+scriptId + '&deploySoftId=' + deploySoftId + '&params=' + params,
+				url: '<%=basePath%>doRebootSoft.do?appNo='+ appNo + '&scriptId='+scriptId + '&rebootSoftIds=' + rebootSoftIds + '&params=' + params,
+				dataType:'json',
+				//beforeSend: validateData,
+				cache: false,
+				success: function(data){
+					if (data != null && data != 'success'){
+						 showDialog(data);
+					}
+				}
+		});
+	}
+	
+	function doInstall(){
+		var params = '';
+		 $('input[name="paramInput"]').each(function(){     
+			 params=params+ $(this).val() + ' ';     
+		 });
+		 if (params == ''){
+			 showDialog("请先选择脚本，并设置脚本参数!");
+			 return false;
+		 }
+		 var scriptId = $('#scriptId').val();
+		 var installSoftIds = $('#installSoftIds').val();
+		 var appNo = $("#h_appNo").val();
+		 $("#executeStatus_0").css('display','none');
+		 $("#executeStatus_1").css('display','block');
+		 queryExecuteStatus(appNo);
+		 $.ajax({
+				type: "POST",
+				url: '<%=basePath%>doInstallSoft.do?appNo='+ appNo + '&scriptId='+scriptId + '&installSoftIds=' + installSoftIds + '&params=' + params,
 				dataType:'json',
 				//beforeSend: validateData,
 				cache: false,
@@ -458,7 +561,7 @@
 			cache: false,
 			success: function(data){
 				window.top.queryPersonalTask();
-				showDialog(data.result);
+				showDialog(data.result, true);
 			}
 		});
 	}

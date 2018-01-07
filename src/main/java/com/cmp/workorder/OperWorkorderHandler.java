@@ -91,7 +91,8 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 		resMap.put("serviceType", serviceType);
 		if (serviceType.equals("1")) {
 			List<DeployedSoft> rebootSoftMap = new ArrayList<DeployedSoft>();
-			String vm = opServe.getVm();  // 在此格式：虚拟机1:软件1，软件2|虚拟机2:软件1,软件2|
+			String vm = opServe.getVm();  // 在此格式：虚拟机1:软件1,软件1|虚拟机2:软件1,软件2|
+			String rebootSoftIds = "";
 			String[] vmlist = vm.split("\\|");
 			for (String dep_softs : vmlist) {
 				if (dep_softs == null || dep_softs.length() == 0) {
@@ -102,10 +103,12 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 					if (softId == null || softId.length() == 0) {
 						continue;
 					}
+					rebootSoftIds = rebootSoftIds + softId + ",";
 					DeployedSoft depSoft = deployedSoftService.findById(softId);
 					rebootSoftMap.add(depSoft);
 				}
 			}
+			resMap.put("rebootSoftIds", rebootSoftIds);
 			resMap.put("rebootSoft", rebootSoftMap);
 			
 			//查询重启中间件script列表
@@ -115,15 +118,22 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 		if (serviceType.equals("2")) {
 			List<DeployedSoft> installSoftList= new ArrayList<DeployedSoft>();
 			String vm = opServe.getDeploySoftId();  // 在此格式：虚拟机1，虚拟机2
+			String installSoftIds = "";
 			String[] softs = vm.split(",");
 			for (String softId : softs) {
 				if (softId == null || softId.length() == 0) {
 					continue;
 				}
+				installSoftIds = installSoftIds + softId + ",";
 				DeployedSoft depSoft = deployedSoftService.findById(softId);
 				installSoftList.add(depSoft);
 			}
+			resMap.put("installSoftIds", installSoftIds);
 			resMap.put("installSoftList", installSoftList);
+			
+			//查询重启中间件script列表
+			List<PageData> scriptList = scriptService.listAll(new PageData());
+			resMap.put("scriptList", scriptList);
 		}
 		if (serviceType.equals("3")) {
 			List<VirtualMachine> vmList = new ArrayList<VirtualMachine>();
