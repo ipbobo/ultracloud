@@ -52,8 +52,9 @@ public class ProductController extends BaseController {
 		pd.put("USERNAME", Jurisdiction.getUsername());
 		String price_new = pd.getString("price_new");
 		String isImediate = pd.getString("isImediate");
-		pd.put("price_old", price_new);
-		pd.put("price_cur", price_new);
+		pd.put("price_old", Float.valueOf(price_new)*100);
+		pd.put("price_cur", Float.valueOf(price_new)*100);
+		pd.put("price_new", Float.valueOf(price_new)*100);
 		if("1".equals(isImediate)) {
 			pd.put("clockTime", DateUtil.dateToString(new Date(), DateUtil.DEFAULT_FORMAT));
 		} else {
@@ -104,8 +105,9 @@ public class ProductController extends BaseController {
 		String price_new = pd.getString("price_new");
 		String isImediate = pd.getString("isImediate");
 		if("1".equals(isImediate)) {
-			pd.put("price_old", price_new);	
-			pd.put("price_cur", price_new);
+			pd.put("price_old", Float.valueOf(price_new)*100);
+			pd.put("price_cur", Float.valueOf(price_new)*100);
+			pd.put("price_new", Float.valueOf(price_new)*100);
 			pd.put("clockTime", DateUtil.dateToString(new Date(), DateUtil.DEFAULT_FORMAT));
 		} else {
 			//ToDo 启动定时任务
