@@ -142,6 +142,7 @@
 											  <option value="3">严重</option>
 										</select>
 									</td>
+									</tr>
 								</table>
 							</div>
 							<div id="op_4" style="display: none;">

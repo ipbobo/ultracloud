@@ -364,6 +364,54 @@
 								</div><!-- /.modal-content -->
 							</div><!-- /.modal -->
 						</div>
+						
+						<div class="modal fade" id="mount_disk_modal" tabindex="-1" role="dialog" style="overflow: auto" aria-labelledby="mount_disk_modalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+											&times;
+										</button>
+										<h4 class="modal-title">
+											指定目录下创建磁盘路径并挂载
+										</h4>
+									</div>
+									<div class="modal-body">
+											<table id="paramsTable" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+												<tr>
+													<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;网络名称:</td>
+													<td>
+														<input type="text" class="form-control limited" name="netname" id="netname" style="width: 70%; margin-top:10px; margin-left: 50px;"></input>
+													</td>
+											    </tr>
+											    <tr>
+													<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;管理员状态:</td>
+													<td>
+														<select name="manager_status" id="manager_status" title="管理员状态" style="width:20%;  margin-top:10px; margin-left: 50px;">
+															  <option value="up">up</option>
+															  <option value="down">down</option>
+														</select>
+													</td>
+												</tr>
+												 <tr>
+													<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;绑定路由器:</td>
+													<td>
+														<input type="checkbox" name="bind_router" id="bind_router" value="1" title="绑定路由器" style="width:20%;  margin-top:10px; margin-left: 50px;" />
+													</td>
+												</tr>
+											</table>
+									</div>
+									<div class="modal-footer">
+										<button  id="mound_disk_modal_ok" type="button" class="btn btn-danger" onclick="doMountDisk();" data-dismiss="modal" aria-hidden="true">
+											确定
+										</button>
+										<button  id="mound_disk_modal_cancel" type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+											取消
+										</button>
+									</div>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal -->
+						</div>
 
 		<!-- 返回顶部 -->
 		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
@@ -456,6 +504,10 @@
 		$('#installSoft_modal').modal('show');
 	}
 	
+	function showMountDisk(){
+		$('#mount_disk_modal').modal('show');
+	}
+	
 	function showSetparams(scriptId){
 		$('#scriptId').val(scriptId);
 		$.ajax({
@@ -490,6 +542,34 @@
 		$('#script_params_modal').modal('hide');
 	}
 	
+	
+	function doMountDisk(){
+		var netname = $('#netname').val();
+		if (netname == null || netname == ''){
+			 showDialog("请先输入网络名称!",false);
+			 return false;
+		}
+		var appNo = $("#h_appNo").val();
+		var manager_status = $("#manager_status").val();
+		var bind_router = $("#bind_router").val();
+		 $("#executeStatus_0").css('display','none');
+		 $("#executeStatus_1").css('display','block');
+		$.ajax({
+				type: "POST",
+				url: '<%=basePath%>doMountDisk.do?appNo='+ appNo + '&netname='+netname + '&manager_status=' + manager_status + '&bind_router=' + bind_router,
+				dataType:'json',
+				//beforeSend: validateData,
+				cache: false,
+				success: function(data){
+					if (data.resultCode == 'success'){
+						 $("#executeStatus_1").css('display','none');
+						 $("#executeStatus_2").css('display','block');
+					}
+					showDialog(data.resultMsg);
+				}
+		});
+		
+	}
 	
 	function doReboot(){
 		var params = '';

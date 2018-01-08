@@ -9,14 +9,13 @@ import javax.annotation.Resource;
 
 import org.activiti.engine.task.Task;
 import org.apache.shiro.session.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.activiti.service.ActivitiService;
+import com.cmp.entity.CmpResultInfo;
 import com.cmp.entity.DeployedSoft;
 import com.cmp.entity.Medium;
 import com.cmp.service.CmpDictService;
@@ -409,6 +408,39 @@ public class AppOperServiceController  extends BaseController {
 		}
 		endExecuteShell(appNo);
 		return "success";
+	}
+	
+	/**
+	 * 执行绑定磁盘
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/doMountDisk")
+	@ResponseBody
+	public Object doMountDisk(String appNo, String netname, String manager_status, String bind_router) throws Exception{
+		CmpResultInfo resultInfo = new CmpResultInfo();
+		resultInfo.setResultCode(CmpResultInfo.ERROR);
+		if (appNo == null || appNo.length() == 0) {
+			resultInfo.setResultMsg("appNo 为空");
+			return resultInfo;
+		}
+		if (netname == null || netname.length() == 0) {
+			resultInfo.setResultMsg("netname 为空");
+			return resultInfo;
+		}
+		CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo(appNo);
+		if (workorder == null) {
+			logger.error("doMountDisk : 工单不存在");
+			resultInfo.setResultMsg("工单不存在");
+			return resultInfo;
+		}
+		initExecuteShell(appNo);
+		//执行磁盘挂载
+		endExecuteShell(appNo);
+		resultInfo.setResultMsg("执行成功");
+		resultInfo.setResultCode(CmpResultInfo.SUCCESS);
+		return resultInfo;
 	}
 	
 	

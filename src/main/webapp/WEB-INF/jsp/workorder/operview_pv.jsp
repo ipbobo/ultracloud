@@ -216,6 +216,9 @@
 										<th class="center">操作类型</th>
 										<th class="center">虚拟机</th>
 										<th class="center">指定目录</th>
+										<c:if test="${userRole != null && userRole == 'execute'}">
+											<th class="center">操作</th>
+										</c:if>
 									</tr>
 								</thead>
 
@@ -228,6 +231,21 @@
 														<td class='center'>${opServe.operTypeName}</td>
 														<td class='center'>${var.name}</td>
 														<td class='center'>${opServe.directory}</td>
+														<c:if test="${userRole != null && userRole == 'execute'}">
+															<td class='center' rowspan='${fn:length(installSoftList) }'>
+															<c:if test="${vs.index == 0}">
+																<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
+																<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
+																	onclick="showMountDisk();">部署</button>
+																<button id="executeStatus_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>部署中...</button>
+																<button id="executeStatus_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>部署完毕</button>
+																<button id="executeStatus_3"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>部署异常</button>
+															</c:if>
+														</td>
+														</c:if>
 													</tr>
 													</c:forEach>
 												</c:when>
