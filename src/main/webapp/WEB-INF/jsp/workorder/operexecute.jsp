@@ -594,7 +594,7 @@
 				//beforeSend: validateData,
 				cache: false,
 				success: function(data){
-					if (data != null && data != 'success'){
+					if (data != null && data.resultCode != 'success'){
 						 showDialog(data);
 					}
 				}
@@ -623,7 +623,7 @@
 				//beforeSend: validateData,
 				cache: false,
 				success: function(data){
-					if (data != null && data != 'success'){
+					if (data != null && data.resultCode != 'success'){
 						 showDialog(data);
 					}
 				}

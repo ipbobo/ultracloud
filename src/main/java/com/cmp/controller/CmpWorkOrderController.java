@@ -365,6 +365,7 @@ public class CmpWorkOrderController extends BaseController{
 		String resultInfo = "审核失败";
 		String appNo = request.getParameter("appNo");
 		String comment = request.getParameter("comment") == null? "":request.getParameter("comment");
+		String rejectFlag = request.getParameter("rejectFlag"); //0拒绝  1批准 
 		Session session = Jurisdiction.getSession();
 		
 		CmpWorkOrder toCheckWorkorder = cmpWorkOrderService.findByAppNo(appNo);
@@ -384,24 +385,38 @@ public class CmpWorkOrderController extends BaseController{
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
 		
-		
 		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 100);
 		for (Task task : userTaskList) {
 			if (task.getProcessInstanceId().equals(toCheckWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
 				//写入流程注释
 				activitiService.addComment(task.getId(), toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
-				activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, null);
-				
-				//更新工单(流程实例ID 和 工单状态)
-				Map<String, String> updateParams = new HashMap<String, String>();
-				updateParams.put("status", "2");  //进入运维执行状态
-				updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
-				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
-				
-				resultInfo = "审核成功";
-				map.put("result", resultInfo);	
-				return map;
+				Map<String, Object> variables = new HashMap<String, Object>();
+				if (rejectFlag != null && "1".equals(rejectFlag)) {
+					//拒绝流程
+					variables.put("USERNAME", userr.getUSERNAME());
+					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
+					
+					//更新工单(流程实例ID 和 工单状态)
+					Map<String, String> updateParams = new HashMap<String, String>();
+					updateParams.put("status", "3");  //审批不通过,退回
+					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
+					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+					resultInfo = "审核完成";
+					map.put("result", resultInfo);	
+					return map;
+				}else {
+					//同意流程
+					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, null);
+					//更新工单(流程实例ID 和 工单状态)
+					Map<String, String> updateParams = new HashMap<String, String>();
+					updateParams.put("status", "2");  //进入运维执行状态
+					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
+					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+					resultInfo = "审核完成";
+					map.put("result", resultInfo);	
+					return map;
+				}
 			}
 		}
 		map.put("result", resultInfo);				//返回结果
