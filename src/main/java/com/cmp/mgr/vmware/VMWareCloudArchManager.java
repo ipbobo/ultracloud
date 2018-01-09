@@ -8,8 +8,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -28,6 +30,7 @@ import com.cmp.entity.tcc.TccVmSnapshot;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
+import com.cmp.mgr.bean.CreateVolumeRequest;
 import com.vmware.vim25.AboutInfo;
 import com.vmware.vim25.Description;
 import com.vmware.vim25.DynamicProperty;
@@ -43,6 +46,7 @@ import com.vmware.vim25.VirtualDeviceConfigSpecFileOperation;
 import com.vmware.vim25.VirtualDeviceConfigSpecOperation;
 import com.vmware.vim25.VirtualDisk;
 import com.vmware.vim25.VirtualDiskFlatVer2BackingInfo;
+import com.vmware.vim25.VirtualDiskMode;
 import com.vmware.vim25.VirtualEthernetCard;
 import com.vmware.vim25.VirtualEthernetCardNetworkBackingInfo;
 import com.vmware.vim25.VirtualLsiLogicController;
@@ -51,6 +55,7 @@ import com.vmware.vim25.VirtualMachineConfigSpec;
 import com.vmware.vim25.VirtualMachineFileInfo;
 import com.vmware.vim25.VirtualMachineRelocateSpec;
 import com.vmware.vim25.VirtualPCNet32;
+import com.vmware.vim25.VirtualSCSIController;
 import com.vmware.vim25.VirtualSCSISharing;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
@@ -70,6 +75,7 @@ import com.vmware.vim25.mo.VirtualMachine;
 import com.vmware.vim25.mo.VirtualMachineSnapshot;
 import com.vmware.vim25.mo.util.MorUtil;
 import com.vmware.vim25.mo.util.PropertyCollectorUtil;
+import com.vmware.vim25.mox.VirtualMachineDeviceManager;
 
 @SuppressWarnings({ "unused" })
 public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
@@ -87,7 +93,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	public List<Datacenter> getDatacenters() {
 		return searchManagedEntities(Datacenter.class);
 	}
-	
+
 	@Override
 	public List<TccDatacenter> getDatacenter() {
 		return searchManagedEntities(Datacenter.class).stream()
@@ -512,83 +518,96 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	@Override
 	@SuppressWarnings("deprecation")
 	public void cloneVirtualMachine(CloneVmRequest req) {
+		String tplName = req.getTplName();
+		String dcName = req.getDcName();
+
 		try {
-			// VirtualMachine vm = searchManagedEntity(VirtualMachine.class, req.getTplName()).get();
-			// Datacenter dc = searchManagedEntity(Datacenter.class, req.getDcName()).get();
-			// ResourcePool rp = searchManagedEntity(ResourcePool.class, req.getRpName()).get();
-			// Datastore ds = searchManagedEntity(Datastore.class, "datastore2-raid5-2.5t").get();
-			// HostSystem hs = searchManagedEntity(HostSystem.class, "192.168.0.251").get();
-			//
-			// VirtualMachineRelocateSpec relocateSpec = new VirtualMachineRelocateSpec();
-			// relocateSpec.setDatastore(ds.getMOR());
-			// relocateSpec.setPool(rp.getMOR());
-			// relocateSpec.setHost(hs.getMOR());
-			//
-			// VirtualMachineCloneSpec cloneSpec = new VirtualMachineCloneSpec();
-			// cloneSpec.setLocation(relocateSpec);
-			// cloneSpec.setPowerOn(false);
-			// cloneSpec.setTemplate(false);
-			//
-			// vm.cloneVM_Task(dc.getVmFolder(), req.getVmName(), cloneSpec).waitForMe();
+			ClusterComputeResource cluster = searchManagedEntities(
+					ClusterComputeResource.class).stream().findFirst()
+							.orElseThrow(error("No cluster found"));
 
-			ClusterComputeResource cluster = searchManagedEntity(ClusterComputeResource.class, "")
-					.get();
-			Datacenter dc = searchManagedEntity(Datacenter.class, req.getDcName()).get();
-			VirtualMachine vm = searchManagedEntity(VirtualMachine.class, req.getTplName()).get();
+			Datacenter dc = searchManagedEntity(Datacenter.class, dcName)
+					.orElseThrow(error("Datacenter not found: " + dcName));
 
-			VirtualMachineCloneSpec cloneSpec = new VirtualMachineCloneSpec();
+			VirtualMachine vm = searchManagedEntity(VirtualMachine.class, tplName)
+					.orElseThrow(error("Template not found: " + tplName));
+
+			Datastore datastore = getDatastoreWithMaxFreeSpaceByVM(vm)
+					.orElseThrow(error("No datastore available"));
+
+			HostSystem hostSystemT = getHostWithLeastVMByClusterAndDataStore(cluster, datastore)
+					.orElseThrow(error("No host machine available"));
+
+			VirtualMachineConfigSpec configSpec = new VirtualMachineConfigSpec();
+			configSpec.setNumCPUs(req.getCpuSize());
+			configSpec.setMemoryMB(req.getRamSize());
+
 			VirtualMachineRelocateSpec relocateSpec = new VirtualMachineRelocateSpec();
 			relocateSpec.setPool(cluster.getResourcePool().getMOR());
-
-			Datastore datastoreT = null;
-			for (Datastore datasotre : vm.getDatastores()) {
-				if (null == datastoreT) {
-					datastoreT = datasotre;
-				} else {
-					if (datasotre.getSummary().accessible == true
-							&& "VMFS".equalsIgnoreCase(datasotre.getSummary().getType())) {
-						if (datasotre.getInfo().getFreeSpace() > datastoreT.getInfo()
-								.getFreeSpace()) {
-							datastoreT = datasotre;
-						}
-					}
-				}
-			}
-
-			double freeStore = Double.parseDouble(
-					Long.toString(datastoreT.getInfo().getFreeSpace())) / 1024 / 1024 / 1024;
-
-			relocateSpec.setDatastore(datastoreT.getMOR());
-
-			HostSystem hostSystemT = null;
-			for (HostSystem hostSystem : cluster.getHosts()) {
-				if (null == hostSystemT) {
-					for (Datastore store : hostSystem.getDatastores()) {
-						if (datastoreT.getMOR().getVal().equals(store.getMOR().getVal())) {
-							hostSystemT = hostSystem;
-						}
-					}
-				} else {
-					for (Datastore store : hostSystem.getDatastores()) {
-						if (datastoreT.getMOR().getVal().equals(store.getMOR().getVal())) {
-							if (hostSystem.getVms().length < hostSystemT.getVms().length) {
-								hostSystemT = hostSystem;
-							}
-						}
-					}
-				}
-			}
-
+			relocateSpec.setDatastore(datastore.getMOR());
 			relocateSpec.setHost(hostSystemT.getMOR());
 
+			VirtualMachineCloneSpec cloneSpec = new VirtualMachineCloneSpec();
+			cloneSpec.setConfig(configSpec);
 			cloneSpec.setLocation(relocateSpec);
 			cloneSpec.setPowerOn(true);
 			cloneSpec.setTemplate(false);
 
 			vm.cloneVM_Task(dc.getVmFolder(), req.getVmName(), cloneSpec).waitForMe();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException(e.getMessage(), e);
 		}
+	}
+
+	private Optional<Datastore> getDatastoreWithMaxFreeSpaceByVM(VirtualMachine vm) {
+		Datastore datastore = null;
+		try {
+			for (Datastore dt : vm.getDatastores()) {
+				if (null == datastore) {
+					datastore = dt;
+					continue;
+				}
+
+				if (dt.getSummary().accessible == true
+						&& "VMFS".equalsIgnoreCase(dt.getSummary().getType())
+						&& dt.getInfo().getFreeSpace() > datastore.getInfo().getFreeSpace()) {
+					datastore = dt;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return Optional.ofNullable(datastore);
+	}
+
+	private Optional<HostSystem> getHostWithLeastVMByClusterAndDataStore(
+			ClusterComputeResource cluster, Datastore datastore) {
+
+		HostSystem hostSystem = null;
+		try {
+			for (HostSystem hs : cluster.getHosts()) {
+				if (null == hostSystem) {
+					for (Datastore dt : hs.getDatastores()) {
+						if (datastore.getMOR().getVal().equals(dt.getMOR().getVal())) {
+							hostSystem = hs;
+						}
+					}
+					continue;
+				}
+
+				for (Datastore store : hs.getDatastores()) {
+					if (datastore.getMOR().getVal().equals(store.getMOR().getVal())
+							&& hs.getVms().length < hostSystem.getVms().length) {
+						hostSystem = hs;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return Optional.ofNullable(hostSystem);
 	}
 
 	@Override
@@ -638,6 +657,119 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public void createVolume(CreateVolumeRequest request) {
+		try {
+			ServiceInstance si = getServiceInstance();
+			VirtualMachine vm = null;
+			if (request.getVmUUID() != null) {
+				ManagedObjectReference mor = new ManagedObjectReference();
+				mor.setType(VirtualMachine.class.getSimpleName());
+				mor.setVal(request.getVmUUID());
+				vm = new VirtualMachine(si.getServerConnection(), mor);
+			} else if (request.getVmName() != null) {
+				vm = searchManagedEntity(VirtualMachine.class, request.getVmName())
+						.orElseThrow(error("VM not found"));
+			}
+
+			String vmName = vm.getName();
+			VirtualMachineDeviceManager vmDeviceMgr = new VirtualMachineDeviceManager(vm);
+
+			// Get all device
+			VirtualDevice[] devices = vmDeviceMgr.getAllVirtualDevices();
+			// first scsi controller
+			VirtualSCSIController scsiCtrl = null;
+			// scsi unit number is 16
+			int scsiCountUnit = 16;
+
+			// disk device
+			Map<String, VirtualDisk> diskMap = new HashMap<>();
+			// disk unit number list
+			Set<Integer> diskUnitSet = new HashSet<>();
+
+			Class<VirtualSCSIController> scsiClass = VirtualSCSIController.class;
+			for (VirtualDevice device : devices) {
+				if (scsiClass.isInstance(device)) {
+					scsiCtrl = (VirtualSCSIController) device;
+					break;
+				}
+			}
+
+			if (scsiCtrl == null) {
+				throw new Exception("Can't find scsi controller when add disk, vm name: " + vmName);
+			}
+
+			Class<VirtualDisk> diskClass = VirtualDisk.class;
+			for (VirtualDevice device : devices) {
+				if (device != null && device.controllerKey != null
+						&& scsiCtrl.key == (int) device.controllerKey
+						&& diskClass.isInstance(device)) {
+					VirtualDisk disk = (VirtualDisk) device;
+					diskMap.put(getDeviceKey(disk), disk);
+					diskUnitSet.add(disk.unitNumber);
+				}
+			}
+
+			// get first free scsi unit number
+			int firstFreeUnit = 0;
+			for (int i = 0; i < scsiCountUnit; i++) {
+				if (!diskUnitSet.contains(i)) {
+					firstFreeUnit = i;
+					break;
+				}
+			}
+
+			// new backing
+			VirtualDiskFlatVer2BackingInfo diskFileBacking = new VirtualDiskFlatVer2BackingInfo();
+			diskFileBacking.setFileName("");
+			diskFileBacking.setDiskMode(VirtualDiskMode.persistent.toString());
+			diskFileBacking.setThinProvisioned(false);
+
+			// new disk
+			VirtualDisk disk = new VirtualDisk();
+			disk.setControllerKey(scsiCtrl.key);
+			disk.setUnitNumber(firstFreeUnit);
+			disk.setBacking(diskFileBacking);
+			disk.setCapacityInKB(Long.valueOf(request.getSize()) * 1024 * 1024);
+			disk.setKey(-1);
+
+			// disk spec
+			VirtualDeviceConfigSpec diskSpec = new VirtualDeviceConfigSpec();
+			diskSpec.setOperation(VirtualDeviceConfigSpecOperation.add);
+			diskSpec.setFileOperation(VirtualDeviceConfigSpecFileOperation.create);
+			diskSpec.setDevice(disk);
+			VirtualDeviceConfigSpec vdiskSpec = diskSpec;
+			VirtualDeviceConfigSpec[] vdiskSpecArray = { vdiskSpec };
+
+			// vm spec
+			VirtualMachineConfigSpec vmConfigSpec = new VirtualMachineConfigSpec();
+			vmConfigSpec.setDeviceChange(vdiskSpecArray);
+			Task task = vm.reconfigVM_Task(vmConfigSpec);
+			if (Task.SUCCESS.equals(task.waitForTask())) {
+				devices = vmDeviceMgr.getAllVirtualDevices();
+				VirtualDisk addedDisk = null;
+				for (VirtualDevice device : devices) {
+					if (device.controllerKey != null
+							&& scsiCtrl.key == (int) device.controllerKey
+							&& device.unitNumber == firstFreeUnit) {
+						addedDisk = (VirtualDisk) device;
+					}
+				}
+				if (addedDisk == null) {
+					throw new Exception("New added disk not found, vm name: " + vmName);
+				}
+			} else {
+				throw new Exception("Add new disk failed, vm name: " + vm);
+			}
+
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
+	private static String getDeviceKey(VirtualDevice device) {
+		return device.controllerKey + " -- " + device.getUnitNumber();
 	}
 
 	private boolean isVirtualMachine(VirtualMachine vm) {

@@ -19,6 +19,7 @@ import com.cmp.entity.tcc.TccVmSnapshot;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
+import com.cmp.mgr.bean.CreateVolumeRequest;
 import com.cmp.mgr.libvirt.LibvirtConnect;
 import com.vmware.vim25.mo.Datacenter;
 
@@ -32,12 +33,12 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	public KvmCloudArchManager(TccCloudPlatform platform) {
 		setPlatform(platform);
 	}
-	
+
 	@Override
 	public List<Datacenter> getDatacenters() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public List<TccDatacenter> getDatacenter() {
 		return null;
@@ -199,6 +200,11 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	@Override
 	public void revertToSnapshot(String snapshotUUID, String hostMachineUUID) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void createVolume(CreateVolumeRequest request) {
+		// TODO Auto-generated method stub
 	}
 
 }
