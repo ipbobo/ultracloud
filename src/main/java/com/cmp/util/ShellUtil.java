@@ -49,7 +49,7 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
      * cmds :命令
      * 日志index :从0开始的日志记录，用于前台显示
      */
-    public String exec(String cmds, String logIndex) {  
+    public String exec(String cmds, String queryKey) {  
         InputStream in = null;  
         String result = "";  
         try {  
@@ -58,7 +58,7 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
                 session.execCommand(cmds);  
                   
                 in = session.getStdout();  
-                result = this.processStdoutBuffLine(in, this.charset, logIndex);  
+                result = this.processStdoutBuffLine(in, this.charset, queryKey);  
                 session.close();  
                 conn.close();  
             }  
@@ -83,19 +83,19 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
     }  
     
     
-    public String processStdoutBuffLine(InputStream in, String charset, String logIndex) throws IOException {  
+    public String processStdoutBuffLine(InputStream in, String charset, String queryKey) throws IOException {  
     	try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in)); 
 			while (true) { 
 			   String line = br.readLine();
-			   Map currentMsgMap = shellMsgMap.get(logIndex);
+			   Map currentMsgMap = shellMsgMap.get(queryKey);
 			   if (line == null) {
 			    break;
 			   }
 			   if (currentMsgMap == null) {
 				   Map<Integer, String> message = new HashMap<Integer, String>();
 				   message.put(1, line);
-				   shellMsgMap.put(logIndex, message);
+				   shellMsgMap.put(queryKey, message);
 			   }else {
 				   currentMsgMap.put(currentMsgMap.size() + 1, line);
 			   }
@@ -117,6 +117,15 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
 	
 	public static Map getShellMsgMap() {
 		return shellMsgMap;
+	}
+	
+	
+	public static void executeFinished(String queryKey) {
+		//所有安装完毕设置结束标志
+		Map currentMsgMap = (Map) getShellMsgMap().get(queryKey);
+		if (currentMsgMap != null) {
+			currentMsgMap.put(currentMsgMap.size() + 1,  "cmp:install finished");
+		}
 	}
 	
     

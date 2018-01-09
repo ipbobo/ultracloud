@@ -9,14 +9,13 @@ import javax.annotation.Resource;
 
 import org.activiti.engine.task.Task;
 import org.apache.shiro.session.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.activiti.service.ActivitiService;
+import com.cmp.entity.CmpResultInfo;
 import com.cmp.entity.DeployedSoft;
 import com.cmp.entity.Medium;
 import com.cmp.service.CmpDictService;
@@ -199,6 +198,8 @@ public class AppOperServiceController  extends BaseController {
 		String exp_time = pd.getString("exp_time");
 		String directory3 = pd.getString("directory3");
 		String vip_num = pd.getString("vip_num");
+		String rootpwd = pd.getString("rootpwd");
+		String exp_time_pwd = pd.getString("exp_time_pwd");
 		CmpOpServe opServe = new CmpOpServe();
 		if (serviceType.equals("1")) {
 			//虚拟机启停
@@ -286,8 +287,9 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setServiceType(serviceType);
 			opServe.setVm(vm);			//虚拟机列表  虚拟机1，虚拟机2
 			opServe.setDirectory(directory2);
-			opServe.setExpTime(exp_time);
+			opServe.setExpTime(exp_time_pwd);
 			opServe.setWorkflow("oper_workflow");
+			opServe.setRemark1(rootpwd);
 		}else if (serviceType.equals("8")) {
 			opServe.setAppmsg(appmsg);
 			opServe.setMiddleware("");
@@ -366,68 +368,165 @@ public class AppOperServiceController  extends BaseController {
 	 */
 	@RequestMapping(value="/doRebootSoft")
 	@ResponseBody
-	public String doRebootSoft(String appNo, String deploySoftId, String scriptId, String params) throws Exception{
+	public String doRebootSoft(String appNo, String rebootSoftIds, String scriptId, String params) throws Exception{
 		if (scriptId == null || scriptId.length() == 0) {
 			return null;
 		}
-		if (deploySoftId == null || deploySoftId.length() == 0) {
+		if (rebootSoftIds == null || rebootSoftIds.length() == 0) {
 			return null;
 		}
 		if (appNo == null || appNo.length() == 0) {
 			return null;
 		}
-		DeployedSoft deployedSoft = deployedSoftService.findById(deploySoftId);
-		if (deployedSoft == null || deployedSoft.getVirtualmachineId() == null) {
-			logger.error("doRebootSoft : 工单中的部署软件不存在");
-			return "工单中的部署软件不存在";
+		String[] rebootSoftIdList = rebootSoftIds.split(",");
+		if (rebootSoftIdList == null || rebootSoftIdList.length == 0) {
+			return null;
 		}
-		String vmId = deployedSoft.getVirtualmachineId();
-		
-		
-		PageData scriptPd = new PageData();
-		scriptPd.put("id", scriptId);
-		scriptPd = scriptService.findById(scriptPd);
-		String scriptUrl = scriptPd.getString("url");
-		String scriptName = scriptPd.getString("name");
-		String cmds = "." + scriptUrl + scriptName + " " + params;
-		int executeRet = 0;
-		if ((executeRet = executeShell(vmId, cmds, appNo)) != 0) {
-			logger.error("doRebootSoft : 中间件重启失败--" + executeRet);
-			return "中间件重启失败";
+		initExecuteShell(appNo);
+		for (String rebootSoftId : rebootSoftIdList) {
+			if (rebootSoftId == null || "".equals(rebootSoftId)) {
+				continue;
+			}
+			DeployedSoft deployedSoft = deployedSoftService.findById(rebootSoftId);
+			if (deployedSoft == null || deployedSoft.getVirtualmachineId() == null) {
+				logger.error("doRebootSoft : 工单中的部署软件不存在");
+				return "工单中的部署软件不存在";
+			}
+			String vmId = deployedSoft.getVirtualmachineId();
+			PageData scriptPd = new PageData();
+			scriptPd.put("id", scriptId);
+			scriptPd = scriptService.findById(scriptPd);
+			String scriptUrl = scriptPd.getString("url");
+			String scriptName = scriptPd.getString("name");
+			String cmds = "." + scriptUrl + scriptName + " " + params;
+			
+			int executeRet = 0;
+			if ((executeRet = executeShell(vmId, cmds, appNo)) != 0) {
+				logger.error("doRebootSoft : 中间件重启失败--" + executeRet);
+				return "中间件重启失败";
+			}
 		}
+		endExecuteShell(appNo);
+		return "success";
+	}
+	
+	/**
+	 * 执行绑定磁盘
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/doMountDisk")
+	@ResponseBody
+	public Object doMountDisk(String appNo, String netname, String manager_status, String bind_router) throws Exception{
+		CmpResultInfo resultInfo = new CmpResultInfo();
+		resultInfo.setResultCode(CmpResultInfo.ERROR);
+		if (appNo == null || appNo.length() == 0) {
+			resultInfo.setResultMsg("appNo 为空");
+			return resultInfo;
+		}
+		if (netname == null || netname.length() == 0) {
+			resultInfo.setResultMsg("netname 为空");
+			return resultInfo;
+		}
+		CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo(appNo);
+		if (workorder == null) {
+			logger.error("doMountDisk : 工单不存在");
+			resultInfo.setResultMsg("工单不存在");
+			return resultInfo;
+		}
+		initExecuteShell(appNo);
+		//执行磁盘挂载
+		endExecuteShell(appNo);
+		resultInfo.setResultMsg("执行成功");
+		resultInfo.setResultCode(CmpResultInfo.SUCCESS);
+		return resultInfo;
+	}
+	
+	
+	
+	/**
+	 * 执行软件安装脚本
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/doInstallSoft")
+	@ResponseBody
+	public String doInstallSoft(String appNo, String installSoftIds, String scriptId, String params) throws Exception{
+		if (scriptId == null || scriptId.length() == 0) {
+			return null;
+		}
+		if (installSoftIds == null || installSoftIds.length() == 0) {
+			return null;
+		}
+		if (appNo == null || appNo.length() == 0) {
+			return null;
+		}
+		String[] installSoftIdList = installSoftIds.split(",");
+		if (installSoftIdList == null || installSoftIdList.length == 0) {
+			return null;
+		}
+		initExecuteShell(appNo);
+		for (String installSoftId : installSoftIdList) {
+			if (installSoftId == null || "".equals(installSoftId)) {
+				continue;
+			}
+			DeployedSoft deployedSoft = deployedSoftService.findById(installSoftId);
+			if (deployedSoft == null || deployedSoft.getVirtualmachineId() == null) {
+				logger.error("doRebootSoft : 工单中的部署软件不存在");
+				return "工单中的部署软件不存在";
+			}
+			String vmId = deployedSoft.getVirtualmachineId();
+			
+			
+			PageData scriptPd = new PageData();
+			scriptPd.put("id", scriptId);
+			scriptPd = scriptService.findById(scriptPd);
+			String scriptUrl = scriptPd.getString("url");
+			String scriptName = scriptPd.getString("name");
+			String cmds = "." + scriptUrl + scriptName + " " + params;
+			initExecuteShell(appNo);
+			int executeRet = 0;
+			if ((executeRet = executeShell(vmId, cmds, appNo)) != 0) {
+				logger.error("doInstallSoft : 软件安装失败--" + executeRet);
+				return "软件安装失败";
+			}
+		}
+		endExecuteShell(appNo);
 		return "success";
 	}
 	
 	
 	public int  executeShell(String vmId, String cmds, String appNo) throws Exception {
-		
 		VirtualMachine vm = virtualMachineService.findById(vmId);
 		if (vm == null) {
 			logger.debug("doRebootSoft:虚拟机不存在");
 			return -1;
 		}
-		
 		String userName = vm.getUsername();
 		String passwd = vm.getPassword();
 		String ip = vm.getIp();
-		
 		//***************执行脚本
-		//变更工单状态
+		ShellUtil shellUtil = new ShellUtil(ip, ShellUtil.DEF_PORT, userName,  
+				passwd, ShellUtil.DEF_CHARSET);
+		shellUtil.exec(cmds,  appNo);
+		return 0;
+	}
+	
+	
+	public void initExecuteShell(String appNo) throws Exception {
 		Map<String , String> exeParams = new HashMap<String , String>();
 		exeParams.put("executeStatus", "1");
 		cmpWorkOrderService.updateExecuteStatus(appNo, exeParams);
-		ShellUtil shellUtil = new ShellUtil(ip, ShellUtil.DEF_PORT, userName,  
-				passwd, ShellUtil.DEF_CHARSET);
-		shellUtil.exec("." + cmds, "0");
-		
-		//所有安装完毕设置结束标志
-		Map currentMsgMap = (Map) ShellUtil.getShellMsgMap().get(appNo);
-		if (currentMsgMap != null) {
-			currentMsgMap.put(currentMsgMap.size() + 1,  "cmp:install finished");
-		}
+	}
+	
+	
+	public void endExecuteShell(String appNo) throws Exception {
+		Map<String , String> exeParams = new HashMap<String , String>();
 		exeParams.put("executeStatus", "2");
 		cmpWorkOrderService.updateExecuteStatus(appNo, exeParams);
-		return 0;
+		ShellUtil.executeFinished(appNo);
 	}
 	
 }

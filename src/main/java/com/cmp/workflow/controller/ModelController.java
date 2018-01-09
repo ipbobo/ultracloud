@@ -3,6 +3,7 @@ package com.cmp.workflow.controller;
 import java.io.ByteArrayInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.util.DateUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -78,11 +80,11 @@ public class ModelController extends BaseController {
 		for(Model model : list) {
 			PageData pageDeta = new PageData();
 			pageDeta.put("category", model.getCategory());
-			pageDeta.put("ceateTime", model.getCreateTime());
+			pageDeta.put("ceateTime", DateUtil.dateToString(model.getCreateTime(), DateUtil.DEFAULT_FORMAT));
 			pageDeta.put("deploymentId", model.getDeploymentId());
 			pageDeta.put("id", model.getId());
 			pageDeta.put("key", model.getKey());
-			pageDeta.put("lastUpdateTime", model.getLastUpdateTime());
+			pageDeta.put("lastUpdateTime", DateUtil.dateToString(model.getLastUpdateTime(), DateUtil.DEFAULT_FORMAT));
 			pageDeta.put("metaInfo", model.getMetaInfo());
 			pageDeta.put("name", model.getName());
 			pageDeta.put("tenantId", model.getTenantId());

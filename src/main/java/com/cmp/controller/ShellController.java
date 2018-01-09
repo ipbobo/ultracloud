@@ -33,4 +33,5 @@ public class ShellController extends BaseController{
 		resultMap.put("length", currentShellMsg == null ? "0" : currentShellMsg.size());	
 		return resultMap;
 	}
+	
 }

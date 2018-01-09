@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
  <c:if test="${not empty rebootSoft}">
 				<table id="simple-table"
 								class="table table-striped table-bordered table-hover"
@@ -28,16 +29,18 @@
 														<td class='center'>${var.virtualmachineName}</td>
 														<td class='center'>${var.softName}</td>
 														<c:if test="${userRole != null && userRole == 'execute'}">
-														<td class='center'>
-															<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
-															<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
-																onclick="showRebootSoft('${var.id}');">操作</button>
-															<button id="executeStatus_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
-																>部署中...</button>
-															<button id="executeStatus_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
-																>部署完毕</button>
-															<button id="executeStatus_3"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
-																>部署异常</button>
+														<td class='center' rowspan='${fn:length(rebootSoft) }'>
+															<c:if test="${vs.index == 0}">
+																<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
+																<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
+																	onclick="showRebootSoft('${rebootSoftIds}');">执行</button>
+																<button id="executeStatus_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>执行中...</button>
+																<button id="executeStatus_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>执行完毕</button>
+																<button id="executeStatus_3"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>执行异常</button>
+															</c:if>
 														</td>
 														</c:if>
 													</tr>
@@ -75,7 +78,19 @@
 														<td class='center'>${var.virtualmachineName}</td>
 														<td class='center'>${var.softName}</td>
 														<c:if test="${userRole != null && userRole == 'execute'}">
-															<td class='center'><input type="button" value="操作"></td>
+															<td class='center' rowspan='${fn:length(installSoftList) }'>
+															<c:if test="${vs.index == 0}">
+																<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
+																<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
+																	onclick="showInstallSoft('${installSoftIds}');">部署</button>
+																<button id="executeStatus_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>部署中...</button>
+																<button id="executeStatus_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>部署完毕</button>
+																<button id="executeStatus_3"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>部署异常</button>
+															</c:if>
+														</td>
 														</c:if>
 													</tr>
 													</c:forEach>
@@ -201,6 +216,9 @@
 										<th class="center">操作类型</th>
 										<th class="center">虚拟机</th>
 										<th class="center">指定目录</th>
+										<c:if test="${userRole != null && userRole == 'execute'}">
+											<th class="center">操作</th>
+										</c:if>
 									</tr>
 								</thead>
 
@@ -213,6 +231,21 @@
 														<td class='center'>${opServe.operTypeName}</td>
 														<td class='center'>${var.name}</td>
 														<td class='center'>${opServe.directory}</td>
+														<c:if test="${userRole != null && userRole == 'execute'}">
+															<td class='center' rowspan='${fn:length(installSoftList) }'>
+															<c:if test="${vs.index == 0}">
+																<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
+																<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
+																	onclick="showMountDisk();">部署</button>
+																<button id="executeStatus_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>部署中...</button>
+																<button id="executeStatus_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>部署完毕</button>
+																<button id="executeStatus_3"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+																	>部署异常</button>
+															</c:if>
+														</td>
+														</c:if>
 													</tr>
 													</c:forEach>
 												</c:when>
@@ -232,6 +265,7 @@
 										<th class="center">虚拟机</th>
 										<th class="center">指定目录</th>
 										<th class="center">使用期限</th>
+										<th class="center">ROOT密码</th>
 									</tr>
 								</thead>
 
@@ -245,6 +279,7 @@
 														<td class='center'>${var.name}</td>
 														<td class='center'>${opServe.directory}</td>
 														<td class='center'>${opServe.expTime}</td>
+														<td class='center'>${opServe.remark1}</td>
 													</tr>
 													</c:forEach>
 												</c:when>

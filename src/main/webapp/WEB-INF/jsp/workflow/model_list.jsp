@@ -58,7 +58,7 @@
 									<th class="center">ID</th>
 									<th class="center">名称</th>
 									<th class="center">KEY</th>
-									<th class="center">Version</th>
+									<th class="center">版本号</th>
 									<th class="center">创建时间</th>
 									<th class="center">更新时间</th>
 									<th class="center">描述</th>
@@ -82,7 +82,7 @@
 											<td class="center">${var.version}</td>
 											<td class='center'>${var.ceateTime}</td>
 											<td class='center'>${var.lastUpdateTime}</td>
-											<td class='center'>${var.metaInfo}</td>
+											<td class='center' style="width:350px;">${var.metaInfo}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
