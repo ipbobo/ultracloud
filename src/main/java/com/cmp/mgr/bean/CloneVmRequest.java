@@ -10,6 +10,10 @@ public class CloneVmRequest {
 
 	private String rpName;
 
+	private int cpuSize;
+
+	private long ramSize;
+
 	public String getDcName() {
 		return dcName;
 	}
@@ -40,6 +44,22 @@ public class CloneVmRequest {
 
 	public void setRpName(String rpName) {
 		this.rpName = rpName;
+	}
+
+	public int getCpuSize() {
+		return cpuSize;
+	}
+
+	public void setCpuSize(int cpuSize) {
+		this.cpuSize = cpuSize;
+	}
+
+	public long getRamSize() {
+		return ramSize;
+	}
+
+	public void setRamSize(long ramSize) {
+		this.ramSize = ramSize;
 	}
 
 }

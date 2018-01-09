@@ -1,6 +1,7 @@
 package com.cmp.mgr;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.cmp.entity.tcc.TccCluster;
 import com.cmp.entity.tcc.TccDatacenter;
@@ -12,12 +13,17 @@ import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.entity.tcc.TccVmSnapshot;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
+import com.cmp.mgr.bean.CreateVolumeRequest;
 import com.vmware.vim25.mo.Datacenter;
 
 public interface CloudArchManager {
 
+	default Supplier<RuntimeException> error(String msg) {
+		return () -> new RuntimeException(msg);
+	}
+
 	public List<Datacenter> getDatacenters();
-	
+
 	public List<TccDatacenter> getDatacenter();
 
 	public List<TccCluster> getClusters();
@@ -35,7 +41,7 @@ public interface CloudArchManager {
 	public List<TccVirtualMachine> getVmTemplates();
 
 	public List<TccVmSnapshot> getVmSnapshots();
-	
+
 	public void createVirtualMachine(CreateVmRequest request);
 
 	public void startVirtualMachine(String name);
@@ -55,5 +61,7 @@ public interface CloudArchManager {
 	public void deleteSnapshot(String snapshotUUID);
 
 	public void revertToSnapshot(String snapshotUUID, String hostMachineUUID);
+
+	public void createVolume(CreateVolumeRequest request);
 
 }

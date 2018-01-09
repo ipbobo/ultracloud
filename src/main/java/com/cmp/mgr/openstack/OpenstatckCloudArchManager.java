@@ -13,50 +13,44 @@ import com.cmp.entity.tcc.TccVmSnapshot;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
+import com.cmp.mgr.bean.CreateVolumeRequest;
 import com.vmware.vim25.mo.Datacenter;
 
 public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public List<Datacenter> getDatacenters() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public List<TccDatacenter> getDatacenter() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public List<TccCluster> getClusters() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public List<TccResourcePool> getResourcePools() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public List<TccHostMachine> getHostMachines() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public List<TccVirtualMachine> getVirtualMachines() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<TccDatastore> getDatastores() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -76,7 +70,7 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public void createVirtualMachine(CreateVmRequest request) {
 		// TODO Auto-generated method stub
@@ -124,6 +118,11 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public void revertToSnapshot(String snapshotUUID, String hostMachineUUID) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void createVolume(CreateVolumeRequest request) {
 		// TODO Auto-generated method stub
 	}
 
