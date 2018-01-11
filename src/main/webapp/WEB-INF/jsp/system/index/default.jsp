@@ -48,39 +48,51 @@ timeTicket = setInterval(function (){
 		</div>
 		<table style="width: 100%;" border=1>
 			<tr>
-				<td align="left" valign="top"><div align="center" style="width: 50px;border:1px solid #000000;"><h4>虚拟</h4></div></td>
-				<td id="virCpuChart" align="center" width="200px" height="200px"></td>
-				<td id="virMemChart" align="center" width="200px" height="200px"></td>
-				<td id="virStoreChart" align="center" width="200px" height="200px"></td>
-				<td align="left" valign="top"><div align="center" style="width: 50px;border:1px solid #000000;"><h4>物理</h4></div></td>
-				<td style="padding:10px;" align="center" width="200px" height="200px">
+				<td align="left" valign="top" colspan="3"><div align="center" style="width: 40px;border:1px solid #000000;"><h5>虚拟</h5></div></td>
+				<td align="left" valign="top" colspan="3"><div align="center" style="width: 40px;border:1px solid #000000;"><h5>物理</h5></div></td>
+			</tr>
+			<tr>
+				<td id="virCpuChart" align="center" width="16%" height="150px"></td>
+				<td id="virMemChart" align="center" width="16%" height="150px"></td>
+				<td id="virStoreChart" align="center" width="16%" height="150px"></td>
+				<td style="padding:10px;" align="center" width="16%" height="150px">
 					<div class="chart-progress">
-						<div class="chart-progress-bar chart-progress-bar-info" role="progressbar" aria-valuenow="${physCmpRes.cpuUseNum}" aria-valuemin="0" aria-valuemax="${physCmpRes.cpuTotalNum}" style="width: ${(physCmpRes.cpuUseNum/physCmpRes.cpuTotalNum)*100}%;">${physCmpRes.cpuUseNum}/${physCmpRes.cpuTotalNum}&nbsp;核</div>
+						<div class="chart-progress-bar chart-progress-bar-info" role="progressbar" aria-valuenow="${phys.cpuUseNum}" aria-valuemin="0" aria-valuemax="${phys.cpuTotalNum}" style="width: ${(phys.cpuUseNum/phys.cpuTotalNum)*100}%;">${phys.cpuUseNum}/${phys.cpuTotalNum}&nbsp;核</div>
 					</div>
 					<h5>CPU</h5>
 				</td>
-				<td style="padding:10px;" align="center" width="200px" height="200px">
+				<td style="padding:10px;" align="center" width="16%" height="150px">
 					<div class="chart-progress">
-						<div class="chart-progress-bar chart-progress-bar-info" role="progressbar" aria-valuenow="${physCmpRes.memUseNum}" aria-valuemin="0" aria-valuemax="${physCmpRes.memTotalNum}" style="width: ${(physCmpRes.memUseNum/physCmpRes.memTotalNum)*100}%;">${physCmpRes.memUseNum}/${physCmpRes.memTotalNum}&nbsp;G</div>
+						<div class="chart-progress-bar chart-progress-bar-info" role="progressbar" aria-valuenow="${phys.memUseNum}" aria-valuemin="0" aria-valuemax="${phys.memTotalNum}" style="width: ${(phys.memUseNum/phys.memTotalNum)*100}%;">${phys.memUseNum}/${phys.memTotalNum}&nbsp;G</div>
 					</div>
 					<h5>内存</h5>
 				</td>
-				<td style="padding:10px;" align="center" width="200px" height="200px">
+				<td style="padding:10px;" align="center" width="16%" height="150px">
 					<div class="chart-progress">
-						<div class="chart-progress-bar chart-progress-bar-info" role="progressbar" aria-valuenow="${physCmpRes.storeUseNum}" aria-valuemin="0" aria-valuemax="${physCmpRes.storeTotalNum}" style="width: ${(physCmpRes.storeUseNum/physCmpRes.storeTotalNum)*100}%;">${physCmpRes.storeUseNum}/${physCmpRes.storeTotalNum}&nbsp;G</div>
+						<div class="chart-progress-bar chart-progress-bar-info" role="progressbar" aria-valuenow="${phys.storeUseNum}" aria-valuemin="0" aria-valuemax="${phys.storeTotalNum}" style="width: ${(phys.storeUseNum/phys.storeTotalNum)*100}%;">${phys.storeUseNum}/${phys.storeTotalNum}&nbsp;G</div>
 					</div>
 					<h5>磁盘</h5>
 				</td>
 			</tr>
 			<tr>
-				<td align="left" valign="top" colspan="4"><div align="left" style="width: 100px;border:1px solid #000000;"><h4>负载情况</h4></div></td>
-				<td align="left" valign="top" colspan="4"><div align="left" style="width: 100px;border:1px solid #000000;"><h4>运行情况</h4></div></td>
+				<td align="left" valign="top" colspan="3"><div align="center" style="width: 80px;border:1px solid #000000;"><h5>负载情况</h5></div></td>
+				<td align="left" valign="top" colspan="3"><div align="center" style="width: 80px;border:1px solid #000000;"><h5>运行情况</h5></div></td>
 			</tr>
 			<tr>
-				<td></td>
-				<td id="fzqkVirChart" align="center" width="200px" height="200px">虚拟机</td>
-				<td id="fzqkHostChart" align="center" width="200px" height="200px"></td>
-				<td id="fzqkPhysChart" align="center" width="200px" height="200px"></td>
+				<td id="virLoadChart" align="center" height="180px"></td>
+				<td id="hostLoadChart" align="center"></td>
+				<td id="physLoadChart" align="center"></td>
+				<td id="virRunChart" align="center"></td>
+				<td id="hostRunChart" align="center"></td>
+				<td id="physRunChart" align="center"></td>
+			</tr>
+			<tr>
+				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">虚拟机</div></td>
+				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">宿主机</div></td>
+				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">物理机</div></td>
+				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">虚拟机</div></td>
+				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">宿主机</div></td>
+				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">物理机</div></td>
 			</tr>
 		</table>
 	</div>
@@ -89,12 +101,15 @@ timeTicket = setInterval(function (){
 <%@ include file="foot.jsp"%>
 <script type="text/javascript">
 $(top.hangge());//关闭加载状态
-getGaugeChart('virCpuChart', ['', 'CPU(${virCmpRes.cpuUseNum}/${virCmpRes.cpuTotalNum})'], '${(virCmpRes.cpuUseNum/virCmpRes.cpuTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getGaugeChart('virMemChart', ['', '内存(${virCmpRes.memUseNum}/${virCmpRes.memTotalNum})'], '${(virCmpRes.memUseNum/virCmpRes.memTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getGaugeChart('virStoreChart', ['', '磁盘(${virCmpRes.storeUseNum}/${virCmpRes.storeTotalNum})'], '${(virCmpRes.storeUseNum/virCmpRes.storeTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getPieChart('fzqkVirChart', ['CPU容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuAppNum}', '${cmpRes.cpuUseNum}', '${cmpRes.cpuRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "核");//获取图表
-getPieChart('fzqkHostChart', ['CPU容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuAppNum}', '${cmpRes.cpuUseNum}', '${cmpRes.cpuRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "核");//获取图表
-getPieChart('fzqkPhysChart', ['CPU容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuAppNum}', '${cmpRes.cpuUseNum}', '${cmpRes.cpuRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "核");//获取图表
+getGaugeChart('virCpuChart', ['', 'CPU(${vir.cpuUseNum}/${vir.cpuTotalNum})'], '${(vir.cpuUseNum/vir.cpuTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getGaugeChart('virMemChart', ['', '内存(${vir.memUseNum}/${vir.memTotalNum})'], '${(vir.memUseNum/vir.memTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getGaugeChart('virStoreChart', ['', '磁盘(${vir.storeUseNum}/${vir.storeTotalNum})'], '${(vir.storeUseNum/vir.storeTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getAnnularChart('virLoadChart', ['${virLoad.loadTotalNum}台\n虚拟机','虚拟机'], ['vertical', 'right', 'top'], ['30%', '50%'], ['50%', '75%'], ['${virLoad.loadLittleNum}台轻度负载','${virLoad.loadMiddleNum}台中度负载','${virLoad.loadHeightNum}台高度负载','${virLoad.loadStopNum}台停机'], ['${virLoad.loadLittleNum}', '${virLoad.loadMiddleNum}', '${virLoad.loadHeightNum}', '${virLoad.loadStopNum}'], ['#00ff00', '#ffff00', '#ff0000','#000000'], "%");//获取图表
+getAnnularChart('hostLoadChart', ['${hostLoad.loadTotalNum}台\n宿主机','宿主机'], ['vertical', 'right', 'top'], ['30%', '50%'], ['50%', '75%'], ['${hostLoad.loadLittleNum}台轻度负载','${hostLoad.loadMiddleNum}台中度负载','${hostLoad.loadHeightNum}台高度负载','${hostLoad.loadStopNum}台停机'], ['${hostLoad.loadLittleNum}', '${hostLoad.loadMiddleNum}', '${hostLoad.loadHeightNum}', '${hostLoad.loadStopNum}'], ['#00ff00', '#ffff00', '#ff0000','#000000'], "%");//获取图表
+getAnnularChart('physLoadChart', ['${physLoad.loadTotalNum}台\n物理机','物理机'], ['vertical', 'right', 'top'], ['30%', '50%'], ['50%', '75%'], ['${physLoad.loadLittleNum}台轻度负载','${physLoad.loadMiddleNum}台中度负载','${physLoad.loadHeightNum}台高度负载','${physLoad.loadStopNum}台停机'], ['${physLoad.loadLittleNum}', '${physLoad.loadMiddleNum}', '${physLoad.loadHeightNum}', '${physLoad.loadStopNum}'], ['#00ff00', '#ffff00', '#ff0000','#000000'], "%");//获取图表
+getAnnularChart('virRunChart', ['','虚拟机'], ['horizontal', 'center', 'bottom'], ['30%', '50%'], ['50%', '50%'], ['运行','挂起','关机'], ['${virRun.runRunnigNum}', '${virRun.runHangupNum}', '${virRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
+getAnnularChart('hostRunChart', ['','宿主机'], ['horizontal', 'center', 'bottom'], ['30%', '50%'], ['50%', '50%'], ['运行','挂起','关机'], ['${hostRun.runRunnigNum}', '${hostRun.runHangupNum}', '${hostRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
+getAnnularChart('physRunChart', ['','物理机'], ['horizontal', 'center', 'bottom'], ['30%', '50%'], ['50%', '50%'], ['运行','挂起','关机'], ['${physRun.runRunnigNum}', '${physRun.runHangupNum}', '${physRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
 </script>
 </body>
 </html>
