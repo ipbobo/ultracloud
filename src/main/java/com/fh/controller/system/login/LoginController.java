@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.service.CmpDictService;
 import com.cmp.service.DashboardService;
 import com.cmp.service.SysConfigService;
 import com.cmp.sid.SysConfigInfo;
@@ -69,6 +70,8 @@ public class LoginController extends BaseController {
 	private SysConfigService sysConfigService;
 	@Resource
 	private DashboardService dashboardService;
+	@Resource
+	private CmpDictService cmpDictService;
 	
 	//仪表盘
 	@RequestMapping(value="/login_default")
@@ -78,6 +81,8 @@ public class LoginController extends BaseController {
 		pd.put("userCount", Integer.parseInt(userService.getUserCount("").get("userCount").toString())-1);				//系统用户数
 		pd.put("appUserCount", Integer.parseInt(appuserService.getAppUserCount("").get("appUserCount").toString()));	//会员数
 		mv.addObject("pd",pd);
+		mv.addObject("timeTypeList", cmpDictService.getCmpDictList("dashboard_time_type"));//仪表盘时间类型列表
+		mv.addObject("resTypeList", cmpDictService.getCmpDictList("dashboard_res_type"));//仪表盘资源类型列表
 		mv.addObject("virNum", dashboardService.getVirNum());//虚机总量
 		mv.addObject("hostNum", dashboardService.getHostNum());//宿主机总量
 		mv.addObject("physNum", dashboardService.getPhysNum());//物理机总量
@@ -92,6 +97,9 @@ public class LoginController extends BaseController {
 		mv.addObject("virRun", dashboardService.getVirRun());//虚拟机运行
 		mv.addObject("hostRun", dashboardService.getHostRun());//宿主机运行
 		mv.addObject("physRun", dashboardService.getPhysRun());//物理机运行
+		mv.addObject("cpuResRate", dashboardService.getCpuResRate());//CPU资源使用量趋势
+		mv.addObject("memResRate", dashboardService.getMemResRate());//存储资源使用量趋势
+		mv.addObject("storeResRate", dashboardService.getStoreResRate());//磁盘资源使用量趋势
 		mv.setViewName("system/index/default");
 		return mv;
 	}

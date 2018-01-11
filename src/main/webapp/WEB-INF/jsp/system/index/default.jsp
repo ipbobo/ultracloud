@@ -51,23 +51,23 @@ timeTicket = setInterval(function (){
 				<td align="left" valign="top" colspan="3"><div align="center" style="width: 40px;border:1px solid #000000;"><h5>虚拟</h5></div></td>
 				<td align="left" valign="top" colspan="3"><div align="center" style="width: 40px;border:1px solid #000000;"><h5>物理</h5></div></td>
 			</tr>
-			<tr>
-				<td id="virCpuChart" align="center" width="16%" height="150px"></td>
-				<td id="virMemChart" align="center" width="16%" height="150px"></td>
-				<td id="virStoreChart" align="center" width="16%" height="150px"></td>
-				<td style="padding:10px;" align="center" width="16%" height="150px">
+			<tr height="150px">
+				<td id="virCpuChart" align="center" width="16%"></td>
+				<td id="virMemChart" align="center" width="16%"></td>
+				<td id="virStoreChart" align="center" width="16%"></td>
+				<td style="padding:10px;" align="center" width="16%">
 					<div class="chart-progress">
 						<div class="chart-progress-bar chart-progress-bar-info" role="progressbar" aria-valuenow="${phys.cpuUseNum}" aria-valuemin="0" aria-valuemax="${phys.cpuTotalNum}" style="width: ${(phys.cpuUseNum/phys.cpuTotalNum)*100}%;">${phys.cpuUseNum}/${phys.cpuTotalNum}&nbsp;核</div>
 					</div>
 					<h5>CPU</h5>
 				</td>
-				<td style="padding:10px;" align="center" width="16%" height="150px">
+				<td style="padding:10px;" align="center" width="16%">
 					<div class="chart-progress">
 						<div class="chart-progress-bar chart-progress-bar-info" role="progressbar" aria-valuenow="${phys.memUseNum}" aria-valuemin="0" aria-valuemax="${phys.memTotalNum}" style="width: ${(phys.memUseNum/phys.memTotalNum)*100}%;">${phys.memUseNum}/${phys.memTotalNum}&nbsp;G</div>
 					</div>
 					<h5>内存</h5>
 				</td>
-				<td style="padding:10px;" align="center" width="16%" height="150px">
+				<td style="padding:10px;" align="center" width="16%">
 					<div class="chart-progress">
 						<div class="chart-progress-bar chart-progress-bar-info" role="progressbar" aria-valuenow="${phys.storeUseNum}" aria-valuemin="0" aria-valuemax="${phys.storeTotalNum}" style="width: ${(phys.storeUseNum/phys.storeTotalNum)*100}%;">${phys.storeUseNum}/${phys.storeTotalNum}&nbsp;G</div>
 					</div>
@@ -78,8 +78,8 @@ timeTicket = setInterval(function (){
 				<td align="left" valign="top" colspan="3"><div align="center" style="width: 80px;border:1px solid #000000;"><h5>负载情况</h5></div></td>
 				<td align="left" valign="top" colspan="3"><div align="center" style="width: 80px;border:1px solid #000000;"><h5>运行情况</h5></div></td>
 			</tr>
-			<tr>
-				<td id="virLoadChart" align="center" height="180px"></td>
+			<tr height="180px">
+				<td id="virLoadChart" align="center"></td>
 				<td id="hostLoadChart" align="center"></td>
 				<td id="physLoadChart" align="center"></td>
 				<td id="virRunChart" align="center"></td>
@@ -87,12 +87,62 @@ timeTicket = setInterval(function (){
 				<td id="physRunChart" align="center"></td>
 			</tr>
 			<tr>
-				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">虚拟机</div></td>
-				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">宿主机</div></td>
-				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">物理机</div></td>
-				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">虚拟机</div></td>
-				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">宿主机</div></td>
-				<td align="center"><div align="center" style="width: 50px;border:1px solid #000000;">物理机</div></td>
+				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">虚拟机</div></td>
+				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">宿主机</div></td>
+				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">物理机</div></td>
+				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">虚拟机</div></td>
+				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">宿主机</div></td>
+				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">物理机</div></td>
+			</tr>
+			<tr>
+				<td align="left" valign="top" colspan="3"><div align="center" style="width: 120px;border:1px solid #000000;"><h5>资源使用量趋势</h5></div></td>
+				<td align="left" valign="top" colspan="3"><div align="center" style="width: 140px;border:1px solid #000000;"><h5>TOP5资源使用排行</h5></div></td>
+			</tr>
+			<tr>
+				<td align="right">
+					<select style="width: 100px;" class="chosen-select form-control" name="cpuTimeType" id="cpuTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="timeTypeFunc('cpuTimeType')">
+					<c:forEach items="${timeTypeList}" var="var">
+						<option value="${var.dictCode}" <c:if test="${cpuTimeType==var.dictCode || (cpuTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
+					</c:forEach>
+				  	</select>
+				</td>
+				<td align="right">
+					<select style="width: 100px;" class="chosen-select form-control" name="memTimeType" id="memTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="timeTypeFunc('memTimeType')">
+					<c:forEach items="${timeTypeList}" var="var">
+						<option value="${var.dictCode}" <c:if test="${memTimeType==var.dictCode || (memTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
+					</c:forEach>
+				  	</select>
+				</td>
+				<td align="right">
+					<select style="width: 100px;" class="chosen-select form-control" name="storeTimeType" id="storeTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="timeTypeFunc('storeTimeType')">
+					<c:forEach items="${timeTypeList}" var="var">
+						<option value="${var.dictCode}" <c:if test="${storeTimeType==var.dictCode || (storeTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
+					</c:forEach>
+				  	</select>
+				</td>
+				<td align="right" colspan="3">
+					<select style="width: 100px;" class="chosen-select form-control" name="resType" id="resType" data-placeholder="请选择资源类型" style="vertical-align:top;width: 100%;" onchange="resTypeFunc()">
+					<c:forEach items="${resTypeList}" var="var">
+						<option value="${var.dictCode}" <c:if test="${resType==var.dictCode || (resType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
+					</c:forEach>
+				  	</select>
+				</td>
+			</tr>
+			<tr height="180px">
+				<td id="cpuChart" align="center">
+					<div class="col-xs-12">
+						<div id="cpuChart" style="width: 100px;height:150px;" class="col-xs-4 col-sm-4"></div>
+					</div>
+				</td>
+				<td id="memChart" align="center"></td>
+				<td id="storeChart" align="center"></td>
+				<td id="virRunChart" align="center" colspan="3">
+			</tr>
+			<tr>
+				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">CPU</div></td>
+				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">内存</div></td>
+				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">磁盘</div></td>
+				<td align="center" style="padding: 10px;" colspan="3"></td>
 			</tr>
 		</table>
 	</div>
@@ -110,6 +160,9 @@ getAnnularChart('physLoadChart', ['${physLoad.loadTotalNum}台\n物理机','物�
 getAnnularChart('virRunChart', ['','虚拟机'], ['horizontal', 'center', 'bottom'], ['30%', '50%'], ['50%', '50%'], ['运行','挂起','关机'], ['${virRun.runRunnigNum}', '${virRun.runHangupNum}', '${virRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
 getAnnularChart('hostRunChart', ['','宿主机'], ['horizontal', 'center', 'bottom'], ['30%', '50%'], ['50%', '50%'], ['运行','挂起','关机'], ['${hostRun.runRunnigNum}', '${hostRun.runHangupNum}', '${hostRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
 getAnnularChart('physRunChart', ['','物理机'], ['horizontal', 'center', 'bottom'], ['30%', '50%'], ['50%', '50%'], ['运行','挂起','关机'], ['${physRun.runRunnigNum}', '${physRun.runHangupNum}', '${physRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
+getLineChart('cpuChart', ['资源使用量趋势'], ['${cpuResRate.xaxis1}', '${cpuResRate.xaxis2}', '${cpuResRate.xaxis3}', '${cpuResRate.xaxis4}', '${cpuResRate.xaxis5}', '${cpuResRate.xaxis6}'], ['${cpuResRate.yaxis1}', '${cpuResRate.yaxis2}', '${cpuResRate.yaxis3}', '${cpuResRate.yaxis4}', '${cpuResRate.yaxis5}', '${cpuResRate.yaxis6}']);//获取图表
+getLineChart('memChart', ['资源使用量趋势'], ['${memResRate.xaxis1}', '${memResRate.xaxis2}', '${memResRate.xaxis3}', '${memResRate.xaxis4}', '${memResRate.xaxis5}', '${memResRate.xaxis6}'], ['${memResRate.yaxis1}', '${memResRate.yaxis2}', '${memResRate.yaxis3}', '${memResRate.yaxis4}', '${memResRate.yaxis5}', '${memResRate.yaxis6}']);//获取图表
+getLineChart('storeChart', ['资源使用量趋势'], ['${storeResRate.xaxis1}', '${storeResRate.xaxis2}', '${storeResRate.xaxis3}', '${storeResRate.xaxis4}', '${storeResRate.xaxis5}', '${storeResRate.xaxis6}'], ['${storeResRate.yaxis1}', '${storeResRate.yaxis2}', '${storeResRate.yaxis3}', '${storeResRate.yaxis4}', '${storeResRate.yaxis5}', '${storeResRate.yaxis6}']);//获取图表
 </script>
 </body>
 </html>

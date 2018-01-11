@@ -113,7 +113,7 @@ function getAnnularChart(chartId, titleArr, legendArr, radiusArr, centerArr, key
 	}
 	
 	var option = {
-		title: {text: titleArr[0], subtext: '', x:'center', y: '130', textStyle: {color: '#000000', fontSize: '12', fontWeight: 'normal'}},  
+		title: {text: titleArr[0], subtext: '', x:'center', y: '118', textStyle: {color: '#000000', fontSize: '12', fontWeight: 'normal'}},  
 	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}({d}"+unit+")", textStyle:{align:'left'}},//item或axis
 	    legend: {orient: legendArr[0], x: legendArr[1]?legendArr[1]:'center', y: legendArr[2]?legendArr[2]:'top', data: keyArr},
 	    color: colorArr,
@@ -287,6 +287,62 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit, splitNumber){
 	
 	var myChart = echarts.init(document.getElementById(chartId));
 	myChart.setOption(option, true);//加载图表
+}
+
+//获取折线图，必须先引入echarts.min.js
+function getLineChart(chartId, titleArr, xdataArr, ydataArr){
+	var option = {
+	    tooltip: {trigger: 'axis', formatter: "{c}: {b}", textStyle:{align:'left'}},//item或axis
+	    legend: {data: titleArr[0]},
+	    calculable: true,
+	    grid: {x: 25, y: 5, x2: 15, y2: 25},
+	    xAxis: [
+	        {
+	        	show: true,
+	            type: 'category',
+	            boundaryGap : false,
+	            axisLabel : {
+	                formatter: '{value}',
+	                interval: 0//全部显示，仅type为category有效
+	            },
+	            data : xdataArr
+	        }
+	    ],
+	    yAxis: [
+	        {
+	        	show: true,
+	            type: 'value',
+	            min : '0',
+	            max : '1',
+	            splitNumber: '6',
+	            axisLine : {onZero: false},
+	            scale: true,
+	            boundaryGap : false,
+	            axisLabel : {
+	                formatter: '{value}'
+	            }
+	        }
+	    ],
+	    series: [
+	        {
+	            name: titleArr[0],
+	            type: 'line',
+	            smooth:true,
+	            showAllSymbol : true,
+	            itemStyle: {
+	            	normal: {
+	                    lineStyle: {
+	                        shadowColor : 'rgba(0,0,0,0.4)'
+	                    }
+	                }
+	            },
+	            data: ydataArr
+	        }
+	    ]
+	};
+	
+	var myChart = echarts.init(document.getElementById(chartId));
+	myChart.setOption(option);//加载图表
 }
 
 //发送Http请求

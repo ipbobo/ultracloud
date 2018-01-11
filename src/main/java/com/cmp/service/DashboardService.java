@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.sid.CmpAxis;
 import com.cmp.sid.CmpRes;
 import com.fh.dao.DaoSupport;
 
@@ -122,5 +123,59 @@ public class DashboardService {
 		cmpRes.setRunHangupNum("23");
 		cmpRes.setRunCloseNum("24");
 		return cmpRes;
+	}
+	
+	//存储资源使用量趋势
+	public CmpAxis getMemResRate() throws Exception {
+		CmpAxis cmpAxis=new CmpAxis();
+		cmpAxis.setXaxis1("12/1");
+		cmpAxis.setXaxis2("12/2");
+		cmpAxis.setXaxis3("12/3");
+		cmpAxis.setXaxis4("12/4");
+		cmpAxis.setXaxis5("12/5");
+		cmpAxis.setXaxis6("12/6");
+		cmpAxis.setYaxis1("0.2");
+		cmpAxis.setYaxis2("0.4");
+		cmpAxis.setYaxis3("0.5");
+		cmpAxis.setYaxis4("0.6");
+		cmpAxis.setYaxis5("0.8");
+		cmpAxis.setYaxis6("1");
+		return cmpAxis;
+	}
+	
+	//磁盘资源使用量趋势
+	public CmpAxis getStoreResRate() throws Exception {
+		CmpAxis cmpAxis=new CmpAxis();
+		cmpAxis.setXaxis1("12/11");
+		cmpAxis.setXaxis2("12/12");
+		cmpAxis.setXaxis3("12/13");
+		cmpAxis.setXaxis4("12/14");
+		cmpAxis.setXaxis5("12/15");
+		cmpAxis.setXaxis6("12/16");
+		cmpAxis.setYaxis1("0.1");
+		cmpAxis.setYaxis2("0.5");
+		cmpAxis.setYaxis3("0.6");
+		cmpAxis.setYaxis4("0.7");
+		cmpAxis.setYaxis5("0.9");
+		cmpAxis.setYaxis6("1");
+		return cmpAxis;
+	}
+	
+	//CPU资源使用量趋势
+	public CmpAxis getCpuResRate() throws Exception {
+		CmpAxis cmpAxis=new CmpAxis();
+		cmpAxis.setXaxis1("12/2");
+		cmpAxis.setXaxis2("12/4");
+		cmpAxis.setXaxis3("12/5");
+		cmpAxis.setXaxis4("12/12");
+		cmpAxis.setXaxis5("12/18");
+		cmpAxis.setXaxis6("12/22");
+		cmpAxis.setYaxis1("0.1");
+		cmpAxis.setYaxis2("0.3");
+		cmpAxis.setYaxis3("0.5");
+		cmpAxis.setYaxis4("0.7");
+		cmpAxis.setYaxis5("0.9");
+		cmpAxis.setYaxis6("1");
+		return cmpAxis;
 	}
 }
