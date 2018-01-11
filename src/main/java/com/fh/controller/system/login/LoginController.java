@@ -84,8 +84,14 @@ public class LoginController extends BaseController {
 		mv.addObject("userNum", dashboardService.getUserNum());//用户总数
 		mv.addObject("projNum", dashboardService.getProjNum());//项目总数
 		mv.addObject("workOrderNum", dashboardService.getWorkOrderNum());//工单总数
-		mv.addObject("virCmpRes", dashboardService.getVirDtl());//虚机详细信息查询
-		mv.addObject("physCmpRes", dashboardService.getPhysDtl());//物理机详细信息查询
+		mv.addObject("vir", dashboardService.getVirDtl());//虚机详细信息查询
+		mv.addObject("phys", dashboardService.getPhysDtl());//物理机详细信息查询
+		mv.addObject("virLoad", dashboardService.getVirLoad());//虚拟机负载
+		mv.addObject("hostLoad", dashboardService.getHostLoad());//宿主机负载
+		mv.addObject("physLoad", dashboardService.getPhysLoad());//物理机负载
+		mv.addObject("virRun", dashboardService.getVirRun());//虚拟机运行
+		mv.addObject("hostRun", dashboardService.getHostRun());//宿主机运行
+		mv.addObject("physRun", dashboardService.getPhysRun());//物理机运行
 		mv.setViewName("system/index/default");
 		return mv;
 	}

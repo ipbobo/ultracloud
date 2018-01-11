@@ -45,25 +45,82 @@ public class DashboardService {
 	
 	//虚机详细信息查询
 	public CmpRes getVirDtl() throws Exception {
-		CmpRes virCmpRes=new CmpRes();
-		virCmpRes.setCpuUseNum("1");
-		virCmpRes.setCpuTotalNum("10");
-		virCmpRes.setMemUseNum("2");
-		virCmpRes.setMemTotalNum("20");
-		virCmpRes.setStoreUseNum("21");
-		virCmpRes.setStoreTotalNum("100");
-		return virCmpRes;
+		CmpRes cmpRes=new CmpRes();
+		cmpRes.setCpuUseNum("1");
+		cmpRes.setCpuTotalNum("10");
+		cmpRes.setMemUseNum("2");
+		cmpRes.setMemTotalNum("20");
+		cmpRes.setStoreUseNum("21");
+		cmpRes.setStoreTotalNum("100");
+		return cmpRes;
 	}
 	
 	//物理机详细信息查询
 	public CmpRes getPhysDtl() throws Exception {
-		CmpRes physCmpRes=new CmpRes();
-		physCmpRes.setCpuUseNum("1");
-		physCmpRes.setCpuTotalNum("10");
-		physCmpRes.setMemUseNum("2");
-		physCmpRes.setMemTotalNum("20");
-		physCmpRes.setStoreUseNum("21");
-		physCmpRes.setStoreTotalNum("100");
-		return physCmpRes;
+		CmpRes cmpRes=new CmpRes();
+		cmpRes.setCpuUseNum("1");
+		cmpRes.setCpuTotalNum("10");
+		cmpRes.setMemUseNum("2");
+		cmpRes.setMemTotalNum("20");
+		cmpRes.setStoreUseNum("21");
+		cmpRes.setStoreTotalNum("100");
+		return cmpRes;
+	}
+	
+	//虚拟机负载
+	public CmpRes getVirLoad() throws Exception {
+		CmpRes cmpRes=new CmpRes();
+		cmpRes.setLoadLittleNum("2");
+		cmpRes.setLoadMiddleNum("3");
+		cmpRes.setLoadHeightNum("4");
+		cmpRes.setLoadStopNum("5");
+		return cmpRes;
+	}
+	
+	//宿主机负载
+	public CmpRes getHostLoad() throws Exception {
+		CmpRes cmpRes=new CmpRes();
+		cmpRes.setLoadLittleNum("12");
+		cmpRes.setLoadMiddleNum("13");
+		cmpRes.setLoadHeightNum("14");
+		cmpRes.setLoadStopNum("15");
+		return cmpRes;
+	}
+	
+	//物理机负载
+	public CmpRes getPhysLoad() throws Exception {
+		CmpRes cmpRes=new CmpRes();
+		cmpRes.setLoadLittleNum("22");
+		cmpRes.setLoadMiddleNum("23");
+		cmpRes.setLoadHeightNum("24");
+		cmpRes.setLoadStopNum("25");
+		return cmpRes;
+	}
+	
+	//虚拟机运行
+	public CmpRes getVirRun() throws Exception {
+		CmpRes cmpRes=new CmpRes();
+		cmpRes.setRunRunnigNum("2");
+		cmpRes.setRunHangupNum("3");
+		cmpRes.setRunCloseNum("4");
+		return cmpRes;
+	}
+	
+	//宿主机运行
+	public CmpRes getHostRun() throws Exception {
+		CmpRes cmpRes=new CmpRes();
+		cmpRes.setRunRunnigNum("12");
+		cmpRes.setRunHangupNum("13");
+		cmpRes.setRunCloseNum("14");
+		return cmpRes;
+	}
+	
+	//物理机运行
+	public CmpRes getPhysRun() throws Exception {
+		CmpRes cmpRes=new CmpRes();
+		cmpRes.setRunRunnigNum("22");
+		cmpRes.setRunHangupNum("23");
+		cmpRes.setRunCloseNum("24");
+		return cmpRes;
 	}
 }
