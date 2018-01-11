@@ -329,7 +329,7 @@
 	//导出excel
 	function toExcel(){
 		window.location.href='<%=basePath%>workorderExcel.do?workorder_type='+$('#workorder_type').val()+'&workorder_status='+$('#workorder_status').val()+'&project='+$('#project').val()+
-		'&workorder_appNo='+$('#workorder_appNo').val()+'&workorder_time='+$('#workorder_time').val();
+		'&workorder_appNo='+$('#workorder_appNo').val()+'&workorder_time='+$('#workorder_time').val()+ '&page.showCount='+$('#pageCount').val();
 	}
 	
 

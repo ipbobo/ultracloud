@@ -182,8 +182,14 @@ public class AppOperServiceController  extends BaseController {
 			map.put("result", resultInfo);
 			return map;
 		}
-		String appmsg = pd.getString("app_msg"); //申请说明
 		String vm = pd.getString("vm");
+		if (vm == null || vm.length() == 0) {
+			resultInfo = "虚拟机选择不正确";
+			map.put("result", resultInfo);
+			return map;
+		}
+		String appmsg = pd.getString("app_msg"); //申请说明
+		
 		String vmMsg = pd.getString("vm_msg");
 		String install_soft = pd.getString("install_soft");
 		String soft_version = pd.getString("soft_version");
@@ -200,7 +206,26 @@ public class AppOperServiceController  extends BaseController {
 		String vip_num = pd.getString("vip_num");
 		String rootpwd = pd.getString("rootpwd");
 		String exp_time_pwd = pd.getString("exp_time_pwd");
+		String remark1 =  pd.getString("remark1");
 		CmpOpServe opServe = new CmpOpServe();
+		
+		//获取申请工单虚拟机的项目信息
+		String projectId = "";
+		for (String vmId: vm.split(",")) {
+			if (vmId == null) {
+				continue;
+			}
+			VirtualMachine virtualMachine = virtualMachineService.findById(vmId);
+			if (projectId.equals("")) {
+				projectId = virtualMachine.getProjectId();
+			} else {
+				if (!projectId.equals(virtualMachine.getProjectId())) {
+					resultInfo = "请选择同项目的虚拟机";
+					map.put("result", resultInfo);
+					return map;
+				}
+			}
+		}
 		if (serviceType.equals("1")) {
 			//虚拟机启停
 			opServe.setAppmsg(appmsg);
@@ -208,7 +233,8 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setMiddlewareMsg("");
 			opServe.setOperType(operType);
 			opServe.setServiceType(serviceType);
-			opServe.setVm(vm);		//启停的而虚拟机及软件   软件1，软件2|软件1,软件2|
+			opServe.setVm(vm);		
+			opServe.setRemark1(remark1);//启停的而虚拟机及软件   软件1，软件2|软件1,软件2|
 			opServe.setVmMsg(vmMsg); //虚拟机启停说明
 			opServe.setWorkflow("middleware_restart");
 		}else if (serviceType.equals("2")) {
@@ -309,6 +335,7 @@ public class AppOperServiceController  extends BaseController {
 		workworder.setAppType("2"); //运维服务申请
 		workworder.setStatus("0");  //工作流初始状态
 		workworder.setApplyUserId(user.getUSERNAME());
+		workworder.setProjectCode(projectId);
 		cmpWorkOrderService.addWordOrder(workworder);
 		
 		//启动工作流

@@ -11,7 +11,7 @@
 		<id column="id" property="id"/>
 		<result column="appNo" property="appNo"/>
 		<result column="user" property="user"/>
-		<result column="project_id " property="projectId"/>
+		<result column="project_id" property="projectId"/>
 		<result column="name" property="name"/>
 		<result column="ip" property="ip"/>
 		<result column="cpu" property="cpu"/>

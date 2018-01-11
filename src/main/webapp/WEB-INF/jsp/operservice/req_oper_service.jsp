@@ -36,6 +36,7 @@
 						<div class="col-xs-12">
 						<input type="hidden" name="middleware" id="middleware" value=""/>
 						<input type="hidden" name="vm" id="vm" value="">
+						<input type="hidden" name="remark1" id="remark1" value="">
 							<div id="zhongxin" style="padding-top: 50px;">
 							<table id="table_report" class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;" >
 								<tr>
@@ -525,9 +526,12 @@
 			 	vm_select_count = vm_select_count +1;
 	            return $('#'+m_soft_id).val();
 	        }).get().join('|');
-		 
+		vm = $("input:checkbox[name='softcheckbox']:checked").map(function(index,vm_selected) {
+			 return $(vm_selected).val();
+        }).get().join(',');
 		//var checkbox = $('#middleware_checkbox');
-		$('#vm').val(text);
+		$('#vm').val(vm);
+		$('#remark1').val(text);
 		$('#btn_add_vm').text('修改');
 		$('#v_vm').html("<b>你已经选择: "+ vm_select_count+ "台虚拟机</b>");
 		$('#vm_modal').modal('hide');
@@ -570,6 +574,7 @@
 		var directory3 = $("#directory3").val();
 		var rootpwd = $("#rootpwd").val();
 		var exp_time_pwd =  $("#exp_time_pwd").val();
+		var remark1 = $("#remark1").val();
 		if( service_type ==""){
 			$("#tip_service_type").tips({
 				side:3,
@@ -659,7 +664,7 @@
 						'oper_type':oper_type, 'install_soft':install_soft, 'soft_version':soft_version,
 						'breakdown_time':breakdown_time, 'breakdown_info':breakdown_info, 'except_solve_time':except_solve_time,
 						'except_result':except_result,'breakdown_level':breakdown_level, 'partition_info':partition_info, 'directory':directory,
-						 'directory2':directory2, 'exp_time':exp_time, 'rootpwd':rootpwd, 'exp_time_pwd':exp_time_pwd,'directory3':directory3, 'vip_num':vip_num
+						 'directory2':directory2, 'exp_time':exp_time, 'rootpwd':rootpwd, 'exp_time_pwd':exp_time_pwd,'directory3':directory3, 'vip_num':vip_num, 'remark1':remark1
 					},  
 			type : "post",  
 			cache : false,  

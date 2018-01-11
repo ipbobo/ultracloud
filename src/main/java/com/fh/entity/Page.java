@@ -100,7 +100,7 @@ public class Page {
 				sb.append("	<li style=\"cursor:pointer;\"><a onclick=\"nextPage("+totalPage+")\">尾页</a></li>\n");
 			}
 			sb.append("	<li><a>共"+totalPage+"页</a></li>\n");
-			sb.append("	<li><select title='显示条数' style=\"width:55px;float:left;margin-top:1px;\" onchange=\"changeCount(this.value)\">\n");
+			sb.append("	<li><select title='显示条数' id='pageCount' style=\"width:55px;float:left;margin-top:1px;\" onchange=\"changeCount(this.value)\">\n");
 			sb.append("	<option value='"+showCount+"'>"+showCount+"</option>\n");
 			sb.append("	<option value='10'>10</option>\n");
 			sb.append("	<option value='20'>20</option>\n");
