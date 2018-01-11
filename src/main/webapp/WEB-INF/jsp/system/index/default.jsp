@@ -46,7 +46,7 @@ timeTicket = setInterval(function (){
 				</tr>
 			</table>
 		</div>
-		<table style="width: 100%;" border=1>
+		<table style="width: 100%;">
 			<tr>
 				<td align="left" valign="top" colspan="3"><div align="center" style="width: 40px;border:1px solid #000000;"><h5>虚拟</h5></div></td>
 				<td align="left" valign="top" colspan="3"><div align="center" style="width: 40px;border:1px solid #000000;"><h5>物理</h5></div></td>
