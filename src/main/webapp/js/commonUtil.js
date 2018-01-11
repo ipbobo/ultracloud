@@ -65,7 +65,7 @@ function trim(str) {
 
 
 //获取饼状图，必须先引入echarts.min.js
-function getPieChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
+function getPieChart(chartId, titleArr, legendArr, radiusArr, centerArr, keyArr, valArr, colorArr, unit){
 	var dataArr=[];
 	if(keyArr.length==valArr.length && keyArr.length==colorArr.length){
 		for(var i=0;i<keyArr.length;i++){
@@ -74,26 +74,82 @@ function getPieChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 	}
 	
 	var option = {
-	    title : {text: titleArr[0], subtext: titleArr[1], x:'center'},  
-	    tooltip : {trigger: 'item', formatter: "{a}<br>{b}: {c}"+unit, textStyle:{align:'left'}},//item或axis
-	    legend: {orient : 'vertical', x : 'left', data: keyArr}, 
+	    title: {text: titleArr[0], subtext: titleArr[1], x:'center'},  
+	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}"+unit, textStyle:{align:'left'}},//item或axis
+	    legend: {orient: legendArr[0], x: legendArr[1]?legendArr[1]:'center', y: legendArr[2]?legendArr[2]:'top', data: keyArr},
 	    color: colorArr,
 	    toolbox: {
-	        show : false,  
-	        feature : {  
-	            mark : {show: true},  
-	            dataView : {show: true, readOnly: false},  
-	            restore : {show: true},  
-	            saveAsImage : {show: true}  
+	        show: false,  
+	        feature: {  
+	            mark: {show: true},  
+	            dataView: {show: true, readOnly: false},  
+	            restore: {show: true},  
+	            saveAsImage: {show: true}  
 	        }
 	    },  
-	    calculable : true,  
-	    series : [
+	    calculable: true,  
+	    series: [
 	        {
 	            name: titleArr[0],  
 	            type: 'pie',  
-	            radius: '35%',//饼图的半径大小  
-	            center: ['50%', '50%'],//饼图的位置  
+	            radius: radiusArr,//饼图的半径大小['35%']
+	            center: centerArr,//饼图的位置['50%', '50%']
+	            data: dataArr
+	        }
+	    ]
+	};
+	
+	var myChart = echarts.init(document.getElementById(chartId));
+	myChart.setOption(option);//加载图表
+}
+
+//获取环形图，必须先引入echarts.min.js
+function getAnnularChart(chartId, titleArr, legendArr, radiusArr, centerArr, keyArr, valArr, colorArr, unit){
+	var dataArr=[];
+	if(keyArr.length==valArr.length && keyArr.length==colorArr.length){
+		for(var i=0;i<keyArr.length;i++){
+			dataArr.push({name: keyArr[i], value: valArr[i]});
+		}
+	}
+	
+	var option = {
+		title: {text: titleArr[0], subtext: '', x:'center', y: '118', textStyle: {color: '#000000', fontSize: '12', fontWeight: 'normal'}},  
+	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}({d}"+unit+")", textStyle:{align:'left'}},//item或axis
+	    legend: {orient: legendArr[0], x: legendArr[1]?legendArr[1]:'center', y: legendArr[2]?legendArr[2]:'top', data: keyArr},
+	    color: colorArr,
+	    toolbox: {
+	        show: false,  
+	        feature: {  
+	            mark: {show: true},  
+	            dataView: {show: true, readOnly: false},  
+	            restore: {show: true},  
+	            saveAsImage: {show: true},
+	            magicType: {
+	                show: true, 
+	                type: ['pie', 'funnel'],
+	                option: {
+	                    funnel: {
+	                        x: '25%',
+	                        width: '50%',
+	                        funnelAlign: 'center',
+	                        max: 1548
+	                    }
+	                }
+	            }
+	        }
+	    }, 
+	    calculable: true,  
+	    series: [
+	        {
+	            name: titleArr[1],  
+	            type: 'pie',
+	            hoverAnimation:false,
+	            radius: radiusArr,//饼图的半径大小['30%', '50%']
+	            center: centerArr,//饼图的位置['50%', '75%']
+	            itemStyle: {
+	            	normal: {label: {show: false}, labelLine: {show: false}}, 
+	            	emphasis: {label: {show: true, position: 'inside', textStyle: {fontSize: '12', fontWeight: 'bold'}}}
+	            },
 	            data: dataArr
 	        }
 	    ]
@@ -106,34 +162,34 @@ function getPieChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 //获取柱状图，必须先引入echarts.min.js
 function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 	var option = {
-		title : {text: titleArr[0], subtext: titleArr[1], x: 'center', y: 'bottom'},
-	    tooltip : {trigger: 'item', formatter: "{a}<br>{b}: {c}"+unit, textStyle:{align:'left'}},//item或axis
+		title: {text: titleArr[0], subtext: titleArr[1], x: 'center', y: 'bottom'},
+	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}"+unit, textStyle:{align:'left'}},//item或axis
 	    legend: {data: keyArr},
 	    toolbox: {
-	        show : false,
-	        feature : {
-	            mark : {show: true},
-	            dataView : {show: true, readOnly: false},
-	            restore : {show: true},
-	            saveAsImage : {show: true}
+	        show: false,
+	        feature: {
+	            mark: {show: true},
+	            dataView: {show: true, readOnly: false},
+	            restore: {show: true},
+	            saveAsImage: {show: true}
 	        }
 	    },
-	    calculable : true,
+	    calculable: true,
 	    grid: {borderWidth: 0, y: 20, y2: 50},
-	    xAxis : [
+	    xAxis: [
 	        {
-	            type : 'category',
+	            type: 'category',
 	            show: true,
-	            data : keyArr
+	            data: keyArr
 	        }
 	    ],
-	    yAxis : [
+	    yAxis: [
 	        {
-	            type : 'value',
+	            type: 'value',
             	show: true
 	        }
 	    ],
-	    series : [
+	    series: [
 	        {
 	            name: titleArr[0],
 	            type: 'bar',
@@ -149,7 +205,7 @@ function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 	                    }
 	                }
 	            },
-	            //barWidth : 30,//柱图宽度
+	            //barWidth: 30,//柱图宽度
 	            data: valArr
 	        }
 	    ]
@@ -160,22 +216,24 @@ function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 }
 
 //获取仪表盘，必须先引入echarts.min.js
-function getGaugeChart(chartId, titleArr, val, colorArr, unit){
+function getGaugeChart(chartId, titleArr, val, colorArr, unit, splitNumber){
 	var option = {
-	    tooltip : {formatter: "{b}: {c}"+unit},
+	    tooltip: {formatter: (titleArr[1]?"{b}: ":"")+"{c}"+unit},
 	    toolbox: {
-	        show : false,
-	        feature : {
-	            mark : {show: true},
-	            restore : {show: true},
-	            saveAsImage : {show: true}
+	        show: false,
+	        feature: {
+	            mark: {show: true},
+	            restore: {show: true},
+	            saveAsImage: {show: true}
 	        }
 	    },
-	    series : [
+	    series: [
 	        {
 	            name: titleArr[0],
 	            type: 'gauge',
-	            splitNumber: 5,//分割段数，默认为5
+	            center: ['50%', '40%'],//圆心坐标：默认全局居中
+	            precision: 0,//小数精度，默认为0，无小数点
+	            splitNumber: splitNumber?splitNumber:5,//分割段数，默认为5
 	            axisLine: {//坐标轴线
 	                lineStyle: {//属性lineStyle控制线条样式
 	                    color: colorArr, 
@@ -183,7 +241,7 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	                }
 	            },
 	            axisTick: {//坐标轴小标记
-	                splitNumber: 5,//每份split细分多少段
+	                splitNumber: splitNumber?splitNumber:5,//每份split细分多少段
 	                length: 12,//属性length控制线长
 	                lineStyle: {//属性lineStyle控制线条样式
 	                    color: 'auto'
@@ -206,16 +264,20 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	            },
 	            title: {
 	                show: true,
-	                offsetCenter: [0, 60],//x, y，单位px
+	                offsetCenter: [0, 70],//x, y，单位px
 	                textStyle: {//其余属性默认使用全局文本样式，详见TEXTSTYLE
 	                    fontWeight: 'bolder'
 	                }
 	            },
 	            detail: {
+	            	show: true,
 	                formatter: '{value}'+unit,
+	                offsetCenter: ['0', 38],//x, y，单位px
+	                width: 0,
+	                height: 0,
 	                textStyle: {//其余属性默认使用全局文本样式，详见TEXTSTYLE
 	                    color: 'auto',
-	                    fontWeight: 'bolder'
+	                    fontWeight: 'normal'
 	                }
 	            },
 	            data:[{name: titleArr[1], value: val}]
@@ -225,6 +287,62 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	
 	var myChart = echarts.init(document.getElementById(chartId));
 	myChart.setOption(option, true);//加载图表
+}
+
+//获取折线图，必须先引入echarts.min.js
+function getLineChart(chartId, titleArr, xdataArr, ydataArr){
+	var option = {
+	    tooltip: {trigger: 'axis', formatter: "{c}: {b}", textStyle:{align:'left'}},//item或axis
+	    legend: {data: titleArr[0]},
+	    calculable: true,
+	    grid: {x: 25, y: 5, x2: 15, y2: 25},
+	    xAxis: [
+	        {
+	        	show: true,
+	            type: 'category',
+	            boundaryGap : false,
+	            axisLabel : {
+	                formatter: '{value}',
+	                interval: 0//全部显示，仅type为category有效
+	            },
+	            data : xdataArr
+	        }
+	    ],
+	    yAxis: [
+	        {
+	        	show: true,
+	            type: 'value',
+	            min : '0',
+	            max : '1',
+	            splitNumber: '6',
+	            axisLine : {onZero: false},
+	            scale: true,
+	            boundaryGap : false,
+	            axisLabel : {
+	                formatter: '{value}'
+	            }
+	        }
+	    ],
+	    series: [
+	        {
+	            name: titleArr[0],
+	            type: 'line',
+	            smooth:true,
+	            showAllSymbol : true,
+	            itemStyle: {
+	            	normal: {
+	                    lineStyle: {
+	                        shadowColor : 'rgba(0,0,0,0.4)'
+	                    }
+	                }
+	            },
+	            data: ydataArr
+	        }
+	    ]
+	};
+	
+	var myChart = echarts.init(document.getElementById(chartId));
+	myChart.setOption(option);//加载图表
 }
 
 //发送Http请求

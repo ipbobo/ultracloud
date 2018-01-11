@@ -162,7 +162,7 @@
 	<!-- 新增工单 -->
 	<insert id="addWorkOrder" parameterType="pd">
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select #{appNo}, #{orderNo}, #{appType}, #{status}, #{procInstId}, #{applyUserId}, areaCode, platType, deployType, envCode, resType, virName, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum
+		select #{appNo}, #{orderNo}, #{appType}, #{status}, #{procInstId}, #{applyUserId}, areaCode, platType, deployType, envCode, resType, virName, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, '0'
 		from cmp_order
 		where orderNo=#{orderNo}
 	</insert>

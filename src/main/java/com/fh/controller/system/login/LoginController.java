@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cmp.activiti.bean.TaskBean;
-import com.cmp.activiti.service.ActivitiService;
+import com.cmp.service.CmpDictService;
+import com.cmp.service.DashboardService;
 import com.cmp.service.SysConfigService;
 import com.cmp.sid.SysConfigInfo;
-import com.cmp.util.Page;
 import com.fh.controller.base.BaseController;
 import com.fh.service.fhoa.datajur.DatajurManager;
 import com.fh.service.system.appuser.AppuserManager;
@@ -45,18 +44,10 @@ import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 import com.fh.util.RightsHelper;
 import com.fh.util.Tools;
-/**
- * 总入口
- * @author fh QQ 3 1 3 5 9 6 7 9 0[青苔]
- * 修改日期：2015/11/2
- */
-/**
- * @author Administrator
- *
- */
+
+//用户登录
 @Controller
 public class LoginController extends BaseController {
-
 	@Resource(name="userService")
 	private UserManager userService;
 	@Resource(name="menuService")
@@ -77,6 +68,41 @@ public class LoginController extends BaseController {
 	private LogInImgManager loginimgService;
 	@Resource
 	private SysConfigService sysConfigService;
+	@Resource
+	private DashboardService dashboardService;
+	@Resource
+	private CmpDictService cmpDictService;
+	
+	//仪表盘
+	@RequestMapping(value="/login_default")
+	public ModelAndView defaultPage() throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd.put("userCount", Integer.parseInt(userService.getUserCount("").get("userCount").toString())-1);				//系统用户数
+		pd.put("appUserCount", Integer.parseInt(appuserService.getAppUserCount("").get("appUserCount").toString()));	//会员数
+		mv.addObject("pd",pd);
+		mv.addObject("timeTypeList", cmpDictService.getCmpDictList("dashboard_time_type"));//仪表盘时间类型列表
+		mv.addObject("resTypeList", cmpDictService.getCmpDictList("dashboard_res_type"));//仪表盘资源类型列表
+		mv.addObject("virNum", dashboardService.getVirNum());//虚机总量
+		mv.addObject("hostNum", dashboardService.getHostNum());//宿主机总量
+		mv.addObject("physNum", dashboardService.getPhysNum());//物理机总量
+		mv.addObject("userNum", dashboardService.getUserNum());//用户总数
+		mv.addObject("projNum", dashboardService.getProjNum());//项目总数
+		mv.addObject("workOrderNum", dashboardService.getWorkOrderNum());//工单总数
+		mv.addObject("vir", dashboardService.getVirDtl());//虚机详细信息查询
+		mv.addObject("phys", dashboardService.getPhysDtl());//物理机详细信息查询
+		mv.addObject("virLoad", dashboardService.getVirLoad());//虚拟机负载
+		mv.addObject("hostLoad", dashboardService.getHostLoad());//宿主机负载
+		mv.addObject("physLoad", dashboardService.getPhysLoad());//物理机负载
+		mv.addObject("virRun", dashboardService.getVirRun());//虚拟机运行
+		mv.addObject("hostRun", dashboardService.getHostRun());//宿主机运行
+		mv.addObject("physRun", dashboardService.getPhysRun());//物理机运行
+		mv.addObject("cpuResRate", dashboardService.getCpuResRate());//CPU资源使用量趋势
+		mv.addObject("memResRate", dashboardService.getMemResRate());//存储资源使用量趋势
+		mv.addObject("storeResRate", dashboardService.getStoreResRate());//磁盘资源使用量趋势
+		mv.setViewName("system/index/default");
+		return mv;
+	}
 	
 	/**访问登录页
 	 * @return
@@ -107,8 +133,8 @@ public class LoginController extends BaseController {
 		String KEYDATA[] = pd.getString("KEYDATA").replaceAll("qq313596790fh", "").replaceAll("QQ978336446fh", "").split(",fh,");
 		if(null != KEYDATA && KEYDATA.length == 3){
 			Session session = Jurisdiction.getSession();
-			String sessionCode = (String)session.getAttribute(Const.SESSION_SECURITY_CODE);		//获取session中的验证码
-			String code = sessionCode;//KEYDATA[2];注释掉验证码先，便于测试
+			//String sessionCode = (String)session.getAttribute(Const.SESSION_SECURITY_CODE);		//获取session中的验证码
+			//String code = sessionCode;//KEYDATA[2];注释掉验证码先，便于测试
 //			if(null == code || "".equals(code)){//判断效验码
 //				errInfo = "nullcode"; 			//效验码为空
 //			}else{
@@ -316,22 +342,6 @@ public class LoginController extends BaseController {
 	@RequestMapping(value="/tab")
 	public String tab(){
 		return "system/index/tab";
-	}
-	
-	/**
-	 * 进入首页后的默认页面
-	 * @return
-	 * @throws Exception 
-	 */
-	@RequestMapping(value="/login_default")
-	public ModelAndView defaultPage() throws Exception{
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd.put("userCount", Integer.parseInt(userService.getUserCount("").get("userCount").toString())-1);				//系统用户数
-		pd.put("appUserCount", Integer.parseInt(appuserService.getAppUserCount("").get("appUserCount").toString()));	//会员数
-		mv.addObject("pd",pd);
-		mv.setViewName("system/index/default");
-		return mv;
 	}
 	
 	/**

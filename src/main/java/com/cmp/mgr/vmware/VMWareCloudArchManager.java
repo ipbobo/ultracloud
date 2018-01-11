@@ -280,12 +280,12 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		vd.setUnitNumber(0);
 		vd.setControllerKey(cKey);
 
-		VirtualDiskFlatVer2BackingInfo diskfileBacking = new VirtualDiskFlatVer2BackingInfo();
+		VirtualDiskFlatVer2BackingInfo diskFileBacking = new VirtualDiskFlatVer2BackingInfo();
 		String fileName = "[" + dsName + "]";
-		diskfileBacking.setFileName(fileName);
-		diskfileBacking.setDiskMode(diskMode);
-		diskfileBacking.setThinProvisioned(true);
-		vd.setBacking(diskfileBacking);
+		diskFileBacking.setFileName(fileName);
+		diskFileBacking.setDiskMode(diskMode);
+		diskFileBacking.setThinProvisioned(true);
+		vd.setBacking(diskFileBacking);
 
 		return diskSpec;
 	}

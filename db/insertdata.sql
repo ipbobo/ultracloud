@@ -66,11 +66,18 @@ INSERT INTO `cmp_dict` VALUES ('98', '2017-11-20 17:59:36', '2017-11-20 18:34:44
 INSERT INTO `cmp_dict` VALUES ('99', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'bizview_type', 'env', '环境', '业务视图总览类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES ('100', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'bizview_type', 'dept', '部门', '业务视图总览类型', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('101', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'bizview_type', 'proj', '项目', '业务视图总览类型', '0', '3');
-
 INSERT INTO `cmp_dict` VALUES ('111', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'install_OS', 'ReadHat 6.5_64', 'rhel6_64Guest', 'ReadHat 6.5 64位系统', '0', '1');
 INSERT INTO `cmp_dict` VALUES ('112', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'install_OS', 'CentOS 6.5_64', 'centos64Guest', 'CentOS 6.5 64位系统', '0', '1');
-
 INSERT INTO `cmp_dict` VALUES ('121', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'install_disk_size', 'default', '50', '默认磁盘大小', '0', '1');
+INSERT INTO `cmp_dict` VALUES ('122', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_time_type', 'hour', '小时', '仪表盘时间类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('123', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_time_type', 'day', '天', '仪表盘时间类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('124', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_time_type', 'week', '周', '仪表盘时间类型', '0', '3');
+INSERT INTO `cmp_dict` VALUES ('125', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_time_type', 'month', '月', '仪表盘时间类型', '0', '4');
+INSERT INTO `cmp_dict` VALUES ('126', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_time_type', 'halfyear', '半年', '仪表盘时间类型', '0', '5');
+INSERT INTO `cmp_dict` VALUES ('127', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_time_type', 'year', '年', '仪表盘时间类型', '0', '6');
+INSERT INTO `cmp_dict` VALUES ('128', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_res_type', 'cpu', 'CPU', '仪表盘资源类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES ('129', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_res_type', 'mem', '内存', '仪表盘资源类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('130', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_res_type', 'store', '磁盘', '仪表盘资源类型', '0', '3');
 
 INSERT INTO `cmp_sequence` VALUES ('cmp_order', '1', '1', '5', 'O');
 
