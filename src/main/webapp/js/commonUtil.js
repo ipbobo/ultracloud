@@ -160,9 +160,9 @@ function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 }
 
 //获取仪表盘，必须先引入echarts.min.js
-function getGaugeChart(chartId, titleArr, val, colorArr, unit){
+function getGaugeChart(chartId, titleArr, val, colorArr, unit, splitNumber){
 	var option = {
-	    tooltip : {formatter: "{b}: {c}"+unit},
+	    tooltip: {formatter: (titleArr[1]?"{b}: ":"")+"{c}"+unit},
 	    toolbox: {
 	        show : false,
 	        feature : {
@@ -171,11 +171,13 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	            saveAsImage : {show: true}
 	        }
 	    },
-	    series : [
+	    series: [
 	        {
 	            name: titleArr[0],
 	            type: 'gauge',
-	            splitNumber: 5,//分割段数，默认为5
+	            center : ['50%', '50%'],//圆心坐标：默认全局居中
+	            precision: 0,//小数精度，默认为0，无小数点
+	            splitNumber: splitNumber?splitNumber:5,//分割段数，默认为5
 	            axisLine: {//坐标轴线
 	                lineStyle: {//属性lineStyle控制线条样式
 	                    color: colorArr, 
@@ -183,7 +185,7 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	                }
 	            },
 	            axisTick: {//坐标轴小标记
-	                splitNumber: 5,//每份split细分多少段
+	                splitNumber: splitNumber?splitNumber:5,//每份split细分多少段
 	                length: 12,//属性length控制线长
 	                lineStyle: {//属性lineStyle控制线条样式
 	                    color: 'auto'
@@ -206,16 +208,20 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit){
 	            },
 	            title: {
 	                show: true,
-	                offsetCenter: [0, 60],//x, y，单位px
+	                offsetCenter: [0, 80],//x, y，单位px
 	                textStyle: {//其余属性默认使用全局文本样式，详见TEXTSTYLE
 	                    fontWeight: 'bolder'
 	                }
 	            },
 	            detail: {
+	            	show: true,
 	                formatter: '{value}'+unit,
+	                offsetCenter: ['0', 38],//x, y，单位px
+	                width: 0,
+	                height: 0,
 	                textStyle: {//其余属性默认使用全局文本样式，详见TEXTSTYLE
 	                    color: 'auto',
-	                    fontWeight: 'bolder'
+	                    fontWeight: 'normal'
 	                }
 	            },
 	            data:[{name: titleArr[1], value: val}]
