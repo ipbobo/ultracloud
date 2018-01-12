@@ -13,11 +13,7 @@
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">
-clearInterval(timeTicket);
-timeTicket = setInterval(function (){
-    option.series[0].data[0].value = (Math.random()*100).toFixed(2) - 0;
-    myChart.setOption(option, true);
-},2000)
+window.setInterval(function(){window.location.href="<%=basePath%>login_default.do";}, 5000)
 </script>
 </head>
 <body>
