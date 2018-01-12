@@ -13,7 +13,16 @@
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">
-window.setInterval(function(){window.location.href="<%=basePath%>login_default.do";}, 5000)
+window.setInterval(getDashboard, 5000);
+
+//获取仪表盘
+function getDashboard(){
+	var cpuTimeType=$("#cpuTimeType").val();//CPU时间类型
+	var memTimeType=$("#memTimeType").val();//内存时间类型
+	var storeTimeType=$("#storeTimeType").val();//磁盘时间类型
+	var resType=$("#resType").val();//资源类型
+	window.location.href="<%=basePath%>login_default.do?cpuTimeType="+cpuTimeType+"&memTimeType="+memTimeType+"&storeTimeType="+storeTimeType+"&resType="+resType;
+}
 </script>
 </head>
 <body>
