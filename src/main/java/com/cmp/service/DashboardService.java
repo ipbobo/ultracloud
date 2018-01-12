@@ -185,7 +185,13 @@ public class DashboardService {
 	
 	//资源使用列表
 	@SuppressWarnings("unchecked")
-	public List<PageData> getResUseList(Page page, String resType) throws Exception {
-		return (List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", page);
+	public List<PageData> getResUseList(String resType) throws Exception {
+        List<PageData> list=(List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", new Page());
+        if(list!=null && !list.isEmpty()){
+        	int size=list.size();
+        	return list.subList(0, size>=5?5:size);
+        }
+        
+        return null;
 	}
 }

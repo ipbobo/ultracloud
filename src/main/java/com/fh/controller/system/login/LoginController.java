@@ -33,7 +33,6 @@ import com.fh.service.system.fhbutton.FhbuttonManager;
 import com.fh.service.system.fhlog.FHlogManager;
 import com.fh.service.system.loginimg.LogInImgManager;
 import com.fh.service.system.menu.MenuManager;
-import com.fh.entity.Page;
 import com.fh.entity.system.Menu;
 import com.fh.entity.system.Role;
 import com.fh.entity.system.User;
@@ -92,7 +91,7 @@ public class LoginController extends BaseController {
 		mv.addObject("memTimeType", memTimeType);//内存时间类型
 		mv.addObject("storeTimeType", storeTimeType);//磁盘时间类型
 		mv.addObject("resType", resType);//资源类型
-		mv.addObject("chkFlag", chkFlag);//复选框是否选中：0-否；1-是
+		mv.addObject("chkFlag", chkFlag==null?"1":chkFlag);//复选框是否选中：0-否；1-是
 		mv.addObject("timeTypeList", cmpDictService.getCmpDictList("dashboard_time_type"));//仪表盘时间类型列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("dashboard_res_type"));//仪表盘资源类型列表
 		mv.addObject("virNum", dashboardService.getVirNum());//虚机总量
@@ -112,9 +111,7 @@ public class LoginController extends BaseController {
 		mv.addObject("cpuResRate", dashboardService.getCpuResRate(cpuTimeType));//CPU资源使用量趋势
 		mv.addObject("memResRate", dashboardService.getMemResRate(memTimeType));//存储资源使用量趋势
 		mv.addObject("storeResRate", dashboardService.getStoreResRate(storeTimeType));//磁盘资源使用量趋势
-		Page page=new Page();
-		getPageData(page, "showCount", 5);
-		mv.addObject("resUseList", dashboardService.getResUseList(page, resType));//资源使用列表
+		mv.addObject("resUseList", dashboardService.getResUseList(resType));//资源使用列表
 		mv.setViewName("system/index/default");
 		return mv;
 	}
