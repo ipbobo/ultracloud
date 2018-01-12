@@ -13,10 +13,18 @@
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">
-window.setInterval(getDashboard, 5000);
+//复选框选择
+function checkFunc(){
+	if($("#chkId").is(":checked")){
+		timeRefresh=window.setInterval(getDashboard, 5000)
+	}else{
+		clearInterval(timeRefresh);
+	}
+}
 
 //获取仪表盘
 function getDashboard(){
+	var chkFlag=$("#chkId").is(":checked");//CPU时间类型
 	var cpuTimeType=$("#cpuTimeType").val();//CPU时间类型
 	var memTimeType=$("#memTimeType").val();//内存时间类型
 	var storeTimeType=$("#storeTimeType").val();//磁盘时间类型
@@ -25,7 +33,7 @@ function getDashboard(){
 }
 </script>
 </head>
-<body>
+<body onload="checkFunc()">
 <div class="main-container">
 	<div class="page-content">
 		<div style="height:5px;"></div>
@@ -39,6 +47,7 @@ function getDashboard(){
 					<td align="center" width="80px">用户总数</td>
 					<td align="center" width="80px">项目总数</td>
 					<td align="center" width="80px">工单总数</td>
+					<td align="center" width="50px" rowspan="2"><input id="chkId" type="checkbox" onclick="checkFunc()" checked/>刷新</td>
 					<td align="center" width="20px" rowspan="2"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button></td>
 				</tr>
 				<tr>
