@@ -165,9 +165,9 @@ getAnnularChart('physLoadChart', ['${physLoad.loadTotalNum}台\n物理机','物�
 getAnnularChart('virRunChart', ['','虚拟机'], ['horizontal', 'center', 'bottom'], ['30%', '50%'], ['50%', '50%'], ['运行','挂起','关机'], ['${virRun.runRunnigNum}', '${virRun.runHangupNum}', '${virRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
 getAnnularChart('hostRunChart', ['','宿主机'], ['horizontal', 'center', 'bottom'], ['30%', '50%'], ['50%', '50%'], ['运行','挂起','关机'], ['${hostRun.runRunnigNum}', '${hostRun.runHangupNum}', '${hostRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
 getAnnularChart('physRunChart', ['','物理机'], ['horizontal', 'center', 'bottom'], ['30%', '50%'], ['50%', '50%'], ['运行','挂起','关机'], ['${physRun.runRunnigNum}', '${physRun.runHangupNum}', '${physRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
-getLineChart('cpuChart', ['资源使用量趋势'], ['${cpuResRate.xaxis1}', '${cpuResRate.xaxis2}', '${cpuResRate.xaxis3}', '${cpuResRate.xaxis4}', '${cpuResRate.xaxis5}', '${cpuResRate.xaxis6}'], ['${cpuResRate.yaxis1}', '${cpuResRate.yaxis2}', '${cpuResRate.yaxis3}', '${cpuResRate.yaxis4}', '${cpuResRate.yaxis5}', '${cpuResRate.yaxis6}']);//获取图表
-getLineChart('memChart', ['资源使用量趋势'], ['${memResRate.xaxis1}', '${memResRate.xaxis2}', '${memResRate.xaxis3}', '${memResRate.xaxis4}', '${memResRate.xaxis5}', '${memResRate.xaxis6}'], ['${memResRate.yaxis1}', '${memResRate.yaxis2}', '${memResRate.yaxis3}', '${memResRate.yaxis4}', '${memResRate.yaxis5}', '${memResRate.yaxis6}']);//获取图表
-getLineChart('storeChart', ['资源使用量趋势'], ['${storeResRate.xaxis1}', '${storeResRate.xaxis2}', '${storeResRate.xaxis3}', '${storeResRate.xaxis4}', '${storeResRate.xaxis5}', '${storeResRate.xaxis6}'], ['${storeResRate.yaxis1}', '${storeResRate.yaxis2}', '${storeResRate.yaxis3}', '${storeResRate.yaxis4}', '${storeResRate.yaxis5}', '${storeResRate.yaxis6}']);//获取图表
+getLineChart('cpuChart', ['资源使用量趋势'], '${cpuResRate.xaxis}'.split(","), '${cpuResRate.yaxis}'.split(","));//获取图表
+getLineChart('memChart', ['资源使用量趋势'], '${memResRate.xaxis}'.split(","), '${memResRate.yaxis}'.split(","));//获取图表
+getLineChart('storeChart', ['资源使用量趋势'], '${storeResRate.xaxis}'.split(","), '${storeResRate.yaxis}'.split(","));//获取图表
 </script>
 </body>
 </html>

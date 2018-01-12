@@ -125,7 +125,25 @@ public class DashboardService {
 		return cmpRes;
 	}
 	
-	//存储资源使用量趋势
+	//CPU资源使用量趋势
+	public CmpAxis getCpuResRate() throws Exception {
+		CmpAxis cmpAxis=new CmpAxis();
+		cmpAxis.setXaxis1("12/2");
+		cmpAxis.setXaxis2("12/4");
+		cmpAxis.setXaxis3("12/5");
+		cmpAxis.setXaxis4("12/12");
+		cmpAxis.setXaxis5("12/18");
+		cmpAxis.setXaxis6("12/22");
+		cmpAxis.setYaxis1("0.1");
+		cmpAxis.setYaxis2("0.3");
+		cmpAxis.setYaxis3("0.5");
+		cmpAxis.setYaxis4("0.7");
+		cmpAxis.setYaxis5("0.9");
+		cmpAxis.setYaxis6("1");
+		return cmpAxis;
+	}
+		
+	//内存资源使用量趋势
 	public CmpAxis getMemResRate() throws Exception {
 		CmpAxis cmpAxis=new CmpAxis();
 		cmpAxis.setXaxis1("12/1");
@@ -155,24 +173,6 @@ public class DashboardService {
 		cmpAxis.setYaxis1("0.1");
 		cmpAxis.setYaxis2("0.5");
 		cmpAxis.setYaxis3("0.6");
-		cmpAxis.setYaxis4("0.7");
-		cmpAxis.setYaxis5("0.9");
-		cmpAxis.setYaxis6("1");
-		return cmpAxis;
-	}
-	
-	//CPU资源使用量趋势
-	public CmpAxis getCpuResRate() throws Exception {
-		CmpAxis cmpAxis=new CmpAxis();
-		cmpAxis.setXaxis1("12/2");
-		cmpAxis.setXaxis2("12/4");
-		cmpAxis.setXaxis3("12/5");
-		cmpAxis.setXaxis4("12/12");
-		cmpAxis.setXaxis5("12/18");
-		cmpAxis.setXaxis6("12/22");
-		cmpAxis.setYaxis1("0.1");
-		cmpAxis.setYaxis2("0.3");
-		cmpAxis.setYaxis3("0.5");
 		cmpAxis.setYaxis4("0.7");
 		cmpAxis.setYaxis5("0.9");
 		cmpAxis.setYaxis6("1");
