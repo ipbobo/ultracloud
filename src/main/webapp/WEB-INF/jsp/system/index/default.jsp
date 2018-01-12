@@ -99,28 +99,28 @@ timeTicket = setInterval(function (){
 				<td align="left" valign="top" colspan="3"><div align="center" style="width: 140px;border:1px solid #000000;"><h5>TOP5资源使用排行</h5></div></td>
 			</tr>
 			<tr>
-				<td align="right">
+				<td align="right" style="padding-top: 10px;">
 					<select style="width: 100px;" class="chosen-select form-control" name="cpuTimeType" id="cpuTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="timeTypeFunc('cpuTimeType')">
 					<c:forEach items="${timeTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${cpuTimeType==var.dictCode || (cpuTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 					</c:forEach>
 				  	</select>
 				</td>
-				<td align="right">
+				<td align="right" style="padding-top: 10px;">
 					<select style="width: 100px;" class="chosen-select form-control" name="memTimeType" id="memTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="timeTypeFunc('memTimeType')">
 					<c:forEach items="${timeTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${memTimeType==var.dictCode || (memTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 					</c:forEach>
 				  	</select>
 				</td>
-				<td align="right">
+				<td align="right" style="padding-top: 10px;">
 					<select style="width: 100px;" class="chosen-select form-control" name="storeTimeType" id="storeTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="timeTypeFunc('storeTimeType')">
 					<c:forEach items="${timeTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${storeTimeType==var.dictCode || (storeTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 					</c:forEach>
 				  	</select>
 				</td>
-				<td align="right" colspan="3">
+				<td align="right" style="padding-top: 10px;" colspan="3">
 					<select style="width: 100px;" class="chosen-select form-control" name="resType" id="resType" data-placeholder="请选择资源类型" style="vertical-align:top;width: 100%;" onchange="resTypeFunc()">
 					<c:forEach items="${resTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${resType==var.dictCode || (resType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
