@@ -24,11 +24,11 @@ function checkFunc(){
 
 //获取仪表盘
 function getDashboard(){
-	var chkFlag=$("#chkId").is(":checked");//CPU时间类型
 	var cpuTimeType=$("#cpuTimeType").val();//CPU时间类型
 	var memTimeType=$("#memTimeType").val();//内存时间类型
 	var storeTimeType=$("#storeTimeType").val();//磁盘时间类型
 	var resType=$("#resType").val();//资源类型
+	var chkFlag=$("#chkId").is(":checked")?"1":"0";//复选框是否选中：0-否；1-是
 	window.location.href="<%=basePath%>login_default.do?cpuTimeType="+cpuTimeType+"&memTimeType="+memTimeType+"&storeTimeType="+storeTimeType+"&resType="+resType;
 }
 </script>
@@ -47,7 +47,7 @@ function getDashboard(){
 					<td align="center" width="80px">用户总数</td>
 					<td align="center" width="80px">项目总数</td>
 					<td align="center" width="80px">工单总数</td>
-					<td align="center" width="50px" rowspan="2"><input id="chkId" type="checkbox" onclick="checkFunc()" checked/>刷新</td>
+					<td align="center" width="50px" rowspan="2"><input id="chkId" type="checkbox" onclick="checkFunc()" <c:if test="${chkFlag=='1'}">checked</c:if>/>刷新</td>
 					<td align="center" width="20px" rowspan="2"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button></td>
 				</tr>
 				<tr>

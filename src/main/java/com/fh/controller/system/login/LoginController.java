@@ -81,6 +81,7 @@ public class LoginController extends BaseController {
 		String memTimeType=request.getParameter("memTimeType");//内存时间类型
 		String storeTimeType=request.getParameter("storeTimeType");//磁盘时间类型
 		String resType=request.getParameter("resType");//资源类型
+		String chkFlag=request.getParameter("chkFlag");//复选框是否选中：0-否；1-是
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd.put("userCount", Integer.parseInt(userService.getUserCount("").get("userCount").toString())-1);				//系统用户数
@@ -90,6 +91,7 @@ public class LoginController extends BaseController {
 		mv.addObject("memTimeType", memTimeType);//内存时间类型
 		mv.addObject("storeTimeType", storeTimeType);//磁盘时间类型
 		mv.addObject("resType", resType);//资源类型
+		mv.addObject("chkFlag", chkFlag);//复选框是否选中：0-否；1-是
 		mv.addObject("timeTypeList", cmpDictService.getCmpDictList("dashboard_time_type"));//仪表盘时间类型列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("dashboard_res_type"));//仪表盘资源类型列表
 		mv.addObject("virNum", dashboardService.getVirNum());//虚机总量
