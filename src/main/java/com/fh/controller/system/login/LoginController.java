@@ -33,6 +33,7 @@ import com.fh.service.system.fhbutton.FhbuttonManager;
 import com.fh.service.system.fhlog.FHlogManager;
 import com.fh.service.system.loginimg.LogInImgManager;
 import com.fh.service.system.menu.MenuManager;
+import com.fh.entity.Page;
 import com.fh.entity.system.Menu;
 import com.fh.entity.system.Role;
 import com.fh.entity.system.User;
@@ -108,9 +109,12 @@ public class LoginController extends BaseController {
 		mv.addObject("virRun", dashboardService.getVirRun());//虚拟机运行
 		mv.addObject("hostRun", dashboardService.getHostRun());//宿主机运行
 		mv.addObject("physRun", dashboardService.getPhysRun());//物理机运行
-		mv.addObject("cpuResRate", dashboardService.getCpuResRate());//CPU资源使用量趋势
-		mv.addObject("memResRate", dashboardService.getMemResRate());//存储资源使用量趋势
-		mv.addObject("storeResRate", dashboardService.getStoreResRate());//磁盘资源使用量趋势
+		mv.addObject("cpuResRate", dashboardService.getCpuResRate(cpuTimeType));//CPU资源使用量趋势
+		mv.addObject("memResRate", dashboardService.getMemResRate(memTimeType));//存储资源使用量趋势
+		mv.addObject("storeResRate", dashboardService.getStoreResRate(storeTimeType));//磁盘资源使用量趋势
+		Page page=new Page();
+		getPageData(page, "showCount", 5);
+		mv.addObject("resUseList", dashboardService.getResUseList(page, resType));//资源使用列表
 		mv.setViewName("system/index/default");
 		return mv;
 	}

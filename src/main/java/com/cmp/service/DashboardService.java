@@ -1,5 +1,7 @@
 package com.cmp.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -7,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.cmp.sid.CmpAxis;
 import com.cmp.sid.CmpRes;
 import com.fh.dao.DaoSupport;
+import com.fh.entity.Page;
+import com.fh.util.PageData;
 
 //仪表盘服务
 @Service
@@ -126,7 +130,7 @@ public class DashboardService {
 	}
 	
 	//CPU资源使用量趋势
-	public CmpAxis getCpuResRate() throws Exception {
+	public CmpAxis getCpuResRate(String timeType) throws Exception {
 		CmpAxis cmpAxis=new CmpAxis();
 		cmpAxis.setXaxis1("12/2");
 		cmpAxis.setXaxis2("12/4");
@@ -144,7 +148,7 @@ public class DashboardService {
 	}
 		
 	//内存资源使用量趋势
-	public CmpAxis getMemResRate() throws Exception {
+	public CmpAxis getMemResRate(String timeType) throws Exception {
 		CmpAxis cmpAxis=new CmpAxis();
 		cmpAxis.setXaxis1("12/1");
 		cmpAxis.setXaxis2("12/2");
@@ -162,7 +166,7 @@ public class DashboardService {
 	}
 	
 	//磁盘资源使用量趋势
-	public CmpAxis getStoreResRate() throws Exception {
+	public CmpAxis getStoreResRate(String timeType) throws Exception {
 		CmpAxis cmpAxis=new CmpAxis();
 		cmpAxis.setXaxis1("12/11");
 		cmpAxis.setXaxis2("12/12");
@@ -177,5 +181,11 @@ public class DashboardService {
 		cmpAxis.setYaxis5("0.9");
 		cmpAxis.setYaxis6("1");
 		return cmpAxis;
+	}
+	
+	//资源使用列表
+	@SuppressWarnings("unchecked")
+	public List<PageData> getResUseList(Page page, String resType) throws Exception {
+		return (List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", page);
 	}
 }

@@ -143,14 +143,42 @@ function getDashboard(){
 				</td>
 			</tr>
 			<tr height="180px">
-				<td id="cpuChart" align="center">
-					<div class="col-xs-12">
-						<div id="cpuChart" style="width: 100px;height:150px;" class="col-xs-4 col-sm-4"></div>
-					</div>
-				</td>
+				<td id="cpuChart" align="center"></td>
 				<td id="memChart" align="center"></td>
 				<td id="storeChart" align="center"></td>
-				<td id="virRunChart" align="center" colspan="3">
+				<td align="center" style="padding-top: 5px;" colspan="3">
+					<table id="simple-table" class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th class="center" style="width: 50px;">序号</th>
+								<th class="center">虚机名</th>
+								<th class="center">IP</th>
+								<th class="center">使用率</th>
+								<th class="center">使用量</th>
+								<th class="center">分配量</th>
+							</tr>
+						</thead>
+						<c:choose>
+						<c:when test="${not empty resUseList}">
+						<c:forEach items="${resUseList}" var="var" varStatus="vs">
+							<tr>
+								<td class='center' style="width: 30px;">${vs.index+1+page.currentResult}</td>
+								<td class='center'>${var.name}</td>
+								<td class='center'>${var.ip}</td>
+								<td class='center'>${var.useRate}</td>
+								<td class='center'>${var.useNum}</td>
+								<td class='center'>${var.allotNum}</td>
+							</tr>
+						</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<tr class="main_info">
+								<td colspan="6" class="center">没有相关数据</td>
+							</tr>
+						</c:otherwise>
+						</c:choose>
+					</table>
+				</td>
 			</tr>
 			<tr>
 				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">CPU</div></td>
