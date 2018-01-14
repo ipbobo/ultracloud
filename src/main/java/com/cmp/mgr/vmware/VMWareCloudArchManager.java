@@ -768,6 +768,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		}
 	}
 
+	@Override
+	public void createVolumeSnapshot(String volumeId, String name, String desc) {
+		throw new UnsupportedOperationException();
+	}
+
 	private static String getDeviceKey(VirtualDevice device) {
 		return device.controllerKey + " -- " + device.getUnitNumber();
 	}
