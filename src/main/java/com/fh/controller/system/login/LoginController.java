@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -75,12 +76,22 @@ public class LoginController extends BaseController {
 	
 	//仪表盘
 	@RequestMapping(value="/login_default")
-	public ModelAndView defaultPage() throws Exception{
+	public ModelAndView defaultPage(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String cpuTimeType=request.getParameter("cpuTimeType");//CPU时间类型
+		String memTimeType=request.getParameter("memTimeType");//内存时间类型
+		String storeTimeType=request.getParameter("storeTimeType");//磁盘时间类型
+		String resType=request.getParameter("resType");//资源类型
+		String chkFlag=request.getParameter("chkFlag");//复选框是否选中：0-否；1-是
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd.put("userCount", Integer.parseInt(userService.getUserCount("").get("userCount").toString())-1);				//系统用户数
 		pd.put("appUserCount", Integer.parseInt(appuserService.getAppUserCount("").get("appUserCount").toString()));	//会员数
-		mv.addObject("pd",pd);
+		mv.addObject("pd", pd);
+		mv.addObject("cpuTimeType", cpuTimeType);//CPU时间类型
+		mv.addObject("memTimeType", memTimeType);//内存时间类型
+		mv.addObject("storeTimeType", storeTimeType);//磁盘时间类型
+		mv.addObject("resType", resType);//资源类型
+		mv.addObject("chkFlag", chkFlag==null?"1":chkFlag);//复选框是否选中：0-否；1-是
 		mv.addObject("timeTypeList", cmpDictService.getCmpDictList("dashboard_time_type"));//仪表盘时间类型列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("dashboard_res_type"));//仪表盘资源类型列表
 		mv.addObject("virNum", dashboardService.getVirNum());//虚机总量
@@ -97,9 +108,10 @@ public class LoginController extends BaseController {
 		mv.addObject("virRun", dashboardService.getVirRun());//虚拟机运行
 		mv.addObject("hostRun", dashboardService.getHostRun());//宿主机运行
 		mv.addObject("physRun", dashboardService.getPhysRun());//物理机运行
-		mv.addObject("cpuResRate", dashboardService.getCpuResRate());//CPU资源使用量趋势
-		mv.addObject("memResRate", dashboardService.getMemResRate());//存储资源使用量趋势
-		mv.addObject("storeResRate", dashboardService.getStoreResRate());//磁盘资源使用量趋势
+		mv.addObject("cpuResRate", dashboardService.getCpuResRate(cpuTimeType));//CPU资源使用量趋势
+		mv.addObject("memResRate", dashboardService.getMemResRate(memTimeType));//存储资源使用量趋势
+		mv.addObject("storeResRate", dashboardService.getStoreResRate(storeTimeType));//磁盘资源使用量趋势
+		mv.addObject("resUseList", dashboardService.getResUseList(resType));//资源使用列表
 		mv.setViewName("system/index/default");
 		return mv;
 	}

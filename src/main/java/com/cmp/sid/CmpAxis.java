@@ -15,6 +15,10 @@ public class CmpAxis {
 	private String yaxis5;//y轴5
 	private String yaxis6;//y轴6
 
+	public String getXaxis() {
+		return xaxis1+","+xaxis2+","+xaxis3+","+xaxis4+","+xaxis5+","+xaxis6;
+	}
+	
 	public String getXaxis1() {
 		return xaxis1;
 	}
@@ -63,6 +67,10 @@ public class CmpAxis {
 		this.xaxis6 = xaxis6;
 	}
 
+	public String getYaxis() {
+		return yaxis1+","+yaxis2+","+yaxis3+","+yaxis4+","+yaxis5+","+yaxis6;
+	}
+	
 	public String getYaxis1() {
 		return yaxis1;
 	}

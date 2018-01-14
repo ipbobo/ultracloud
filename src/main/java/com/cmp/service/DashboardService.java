@@ -1,5 +1,7 @@
 package com.cmp.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -7,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.cmp.sid.CmpAxis;
 import com.cmp.sid.CmpRes;
 import com.fh.dao.DaoSupport;
+import com.fh.entity.Page;
+import com.fh.util.PageData;
 
 //仪表盘服务
 @Service
@@ -125,8 +129,26 @@ public class DashboardService {
 		return cmpRes;
 	}
 	
-	//存储资源使用量趋势
-	public CmpAxis getMemResRate() throws Exception {
+	//CPU资源使用量趋势
+	public CmpAxis getCpuResRate(String timeType) throws Exception {
+		CmpAxis cmpAxis=new CmpAxis();
+		cmpAxis.setXaxis1("12/2");
+		cmpAxis.setXaxis2("12/4");
+		cmpAxis.setXaxis3("12/5");
+		cmpAxis.setXaxis4("12/12");
+		cmpAxis.setXaxis5("12/18");
+		cmpAxis.setXaxis6("12/22");
+		cmpAxis.setYaxis1("0.1");
+		cmpAxis.setYaxis2("0.3");
+		cmpAxis.setYaxis3("0.5");
+		cmpAxis.setYaxis4("0.7");
+		cmpAxis.setYaxis5("0.9");
+		cmpAxis.setYaxis6("1");
+		return cmpAxis;
+	}
+		
+	//内存资源使用量趋势
+	public CmpAxis getMemResRate(String timeType) throws Exception {
 		CmpAxis cmpAxis=new CmpAxis();
 		cmpAxis.setXaxis1("12/1");
 		cmpAxis.setXaxis2("12/2");
@@ -144,7 +166,7 @@ public class DashboardService {
 	}
 	
 	//磁盘资源使用量趋势
-	public CmpAxis getStoreResRate() throws Exception {
+	public CmpAxis getStoreResRate(String timeType) throws Exception {
 		CmpAxis cmpAxis=new CmpAxis();
 		cmpAxis.setXaxis1("12/11");
 		cmpAxis.setXaxis2("12/12");
@@ -161,21 +183,15 @@ public class DashboardService {
 		return cmpAxis;
 	}
 	
-	//CPU资源使用量趋势
-	public CmpAxis getCpuResRate() throws Exception {
-		CmpAxis cmpAxis=new CmpAxis();
-		cmpAxis.setXaxis1("12/2");
-		cmpAxis.setXaxis2("12/4");
-		cmpAxis.setXaxis3("12/5");
-		cmpAxis.setXaxis4("12/12");
-		cmpAxis.setXaxis5("12/18");
-		cmpAxis.setXaxis6("12/22");
-		cmpAxis.setYaxis1("0.1");
-		cmpAxis.setYaxis2("0.3");
-		cmpAxis.setYaxis3("0.5");
-		cmpAxis.setYaxis4("0.7");
-		cmpAxis.setYaxis5("0.9");
-		cmpAxis.setYaxis6("1");
-		return cmpAxis;
+	//资源使用列表
+	@SuppressWarnings("unchecked")
+	public List<PageData> getResUseList(String resType) throws Exception {
+        List<PageData> list=(List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", new Page());
+        if(list!=null && !list.isEmpty()){
+        	int size=list.size();
+        	return list.subList(0, size>=5?5:size);
+        }
+        
+        return null;
 	}
 }
