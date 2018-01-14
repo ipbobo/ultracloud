@@ -204,7 +204,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public void createVolume(CreateVolumeRequest request) {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 	}
 
 }

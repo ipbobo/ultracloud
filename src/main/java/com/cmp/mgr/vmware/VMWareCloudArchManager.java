@@ -611,7 +611,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void createSnapshot(String name, String vmName, String desc, boolean memoryFlag) {
+	public void createVmSnapshot(String name, String vmName, String desc, boolean memoryFlag) {
 		searchManagedEntity(VirtualMachine.class, vmName).ifPresent(vm -> {
 			try {
 				vm.createSnapshot_Task(name, desc, memoryFlag, false);

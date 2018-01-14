@@ -31,6 +31,8 @@ public class TccCloudPlatform implements java.io.Serializable {
 	private String platformManagerType;
 
 	private String cloudplatformKey;// 平台，如果是venter则为vcenter的指纹信息
+	
+	private String tenantName; // oprnstack中使用
 
 	private String enableFlg;
 
