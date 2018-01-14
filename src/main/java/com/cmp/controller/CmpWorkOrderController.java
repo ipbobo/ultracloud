@@ -392,9 +392,10 @@ public class CmpWorkOrderController extends BaseController{
 				//写入流程注释
 				activitiService.addComment(task.getId(), toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
 				Map<String, Object> variables = new HashMap<String, Object>();
-				if (rejectFlag != null && "1".equals(rejectFlag)) {
+				if (rejectFlag != null && "0".equals(rejectFlag)) {
 					//拒绝流程
 					variables.put("USERNAME", userr.getUSERNAME());
+					variables.put("rejectFlag", 0);
 					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					
 					//更新工单(流程实例ID 和 工单状态)
@@ -407,7 +408,9 @@ public class CmpWorkOrderController extends BaseController{
 					return map;
 				}else {
 					//同意流程
-					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, null);
+					variables.put("USERNAME", userr.getUSERNAME());
+					variables.put("rejectFlag", 1);
+					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					//更新工单(流程实例ID 和 工单状态)
 					Map<String, String> updateParams = new HashMap<String, String>();
 					updateParams.put("status", "2");  //进入运维执行状态

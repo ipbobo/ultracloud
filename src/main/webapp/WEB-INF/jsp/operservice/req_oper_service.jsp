@@ -246,7 +246,8 @@
 						</h4>
 					</div>
 					<div class="modal-body">
-						<select name="vmModalProject" id="vmModalProject" title="分项目查询" style="width:20%;margin-left: 100px;" onchange="onVmModalProJectSelect(this.value)">
+						项目查询:
+						<select name="vmModalProject" id="vmModalProject" title="分项目查询" style="width:20%;margin-left: 100px;" onchange="onVmModalProjectSelect(this.value)">
 										<option value="#" selected="selected">清选择项目</option>
 									   <c:forEach items="${projectNameMap}" var="var">
 					                   <option value="${var.key}">${var.value}</option>
@@ -275,7 +276,7 @@
 									<c:choose>
 										<c:when test="${not empty vmList}">
 											<c:forEach items="${vmList}" var="var" varStatus="vs">
-												<tr id="vm_modal_td_${var.projectId}">
+												<tr id="vm_modal_tr_${var.projectId}" class="vm_modal_tr">
 											<td class='center' ><label class="pos-rel"><input
 															type='checkbox' id='checkbox_${var.id}' name='softcheckbox' value="${var.id}" class="ace" /><span
 															class="lbl"></span></label></td>
@@ -379,6 +380,13 @@
 						</h4>
 					</div>
 					<div class="modal-body">	
+						项目查询:
+						<select name="vmModalProject" id="vmModalProject" title="分项目查询" style="width:20%;margin-left: 100px;" onchange="onVmSelectModalProjectSelect(this.value)">
+										<option value="#" selected="selected">清选择项目</option>
+									   <c:forEach items="${projectNameMap}" var="var">
+					                   <option value="${var.key}">${var.value}</option>
+				                     </c:forEach>
+						</select>
 						<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 							<tr class="tablecls">
 								<td align="right" style="width: 120px;padding:10px;">虚拟机：</td>
@@ -399,7 +407,7 @@
 									<c:choose>
 										<c:when test="${not empty vmList}">
 											<c:forEach items="${vmList}" var="var" varStatus="vs">
-												<tr>
+												<tr id="vm_select_modal_tr_${var.projectId}" class="vm_select_modal_tr">
 											<td class='center'><label class="pos-rel"><input
 															type='checkbox' id='vmcheckbox_${var.id}' name='vmcheckbox' value="${var.id}" class="ace" /><span
 															class="lbl"></span></label></td>
@@ -767,15 +775,22 @@
 		});  
 	}
 	
-	function onVmModalProJectSelect(projectId){
-		alert($("#vm_modal tr").size());
-		alert($("#vm_modal tr:not(#vm_modal_head)").size());
-		//$("#vm_modal tr:not(#vm_modal_head)").each(function(){       
-		//    $(this).attr("style", "display:none;");
-		//});   
-		alert($("[id=vm_modal_td_"+ projectId +"]").size());
-		$("[id=vm_modal_td_"+ projectId +"]").each(function(){       
+	function onVmModalProjectSelect(projectId){
+		$(".vm_modal_tr").each(function(){       
 		    $(this).attr("style", "display:none;");
+		});   
+		$("[id=vm_modal_tr_"+ projectId +"]").each(function(){       
+		    $(this).attr("style", "display:' ';");
+		});   
+	}
+	
+	         
+	function onVmSelectModalProjectSelect(projectId){
+		$(".vm_select_modal_tr").each(function(){       
+		    $(this).attr("style", "display:none;");
+		});   
+		$("[id=vm_select_modal_tr_"+ projectId +"]").each(function(){       
+		    $(this).attr("style", "display:' ';");
 		});   
 	}
 	

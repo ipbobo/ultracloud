@@ -45,11 +45,17 @@
 		<jsp:include page="operview_pv.jsp"></jsp:include>
 		<table>
 			<tr>
+				<td align="right" style="width: 120px;padding:10px;">退回：</td>
+				<td align="left" style="padding:10px;" width="90%">
+					<input type="checkbox" name="rejectFlag" id="rejectFlag" value="0">
+				</td>
+			</tr>
+			<tr>
 			<td align="right" style="width: 120px;padding:10px;">批复：</td>
 			<td align="left" style="padding:10px;" width="90%">
 				<textarea class="form-control limited" id="comment" name="comment" style="width: 100%"></textarea>
 			</td>
-		</tr>
+			</tr>
 		</table>
 		<form class="form-horizontal" id="checkform" name="checkform"
 			role="form">
@@ -176,9 +182,10 @@
 	function doCheck(appNo){
 		top.jzts();
 		var comment = $("#comment").val();
+		var rejectFlag = $("#rejectFlag").val();
 		$.ajax({
 			type: "POST",
-			url: '<%=basePath%>doCheck.do?appNo='+appNo +'&comment=' + comment,
+			url: '<%=basePath%>doCheck.do?appNo='+appNo +'&comment=' + comment + '&rejectFlag=' + rejectFlag,
 			dataType:'json',
 			//beforeSend: validateData,
 			cache: false,
