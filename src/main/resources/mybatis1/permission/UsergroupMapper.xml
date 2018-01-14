@@ -6,6 +6,7 @@
 		<id column="id" property="id"/>
 		<result column="usergroup_id" property="usergroup_id"/>
 		<result column="USER_ID" property="USER_ID"/>
+		<result column="USERNAME" property="USERNAME"/>
 		<result column="gmt_create" property="gmt_create"/>
 		<result column="gmt_modified" property="gmt_modified"/>
 	</resultMap>
@@ -22,6 +23,9 @@
 	</sql>
 	<sql id="usergroupusertableName">
 		t_usergroup_user_map
+	</sql>
+	<sql id="userTableName">
+		sys_user
 	</sql>
 	
 	<!-- 字段 -->
@@ -164,9 +168,16 @@
 	
 	<!-- 通过用户组查找用户列表 -->
 	<select id="listUserGroupUserMap" parameterType="String" resultMap="userGroupUserMapResultMap">
-		select * from 
-		<include refid="usergroupusertableName"></include>
-		where usergroup_id=#{id}
+		select a.id,
+		       a.usergroup_id,
+		       a.USER_ID,
+		       b.USERNAME,
+		       a.gmt_create,
+		       a.gmt_modified 
+		from 
+		<include refid="usergroupusertableName"></include> a,<include refid="userTableName"></include> b
+		where a.USER_ID=b.USER_ID
+		and a.usergroup_id=#{id}
 	</select>
 	
 </mapper>

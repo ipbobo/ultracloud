@@ -329,7 +329,9 @@ public class AppOperServiceController  extends BaseController {
 		
 		//完成申请任务
 		//List<User> userList = userService.listAllUserByRoldId(pd)
-		activitiService.handleTask(workworder.getAppNo(), procInstId,  user.getUSERNAME(), null, null);
+		Map<String, Object> variablesMap = new HashMap<String, Object>();
+		variablesMap.put("appNo", workworder.getAppNo());
+		activitiService.handleTask(workworder.getAppNo(), procInstId,  user.getUSERNAME(), null, variablesMap);
 		
 		//更新工单(流程实例ID 和 工单状态)
 		Map<String, String> updateParams = new HashMap<String, String>();
