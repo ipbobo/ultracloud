@@ -39,7 +39,7 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 							platform.getCloudplatformPassword())
 					.tenantName(platform.getTenantName()).authenticate();
 		} catch (Exception e) {
-			logger.info("根据参数取得openStack客户端出错，错误原因：" + e);
+			throw new RuntimeException(e);
 		}
 
 		return Optional.ofNullable(os);
@@ -184,7 +184,6 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
 			client.blockStorage().snapshots().create(volumeSnapshot);
 		});
-
 	}
 
 }

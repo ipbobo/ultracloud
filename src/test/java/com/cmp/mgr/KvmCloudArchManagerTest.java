@@ -12,12 +12,14 @@ public class KvmCloudArchManagerTest implements CloudArchTest {
 
 	private KvmCloudArchManager cloudArchManager;
 
+	static {
+		System.setProperty("jna.library.path", "C:/Program Files/VirtViewer v6.0-256/bin");
+	}
+
 	@Before
 	public void setup() {
 		TccCloudPlatform platform = new TccCloudPlatform();
-		platform.setCloudplatformUser("administrator@vsphere.local");
-		platform.setCloudplatformPassword("123.comM");
-		platform.setCloudplatformIp("118.242.40.216");
+		platform.setCloudplatformIp("180.169.225.158");
 
 		cloudArchManager = new KvmCloudArchManager(platform);
 	}
