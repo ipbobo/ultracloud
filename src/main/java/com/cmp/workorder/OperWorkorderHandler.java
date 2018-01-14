@@ -91,9 +91,9 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 		resMap.put("serviceType", serviceType);
 		if (serviceType.equals("1")) {
 			List<DeployedSoft> rebootSoftMap = new ArrayList<DeployedSoft>();
-			String vm = opServe.getVm();  // 在此格式：虚拟机1:软件1,软件1|虚拟机2:软件1,软件2|
+			String vms = opServe.getRemark1();  // 在此格式：软件1,软件2,软件3
 			String rebootSoftIds = "";
-			String[] vmlist = vm.split("\\|");
+			String[] vmlist = vms.split("\\|");
 			for (String dep_softs : vmlist) {
 				if (dep_softs == null || dep_softs.length() == 0) {
 					continue;

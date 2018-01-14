@@ -100,11 +100,19 @@
 	function save(){
 		if($("#sys_name").val()==""){
 			showDialog("系统名称不能为空");
-		}else{
-			$("#sysconfigForm").submit();
-			$("#zhongxin").hide();
-			$("#zhongxin2").show();
+			return false;
 		}
+		var logo = document.getElementById("logo").value;
+		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(logo))
+        {
+			showDialog("图片类型必须是.gif,jpeg,jpg,png中的一种")
+          return false;
+        }
+		
+		$("#sysconfigForm").submit();
+		$("#zhongxin").hide();
+		$("#zhongxin2").show();
+		
 	}
 	
 	

@@ -36,6 +36,7 @@
 						<div class="col-xs-12">
 						<input type="hidden" name="middleware" id="middleware" value=""/>
 						<input type="hidden" name="vm" id="vm" value="">
+						<input type="hidden" name="remark1" id="remark1" value="">
 							<div id="zhongxin" style="padding-top: 50px;">
 							<table id="table_report" class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;" >
 								<tr>
@@ -244,17 +245,23 @@
 							虚拟机
 						</h4>
 					</div>
-					<div class="modal-body">	
+					<div class="modal-body">
+						<select name="vmModalProject" id="vmModalProject" title="分项目查询" style="width:20%;margin-left: 100px;" onchange="onVmModalProJectSelect(this.value)">
+										<option value="#" selected="selected">清选择项目</option>
+									   <c:forEach items="${projectNameMap}" var="var">
+					                   <option value="${var.key}">${var.value}</option>
+				                     </c:forEach>
+						</select>
 						<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 							<tr class="tablecls">
 								<td align="right" style="width: 120px;padding:10px;">虚拟机：</td>
 								<td align="left" style="padding:10px;">
-									<table id="simple-table"
+									<table id="table_vm_1"
 								class="table table-striped table-bordered table-hover"
 								style="margin-top: 5px;">
 								
 									<thead>
-									<tr>
+									<tr id="vm_modal_head">
 										<th class="center" style="width: 35px;"><label
 											class="pos-rel"><input type="checkbox" class="ace"
 												id="zcheckbox" /><span class="lbl"></span></label></th>
@@ -268,8 +275,8 @@
 									<c:choose>
 										<c:when test="${not empty vmList}">
 											<c:forEach items="${vmList}" var="var" varStatus="vs">
-												<tr>
-											<td class='center'><label class="pos-rel"><input
+												<tr id="vm_modal_td_${var.projectId}">
+											<td class='center' ><label class="pos-rel"><input
 															type='checkbox' id='checkbox_${var.id}' name='softcheckbox' value="${var.id}" class="ace" /><span
 															class="lbl"></span></label></td>
 														<td class='center'>${var.id}</td>
@@ -525,9 +532,12 @@
 			 	vm_select_count = vm_select_count +1;
 	            return $('#'+m_soft_id).val();
 	        }).get().join('|');
-		 
+		vm = $("input:checkbox[name='softcheckbox']:checked").map(function(index,vm_selected) {
+			 return $(vm_selected).val();
+        }).get().join(',');
 		//var checkbox = $('#middleware_checkbox');
-		$('#vm').val(text);
+		$('#vm').val(vm);
+		$('#remark1').val(text);
 		$('#btn_add_vm').text('修改');
 		$('#v_vm').html("<b>你已经选择: "+ vm_select_count+ "台虚拟机</b>");
 		$('#vm_modal').modal('hide');
@@ -570,6 +580,7 @@
 		var directory3 = $("#directory3").val();
 		var rootpwd = $("#rootpwd").val();
 		var exp_time_pwd =  $("#exp_time_pwd").val();
+		var remark1 = $("#remark1").val();
 		if( service_type ==""){
 			$("#tip_service_type").tips({
 				side:3,
@@ -659,7 +670,7 @@
 						'oper_type':oper_type, 'install_soft':install_soft, 'soft_version':soft_version,
 						'breakdown_time':breakdown_time, 'breakdown_info':breakdown_info, 'except_solve_time':except_solve_time,
 						'except_result':except_result,'breakdown_level':breakdown_level, 'partition_info':partition_info, 'directory':directory,
-						 'directory2':directory2, 'exp_time':exp_time, 'rootpwd':rootpwd, 'exp_time_pwd':exp_time_pwd,'directory3':directory3, 'vip_num':vip_num
+						 'directory2':directory2, 'exp_time':exp_time, 'rootpwd':rootpwd, 'exp_time_pwd':exp_time_pwd,'directory3':directory3, 'vip_num':vip_num, 'remark1':remark1
 					},  
 			type : "post",  
 			cache : false,  
@@ -754,6 +765,18 @@
 				   }
 			}
 		});  
+	}
+	
+	function onVmModalProJectSelect(projectId){
+		alert($("#vm_modal tr").size());
+		alert($("#vm_modal tr:not(#vm_modal_head)").size());
+		//$("#vm_modal tr:not(#vm_modal_head)").each(function(){       
+		//    $(this).attr("style", "display:none;");
+		//});   
+		alert($("[id=vm_modal_td_"+ projectId +"]").size());
+		$("[id=vm_modal_td_"+ projectId +"]").each(function(){       
+		    $(this).attr("style", "display:none;");
+		});   
 	}
 	
 </script>
