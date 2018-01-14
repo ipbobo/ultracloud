@@ -56,12 +56,14 @@ public interface CloudArchManager {
 
 	public void cloneVirtualMachine(CloneVmRequest request);
 
-	public void createSnapshot(String name, String vmName, String desc, boolean memoryFlag);
+	public void createVmSnapshot(String name, String vmName, String desc, boolean memoryFlag);
 
 	public void deleteSnapshot(String snapshotUUID);
 
 	public void revertToSnapshot(String snapshotUUID, String hostMachineUUID);
 
 	public void createVolume(CreateVolumeRequest request);
+
+	public void createVolumeSnapshot(String volumeId, String name, String desc);
 
 }

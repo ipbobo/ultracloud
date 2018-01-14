@@ -1,6 +1,17 @@
 package com.cmp.mgr.openstack;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.openstack4j.api.Builders;
+import org.openstack4j.api.OSClient.OSClientV2;
+import org.openstack4j.model.compute.RebootType;
+import org.openstack4j.model.storage.block.VolumeSnapshot;
+import org.openstack4j.openstack.OSFactory;
 
 import com.cmp.entity.tcc.TccCluster;
 import com.cmp.entity.tcc.TccDatacenter;
@@ -17,6 +28,22 @@ import com.cmp.mgr.bean.CreateVolumeRequest;
 import com.vmware.vim25.mo.Datacenter;
 
 public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
+
+	private OpenstackConverters converters = new OpenstackConverters();
+
+	private Optional<OSClientV2> getOSClient() {
+		OSClientV2 os = null;
+		try {
+			os = OSFactory.builderV2().endpoint(platform.getCloudplatformIp())
+					.credentials(platform.getCloudplatformUser(),
+							platform.getCloudplatformPassword())
+					.tenantName(platform.getTenantName()).authenticate();
+		} catch (Exception e) {
+			logger.info("根据参数取得openStack客户端出错，错误原因：" + e);
+		}
+
+		return Optional.ofNullable(os);
+	}
 
 	@Override
 	public List<Datacenter> getDatacenters() {
@@ -45,7 +72,16 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public List<TccVirtualMachine> getVirtualMachines() {
-		return null;
+		// @formatter:off
+		return getOSClient()
+				.map(c -> c.compute().servers().list())
+				.filter(CollectionUtils::isNotEmpty)
+				.map(ls ->
+					ls.stream()
+					  .map(converters.toVirtualMachine())
+					  .collect(toList()))
+				.orElse(Collections.emptyList());
+		// @formatter:on
 	}
 
 	@Override
@@ -88,7 +124,9 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public void rebootVirtualMachine(String name) {
-		// TODO Auto-generated method stub
+		getOSClient().ifPresent(client -> {
+			client.compute().servers().reboot(name, RebootType.SOFT);
+		});
 	}
 
 	@Override
@@ -98,7 +136,9 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public void deleteVirtualMachine(String name) {
-		// TODO Auto-generated method stub
+		getOSClient().ifPresent(client -> {
+			client.compute().servers().delete(name);
+		});
 	}
 
 	@Override
@@ -107,13 +147,17 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void createSnapshot(String name, String vmName, String desc, boolean memoryFlag) {
-		// TODO Auto-generated method stub
+	public void createVmSnapshot(String name, String vmName, String desc, boolean memoryFlag) {
+		getOSClient().ifPresent(client -> {
+			client.compute().servers().createSnapshot(vmName, name);
+		});
 	}
 
 	@Override
 	public void deleteSnapshot(String snapshotUUID) {
-		// TODO Auto-generated method stub
+		getOSClient().ifPresent(client -> {
+			client.images().delete(snapshotUUID);
+		});
 	}
 
 	@Override
@@ -123,7 +167,24 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public void createVolume(CreateVolumeRequest request) {
-		// TODO Auto-generated method stub
+		String serverId = request.getVmUUID();
+		String volumeId = request.getVolumeId();
+		String device = request.getDevice();
+
+		getOSClient().ifPresent(client -> {
+			client.compute().servers().attachVolume(serverId, volumeId, device);
+		});
+	}
+
+	@Override
+	public void createVolumeSnapshot(String volumeId, String name, String desc) {
+		getOSClient().ifPresent(client -> {
+			VolumeSnapshot volumeSnapshot = Builders.volumeSnapshot()
+					.volume(volumeId).name(name).description(desc).build();
+
+			client.blockStorage().snapshots().create(volumeSnapshot);
+		});
+
 	}
 
 }

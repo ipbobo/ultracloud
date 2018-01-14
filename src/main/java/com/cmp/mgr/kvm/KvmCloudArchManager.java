@@ -25,7 +25,7 @@ import com.vmware.vim25.mo.Datacenter;
 
 public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 
-	private KvmConverters converters;
+	private KvmConverters converters = new KvmConverters();
 
 	public KvmCloudArchManager() {
 	}
@@ -188,7 +188,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void createSnapshot(String name, String vmName, String desc, boolean memoryFlag) {
+	public void createVmSnapshot(String name, String vmName, String desc, boolean memoryFlag) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -204,7 +204,12 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public void createVolume(CreateVolumeRequest request) {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void createVolumeSnapshot(String volumeId, String name, String desc) {
+		throw new UnsupportedOperationException();
 	}
 
 }
