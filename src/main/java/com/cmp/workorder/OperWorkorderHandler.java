@@ -59,6 +59,17 @@ public class OperWorkorderHandler implements IWorkorderHandler {
 		}
 		return resMap;
 	}
+	
+	@Override
+	public Map<String, Object> toWorkorderVerify(CmpWorkOrder cmpWorkorder) throws Exception {
+		Map<String, Object> resMap = new HashMap<String, Object>();
+		resMap = buildViewInfo(cmpWorkorder, resMap);
+		resMap.put("userRole", "verify");  //设置此值，可在页面中看到操作按钮，没有就不显示
+		if (resMap.get("toPageUrl") == null) {
+			resMap.put("toPageUrl", "workorder/operverify");
+		}
+		return resMap;
+	}
 
 	@Override
 	public Map<String, Object> toWorkorderExecute(CmpWorkOrder cmpWorkorder) throws Exception {

@@ -45,16 +45,10 @@
 		<jsp:include page="operview_pv.jsp"></jsp:include>
 		<table>
 			<tr>
-				<td align="right" style="width: 120px;padding:10px;">退回：</td>
+				<td align="right" style="width: 120px;padding:10px;">批复：</td>
 				<td align="left" style="padding:10px;" width="90%">
-					<input type="checkbox" name="rejectFlag" id="rejectFlag" value="0">
+					<textarea class="form-control limited" id="comment" name="comment" style="width: 100%"></textarea>
 				</td>
-			</tr>
-			<tr>
-			<td align="right" style="width: 120px;padding:10px;">批复：</td>
-			<td align="left" style="padding:10px;" width="90%">
-				<textarea class="form-control limited" id="comment" name="comment" style="width: 100%"></textarea>
-			</td>
 			</tr>
 		</table>
 		<form class="form-horizontal" id="checkform" name="checkform"
@@ -62,8 +56,8 @@
 			<div class="clearfix form-actions">
 				<div class="col-md-offset-3 col-md-9">
 					<button class="btn btn-info" id="OK" name="OK" type="button"
-						onclick="doCheck('${workorder.appNo}');">
-						<i class="ace-icon fa fa-check bigger-110"></i> 确定审核
+						onclick="doVerify('${workorder.appNo}');">
+						<i class="ace-icon fa fa-check bigger-110"></i> 确定
 					</button>
 
 					&nbsp; &nbsp; &nbsp;
@@ -179,19 +173,12 @@
 	});
 	
 	
-	function doCheck(appNo){
+	function doVerify(appNo){
 		top.jzts();
 		var comment = $("#comment").val();
-		var isRejectChecked = document.getElementById("rejectFlag").checked
-		var rejectFlag = true;
-		if (isRejectChecked == true){
-			rejectFlag = true;
-		}else {
-			rejectFlag = false;
-		}
 		$.ajax({
 			type: "POST",
-			url: '<%=basePath%>doCheck.do?appNo='+appNo +'&comment=' + comment + '&rejectFlag=' + rejectFlag,
+			url: '<%=basePath%>doVerify.do?appNo='+appNo +'&comment=' + comment,
 			dataType:'json',
 			//beforeSend: validateData,
 			cache: false,

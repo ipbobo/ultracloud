@@ -219,6 +219,73 @@ public class CmpWorkOrderController extends BaseController{
 		return mv;
 	}
 	
+	@RequestMapping(value="/goWorkorderVerify")
+	public ModelAndView goWorkorderVerify(String appNo) throws Exception {
+		
+		ModelAndView mv = new ModelAndView();
+		if (appNo == null || appNo.length() == 0) {
+			return null;
+		}
+		CmpWorkOrder toVerifyWorkorder = cmpWorkOrderService.findByAppNo(appNo);
+		//获取工作流程图,查询流程定义
+		HistoricProcessInstance hpi = activitiService.findProcessInst(toVerifyWorkorder.getProcInstId());
+		ActivityImpl workorderImag = null;
+		if (!toVerifyWorkorder.getStatus().equals("5")) {
+			//流程执行未完毕
+			workorderImag = activitiService.getProcessMap(hpi.getProcessDefinitionId(), hpi.getId()); 
+		}
+		//获取流程信息
+		List<RelateTask> relateTaskList = fetchRelateTaskList(toVerifyWorkorder.getProcInstId());
+		
+		mv.addObject("relateTaskList", relateTaskList);
+		mv.addObject("workorderImag", workorderImag);
+		mv.addObject("procDefId", hpi.getProcessDefinitionId());
+		
+		//获取流程注释
+		List<Comment> commentList = activitiService.getProcessComments(toVerifyWorkorder.getProcInstId());
+		mv.addObject("commentList", commentList);
+		
+		//是资源申请，跳资源申请详情页面或运维申请审核页面
+		String toViewUrl = "";
+		IWorkorderHandler workorderHandler = workorderHelper.instance(toVerifyWorkorder.getAppType());
+		if (workorderHandler == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
+		}
+		Map<String, Object> pageViewMap = workorderHandler.toWorkorderCheck(toVerifyWorkorder);
+		if (pageViewMap == null) {
+			toViewUrl = "/404"; 
+			mv.setViewName(toViewUrl);
+			return mv;
+		}
+		for (String key : pageViewMap.keySet()) {
+			mv.addObject(key, pageViewMap.get(key));
+		}
+		mv.setViewName((String)pageViewMap.get("toPageUrl"));
+		
+		//是资源申请，跳资源申请审核页面或运维申请审核页面
+//		String toCheckUrl = "";
+//		if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("1")) {
+//			CmpOrder orderInfo = null;
+//			List<CmpOrder> orderList = cmpOrderService.getOrderDtl(toCheckWorkorder.getOrderNo());
+//			if (orderList != null && orderList.size() > 0) {
+//				orderInfo = orderList.get(0);
+//			}
+//			mv.addObject("orderInfo", orderInfo);
+//			toCheckUrl = "workorder/applycheck";
+//		}else if (toCheckWorkorder.getAppType()!= null && toCheckWorkorder.getAppType().equals("2")) {
+//			//查询工单关联的运维信息
+//			CmpOpServe opServe = cmpOpServeService.findByOrderNo(toCheckWorkorder.getOrderNo());
+//			cmpOpServeService.encase(opServe);  //中文填充
+//			mv.addObject("opServe", opServe);
+//			toCheckUrl = "workorder/opercheck";
+//		}
+//		mv.addObject("workorder", toCheckWorkorder);
+//		mv.setViewName(toCheckUrl);
+		return mv;
+	}
+	
 	@RequestMapping(value="/goWorkorderExecute")
 	public ModelAndView goWorkorderExecute(String appNo) throws Exception {
 		
@@ -420,6 +487,59 @@ public class CmpWorkOrderController extends BaseController{
 					map.put("result", resultInfo);	
 					return map;
 				}
+			}
+		}
+		map.put("result", resultInfo);				//返回结果
+		return map;
+	}
+	
+	
+	/**工单确认
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/doVerify")
+	@ResponseBody
+	public Object doVerify(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		Map<String,String> map = new HashMap<String,String>();
+		String resultInfo = "确认完成";
+		String appNo = request.getParameter("appNo");
+		String comment = request.getParameter("comment") == null? "":request.getParameter("comment");
+		Session session = Jurisdiction.getSession();
+		
+		CmpWorkOrder toVerifyWorkorder = cmpWorkOrderService.findByAppNo(appNo);
+		if (toVerifyWorkorder == null) {
+			resultInfo = "审核失败,工单号不存在";
+			map.put("result", resultInfo);	
+			return map;
+		}
+		User userr = (User)session.getAttribute(Const.SESSION_USERROL);				//读取session中的用户信息(含角色信息)
+		if (userr == null) {
+			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
+			if (user == null) {
+				map.put("result", resultInfo);	
+				return map;
+			}
+			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
+			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
+		}
+		
+		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 100);
+		for (Task task : userTaskList) {
+			if (task.getProcessInstanceId().equals(toVerifyWorkorder.getProcInstId())) {
+				activitiService.claimTask(task.getId(), userr.getUSERNAME());
+				//写入流程注释
+				activitiService.addComment(task.getId(), toVerifyWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
+				Map<String, Object> variables = new HashMap<String, Object>();
+				activitiService.handleTask(appNo, toVerifyWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
+				//更新工单(流程实例ID 和 工单状态)
+				Map<String, String> updateParams = new HashMap<String, String>();
+				updateParams.put("status", "5");  //工单完成
+				updateParams.put("procInstId", toVerifyWorkorder.getProcInstId());
+				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+				resultInfo = "确认完成";
+				map.put("result", resultInfo);	
+				return map;
 			}
 		}
 		map.put("result", resultInfo);				//返回结果
