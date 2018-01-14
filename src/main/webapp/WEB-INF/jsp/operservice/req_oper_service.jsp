@@ -245,17 +245,23 @@
 							虚拟机
 						</h4>
 					</div>
-					<div class="modal-body">	
+					<div class="modal-body">
+						<select name="vmModalProject" id="vmModalProject" title="分项目查询" style="width:20%;margin-left: 100px;" onchange="onVmModalProJectSelect(this.value)">
+										<option value="#" selected="selected">清选择项目</option>
+									   <c:forEach items="${projectNameMap}" var="var">
+					                   <option value="${var.key}">${var.value}</option>
+				                     </c:forEach>
+						</select>
 						<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 							<tr class="tablecls">
 								<td align="right" style="width: 120px;padding:10px;">虚拟机：</td>
 								<td align="left" style="padding:10px;">
-									<table id="simple-table"
+									<table id="table_vm_1"
 								class="table table-striped table-bordered table-hover"
 								style="margin-top: 5px;">
 								
 									<thead>
-									<tr>
+									<tr id="vm_modal_head">
 										<th class="center" style="width: 35px;"><label
 											class="pos-rel"><input type="checkbox" class="ace"
 												id="zcheckbox" /><span class="lbl"></span></label></th>
@@ -269,8 +275,8 @@
 									<c:choose>
 										<c:when test="${not empty vmList}">
 											<c:forEach items="${vmList}" var="var" varStatus="vs">
-												<tr>
-											<td class='center'><label class="pos-rel"><input
+												<tr id="vm_modal_td_${var.projectId}">
+											<td class='center' ><label class="pos-rel"><input
 															type='checkbox' id='checkbox_${var.id}' name='softcheckbox' value="${var.id}" class="ace" /><span
 															class="lbl"></span></label></td>
 														<td class='center'>${var.id}</td>
@@ -759,6 +765,18 @@
 				   }
 			}
 		});  
+	}
+	
+	function onVmModalProJectSelect(projectId){
+		alert($("#vm_modal tr").size());
+		alert($("#vm_modal tr:not(#vm_modal_head)").size());
+		//$("#vm_modal tr:not(#vm_modal_head)").each(function(){       
+		//    $(this).attr("style", "display:none;");
+		//});   
+		alert($("[id=vm_modal_td_"+ projectId +"]").size());
+		$("[id=vm_modal_td_"+ projectId +"]").each(function(){       
+		    $(this).attr("style", "display:none;");
+		});   
 	}
 	
 </script>

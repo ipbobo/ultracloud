@@ -23,6 +23,7 @@ import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.DeployedSoftService;
 import com.cmp.service.MediumService;
+import com.cmp.service.ProjectService;
 import com.cmp.service.ScriptParamService;
 import com.cmp.service.ScriptService;
 import com.cmp.service.VirtualMachineService;
@@ -78,6 +79,8 @@ public class AppOperServiceController  extends BaseController {
 	@Resource
 	private ScriptService scriptService;
 	
+	@Resource
+	private ProjectService projectService;
 	//运维服务申请表单查询
 	@RequestMapping(value="/reqOperServicePre")
 	public ModelAndView reqOperServicePre() throws Exception{
@@ -101,19 +104,32 @@ public class AppOperServiceController  extends BaseController {
 		
 		//查询用户拥有的虚拟机及虚拟机上部署的中间件
 		List<VirtualMachine> vmList = virtualMachineService.findByUser(userr.getNAME());
-//		Map<String , List<DeployedSoft>> deployedSoftMap = new HashMap<String , List<DeployedSoft>>();
-//		for (VirtualMachine vm : vmList) {
-//			List<DeployedSoft> softList = deployedSoftService.findByVmId(vm.getId());
-//			deployedSoftMap.put(vm.getId(), softList);
-//		}
-//		mv.addObject("deployedSoftMap", deployedSoftMap);
-		//查询所有的可安装软件
+		//生成虚拟机对应的项目列表，用于条件查询
+		Map<String, String> projectNameMap = new HashMap<String, String>();
+		for (VirtualMachine onevm : vmList) {
+			if (onevm.getProjectId() == null || "".equals(onevm.getProjectId())) {
+				continue;
+			}
+			projectNameMap.put(onevm.getProjectId(), onevm.getProjectId());
+		}
+		projectNameMap.forEach((k,v)->{  
+			try {
+			PageData p_pd = new PageData();
+			p_pd.put("id", k);
+			p_pd = projectService.findById(p_pd);
+			projectNameMap.put(k, (String)p_pd.get("name"));
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			}
+        });  
 		Map<String, Medium> mediumMap = new HashMap<String, Medium>();
 		List<PageData> mpdList = mediumService.listAll(new PageData());
 		for (PageData spd : mpdList) {
 			Medium medium = (Medium) PageDataUtil.mapToObject(spd, Medium.class);
 			mediumMap.put(medium.getName(), medium);
 		}
+		mv.addObject("projectNameMap", projectNameMap);
 		mv.addObject("softName", mediumMap.keySet());
 		mv.addObject("serviceTypeList", serviceTypeList);
 		mv.addObject("vmList", vmList);
