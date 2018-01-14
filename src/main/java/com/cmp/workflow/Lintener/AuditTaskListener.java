@@ -1,5 +1,6 @@
 package com.cmp.workflow.Lintener;
 
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,11 +43,12 @@ public class AuditTaskListener implements TaskListener {
 		pageData.put("id", projectCode);
 		try {
 			pageData = userGroupService.findById(pageData);
+			pageData.put("id", (BigInteger)pageData.get("id")+"");
 			List<UserGroupUserMap> userList = userGroupService.listUserGroupUserMap(pageData);
 			if (null != userList) {
 				Set<String> set = new HashSet<String>();
 				for (UserGroupUserMap user : userList) {
-					set.add(user.getUSRNAME());
+					set.add(user.getUSERNAME());
 				}
 				delegateTask.addCandidateUsers(set);
 			}
