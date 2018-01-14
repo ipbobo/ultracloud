@@ -114,28 +114,28 @@ function getDashboard(){
 			</tr>
 			<tr>
 				<td align="right" style="padding-top: 10px;">
-					<select style="width: 100px;" class="chosen-select form-control" name="cpuTimeType" id="cpuTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="timeTypeFunc('cpuTimeType')">
+					<select style="width: 100px;" class="chosen-select form-control" name="cpuTimeType" id="cpuTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
 					<c:forEach items="${timeTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${cpuTimeType==var.dictCode || (cpuTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 					</c:forEach>
 				  	</select>
 				</td>
 				<td align="right" style="padding-top: 10px;">
-					<select style="width: 100px;" class="chosen-select form-control" name="memTimeType" id="memTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="timeTypeFunc('memTimeType')">
+					<select style="width: 100px;" class="chosen-select form-control" name="memTimeType" id="memTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
 					<c:forEach items="${timeTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${memTimeType==var.dictCode || (memTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 					</c:forEach>
 				  	</select>
 				</td>
 				<td align="right" style="padding-top: 10px;">
-					<select style="width: 100px;" class="chosen-select form-control" name="storeTimeType" id="storeTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="timeTypeFunc('storeTimeType')">
+					<select style="width: 100px;" class="chosen-select form-control" name="storeTimeType" id="storeTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
 					<c:forEach items="${timeTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${storeTimeType==var.dictCode || (storeTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 					</c:forEach>
 				  	</select>
 				</td>
 				<td align="right" style="padding-top: 10px;" colspan="3">
-					<select style="width: 100px;" class="chosen-select form-control" name="resType" id="resType" data-placeholder="请选择资源类型" style="vertical-align:top;width: 100%;" onchange="resTypeFunc()">
+					<select style="width: 100px;" class="chosen-select form-control" name="resType" id="resType" data-placeholder="请选择资源类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
 					<c:forEach items="${resTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${resType==var.dictCode || (resType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 					</c:forEach>
