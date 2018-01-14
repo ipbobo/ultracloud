@@ -89,7 +89,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	private Connect getLibvirtConnect() throws LibvirtException {
-		return new LibvirtConnect("qemu+ssh://" + platform.getCloudplatformIp() + "/system", false);
+		return new LibvirtConnect("qemu+tcp://" + platform.getCloudplatformIp() + "/system", false);
 	}
 
 	private void release(Connect conn) {
