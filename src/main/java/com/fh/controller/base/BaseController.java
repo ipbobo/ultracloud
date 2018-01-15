@@ -31,6 +31,18 @@ public class BaseController {
 		page.setPd(pd);
 		return pd;
 	}
+	
+	//简化Page赋值操作，采用key/value，add by kfzx-chenwm
+	public PageData getPageData(Object ... params) {
+		PageData pd=new PageData();
+		if(params!=null && params.length>0 && params.length%2==0){//key/value
+    		for(int i=0;i<params.length/2;i++){
+    			pd.put(params[i*2], params[i*2+1]);
+    		}
+    	}
+		
+		return pd;
+	}
 
 	public ModelAndView getModelAndView() {
 		return new ModelAndView();

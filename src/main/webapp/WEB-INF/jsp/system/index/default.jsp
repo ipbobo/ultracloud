@@ -8,8 +8,6 @@
 <base href="<%=basePath%>">
 <%@ include file="top.jsp"%>
 <link rel="stylesheet" href="css/style.css"/>
-<script type="text/javascript" src="static/ace/js/ace/ace.js"></script><!-- ace scripts -->
-<script type="text/javascript" src="static/ace/js/chosen.jquery.js"></script><!-- 下拉框 -->
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">

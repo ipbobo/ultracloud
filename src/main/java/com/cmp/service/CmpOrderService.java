@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.cmp.sid.CmpOrder;
 import com.fh.dao.DaoSupport;
+import com.fh.util.PageData;
 
 @Service
 public class CmpOrderService {
@@ -55,8 +56,8 @@ public class CmpOrderService {
 	
 	//已购历史列表查询
 	@SuppressWarnings("unchecked")
-	public List<CmpOrder> getBuyHisList(String applyUserId) throws Exception {
-		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getBuyHisList", applyUserId);
+	public List<CmpOrder> getBuyHisList(PageData pd) throws Exception {
+		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getBuyHisList", pd);
 	}
 	
 	//已购历史列表总数查询

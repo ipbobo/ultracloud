@@ -33,6 +33,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.system.User;
 import com.fh.util.Const;
 import com.fh.util.Jurisdiction;
+import com.fh.util.PageData;
 
 //申请管理
 @Controller
@@ -131,9 +132,15 @@ public class AppMgrController extends BaseController {
 	
 	//已购历史列表查询
 	@RequestMapping(value="/getBuyHisList")
-	public ModelAndView getBuyHisList() throws Exception{
-		List<CmpOrder> buyHisList=cmpOrderService.getBuyHisList(getUserId());//已购历史列表查询
+	public ModelAndView getBuyHisList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String beginDate=request.getParameter("beginDate");//开始日期
+		String endDate=request.getParameter("endDate");//结束日期
+		String projCode=request.getParameter("projCode");//项目
+		PageData pd=getPageData("beginDate", beginDate, "endDate", endDate, "projCode", projCode, "applyUserId", getUserId());
+		List<CmpOrder> buyHisList=cmpOrderService.getBuyHisList(pd);//已购历史列表查询
 		ModelAndView mv = new ModelAndView();
+		mv.addObject("pd", pd);
+		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("buyHisList", buyHisList);//已购历史列表
 		mv.addObject("buyHisNum", buyHisList!=null?buyHisList.size():0);//已购历史列表大小
 		mv.setViewName("appmgr/buyhis_qry_list");
