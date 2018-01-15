@@ -345,6 +345,23 @@ function getLineChart(chartId, titleArr, xdataArr, ydataArr){
 	myChart.setOption(option);//加载图表
 }
 
+//金额格式化
+function amtFmt(amt, unit){
+	if(''==amt || isNaN(amt)){return 'Not a Number ! ';}//如果amt不是数字，则将amt置0，并返回
+	amt = amt.toString().replace(/\$|\,/g,'');//将amt中的$,去掉，将amt变成一个纯粹的数据格式字符串
+	var sign = amt.indexOf("-")> 0 ? '-' : '';//如果amt是负数，则获取她的符号
+	var cents = amt.indexOf(".")> 0 ? amt.substr(amt.indexOf(".")) : ''; //如果存在小数点，则获取数字的小数部分
+	cents = cents.length>1 ? cents : '' ;//小数位(含小数点)
+	amt = amt.indexOf(".")>0 ? amt.substring(0,(amt.indexOf("."))) : amt;//获取数字的整数数部分
+	if('' == cents){ if(amt.length>1 && '0' == amt.substr(0,1)){return 'Not a Number ! ';}}//如果没有小数点，整数部分不能以0开头
+	else{if(amt.length>1 && '0' == amt.substr(0,1)){return 'Not a Number ! ';}}//如果有小数点，且整数的部分的长度大于1，则整数部分不能以0开头
+	for (var i = 0; i < Math.floor((amt.length-(1+i))/3); i++){
+		amt = amt.substring(0,amt.length-(4*i+3))+','+amt.substring(amt.length-(4*i+3));
+	}
+     
+	return (unit?unit:'￥')+sign+amt+cents;//将数据（符号、整数部分、小数部分）整体组合返回
+}
+
 //发送Http请求
 function sendHttpPost(url, jsonObj, func){
     $.ajax({
