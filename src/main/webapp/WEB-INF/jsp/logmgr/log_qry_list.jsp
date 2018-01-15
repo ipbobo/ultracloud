@@ -141,7 +141,7 @@ function del(ids, msg){
 			<td class='center'>${var.username}</td>
 			<td class='center'>${var.operTypeName}</td>
 			<td class='center'>${var.opt_object}</td>
-			<td class='center'><div href="#" onclick="return false;" title="${var.detail}" style="cursor: pointer;display: block;width: 300px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" onmouseover="mouseoverFunc(this)" onmouseout="mouseoutFunc(this)">${var.detail}</div></td>
+			<td class='center'><span title="${var.detail}" style="cursor: pointer;display: block;width: 300px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" onmouseover="mouseoverFunc(this)" onmouseout="mouseoutFunc(this)">${var.detail}</span></td>
 			<td class='center'>${var.optStatusName}</td>
 			<td class='center'>${var.ip}</td>
 			<td class='center'>${var.gmt_create}</td>
