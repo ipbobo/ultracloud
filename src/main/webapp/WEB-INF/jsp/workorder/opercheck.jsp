@@ -185,9 +185,9 @@
 		var isRejectChecked = document.getElementById("rejectFlag").checked
 		var rejectFlag = true;
 		if (isRejectChecked == true){
-			rejectFlag = true;
+			rejectFlag = 0;
 		}else {
-			rejectFlag = false;
+			rejectFlag = 1;
 		}
 		$.ajax({
 			type: "POST",
