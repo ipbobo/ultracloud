@@ -406,12 +406,15 @@ function maskLayerClick(id){
 	  	$('#buyHisId').css('min-height', (isOpen?$(window).height():0)+"px");
 	  	$('#buyHisId').css('max-height', (isOpen?$(window).height():0)+"px");
 	  	$('#getBuyHisList').css('height', (isOpen?$(window).height():0)+"px");
-	  	if(isOpen){
-			$("#getBuyHisList").load("getBuyHisList.do");
-	  	}
+	  	$("#getBuyHisList").load("getBuyHisList.do");
 	}else{//遮罩层
 		maskLayerClick($('#shoppingCartId').hasClass("open")?"shoppingCart":"buyHis");//点击遮罩层
 	}
+}
+
+//重新加载已购历史列表
+function reloadBuyHis(beginDate, endDate, projCode){
+	$("#getBuyHisList").load("getBuyHisList.do?beginDate="+beginDate+"&endDate="+endDate+"&projCode="+projCode);
 }
 
 //资源类型改变时触发
