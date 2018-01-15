@@ -346,7 +346,7 @@ function getLineChart(chartId, titleArr, xdataArr, ydataArr){
 }
 
 //金额格式化
-function amtFmt(amt, unitArr){
+function amtFmt(amt, unit){
 	if(''==amt || isNaN(amt)){return 'Not a Number ! ';}//如果amt不是数字，则将amt置0，并返回
 	amt = amt.toString().replace(/\$|\,/g,'');//将amt中的$,去掉，将amt变成一个纯粹的数据格式字符串
 	var sign = amt.indexOf("-")> 0 ? '-' : '';//如果amt是负数，则获取她的符号
@@ -358,8 +358,8 @@ function amtFmt(amt, unitArr){
 	for (var i = 0; i < Math.floor((amt.length-(1+i))/3); i++){
 		amt = amt.substring(0,amt.length-(4*i+3))+','+amt.substring(amt.length-(4*i+3));
 	}
-     
-	return (unitArr[0]?unitArr[0]:'￥')+sign+amt+cents+unitArr[1];//将数据（符号、整数部分、小数部分）整体组合返回
+    
+	return (unit?unit:'￥')+sign+amt+cents;//将数据（符号、整数部分、小数部分）整体组合返回
 }
 
 //发送Http请求
