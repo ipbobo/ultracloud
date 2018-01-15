@@ -498,13 +498,13 @@ function expireDateFunc(){
 //计算金额
 function getTotalAmt(){
 	var amt="123456789.00";
-	$("#totalAmt").html(amtFmt(amt));
+	$("#totalAmt").html(amtFmt(amt, ['￥', '元']));
 }
 
 //购物车计算金额
 function getAllTotalAmt(){
 	var amt="123456789.00";
-	$("#allTotalAmt").html(amtFmt(amt));
+	$("#allTotalAmt").html(amtFmt(amt, ['￥', '元']));
 }
 
 //必须加<!DOCTYPE html>
