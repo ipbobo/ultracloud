@@ -9,11 +9,26 @@
 <%@ include file="../system/index/top.jsp"%>
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
 <link rel="stylesheet" href="static/ace/css/chosen.css" />
-<script type="text/javascript" src="static/js/jquery.tips.js"></script><!--提示框-->
-<script type="text/javascript" src="static/ace/js/ace/ace.js"></script><!-- ace scripts -->
 <script type="text/javascript" src="static/ace/js/chosen.jquery.js"></script><!-- 下拉框 -->
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript">
+var title='';
+function mouseoverFunc(obj) {
+	title=$(obj).attr("title");
+	if (title && title != '') {
+		$(obj).attr("title", "");
+		$("#tipId").css('left', event.x);
+		$("#tipId").css('top', event.y);
+		$("#tipId").html(title);
+		$("#tipId").css('visibility', 'visible');
+	}
+}
+
+function mouseoutFunc(obj) {
+	$(obj).attr("title", title);
+	$("#tipId").css('visibility', 'hidden');
+}
+
 //查询
 function doSearch(){
 	var beginDate=$("#beginDate").val();
@@ -126,7 +141,7 @@ function del(ids, msg){
 			<td class='center'>${var.username}</td>
 			<td class='center'>${var.operTypeName}</td>
 			<td class='center'>${var.opt_object}</td>
-			<td class='center'>${var.detail}</td>
+			<td class='center'><div href="#" onclick="return false;" title="${var.detail}" style="cursor: pointer;display: block;width: 300px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" onmouseover="mouseoverFunc(this)" onmouseout="mouseoutFunc(this)">${var.detail}</div></td>
 			<td class='center'>${var.optStatusName}</td>
 			<td class='center'>${var.ip}</td>
 			<td class='center'>${var.gmt_create}</td>
@@ -141,6 +156,7 @@ function del(ids, msg){
 	</c:otherwise>
 	</c:choose>
 </table>
+<div id="tipId" style="visibility:hidden;border:1px solid #000000;background-color:#FFFFCC;font-size:12px;position:absolute;"></div>
 <table style="width: 100%;"><tr><td style="vertical-align: top;"><div class="pagination" style="float: right; padding-top: 0px; margin-top: 0px;margin-bottom: 0px;">${page.pageStr}</div></td></tr></table>
 <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a><!-- 返回顶部 -->
 <%@ include file="../system/index/foot.jsp"%>
