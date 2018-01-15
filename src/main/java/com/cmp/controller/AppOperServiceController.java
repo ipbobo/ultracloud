@@ -23,6 +23,7 @@ import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.DeployedSoftService;
 import com.cmp.service.MediumService;
+import com.cmp.service.ProjectService;
 import com.cmp.service.ScriptParamService;
 import com.cmp.service.ScriptService;
 import com.cmp.service.VirtualMachineService;
@@ -78,6 +79,8 @@ public class AppOperServiceController  extends BaseController {
 	@Resource
 	private ScriptService scriptService;
 	
+	@Resource
+	private ProjectService projectService;
 	//运维服务申请表单查询
 	@RequestMapping(value="/reqOperServicePre")
 	public ModelAndView reqOperServicePre() throws Exception{
@@ -101,19 +104,32 @@ public class AppOperServiceController  extends BaseController {
 		
 		//查询用户拥有的虚拟机及虚拟机上部署的中间件
 		List<VirtualMachine> vmList = virtualMachineService.findByUser(userr.getNAME());
-//		Map<String , List<DeployedSoft>> deployedSoftMap = new HashMap<String , List<DeployedSoft>>();
-//		for (VirtualMachine vm : vmList) {
-//			List<DeployedSoft> softList = deployedSoftService.findByVmId(vm.getId());
-//			deployedSoftMap.put(vm.getId(), softList);
-//		}
-//		mv.addObject("deployedSoftMap", deployedSoftMap);
-		//查询所有的可安装软件
+		//生成虚拟机对应的项目列表，用于条件查询
+		Map<String, String> projectNameMap = new HashMap<String, String>();
+		for (VirtualMachine onevm : vmList) {
+			if (onevm.getProjectId() == null || "".equals(onevm.getProjectId())) {
+				continue;
+			}
+			projectNameMap.put(onevm.getProjectId(), onevm.getProjectId());
+		}
+		projectNameMap.forEach((k,v)->{  
+			try {
+			PageData p_pd = new PageData();
+			p_pd.put("id", k);
+			p_pd = projectService.findById(p_pd);
+			projectNameMap.put(k, (String)p_pd.get("name"));
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				e.printStackTrace();
+			}
+        });  
 		Map<String, Medium> mediumMap = new HashMap<String, Medium>();
 		List<PageData> mpdList = mediumService.listAll(new PageData());
 		for (PageData spd : mpdList) {
 			Medium medium = (Medium) PageDataUtil.mapToObject(spd, Medium.class);
 			mediumMap.put(medium.getName(), medium);
 		}
+		mv.addObject("projectNameMap", projectNameMap);
 		mv.addObject("softName", mediumMap.keySet());
 		mv.addObject("serviceTypeList", serviceTypeList);
 		mv.addObject("vmList", vmList);
@@ -182,8 +198,14 @@ public class AppOperServiceController  extends BaseController {
 			map.put("result", resultInfo);
 			return map;
 		}
-		String appmsg = pd.getString("app_msg"); //申请说明
 		String vm = pd.getString("vm");
+		if (vm == null || vm.length() == 0) {
+			resultInfo = "虚拟机选择不正确";
+			map.put("result", resultInfo);
+			return map;
+		}
+		String appmsg = pd.getString("app_msg"); //申请说明
+		
 		String vmMsg = pd.getString("vm_msg");
 		String install_soft = pd.getString("install_soft");
 		String soft_version = pd.getString("soft_version");
@@ -200,7 +222,26 @@ public class AppOperServiceController  extends BaseController {
 		String vip_num = pd.getString("vip_num");
 		String rootpwd = pd.getString("rootpwd");
 		String exp_time_pwd = pd.getString("exp_time_pwd");
+		String remark1 =  pd.getString("remark1");
 		CmpOpServe opServe = new CmpOpServe();
+		
+		//获取申请工单虚拟机的项目信息
+		String projectId = "";
+		for (String vmId: vm.split(",")) {
+			if (vmId == null) {
+				continue;
+			}
+			VirtualMachine virtualMachine = virtualMachineService.findById(vmId);
+			if (projectId.equals("")) {
+				projectId = virtualMachine.getProjectId();
+			} else {
+				if (!projectId.equals(virtualMachine.getProjectId())) {
+					resultInfo = "请选择同项目的虚拟机";
+					map.put("result", resultInfo);
+					return map;
+				}
+			}
+		}
 		if (serviceType.equals("1")) {
 			//虚拟机启停
 			opServe.setAppmsg(appmsg);
@@ -208,7 +249,8 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setMiddlewareMsg("");
 			opServe.setOperType(operType);
 			opServe.setServiceType(serviceType);
-			opServe.setVm(vm);		//启停的而虚拟机及软件   软件1，软件2|软件1,软件2|
+			opServe.setVm(vm);		
+			opServe.setRemark1(remark1);//启停的而虚拟机及软件   软件1，软件2|软件1,软件2|
 			opServe.setVmMsg(vmMsg); //虚拟机启停说明
 			opServe.setWorkflow("middleware_restart");
 		}else if (serviceType.equals("2")) {
@@ -309,6 +351,7 @@ public class AppOperServiceController  extends BaseController {
 		workworder.setAppType("2"); //运维服务申请
 		workworder.setStatus("0");  //工作流初始状态
 		workworder.setApplyUserId(user.getUSERNAME());
+		workworder.setProjectCode(projectId);
 		cmpWorkOrderService.addWordOrder(workworder);
 		
 		//启动工作流
@@ -329,7 +372,9 @@ public class AppOperServiceController  extends BaseController {
 		
 		//完成申请任务
 		//List<User> userList = userService.listAllUserByRoldId(pd)
-		activitiService.handleTask(workworder.getAppNo(), procInstId,  user.getUSERNAME(), null, null);
+		Map<String, Object> variablesMap = new HashMap<String, Object>();
+		variablesMap.put("appNo", workworder.getAppNo());
+		activitiService.handleTask(workworder.getAppNo(), procInstId,  user.getUSERNAME(), null, variablesMap);
 		
 		//更新工单(流程实例ID 和 工单状态)
 		Map<String, String> updateParams = new HashMap<String, String>();

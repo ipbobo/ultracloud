@@ -611,7 +611,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void createSnapshot(String name, String vmName, String desc, boolean memoryFlag) {
+	public void createVmSnapshot(String name, String vmName, String desc, boolean memoryFlag) {
 		searchManagedEntity(VirtualMachine.class, vmName).ifPresent(vm -> {
 			try {
 				vm.createSnapshot_Task(name, desc, memoryFlag, false);
@@ -766,6 +766,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public void createVolumeSnapshot(String volumeId, String name, String desc) {
+		throw new UnsupportedOperationException();
 	}
 
 	private static String getDeviceKey(VirtualDevice device) {

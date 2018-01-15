@@ -383,4 +383,10 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		return resMap;
 	}
 
+	@Override
+	public Map<String, Object> toWorkorderVerify(CmpWorkOrder cmpWorkorder) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

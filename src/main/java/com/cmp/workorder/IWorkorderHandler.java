@@ -10,4 +10,6 @@ public interface IWorkorderHandler {
 	public Map<String, Object> toWorkorderCheck(CmpWorkOrder cmpWorkorder) throws Exception;
 	public Map<String, Object> toWorkorderExecute(CmpWorkOrder cmpWorkorder) throws Exception;
 	public Map<String, Object> executeWork(PageData pd, CmpWorkOrder workOrder) throws Exception;
+	public Map<String, Object> toWorkorderVerify(CmpWorkOrder cmpWorkorder) throws Exception;
+	
 }

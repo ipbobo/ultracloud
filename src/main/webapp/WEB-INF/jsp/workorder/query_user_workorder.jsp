@@ -158,6 +158,13 @@
 																	title="查看"></i>
 																</a>
 															</c:if>
+															<c:if test="${QX.query == 1 and var.status != '3' }">
+																<a class="btn btn-xs btn-danger" title="确认"
+																	onclick="verify('${var.appNo}');"> <i
+																	class="ace-icon fa fa-print  align-top bigger-125"
+																	title="确认"></i>
+																</a>
+															</c:if>
 															<c:if test="${QX.execute == 1  and var.status != '2'}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
@@ -326,10 +333,26 @@
 		 diag.show();
 	}
 	
+	//确认
+	function verify(appNo){
+		top.jzts();
+		 var diag = new top.Dialog();
+		 diag.Drag=true;
+		 diag.Title ="工单确认";
+		 diag.URL = '<%=basePath%>goWorkorderVerify.do?appNo='+ appNo;
+		 diag.Width = 992;
+		 diag.Height = 580;
+		 diag.CancelEvent = function(){ //关闭事件
+			tosearch();
+			diag.close();
+		 };
+		 diag.show();
+	}
+	
 	//导出excel
 	function toExcel(){
 		window.location.href='<%=basePath%>workorderExcel.do?workorder_type='+$('#workorder_type').val()+'&workorder_status='+$('#workorder_status').val()+'&project='+$('#project').val()+
-		'&workorder_appNo='+$('#workorder_appNo').val()+'&workorder_time='+$('#workorder_time').val();
+		'&workorder_appNo='+$('#workorder_appNo').val()+'&workorder_time='+$('#workorder_time').val()+ '&page.showCount='+$('#pageCount').val();
 	}
 	
 

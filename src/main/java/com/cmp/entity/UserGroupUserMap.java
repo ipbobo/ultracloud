@@ -13,6 +13,7 @@ public class UserGroupUserMap {
 	private BigInteger id;
 	private BigInteger usergroup_id;
 	private String USER_ID;
+	private String USERNAME;
 	private Timestamp gmt_create;
 	private Timestamp gmt_modified;
 
@@ -56,4 +57,11 @@ public class UserGroupUserMap {
 		this.gmt_modified = gmt_modified;
 	}
 
+	public String getUSERNAME() {
+		return USERNAME;
+	}
+
+	public void setUSERNAME(String uSERNAME) {
+		USERNAME = uSERNAME;
+	}
 }

@@ -6,6 +6,10 @@ public class CreateVolumeRequest {
 
 	private String vmName;
 
+	private String volumeId;
+
+	private String device;
+
 	private String size;
 
 	public String getVmUUID() {
@@ -22,6 +26,22 @@ public class CreateVolumeRequest {
 
 	public void setVmName(String vmName) {
 		this.vmName = vmName;
+	}
+
+	public String getVolumeId() {
+		return volumeId;
+	}
+
+	public void setVolumeId(String volumeId) {
+		this.volumeId = volumeId;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
 	}
 
 	public String getSize() {

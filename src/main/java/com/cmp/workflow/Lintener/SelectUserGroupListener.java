@@ -1,7 +1,5 @@
 package com.cmp.workflow.Lintener;
 
-import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -19,36 +17,28 @@ import com.cmp.sid.CmpWorkOrder;
 import com.fh.util.PageData;
 
 /**
- * 审核者任务监听器
+ * 选择用户组工作流监听器
  * 
  * @author liuweixing
  *
  */
-public class AuditTaskListener implements Serializable, TaskListener {
+public class SelectUserGroupListener implements TaskListener {
 
-	private static final long serialVersionUID = 667530869305257754L;
-	
-	private String name;
+	private static final long serialVersionUID = 2915025625163813966L;
 
 	@Override
 	public void notify(DelegateTask delegateTask) {
 		Map<String, Object> map = delegateTask.getVariables();
-		String appNo = (String) delegateTask.getVariable("appNo");
+		//String usergroup = (String) delegateTask.getVariable("usergroup");
 		WebApplicationContext webctx=ContextLoader.getCurrentWebApplicationContext();
 		CmpWorkOrderService cmpWorkOrderService = (CmpWorkOrderService) webctx.getBean("cmpWorkOrderService");
 		CmpWorkOrder workOrder = null;
-		try {
-			workOrder = cmpWorkOrderService.findByAppNo(appNo);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		String projectCode = workOrder.getProjectCode();
+		
 		UserGroupService userGroupService = (UserGroupService) webctx.getBean("userGroupService");
-		PageData pageData = new PageData();
-		pageData.put("id", projectCode);
+		
 		try {
-			pageData = userGroupService.findById(pageData);
-			pageData.put("id", (BigInteger)pageData.get("id")+"");
+			PageData pageData = new PageData();
+			pageData.put("id", "3");
 			List<UserGroupUserMap> userList = userGroupService.listUserGroupUserMap(pageData);
 			if (null != userList) {
 				Set<String> set = new HashSet<String>();
@@ -60,5 +50,6 @@ public class AuditTaskListener implements Serializable, TaskListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	
 	}
 }
