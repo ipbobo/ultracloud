@@ -34,6 +34,17 @@ public class CmpOpServe {
 	private String remark2; //业务备用字段2
 	
 	
+	public static final String OP_MIDDLEWATE_RESTART = "middleware_restart";
+	public static final String OP_SOFTWARE_INSTALL = "software_install";
+	public static final String OP_FAULT_HANDLE = "fault_handle";
+	public static final String OP_SYSTEM_PARTITION = "system_partition";
+	public static final String OP_CREATE_SYSTEMFILE = "create_systemfile";
+	public static final String OP_MOUNT_DISK = "mount_disk";
+	public static final String OP_ROOT_APPLY = "root_apply";
+	public static final String OP_VIP_ADD = "vip_add";
+	
+	
+	
 	
 	public String getId() {
 		return id;

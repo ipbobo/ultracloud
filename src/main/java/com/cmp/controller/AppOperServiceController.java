@@ -252,7 +252,7 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setVm(vm);		
 			opServe.setRemark1(remark1);//启停的而虚拟机及软件   软件1，软件2|软件1,软件2|
 			opServe.setVmMsg(vmMsg); //虚拟机启停说明
-			opServe.setWorkflow("middleware_restart");
+			opServe.setWorkflow(CmpOpServe.OP_MIDDLEWATE_RESTART);
 		}else if (serviceType.equals("2")) {
 			String[] vmIds = vm.split(",");
 			String deploySoftIds = "";
@@ -280,7 +280,7 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setOperType(operType);
 			opServe.setServiceType(serviceType);
 			opServe.setVm(vm);		//虚拟机列表  虚拟机1，虚拟机2
-			opServe.setWorkflow("oper_workflow");
+			opServe.setWorkflow(CmpOpServe.OP_SOFTWARE_INSTALL);
 			opServe.setDeploySoftId(deploySoftIds);
 		}else if (serviceType.equals("3")) {
 			opServe.setAppmsg(appmsg);
@@ -289,7 +289,7 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setOperType(operType);
 			opServe.setServiceType(serviceType);
 			opServe.setVm(vm);		//虚拟机列表  虚拟机1，虚拟机2
-			opServe.setWorkflow("oper_workflow");
+			opServe.setWorkflow(CmpOpServe.OP_FAULT_HANDLE);
 			opServe.setBreakdownTime(breakdown_time);
 			opServe.setBreakdownInfo(breakdown_info);
 			opServe.setBreakdownLevel(breakdown_level);
@@ -302,7 +302,7 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setOperType(operType);
 			opServe.setServiceType(serviceType);
 			opServe.setVm(vm);		//虚拟机列表  虚拟机1，虚拟机2
-			opServe.setWorkflow("oper_workflow");
+			opServe.setWorkflow(CmpOpServe.OP_SYSTEM_PARTITION);
 			opServe.setPartitionInfo(partition_info);
 		}else if (serviceType.equals("5")) {
 			opServe.setAppmsg(appmsg);
@@ -311,7 +311,7 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setOperType(operType);
 			opServe.setServiceType(serviceType);
 			opServe.setVm(vm);			//虚拟机列表  虚拟机1，虚拟机2
-			opServe.setWorkflow("oper_workflow");
+			opServe.setWorkflow(CmpOpServe.OP_CREATE_SYSTEMFILE);
 		}else if (serviceType.equals("6")) {
 			opServe.setAppmsg(appmsg);
 			opServe.setMiddleware("");
@@ -320,7 +320,7 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setServiceType(serviceType);
 			opServe.setVm(vm);			//虚拟机列表  虚拟机1，虚拟机2
 			opServe.setDirectory(directory);
-			opServe.setWorkflow("oper_workflow");
+			opServe.setWorkflow(CmpOpServe.OP_MOUNT_DISK);
 		}else if (serviceType.equals("7")) {
 			opServe.setAppmsg(appmsg);
 			opServe.setMiddleware("");
@@ -330,7 +330,7 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setVm(vm);			//虚拟机列表  虚拟机1，虚拟机2
 			opServe.setDirectory(directory2);
 			opServe.setExpTime(exp_time_pwd);
-			opServe.setWorkflow("oper_workflow");
+			opServe.setWorkflow(CmpOpServe.OP_ROOT_APPLY);
 			opServe.setRemark1(rootpwd);
 		}else if (serviceType.equals("8")) {
 			opServe.setAppmsg(appmsg);
@@ -341,7 +341,7 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setVm(vm);			//虚拟机列表  虚拟机1，虚拟机2
 			opServe.setDirectory(directory3);
 			opServe.setVipNum(vip_num);
-			opServe.setWorkflow("oper_workflow");
+			opServe.setWorkflow(CmpOpServe.OP_VIP_ADD);
 		}
 		cmpOpServeService.saveCmpOpServe(opServe);
 		Session session = Jurisdiction.getSession();
