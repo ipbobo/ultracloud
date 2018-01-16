@@ -1,5 +1,6 @@
 package com.cmp.workflow.Lintener;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +18,12 @@ import com.cmp.sid.CmpWorkOrder;
 import com.fh.util.PageData;
 
 /**
- * 选择用户组工作流监听器
+ * 选择用户组工作流-任务监听器
  * 
  * @author liuweixing
  *
  */
-public class SelectUserGroupListener implements TaskListener {
+public class SelectUserGroupListener implements Serializable, TaskListener {
 
 	private static final long serialVersionUID = 2915025625163813966L;
 
