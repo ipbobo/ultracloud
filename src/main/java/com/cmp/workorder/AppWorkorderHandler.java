@@ -108,6 +108,14 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		return resMap;
 	}
 	
+	@Override
+	public Map<String, Object> toWorkorderVerify(CmpWorkOrder cmpWorkorder) throws Exception {
+		Map<String, Object> resMap = new HashMap<String, Object>();
+		resMap = buildViewInfo(cmpWorkorder, resMap);
+		resMap.put("toPageUrl", "workorder/applyverify");
+		return resMap;
+	}
+	
 	public Map<String, Object> buildViewInfo(CmpWorkOrder cmpWorkorder, Map<String, Object> resMap) throws Exception {
 		//工单信息
 		CmpOrder orderInfo = null;
@@ -383,10 +391,6 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		return resMap;
 	}
 
-	@Override
-	public Map<String, Object> toWorkorderVerify(CmpWorkOrder cmpWorkorder) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 }
