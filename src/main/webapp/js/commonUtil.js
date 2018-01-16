@@ -78,15 +78,6 @@ function getPieChart(chartId, titleArr, legendArr, radiusArr, centerArr, keyArr,
 	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}"+unit, textStyle:{align:'left'}},//item或axis
 	    legend: {orient: legendArr[0], x: legendArr[1]?legendArr[1]:'center', y: legendArr[2]?legendArr[2]:'top', data: keyArr},
 	    color: colorArr,
-	    toolbox: {
-	        show: false,  
-	        feature: {  
-	            mark: {show: true},  
-	            dataView: {show: true, readOnly: false},  
-	            restore: {show: true},  
-	            saveAsImage: {show: true}  
-	        }
-	    },  
 	    calculable: true,  
 	    series: [
 	        {
@@ -117,27 +108,6 @@ function getAnnularChart(chartId, titleArr, legendArr, radiusArr, centerArr, key
 	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}({d}"+unit+")", textStyle:{align:'left'}},//item或axis
 	    legend: {orient: legendArr[0], x: legendArr[1]?legendArr[1]:'center', y: legendArr[2]?legendArr[2]:'top', data: keyArr},
 	    color: colorArr,
-	    toolbox: {
-	        show: false,  
-	        feature: {  
-	            mark: {show: true},  
-	            dataView: {show: true, readOnly: false},  
-	            restore: {show: true},  
-	            saveAsImage: {show: true},
-	            magicType: {
-	                show: true, 
-	                type: ['pie', 'funnel'],
-	                option: {
-	                    funnel: {
-	                        x: '25%',
-	                        width: '50%',
-	                        funnelAlign: 'center',
-	                        max: 1548
-	                    }
-	                }
-	            }
-	        }
-	    }, 
 	    calculable: true,  
 	    series: [
 	        {
@@ -165,15 +135,6 @@ function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 		title: {text: titleArr[0], subtext: titleArr[1], x: 'center', y: 'bottom'},
 	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}"+unit, textStyle:{align:'left'}},//item或axis
 	    legend: {data: keyArr},
-	    toolbox: {
-	        show: false,
-	        feature: {
-	            mark: {show: true},
-	            dataView: {show: true, readOnly: false},
-	            restore: {show: true},
-	            saveAsImage: {show: true}
-	        }
-	    },
 	    calculable: true,
 	    grid: {borderWidth: 0, y: 20, y2: 50},
 	    xAxis: [
@@ -219,14 +180,6 @@ function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 function getGaugeChart(chartId, titleArr, val, colorArr, unit, splitNumber){
 	var option = {
 	    tooltip: {formatter: (titleArr[1]?"{b}: ":"")+"{c}"+unit},
-	    toolbox: {
-	        show: false,
-	        feature: {
-	            mark: {show: true},
-	            restore: {show: true},
-	            saveAsImage: {show: true}
-	        }
-	    },
 	    series: [
 	        {
 	            name: titleArr[0],
@@ -277,10 +230,11 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit, splitNumber){
 	                height: 0,
 	                textStyle: {//其余属性默认使用全局文本样式，详见TEXTSTYLE
 	                    color: 'auto',
-	                    fontWeight: 'normal'
+	                    fontWeight: 'normal',
+	                    fontSize: '18'
 	                }
 	            },
-	            data:[{name: titleArr[1], value: val}]
+	            data:[{name: titleArr[1], value: (val*1).toFixed(2)}]
 	        }
 	    ]
 	};

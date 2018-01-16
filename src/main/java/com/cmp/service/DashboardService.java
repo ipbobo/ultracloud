@@ -63,11 +63,11 @@ public class DashboardService {
 	//物理机详细信息查询
 	public CmpRes getPhysDtl() throws Exception {
 		CmpRes cmpRes=new CmpRes();
-		cmpRes.setCpuUseNum("1");
+		cmpRes.setCpuUseNum("3");
 		cmpRes.setCpuTotalNum("10");
-		cmpRes.setMemUseNum("2");
-		cmpRes.setMemTotalNum("20");
-		cmpRes.setStoreUseNum("21");
+		cmpRes.setMemUseNum("28");
+		cmpRes.setMemTotalNum("36");
+		cmpRes.setStoreUseNum("60");
 		cmpRes.setStoreTotalNum("100");
 		return cmpRes;
 	}

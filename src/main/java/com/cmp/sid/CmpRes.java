@@ -24,8 +24,8 @@ public class CmpRes {
 	private String loadHeightNum;//高度负载
 	private String loadStopNum;//停机负载
 	private String runRunnigNum;//运行
-	private String runCloseNum;//关机
 	private String runHangupNum;//挂起
+	private String runCloseNum;//关机
 
 	public String getBizviewType() {
 		return bizviewType;
@@ -207,20 +207,25 @@ public class CmpRes {
 	public void setRunRunnigNum(String runRunnigNum) {
 		this.runRunnigNum = runRunnigNum;
 	}
+	
+	public String getRunHangupNum() {
+		return runHangupNum;
+	}
+	
+	public void setRunHangupNum(String runHangupNum) {
+		this.runHangupNum = runHangupNum;
+	}
 
 	public String getRunCloseNum() {
 		return runCloseNum;
 	}
-
+	
 	public void setRunCloseNum(String runCloseNum) {
 		this.runCloseNum = runCloseNum;
 	}
-
-	public String getRunHangupNum() {
-		return runHangupNum;
-	}
-
-	public void setRunHangupNum(String runHangupNum) {
-		this.runHangupNum = runHangupNum;
+	
+	//运行总数
+	public String getRunTotalNum() {
+		return String.valueOf(Integer.parseInt(runRunnigNum)+Integer.parseInt(runHangupNum)+Integer.parseInt(runCloseNum));
 	}
 }
