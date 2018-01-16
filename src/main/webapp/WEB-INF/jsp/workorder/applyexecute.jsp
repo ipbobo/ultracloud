@@ -147,6 +147,12 @@
 			<div class="alert alert-info">后续任务处理</div>
 		<table>
 			<tr>
+				<td align="right" style="width: 120px;padding:10px;">退回：</td>
+				<td align="left" style="padding:10px;" width="90%">
+					<input type="checkbox" name="rejectFlag" id="rejectFlag" value="0">
+				</td>
+			</tr>
+			<tr>
 			<td align="right" style="width: 120px;padding:10px;">批复：</td>
 			<td align="left" style="padding:10px;" width="90%">
 				<textarea class="form-control limited" id="comment" name="comment" style="width: 100%"></textarea>
@@ -347,9 +353,16 @@
 	function doExecute(appNo){
 		top.jzts();
 		var comment = $("#comment").val();
+		var isRejectChecked = document.getElementById("rejectFlag").checked
+		var rejectFlag = true;
+		if (isRejectChecked == true){
+			rejectFlag = 0;
+		}else {
+			rejectFlag = 1;
+		}
 		$.ajax({
 			type: "POST",
-			url: '<%=basePath%>doExecute.do?appNo='+appNo +'&comment=' + comment,
+			url: '<%=basePath%>doExecute.do?appNo='+appNo +'&comment=' + comment + '&rejectFlag=' + rejectFlag,
 			dataType:'json',
 			//beforeSend: validateData,
 			cache: false,

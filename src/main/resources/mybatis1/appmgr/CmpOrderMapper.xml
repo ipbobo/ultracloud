@@ -202,6 +202,7 @@
 		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
 		left join t_mirrortemplate j on j.id=a.imgCode
 		where status='0' and applyUserId=#{applyUserId}
+		order by a.createTime desc
 	</select>
 	
 	<!-- 购物车列表总数查询 -->
@@ -213,7 +214,7 @@
 	</select>
 	
 	<!-- 已购历史列表查询 -->
-	<select id="getBuyHisList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+	<select id="getBuyHisList" parameterType="pd" resultType="com.cmp.sid.CmpOrder">
 		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
 		, b.dictValue areaCodeName
 		, c.dictValue platTypeName
@@ -237,7 +238,17 @@
 		left join cmp_dict h on h.dictType='os_type' and h.dictCode=a.osType
 		left join cmp_dict i on i.dictType='os_bit_num' and i.dictCode=a.osBitNum
 		left join t_mirrortemplate j on j.id=a.imgCode
-		where status='1' and applyUserId=#{applyUserId}
+		where status='1' and a.applyUserId=#{applyUserId}
+		<if test="beginDate != null and beginDate != ''">
+		and DATE_FORMAT(a.createTime, '%Y-%m-%d')>=#{beginDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+		and #{endDate}>=DATE_FORMAT(a.createTime, '%Y-%m-%d')
+		</if>
+		<if test="projCode != null and projCode != ''">
+		and a.projectCode=#{projCode}
+		</if>
+		order by a.createTime desc
 	</select>
 	
 	<!-- 已购历史列表总数查询 -->

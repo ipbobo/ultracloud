@@ -19,6 +19,7 @@
 <script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 <script src="static/ace/js/bootstrap.js"></script>
 <script type="text/javascript" src="static/js/jquery.tips.js"></script>
+<script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript">
 //$('.f_uli li').eq(0).addClass("active");
 //$('.f_uli li').eq(1).removeClass("active");
@@ -406,12 +407,15 @@ function maskLayerClick(id){
 	  	$('#buyHisId').css('min-height', (isOpen?$(window).height():0)+"px");
 	  	$('#buyHisId').css('max-height', (isOpen?$(window).height():0)+"px");
 	  	$('#getBuyHisList').css('height', (isOpen?$(window).height():0)+"px");
-	  	if(isOpen){
-			$("#getBuyHisList").load("getBuyHisList.do");
-	  	}
+	  	$("#getBuyHisList").load("getBuyHisList.do");
 	}else{//遮罩层
 		maskLayerClick($('#shoppingCartId').hasClass("open")?"shoppingCart":"buyHis");//点击遮罩层
 	}
+}
+
+//重新加载已购历史列表
+function reloadBuyHis(beginDate, endDate, projCode){
+	$("#getBuyHisList").load("getBuyHisList.do?beginDate="+beginDate+"&endDate="+endDate+"&projCode="+projCode);
 }
 
 //资源类型改变时触发
@@ -424,6 +428,7 @@ function specFunc(cpuVal, memoryVal){
 	cpuVal=(cpuVal==""?$("#cpu").val():cpuVal);//CPU                                 
 	memoryVal=(memoryVal==""?$("#memory").val():memoryVal);//内存
 	$("#specLabel").html(cpuVal+"&nbsp;核&nbsp;"+memoryVal+"&nbsp;GB");
+	getTotalAmt();//计算金额
 }
 
 //镜像改变时触发
@@ -488,6 +493,18 @@ function virNumFunc(operType){
 //到期时间改变时触发
 function expireDateFunc(){
 	$("#expireDateLabel").html($("#expireDate").val());
+}
+
+//计算金额
+function getTotalAmt(){
+	var amt="123456789.00";
+	$("#totalAmt").html(amtFmt(amt, '￥'));
+}
+
+//购物车计算金额
+function getAllTotalAmt(){
+	var amt="123456789.00";
+	$("#allTotalAmt").html(amtFmt(amt, '￥'));
 }
 
 //必须加<!DOCTYPE html>
@@ -804,7 +821,7 @@ $(window).scroll(function() {
 	<tr>
 		<td align="left" style="padding:10px;">
 			<div class="divbtn">
-				配置费用：<span id="totalPrice" style="font-size:26px;color: #f5620a;">￥123456789.00</span>
+				配置费用(元)：<span id="totalAmt" style="font-size:26px;color: #f5620a;">￥0.00</span>
 			    <span id="addListBtnId" class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
 			    <span style="width:30px;float:right;">&nbsp;</span>
 			    <span id="savePckgBtnId" class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
@@ -816,11 +833,11 @@ $(window).scroll(function() {
 <!-- 购物车 -->
 <table id="shoppingCartTable" style="position: fixed; right: 0; top: 130px; z-index: 999999999;">
 	<tr>
-		<td onclick="maskLayerClick('shoppingCart')" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-shopping-cart"></span><div style="width: 10px;">购买清单</div><span id="shoppingCartNum" style="color: #f5620a;">5000</span></div></td>
+		<td onclick="maskLayerClick('shoppingCart')" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-shopping-cart"></span><div style="width: 10px;">购买清单</div><span id="shoppingCartNum" style="color: #f5620a;">0</span></div></td>
 		<td id="shoppingCartId" class="shoppingCart">
 			<div id="getShoppingCartList" style="height:0px;overflow-y: auto;"></div>
 			<div id="batchBuy" class="divbtn" style="display:none;width:100%;height:50px;padding:10px;border-top:1px solid #f5f5f5;">
-				共计：<span id="totalPrice" style="font-size:26px;color: #f5620a;">￥123456789.00</span>
+				共计(元)：<span id="allTotalAmt" style="font-size:26px;color: #f5620a;">￥0.00</span>
 				<span class="btncls" style="width:100px;background-color:#f5620a;"><a href="javascript:void()" onclick="batchBuy()">批量购买</a></span>
 				<span style="width:20px;float:right;">&nbsp;</span>
 			    <span class="btncls" style="width:100px;"><a href="javascript:void()" onclick="clearShoppingCart()">清空购物车</a></span>
@@ -831,7 +848,7 @@ $(window).scroll(function() {
 <!-- 购买历史 -->
 <table id="buyHisTable" style="position: fixed; right: 0; top: 280px; z-index: 999999999;">
 	<tr>
-		<td onclick="maskLayerClick('buyHis')" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-time"></span><div style="width: 10px;">已购历史</div><span id="buyHisNum" style="color: #f5620a">5000</span></div></td>
+		<td onclick="maskLayerClick('buyHis')" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-time"></span><div style="width: 10px;">已购历史</div><span id="buyHisNum" style="color: #f5620a">0</span></div></td>
 		<td id="buyHisId" class="shoppingCart">
 			<div id="getBuyHisList" style="height:0px;overflow-y: auto;"></div>
 		</td>

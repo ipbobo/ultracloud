@@ -560,6 +560,7 @@ public class CmpWorkOrderController extends BaseController{
 		String resultInfo = "执行失败";
 		String appNo = request.getParameter("appNo");
 		String comment = request.getParameter("comment") == null? "":request.getParameter("comment");
+		String rejectFlag = request.getParameter("rejectFlag"); //0拒绝  1批准 
 		Session session = Jurisdiction.getSession();
 		
 		CmpWorkOrder toExecuteWorkorder = cmpWorkOrderService.findByAppNo(appNo);
@@ -578,26 +579,33 @@ public class CmpWorkOrderController extends BaseController{
 			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
-		
-		
 		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 100);
 		for (Task task : userTaskList) {
 			if (task.getProcessInstanceId().equals(toExecuteWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
 				//写入流程注释
 				activitiService.addComment(task.getId(), toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
-				activitiService.handleTask(appNo, toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), null, null);
-				
-				//更新工单(流程实例ID 和 工单状态)
-				Map<String, String> updateParams = new HashMap<String, String>();
-				updateParams.put("status", "5");  //进入运维执行状态
-				updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
-				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
-				
-				
-
-				
-				
+				Map<String, Object> variables = new HashMap<String, Object>();
+				if (rejectFlag != null && "0".equals(rejectFlag)) {
+					//拒绝流程
+					variables.put("USERNAME", userr.getUSERNAME());
+					variables.put("rejectFlag", 0);
+					activitiService.handleTask(appNo, toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
+					//更新工单(流程实例ID 和 工单状态)
+					Map<String, String> updateParams = new HashMap<String, String>();
+					updateParams.put("status", "3");  //退回
+					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
+					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+				}else {
+					variables.put("USERNAME", userr.getUSERNAME());
+					variables.put("rejectFlag", 1);
+					activitiService.handleTask(appNo, toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
+					//更新工单(流程实例ID 和 工单状态)
+					Map<String, String> updateParams = new HashMap<String, String>();
+					updateParams.put("status", "5");  //进入运维执行状态
+					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
+					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+				}
 				resultInfo = "执行成功";
 				map.put("result", resultInfo);	
 				return map;
