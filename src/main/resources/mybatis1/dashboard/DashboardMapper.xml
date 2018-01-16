@@ -8,12 +8,12 @@
 	
 	<!-- 宿主机总量 -->
 	<select id="getHostNum" parameterType="String" resultType="Long">
-		select count(1) from t_hostmachine
+		select count(1) from t_hostmachine where type!='kvm'
 	</select>
 	
 	<!-- 物理机总量 -->
 	<select id="getPhysNum" parameterType="String" resultType="Long">
-		select count(1) from t_hostmachine
+		select count(1) from t_hostmachine where type='kvm'
 	</select>
 	
 	<!-- 用户总数 -->
