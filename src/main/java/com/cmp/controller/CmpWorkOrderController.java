@@ -253,7 +253,7 @@ public class CmpWorkOrderController extends BaseController{
 			mv.setViewName(toViewUrl);
 			return mv;
 		}
-		Map<String, Object> pageViewMap = workorderHandler.toWorkorderCheck(toVerifyWorkorder);
+		Map<String, Object> pageViewMap = workorderHandler.toWorkorderVerify(toVerifyWorkorder);
 		if (pageViewMap == null) {
 			toViewUrl = "/404"; 
 			mv.setViewName(toViewUrl);
@@ -461,7 +461,7 @@ public class CmpWorkOrderController extends BaseController{
 				Map<String, Object> variables = new HashMap<String, Object>();
 				if (rejectFlag != null && "0".equals(rejectFlag)) {
 					//拒绝流程
-					variables.put("USERNAME", userr.getUSERNAME());
+					variables.put("USERNAME", toCheckWorkorder.getApplyUserId());
 					variables.put("rejectFlag", 0);
 					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					
@@ -475,7 +475,6 @@ public class CmpWorkOrderController extends BaseController{
 					return map;
 				}else {
 					//同意流程
-					variables.put("USERNAME", userr.getUSERNAME());
 					variables.put("rejectFlag", 1);
 					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					//更新工单(流程实例ID 和 工单状态)
@@ -509,7 +508,7 @@ public class CmpWorkOrderController extends BaseController{
 		
 		CmpWorkOrder toVerifyWorkorder = cmpWorkOrderService.findByAppNo(appNo);
 		if (toVerifyWorkorder == null) {
-			resultInfo = "审核失败,工单号不存在";
+			resultInfo = "确认异常 ,工单号不存在";
 			map.put("result", resultInfo);	
 			return map;
 		}
@@ -524,13 +523,14 @@ public class CmpWorkOrderController extends BaseController{
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
 		
-		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 100);
+		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 500);
 		for (Task task : userTaskList) {
 			if (task.getProcessInstanceId().equals(toVerifyWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
 				//写入流程注释
 				activitiService.addComment(task.getId(), toVerifyWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
 				Map<String, Object> variables = new HashMap<String, Object>();
+				variables.put("USERNAME", toVerifyWorkorder.getApplyUserName());
 				activitiService.handleTask(appNo, toVerifyWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 				//更新工单(流程实例ID 和 工单状态)
 				Map<String, String> updateParams = new HashMap<String, String>();
@@ -579,7 +579,7 @@ public class CmpWorkOrderController extends BaseController{
 			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
-		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 100);
+		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 500);
 		for (Task task : userTaskList) {
 			if (task.getProcessInstanceId().equals(toExecuteWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
@@ -588,7 +588,7 @@ public class CmpWorkOrderController extends BaseController{
 				Map<String, Object> variables = new HashMap<String, Object>();
 				if (rejectFlag != null && "0".equals(rejectFlag)) {
 					//拒绝流程
-					variables.put("USERNAME", userr.getUSERNAME());
+					variables.put("USERNAME", toExecuteWorkorder.getApplyUserId());
 					variables.put("rejectFlag", 0);
 					activitiService.handleTask(appNo, toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					//更新工单(流程实例ID 和 工单状态)

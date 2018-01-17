@@ -151,14 +151,14 @@
 																	class="ace-icon fa fa-pencil-square-o bigger-120" title="审核"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.query == 1}">
+															<c:if test="${QX.query == 1 and var.status != '3'}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
 																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="查看"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.query == 1 and var.status != '3' }">
+															<c:if test="${QX.query == 1 and var.status == '3' }">
 																<a class="btn btn-xs btn-danger" title="确认"
 																	onclick="verify('${var.appNo}');"> <i
 																	class="ace-icon fa fa-print  align-top bigger-125"
