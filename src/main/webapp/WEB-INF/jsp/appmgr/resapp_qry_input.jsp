@@ -521,22 +521,16 @@ function getTotalAmt(){
 }
 
 //套餐计算金额
-function getPckgTotalAmt(cpuVal, memVal, diskSize){
+function getPckgTotalAmt(cpuVal, memVal, storeVal){
 	var cpuAmt=cpuVal*cpuPrice;//cpu总价
 	var memAmt=memVal*memPrice;//内存总价
-	var diskSizes=diskSize.split(",");
+	var storeVals=storeVal.split(",");
 	var storeAmt=0;//磁盘总价
-	$.each(diskSizes, function (i, item) {
+	$.each(storeVals, function (i, item) {
 		storeAmt+=item*storePrice;//磁盘总价
 	});
 	
 	$("#totalAmt").html(amtFmt((cpuAmt+memAmt+storeAmt).toFixed(2)+"", '￥'));//总价
-}
-
-//购物车计算金额
-function getAllTotalAmt(cpuVal, memoryVal, diskSizeArr){
-	var amt="123456789.00";
-	$("#allTotalAmt").html(amtFmt(amt, '￥'));
 }
 
 //必须加<!DOCTYPE html>
