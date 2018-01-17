@@ -296,4 +296,9 @@
 	<select id="delPckg" parameterType="String">
 		delete from <include refid="tableName"/> where orderNo=#{pckgId}
 	</select>
+	
+	<!-- 计算价格查询 -->
+	<select id="getCmpPrice" parameterType="String" resultType="String">
+		SELECT ifnull(group_concat(round(price_cur/unit, 2) ORDER BY type asc), '0,0,0') FROM t_product
+	</select>
 </mapper>

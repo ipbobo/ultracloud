@@ -156,8 +156,15 @@ function checkData(btnId){
 		return false;
 	}
 	
-	if($("#virName").val()==""){
+	var virName=$("#virName").val();
+	if(virName==""){
 		$("#virName").tips({side:3, msg:'虚拟机名称不能为空', bg:'#AE81FF', time:2});
+		$("#virName").focus();
+		return false;
+	}
+	
+	if(virName.match(/^['"]*$/)){
+		$("#virName").tips({side:3, msg:'虚拟机名称不能包含“\'"”', bg:'#AE81FF', time:2});
 		$("#virName").focus();
 		return false;
 	}
@@ -361,10 +368,12 @@ function diskSizeFunc(obj, diskTypeId, iopsId){
 //点击tab页
 function tabFunc(tabId){
 	if(tabId=="zdysq"){//自定义申请
+		getTotalAmt();//计算金额
 		$("#savePckgBtnId").show();
 		return;
 	}else{//套餐申请
 		$("#savePckgBtnId").hide();
+		$("#totalAmt").html("￥0.00");//总价
 		$("#tcsq").load("pckgAppPre.do");
 	}
 }
@@ -468,6 +477,7 @@ function diskTypeFunc(){
 	}
 	
 	$("#diskTypeLabel").html(diskTypeLabel);
+	getTotalAmt();//计算金额
 }
 
 //数量改变时触发
@@ -496,13 +506,35 @@ function expireDateFunc(){
 }
 
 //计算金额
+var cpuPrice=('${cmpPrice.cpuPrice}')*1;//cpu单价
+var memPrice=('${cmpPrice.memPrice}')*1;//内存单价
+var storePrice=('${cmpPrice.storePrice}')*1;//磁盘单价
 function getTotalAmt(){
-	var amt="123456789.00";
-	$("#totalAmt").html(amtFmt(amt, '￥'));
+	var cpuAmt=$("#cpu").val()*cpuPrice;//cpu总价
+	var memAmt=$("#memory").val()*memPrice;//内存总价
+	var storeAmt=0;//磁盘总价
+	$("input[name='diskSize']").each(function() {
+		storeAmt+=$(this).val()*storePrice;//磁盘总价
+	});
+	
+	$("#totalAmt").html(amtFmt((cpuAmt+memAmt+storeAmt).toFixed(2)+"", '￥'));//总价
+}
+
+//套餐计算金额
+function getPckgTotalAmt(cpuVal, memVal, diskSize){
+	var cpuAmt=cpuVal*cpuPrice;//cpu总价
+	var memAmt=memVal*memPrice;//内存总价
+	var diskSizes=diskSize.split(",");
+	var storeAmt=0;//磁盘总价
+	$.each(diskSizes, function (i, item) {
+		storeAmt+=item*storePrice;//磁盘总价
+	});
+	
+	$("#totalAmt").html(amtFmt((cpuAmt+memAmt+storeAmt).toFixed(2)+"", '￥'));//总价
 }
 
 //购物车计算金额
-function getAllTotalAmt(){
+function getAllTotalAmt(cpuVal, memoryVal, diskSizeArr){
 	var amt="123456789.00";
 	$("#allTotalAmt").html(amtFmt(amt, '￥'));
 }
@@ -860,6 +892,7 @@ $(top.hangge());
 $('.date-picker').datepicker({autoclose: true,todayHighlight: true});//datepicker
 $("#shoppingCartNum").html("${shoppingCartNum}");
 $("#buyHisNum").html("${buyHisNum}");
+getTotalAmt();//计算金额，初始化加载
 </script>
 </body>
 </html>

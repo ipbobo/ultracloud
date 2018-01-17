@@ -68,6 +68,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
 		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
+		String applyUserId=getUserId();//申请者
 		List<CmpDict> envList=environmentService.getEnvList();
 		if(envList!=null && !envList.isEmpty()){
 			CmpDict cmpDict=envList.get(0);//第一项
@@ -88,9 +89,9 @@ public class AppMgrController extends BaseController {
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
 		mv.addObject("cmpOrder", StringUtils.isBlank(orderNo)?null:cmpOrderService.getOrderDtl(orderNo));//清单详细信息
-		String applyUserId=getUserId();//申请者
 		mv.addObject("shoppingCartNum", cmpOrderService.getShoppingCartNum(applyUserId));//购物车列表大小
 		mv.addObject("buyHisNum", cmpOrderService.getBuyHisNum(applyUserId));//已购历史列表大小
+		mv.addObject("cmpPrice", cmpOrderService.getCmpPrice());//计算价格
 		mv.setViewName("appmgr/resapp_qry_input");
 		return mv;
 	}
