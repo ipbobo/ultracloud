@@ -26,6 +26,7 @@ public class VirtualMachine {
 	private String appNo;	//工单号
 	private String type;    //类型
 	
+	
 	public String getId() {
 		return id;
 	}

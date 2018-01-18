@@ -9,15 +9,14 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.cmp.activiti.CustomGroupEntityManager;
 import com.cmp.entity.DeployedSoft;
 import com.cmp.entity.Medium;
 import com.cmp.entity.Project;
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.mgr.CloudArchManager;
 import com.cmp.mgr.CloudArchManagerAdapter;
-import com.cmp.mgr.bean.CreateVmRequest;
-import com.cmp.mgr.vmware.VMWareCloudArchManager;
+import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
@@ -252,7 +251,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		departmentService.editUsedQuota(d_pd);
 		
 		
-		//测试添加虚拟机
+		//添加虚拟机
 		
 		//rhel6_64Guest
 		//centos64Guest
@@ -315,22 +314,36 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		
 		platForm.setPlatformManagerType(platformManagerType);
 		CloudArchManager cloudArchManager = cloudArchManagerAdapter.getCloudArchManagerAdaptee(platForm);
-		CreateVmRequest cvq = new CreateVmRequest();
-		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
-		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));
-		int defaultDiskSize = Integer.parseInt(cmpDictService.getCmpDict("install_disk_size", "default").getDictValue());
-		cvq.setDiskSizeKB(defaultDiskSize*1024*1024);
-		cvq.setDiskMode("persistent");					
-		cvq.setDcName(datacenterPd.getString("name"));
-		cvq.setVmName(vmName);
-		cvq.setNetName("VM Network");					//网络名称  ---   datacenter_network表中根据 数据中心 ID获取 				
-		cvq.setRpName("Resources");						//资源池 --- 先写死
-		cvq.setNicName("VMXNET 3");						//写死先
-		cvq.setDsName("datastore2-raid5-2.5t");			//调接口获取
-		cvq.setGuestOs(installOS);
-		//cloudArchManager.createVirtualMachine(cvq);
+		
+		CloneVmRequest cloneVmRequest = new CloneVmRequest();
+		cloneVmRequest.setCpuSize(Integer.parseInt(pd.getString("CPU")));
+		cloneVmRequest.setRamSize(Long.parseLong(pd.getString("memory"))*1024);
+		cloneVmRequest.setVmName(vmName);
+		cloneVmRequest.setDcName(datacenterPd.getString("name"));
+		cloneVmRequest.setTplName("rhel6.0_x64_template");
+		cloudArchManager.cloneVirtualMachine(cloneVmRequest);
+//		CreateVmRequest cvq = new CreateVmRequest();
+//		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
+//		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));
+//		int defaultDiskSize = Integer.parseInt(cmpDictService.getCmpDict("install_disk_size", "default").getDictValue());
+//		cvq.setDiskSizeKB(defaultDiskSize*1024*1024);
+//		cvq.setDiskMode("persistent");					
+//		cvq.setDcName(datacenterPd.getString("name"));
+//		cvq.setVmName(vmName);
+//		cvq.setNetName("VM Network");					//网络名称  ---   datacenter_network表中根据 数据中心 ID获取 				
+//		cvq.setRpName("Resources");						//资源池 --- 先写死
+//		cvq.setNicName("VMXNET 3");						//写死先
+//		cvq.setDsName("datastore2-raid5-2.5t");			//调接口获取
+//		cvq.setGuestOs(installOS);
+//		cloudArchManager.createVirtualMachine(cvq);
 		logger.info("远程虚拟机创建完毕");
 		
+		TccVirtualMachine  vmInst = cloudArchManager.geVirtualMachineByName(vmName);
+		String vmIp = vmInst.getIpAddress();
+		
+		//获取模板用户名密码
+		String tp_username = "root";
+		String tp_passwd = "pwdpwd";
 		
 		String softCode = orderInfo.getSoftCode();
 		String[] softs = softCode.split(",");
@@ -346,9 +359,9 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		vm.setSoft(softCode);
 		vm.setSoftStatus("未安装");
 		vm.setName(vmName);
-		vm.setIp("192.168.1.101");
-		vm.setUsername("test");
-		vm.setPassword("pwd123");
+		vm.setIp(vmIp);
+		vm.setUsername(tp_username);
+		vm.setPassword(tp_passwd);
 		vm.setStatus("0");
 		vm.setType(workOrder.getPlatType());
 		vm.setHostmachineId(182837323);
@@ -374,8 +387,8 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			
 			//执行软件安装脚本
 			String scriptUrl = medium.getUrl();
-			ShellUtil shellUtil = new ShellUtil("118.242.40.216", ShellUtil.DEF_PORT, "root",  
-	                "r00t0neio", ShellUtil.DEF_CHARSET);
+			ShellUtil shellUtil = new ShellUtil(vmIp, ShellUtil.DEF_PORT, tp_username,  
+					tp_passwd , ShellUtil.DEF_CHARSET);
 			shellUtil.exec("." + scriptUrl, workOrder.getAppNo());
 		}
 		//所有安装完毕设置结束标志

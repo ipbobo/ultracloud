@@ -199,6 +199,8 @@ public class AppMgrController extends BaseController {
     @ResponseBody
 	public String appCommit(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		try{
+			Session session = Jurisdiction.getSession();
+			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
 			String orderNoStr=request.getParameter("orderNoStr");//清单ID字符串
 			String[] orderNos=orderNoStr.split(",");
 			if(orderNos!=null && orderNos.length>0){
@@ -207,6 +209,7 @@ public class AppMgrController extends BaseController {
 					String appNo=cmpCommonService.getAppNo("cmp_workorder");
 					Map<String, Object> variables=new HashMap<String, Object>();
 					variables.put("btnName", "提交");
+					variables.put("USERNAME", user.getUSERNAME());
 					String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动
 					cmpWorkOrderService.addWorkOrder(appNo, orderNo, applyUserId, procInstId);//提交申请
 					//添加任务拾取
@@ -217,7 +220,9 @@ public class AppMgrController extends BaseController {
 						}
 					}
 					//更新工单状态
-					activitiService.handleTask(appNo, procInstId, applyUserId, null, null);
+					Map<String, Object> variablesMap = new HashMap<String, Object>();
+					variablesMap.put("appNo", appNo);
+					activitiService.handleTask(appNo, procInstId, applyUserId, null, variablesMap);
 					//更新工单(流程实例ID 和 工单状态)
 					Map<String, String> updateParams = new HashMap<String, String>();
 					updateParams.put("procInstId", procInstId);

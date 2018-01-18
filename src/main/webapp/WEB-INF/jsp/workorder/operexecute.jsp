@@ -293,7 +293,7 @@
 									</div>
 									<div class="modal-body">
 											<input  type="hidden" id="installSoftIds" />
-											<input  type="hidden" id="scriptId" />
+											<input  type="hidden" id="installScriptId" />
 											<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 												<thead>
 													<tr>
@@ -515,7 +515,7 @@
 	}
 	
 	function showSetparams(scriptId){
-		$('#scriptId').val(scriptId);
+		$('#installScriptId').val(scriptId);
 		$.ajax({
 			type: "POST",
 			url: '<%=basePath%>queryScriptParams.do?scriptId='+scriptId,
@@ -524,16 +524,18 @@
 			cache: false,
 			success: function(data){
 				 var paramsTable = $("#paramsTable");
+				 $("#paramsTable tr:gt(0)").remove();
 				 for(var i=0;i<data.length;i++){  
 					 paramsTable.append("<tr><td class='center'>" + data[i].name + "</td><td class='center'><input name='paramInput' value='"+ data[i].value +"' /></td></tr>");
 			    }
+				 $('#installScriptLoadFlag').val('1');
 			}
 		});
 	    $('#script_params_modal').modal('show');
 	}
 	
 	function setParams(){
-		var scriptId = $('#scriptId').val();
+		var scriptId = $('#installScriptId').val();
 		if (scriptId == null || scriptId == ''){
 			 showDialog("请先选择脚本，并设置脚本参数!");
 		}
