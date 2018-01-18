@@ -917,6 +917,23 @@ CREATE TABLE `t_systemnotice` (
   PRIMARY KEY (`FHSMS_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统公告'; 
 
+-- ----------------------------
+-- 监控策略
+-- ----------------------------
+DROP TABLE IF EXISTS `t_monitor_policy`;
+CREATE TABLE `t_monitor_policy` (
+  `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `code` varchar(20) DEFAULT NULL COMMENT '标识',
+  `name` varchar(50) DEFAULT NULL COMMENT '监控指标',
+  `cycle` int(4) DEFAULT NULL COMMENT '统计周期',
+  `max` int(4) DEFAULT NULL COMMENT '最小值',
+  `min` int(4) DEFAULT NULL COMMENT '最大值',
+  `isemail` varchar(100) DEFAULT NULL COMMENT '是否邮件通知',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='监控策略'; 
+
 -- ---------------------------------------------------------------------------------------
 -- 创建虚拟机费用查询视图 start...
 -- ----------------------------------------------------------------------------------------
