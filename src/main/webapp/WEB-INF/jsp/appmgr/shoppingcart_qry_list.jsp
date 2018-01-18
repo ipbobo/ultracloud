@@ -73,6 +73,33 @@ function batchBuy(){
 	    }
 	});
 }
+
+//获取磁盘数量
+function getStoreNum(storeVal){
+	var storeNum=0;//磁盘数量
+	var storeVals=storeVal.split(",");
+	$.each(storeVals, function (i, item) {
+		storeNum+=item*1;//磁盘数量
+	});
+	
+	return storeNum;
+}
+
+//购物车计算金额
+function getAllTotalAmt(){
+	var cpuNum=0;
+	var memNum=0;
+	var storeNum=0;
+	$("input:checkbox[name='orderNo']:checked").each(function() {
+		var virNum=($(this).siblings(".virNum").val())*1;
+		cpuNum+=virNum*($(this).siblings(".cpu").val());
+		memNum+=virNum*($(this).siblings(".mem").val());
+		storeNum+=virNum*getStoreNum($(this).siblings(".store").val());
+	});
+	
+	
+	$("#allTotalAmt").html(amtFmt((cpuNum*cpuPrice+memNum*memPrice+storeNum*storePrice).toFixed(2)+"", '￥'));
+}
 </script>
 </head>
 <body>
@@ -81,7 +108,11 @@ function batchBuy(){
 	<c:forEach items="${shoppingCartList}" var="var" varStatus="st">
 	<tr style="width: 100%;border:1px solid #cccccc;">
 		<td align="center" style="width: 30px;">
-			<input type="checkbox" name="orderNo" id="orderNo" value="${var.orderNo}" checked/>
+			<input type="checkbox" name="orderNo" value="${var.orderNo}" onclick="getAllTotalAmt()" checked/>
+			<input type="hidden" name="cpuVal" value="${var.cpu}" class="cpu"/>
+			<input type="hidden" name="memVal" value="${var.memory}" class="mem"/>
+			<input type="hidden" name="storeVal" value="${var.diskSize}" class="store"/>
+			<input type="hidden" name="virNumVal" value="${var.virNum}" class="virNum"/>
 		</td>
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
@@ -141,6 +172,7 @@ function batchBuy(){
 </table>
 <script type="text/javascript">
 $("#shoppingCartNum").html("${shoppingCartNum}");
+getAllTotalAmt();//购物车计算金额，初始化加载
 </script>
 </body>
 </html>
