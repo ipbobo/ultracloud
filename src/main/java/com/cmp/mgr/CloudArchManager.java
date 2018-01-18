@@ -34,7 +34,7 @@ public interface CloudArchManager {
 
 	public List<TccVirtualMachine> getVirtualMachines();
 	
-	public TccVirtualMachine geVirtualMachineByName(String name);
+	public TccVirtualMachine getVirtualMachineByName(String name);
 
 	public List<TccDatastore> getDatastores();
 

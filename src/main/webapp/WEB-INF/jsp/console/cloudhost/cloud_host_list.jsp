@@ -103,57 +103,46 @@
 							</thead>
 													
 							<tbody>
-								<%-- <c:forEach items="${varList}" var="var" varStatus="vs"> --%>
-								<c:forEach begin="0" end="5" step="1" var="var">
+								<c:forEach items="${varList}" var="var" varStatus="vs">
+								<%-- <c:forEach begin="0" end="5" step="1" var="var"> --%>
 									<tr>
 										<td class='center'>
-											<label class="pos-rel"><input type='checkbox' name='ids' id="${var}" value="${var}" class="ace" /><span class="lbl"></span></label>
+											<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 										</td>
-										<td class='center'><a>kf201710101244478817</a></td>
-										<td class='center'>192.168.153.201</td>
-										<td class='center'>8核</td>
-										<td class='center'>16G</td>
-										<td class='center'>500G</td>
-										<td class='center'>redhat6.5</td>
-										<td class='center'>运行中</td>
-										<td class='center'>开发系统</td>
-										<td class='center'>长期</td>
+										<td class='center'><a>${var.name}</a></td>
+										<td class='center'>${var.ip}</td>
+										<td class='center'>${var.cpu}</td>
+										<td class='center'>
+											<c:if test="${not empty var.memory}">
+												${var.memory}G
+											</c:if>
+										</td>
+										<td class='center'>
+											<c:if test="${not empty var.datadisk}">
+												${var.datadisk}G
+											</c:if>
+										</td>
+										<td class='center'>${var.os}</td>
+										<td class='center'>
+											<c:choose>
+											    <c:when test="${var.status == 0}">
+													运行中
+											    </c:when>
+											    <c:when test="${var.status == 1}">
+													挂起
+											    </c:when>
+											    <c:when test="${var.status == 2}">
+													关机
+											    </c:when>
+											    <c:otherwise>
+													未知
+											    </c:otherwise>
+											</c:choose>
+										</td>
+										<td class='center'>${var.platform}</td>
+										<td class='center'>${var.duedate}</td>
 										<td class='center'><a>SSH</a></td>
 									</tr>
-									<%-- <tr>
-										<td class='center'>
-											<label class="pos-rel"><input type='checkbox' name='ids' id="${var.TO_USERNAME}" value="${var.FHSMS_ID}" class="ace" /><span class="lbl"></span></label>
-										</td>
-										<td class='center'>VCenter资源管理平台</td>
-										<td class='center'>虚拟机</td>
-										<td class='center'><a>kf201710101244573319</a></td>
-										<td class='center'>192.168.153.202</td>
-										<td class='center'>8核/16G</td>
-										<td class='center'>500G</td>
-										<td class='center'>redhat6.5</td>
-										<td class='center'>开发系统</td>
-										<td class='center'>长期</td>
-										<td class='center'>2017-10-21 10:30:55</td>
-										<td class='center'>运行中</td>
-										<td class='center'><a>查看</a></td>
-									</tr>
-									<tr>
-										<td class='center'>
-											<label class="pos-rel"><input type='checkbox' name='ids' id="${var.TO_USERNAME}" value="${var.FHSMS_ID}" class="ace" /><span class="lbl"></span></label>
-										</td>
-										<td class='center'>VCenter资源管理平台</td>
-										<td class='center'>虚拟机</td>
-										<td class='center'><a>kf201711101254273200</a></td>
-										<td class='center'>192.168.153.203</td>
-										<td class='center'>8核/16G</td>
-										<td class='center'>500G</td>
-										<td class='center'>redhat6.5</td>
-										<td class='center'>开发系统</td>
-										<td class='center'>长期</td>
-										<td class='center'>2017-11-01 15:30:20</td>
-										<td class='center'>运行中</td>
-										<td class='center'><a>查看</a></td>
-									</tr> --%>
 								</c:forEach>
 							</tbody>
 						</table>
@@ -263,7 +252,7 @@
 			 diag.CancelEvent = function(){ //关闭事件
 				 top.jzts();
 				 setTimeout("self.location=self.location",100);
-				diag.close();
+				 diag.close();
 			 };
 			 diag.show();
 		}

@@ -85,7 +85,7 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 	
 	@Override
-	public TccVirtualMachine geVirtualMachineByName(String name) {
+	public TccVirtualMachine getVirtualMachineByName(String name) {
 		return null;
 	}
 

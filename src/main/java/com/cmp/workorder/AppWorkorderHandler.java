@@ -338,7 +338,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 //		cloudArchManager.createVirtualMachine(cvq);
 		logger.info("远程虚拟机创建完毕");
 		
-		TccVirtualMachine  vmInst = cloudArchManager.geVirtualMachineByName(vmName);
+		TccVirtualMachine  vmInst = cloudArchManager.getVirtualMachineByName(vmName);
 		String vmIp = vmInst.getIpAddress();
 		
 		//获取模板用户名密码

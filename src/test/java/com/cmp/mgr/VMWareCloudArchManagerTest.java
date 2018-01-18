@@ -1,5 +1,7 @@
 package com.cmp.mgr;
 
+import java.util.Optional;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,6 +64,14 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 		execute("GetVirtualMachines", () -> {
 			cloudArchManager.getVirtualMachines().stream()
 					.map(TccVirtualMachine::getUUID).forEach(System.out::println);
+		});
+	}
+	
+	@Test
+	public void testGetVirtualMachineByName() {
+		execute("GetVirtualMachineByName", () -> {
+			Optional.ofNullable(cloudArchManager.getVirtualMachineByName("cmp_54"))
+					.map(TccVirtualMachine::getUUID).ifPresent(System.out::println);
 		});
 	}
 
@@ -135,7 +145,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 		});
 	}
 
-	@Test
+	// @Test
 	public void testCloneVM() {
 		execute("CloneVirtualMachine", () -> {
 			CloneVmRequest request = new CloneVmRequest();
@@ -143,6 +153,8 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 			request.setTplName("rhel6.0_x64_template");
 			request.setDcName("DC1");
 			request.setRpName("Resources");
+			request.setCpuSize(1);
+			request.setRamSize(768);
 
 			cloudArchManager.cloneVirtualMachine(request);
 		});

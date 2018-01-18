@@ -60,7 +60,7 @@ public class CloudHostController extends BaseController {
 		pd.put("FROM_USERNAME", Jurisdiction.getUsername()); // 当前用户名
 		page.setPd(pd);
 		List<PageData> varList = cloudHostService.list(page); // 列出Fhsms列表
-		mv.setViewName("console/cloudhost/fhsms_list");
+		mv.setViewName("console/cloudhost/cloud_host_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
