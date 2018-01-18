@@ -137,7 +137,7 @@ function getDashboard(){
 				  	</select>
 				</td>
 			</tr>
-			<tr height="180px">
+			<tr height="120px">
 				<td id="cpuChart" align="center"></td>
 				<td id="memChart" align="center"></td>
 				<td id="storeChart" align="center"></td>
@@ -145,24 +145,24 @@ function getDashboard(){
 					<table id="simple-table" class="table table-striped table-bordered table-hover">
 						<thead>
 							<tr>
-								<th class="center" style="width: 50px;">序号</th>
-								<th class="center">虚机名</th>
-								<th class="center">IP</th>
-								<th class="center">使用率</th>
-								<th class="center">使用量</th>
-								<th class="center">分配量</th>
+								<th style="padding: 0px;" class="center" style="width: 50px;">序号</th>
+								<th style="padding: 0px;" class="center">虚机名</th>
+								<th style="padding: 0px;" class="center">IP</th>
+								<th style="padding: 0px;" class="center">使用率</th>
+								<th style="padding: 0px;" class="center">使用量</th>
+								<th style="padding: 0px;" class="center">分配量</th>
 							</tr>
 						</thead>
 						<c:choose>
 						<c:when test="${not empty resUseList}">
 						<c:forEach items="${resUseList}" var="var" varStatus="vs">
 							<tr>
-								<td class='center' style="width: 30px;">${vs.index+1+page.currentResult}</td>
-								<td class='center'>${var.name}</td>
-								<td class='center'>${var.ip}</td>
-								<td class='center'>${var.useRate}</td>
-								<td class='center'>${var.useNum}</td>
-								<td class='center'>${var.allotNum}</td>
+								<td style="padding: 0px;width: 30px;" class='center'>${vs.index+1+page.currentResult}</td>
+								<td style="padding: 0px;" class='center'>${var.name}</td>
+								<td style="padding: 0px;" class='center'>${var.ip}</td>
+								<td style="padding: 0px;" class='center'>${var.useRate}</td>
+								<td style="padding: 0px;" class='center'>${var.useNum}</td>
+								<td style="padding: 0px;" class='center'>${var.allotNum}</td>
 							</tr>
 						</c:forEach>
 						</c:when>
