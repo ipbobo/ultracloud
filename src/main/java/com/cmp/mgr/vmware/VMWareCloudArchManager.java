@@ -194,6 +194,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		}
 	}
 
+	public TccVirtualMachine geVirtualMachineByName(String name) {
+		return searchManagedEntity(VirtualMachine.class, name)
+				.map(converters.toVirtualMachine()).orElse(null);
+	}
+
 	@Override
 	@SuppressWarnings("deprecation")
 	public void createVirtualMachine(CreateVmRequest request) {

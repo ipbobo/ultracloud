@@ -33,6 +33,8 @@ public interface CloudArchManager {
 	public List<TccHostMachine> getHostMachines();
 
 	public List<TccVirtualMachine> getVirtualMachines();
+	
+	public TccVirtualMachine geVirtualMachineByName(String name);
 
 	public List<TccDatastore> getDatastores();
 

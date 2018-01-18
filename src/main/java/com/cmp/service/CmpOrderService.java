@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.cmp.sid.CmpOrder;
-import com.cmp.sid.CmpPrice;
 import com.fh.dao.DaoSupport;
 import com.fh.util.PageData;
 
@@ -99,18 +98,19 @@ public class CmpOrderService {
 	}
 	
 	//计算价格查询
-	public CmpPrice getCmpPrice() throws Exception {
-		String price=(String)dao.findForObject("CmpOrderMapper.getCmpPrice", null);
-		String[] prices=null;
-		if(price==null || "".equals(price) || (prices=price.split(","))==null || prices.length!=3){
-			logger.error("CPU、内存、磁盘计算价格不能为空");
-			return null;
-		}
-		
-		CmpPrice cmpPrice=new CmpPrice();
-		cmpPrice.setCpuPrice(prices[0]);//cpu
-		cmpPrice.setMemPrice(prices[2]);//内存
-		cmpPrice.setStorePrice(prices[1]);//磁盘
-		return cmpPrice;
-	}
+//	public CmpPrice getCmpPrice() throws Exception {
+//		String price=(String)dao.findForObject("CmpOrderMapper.getCmpPrice", null);
+//		String[] prices=null;
+//		if(price==null || "".equals(price) || (prices=price.split(","))==null || prices.length!=3){
+//			logger.error("CPU、内存、磁盘计算价格不能为空");
+//			return null;
+//		}
+//		
+//		CmpPrice cmpPrice=new CmpPrice();
+//		cmpPrice.setCpuPrice(prices[0]);//cpu
+//		cmpPrice.setMemPrice(prices[2]);//内存
+//		cmpPrice.setStorePrice(prices[1]);//磁盘
+//		
+//		return cmpPrice;
+//	}
 }

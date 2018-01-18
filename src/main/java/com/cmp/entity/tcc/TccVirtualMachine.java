@@ -17,6 +17,7 @@ public class TccVirtualMachine implements java.io.Serializable {
 	private String	domainInfo;
 	private String	memoryStatistic;
 	private String	cpuInfo;
+	private String	ipAddress;
 	private String	xmlDesc0;
 	private String	xmlDesc2;
 
@@ -122,6 +123,14 @@ public class TccVirtualMachine implements java.io.Serializable {
 
 	public void setCpuInfo(String cpuInfo) {
 		this.cpuInfo = cpuInfo;
+	}
+
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 
 	public String getXmlDesc0() {

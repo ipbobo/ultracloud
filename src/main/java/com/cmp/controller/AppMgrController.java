@@ -91,7 +91,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("cmpOrder", StringUtils.isBlank(orderNo)?null:cmpOrderService.getOrderDtl(orderNo));//清单详细信息
 		mv.addObject("shoppingCartNum", cmpOrderService.getShoppingCartNum(applyUserId));//购物车列表大小
 		mv.addObject("buyHisNum", cmpOrderService.getBuyHisNum(applyUserId));//已购历史列表大小
-		mv.addObject("cmpPrice", cmpOrderService.getCmpPrice());//计算价格
+		//mv.addObject("cmpPrice", cmpOrderService.getCmpPrice());//计算价格
 		mv.setViewName("appmgr/resapp_qry_input");
 		return mv;
 	}

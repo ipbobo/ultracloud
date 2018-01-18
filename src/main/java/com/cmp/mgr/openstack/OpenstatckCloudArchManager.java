@@ -83,6 +83,11 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 				.orElse(Collections.emptyList());
 		// @formatter:on
 	}
+	
+	@Override
+	public TccVirtualMachine geVirtualMachineByName(String name) {
+		return null;
+	}
 
 	@Override
 	public List<TccDatastore> getDatastores() {

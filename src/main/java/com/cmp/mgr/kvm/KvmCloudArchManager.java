@@ -87,6 +87,11 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 
 		return ls;
 	}
+	
+	@Override
+	public TccVirtualMachine geVirtualMachineByName(String name) {
+		return null;
+	}
 
 	private Connect getLibvirtConnect() throws LibvirtException {
 		return new LibvirtConnect("qemu+tcp://" + platform.getCloudplatformIp() + "/system", false);
