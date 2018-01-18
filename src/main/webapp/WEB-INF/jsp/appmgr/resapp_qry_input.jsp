@@ -489,8 +489,8 @@ function expireDateFunc(){
 var cpuPrice=('${cmpPrice.cpuPrice}')*1;//cpu单价
 var memPrice=('${cmpPrice.memPrice}')*1;//内存单价
 var storePrice=('${cmpPrice.storePrice}')*1;//磁盘单价
-function getTotalAmt(){
-	var virNum=$("#virNum").val();//数量
+function getTotalAmt(virNum){
+	var virNum=virNum?virNum:$("#virNum").val();//数量
 	var cpuNum=virNum*($("#cpu").val());//cpu总价
 	var memNum=virNum*($("#memory").val());//内存总价
 	var storeNum=0;//磁盘数量
@@ -532,7 +532,7 @@ function virNumFunc(operType){
 	if(virNum<1) virNum=1;
 	if(virNum>1000) virNum=1000;
 	$("#virNumLabel").html(virNum+"&nbsp;台");
-	getTotalAmt();//计算金额
+	getTotalAmt(virNum);//计算金额
 }
 
 //必须加<!DOCTYPE html>
