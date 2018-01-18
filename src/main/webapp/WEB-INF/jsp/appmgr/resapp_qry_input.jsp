@@ -480,6 +480,40 @@ function diskTypeFunc(){
 	getTotalAmt();//计算金额
 }
 
+//到期时间改变时触发
+function expireDateFunc(){
+	$("#expireDateLabel").html($("#expireDate").val());
+}
+
+//计算金额
+var cpuPrice=('${cmpPrice.cpuPrice}')*1;//cpu单价
+var memPrice=('${cmpPrice.memPrice}')*1;//内存单价
+var storePrice=('${cmpPrice.storePrice}')*1;//磁盘单价
+function getTotalAmt(){
+	var virNum=$("#virNum").val();//数量
+	var cpuNum=virNum*($("#cpu").val());//cpu总价
+	var memNum=virNum*($("#memory").val());//内存总价
+	var storeNum=0;//磁盘数量
+	$("input[name='diskSize']").each(function() {
+		storeNum+=($(this).val())*1;//磁盘数量
+	});
+	
+	$("#totalAmt").html(amtFmt((cpuNum*cpuPrice+memNum*memPrice+virNum*storeNum*storePrice).toFixed(2)+"", '￥'));//总价
+}
+
+//套餐计算金额
+function getPckgTotalAmt(cpuVal, memVal, storeVal, virNum){
+	var cpuNum=virNum*cpuVal;//cpu总价
+	var memNum=virNum*memVal;//内存总价
+	var storeVals=storeVal.split(",");
+	var storeNum=0;//磁盘总价
+	$.each(storeVals, function (i, item) {
+		storeNum+=item*1;//磁盘总价
+	});
+	
+	$("#totalAmt").html(amtFmt((cpuNum*cpuPrice+memNum*memPrice+virNum*storeNum*storePrice).toFixed(2)+"", '￥'));//总价
+}
+
 //数量改变时触发
 function virNumFunc(operType){
 	var virNum=$("#virNum").val();
@@ -498,39 +532,7 @@ function virNumFunc(operType){
 	if(virNum<1) virNum=1;
 	if(virNum>1000) virNum=1000;
 	$("#virNumLabel").html(virNum+"&nbsp;台");
-}
-
-//到期时间改变时触发
-function expireDateFunc(){
-	$("#expireDateLabel").html($("#expireDate").val());
-}
-
-//计算金额
-var cpuPrice=('${cmpPrice.cpuPrice}')*1;//cpu单价
-var memPrice=('${cmpPrice.memPrice}')*1;//内存单价
-var storePrice=('${cmpPrice.storePrice}')*1;//磁盘单价
-function getTotalAmt(){
-	var cpuNum=$("#cpu").val();//cpu总价
-	var memNum=$("#memory").val();//内存总价
-	var storeNum=0;//磁盘数量
-	$("input[name='diskSize']").each(function() {
-		storeNum+=($(this).val())*1;//磁盘数量
-	});
-	
-	$("#totalAmt").html(amtFmt((cpuNum*cpuPrice+memNum*memPrice+storeNum*storePrice).toFixed(2)+"", '￥'));//总价
-}
-
-//套餐计算金额
-function getPckgTotalAmt(cpuVal, memVal, storeVal){
-	var cpuAmt=cpuVal*cpuPrice;//cpu总价
-	var memAmt=memVal*memPrice;//内存总价
-	var storeVals=storeVal.split(",");
-	var storeAmt=0;//磁盘总价
-	$.each(storeVals, function (i, item) {
-		storeAmt+=item*storePrice;//磁盘总价
-	});
-	
-	$("#totalAmt").html(amtFmt((cpuAmt+memAmt+storeAmt).toFixed(2)+"", '￥'));//总价
+	getTotalAmt();//计算金额
 }
 
 //必须加<!DOCTYPE html>
