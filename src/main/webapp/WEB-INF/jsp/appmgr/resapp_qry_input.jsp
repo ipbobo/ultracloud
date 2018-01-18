@@ -510,14 +510,14 @@ var cpuPrice=('${cmpPrice.cpuPrice}')*1;//cpu单价
 var memPrice=('${cmpPrice.memPrice}')*1;//内存单价
 var storePrice=('${cmpPrice.storePrice}')*1;//磁盘单价
 function getTotalAmt(){
-	var cpuAmt=$("#cpu").val()*cpuPrice;//cpu总价
-	var memAmt=$("#memory").val()*memPrice;//内存总价
-	var storeAmt=0;//磁盘总价
+	var cpuNum=$("#cpu").val();//cpu总价
+	var memNum=$("#memory").val();//内存总价
+	var storeNum=0;//磁盘数量
 	$("input[name='diskSize']").each(function() {
-		storeAmt+=$(this).val()*storePrice;//磁盘总价
+		storeNum+=($(this).val())*1;//磁盘数量
 	});
 	
-	$("#totalAmt").html(amtFmt((cpuAmt+memAmt+storeAmt).toFixed(2)+"", '￥'));//总价
+	$("#totalAmt").html(amtFmt((cpuNum*cpuPrice+memNum*memPrice+storeNum*storePrice).toFixed(2)+"", '￥'));//总价
 }
 
 //套餐计算金额
