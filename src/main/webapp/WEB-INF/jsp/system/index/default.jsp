@@ -51,7 +51,7 @@ function getDashboard(){
 					<td style="background-color: #dff0d8;" align="center" width="80px">项目总数</td>
 					<td width="20px">&nbsp;</td>
 					<td style="background-color: #dff0d8;" align="center" width="80px">工单总数</td>
-					<td align="center" width="50px" rowspan="2"><input id="chkId" type="checkbox" onclick="checkFunc()" <c:if test="${chkFlag=='1'}">checked</c:if>/>刷新</td>
+					<%-- <td align="center" width="50px" rowspan="2"><input id="chkId" type="checkbox" onclick="checkFunc()" <c:if test="${chkFlag=='1'}">checked</c:if>/>刷新</td> --%>
 					<td align="center" width="20px" rowspan="2"><button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button></td>
 				</tr>
 				<tr>
@@ -75,7 +75,7 @@ function getDashboard(){
 				<td align="left" valign="top" style="padding-top: 0px;" colspan="3"><h5><span style="border:1px solid #000000;">虚拟资源</span></h5></td>
 				<td align="left" valign="top" style="padding-top: 0px;" colspan="3"><h5><span style="border:1px solid #000000;">物理资源</span></h5></td>
 			</tr>
-			<tr height="150px">
+			<tr height="120px">
 				<td id="virCpuChart" align="center" width="16%"></td>
 				<td id="virMemChart" align="center" width="16%"></td>
 				<td id="virStoreChart" align="center" width="16%"></td>
@@ -87,7 +87,7 @@ function getDashboard(){
 				<td align="left" valign="top" style="padding-top: 30px;" colspan="3"><h5><span style="border:1px solid #000000;">负载情况</span><img src="images/load.jpg"/></h5></td>
 				<td align="left" valign="top" style="padding-top: 30px;" colspan="3"><h5><span style="border:1px solid #000000;">运行情况</span><img src="images/run.jpg"/></h5></td>
 			</tr>
-			<tr height="180px">
+			<tr height="120px">
 				<td id="virLoadChart" align="center" width="16%"></td>
 				<td id="hostLoadChart" align="center" width="16%"></td>
 				<td id="physLoadChart" align="center" width="16%"></td>
@@ -188,18 +188,18 @@ function getDashboard(){
 <%@ include file="foot.jsp"%>
 <script type="text/javascript">
 $(top.hangge());//关闭加载状态
-getGaugeChart('virCpuChart', ['', 'CPU(${vir.cpuUseNum}/${vir.cpuTotalNum}核)'], '${(vir.cpuUseNum/vir.cpuTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getGaugeChart('virMemChart', ['', '内存(${vir.memUseNum}/${vir.memTotalNum}GB)'], '${(vir.memUseNum/vir.memTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getGaugeChart('virStoreChart', ['', '磁盘(${vir.storeUseNum}/${vir.storeTotalNum}GB)'], '${(vir.storeUseNum/vir.storeTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getGaugeChart('physCpuChart', ['', 'CPU(${phys.cpuUseNum}/${phys.cpuTotalNum}核)'], '${(phys.cpuUseNum/phys.cpuTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getGaugeChart('physMemChart', ['', '内存(${phys.memUseNum}/${phys.memTotalNum}GB)'], '${(phys.memUseNum/phys.memTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getGaugeChart('physStoreChart', ['', '磁盘(${phys.storeUseNum}/${phys.storeTotalNum}GB)'], '${(phys.storeUseNum/phys.storeTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getAnnularChart('virLoadChart', ['${virLoad.loadTotalNum}台','虚拟机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${virLoad.loadLittleNum}台','${virLoad.loadMiddleNum}台','${virLoad.loadHeightNum}台','${virLoad.loadStopNum}台'], ['${virLoad.loadLittleNum}', '${virLoad.loadMiddleNum}', '${virLoad.loadHeightNum}', '${virLoad.loadStopNum}'], ['#00ff00', '#ffff00', '#ff0000','#A9A9A9'], "%");//获取图表
-getAnnularChart('hostLoadChart', ['${hostLoad.loadTotalNum}台','宿主机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${hostLoad.loadLittleNum}台','${hostLoad.loadMiddleNum}台','${hostLoad.loadHeightNum}台','${hostLoad.loadStopNum}台'], ['${hostLoad.loadLittleNum}', '${hostLoad.loadMiddleNum}', '${hostLoad.loadHeightNum}', '${hostLoad.loadStopNum}'], ['#00ff00', '#ffff00', '#ff0000','#A9A9A9'], "%");//获取图表
-getAnnularChart('physLoadChart', ['${physLoad.loadTotalNum}台','物理机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${physLoad.loadLittleNum}台','${physLoad.loadMiddleNum}台','${physLoad.loadHeightNum}台','${physLoad.loadStopNum}台'], ['${physLoad.loadLittleNum}', '${physLoad.loadMiddleNum}', '${physLoad.loadHeightNum}', '${physLoad.loadStopNum}'], ['#00ff00', '#ffff00', '#ff0000','#A9A9A9'], "%");//获取图表
-getAnnularChart('virRunChart', ['${virRun.runTotalNum}台','虚拟机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${virRun.runRunnigNum}台','${virRun.runHangupNum}台','${virRun.runCloseNum}台'], ['${virRun.runRunnigNum}','${virRun.runHangupNum}','${virRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
-getAnnularChart('hostRunChart', ['${hostRun.runTotalNum}台','宿主机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${hostRun.runRunnigNum}台','${hostRun.runHangupNum}台','${hostRun.runCloseNum}台'], ['${hostRun.runRunnigNum}','${hostRun.runHangupNum}','${hostRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
-getAnnularChart('physRunChart', ['${physRun.runTotalNum}台','物理机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${physRun.runRunnigNum}台','${physRun.runHangupNum}台','${physRun.runCloseNum}台'], ['${physRun.runRunnigNum}','${physRun.runHangupNum}','${physRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
+getGaugeChart('virCpuChart', ['', 'CPU(${vir.cpuUseNum}/${vir.cpuTotalNum}核)'], ['50%', '40%'], [0, 65], '${(vir.cpuUseNum/vir.cpuTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getGaugeChart('virMemChart', ['', '内存(${vir.memUseNum}/${vir.memTotalNum}GB)'], ['50%', '40%'], [0, 65], '${(vir.memUseNum/vir.memTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getGaugeChart('virStoreChart', ['', '磁盘(${vir.storeUseNum}/${vir.storeTotalNum}GB)'], ['50%', '40%'], [0, 65], '${(vir.storeUseNum/vir.storeTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getGaugeChart('physCpuChart', ['', 'CPU(${phys.cpuUseNum}/${phys.cpuTotalNum}核)'], ['50%', '40%'], [0, 65], '${(phys.cpuUseNum/phys.cpuTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getGaugeChart('physMemChart', ['', '内存(${phys.memUseNum}/${phys.memTotalNum}GB)'], ['50%', '40%'], [0, 65], '${(phys.memUseNum/phys.memTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getGaugeChart('physStoreChart', ['', '磁盘(${phys.storeUseNum}/${phys.storeTotalNum}GB)'], ['50%', '40%'], [0, 65], '${(phys.storeUseNum/phys.storeTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getAnnularChart('virLoadChart', ['${virLoad.loadTotalNum}台','虚拟机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['60%', '75%'], ['${virLoad.loadLittleNum}台','${virLoad.loadMiddleNum}台','${virLoad.loadHeightNum}台','${virLoad.loadStopNum}台'], ['${virLoad.loadLittleNum}', '${virLoad.loadMiddleNum}', '${virLoad.loadHeightNum}', '${virLoad.loadStopNum}'], ['#00ff00', '#ffff00', '#ff0000','#A9A9A9'], "%");//获取图表
+getAnnularChart('hostLoadChart', ['${hostLoad.loadTotalNum}台','宿主机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['60%', '75%'], ['${hostLoad.loadLittleNum}台','${hostLoad.loadMiddleNum}台','${hostLoad.loadHeightNum}台','${hostLoad.loadStopNum}台'], ['${hostLoad.loadLittleNum}', '${hostLoad.loadMiddleNum}', '${hostLoad.loadHeightNum}', '${hostLoad.loadStopNum}'], ['#00ff00', '#ffff00', '#ff0000','#A9A9A9'], "%");//获取图表
+getAnnularChart('physLoadChart', ['${physLoad.loadTotalNum}台','物理机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['60%', '75%'], ['${physLoad.loadLittleNum}台','${physLoad.loadMiddleNum}台','${physLoad.loadHeightNum}台','${physLoad.loadStopNum}台'], ['${physLoad.loadLittleNum}', '${physLoad.loadMiddleNum}', '${physLoad.loadHeightNum}', '${physLoad.loadStopNum}'], ['#00ff00', '#ffff00', '#ff0000','#A9A9A9'], "%");//获取图表
+getAnnularChart('virRunChart', ['${virRun.runTotalNum}台','虚拟机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['60%', '75%'], ['${virRun.runRunnigNum}台','${virRun.runHangupNum}台','${virRun.runCloseNum}台'], ['${virRun.runRunnigNum}','${virRun.runHangupNum}','${virRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
+getAnnularChart('hostRunChart', ['${hostRun.runTotalNum}台','宿主机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['60%', '75%'], ['${hostRun.runRunnigNum}台','${hostRun.runHangupNum}台','${hostRun.runCloseNum}台'], ['${hostRun.runRunnigNum}','${hostRun.runHangupNum}','${hostRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
+getAnnularChart('physRunChart', ['${physRun.runTotalNum}台','物理机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['60%', '75%'], ['${physRun.runRunnigNum}台','${physRun.runHangupNum}台','${physRun.runCloseNum}台'], ['${physRun.runRunnigNum}','${physRun.runHangupNum}','${physRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
 getLineChart('cpuChart', ['资源使用量趋势'], '${cpuResRate.xaxis}'.split(","), '${cpuResRate.yaxis}'.split(","));//获取图表
 getLineChart('memChart', ['资源使用量趋势'], '${memResRate.xaxis}'.split(","), '${memResRate.yaxis}'.split(","));//获取图表
 getLineChart('storeChart', ['资源使用量趋势'], '${storeResRate.xaxis}'.split(","), '${storeResRate.yaxis}'.split(","));//获取图表

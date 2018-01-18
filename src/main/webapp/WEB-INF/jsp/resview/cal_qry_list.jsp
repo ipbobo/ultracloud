@@ -14,8 +14,8 @@
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
 <script type="text/javascript">
-getGaugeChart('cpuGaugeChart', ['', 'CPU使用率'], '${(cmpRes.cpuUseNum/cmpRes.cpuTotalNum)*100}', [[0.6, '#228b22'],[0.8, '#48b'],[1, '#ff4500']], "%");//获取图表
-getGaugeChart('memGaugeChart', ['', '内存使用率'], '${(cmpRes.memUseNum/cmpRes.memTotalNum)*100}', [[0.6, '#228b22'],[0.8, '#48b'],[1, '#ff4500']], "%");//获取图表
+getGaugeChart('cpuGaugeChart', ['', 'CPU使用率'], ['50%', '40%'], [0, 70], '${(cmpRes.cpuUseNum/cmpRes.cpuTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getGaugeChart('memGaugeChart', ['', '内存使用率'], ['50%', '40%'], [0, 70], '${(cmpRes.memUseNum/cmpRes.memTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
 getBarChart('cpuChart', ['CPU容量'], ['总量','使用量'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuUseNum}'], ['#00E5EE','#FF0000'], "核");//获取图表
 getBarChart('memChart', ['内存容量'], ['总量','使用量'], ['${cmpRes.memTotalNum}', '${cmpRes.memUseNum}'], ['#00E5EE','#FF0000'], "GB");//获取图表
 </script>

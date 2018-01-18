@@ -106,7 +106,7 @@ function getAnnularChart(chartId, titleArr, legendArr, radiusArr, centerArr, key
 	var option = {
 		title: {text: titleArr[0], subtext: '', x:'center', y: '125', textStyle: {color: '#000000', fontSize: '12', fontWeight: 'normal'}},  
 	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}({d}"+unit+")", textStyle:{align:'left'}},//item或axis
-	    legend: {orient: legendArr[0], x: legendArr[1]?legendArr[1]:'center', y: legendArr[2]?legendArr[2]:'top', data: keyArr},
+	    legend: {orient: legendArr[0], x: legendArr[1]?legendArr[1]:'center', y: legendArr[2]?legendArr[2]:'top', data: keyArr},//horizontal、vertical
 	    color: colorArr,
 	    calculable: true,  
 	    series: [
@@ -177,14 +177,14 @@ function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 }
 
 //获取仪表盘，必须先引入echarts.min.js
-function getGaugeChart(chartId, titleArr, val, colorArr, unit, splitNumber){
+function getGaugeChart(chartId, titleArr, centerArr, offsetCenterArr, val, colorArr, unit, splitNumber){
 	var option = {
 	    tooltip: {formatter: (titleArr[1]?"{b}: ":"")+"{c}"+unit},
 	    series: [
 	        {
 	            name: titleArr[0],
 	            type: 'gauge',
-	            center: ['50%', '40%'],//圆心坐标：默认全局居中
+	            center: centerArr,//圆心坐标：默认全局居中
 	            precision: 0,//小数精度，默认为0，无小数点
 	            splitNumber: splitNumber?splitNumber:5,//分割段数，默认为5
 	            axisLine: {//坐标轴线
@@ -195,19 +195,21 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit, splitNumber){
 	            },
 	            axisTick: {//坐标轴小标记
 	                splitNumber: splitNumber?splitNumber:5,//每份split细分多少段
-	                length: 12,//属性length控制线长
+	                length: 11,//属性length控制线长
 	                lineStyle: {//属性lineStyle控制线条样式
 	                    color: 'auto'
 	                }
 	            },
 	            axisLabel: {//坐标轴文本标签，详见axis.axisLabel
+	            	margin: 0,
 	                textStyle: {//其余属性默认使用全局文本样式，详见TEXTSTYLE
-	                    color: 'auto'
+	                    color: 'auto',
+	                    fontSize: 10
 	                }
 	            },
 	            splitLine: {//分隔线
 	                show: true,//默认显示，属性show控制显示与否
-	                length: 15,//属性length控制线长
+	                length: 14,//属性length控制线长
 	                lineStyle: {//属性lineStyle（详见lineStyle）控制线条样式
 	                    color: 'auto'
 	                }
@@ -217,7 +219,7 @@ function getGaugeChart(chartId, titleArr, val, colorArr, unit, splitNumber){
 	            },
 	            title: {
 	                show: true,
-	                offsetCenter: [0, 70],//x, y，单位px
+	                offsetCenter: offsetCenterArr,//x, y，单位px：[0, 70]
 	                textStyle: {//其余属性默认使用全局文本样式，详见TEXTSTYLE
 	                    fontWeight: 'bolder'
 	                }
