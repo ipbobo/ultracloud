@@ -72,8 +72,8 @@ function getDashboard(){
 		</div>
 		<table style="width: 100%;">
 			<tr>
-				<td align="left" valign="top" style="padding-top: 10px;" colspan="3"><div align="center" style="width: 80px;border:1px solid #000000;"><h5>虚拟资源</h5></div></td>
-				<td align="left" valign="top" style="padding-top: 10px;" colspan="3"><div align="center" style="width: 80px;border:1px solid #000000;"><h5>物理资源</h5></div></td>
+				<td align="left" valign="top" style="padding-top: 0px;" colspan="3"><h5><span style="border:1px solid #000000;">虚拟资源</span></h5></td>
+				<td align="left" valign="top" style="padding-top: 0px;" colspan="3"><h5><span style="border:1px solid #000000;">物理资源</span></h5></td>
 			</tr>
 			<tr height="150px">
 				<td id="virCpuChart" align="center" width="16%"></td>
@@ -84,10 +84,8 @@ function getDashboard(){
 				<td id="physStoreChart" align="center" width="16%"></td>
 			</tr>
 			<tr>
-				<td align="left" valign="top"><div align="center" style="width: 80px;border:1px solid #000000;"><h5>负载情况</h5></div></td>
-				<td align="left" colspan="2"><img src="images/load.jpg"/></td>
-				<td align="left" valign="top"><div align="center" style="width: 80px;border:1px solid #000000;"><h5>运行情况</h5></div></td>
-				<td align="left" colspan="2"><img src="images/run.jpg"/></td>
+				<td align="left" valign="top" style="padding-top: 30px;" colspan="3"><h5><span style="border:1px solid #000000;">负载情况</span><img src="images/load.jpg"/></h5></td>
+				<td align="left" valign="top" style="padding-top: 30px;" colspan="3"><h5><span style="border:1px solid #000000;">运行情况</span><img src="images/run.jpg"/></h5></td>
 			</tr>
 			<tr height="180px">
 				<td id="virLoadChart" align="center" width="16%"></td>
@@ -106,25 +104,25 @@ function getDashboard(){
 				<td align="center" style="padding: 10px;"><div align="center" style="width: 50px;border:1px solid #000000;">物理机</div></td>
 			</tr>
 			<tr>
-				<td align="left" valign="top" colspan="3"><div align="center" style="width: 120px;border:1px solid #000000;"><h5>资源使用量趋势</h5></div></td>
-				<td align="left" valign="top" colspan="3"><div align="center" style="width: 140px;border:1px solid #000000;"><h5>TOP5资源使用排行</h5></div></td>
+				<td align="left" valign="top" style="padding-top: 30px;" colspan="3"><h5><span style="border:1px solid #000000;">资源使用量趋势</span></h5></td>
+				<td align="left" valign="top" style="padding-top: 30px;" colspan="3"><h5><span style="border:1px solid #000000;">TOP5资源使用排行</span></h5></td>
 			</tr>
 			<tr>
-				<td align="right" style="padding-top: 10px;">
+				<td align="right" style="padding-top: 10px;padding-right: 15px;">
 					<select style="width: 100px;" class="chosen-select form-control" name="cpuTimeType" id="cpuTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
 					<c:forEach items="${timeTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${cpuTimeType==var.dictCode || (cpuTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 					</c:forEach>
 				  	</select>
 				</td>
-				<td align="right" style="padding-top: 10px;">
+				<td align="right" style="padding-top: 10px;padding-right: 15px;">
 					<select style="width: 100px;" class="chosen-select form-control" name="memTimeType" id="memTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
 					<c:forEach items="${timeTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${memTimeType==var.dictCode || (memTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 					</c:forEach>
 				  	</select>
 				</td>
-				<td align="right" style="padding-top: 10px;">
+				<td align="right" style="padding-top: 10px;padding-right: 15px;">
 					<select style="width: 100px;" class="chosen-select form-control" name="storeTimeType" id="storeTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
 					<c:forEach items="${timeTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${storeTimeType==var.dictCode || (storeTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
