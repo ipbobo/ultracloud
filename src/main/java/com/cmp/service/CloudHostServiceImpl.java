@@ -4,8 +4,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.mgr.CloudArchManager;
+import com.cmp.mgr.CloudArchManagerAdapter;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -16,38 +20,84 @@ public class CloudHostServiceImpl implements CloudHostService {
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
 
-	public void save(PageData pd) throws Exception {
-		dao.save("CloudHostMapper.save", pd);
-	}
-
-	public void delete(PageData pd) throws Exception {
-		dao.delete("CloudHostMapper.delete", pd);
-	}
-
-	public void edit(PageData pd) throws Exception {
-		dao.update("CloudHostMapper.edit", pd);
-	}
+	@Resource
+	private CloudArchManagerAdapter camAdapter;
 
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("CloudHostMapper.datalistPage", page);
+		return (List<PageData>) dao.findForList("CloudHostMapper.list", page);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("CloudHostMapper.listAll", pd);
+	@Override
+	public void start(List<Integer> ls) throws Exception {
+		for (Integer id : ls) {
+			PageData pd = findById(id);
+
+			Integer status = (Integer) pd.get("status");
+			if (Integer.valueOf(0).equals(status)) {
+				continue;
+			}
+
+			String platformId = pd.getString("platform");
+			if (StringUtils.isBlank(platformId)) {
+				continue;
+			}
+
+			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
+			cloudArchManager.startVirtualMachine(pd.getString("name"));
+
+			dao.update("CloudHostMapper.updateStatus", status);
+		}
 	}
 
-	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("CloudHostMapper.findById", pd);
+	@Override
+	public void stop(List<Integer> ls) throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 
-	public PageData findFhsmsCount(String USERNAME) throws Exception {
-		return (PageData) dao.findForObject("CloudHostMapper.findFhsmsCount", USERNAME);
+	@Override
+	public void restart(List<Integer> ls) throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 
-	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("CloudHostMapper.deleteAll", ArrayDATA_IDS);
+	@Override
+	public void suspend(List<Integer> ls) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void resume(List<Integer> ls) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(List<Integer> ls) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	private CloudArchManager getCloudArchManager(String platformId) throws Exception {
+		PageData pd = findPlatformById(platformId);
+
+		TccCloudPlatform platform = new TccCloudPlatform();
+		platform.setCloudplatformType(pd.getString("type"));
+		platform.setCloudplatformIp(pd.getString("ip"));
+		platform.setCloudplatformUser(pd.getString("username"));
+		platform.setCloudplatformPassword(pd.getString("password"));
+
+		return camAdapter.getCloudArchManagerAdaptee(platform);
+	}
+
+	private PageData findById(Integer id) throws Exception {
+		return (PageData) dao.findForObject("CloudHostMapper.findById", id);
+	}
+
+	private PageData findPlatformById(String id) throws Exception {
+		return (PageData) dao.findForObject("CloudHostMapper.findPlatformById", id);
 	}
 
 }

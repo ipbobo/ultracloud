@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.mgr.kvm.KvmCloudArchManager;
+import com.cmp.mgr.openstack.OpenstatckCloudArchManager;
+import com.cmp.mgr.vmware.VMWareCloudArchManager;
 
 @Component
 public class CloudArchManagerAdapter {
@@ -40,7 +43,10 @@ public class CloudArchManagerAdapter {
 				return cloudArchManager;
 			}
 
-			String qualifiedClassName = platform.getPlatformManagerType();
+			String qualifiedClassName = StringUtils.defaultIfBlank(
+					platform.getPlatformManagerType(),
+					getManagerClassName(platform.getCloudplatformType()));
+
 			if (StringUtils.isBlank(qualifiedClassName)) {
 				return null;
 			}
@@ -59,6 +65,21 @@ public class CloudArchManagerAdapter {
 		}
 
 		return cloudArchManager;
+	}
+
+	private String getManagerClassName(String type) {
+		if ("vmware".equalsIgnoreCase(type)) {
+			return VMWareCloudArchManager.class.getName();
+		}
+		if ("openstack".equalsIgnoreCase(type)) {
+			return OpenstatckCloudArchManager.class.getName();
+		}
+
+		if ("kvm".equalsIgnoreCase(type)) {
+			return KvmCloudArchManager.class.getName();
+		}
+
+		return null;
 	}
 
 }

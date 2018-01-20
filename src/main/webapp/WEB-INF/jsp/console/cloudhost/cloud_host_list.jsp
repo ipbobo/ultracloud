@@ -2,192 +2,160 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+String path = request.getContextPath();
+String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <base href="<%=basePath%>">
-<!-- 下拉框 -->
-<link rel="stylesheet" href="static/ace/css/chosen.css" />
-<!-- jsp文件头和头部 -->
 <%@ include file="../../system/index/top.jsp"%>
-<!-- 日期框 -->
+
+<link rel="stylesheet" href="static/ace/css/chosen.css" />
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
+
 <script src="static/js/myjs/head.js"></script>
 </head>
 <body class="no-skin">
-
-	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
-		<!-- /section:basics/sidebar -->
 		<div class="main-content">
 			<div class="main-content-inner">
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
 							
-						<!-- 检索  -->
-						<form action="cloudhost/list.do" method="post" name="Form" id="Form">
-						<input type="hidden" name="TYPE" value="${pd.TYPE}" />
-						<table style="margin-top:5px;">
-							<tr>
-								<td style="padding-left:6px;"><a class="btn btn-primary btn-sm" onclick="apply()">申请</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">开机</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm">关机</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm">重启</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-warning btn-sm">挂起</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">恢复</a></td>
-								<!-- <td style="padding-left:6px;">
-									<div class="btn-group">
-										<a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-											更多操作<span class="caret"></span>
-										</a>
-										<ul class="dropdown-menu">
-											<li><a href="#">计算扩容</a></li>
-											<li><a href="#">磁盘扩容</a></li>
-											<li><a href="#">克隆</a></li>
-											<li><a href="#">快照</a></li>
-											<li><a href="#">删除</a></li>
-										</ul>
-									</div>
-								</td> -->
-								<td style="padding-left:6px;">
-								<div class="btn-group">
-								<a class="btn btn-primary btn-sm">更多操作</a>
-								<a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<span class="caret"></span>
-									<!-- <span class="sr-only">Toggle Dropdown</span> -->
-								</a>
-								<ul class="dropdown-menu">
-									<li><a href="#">计算扩容</a></li>
-									<li><a href="#">磁盘扩容</a></li>
-									<li><a href="#">克隆</a></li>
-									<li><a href="#">快照</a></li>
-									<li><a href="#">删除</a></li>
-								</ul>
-								</div>
-								</td>
-								<td style="padding-left:6px;">
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-							</tr>
-						</table>
-						<!-- 检索  -->
-					
-						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
-							<thead>
-								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
-									<th class="center">名称</th>
-									<th class="center">IP</th>
-									<th class="center">CPU</th>
-									<th class="center">内存</th>
-									<th class="center">磁盘</th>
-									<th class="center">OS</th>
-									<th class="center">状态</th>
-									<th class="center">所属平台</th>
-									<th class="center">到期时间</th>
-									<th class="center">远程控制台</th>
-								</tr>
-							</thead>
-													
-							<tbody>
-								<c:forEach items="${varList}" var="var" varStatus="vs">
-								<%-- <c:forEach begin="0" end="5" step="1" var="var"> --%>
+							<form action="cloudhost/list.do" method="post" name="Form" id="Form">
+								<input type="hidden" name="TYPE" value="${pd.TYPE}" />
+								<table style="margin-top:5px;">
 									<tr>
-										<td class='center'>
-											<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
+										<td style="padding-left:6px;"><a class="btn btn-primary btn-sm" onclick="apply()">申请</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-success btn-sm" onclick="start()">开机</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="stop()">关机</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="restart()">重启</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-warning btn-sm" onclick="suspend()">挂起</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-success btn-sm" onclick="resume()">恢复</a></td>
+										<td style="padding-left:6px;">
+										<div class="btn-group">
+											<a class="btn btn-primary btn-sm">更多操作</a>
+											<a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<span class="caret"></span>
+												<!-- <span class="sr-only">Toggle Dropdown</span> -->
+											</a>
+											<ul class="dropdown-menu">
+												<li><a href="#">计算扩容</a></li>
+												<li><a href="#">磁盘扩容</a></li>
+												<li><a href="#">克隆</a></li>
+												<li><a href="#">快照</a></li>
+												<li><a href="#">删除</a></li>
+											</ul>
+										</div>
 										</td>
-										<td class='center'><a>${var.name}</a></td>
-										<td class='center'>${var.ip}</td>
-										<td class='center'>${var.cpu}</td>
-										<td class='center'>
-											<c:if test="${not empty var.memory}">
-												${var.memory}G
-											</c:if>
+										<td style="padding-left:6px;">
+											<div class="nav-search">
+												<span class="input-icon">
+													<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+													<i class="ace-icon fa fa-search nav-search-icon"></i>
+												</span>
+											</div>
 										</td>
-										<td class='center'>
-											<c:if test="${not empty var.datadisk}">
-												${var.datadisk}G
-											</c:if>
-										</td>
-										<td class='center'>${var.os}</td>
-										<td class='center'>
-											<c:choose>
-											    <c:when test="${var.status == 0}">
-													运行中
-											    </c:when>
-											    <c:when test="${var.status == 1}">
-													挂起
-											    </c:when>
-											    <c:when test="${var.status == 2}">
-													关机
-											    </c:when>
-											    <c:otherwise>
-													未知
-											    </c:otherwise>
-											</c:choose>
-										</td>
-										<td class='center'>${var.platform}</td>
-										<td class='center'>${var.duedate}</td>
-										<td class='center'><a>SSH</a></td>
 									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-						<div class="page-header position-relative">
-						<table style="width:100%;">
-							<tr>
-								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
-							</tr>
-						</table>
+								</table>
+							
+								<table id="datagrid" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
+									<thead>
+										<tr>
+											<th class="center" style="width:35px;">
+												<label class="pos-rel">
+													<input type="checkbox" class="ace" id="zcheckbox" />
+													<span class="lbl"></span>
+												</label>
+											</th>
+											<th class="center">名称</th>
+											<th class="center">IP</th>
+											<th class="center">CPU</th>
+											<th class="center">内存</th>
+											<th class="center">磁盘</th>
+											<th class="center">OS</th>
+											<th class="center">状态</th>
+											<th class="center">所属平台</th>
+											<th class="center">到期时间</th>
+											<th class="center">远程控制台</th>
+										</tr>
+									</thead>
+															
+									<tbody>
+										<c:forEach items="${varList}" var="var" varStatus="vs">
+											<tr>
+												<td class='center'>
+													<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
+												</td>
+												<td class='center'><a>${var.name}</a></td>
+												<td class='center'>${var.ip}</td>
+												<td class='center'>${var.cpu}</td>
+												<td class='center'>
+													<c:if test="${not empty var.memory}">
+														${var.memory}G
+													</c:if>
+												</td>
+												<td class='center'>
+													<c:if test="${not empty var.datadisk}">
+														${var.datadisk}G
+													</c:if>
+												</td>
+												<td class='center'>${var.os}</td>
+												<td class='center'>
+													<c:choose>
+													    <c:when test="${var.status == 0}">
+															运行中
+													    </c:when>
+													    <c:when test="${var.status == 1}">
+															挂起
+													    </c:when>
+													    <c:when test="${var.status == 2}">
+															关机
+													    </c:when>
+													    <c:otherwise>
+															未知
+													    </c:otherwise>
+													</c:choose>
+												</td>
+												<td class='center'>${var.platform}</td>
+												<td class='center'>${var.duedate}</td>
+												<td class='center'><a>SSH</a></td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+								
+								<div class="page-header position-relative">
+								<table style="width:100%;">
+									<tr>
+										<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
+									</tr>
+								</table>
+								</div>
+							</form>
 						</div>
-						</form>
-					
-						</div>
-						<!-- /.col -->
 					</div>
-					<!-- /.row -->
 				</div>
-				<!-- /.page-content -->
 			</div>
 		</div>
-		<!-- /.main-content -->
 
-		<!-- 返回顶部 -->
 		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
 			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 		</a>
-
 	</div>
-	<!-- /.main-container -->
 
-	<!-- basic scripts -->
-	<!-- 页面底部js¨ -->
 	<%@ include file="../../system/index/foot.jsp"%>
-	<!-- 删除时确认窗口 -->
+	
 	<script src="static/ace/js/bootbox.js"></script>
-	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
-	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
-	<!-- 日期框 -->
 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
-	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
+		
 		//检索
 		function tosearch(){
 			top.jzts();
@@ -195,43 +163,10 @@
 		}
 		
 		$(function() {
-			//日期框
-			$('.date-picker').datepicker({
-				autoclose: true,
-				todayHighlight: true
-			});
-			
-			//下拉框
-			if(!ace.vars['touch']) {
-				$('.chosen-select').chosen({allow_single_deselect:true}); 
-				$(window)
-				.off('resize.chosen')
-				.on('resize.chosen', function() {
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				}).trigger('resize.chosen');
-				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-					if(event_name != 'sidebar_collapsed') return;
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				});
-				$('#chosen-multiple-style .btn').on('click', function(e){
-					var target = $(this).find('input[type=radio]');
-					var which = parseInt(target.val());
-					if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-					 else $('#form-field-select-4').removeClass('tag-input-style');
-				});
-			}
-			
-			
 			//复选框全选控制
 			var active_class = 'active';
-			$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-				var th_checked = this.checked;//checkbox inside "TH" table header
+			$('#datagrid > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
+				var th_checked = this.checked;
 				$(this).closest('table').find('tbody > tr').each(function(){
 					var row = this;
 					if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
@@ -240,25 +175,8 @@
 			});
 		});
 		
-		//发站内信
-		function sendFhsms(username){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="站内信";
-			 diag.URL = '<%=basePath%>fhsms/goAdd.do?username='+username;
-			 diag.Width = 660;
-			 diag.Height = 444;
-			 diag.CancelEvent = function(){ //关闭事件
-				 top.jzts();
-				 setTimeout("self.location=self.location",100);
-				 diag.close();
-			 };
-			 diag.show();
-		}
-		
 		//删除
-		function del(ztid,STATUS,type,Id,SANME_ID){
+		function del(ztid, STATUS, type, Id, SANME_ID){
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(type == "1" && STATUS == '2' && $("#"+ztid).html() == '<span class="label label-important arrowed-in">未读</span>'){
 					top.readFhsms();//读取站内信时减少未读总数  <!-- readFhsms()函数在 WebRoot\static\js\myjs\head.js中 -->
@@ -271,25 +189,6 @@
 					});
 				}
 			});
-		}
-		
-		//查看信件
-		function viewx(ztid,STATUS,type,Id,SANME_ID){
-			if(type == "1" && STATUS == '2' && $("#"+ztid).html() == '<span class="label label-important arrowed-in">未读</span>'){
-				$("#"+ztid).html('<span class="label label-success arrowed">已读</span>');
-				top.readFhsms();//读取站内信时减少未读总数  <!-- readFhsms()函数在 WebRoot\static\js\myjs\head.js中 -->
-			}
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="站内信";
-			 diag.URL = '<%=basePath%>fhsms/goView.do?FHSMS_ID='+Id+'&TYPE='+type+'&SANME_ID='+SANME_ID+'&STATUS='+STATUS;
-			 diag.Width = 600;
-			 diag.Height = 460;
-			 diag.CancelEvent = function(){ //关闭事件
-				diag.close();
-			 };
-			 diag.show();
 		}
 		
 		//批量操作
@@ -345,31 +244,42 @@
 			});
 		};
 		
-		//查看用户
-		function viewUser(USERNAME){
-			if('admin' == USERNAME){
-				bootbox.dialog({
-					message: "<span class='bigger-110'>不能查看admin用户!</span>",
-					buttons: 			
-					{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
-				});
-				return;
-			}
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="资料";
-			 diag.URL = '<%=basePath%>user/view.do?USERNAME='+USERNAME;
-			 diag.Width = 469;
-			 diag.Height = 380;
-			 diag.CancelEvent = function(){ //关闭事件
-				diag.close();
-			 };
-			 diag.show();
+		function getSelected() {
+			$('#datagrid').find('input:checked').map(function() { return $(this).val(); }).get();
 		}
 		
 		function apply() {
 			siMenu('122','121','资源申请','resAppPre.do')
+		}
+		
+		function start() {
+			$.post('/cloudhost/start', getSelected(), function(result) {
+				consol.log(result);
+			});
+		}
+		
+		function stop() {
+			$.post('/cloudhost/stop', getSelected(), function(result) {
+				consol.log(result);
+			});
+		}
+		
+		function restart() {
+			$.post('/cloudhost/restart', getSelected(), function(result) {
+				consol.log(result);
+			});
+		}
+		
+		function suspend() {
+			$.post('/cloudhost/suspend', getSelected(), function(result) {
+				consol.log(result);
+			});
+		}
+		
+		function resume() {
+			$.post('/cloudhost/resume', getSelected(), function(result) {
+				consol.log(result);
+			});
 		}
 	</script>
 

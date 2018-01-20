@@ -7,20 +7,18 @@ import com.fh.util.PageData;
 
 public interface CloudHostService {
 
-	public void save(PageData pd) throws Exception;
-
-	public void delete(PageData pd) throws Exception;
-
-	public void edit(PageData pd) throws Exception;
-
 	public List<PageData> list(Page page) throws Exception;
 
-	public List<PageData> listAll(PageData pd) throws Exception;
+	public void start(List<Integer> ls) throws Exception;
 
-	public PageData findById(PageData pd) throws Exception;
+	public void stop(List<Integer> ls) throws Exception;
 
-	public PageData findFhsmsCount(String USERNAME) throws Exception;
+	public void restart(List<Integer> ls) throws Exception;
 
-	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
+	public void suspend(List<Integer> ls) throws Exception;
+
+	public void resume(List<Integer> ls) throws Exception;
+
+	public void delete(List<Integer> ls) throws Exception;
 
 }

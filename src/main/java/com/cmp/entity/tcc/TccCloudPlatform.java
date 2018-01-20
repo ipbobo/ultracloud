@@ -72,13 +72,8 @@ public class TccCloudPlatform implements java.io.Serializable {
 	private Set<TccDatacenter> tccCloudDatacenters = new HashSet<TccDatacenter>(
 			0);
 
-	// Constructors
-
-	/** default constructor */
 	public TccCloudPlatform() {
 	}
-
-	// Property accessors
 
 	public Long getCloudplatformId() {
 		return this.cloudplatformId;
