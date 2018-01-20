@@ -285,17 +285,17 @@
 			and appNo like CONCAT('%',#{pd.workorder_appNo},'%')   
 		</if>
 		<if test="pd.workorder_time != null and pd.workorder_time != ''">
-			<if test="pd.workorder_time=='1'">
+			<if test="pd.workorder_time=='1'.toString()">
 				<![CDATA[
 				and  date_sub(CURDATE(),interval 7 day) <= date(createTime) 
 				]]>
 			</if>
-			<if test="pd.workorder_time == '2'">
+			<if test="pd.workorder_time == '2'.toString()">
 				<![CDATA[
 				and date_sub(curdate(),interval 1 month)<=date(createTime) 
 				]]>
 			</if>
-			<if test="pd.workorder_time == '3'">
+			<if test="pd.workorder_time == '3'.toString()">
 				<![CDATA[
 				and date_sub(curdate(),interval 1 year)<=date(createTime) 
 				]]>

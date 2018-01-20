@@ -103,11 +103,13 @@
 			return false;
 		}
 		var logo = document.getElementById("logo").value;
-		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(logo))
-        {
-			showDialog("图片类型必须是.gif,jpeg,jpg,png中的一种")
-          return false;
-        }
+		if (logo != null && logo != ''){
+			if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(logo))
+	        {
+				showDialog("图片类型必须是.gif,jpeg,jpg,png中的一种")
+	          return false;
+	        }
+		}
 		
 		$("#sysconfigForm").submit();
 		$("#zhongxin").hide();

@@ -42,8 +42,8 @@
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;服务类型</td>
 									<td id="tip_service_type">
-									<select name="service_type" id="service_type" title="清选择服务类型" style="width:20%;margin-left: 100px;" onchange="onServiceTypeSelected(this.value)">
-										<option value="#" selected="selected">清选择服务类型</option>
+									<select name="service_type" id="service_type" title="请选择服务类型" style="width:20%;margin-left: 100px;" onchange="onServiceTypeSelected(this.value)">
+										<option value="#" selected="selected">请选择服务类型</option>
 									   <c:forEach items="${serviceTypeList}" var="var">
 					                   <option value="${var.dictCode}">${var.dictValue}</option>
 				                     </c:forEach>
@@ -53,7 +53,7 @@
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;操作类型:</td>
 									<td id="tip_oper_type">
-									<select name="oper_type" id="oper_type" title="清选择操作类型" style="width:20%;margin-left: 100px;">
+									<select name="oper_type" id="oper_type" title="请选择操作类型" style="width:20%;margin-left: 100px;">
 									</select>
 									</td>
 								</tr>
@@ -89,7 +89,7 @@
 									<tr>
 										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;选择软件:</td>
 										<td id="tip_oper_soft">
-										<select name="install_soft" id="install_soft" title="清选择软件" style="width:20%;margin-left: 100px;" onchange="selectSoftVersion(this.value)">
+										<select name="install_soft" id="install_soft" title="请选择软件" style="width:20%;margin-left: 100px;" onchange="selectSoftVersion(this.value)">
 											  <option value="#">请选择软件</option>
 											  <c:forEach items="${softName}" var="var">
 					                  				 <option value="${var}">${var}</option>
@@ -248,7 +248,7 @@
 					<div class="modal-body">
 						项目查询:
 						<select name="vmModalProject" id="vmModalProject" title="分项目查询" style="width:20%;margin-left: 100px;" onchange="onVmModalProjectSelect(this.value)">
-										<option value="#" selected="selected">清选择项目</option>
+										<option value="#" selected="selected">请选择项目</option>
 									   <c:forEach items="${projectNameMap}" var="var">
 					                   <option value="${var.key}">${var.value}</option>
 				                     </c:forEach>
@@ -382,7 +382,7 @@
 					<div class="modal-body">	
 						项目查询:
 						<select name="vmModalProject" id="vmModalProject" title="分项目查询" style="width:20%;margin-left: 100px;" onchange="onVmSelectModalProjectSelect(this.value)">
-										<option value="#" selected="selected">清选择项目</option>
+										<option value="#" selected="selected">请选择项目</option>
 									   <c:forEach items="${projectNameMap}" var="var">
 					                   <option value="${var.key}">${var.value}</option>
 				                     </c:forEach>

@@ -578,7 +578,7 @@ public class UserController extends BaseController {
 		}
 		userService.edit(pd);	//执行修改
 		FHLOG.save(Jurisdiction.getUsername(), "修改系统用户："+pd.getString("USERNAME"));
-		mv.addObject("msg","修改成功");
+		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
 	}

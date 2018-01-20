@@ -270,8 +270,8 @@
 					<tr>
 						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;云平台</td>
 						<td id="tip_cloudplatform">
-						<select name="cloudplatform" id="cloudplatform" title="清选择云平台" style="width:40%;margin-left: 100px;" onchange="onCloudPlatformSelected(this.value)">
-							<option value="#" selected="selected">清选择服云平台</option>
+						<select name="cloudplatform" id="cloudplatform" title="请选择云平台" style="width:40%;margin-left: 100px;" onchange="onCloudPlatformSelected(this.value)">
+							<option value="#" selected="selected">请选择服云平台</option>
 						   <c:forEach items="${cloudplatformList}" var="var">
 		                 	  <option value="${var.id}">${var.name}</option>
 	                       </c:forEach>
@@ -281,16 +281,16 @@
 					<tr>
 						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;数据中心:</td>
 						<td id="tip_datacenter">
-							<select name="datacenter" id="datacenter" title="清选择数据中心" style="width:40%;margin-left: 100px;" onchange="onDataCenterSelected(this.value)">
-								<option value="#" selected="selected">清选择数据中心</option>
+							<select name="datacenter" id="datacenter" title="请选择数据中心" style="width:40%;margin-left: 100px;" onchange="onDataCenterSelected(this.value)">
+								<option value="#" selected="selected">请选择数据中心</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;集群:</td>
 						<td id="tip_cluster">
-							<select name="cluster" id="cluster" title="清选择集群" style="width:40%;margin-left: 100px;">
-								<option value="#" selected="selected">清选择集群</option>
+							<select name="cluster" id="cluster" title="请选择集群" style="width:40%;margin-left: 100px;">
+								<option value="#" selected="selected">请选择集群</option>
 							</select>
 						</td>
 					</tr>

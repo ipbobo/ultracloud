@@ -14,8 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.CmpDictService;
+import com.cmp.service.CmpLogService;
 import com.cmp.service.SysConfigService;
 import com.cmp.sid.SysConfigInfo;
+import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.FileUpload;
@@ -30,6 +32,10 @@ public class SysConfigController extends BaseController{
 	
 	@Resource
 	private CmpDictService cmpDictService;
+	
+	@Resource
+	private CmpLogService cmpLogService;
+	
 
 	@RequestMapping(value = "/updatePre")
 	public ModelAndView updatePre(Page page) throws Exception {
@@ -68,6 +74,8 @@ public class SysConfigController extends BaseController{
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		
+		
+		
 		SysConfigInfo initConfig = SysConfigInfo.getInstance();
 		String newlogoPath = initConfig.getLogo();;
 		if (null != logo && !logo.isEmpty()) {
@@ -97,7 +105,8 @@ public class SysConfigController extends BaseController{
 		initConfig.setSysName(sys_name);
 		initConfig.setTel(tel);
 		initConfig.setWebsite(website);
-		
+
+		cmpLogService.addCmpLog("1", "修改系统设置", "修改系统设置", "0", StringUtil.getClientIp(request));
 		mv.addObject("result", "修改成功");
 		mv.addObject("pd", pd);
 		mv.setViewName("system/config/sysconfig");

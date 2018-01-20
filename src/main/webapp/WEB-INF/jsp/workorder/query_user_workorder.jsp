@@ -20,6 +20,8 @@
 		<!-- /section:basics/sidebar -->
 		<div class="main-content">
 			<div class="main-content-inner">
+			<form action="queryUserApplyWorkOrderPre.do" method="post"
+									name="queryForm" id="queryForm">
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
@@ -29,8 +31,7 @@
 									<h4 class="smaller">条件查询</h4>
 								</div>
 
-								<form action="queryUserApplyWorkOrderPre.do" method="post"
-									name="queryForm" id="queryForm">
+								
 									<table style="margin-top: 5px;">
 										<tr>
 											<td style="width: 120px; text-align: right;">&nbsp;工单类型:</td>
@@ -91,7 +92,7 @@
 
 										</tr>
 									</table>
-								</form>
+								
 							</div>
 							<table id="simple-table"
 								class="table table-striped table-bordered table-hover"
@@ -244,6 +245,7 @@
 					<!-- /.row -->
 				</div>
 				<!-- /.page-content -->
+				</form>
 			</div>
 		</div>
 		<!-- /.main-content -->
@@ -352,7 +354,7 @@
 	//导出excel
 	function toExcel(){
 		window.location.href='<%=basePath%>workorderExcel.do?workorder_type='+$('#workorder_type').val()+'&workorder_status='+$('#workorder_status').val()+'&project='+$('#project').val()+
-		'&workorder_appNo='+$('#workorder_appNo').val()+'&workorder_time='+$('#workorder_time').val()+ '&page.showCount='+$('#pageCount').val();
+		'&workorder_appNo='+$('#workorder_appNo').val()+'&workorder_time='+$('#workorder_time').val()+ '&showCount='+$('#showCount').val();
 	}
 	
 

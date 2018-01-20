@@ -19,6 +19,7 @@ import com.cmp.entity.CmpResultInfo;
 import com.cmp.entity.DeployedSoft;
 import com.cmp.entity.Medium;
 import com.cmp.service.CmpDictService;
+import com.cmp.service.CmpLogService;
 import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.DeployedSoftService;
@@ -33,6 +34,7 @@ import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.VirtualMachine;
 import com.cmp.util.PageDataUtil;
 import com.cmp.util.ShellUtil;
+import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.system.User;
 import com.fh.service.system.user.impl.UserService;
@@ -81,6 +83,10 @@ public class AppOperServiceController  extends BaseController {
 	
 	@Resource
 	private ProjectService projectService;
+	
+	@Resource
+	private CmpLogService cmpLogService;
+	
 	//运维服务申请表单查询
 	@RequestMapping(value="/reqOperServicePre")
 	public ModelAndView reqOperServicePre() throws Exception{
@@ -382,6 +388,7 @@ public class AppOperServiceController  extends BaseController {
 		updateParams.put("status", "1");
 		cmpWorkOrderService.updateWorkOrder(workworder.getAppNo(), updateParams);
 		
+		cmpLogService.addCmpLog("1", "申请运维服务", "申请运维服务成功", "0", StringUtil.getClientIp(getRequest()));
 		resultInfo = "申请成功!";
 		map.put("result", resultInfo);
 		return map;
@@ -463,6 +470,7 @@ public class AppOperServiceController  extends BaseController {
 			}
 		}
 		endExecuteShell(appNo);
+		cmpLogService.addCmpLog("1", "执行中间件启停", "执行中间件启停成功", "0", StringUtil.getClientIp(getRequest()));
 		resultInfo.setResultMsg("执行成功");
 		resultInfo.setResultCode(CmpResultInfo.SUCCESS);
 		return resultInfo;
@@ -496,6 +504,7 @@ public class AppOperServiceController  extends BaseController {
 		initExecuteShell(appNo);
 		//执行磁盘挂载
 		endExecuteShell(appNo);
+		cmpLogService.addCmpLog("1", "执行磁盘挂载", "执行磁盘挂载成功", "0", StringUtil.getClientIp(getRequest()));
 		resultInfo.setResultMsg("执行成功");
 		resultInfo.setResultCode(CmpResultInfo.SUCCESS);
 		return resultInfo;
@@ -559,6 +568,7 @@ public class AppOperServiceController  extends BaseController {
 			}
 		}
 		endExecuteShell(appNo);
+		cmpLogService.addCmpLog("1", "执行软件安装", "执行软件安装成功", "0", StringUtil.getClientIp(getRequest()));
 		resultInfo.setResultMsg("执行成功");
 		resultInfo.setResultCode(CmpResultInfo.SUCCESS);
 		return resultInfo;

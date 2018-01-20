@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmp.activiti.service.ActivitiService;
 import com.cmp.entity.Project;
 import com.cmp.service.CmpDictService;
+import com.cmp.service.CmpLogService;
 import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
@@ -34,6 +35,7 @@ import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.RelateTask;
+import com.cmp.util.StringUtil;
 import com.cmp.workorder.IWorkorderHandler;
 import com.cmp.workorder.WorkorderHelper;
 import com.fh.controller.base.BaseController;
@@ -78,7 +80,8 @@ public class CmpWorkOrderController extends BaseController{
 	@Resource
 	private ClusterService clusterService;
 	
-	
+	@Resource
+	private CmpLogService cmpLogService;
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
@@ -148,6 +151,7 @@ public class CmpWorkOrderController extends BaseController{
 		mv.addObject("workorderStatusNameMap", getWorkorderStatusNameMap());
 		mv.addObject("QX", qxMap); // 右侧按钮权限
 		mv.addObject("pd", pd);
+		mv.addObject("page", page);
 		mv.setViewName("workorder/query_user_workorder");
 		return mv;
 	}
@@ -437,6 +441,7 @@ public class CmpWorkOrderController extends BaseController{
 		
 		CmpWorkOrder toCheckWorkorder = cmpWorkOrderService.findByAppNo(appNo);
 		if (toCheckWorkorder == null) {
+			cmpLogService.addCmpLog("1", "工单审核失败", "工单审核失败, 工单号不存在", "-1", StringUtil.getClientIp(getRequest()));
 			resultInfo = "审核失败,工单号不存在";
 			map.put("result", resultInfo);	
 			return map;
@@ -470,6 +475,7 @@ public class CmpWorkOrderController extends BaseController{
 					updateParams.put("status", "3");  //审批不通过,退回
 					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
 					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+					cmpLogService.addCmpLog("1", "工单审核完成", "工单审核完成", "0", StringUtil.getClientIp(getRequest()));
 					resultInfo = "审核完成";
 					map.put("result", resultInfo);	
 					return map;
@@ -482,6 +488,7 @@ public class CmpWorkOrderController extends BaseController{
 					updateParams.put("status", "2");  //进入运维执行状态
 					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
 					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+					cmpLogService.addCmpLog("1", "工单审核完成", "工单审核完成", "0", StringUtil.getClientIp(getRequest()));
 					resultInfo = "审核完成";
 					map.put("result", resultInfo);	
 					return map;
@@ -508,7 +515,8 @@ public class CmpWorkOrderController extends BaseController{
 		
 		CmpWorkOrder toVerifyWorkorder = cmpWorkOrderService.findByAppNo(appNo);
 		if (toVerifyWorkorder == null) {
-			resultInfo = "确认异常 ,工单号不存在";
+			cmpLogService.addCmpLog("1", "工单退回确认失败", "工单退回确认失败, 工单号不存在", "-1", StringUtil.getClientIp(getRequest()));
+			resultInfo = "工单退回确认异常 ,工单号不存在";
 			map.put("result", resultInfo);	
 			return map;
 		}
@@ -537,7 +545,8 @@ public class CmpWorkOrderController extends BaseController{
 				updateParams.put("status", "5");  //工单完成
 				updateParams.put("procInstId", toVerifyWorkorder.getProcInstId());
 				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
-				resultInfo = "确认完成";
+				cmpLogService.addCmpLog("1", "工单退回确认完成", "工单退回确认完成", "0", StringUtil.getClientIp(getRequest()));
+				resultInfo = "工单退回确认完成";
 				map.put("result", resultInfo);	
 				return map;
 			}
@@ -565,6 +574,7 @@ public class CmpWorkOrderController extends BaseController{
 		
 		CmpWorkOrder toExecuteWorkorder = cmpWorkOrderService.findByAppNo(appNo);
 		if (toExecuteWorkorder == null) {
+			cmpLogService.addCmpLog("1", "工单执行确认失败", "工单执行确认失败, 工单号不存在", "-1", StringUtil.getClientIp(getRequest()));
 			resultInfo = "执行失败,工单号不存在";
 			map.put("result", resultInfo);	
 			return map;
@@ -606,6 +616,7 @@ public class CmpWorkOrderController extends BaseController{
 					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
 					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 				}
+				cmpLogService.addCmpLog("1", "工单执行确认完成", "工单执行确认完成", "0", StringUtil.getClientIp(getRequest()));
 				resultInfo = "执行成功";
 				map.put("result", resultInfo);	
 				return map;
@@ -644,6 +655,7 @@ public class CmpWorkOrderController extends BaseController{
 		pd.put("USERNAME", userr.getUSERNAME());
 		CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo((String)pd.get("appNo"));
 		if (workorder == null) {
+			cmpLogService.addCmpLog("1", "工单执行确认失败", "工单执行确认失败, 工单不存在", "-1", StringUtil.getClientIp(getRequest()));
 			resultInfo = "执行失败,工单不存在";
 			map.put("result", resultInfo);	
 			return map;
@@ -651,6 +663,7 @@ public class CmpWorkOrderController extends BaseController{
 		
 		IWorkorderHandler workorderHandler = workorderHelper.instance(workorder.getAppType());
 		if (workorderHandler == null) {
+			cmpLogService.addCmpLog("1", "工单执行确认失败", "工单执行确认失败, 工单不存在", "-1", StringUtil.getClientIp(getRequest()));
 			resultInfo = "执行失败,工单不存在";
 			map.put("result", resultInfo);	
 			return map;
@@ -666,6 +679,7 @@ public class CmpWorkOrderController extends BaseController{
 			map.put("result", resultInfo);	
 			return map;
 		}
+		cmpLogService.addCmpLog("1", "工单执行完成", "工单执行完成", "0", StringUtil.getClientIp(getRequest()));
 		map.put("result", (String)pageViewMap.get("result"));				//返回结果
 		return map;
 	}
