@@ -101,7 +101,8 @@ function choosePckg(jsonStr){
 	addPckgDiskRow(jsonObj.diskType, jsonObj.diskSize, jsonObj.diskEncrypt);//新增套餐磁盘行
 	addPckgSoftRow(jsonObj.softCode, jsonObj.softParam);//新增套餐软件安装行
 	getCurrConf(jsonObj);//获取当前配置
-	getPckgTotalAmt(jsonObj.cpu, jsonObj.memory, jsonObj.diskSize, jsonObj.virNum);//套餐计算金额
+	var dayNum=getDateDiff(getCurrDate(), jsonObj.expireDate);
+	getPckgTotalAmt(jsonObj.cpu, jsonObj.memory, jsonObj.diskSize, dayNum*jsonObj.virNum);//套餐计算金额
 }
 
 //获取当前配置

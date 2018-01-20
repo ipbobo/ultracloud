@@ -41,12 +41,12 @@ function doSearch(){
 </head>
 <body>
 <table style="width: 100%;">
-	<tr>
+	<tr style="width: 100%;border:1px solid #cccccc;">
 		<td style="width: 176px;padding-left: 5px;" colspan="2">
 			申请时间：<input class="span10 date-picker" name="beginDate" id="beginDate"  value="${pd.beginDate}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/>&nbsp;到&nbsp;<input class="span10 date-picker" name="endDate" id="endDate"  value="${pd.endDate}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/>
 		</td>
-		<td style="width: 30px;padding-left: 5px;" align="right">项目：</td>
-		<td>
+		<td style="width: 20px;padding-left: 5px;" align="right">项目：</td>
+		<td style="width: 150px;">
 			<select style="vertical-align:top;width: 100%;" class="chosen-select form-control" name="projCode" id="projCode" data-placeholder="请选择项目">
 			<option value="">请选择</option>
 			<c:forEach items="${projectList}" var="var">
@@ -65,7 +65,7 @@ function doSearch(){
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
 			<tr>
 				<td align="left" style="width: 60px;" colspan="2">ECS（${var.orderNo}）</td>
-				<td align="right" style="padding: 10px;">${var.virNum}台</td>
+				<td align="right" style="padding-right: 10px;">${var.virNum}台</td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">地域：</td>

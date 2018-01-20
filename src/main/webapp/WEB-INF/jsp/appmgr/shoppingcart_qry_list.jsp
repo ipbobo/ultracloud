@@ -91,12 +91,12 @@ function getAllTotalAmt(){
 	var memNum=0;
 	var storeNum=0;
 	$("input:checkbox[name='orderNo']:checked").each(function() {
-		var virNum=($(this).siblings(".virNum").val())*1;
+		var dayNum=getDateDiff(getCurrDate(), $(this).siblings(".expireDate").val());
+		var virNum=dayNum*($(this).siblings(".virNum").val());
 		cpuNum+=virNum*($(this).siblings(".cpu").val());
 		memNum+=virNum*($(this).siblings(".mem").val());
 		storeNum+=virNum*getStoreNum($(this).siblings(".store").val());
 	});
-	
 	
 	$("#allTotalAmt").html(amtFmt((cpuNum*cpuPrice+memNum*memPrice+storeNum*storePrice).toFixed(2)+"", '￥'));
 }
@@ -113,12 +113,13 @@ function getAllTotalAmt(){
 			<input type="hidden" name="memVal" value="${var.memory}" class="mem"/>
 			<input type="hidden" name="storeVal" value="${var.diskSize}" class="store"/>
 			<input type="hidden" name="virNumVal" value="${var.virNum}" class="virNum"/>
+			<input type="hidden" name="expireDateVal" value="${var.expireDate}" class="expireDate"/>
 		</td>
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
 			<tr>
 				<td align="left" style="width: 60px;" colspan="2">ECS（${var.orderNo}）</td>
-				<td align="right" style="padding: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.orderNo}')" class="img_close"></div></td>
+				<td align="right" style="padding-right: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.orderNo}')" class="img_close"></div></td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">地域：</td>

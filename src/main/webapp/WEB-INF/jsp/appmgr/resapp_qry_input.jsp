@@ -84,7 +84,8 @@ function checkExpireDate(isChk){
 		$("#expireDateChk").prop("checked", false);//不选择复选框
 	}
 	
-	expireDateFunc();//到期时间改变时触发
+	$("#expireDateLabel").html($("#expireDate").val());
+	getTotalAmt();//计算金额
 }
 
 //新增磁盘行
@@ -480,38 +481,32 @@ function diskTypeFunc(){
 	getTotalAmt();//计算金额
 }
 
-//到期时间改变时触发
-function expireDateFunc(){
-	$("#expireDateLabel").html($("#expireDate").val());
-}
-
 //计算金额
 var cpuPrice=('${cmpPrice.cpuPrice}')*1;//cpu单价
 var memPrice=('${cmpPrice.memPrice}')*1;//内存单价
 var storePrice=('${cmpPrice.storePrice}')*1;//磁盘单价
 function getTotalAmt(virNum){
-	var virNum=virNum?virNum:$("#virNum").val();//数量
-	var cpuNum=virNum*($("#cpu").val());//cpu总价
-	var memNum=virNum*($("#memory").val());//内存总价
+	var dayNum=getDateDiff(getCurrDate(), $("#expireDate").val());
+	var virNum=dayNum*(virNum?virNum:$("#virNum").val());//数量
+	var cpuNum=$("#cpu").val();//cpu数量
+	var memNum=$("#memory").val();//内存数量
 	var storeNum=0;//磁盘数量
 	$("input[name='diskSize']").each(function() {
 		storeNum+=($(this).val())*1;//磁盘数量
 	});
 	
-	$("#totalAmt").html(amtFmt((cpuNum*cpuPrice+memNum*memPrice+virNum*storeNum*storePrice).toFixed(2)+"", '￥'));//总价
+	$("#totalAmt").html(amtFmt((virNum*(cpuNum*cpuPrice+memNum*memPrice+storeNum*storePrice)).toFixed(2)+"", '￥'));//总价
 }
 
 //套餐计算金额
-function getPckgTotalAmt(cpuVal, memVal, storeVal, virNum){
-	var cpuNum=virNum*cpuVal;//cpu总价
-	var memNum=virNum*memVal;//内存总价
+function getPckgTotalAmt(cpuNum, memNum, storeVal, virNum){
 	var storeVals=storeVal.split(",");
-	var storeNum=0;//磁盘总价
+	var storeNum=0;//磁盘数量
 	$.each(storeVals, function (i, item) {
-		storeNum+=item*1;//磁盘总价
+		storeNum+=item*1;//磁盘数量
 	});
 	
-	$("#totalAmt").html(amtFmt((cpuNum*cpuPrice+memNum*memPrice+virNum*storeNum*storePrice).toFixed(2)+"", '￥'));//总价
+	$("#totalAmt").html(amtFmt((virNum*(cpuNum*cpuPrice+memNum*memPrice+storeNum*storePrice)).toFixed(2)+"", '￥'));//总价
 }
 
 //数量改变时触发
@@ -817,7 +812,7 @@ $(window).scroll(function() {
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="padding:10px;" colspan="6">
-				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onclick="checkExpireDate(false)" onchange="expireDateFunc()" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
+				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onchange="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
 			</td>
 		</tr>
@@ -866,9 +861,9 @@ $(window).scroll(function() {
 			<div id="getShoppingCartList" style="height:0px;overflow-y: auto;"></div>
 			<div id="batchBuy" class="divbtn" style="display:none;width:100%;height:50px;padding:10px;border-top:1px solid #f5f5f5;">
 				共计(元)：<span id="allTotalAmt" style="font-size:26px;color: #f5620a;">￥0.00</span>
-				<span class="btncls" style="width:100px;background-color:#f5620a;"><a href="javascript:void()" onclick="batchBuy()">批量购买</a></span>
-				<span style="width:20px;float:right;">&nbsp;</span>
-			    <span class="btncls" style="width:100px;"><a href="javascript:void()" onclick="clearShoppingCart()">清空购物车</a></span>
+				<span class="btncls" style="width:80px;background-color:#f5620a;"><a href="javascript:void()" onclick="batchBuy()">批量购买</a></span>
+				<span style="width:10px;float:right;">&nbsp;</span>
+			    <span class="btncls" style="width:80px;"><a href="javascript:void()" onclick="clearShoppingCart()">清空购物车</a></span>
 			</div>
 		</td>
 	</tr>

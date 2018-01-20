@@ -318,6 +318,36 @@ function amtFmt(amt, unit){
 	return (unit?unit:'￥')+sign+amt+cents;//将数据（符号、整数部分、小数部分）整体组合返回
 }
 
+//获取当前日志YYYY-MM-DD
+function getCurrDate(){
+	var currDate = new Date();
+	var month = currDate.getMonth()+1;
+	if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+	
+	var day = currDate.getDate();
+	if (day >= 0 && day <= 9) {
+		day = "0" + day;
+	}
+	
+	return currDate.getFullYear()+"-"+month+"-"+day;
+}
+
+function getDateDiff(beginDate, endDate) {
+	if(beginDate=="" || endDate=="" || beginDate>=endDate){
+		return 0;
+	}
+	
+	if(endDate=="9999-12-31"){
+		return 5;
+	}
+	
+	var startTime = new Date(Date.parse(beginDate.replace(/-/g, "/"))).getTime();
+	var endTime = new Date(Date.parse(endDate.replace(/-/g, "/"))).getTime();
+	return Math.abs((endTime-startTime))/(1000 * 60 * 60 * 24);
+}
+
 //发送Http请求
 function sendHttpPost(url, jsonObj, func){
     $.ajax({
