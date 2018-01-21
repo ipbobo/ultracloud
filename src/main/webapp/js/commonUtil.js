@@ -104,7 +104,7 @@ function getAnnularChart(chartId, titleArr, legendArr, radiusArr, centerArr, key
 	}
 	
 	var option = {
-		title: {text: titleArr[0], subtext: '', x:'center', y: '125', textStyle: {color: '#000000', fontSize: '12', fontWeight: 'normal'}},  
+		title: {text: titleArr[0], subtext: '', x:'center', y: '100', textStyle: {color: '#000000', fontSize: '12', fontWeight: 'normal'}},  
 	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}({d}"+unit+")", textStyle:{align:'left'}},//item或axis
 	    legend: {orient: legendArr[0], x: legendArr[1]?legendArr[1]:'center', y: legendArr[2]?legendArr[2]:'top', data: keyArr},//horizontal、vertical
 	    color: colorArr,
