@@ -156,7 +156,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			cloudInfoCollect.setCpuTotal(orderInfo.getCpu() == null ? 
 					0 : vmNum*Integer.parseInt(StringUtil.getInteger(cmpDictService.getCmpDict("cpu", orderInfo.getCpu()).getDictValue())));
 			cloudInfoCollect.setMemoryTotal(orderInfo.getMemory() == null ? 
-					0 : vmNum*Integer.parseInt(StringUtil.getInteger(cmpDictService.getCmpDict("memory", orderInfo.getMemory()).getDictValue())));
+					0 : Integer.parseInt( orderInfo.getMemory()));
 			if (orderInfo.getDiskSize() == null) {
 				cloudInfoCollect.setDiskTotal(0);
 			}else {

@@ -117,11 +117,11 @@
 									</thead>
 									
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">申请云主机数量</td>
+										<td class='center' style="background-color: rgb(244,244,244);">申请云主机数量:</td>
 										<td class='center'>${cloudInfoCollect.vmCount}台</td>
-										<td class='center' style="background-color: rgb(244,244,244);">cpu/内存总量</td>
+										<td class='center' style="background-color: rgb(244,244,244);">cpu/内存总量:</td>
 										<td class='center'>${cloudInfoCollect.cpuTotal}核/${cloudInfoCollect.memoryTotal}G</td>
-										<td class='center' style="background-color: rgb(244,244,244);">数据盘总量</td>
+										<td class='center' style="background-color: rgb(244,244,244);">数据盘总量:</td>
 										<td class='center'>${cloudInfoCollect.diskTotal}G</td>
 									</tr>
 								</tbody>
@@ -137,31 +137,29 @@
 										</tr>
 									</thead>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">操作系统</td>
+										<td class='center' style="background-color: rgb(244,244,244);">操作系统:</td>
 										<td class='center'>${cmpCloudInfo.osTypeName}</td>
-										<td class='center' style="background-color: rgb(244,244,244);">系统盘/数据盘</td>
+										<td class='center' style="background-color: rgb(244,244,244);">系统盘/数据盘:</td>
 										<td class='center'>系统盘${cmpCloudInfo.sysDiskSize}; 数据盘${cloudInfoCollect.diskTotal}G</td>
 									</tr>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">CPU/内存</td>
+										<td class='center' style="background-color: rgb(244,244,244);">CPU/内存:</td>
 										<td class='center'>${cmpCloudInfo.cpu}核/${cmpCloudInfo.memory}G</td>
-										<td class='center' style="background-color: rgb(244,244,244);">安装状态</td>
-										<td class='center'>${cmpCloudInfo.osStatus}</td>
+										
 									</tr>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">软件安装</td>
-										<td class='center'>${cmpCloudInfo.softStatus}</td>
-									</tr>
-									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">数据盘信息</td>
+										<td class='center' style="background-color: rgb(244,244,244);">数据盘信息:</td>
 										<td class='center'>${cmpCloudInfo.dataDiskInfo}</td>
-										<td class='center' style="background-color: rgb(244,244,244);">使用期限</td>
+										<td class='center' style="background-color: rgb(244,244,244);">使用期限:</td>
 										<td class='center'>${cmpCloudInfo.expireDate}</td>
 									</tr>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">电子钥匙</td>
-										<td class='center'></td>
+										<td class='center' style="background-color: rgb(244,244,244);">系统安装状态:</td>
+											<td class='center'>${cmpCloudInfo.osStatus}</td>
+										<td class='center' style="background-color: rgb(244,244,244);">软件安装:</td>
+											<td class='center'>${cmpCloudInfo.softStatus}</td>
 									</tr>
+								
 								</tbody>
 						</table>
 			<div class="alert alert-info">后续任务处理</div>

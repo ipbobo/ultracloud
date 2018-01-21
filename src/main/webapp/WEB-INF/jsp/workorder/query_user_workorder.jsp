@@ -22,6 +22,7 @@
 			<div class="main-content-inner">
 			<form action="queryUserApplyWorkOrderPre.do" method="post"
 									name="queryForm" id="queryForm">
+				<input type="hidden" id="queryType" name="queryType" value="${pd.queryType}">
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
@@ -35,8 +36,8 @@
 									<table style="margin-top: 5px;">
 										<tr>
 											<td style="width: 120px; text-align: right;">&nbsp;工单类型:</td>
-											<td style="width: 120px; text-align: left;"><select
-												name="workorder_type" id="workorder_type" title="选择工单类型">
+											<td style="width: 120px; text-align: left;">
+											<select name="workorder_type" style="width: 110px;" id="workorder_type" title="选择工单类型">
 													
 														<option value=""  <c:if test="${pd.workorder_type == null || pd.workorder_type == '' }">selected="selected"</c:if>>选择工单类型</option>
 													
@@ -45,7 +46,7 @@
 													</c:forEach>
 											</select></td>
 											<td style="width: 120px; text-align: right;">&nbsp;工单状态:</td>
-											<td style="width: 120px; text-align: left;">
+											<td style="width: 150px; text-align: left;">
 											<select name="workorder_status" id="workorder_status" title="选择工单状态">
 													<option value="" <c:if test="${pd.workorder_status == null || pd.workorder_status == '' }">selected="selected"</c:if>>选择工单类型</option>
 													<c:forEach items="${workorderStatusList}" var="var">
@@ -73,11 +74,11 @@
 										</tr>
 										<tr>
 											<td style="width: 120px; text-align: right;">&nbsp;工单号:</td>
-											<td style="width: 120px; text-align: left;"><input
-												type="text" name="workorder_appNo" value="${pd.workorder_appNo}" id="workorder_appNo" /></td>
+											<td style="width: 120px; text-align: left;">
+											<input type="text" style="width: 110px" name="workorder_appNo" value="${pd.workorder_appNo}" id="workorder_appNo"/></td>
 											<td style="width: 120px; text-align: right;">&nbsp;时间选择:</td>
-											<td style="width: 120px; text-align: left;"><select
-												name="workorder_time" id="workorder_time" title="时间选择">
+											<td style="width: 120px; text-align: left;">
+											<select  style="width: 110px" name="workorder_time" id="workorder_time" title="时间选择">
 													<option value="" <c:if test="${pd.workorder_time == null || pd.workorder_time == '' }">selected="selected"</c:if>>全部</option>
 													<option value="1" <c:if test="${pd.workorder_time !='' && '1' == pd.workorder_time }">selected="selected"</c:if>>近一周</option>
 													<option value="2" <c:if test="${pd.workorder_time !='' && '2' == pd.workorder_time }">selected="selected"</c:if>>近一个月</option>

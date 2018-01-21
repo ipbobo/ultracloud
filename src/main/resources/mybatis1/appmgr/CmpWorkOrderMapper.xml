@@ -315,7 +315,7 @@
 		 order by appNo desc
 	</select>
 	
-	<select id="queryUserToDoWorkorder" parameterType="page" resultType="pd">
+	<select id="queryUserToDoWorkorderPage" parameterType="page" resultType="pd">
 		select <include refid="fieldName"/>
 		from 
 		<include refid="tableName"/>
@@ -331,7 +331,7 @@
 		 order by appNo desc
 	</select>
 	
-	<select id="queryUserCurrentdayWorkorder" parameterType="page" resultType="pd">
+	<select id="queryUserCurrentdayWorkorderPage" parameterType="page" resultType="pd">
 		select <include refid="fieldName"/>
 		from 
 		<include refid="tableName"/>
