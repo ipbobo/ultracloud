@@ -280,14 +280,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		function expandCompute() {
 			var selection = getSelected();
 			if (selection) {
-				siMenu('123', '121', '计算扩容', 'reqOperServicePre?serviceType=6&vmId=' + selection[0]);
+				siMenu('123', '121', '计算扩容', 'reqOperServicePre.do?serviceType=6&vmId=' + selection[0]);
 			}
 		}
 		
 		function expandStorage() {
 			var selection = getSelected();
 			if (selection) {
-				siMenu('123', '121', '磁盘扩容', 'reqOperServicePre?serviceType=6&vmId=' + selection[0]);
+				siMenu('123', '121', '磁盘扩容', 'reqOperServicePre.do?serviceType=6&vmId=' + selection[0]);
 			}
 		}
 		
