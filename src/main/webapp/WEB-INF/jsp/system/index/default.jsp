@@ -184,7 +184,6 @@ function getDashboard(){
 		</table>
 	</div>
 </div>
-<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"><i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a><!-- 返回顶部 -->
 <%@ include file="foot.jsp"%>
 <script type="text/javascript">
 $(top.hangge());//关闭加载状态

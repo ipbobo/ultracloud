@@ -158,7 +158,6 @@ function del(ids, msg){
 </table>
 <div id="tipId" style="visibility:hidden;border:1px solid #000000;background-color:#FFFFCC;font-size:12px;position:absolute;"></div>
 <table style="width: 100%;"><tr><td style="vertical-align: top;"><div class="pagination" style="float: right; padding-top: 0px; margin-top: 0px;margin-bottom: 0px;">${page.pageStr}</div></td></tr></table>
-<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a><!-- 返回顶部 -->
 <%@ include file="../system/index/foot.jsp"%>
 <script type="text/javascript" src="static/ace/js/date-time/bootstrap-datepicker.js"></script><!-- 日期框 -->
 <script type="text/javascript" src="static/ace/js/bootbox.js"></script><!-- 删除时确认窗口 -->
