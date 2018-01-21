@@ -41,11 +41,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													<!-- <span class="sr-only">Toggle Dropdown</span> -->
 												</a>
 												<ul class="dropdown-menu">
-													<li><a href="#" onclick="expandCompute()">计算扩容</a></li>
-													<li><a href="#" onclick="expandStorage()">磁盘扩容</a></li>
-													<li><a href="#" onclick="clone()">克隆</a></li>
-													<li><a href="#" onclick="snapshot()">快照</a></li>
-													<li><a href="#" onclick="destory()">删除</a></li>
+													<li><a onclick="expandCompute()">计算扩容</a></li>
+													<li><a onclick="expandStorage()">磁盘扩容</a></li>
+													<li><a onclick="clone()">克隆</a></li>
+													<li><a onclick="snapshot()">快照</a></li>
+													<li><a onclick="destory()">删除</a></li>
 												</ul>
 											</div>
 										</td>
