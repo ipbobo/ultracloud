@@ -14,6 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.cmp.entity.UserGroupUserMap;
 import com.cmp.service.CmpWorkOrderService;
+import com.cmp.service.ProjectService;
 import com.cmp.service.UserGroupService;
 import com.cmp.sid.CmpWorkOrder;
 import com.fh.util.PageData;
@@ -34,6 +35,7 @@ public class AuditTaskListener implements Serializable, TaskListener {
 	public void notify(DelegateTask delegateTask) {
 		Map<String, Object> map = delegateTask.getVariables();
 		String appNo = (String) delegateTask.getVariable("appNo");
+		
 		WebApplicationContext webctx=ContextLoader.getCurrentWebApplicationContext();
 		CmpWorkOrderService cmpWorkOrderService = (CmpWorkOrderService) webctx.getBean("cmpWorkOrderService");
 		CmpWorkOrder workOrder = null;
@@ -43,12 +45,21 @@ public class AuditTaskListener implements Serializable, TaskListener {
 			e.printStackTrace();
 		}
 		String projectCode = workOrder.getProjectCode();
-		UserGroupService userGroupService = (UserGroupService) webctx.getBean("userGroupService");
+		
+		ProjectService projectService = (ProjectService) webctx.getBean("projectService");
 		PageData pageData = new PageData();
 		pageData.put("id", projectCode);
+		PageData projectPD = null;
 		try {
-			pageData = userGroupService.findById(pageData);
-			pageData.put("id", (BigInteger)pageData.get("id")+"");
+			projectPD = projectService.findById(pageData);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		UserGroupService userGroupService = (UserGroupService) webctx.getBean("userGroupService");
+		pageData.put("id", (BigInteger)projectPD.get("usergroup_id")+"");
+		
+		try {
 			List<UserGroupUserMap> userList = userGroupService.listUserGroupUserMap(pageData);
 			if (null != userList) {
 				Set<String> set = new HashSet<String>();

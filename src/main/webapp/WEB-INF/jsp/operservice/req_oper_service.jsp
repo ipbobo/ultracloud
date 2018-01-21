@@ -263,9 +263,7 @@
 								
 									<thead>
 									<tr id="vm_modal_head">
-										<th class="center" style="width: 35px;"><label
-											class="pos-rel"><input type="checkbox" class="ace"
-												id="zcheckbox" /><span class="lbl"></span></label></th>
+										<th class="center" style="width: 35px;"></th>
 										<th class="center">虚拟机编号</th>
 										<th class="center">虚拟机名称</th>
 										<th class="center">操作</th>
@@ -396,9 +394,7 @@
 								style="margin-top: 5px;">
 									<thead>
 									<tr>
-										<th class="center" style="width: 35px;"><label
-											class="pos-rel"><input type="checkbox" class="ace"
-												id="zcheckbox" /><span class="lbl"></span></label></th>
+										<th class="center" style="width: 35px;"></th>
 										<th class="center">虚拟机编号</th>
 										<th class="center">虚拟机名称</th>
 									</tr>
