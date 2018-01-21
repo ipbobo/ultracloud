@@ -75,7 +75,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 	}
 
 	@Override
-	public void delete(List<Integer> ls) throws Exception {
+	public void destroy(List<Integer> ls) throws Exception {
 		// TODO Auto-generated method stub
 
 	}

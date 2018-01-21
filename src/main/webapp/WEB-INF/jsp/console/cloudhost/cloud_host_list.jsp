@@ -23,7 +23,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-							
 							<form action="cloudhost/list.do" method="post" name="Form" id="Form">
 								<input type="hidden" name="TYPE" value="${pd.TYPE}" />
 								<table style="margin-top:5px;">
@@ -35,20 +34,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td style="padding-left:6px;"><a class="btn btn-warning btn-sm" onclick="suspend()">挂起</a></td>
 										<td style="padding-left:6px;"><a class="btn btn-success btn-sm" onclick="resume()">恢复</a></td>
 										<td style="padding-left:6px;">
-										<div class="btn-group">
-											<a class="btn btn-primary btn-sm">更多操作</a>
-											<a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-												<span class="caret"></span>
-												<!-- <span class="sr-only">Toggle Dropdown</span> -->
-											</a>
-											<ul class="dropdown-menu">
-												<li><a href="#">计算扩容</a></li>
-												<li><a href="#">磁盘扩容</a></li>
-												<li><a href="#">克隆</a></li>
-												<li><a href="#">快照</a></li>
-												<li><a href="#">删除</a></li>
-											</ul>
-										</div>
+											<div class="btn-group">
+												<a class="btn btn-primary btn-sm">更多操作</a>
+												<a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													<span class="caret"></span>
+													<!-- <span class="sr-only">Toggle Dropdown</span> -->
+												</a>
+												<ul class="dropdown-menu">
+													<li><a onclick="expandCompute()">计算扩容</a></li>
+													<li><a onclick="expandStorage()">磁盘扩容</a></li>
+													<li><a onclick="clone()">克隆</a></li>
+													<li><a onclick="snapshot()">快照</a></li>
+													<li><a onclick="destory()">删除</a></li>
+												</ul>
+											</div>
 										</td>
 										<td style="padding-left:6px;">
 											<div class="nav-search">
@@ -60,7 +59,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										</td>
 									</tr>
 								</table>
-							
 								<table id="datagrid" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 									<thead>
 										<tr>
@@ -82,7 +80,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<th class="center">远程控制台</th>
 										</tr>
 									</thead>
-															
 									<tbody>
 										<c:forEach items="${varList}" var="var" varStatus="vs">
 											<tr>
@@ -126,13 +123,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										</c:forEach>
 									</tbody>
 								</table>
-								
 								<div class="page-header position-relative">
-								<table style="width:100%;">
-									<tr>
-										<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
-									</tr>
-								</table>
+									<table style="width:100%;">
+										<tr>
+											<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
+										</tr>
+									</table>
 								</div>
 							</form>
 						</div>
@@ -140,7 +136,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 			</div>
 		</div>
-
 		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
 			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 		</a>
@@ -175,7 +170,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			});
 		});
 		
-		//删除
+		<%-- //删除
 		function del(ztid, STATUS, type, Id, SANME_ID){
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(type == "1" && STATUS == '2' && $("#"+ztid).html() == '<span class="label label-important arrowed-in">未读</span>'){
@@ -189,7 +184,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					});
 				}
 			});
-		}
+		} --%>
 		
 		//批量操作
 		function makeAll(msg){
@@ -245,42 +240,74 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		};
 		
 		function getSelected() {
-			$('#datagrid').find('input:checked').map(function() { return $(this).val(); }).get();
+			return $('#datagrid').find('input:checked').map(function() { return $(this).val(); }).get();
 		}
 		
 		function apply() {
-			siMenu('122','121','资源申请','resAppPre.do')
+			siMenu('122', '121', '资源申请', 'resAppPre.do');
 		}
 		
 		function start() {
-			$.post('/cloudhost/start', getSelected(), function(result) {
+			$.post('cloudhost/start', { ls: getSelected() }, function(result) {
 				consol.log(result);
 			});
 		}
 		
 		function stop() {
-			$.post('/cloudhost/stop', getSelected(), function(result) {
+			$.post('cloudhost/stop', { ls: getSelected() }, function(result) {
 				consol.log(result);
 			});
 		}
 		
 		function restart() {
-			$.post('/cloudhost/restart', getSelected(), function(result) {
+			$.post('cloudhost/restart', { ls: getSelected() }, function(result) {
 				consol.log(result);
 			});
 		}
 		
 		function suspend() {
-			$.post('/cloudhost/suspend', getSelected(), function(result) {
+			$.post('cloudhost/suspend', { ls: getSelected() }, function(result) {
 				consol.log(result);
 			});
 		}
 		
 		function resume() {
-			$.post('/cloudhost/resume', getSelected(), function(result) {
+			$.post('cloudhost/resume', { ls: getSelected() }, function(result) {
 				consol.log(result);
 			});
 		}
+		
+		function expandCompute() {
+			var selection = getSelected();
+			if (selection.length > 0) {
+				siMenu('123', '121', '计算扩容', 'reqOperServicePre.do?serviceType=6&vmId=' + selection[0]);
+			}
+		}
+		
+		function expandStorage() {
+			var selection = getSelected();
+			if (selection.length > 0) {
+				siMenu('123', '121', '磁盘扩容', 'reqOperServicePre.do?serviceType=6&vmId=' + selection[0]);
+			}
+		}
+		
+		function clone() {
+			$.post('cloudhost/clone', { ls: getSelected() }, function(result) {
+				consol.log(result);
+			});
+		}
+		
+		function snapshot() {
+			$.post('cloudhost/snapshot', { ls: getSelected() }, function(result) {
+				consol.log(result);
+			});
+		}
+		
+		function destory() {
+			$.post('cloudhost/destory', { ls: getSelected() }, function(result) {
+				consol.log(result);
+			});
+		} 
 	</script>
 
 </body>

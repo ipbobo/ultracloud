@@ -1,5 +1,7 @@
 package com.cmp.controller;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,10 +10,12 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.CloudHostService;
@@ -61,33 +65,69 @@ public class CloudHostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/start")
-	public void start(List<Integer> ls) {
+	public ResponseEntity<String> start(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			cloudHostService.start(ls);
+		} catch (Exception e) {
+			return ok("FAILURE");
+		}
 
+		return ok("SUCCESS");
 	}
 
 	@RequestMapping(value = "/stop")
-	public void stop(List<Integer> ls) {
+	public ResponseEntity<String> stop(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			cloudHostService.stop(ls);
+		} catch (Exception e) {
+			return ok("FAILURE");
+		}
 
+		return ok("SUCCESS");
 	}
 
 	@RequestMapping(value = "/restart")
-	public void restart(List<Integer> ls) {
+	public ResponseEntity<String> restart(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			cloudHostService.restart(ls);
+		} catch (Exception e) {
+			return ok("FAILURE");
+		}
 
+		return ok("SUCCESS");
 	}
 
 	@RequestMapping(value = "/suspend")
-	public void suspend(List<Integer> ls) {
+	public ResponseEntity<String> suspend(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			cloudHostService.suspend(ls);
+		} catch (Exception e) {
+			return ok("FAILURE");
+		}
 
+		return ok("SUCCESS");
 	}
 
 	@RequestMapping(value = "/resume")
-	public void resume(List<Integer> ls) {
+	public ResponseEntity<String> resume(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			cloudHostService.resume(ls);
+		} catch (Exception e) {
+			return ok("FAILURE");
+		}
 
+		return ok("SUCCESS");
 	}
 
-	@RequestMapping(value = "/delete")
-	public void delete(List<Integer> ls) throws Exception {
+	@RequestMapping(value = "/destroy")
+	public ResponseEntity<String> destroy(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			cloudHostService.destroy(ls);
+		} catch (Exception e) {
+			return ok("FAILURE");
+		}
 
+		return ok("SUCCESS");
 	}
 
 	@InitBinder
