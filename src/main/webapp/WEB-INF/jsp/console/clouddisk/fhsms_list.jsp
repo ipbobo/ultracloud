@@ -1,5 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -32,67 +31,67 @@
 							
 						<!-- 检索  -->
 						<form action="clouddisk/list.do" method="post" name="Form" id="Form">
-						<input type="hidden" name="TYPE" value="${pd.TYPE}" />
-						<table style="margin-top:5px;">
-							<tr>
-								<td style="padding-left:6px;"><a class="btn btn-primary btn-sm">申请</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">挂载</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-warning btn-sm">卸载</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">快照</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">扩容</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-danger btn-sm">删除</a></td>
-								<td style="padding-left:6px;">
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-							</tr>
-						</table>
-						<!-- 检索  -->
-					
-						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
-							<thead>
+							<input type="hidden" name="TYPE" value="${pd.TYPE}" />
+							<table style="margin-top:5px;">
 								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
-									<th class="center">服务器名称</th>
-									<th class="center">IP</th>
-									<th class="center">允许保存手动快照版本</th>
-									<th class="center">已保存手动快照版本</th>
-									<th class="center">允许保存自动快照版本</th>
-									<th class="center">已保存自动快照版本</th>
-									<th class="center">创建人</th>
+									<td style="padding-left:6px;"><a class="btn btn-primary btn-sm">申请</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-success btn-sm">挂载</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-warning btn-sm">卸载</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-success btn-sm">快照</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-success btn-sm">扩容</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-danger btn-sm">删除</a></td>
+									<td style="padding-left:6px;">
+										<div class="nav-search">
+											<span class="input-icon">
+												<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+												<i class="ace-icon fa fa-search nav-search-icon"></i>
+											</span>
+										</div>
+									</td>
 								</tr>
-							</thead>
-													
-							<tbody>
-								<c:forEach items="${varList}" var="var" varStatus="vs">
+							</table>
+							<!-- 检索  -->
+					
+							<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
+								<thead>
 									<tr>
-										<td class='center'>
-											<label class="pos-rel"><input type='checkbox' name='ids' id="${var.TO_USERNAME}" value="${var.FHSMS_ID}" class="ace" /><span class="lbl"></span></label>
-										</td>
-										<td class='center'><a>kf201710101244478817</a></td>
-										<td class='center'>192.168.153.201</td>
-										<td class='center'></td>
-										<td class='center'>1</td>
-										<td class='center'></td>
-										<td class='center'>3</td>
-										<td class='center'>申请者</td>
+										<th class="center" style="width:35px;">
+										<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
+										</th>
+										<th class="center">服务器名称</th>
+										<th class="center">IP</th>
+										<th class="center">允许保存手动快照版本</th>
+										<th class="center">已保存手动快照版本</th>
+										<th class="center">允许保存自动快照版本</th>
+										<th class="center">已保存自动快照版本</th>
+										<th class="center">创建人</th>
 									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-						<div class="page-header position-relative">
-						<table style="width:100%;">
-							<tr>
-								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
-							</tr>
-						</table>
-						</div>
+								</thead>
+														
+								<tbody>
+									<c:forEach items="${varList}" var="var" varStatus="vs">
+										<tr>
+											<td class='center'>
+												<label class="pos-rel"><input type='checkbox' name='ids' id="${var.TO_USERNAME}" value="${var.FHSMS_ID}" class="ace" /><span class="lbl"></span></label>
+											</td>
+											<td class='center'><a>kf201710101244478817</a></td>
+											<td class='center'>192.168.153.201</td>
+											<td class='center'></td>
+											<td class='center'>1</td>
+											<td class='center'></td>
+											<td class='center'>3</td>
+											<td class='center'>申请者</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+							<div class="page-header position-relative">
+								<table style="width:100%;">
+									<tr>
+										<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
+									</tr>
+								</table>
+							</div>
 						</form>
 					
 						</div>
