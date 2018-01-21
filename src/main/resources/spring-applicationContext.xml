@@ -11,7 +11,7 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 	
-	<!-- ====================数据源1==================== -->
+	<!-- begin-数据库配置 -->
 	<!-- sql会话模版 -->
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactory" />
@@ -69,6 +69,7 @@
 	<bean id="mysqlTransactionManager" name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">   
     	<property name="dataSource" ref="dataSource"></property>
  	</bean>
+ 	<!-- end-数据库配置 -->
 	
 	<context:annotation-config /><!-- 启用注解 -->
 	
@@ -126,5 +127,4 @@
 	</bean>
 	
  	<beans:import resource="activiti-context.xml"/><!-- 加载activiti5配置文件 -->
-
 </beans>
