@@ -497,6 +497,28 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			}
 		});
 	}
+	
+	@Override
+	public void suspendVirtualMachine(String name) {
+		searchManagedEntity(VirtualMachine.class, name).ifPresent(vm -> {
+			try {
+				vm.suspendVM_Task();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
+	}
+	
+	@Override
+	public void resumeVirtualMachine(String name) {
+		searchManagedEntity(VirtualMachine.class, name).ifPresent(vm -> {
+			try {
+				vm.powerOnVM_Task(null);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
+	}
 
 	@Override
 	public void resetVirtualMachine(String name) {
@@ -510,7 +532,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void deleteVirtualMachine(String name) {
+	public void destroyVirtualMachine(String name) {
 		searchManagedEntity(VirtualMachine.class, name).ifPresent(vm -> {
 			try {
 				vm.destroy_Task();

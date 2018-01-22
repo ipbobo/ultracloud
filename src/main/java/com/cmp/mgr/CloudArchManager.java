@@ -51,10 +51,14 @@ public interface CloudArchManager {
 	public void stopVirtualMachine(String name);
 
 	public void rebootVirtualMachine(String name);
+	
+	public void suspendVirtualMachine(String name);
+	
+	public void resumeVirtualMachine(String name);
 
 	public void resetVirtualMachine(String name);
 
-	public void deleteVirtualMachine(String name);
+	public void destroyVirtualMachine(String name);
 
 	public void cloneVirtualMachine(CloneVmRequest request);
 

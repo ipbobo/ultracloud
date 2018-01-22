@@ -133,6 +133,20 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 			client.compute().servers().reboot(name, RebootType.SOFT);
 		});
 	}
+	
+	@Override
+	public void suspendVirtualMachine(String name) {
+		getOSClient().ifPresent(client -> {
+			// client.compute().servers().suspend(name, RebootType.SOFT);
+		});
+	}
+	
+	@Override
+	public void resumeVirtualMachine(String name) {
+		getOSClient().ifPresent(client -> {
+			// client.compute().servers().resume(name, RebootType.SOFT);
+		});
+	}
 
 	@Override
 	public void resetVirtualMachine(String name) {
@@ -140,7 +154,7 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void deleteVirtualMachine(String name) {
+	public void destroyVirtualMachine(String name) {
 		getOSClient().ifPresent(client -> {
 			client.compute().servers().delete(name);
 		});
