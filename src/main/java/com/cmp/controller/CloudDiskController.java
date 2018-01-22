@@ -60,7 +60,7 @@ public class CloudDiskController extends BaseController {
 		pd.put("FROM_USERNAME", Jurisdiction.getUsername()); // 当前用户名
 		page.setPd(pd);
 		List<PageData> varList = cloudDiskService.list(page); // 列出Fhsms列表
-		mv.setViewName("console/clouddisk/fhsms_list");
+		mv.setViewName("console/clouddisk/cloud_disk");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限

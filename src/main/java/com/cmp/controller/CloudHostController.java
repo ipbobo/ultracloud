@@ -36,30 +36,20 @@ public class CloudHostController extends BaseController {
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
 		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
+		PageData pd = this.getPageData();
+		
+		String keywords = pd.getString("keywords");
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
-		String lastLoginStart = pd.getString("lastLoginStart"); // 开始时间
-		String lastLoginEnd = pd.getString("lastLoginEnd"); // 结束时间
-		if (lastLoginStart != null && !"".equals(lastLoginStart)) {
-			pd.put("lastLoginStart", lastLoginStart + " 00:00:00");
-		}
-		if (lastLoginEnd != null && !"".equals(lastLoginEnd)) {
-			pd.put("lastLoginEnd", lastLoginEnd + " 00:00:00");
-		}
-		if (!"2".equals(pd.getString("TYPE"))) { // 1：收信箱 2：发信箱
-			pd.put("TYPE", 1);
-		}
-		pd.put("FROM_USERNAME", Jurisdiction.getUsername()); // 当前用户名
+		
+		pd.put("FROM_USERNAME", Jurisdiction.getUsername());
 		page.setPd(pd);
-		List<PageData> varList = cloudHostService.list(page); // 列出Fhsms列表
-		mv.setViewName("console/cloudhost/cloud_host_list");
+		List<PageData> varList = cloudHostService.list(page);
+		mv.setViewName("console/cloudhost/cloud_host");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());
 
 		return mv;
 	}

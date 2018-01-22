@@ -10,11 +10,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <head>
 <base href="<%=basePath%>">
 <%@ include file="../../system/index/top.jsp"%>
-
-<link rel="stylesheet" href="static/ace/css/chosen.css" />
-<link rel="stylesheet" href="static/ace/css/datepicker.css" />
-
-<script src="static/js/myjs/head.js"></script>
 </head>
 <body class="no-skin">
 	<div class="main-container" id="main-container">
@@ -147,7 +142,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<script src="static/ace/js/ace/ace.js"></script>
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
-	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+	<script src="static/js/jquery.tips.js"></script>
+	<script src="static/js/myjs/head.js"></script>
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		
