@@ -21,6 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmp.service.CloudHostService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.User;
+import com.fh.service.system.user.impl.UserService;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 
@@ -33,23 +35,32 @@ public class CloudHostController extends BaseController {
 	@Resource(name = "cloudHostService")
 	private CloudHostService cloudHostService;
 
+	@Resource(name = "userService")
+	private UserService userService;
+
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();
-		
+
 		String keywords = pd.getString("keywords");
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
-		
+
 		pd.put("FROM_USERNAME", Jurisdiction.getUsername());
 		page.setPd(pd);
 		List<PageData> varList = cloudHostService.list(page);
 		mv.setViewName("console/cloudhost/cloud_host");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC());
+
+		User userr = userService.getCurrrentUserAndRole();
+		if (userr != null) {
+			mv.addObject("QX", "audit".equalsIgnoreCase(userr.getRole().getTYPE()) ? 0 : 1);
+		} else {
+			mv.addObject("QX", 0);
+		}
 
 		return mv;
 	}

@@ -32,6 +32,7 @@
 						<!-- 检索  -->
 						<form action="clouddisk/list.do" method="post" name="Form" id="Form">
 							<input type="hidden" name="TYPE" value="${pd.TYPE}" />
+							<c:if test="${QX == 1}">
 							<table style="margin-top:5px;">
 								<tr>
 									<td style="padding-left:6px;"><a class="btn btn-primary btn-sm">申请</a></td>
@@ -50,6 +51,7 @@
 									</td>
 								</tr>
 							</table>
+							</c:if>
 							<!-- 检索  -->
 					
 							<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	

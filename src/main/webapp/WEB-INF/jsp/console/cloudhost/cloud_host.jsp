@@ -20,6 +20,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="col-xs-12">
 							<form action="cloudhost/list.do" method="post" name="Form" id="Form">
 								<input type="hidden" name="TYPE" value="${pd.TYPE}" />
+								<c:if test="${QX == 1}">
 								<table style="margin-top:5px;">
 									<tr>
 										<td style="padding-left:6px;"><a class="btn btn-primary btn-sm" onclick="apply()">申请</a></td>
@@ -54,6 +55,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										</td>
 									</tr>
 								</table>
+								</c:if>
 								<table id="datagrid" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 									<thead>
 										<tr>

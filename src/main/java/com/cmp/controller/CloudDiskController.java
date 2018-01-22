@@ -22,6 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmp.service.CloudDiskService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.User;
+import com.fh.service.system.user.impl.UserService;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtil;
 import com.fh.util.Jurisdiction;
@@ -36,41 +38,41 @@ public class CloudDiskController extends BaseController {
 	@Resource(name = "cloudDiskService")
 	private CloudDiskService cloudDiskService;
 
+	@Resource(name = "userService")
+	private UserService userService;
+
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "列表Fhsms");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
-		String lastLoginStart = pd.getString("lastLoginStart"); // 开始时间
-		String lastLoginEnd = pd.getString("lastLoginEnd"); // 结束时间
-		if (lastLoginStart != null && !"".equals(lastLoginStart)) {
-			pd.put("lastLoginStart", lastLoginStart + " 00:00:00");
-		}
-		if (lastLoginEnd != null && !"".equals(lastLoginEnd)) {
-			pd.put("lastLoginEnd", lastLoginEnd + " 00:00:00");
-		}
-		if (!"2".equals(pd.getString("TYPE"))) { // 1：收信箱 2：发信箱
-			pd.put("TYPE", 1);
-		}
-		pd.put("FROM_USERNAME", Jurisdiction.getUsername()); // 当前用户名
+
+		pd.put("FROM_USERNAME", Jurisdiction.getUsername());
 		page.setPd(pd);
-		List<PageData> varList = cloudDiskService.list(page); // 列出Fhsms列表
+		List<PageData> varList = cloudDiskService.list(page);
 		mv.setViewName("console/clouddisk/cloud_disk");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+
+		User userr = userService.getCurrrentUserAndRole();
+		if (userr != null) {
+			mv.addObject("QX", "audit".equalsIgnoreCase(userr.getRole().getTYPE()) ? 0 : 1);
+		} else {
+			mv.addObject("QX", 0);
+		}
+
 		return mv;
 	}
 
 	@RequestMapping(value = "/save")
 	public @ResponseBody Object save() throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "发送站内信");
-		// if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限（站内信用独立的按钮权限,在此就不必校验新增权限）
+		// if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
+		// //校验权限（站内信用独立的按钮权限,在此就不必校验新增权限）
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		Map<String, Object> map = new HashMap<String, Object>();
