@@ -835,7 +835,8 @@
 					<target>1.8</target>
 					<compilerArgs>
 						<arg>-Xlint:all,-deprecation,-unchecked,-rawtypes,-serial</arg>
-						<arg>-Xbootclasspath:${java.home}/lib/rt.jar;${java.home}/lib/jce.jar</arg>
+						<arg>-Xbootclasspath:${java.home}/lib/rt.jar</arg>
+						<arg>-Xbootclasspath/a:${java.home}/lib/jce.jar</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
