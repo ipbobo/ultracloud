@@ -42,13 +42,6 @@ public class StringUtil {
 		return str2;
 	}
 	
-	//获取登录用户
-	public static String getUserId() {
-		Session session = Jurisdiction.getSession();
-		User user=(User)session.getAttribute(Const.SESSION_USER);
-		return user.getUSERNAME();//获取登录用户
-	}
-	
 	//获取客户端真实IP
 	public static String getClientIp(HttpServletRequest request){
 	    String ip = request.getHeader("x-forwarded-for");
@@ -63,5 +56,27 @@ public class StringUtil {
 	    }
 	    
 	    return ip.equals("0:0:0:0:0:0:0:1")?"127.0.0.1":ip;
+	}
+	
+	//获取登录用户
+	public static String getUserName(){
+		try{
+			Session session = Jurisdiction.getSession();
+			User user=(User)session.getAttribute(Const.SESSION_USER);
+			return user.getUSERNAME();//获取登录用户
+		} catch (Exception e) {
+	    	return null;
+	    }
+	}
+	
+	//获取登录用户
+	public static String getUserId(){
+		try{
+			Session session = Jurisdiction.getSession();
+			User user=(User)session.getAttribute(Const.SESSION_USER);
+			return user.getUSER_ID();//获取登录用户
+		} catch (Exception e) {
+	    	return null;
+	    }
 	}
 }

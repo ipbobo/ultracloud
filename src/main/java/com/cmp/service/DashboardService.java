@@ -18,34 +18,39 @@ public class DashboardService {
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
 
+	//审核组查询
+	public String getAudit(String applyUserId) throws Exception {
+		return (String)dao.findForObject("DashboardMapper.getAudit", applyUserId);
+	}
+	
 	//虚机总量查询
-	public Long getVirNum() throws Exception {
-		return (Long)dao.findForObject("DashboardMapper.getVirNum", null);
+	public Long getVirNum(PageData pd) throws Exception {
+		return (Long)dao.findForObject("DashboardMapper.getVirNum", pd);
 	}
 	
 	//宿主机总量查询
-	public Long getHostNum() throws Exception {
-		return (Long)dao.findForObject("DashboardMapper.getHostNum", null);
+	public Long getHostNum(PageData pd) throws Exception {
+		return (Long)dao.findForObject("DashboardMapper.getHostNum", pd);
 	}
 	
 	//物理机总量查询
-	public Long getPhysNum() throws Exception {
-		return (Long)dao.findForObject("DashboardMapper.getPhysNum", null);
+	public Long getPhysNum(PageData pd) throws Exception {
+		return (Long)dao.findForObject("DashboardMapper.getPhysNum", pd);
 	}
 	
 	//用户总数查询
-	public Long getUserNum() throws Exception {
-		return (Long)dao.findForObject("DashboardMapper.getUserNum", null);
+	public Long getUserNum(PageData pd) throws Exception {
+		return (Long)dao.findForObject("DashboardMapper.getUserNum", pd);
 	}
 	
 	//项目总数查询
-	public Long getProjNum() throws Exception {
-		return (Long)dao.findForObject("DashboardMapper.getProjNum", null);
+	public Long getProjNum(PageData pd) throws Exception {
+		return (Long)dao.findForObject("DashboardMapper.getProjNum", pd);
 	}
 	
 	//工单总数查询
-	public Long getWorkOrderNum() throws Exception {
-		return (Long)dao.findForObject("DashboardMapper.getWorkOrderNum", null);
+	public Long getWorkOrderNum(PageData pd) throws Exception {
+		return (Long)dao.findForObject("DashboardMapper.getWorkOrderNum", pd);
 	}
 	
 	//虚机详细信息查询

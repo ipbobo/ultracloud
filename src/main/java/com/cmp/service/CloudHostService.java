@@ -19,6 +19,6 @@ public interface CloudHostService {
 
 	public void resume(List<Integer> ls) throws Exception;
 
-	public void delete(List<Integer> ls) throws Exception;
+	public void destroy(List<Integer> ls) throws Exception;
 
 }

@@ -25,7 +25,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("CloudHostMapper.list", page);
+		return (List<PageData>) dao.findForList("CloudHostMapper.listPage", page);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 	}
 
 	@Override
-	public void delete(List<Integer> ls) throws Exception {
+	public void destroy(List<Integer> ls) throws Exception {
 		// TODO Auto-generated method stub
 
 	}

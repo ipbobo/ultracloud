@@ -31,15 +31,13 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="clouddisk/list.do" method="post" name="Form" id="Form">
+						<form action="snapshot/list.do" method="post" name="Form" id="Form">
 						<input type="hidden" name="TYPE" value="${pd.TYPE}" />
+						<c:if test="${QX == 1}">
 						<table style="margin-top:5px;">
 							<tr>
-								<td style="padding-left:6px;"><a class="btn btn-primary btn-sm">申请</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">挂载</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-warning btn-sm">卸载</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">快照</a></td>
-								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">扩容</a></td>
+								<td style="padding-left:6px;"><a class="btn btn-success btn-sm">创建</a></td>
+								<td style="padding-left:6px;"><a class="btn btn-warning btn-sm">回滚</a></td>
 								<td style="padding-left:6px;"><a class="btn btn-danger btn-sm">删除</a></td>
 								<td style="padding-left:6px;">
 									<div class="nav-search">
@@ -51,6 +49,7 @@
 								</td>
 							</tr>
 						</table>
+						</c:if>
 						<!-- 检索  -->
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
