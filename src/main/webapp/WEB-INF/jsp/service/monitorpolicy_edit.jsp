@@ -12,24 +12,38 @@
 	<base href="<%=basePath%>">
 	<!-- 下拉框 -->
 	<link rel="stylesheet" href="static/ace/css/chosen.css" />
-	<script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
+	<link rel="stylesheet" href="static/html_UI/assets/css/jquery-ui.css" />
+		<script type="text/javascript" src="static/ace/js/jquery.js"></script>
+		<script src="static/html_UI/assets/js/bootstrap.js"></script>
+		
+		<script src="static/html_UI/assets/js/jquery-ui.js"></script>
+		<script src="static/html_UI/assets/js/jquery.ui.touch-punch.js"></script>
+
+		<!-- ace scripts -->
+		<script src="static/html_UI/assets/js/ace/elements.scroller.js"></script>
+		<script src="static/html_UI/assets/js/ace/elements.colorpicker.js"></script>
+		<script src="static/html_UI/assets/js/ace/elements.fileinput.js"></script>
+		<script src="static/html_UI/assets/js/ace/elements.typeahead.js"></script>
+		<script src="static/html_UI/assets/js/ace/elements.wysiwyg.js"></script>
+		<script src="static/html_UI/assets/js/ace/elements.spinner.js"></script>
+		<script src="static/html_UI/assets/js/ace/elements.treeview.js"></script>
+		<script src="static/html_UI/assets/js/ace/elements.wizard.js"></script>
+		<script src="static/html_UI/assets/js/ace/elements.aside.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.ajax-content.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.touch-drag.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.sidebar.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.sidebar-scroll-1.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.submenu-hover.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.widget-box.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.settings.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.settings-rtl.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.settings-skin.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.widget-on-reload.js"></script>
+		<script src="static/html_UI/assets/js/ace/ace.searchbox-autocomplete.js"></script>
+	
 	<!-- jsp文件头和头部 -->
 	<%@ include file="../system/index/top.jsp"%>
-	<!-- 树形下拉框start -->
-	<script type="text/javascript" src="plugins/selectZtree/selectTree.js"></script>
-	<script type="text/javascript" src="plugins/selectZtree/framework.js"></script>
-	<link rel="stylesheet" type="text/css" href="plugins/selectZtree/import_fh.css"/>
-	<script type="text/javascript" src="plugins/selectZtree/ztree/ztree.js"></script>
-	<link type="text/css" rel="stylesheet" href="plugins/selectZtree/ztree/ztree.css"></link>
-	<!-- 树形下拉框end -->
-	<!-- 左右双列 start -->
-	<link rel="stylesheet" href="css/bootstrap.min.css"/>
-	<link rel="stylesheet" type="text/css" href="/ultracloud/static/html_UI/assets/css/prettify.css">
-	<link rel="stylesheet" href="static/html_UI/assets/css/bootstrap-duallistbox.css" />
-	<!-- <script src="http://www.jq22.com/jquery/2.1.1/jquery.min.js"></script> -->
-	<script src="js/bootstrap.min.js"></script>
-	<script src="static/html_UI/assets/js/jquery.bootstrap-duallistbox.js"></script>
-	<!-- 左右双列 end -->
 </head>
 <body class="no-skin" style="width: 98%;">
 <!-- /section:basics/navbar.layout -->
@@ -46,62 +60,23 @@
 						<div id="zhongxin" style="padding-top: 13px;padding-left: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover" style="padding-left: 13px;">
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目名称:</td>
-								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30"  style="width:98%;"/></td>
-								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目简称:</td>
-								<td><input type="text" name="shortname" id="shortname" value="${pd.shortname}" maxlength="30" style="width:98%;"/></td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;监控指标:</td>
+								<td><input readonly="readonly" type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目等级:</td>
-								<td id="level_td">
-									<select class="chosen-select form-control" name="level" id=level data-placeholder="请选择等级" style="vertical-align:top;"  title="等级" style="width:98%;" >
-									<option value=""></option>
-									<c:forEach items="${dictionariesList}" var="dictionaries">
-										<option value="${dictionaries.NAME }" <c:if test="${dictionaries.NAME == pd.level }">selected</c:if>>${dictionaries.NAME }</option>
-									</c:forEach>
-									</select>
-								</td>
-								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;审核用户组:</td>
-								<td id="usergroup_td">
-								<select class="chosen-select form-control" name="usergroup_id" id="usergroup_id" data-placeholder="请选择用户组" style="vertical-align:top;" style="width:98%;" >
-								<option value=""></option>
-								<c:forEach items="${usergroupList}" var="usergroup">
-									<option value="${usergroup.id }" <c:if test="${usergroup.id == pd.usergroup_id }">selected</c:if>>${usergroup.name }</option>
-								</c:forEach>
-								</select>
-								</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;统计范围:</td>
+								<td><input type="text" name="name" id="name" value="${pd.cycle}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目归属部门:</td>
-								<td id="DEPARTMENT_td">
-									<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
-									<div class="selectTree" id="selectTree"></div>
-								</td>
-								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;项目责任人:</td>
-								<td>
-									<input type="text" name="USERNAME" id="USERNAME" value="${pd.USERNAME}" maxlength="30"  style="width:70%;"/>&nbsp;&nbsp;
-									<a class="btn btn-mini btn-primary" onclick="selectLeaderUser('USERNAME');">选择</a>
-								</td>
-							</tr>
- 				 			<tr>
-								<td style="width:130px;height:130px;text-align: right;padding-top: 13px;">项目组成员:</td>
-								<div class="col-xs-12">
-								<td colspan="8">
-										<select multiple="multiple" size="5" name="duallistbox_demo1[]" class="demo2">
-											<c:forEach items="${notBindingUserList}" var="user">
-												<option value="${user.USER_ID }">${user.NAME }</option>
-											</c:forEach>
-											<c:forEach items="${bindedUserList}" var="user">
-												<option value="${user.USER_ID }" selected="selected">${user.NAME }</option>
-											</c:forEach>
-										</select>
-								</td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;阀值范围:</td>
+								<td style="padding-top: 13px;">
+								<input type="number" name="min" id="min" value="${pd.min}" maxlength="2" title="最小值" style="width:30%;"/>&nbsp;-&nbsp;
+								<input type="number" name="max" id="max" value="${pd.max}" maxlength="2" title="最大值" style="width:30%;"/>
+								<!-- <p style="vertical-align: middle;">前后输入框分别为阀值更好限和上限</p> -->
+								<div style="padding-top: 5px;">
+									<div class="space-4"></div>
+									<div id="slider"></div>
 								</div>
-							</tr>
-							<tr>
-								<td style="width:130px;text-align: right;padding-top: 13px;">描述:</td>
-								<td  colspan="10">
-									<textarea rows="2" cols="10" id="detail" name="detail" style="width:98%;"></textarea>
 								</td>
 							</tr>
 							<tr>
@@ -134,30 +109,14 @@
 		<script type="text/javascript">
 		$(top.hangge());
 		$(function() {
-			var str1 = '<c'+':if test="'+'$'+'{QX.'+$("#QX_NAME").val();
-			var str2 = ' == 1 }">这里放按钮<'+'/c:'+'if>';
-			$("#code").val(str1+str2);
-			
+			$( "#slider" ).slider({
+				range: true,
+				min: 0,
+				max: 100,
+				values: [ 10, 80 ]
+			});
 
 		});
-		
-		//下拉树
-		var defaultNodes = {"treeNodes":${zTreeNodes}};
-		function initComplete(){
-			//绑定change事件
-			$("#selectTree").bind("change",function(){
-				if(!$(this).attr("relValue")){
-			      //  top.Dialog.alert("没有选择节点");
-			    }else{
-					//alert("选中节点文本："+$(this).attr("relText")+"<br/>选中节点值："+$(this).attr("relValue"));
-					$("#DEPARTMENT_ID").val($(this).attr("relValue"));
-			    }
-			});
-			//赋给data属性
-			$("#selectTree").data("data",defaultNodes);  
-			$("#selectTree").render();
-			$("#selectTree2_input").val("${null==depname?'请选择':depname}");
-		}
 		
 		//拼代码
 		function changecode(value){
@@ -167,7 +126,7 @@
 		}
 		
 		//保存
-		function save(){
+		function save() {
 			if($("#name").val()==""){
 				$("#name").tips({
 					side:3,
@@ -178,96 +137,12 @@
 				$("#name").focus();
 			return false;
 			}
-			if($("#shortname").val()==""){
-				$("#shortname").tips({
-					side:3,
-		            msg:'请输入项目简称',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#shortname").focus();
-			return false;
-			}
-			if($("#level").val()==""){
-				$("#level_td").tips({
-					side:3,
-		            msg:'请选择项目等级',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#level").focus();
-			return false;
-			}
-			if($("#usergroup_id").val()==""){
-				$("#usergroup_td").tips({
-					side:3,
-		            msg:'请选择审核用户组',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#usergroup_id").focus();
-			return false;
-			}
-			if($("#DEPARTMENT_ID").val()==""){
-				$("#DEPARTMENT_td").tips({
-					side:3,
-		            msg:'请选择项目归属部门',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#DEPARTMENT_ID").focus();
-			return false;
-			}
-			if($("#USERNAME").val()==""){
-				$("#USERNAME").tips({
-					side:3,
-		            msg:'请选择项目责任人',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#USERNAME").focus();
-			return false;
-			}
 			
 			$("#Form1").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
 		}
-		
-		//选择责任人
-		function selectLeaderUser(USERNAME){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="选择项目责任人";
-			 diag.URL = '<%=basePath%>user/listwindows.do';
-			 diag.Width = 800;
-			 diag.Height = 500;
-			 diag.CancelEvent = function(){ //关闭事件
-				 $("#"+USERNAME).val(diag.innerFrame.contentWindow.document.getElementById('xzvalue').value);
-				 diag.close();
-			 };
-			 diag.show();
-		}
-		
-		var demo1 = $('select[name="duallistbox_demo1[]"]')
-		.bootstrapDualListbox({
-			nonSelectedListLabel : '未加入',
-			selectedListLabel : '已加入',
-			preserveSelectionOnMove : 'moved',
-			moveOnSelect : true,
-			nonSelectedFilter : '',		
-			infoText : '',
-			filterPlaceHolder : '可输入用户名过滤',
-			selectorMinimalHeight: 10
-		});
 
-		$("#Form1").submit(function() {
-			console.log('111111111111');
-			$("#DATA_IDS").val($('[name="duallistbox_demo1[]"]').val());
-			console.log($('[name="duallistbox_demo1[]"]').val());
-			return true;
-		});
 		</script>
 </body>
 </html>

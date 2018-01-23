@@ -314,5 +314,15 @@ public class UserService implements UserManager {
 	public List<PageData> listAllOutProjectByPdId(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("UserMapper.listAllOutProjectByPdId", pd);
 	}
+	
+	/**列出用户列表根据用户ids 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listUserByUserIds(String[] USER_IDS) throws Exception {
+		return (List<PageData>) dao.findForList("UserMapper.listUserByUserIds", USER_IDS);
+	}
 
 }

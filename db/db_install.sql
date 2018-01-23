@@ -668,6 +668,7 @@ CREATE TABLE `t_usergroup_user_map` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `usergroup_id` bigint(20) unsigned NOT NULL COMMENT '用户组id',
   `USER_ID` varchar(100) NOT NULL COMMENT '用户id',
+  `USERNAME` varchar(50) NOT NULL COMMENT '用户名',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),

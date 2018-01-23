@@ -38,10 +38,7 @@
 									<th class="center">统计周期(天)</th>
 									<th class="center">最小值(%)</th>
 									<th class="center">最大值(%)</th>
-									<th class="center">负责人</th>
-									<th class="center">审核用户组</th>
-									<th class="center">更新时间</th>
-									<th class="center">操作</th>
+									<th class="center">是否邮件通知</th>
 								</tr>
 							</thead>
 													
@@ -55,58 +52,11 @@
 											<td class='center'>
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
-											<td class='center'>${var.name}</td>
-											<td class="center">${var.shortname }</td>
-											<td class='center'>${var.level}</td>
-											<td class='center'>${var.DEPARTMENT_NAME}</td>
-											<td class='center'>${var.USERNAME}</td>
-											<td class='center'>${var.usergroup_name}</td>
-											<td class='center'>${var.gmt_modified}</td>
-											<td class="center">
-												<c:if test="${QX.edit != 1 && QX.del != 1 }">
-												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
-												</c:if>
-												<div class="hidden-sm hidden-xs btn-group">
-													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
-														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
-													</a>
-													</c:if>
-													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger" onclick="del('${var.id}');">
-														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
-													</a>
-													</c:if>
-												</div>
-												<div class="hidden-md hidden-lg">
-													<div class="inline pos-rel">
-														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-														</button>
-			
-														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<c:if test="${QX.edit == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="edit('${var.id}');" class="tooltip-success" data-rel="tooltip" title="修改">
-																	<span class="green">
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-															<c:if test="${QX.del == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="del('${var.id}');" class="tooltip-error" data-rel="tooltip" title="删除">
-																	<span class="red">
-																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-														</ul>
-													</div>
-												</div>
-											</td>
+											<td class='center'><a onclick="edit('${var.id}')" style="cursor:pointer;">${var.name}</a></td>
+											<td class="center">${var.cycle }</td>
+											<td class='center'>${var.max}</td>
+											<td class='center'>${var.min}</td>
+											<td class='center'>${var.isemail}</td>
 										</tr>
 									</c:forEach>
 									</c:if>
@@ -180,53 +130,15 @@
 		});
 	});
 	
-	//新增
-	function add(){
-		 top.jzts();
-		 var diag = new top.Dialog();
-		 diag.Drag=true;
-		 diag.Title ="新增";
-		 diag.URL = '<%=basePath%>project/goAdd.do';
-		 diag.Width = 992;
-		 diag.Height = 580;
-		 diag.CancelEvent = function(){ //关闭事件
-			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-				 if('${page.currentPage}' == '0'){
-					 top.jzts();
-					 setTimeout("self.location=self.location",100);
-				 }else{
-					 nextPage(${page.currentPage});
-				 }
-			}
-			diag.close();
-		 };
-		 diag.show();
-	}
-	
-	
-	//删除
-	function del(Id){
-		console.log(Id);
-		bootbox.confirm("确定要删除吗?", function(result) {
-			if(result) {
-				top.jzts();
-				var url = "<%=basePath%>project/delete.do?id="+Id;
-				$.get(url,function(data){
-					nextPage(${page.currentPage});
-				});
-			}
-		});
-	}
-	
 	//修改
 	function edit(Id){
 		 top.jzts();
 		 var diag = new top.Dialog();
 		 diag.Drag=true;
 		 diag.Title ="编辑";
-		 diag.URL = '<%=basePath%>project/goEdit.do?id='+Id;
-		 diag.Width = 992;
-		 diag.Height = 580;
+		 diag.URL = '<%=basePath%>monitorpolicy/goEdit.do?id='+Id;
+		 diag.Width = 800;
+		 diag.Height = 600;
 		 diag.CancelEvent = function(){ //关闭事件
 			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 				 nextPage(${page.currentPage});
@@ -234,52 +146,6 @@
 			diag.close();
 		 };
 		 diag.show();
-	}
-	
-	//批量操作
-	function makeAll(msg){
-		bootbox.confirm(msg, function(result) {
-			if(result) {
-				var str = '';
-				for(var i=0;i < document.getElementsByName('ids').length;i++){
-				  if(document.getElementsByName('ids')[i].checked){
-				  	if(str=='') str += document.getElementsByName('ids')[i].value;
-				  	else str += ',' + document.getElementsByName('ids')[i].value;
-				  }
-				}
-				if(str==''){
-					bootbox.dialog({
-						message: "<span class='bigger-110'>您没有选择任何内容!</span>",
-						buttons: 			
-						{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
-					});
-					$("#zcheckbox").tips({
-						side:1,
-			            msg:'点这里全选',
-			            bg:'#AE81FF',
-			            time:8
-			        });
-					return;
-				}else{
-					if(msg == '确定要删除选中的数据吗?'){
-						top.jzts();
-						$.ajax({
-							type: "POST",
-							url: '<%=basePath%>project/deleteAll.do?tm='+new Date().getTime(),
-					    	data: {DATA_IDS:str},
-							dataType:'json',
-							//beforeSend: validateData,
-							cache: false,
-							success: function(data){
-								 $.each(data.list, function(i, list){
-										nextPage(${page.currentPage});
-								 });
-							}
-						});
-					}
-				}
-			}
-		});
 	}
 
 	</script>
