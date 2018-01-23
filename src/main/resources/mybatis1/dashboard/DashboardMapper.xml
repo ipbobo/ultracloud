@@ -6,20 +6,20 @@
 		SELECT GROUP_CONCAT(a.usergroup_id) FROM `t_usergroup_user_map` a
 		inner join t_usergroup b on b.id=a.usergroup_id
 		inner JOIN sys_role c on b.ROLE_ID=c.ROLE_ID and c.type='audit'
-		where a.USER_ID=#{applyUserId}
+		where a.USERNAME=#{applyUserId}
 	</select>
 	
 	<!-- 虚机总量查询 -->
 	<select id="getVirNum" parameterType="pd" resultType="Long">
-		select count(1) from t_virtualmachine
+		select count(1) from t_virtualmachine a
 		<if test="(audit == null or audit == '') and applyUserId != null and applyUserId != ''">
 		where exists (select 1 from cmp_workorder b where a.appNo=b.appNo and b.applyUserId=#{applyUserId})
 		</if>
 		<if test="audit != null and audit != ''">
-		where exists (select 1 from cmp_workorder b where a.appNo in(
-		SELECT b.BUSINESS_KEY_ FROM `act_hi_actinst` a
-		INNER JOIN act_hi_procinst b on a.PROC_INST_ID_=b.PROC_INST_ID_
-		where a.ASSIGNEE_ in (select c.USER_ID from t_usergroup_user_map c where FIND_IN_SET(c.usergroup_id, #{audit}))))
+		where exists (select 1 from cmp_workorder b where a.appNo in (
+		SELECT c.BUSINESS_KEY_ FROM act_hi_procinst c
+		INNER JOIN act_hi_actinst d on c.PROC_INST_ID_=d.PROC_INST_ID_
+		where d.ASSIGNEE_ in (select e.USERNAME from t_usergroup_user_map e where FIND_IN_SET(e.usergroup_id, #{audit}))))
 		</if>
 	</select>
 	
@@ -40,11 +40,11 @@
 	
 	<!-- 项目总数 -->
 	<select id="getProjNum" parameterType="pd" resultType="Long">
-		select count(1) from t_project
+		select count(1) from t_project where USERNAME=#{applyUserId}
 	</select>
 	
 	<!-- 工单总数 -->
 	<select id="getWorkOrderNum" parameterType="pd" resultType="Long">
-		select count(1) from cmp_workorder
+		select count(1) from cmp_workorder where applyUserId=#{applyUserId}
 	</select>
 </mapper>
