@@ -18,8 +18,11 @@ import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.activiti.service.ActivitiService;
@@ -43,6 +46,7 @@ import com.fh.entity.Page;
 import com.fh.entity.system.User;
 import com.fh.service.system.user.UserManager;
 import com.fh.util.Const;
+import com.fh.util.FileUpload;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
@@ -100,6 +104,7 @@ public class CmpWorkOrderController extends BaseController{
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("USERNAME", userr.getUSERNAME());
+		pd.put("userType", userr.getRole().getTYPE());
 		page.setPd(pd);
 		
 		
@@ -806,6 +811,18 @@ public class CmpWorkOrderController extends BaseController{
 		return clusterList;
 	}
 	
+	
+	@RequestMapping(value = "/appFileUpload")
+	@ResponseBody
+	public String update(HttpServletRequest request,
+			@RequestParam(value="uploadFile",required=false) MultipartFile uploadFile,  ModelMap model) throws Exception {
+		Map<String,String> map = new HashMap<String,String>();
+		String filePath = "static/upload";	//文件上传路径
+		String uploadfileName = System.currentTimeMillis() + "_" + uploadFile.getOriginalFilename();
+		String uploadfilePath = filePath + "/" + uploadfileName;
+		FileUpload.fileUp(uploadFile, filePath, uploadfileName);			//执行上传
+		return uploadfileName;
+	}
 	
 	
 	

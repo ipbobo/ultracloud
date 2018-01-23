@@ -41,11 +41,17 @@
 	
 	<!-- 项目总数 -->
 	<select id="getProjNum" parameterType="pd" resultType="Long">
-		select count(1) from t_project where USERNAME=#{applyUserId}
+		select count(1) from t_project
+		<if test="roleType == 'applicant' or roleType == 'audit' or roleType == 'executor'">
+		where USERNAME=#{applyUserId}
+		</if>
 	</select>
 	
 	<!-- 工单总数 -->
 	<select id="getWorkOrderNum" parameterType="pd" resultType="Long">
-		select count(1) from cmp_workorder where applyUserId=#{applyUserId}
+		select count(1) from cmp_workorder
+		<if test="roleType == 'applicant' or roleType == 'audit' or roleType == 'executor'">
+		where applyUserId=#{applyUserId}
+		</if>
 	</select>
 </mapper>

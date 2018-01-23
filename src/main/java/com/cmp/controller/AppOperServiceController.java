@@ -103,6 +103,7 @@ public class AppOperServiceController  extends BaseController {
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
 		PageData pd = new PageData();
+		pd = this.getPageData();
 		pd.put("USERNAME", userr.getUSERNAME());
 		List<CmpDict> serviceTypeList=cmpDictService.getCmpDictList("service_type");//服务类型列表查询
 		//List<CmpDict> vmList=cmpDictService.getCmpDictList("plat_type");//虚拟机类型查询
@@ -134,6 +135,29 @@ public class AppOperServiceController  extends BaseController {
 		for (PageData spd : mpdList) {
 			Medium medium = (Medium) PageDataUtil.mapToObject(spd, Medium.class);
 			mediumMap.put(medium.getName(), medium);
+		}
+		//特殊过滤
+		String serviceType = "";
+		String vmId = "";
+		if (pd.get("serviceType") != null ) {
+			serviceType = String.valueOf(pd.get("serviceType"));
+			List<CmpDict> newServiceTypeList = new ArrayList<CmpDict>();
+			for (CmpDict cd : serviceTypeList) {
+				if (cd.getDictCode().equals(serviceType)) {
+					newServiceTypeList.add(cd);
+				}
+			}
+			serviceTypeList = newServiceTypeList;
+		}
+		if (pd.get("vmId") != null ) {
+			vmId = String.valueOf(pd.get("vmId"));
+			List<VirtualMachine> newVmList = new ArrayList<VirtualMachine>();
+			for (VirtualMachine vm : vmList) {
+				if (vm.getId().equals(vmId)) {
+					newVmList.add(vm);
+				}
+			}
+			vmList = newVmList;
 		}
 		mv.addObject("projectNameMap", projectNameMap);
 		mv.addObject("softName", mediumMap.keySet());
@@ -229,6 +253,7 @@ public class AppOperServiceController  extends BaseController {
 		String rootpwd = pd.getString("rootpwd");
 		String exp_time_pwd = pd.getString("exp_time_pwd");
 		String remark1 =  pd.getString("remark1");
+		String file_name = pd.getString("file_name");
 		CmpOpServe opServe = new CmpOpServe();
 		
 		//获取申请工单虚拟机的项目信息
