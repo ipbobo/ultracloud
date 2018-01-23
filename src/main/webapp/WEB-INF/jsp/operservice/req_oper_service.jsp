@@ -217,6 +217,14 @@
 							
 							<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 								<tr>
+									<td style="width:120px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;文件上传:</td>
+									<td>
+										<input style="margin-left: 100px;" type="file" name="uploadFile" id="uploadFile" value="选择文件"/>
+										<input style="margin-left: 100px;" type="button" value="点击上传" onclick="doUpload();">
+										<input type="hidden" name="file_name" id="file_name">
+									</td>	
+								</tr>
+								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;申请说明:</td>
 									<td id="tip_appmsg">
 										<textarea class="form-control limited" name="app_msg" id="app_msg" style="width: 70%;margin-left: 100px;"></textarea>
@@ -585,6 +593,7 @@
 		var rootpwd = $("#rootpwd").val();
 		var exp_time_pwd =  $("#exp_time_pwd").val();
 		var remark1 = $("#remark1").val();
+		var file_name = $("#file_name").val();
 		if( service_type ==""){
 			$("#tip_service_type").tips({
 				side:3,
@@ -674,7 +683,7 @@
 						'oper_type':oper_type, 'install_soft':install_soft, 'soft_version':soft_version,
 						'breakdown_time':breakdown_time, 'breakdown_info':breakdown_info, 'except_solve_time':except_solve_time,
 						'except_result':except_result,'breakdown_level':breakdown_level, 'partition_info':partition_info, 'directory':directory,
-						 'directory2':directory2, 'exp_time':exp_time, 'rootpwd':rootpwd, 'exp_time_pwd':exp_time_pwd,'directory3':directory3, 'vip_num':vip_num, 'remark1':remark1
+						 'directory2':directory2, 'exp_time':exp_time, 'rootpwd':rootpwd, 'exp_time_pwd':exp_time_pwd,'directory3':directory3, 'vip_num':vip_num, 'remark1':remark1, 'file_name':file_name
 					},  
 			type : "post",  
 			cache : false,  
@@ -780,6 +789,25 @@
 		});   
 	}
 	
+	function doUpload() {  
+	     var formData = new FormData($( "#subOperService" )[0]);  
+	     $.ajax({  
+	          url: 'appFileUpload.do' ,  
+	          type: 'POST',  
+	          data: formData,  
+	          async: false,  
+	          cache: false,  
+	          contentType: false,  
+	          processData: false,  
+	          success: function (data) {  
+	        	  $("#file_name").val(data);
+	              showDialog("文件上传成功");
+	          },  
+	          error: function (data) {  
+	        	  showDialog("文件上传异常"); 
+	          }  
+	     });  
+	}  
 	         
 	function onVmSelectModalProjectSelect(projectId){
 		$(".vm_select_modal_tr").each(function(){       
