@@ -86,9 +86,6 @@ public class LoginController extends BaseController {
 		String applyUserId=StringUtil.getUserName();
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = getPageData("applyUserId", applyUserId, "audit", dashboardService.getAudit(applyUserId));
-		pd.put("userCount", Integer.parseInt(userService.getUserCount("").get("userCount").toString())-1);//系统用户数
-		pd.put("appUserCount", Integer.parseInt(appuserService.getAppUserCount("").get("appUserCount").toString()));//会员数
-		mv.addObject("pd", pd);
 		mv.addObject("cpuTimeType", cpuTimeType);//CPU时间类型
 		mv.addObject("memTimeType", memTimeType);//内存时间类型
 		mv.addObject("storeTimeType", storeTimeType);//磁盘时间类型
