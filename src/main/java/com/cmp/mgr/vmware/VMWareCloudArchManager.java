@@ -456,7 +456,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<TccVmSnapshot> getVmSnapshots() {
+	public List<TccVmSnapshot> getVmSnapshots(String uuid) {
 		return getVirtualMachinesNoVerify().stream()
 				.filter(this::isVirtualMachine)
 				.map(VirtualMachine::getRootSnapshot)
@@ -497,7 +497,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			}
 		});
 	}
-	
+
 	@Override
 	public void suspendVirtualMachine(String name) {
 		searchManagedEntity(VirtualMachine.class, name).ifPresent(vm -> {
@@ -508,7 +508,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			}
 		});
 	}
-	
+
 	@Override
 	public void resumeVirtualMachine(String name) {
 		searchManagedEntity(VirtualMachine.class, name).ifPresent(vm -> {

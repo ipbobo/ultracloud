@@ -255,7 +255,15 @@
 				<!-- 获取完成的工单 -->
 				select DISTINCT  PROC_INST_ID_ from 
 				<include refid="hi_actinst" /> t 
-				where t.ASSIGNEE_=#{pd.USERNAME}
+				where 1=1  
+				
+				<if test="pd.userType == 'admin'.toString() or pd.userType == 'applicant'.toString()">
+				and t.ASSIGNEE_ = #{pd.USERNAME}
+				 </if>
+				<if test="pd.userType == 'audit'.toString() or pd.userType == 'executor'.toString()">
+				and t.ASSIGNEE_ in (select distinct a.username from t_usergroup_user_map a , t_usergroup_user_map b where a.usergroup_id = b.usergroup_id and b.username = #{pd.USERNAME})
+				</if>
+				
 				UNION
 				<!-- 获取未拾取的工单 -->
 				select DISTINCT  r.PROC_INST_ID_ from <include refid="ru_task" />  r , <include refid="ru_identitylink" /> i where r.ID_ = i.TASK_ID_  and 
@@ -306,7 +314,14 @@
 				<!-- 获取完成的工单 -->
 				select DISTINCT  PROC_INST_ID_ from 
 				<include refid="hi_actinst" /> t 
-				where t.ASSIGNEE_=#{pd.USERNAME}
+				where 1=1  
+				
+				<if test="pd.userType == 'admin'.toString() or pd.userType == 'applicant'.toString()">
+				and t.ASSIGNEE_ = #{pd.USERNAME}
+				 </if>
+				<if test="pd.userType == 'audit'.toString() or pd.userType == 'executor'.toString()">
+				and t.ASSIGNEE_ in (select distinct a.username from t_usergroup_user_map a , t_usergroup_user_map b where a.usergroup_id = b.usergroup_id and b.username = #{pd.USERNAME})
+				</if>
 				UNION
 				<!-- 获取未拾取的或未完成的工单 -->
 				select DISTINCT  r.PROC_INST_ID_ from <include refid="ru_task" />  r , <include refid="ru_identitylink" /> i where r.ID_ = i.TASK_ID_  and 
@@ -341,7 +356,13 @@
 				<!-- 获取完成的工单 -->
 				select DISTINCT  PROC_INST_ID_ from 
 				<include refid="hi_actinst" /> t 
-				where t.ASSIGNEE_=#{pd.USERNAME} 
+				where 1=1   
+				<if test="pd.userType == 'admin'.toString() or pd.userType == 'applicant'.toString()">
+				and t.ASSIGNEE_ = #{pd.USERNAME}
+				 </if>
+				<if test="pd.userType == 'audit'.toString() or pd.userType == 'executor'.toString()">
+				and t.ASSIGNEE_ in (select distinct a.username from t_usergroup_user_map a , t_usergroup_user_map b where a.usergroup_id = b.usergroup_id and b.username = #{pd.USERNAME})
+				</if>
 				<![CDATA[
 				and date_sub(curdate(),interval 24 HOUR)<=date(t.START_TIME_) 
 				]]>

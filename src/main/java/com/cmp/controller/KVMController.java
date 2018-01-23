@@ -50,8 +50,86 @@ public class KVMController extends BaseController {
 		}
 		page.setPd(pd);
 		// 分页查询kvm主机
-		List<PageData> varList = hostmachineService.listKVM(page, false);
+		//List<PageData> varList = hostmachineService.listKVM(page, false);
 		mv.setViewName("resource/kvm_list");
+		//mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+	
+	/**
+	 * 查询宿主机列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listHostmachine")
+	public ModelAndView listHostmachine(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表kvm");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+		// 分页查询kvm主机
+		List<PageData> varList = hostmachineService.listKVM(page, false);
+		mv.setViewName("resource/kvm_hostmachine_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+	
+	/**
+	 * 查询虚拟机列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listVirtual")
+	public ModelAndView listVirtual(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表kvm");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+		// 分页查询kvm主机
+		List<PageData> varList = hostmachineService.listKVM(page, false);
+		mv.setViewName("resource/kvm_virtual_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+	
+	/**
+	 * 查询模板列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listTemplate")
+	public ModelAndView listTemplate(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表kvm");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+		// 分页查询kvm主机
+		List<PageData> varList = hostmachineService.listKVM(page, false);
+		mv.setViewName("resource/kvm_template_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限

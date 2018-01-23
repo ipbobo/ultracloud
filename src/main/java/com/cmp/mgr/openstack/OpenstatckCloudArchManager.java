@@ -83,7 +83,7 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 				.orElse(Collections.emptyList());
 		// @formatter:on
 	}
-	
+
 	@Override
 	public TccVirtualMachine getVirtualMachineByName(String name) {
 		return null;
@@ -107,7 +107,7 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public List<TccVmSnapshot> getVmSnapshots() {
+	public List<TccVmSnapshot> getVmSnapshots(String uuid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -133,14 +133,14 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 			client.compute().servers().reboot(name, RebootType.SOFT);
 		});
 	}
-	
+
 	@Override
 	public void suspendVirtualMachine(String name) {
 		getOSClient().ifPresent(client -> {
 			// client.compute().servers().suspend(name, RebootType.SOFT);
 		});
 	}
-	
+
 	@Override
 	public void resumeVirtualMachine(String name) {
 		getOSClient().ifPresent(client -> {
