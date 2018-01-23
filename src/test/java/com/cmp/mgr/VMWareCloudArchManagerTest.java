@@ -66,7 +66,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 					.map(TccVirtualMachine::getUUID).forEach(System.out::println);
 		});
 	}
-	
+
 	@Test
 	public void testGetVirtualMachineByName() {
 		execute("GetVirtualMachineByName", () -> {
@@ -120,7 +120,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	@Test
 	public void testGetVmSnapshots() {
 		execute("GetVmSnapshots", () -> {
-			cloudArchManager.getVmSnapshots().stream()
+			cloudArchManager.getVmSnapshots(null).stream()
 					.map(TccVmSnapshot::getName).forEach(System.out::println);
 		});
 	}
