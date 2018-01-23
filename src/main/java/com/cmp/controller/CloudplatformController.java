@@ -245,7 +245,11 @@ public class CloudplatformController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData> varList = cloudplatformService.list(page, false); // 列出列表
-		mv.setViewName("resource/cloudplatform_type_list");
+		if("vmware".equals(pd.getString("type"))) {
+			mv.setViewName("resource/cloudplatform_vmware_list");
+		} else {
+			mv.setViewName("resource/cloudplatform_openstack_list");
+		}
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限

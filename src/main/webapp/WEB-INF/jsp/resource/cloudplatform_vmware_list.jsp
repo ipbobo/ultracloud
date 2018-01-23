@@ -29,6 +29,7 @@
 							
 						<!-- 检索  -->
 						<form action="cloudplatform/listType.do" method="post" name="Form" id="Form">
+						<input type="hidden" name="type" id="type" value="${pd.type}"/>
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="vertical-align:top;">

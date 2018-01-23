@@ -30,11 +30,11 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:150px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;名称:</td>
+								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:150px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;类型:</td>
+								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;类型:</td>
 								<td id="js">
 									<select disabled="disabled" class="chosen-select form-control" name="type" id="type" value="${pd.type}" data-placeholder="请选择类型" style="vertical-align:top;"  title="类型"  >
 									<option <c:if test="${pd.type == 'vmware' }">selected="selected"</c:if> value="vmware">vmware</option>
@@ -43,7 +43,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:150px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;主机名(地址或域名):</td>
+								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;主机名(地址或域名):</td>
 								<td><input type="text" name="ip" id="ip" value="${pd.ip}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
@@ -51,11 +51,11 @@
 								<td><input type="text" name="username" id="username" value="${pd.username}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:150;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;密码:</td>
+								<td style="width:160;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;密码:</td>
 								<td><input type="password" name="password" id="password" value="${pd.password}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:150px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;确认密码:</td>
+								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;确认密码:</td>
 								<td><input type="password" name="confirmpassword" id="confirmpassword" value="${pd.confirmpassword}" maxlength="30" style="width:100%;"/></td>
 							</tr>
 							<tr>
