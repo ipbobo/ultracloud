@@ -1,5 +1,7 @@
 package com.cmp.util;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.session.Session;
@@ -42,13 +44,6 @@ public class StringUtil {
 		return str2;
 	}
 	
-	//获取登录用户
-	public static String getUserId() {
-		Session session = Jurisdiction.getSession();
-		User user=(User)session.getAttribute(Const.SESSION_USER);
-		return user.getUSERNAME();//获取登录用户
-	}
-	
 	//获取客户端真实IP
 	public static String getClientIp(HttpServletRequest request){
 	    String ip = request.getHeader("x-forwarded-for");
@@ -63,5 +58,42 @@ public class StringUtil {
 	    }
 	    
 	    return ip.equals("0:0:0:0:0:0:0:1")?"127.0.0.1":ip;
+	}
+	
+	//获取登录用户
+	public static String getUserName(){
+		try{
+			Session session = Jurisdiction.getSession();
+			User user=(User)session.getAttribute(Const.SESSION_USER);
+			return user.getUSERNAME();//获取登录用户
+		} catch (Exception e) {
+	    	return null;
+	    }
+	}
+	
+	//获取登录用户
+	public static String getUserId(){
+		try{
+			Session session = Jurisdiction.getSession();
+			User user=(User)session.getAttribute(Const.SESSION_USER);
+			return user.getUSER_ID();//获取登录用户
+		} catch (Exception e) {
+	    	return null;
+	    }
+	}
+	
+	//获取用户的角色类型
+	public static String getRoleType(Map<String, String> auditMap){
+		if(auditMap.containsKey("admin")){//管理员
+			return "admin";
+		}else if(auditMap.containsKey("executor")){//实施者
+			return "executor";
+		}else if(auditMap.containsKey("audit")){//审核者
+			return "audit";
+		}else if(auditMap.containsKey("applicant")){//申请者
+			return "applicant";
+		}else{
+			return null;
+		}
 	}
 }

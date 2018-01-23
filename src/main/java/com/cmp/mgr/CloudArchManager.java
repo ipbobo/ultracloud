@@ -33,7 +33,7 @@ public interface CloudArchManager {
 	public List<TccHostMachine> getHostMachines();
 
 	public List<TccVirtualMachine> getVirtualMachines();
-	
+
 	public TccVirtualMachine getVirtualMachineByName(String name);
 
 	public List<TccDatastore> getDatastores();
@@ -42,7 +42,7 @@ public interface CloudArchManager {
 
 	public List<TccVirtualMachine> getVmTemplates();
 
-	public List<TccVmSnapshot> getVmSnapshots();
+	public List<TccVmSnapshot> getVmSnapshots(String param);
 
 	public void createVirtualMachine(CreateVmRequest request);
 
@@ -52,9 +52,13 @@ public interface CloudArchManager {
 
 	public void rebootVirtualMachine(String name);
 
+	public void suspendVirtualMachine(String name);
+
+	public void resumeVirtualMachine(String name);
+
 	public void resetVirtualMachine(String name);
 
-	public void deleteVirtualMachine(String name);
+	public void destroyVirtualMachine(String name);
 
 	public void cloneVirtualMachine(CloneVmRequest request);
 

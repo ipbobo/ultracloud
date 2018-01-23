@@ -132,7 +132,7 @@ function getAnnularChart(chartId, titleArr, legendArr, radiusArr, centerArr, key
 //获取柱状图，必须先引入echarts.min.js
 function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 	var option = {
-		title: {text: titleArr[0], subtext: titleArr[1], x: 'center', y: 'bottom'},
+		title: {text: titleArr[0], subtext: titleArr[1], x: 'center', y: 'bottom', textStyle: {fontSize: '15'}},
 	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}"+unit, textStyle:{align:'left'}},//item或axis
 	    legend: {data: keyArr},
 	    calculable: true,

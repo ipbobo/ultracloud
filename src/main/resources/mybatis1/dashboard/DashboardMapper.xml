@@ -1,33 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="DashboardMapper">
+	<!-- 审核组列表查询 -->
+	<select id="getAuditList" parameterType="String" resultType="pd">
+		SELECT c.type, GROUP_CONCAT(DISTINCT a.usergroup_id) userGroupId FROM `t_usergroup_user_map` a
+		inner join t_usergroup b on b.id=a.usergroup_id
+		inner JOIN sys_role c on c.ROLE_ID=b.ROLE_ID and c.type='audit'
+		where a.USERNAME=#{applyUserId}
+		GROUP BY c.type
+	</select>
+	
 	<!-- 虚机总量查询 -->
-	<select id="getVirNum" parameterType="String" resultType="Long">
-		select count(1) from t_virtualmachine
+	<select id="getVirNum" parameterType="pd" resultType="Long">
+		select count(1) from t_virtualmachine a
+		<if test="applicant != null and applicant != ''">
+		where exists (select 1 from cmp_workorder b where a.appNo=b.appNo and b.applyUserId=#{applicant})
+		</if>
+		<if test="audit != null and audit != ''">
+		where exists (select 1 from cmp_workorder b where a.appNo in (
+		SELECT c.BUSINESS_KEY_ FROM act_hi_procinst c
+		INNER JOIN act_hi_actinst d on c.PROC_INST_ID_=d.PROC_INST_ID_
+		where d.ASSIGNEE_ in (select e.USERNAME from t_usergroup_user_map e where FIND_IN_SET(e.usergroup_id, #{audit}))))
+		</if>
 	</select>
 	
 	<!-- 宿主机总量 -->
-	<select id="getHostNum" parameterType="String" resultType="Long">
+	<select id="getHostNum" parameterType="pd" resultType="Long">
 		select count(1) from t_hostmachine where type!='kvm'
 	</select>
 	
 	<!-- 物理机总量 -->
-	<select id="getPhysNum" parameterType="String" resultType="Long">
+	<select id="getPhysNum" parameterType="pd" resultType="Long">
 		select count(1) from t_hostmachine where type='kvm'
 	</select>
 	
 	<!-- 用户总数 -->
-	<select id="getUserNum" parameterType="String" resultType="Long">
+	<select id="getUserNum" parameterType="pd" resultType="Long">
 		select count(1) from sys_user
 	</select>
 	
 	<!-- 项目总数 -->
-	<select id="getProjNum" parameterType="String" resultType="Long">
-		select count(1) from t_project
+	<select id="getProjNum" parameterType="pd" resultType="Long">
+		select count(1) from t_project where USERNAME=#{applyUserId}
 	</select>
 	
 	<!-- 工单总数 -->
-	<select id="getWorkOrderNum" parameterType="String" resultType="Long">
-		select count(1) from cmp_workorder
+	<select id="getWorkOrderNum" parameterType="pd" resultType="Long">
+		select count(1) from cmp_workorder where applyUserId=#{applyUserId}
 	</select>
 </mapper>

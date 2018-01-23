@@ -223,10 +223,15 @@ public class UserGroupController extends BaseController {
 		pd = this.getPageData();
 		BigInteger id = new BigInteger(pd.getString("id"));
 		String DATA_IDS = pd.getString("DATA_IDS");
+		Map<String, String> userIdNameMap = new HashMap<String, String>();
 		if(null != DATA_IDS && !"".equals(DATA_IDS)){
 			List<UserGroupUserMap> newList = new ArrayList<UserGroupUserMap>();
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 			
+			List<PageData> userList = userService.listUserByUserIds(ArrayDATA_IDS);
+			for(PageData userPD : userList) {
+				userIdNameMap.put(userPD.getString("USER_ID"), userPD.getString("USERNAME"));
+			}
 			
 			List<UserGroupUserMap> existList = userGroupService.listUserGroupUserMap(pd);
 			List<BigInteger> deleteIdList = new ArrayList<BigInteger>();
@@ -240,12 +245,12 @@ public class UserGroupController extends BaseController {
 					} 
 				}
 				
-				
 				for(int i = 0; i < ArrayDATA_IDS.length; i++) {
 					if(!sb.toString().contains(ArrayDATA_IDS[i])) {
 						UserGroupUserMap uguMap = new UserGroupUserMap();
 						uguMap.setUSER_ID(ArrayDATA_IDS[i]);
 						uguMap.setUsergroup_id(id);
+						uguMap.setUSERNAME(userIdNameMap.get(ArrayDATA_IDS[i]));
 						newList.add(uguMap);
 					}
 				}
@@ -254,6 +259,7 @@ public class UserGroupController extends BaseController {
 						UserGroupUserMap uguMap = new UserGroupUserMap();
 						uguMap.setUSER_ID(ArrayDATA_IDS[i]);
 						uguMap.setUsergroup_id(id);
+						uguMap.setUSERNAME(userIdNameMap.get(ArrayDATA_IDS[i]));
 						newList.add(uguMap);
 				}
 			}
