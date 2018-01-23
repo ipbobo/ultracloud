@@ -163,7 +163,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	// @Test
 	public void testDeleteVM() {
 		execute("DeleteVirtualMachine", () -> {
-			cloudArchManager.deleteVirtualMachine("TestVM");
+			cloudArchManager.destroyVirtualMachine("TestVM");
 		});
 	}
 

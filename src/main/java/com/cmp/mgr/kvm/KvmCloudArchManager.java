@@ -170,6 +170,28 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	@Override
+	public void suspendVirtualMachine(String name) {
+		try {
+			Connect conn = getLibvirtConnect();
+			Domain dom = conn.domainLookupByName(name);
+			dom.suspend();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@Override
+	public void resumeVirtualMachine(String name) {
+		try {
+			Connect conn = getLibvirtConnect();
+			Domain dom = conn.domainLookupByName(name);
+			dom.resume();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Override
 	public void resetVirtualMachine(String name) {
@@ -177,7 +199,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void deleteVirtualMachine(String name) {
+	public void destroyVirtualMachine(String name) {
 		try {
 			Connect conn = getLibvirtConnect();
 			Domain dom = conn.domainLookupByName(name);
