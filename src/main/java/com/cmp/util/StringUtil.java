@@ -90,8 +90,10 @@ public class StringUtil {
 			return "executor";
 		}else if(auditMap.containsKey("audit")){//审核者
 			return "audit";
-		}else{//申请者
+		}else if(auditMap.containsKey("applicant")){//申请者
 			return "applicant";
+		}else{
+			return null;
 		}
 	}
 }
