@@ -104,10 +104,10 @@
 	<!-- 批量插入用户组与用户的关联 -->
 	<insert id="insertAllUsergroup" parameterType="java.util.List">   
     	insert into 
-    	<include refid="usergroupusertableName"></include> (usergroup_id,USER_ID)   
+    	<include refid="usergroupusertableName"></include> (usergroup_id,USER_ID,USERNAME)   
     	values  
     	<foreach collection="list" item="item" index="index" separator="," >  
-        	(#{item.usergroup_id},#{item.USER_ID})  
+        	(#{item.usergroup_id},#{item.USER_ID},#{item.USERNAME})  
     	</foreach>  
 	</insert> 
 	

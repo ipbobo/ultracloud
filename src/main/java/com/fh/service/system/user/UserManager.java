@@ -179,4 +179,11 @@ public interface UserManager {
 	 * @throws Exception
 	 */
 	public PageData findByUsernameForUpdate(PageData pd)throws Exception;
+	
+	/**列出用户列表根据用户ids 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listUserByUserIds(String[] USER_IDS) throws Exception;
 }

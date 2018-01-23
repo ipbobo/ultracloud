@@ -489,4 +489,23 @@
 						and pu.project_id= #{id})
 	</select>
 	
+	<!-- 列出用户通过用户ids -->
+	<select id="listUserByUserIds"  parameterType="String" resultType="pd" >
+		select  u.USER_ID,
+				u.USERNAME,
+				u.PASSWORD,
+				u.LAST_LOGIN,
+				u.NAME,
+				u.IP,
+				u.EMAIL,
+				u.NUMBER,
+				u.PHONE
+		from <include refid="tableName"></include> u
+		where 
+			u.USER_ID in
+  			 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                  #{item}
+             </foreach>
+	</select>
+	
 </mapper>
