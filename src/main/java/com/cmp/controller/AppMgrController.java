@@ -68,7 +68,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
 		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
-		String applyUserId=getUserId();//申请者
+		String applyUserId=StringUtil.getUserName();//申请者
 		List<CmpDict> envList=environmentService.getEnvList();
 		if(envList!=null && !envList.isEmpty()){
 			CmpDict cmpDict=envList.get(0);//第一项
@@ -115,7 +115,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
-		mv.addObject("pckgList", cmpOrderService.getPckgList(getUserId()));//套餐列表查询
+		mv.addObject("pckgList", cmpOrderService.getPckgList(StringUtil.getUserName()));//套餐列表查询
 		mv.setViewName("appmgr/resapp_pckg_input");
 		return mv;
 	}
@@ -123,7 +123,7 @@ public class AppMgrController extends BaseController {
 	//购物车列表查询
 	@RequestMapping(value="/getShoppingCartList")
 	public ModelAndView getShoppingCartList() throws Exception{
-		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList(getUserId());//购物车列表查询
+		List<CmpOrder> shoppingCartList=cmpOrderService.getShoppingCartList(StringUtil.getUserName());//购物车列表查询
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("shoppingCartList", shoppingCartList);//软件版本列表
 		mv.addObject("shoppingCartNum", shoppingCartList!=null?shoppingCartList.size():0);//软件版本列表大小
@@ -137,7 +137,7 @@ public class AppMgrController extends BaseController {
 		String beginDate=request.getParameter("beginDate");//开始日期
 		String endDate=request.getParameter("endDate");//结束日期
 		String projCode=request.getParameter("projCode");//项目
-		PageData pd=getPageData("beginDate", beginDate, "endDate", endDate, "projCode", projCode, "applyUserId", getUserId());
+		PageData pd=getPageData("beginDate", beginDate, "endDate", endDate, "projCode", projCode, "applyUserId", StringUtil.getUserName());
 		List<CmpOrder> buyHisList=cmpOrderService.getBuyHisList(pd);//已购历史列表查询
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("pd", pd);
@@ -160,7 +160,7 @@ public class AppMgrController extends BaseController {
 			}
 			
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
-			cmpOrder.setApplyUserId(getUserId());//获取登录用户
+			cmpOrder.setApplyUserId(StringUtil.getUserName());//获取登录用户
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpLogService.addCmpLog("1", "加入清单", "加入清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "加入清单成功");
@@ -183,7 +183,7 @@ public class AppMgrController extends BaseController {
 			}
 			
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
-			cmpOrder.setApplyUserId(getUserId());//获取登录用户
+			cmpOrder.setApplyUserId(StringUtil.getUserName());//获取登录用户
 			cmpOrderService.addPckgList(cmpOrder);//新增套餐清单
 			cmpLogService.addCmpLog("1", "加入套餐清单", "加入套餐清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "加入套餐清单成功");
@@ -204,7 +204,7 @@ public class AppMgrController extends BaseController {
 			String orderNoStr=request.getParameter("orderNoStr");//清单ID字符串
 			String[] orderNos=orderNoStr.split(",");
 			if(orderNos!=null && orderNos.length>0){
-				String applyUserId=getUserId();//获取登录用户
+				String applyUserId=StringUtil.getUserName();//获取登录用户
 				for(String orderNo: orderNos){
 					String appNo=cmpCommonService.getAppNo("cmp_workorder");
 					Map<String, Object> variables=new HashMap<String, Object>();
@@ -260,7 +260,7 @@ public class AppMgrController extends BaseController {
 				logger.error(errMsg);
 			}
 			
-			cmpOrder.setApplyUserId(getUserId());//获取登录用户
+			cmpOrder.setApplyUserId(StringUtil.getUserName());//获取登录用户
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpLogService.addCmpLog("1", "保存套餐", "保存套餐成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "保存套餐成功");
@@ -276,7 +276,7 @@ public class AppMgrController extends BaseController {
 	@ResponseBody
 	public String clearShoppingCart(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		try{
-			cmpOrderService.clearShoppingCart(getUserId());//清空购物车
+			cmpOrderService.clearShoppingCart(StringUtil.getUserName());//清空购物车
 			cmpLogService.addCmpLog("3", "清空购物车", "清空购物车成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "清空购物车成功");
 		} catch (Exception e) {
@@ -316,18 +316,6 @@ public class AppMgrController extends BaseController {
 			cmpLogService.addCmpLog("3", "删除套餐", "删除套餐时错误："+e, "-1", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("-1", "删除套餐时错误："+e);
 		}
-	}
-	
-	//获取登录用户
-	private String getUserId() throws Exception{
-		try{
-			Session session = Jurisdiction.getSession();
-			User user=(User)session.getAttribute(Const.SESSION_USER);
-			return user.getUSERNAME();//获取登录用户
-		} catch (Exception e) {
-	    	logger.error("获取登录用户时错误："+e);
-	    	return StringUtil.getRetStr("-1", "获取登录用户时错误："+e);
-	    }
 	}
 	
 	//获取参数Bean

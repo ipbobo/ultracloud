@@ -25,6 +25,7 @@ import com.cmp.service.CmpDictService;
 import com.cmp.service.DashboardService;
 import com.cmp.service.SysConfigService;
 import com.cmp.sid.SysConfigInfo;
+import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.service.fhoa.datajur.DatajurManager;
 import com.fh.service.system.appuser.AppuserManager;
@@ -82,10 +83,11 @@ public class LoginController extends BaseController {
 		String storeTimeType=request.getParameter("storeTimeType");//磁盘时间类型
 		String resType=request.getParameter("resType");//资源类型
 		String chkFlag=request.getParameter("chkFlag");//复选框是否选中：0-否；1-是
+		String applyUserId=StringUtil.getUserName();
 		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd.put("userCount", Integer.parseInt(userService.getUserCount("").get("userCount").toString())-1);				//系统用户数
-		pd.put("appUserCount", Integer.parseInt(appuserService.getAppUserCount("").get("appUserCount").toString()));	//会员数
+		PageData pd = getPageData("applyUserId", applyUserId, "audit", dashboardService.getAudit(applyUserId));
+		pd.put("userCount", Integer.parseInt(userService.getUserCount("").get("userCount").toString())-1);//系统用户数
+		pd.put("appUserCount", Integer.parseInt(appuserService.getAppUserCount("").get("appUserCount").toString()));//会员数
 		mv.addObject("pd", pd);
 		mv.addObject("cpuTimeType", cpuTimeType);//CPU时间类型
 		mv.addObject("memTimeType", memTimeType);//内存时间类型
@@ -94,12 +96,12 @@ public class LoginController extends BaseController {
 		mv.addObject("chkFlag", chkFlag==null?"1":chkFlag);//复选框是否选中：0-否；1-是
 		mv.addObject("timeTypeList", cmpDictService.getCmpDictList("dashboard_time_type"));//仪表盘时间类型列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("dashboard_res_type"));//仪表盘资源类型列表
-		mv.addObject("virNum", dashboardService.getVirNum());//虚机总量
-		mv.addObject("hostNum", dashboardService.getHostNum());//宿主机总量
-		mv.addObject("physNum", dashboardService.getPhysNum());//物理机总量
-		mv.addObject("userNum", dashboardService.getUserNum());//用户总数
-		mv.addObject("projNum", dashboardService.getProjNum());//项目总数
-		mv.addObject("workOrderNum", dashboardService.getWorkOrderNum());//工单总数
+		mv.addObject("virNum", dashboardService.getVirNum(pd));//虚机总量
+		mv.addObject("hostNum", dashboardService.getHostNum(pd));//宿主机总量
+		mv.addObject("physNum", dashboardService.getPhysNum(pd));//物理机总量
+		mv.addObject("userNum", dashboardService.getUserNum(pd));//用户总数
+		mv.addObject("projNum", dashboardService.getProjNum(pd));//项目总数
+		mv.addObject("workOrderNum", dashboardService.getWorkOrderNum(pd));//工单总数
 		mv.addObject("vir", dashboardService.getVirDtl());//虚机详细信息查询
 		mv.addObject("phys", dashboardService.getPhysDtl());//物理机详细信息查询
 		mv.addObject("virLoad", dashboardService.getVirLoad());//虚拟机负载

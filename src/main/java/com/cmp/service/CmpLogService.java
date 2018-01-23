@@ -26,7 +26,7 @@ public class CmpLogService {
 	//新增日志
 	public void addCmpLog(String operType, String optObj, String detail, String optStatus, String requestIp) throws Exception {
 		CmpLog cmpLog=new CmpLog();
-		cmpLog.setUserName(StringUtil.getUserId());//操作者
+		cmpLog.setUserName(StringUtil.getUserName());//操作者
 		cmpLog.setType(operType);//操作类型：1-新增；2-修改；3-删除
 		cmpLog.setOptObject(optObj);//操作对象
 		cmpLog.setDetail(detail);//操作详细描述
