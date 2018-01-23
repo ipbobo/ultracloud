@@ -52,32 +52,112 @@ public class CloudHostServiceImpl implements CloudHostService {
 
 	@Override
 	public void stop(List<Integer> ls) throws Exception {
-		// TODO Auto-generated method stub
+		for (Integer id : ls) {
+			PageData pd = findById(id);
 
+			Integer status = (Integer) pd.get("status");
+			if (Integer.valueOf(0).equals(status)) {
+				continue;
+			}
+
+			String platformId = pd.getString("platform");
+			if (StringUtils.isBlank(platformId)) {
+				continue;
+			}
+
+			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
+			cloudArchManager.stopVirtualMachine(pd.getString("name"));
+
+			dao.update("CloudHostMapper.updateStatus", status);
+		}
 	}
 
 	@Override
 	public void restart(List<Integer> ls) throws Exception {
-		// TODO Auto-generated method stub
+		for (Integer id : ls) {
+			PageData pd = findById(id);
 
+			Integer status = (Integer) pd.get("status");
+			if (Integer.valueOf(0).equals(status)) {
+				continue;
+			}
+
+			String platformId = pd.getString("platform");
+			if (StringUtils.isBlank(platformId)) {
+				continue;
+			}
+
+			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
+			cloudArchManager.resetVirtualMachine(pd.getString("name"));
+
+			dao.update("CloudHostMapper.updateStatus", status);
+		}
 	}
 
 	@Override
 	public void suspend(List<Integer> ls) throws Exception {
-		// TODO Auto-generated method stub
+		for (Integer id : ls) {
+			PageData pd = findById(id);
 
+			Integer status = (Integer) pd.get("status");
+			if (Integer.valueOf(0).equals(status)) {
+				continue;
+			}
+
+			String platformId = pd.getString("platform");
+			if (StringUtils.isBlank(platformId)) {
+				continue;
+			}
+
+			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
+			cloudArchManager.suspendVirtualMachine(pd.getString("name"));
+
+			dao.update("CloudHostMapper.updateStatus", status);
+		}
 	}
 
 	@Override
 	public void resume(List<Integer> ls) throws Exception {
-		// TODO Auto-generated method stub
+		for (Integer id : ls) {
+			PageData pd = findById(id);
 
+			Integer status = (Integer) pd.get("status");
+			if (Integer.valueOf(0).equals(status)) {
+				continue;
+			}
+
+			String platformId = pd.getString("platform");
+			if (StringUtils.isBlank(platformId)) {
+				continue;
+			}
+
+			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
+			cloudArchManager.resumeVirtualMachine(pd.getString("name"));
+
+			dao.update("CloudHostMapper.updateStatus", status);
+		}
 	}
 
 	@Override
 	public void destroy(List<Integer> ls) throws Exception {
-		// TODO Auto-generated method stub
+		for (Integer id : ls) {
+			PageData pd = findById(id);
 
+			Integer status = (Integer) pd.get("status");
+			if (Integer.valueOf(0).equals(status)) {
+				continue;
+			}
+
+			String platformId = pd.getString("platform");
+			if (StringUtils.isBlank(platformId)) {
+				continue;
+			}
+
+			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
+			cloudArchManager.destroyVirtualMachine(pd.getString("name"));
+
+			dao.update("CloudHostMapper.updateStatus", status);
+		}
 	}
 
 	private CloudArchManager getCloudArchManager(String platformId) throws Exception {
