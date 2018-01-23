@@ -86,7 +86,6 @@ public class LoginController extends BaseController {
 		String applyUserId=StringUtil.getUserName();
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = getPageData("applyUserId", applyUserId, "audit", dashboardService.getAudit(applyUserId));
-		mv.addObject("pd", pd);
 		mv.addObject("cpuTimeType", cpuTimeType);//CPU时间类型
 		mv.addObject("memTimeType", memTimeType);//内存时间类型
 		mv.addObject("storeTimeType", storeTimeType);//磁盘时间类型
