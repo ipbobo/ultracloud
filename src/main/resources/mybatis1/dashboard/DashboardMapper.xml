@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="DashboardMapper">
-	<!-- 审核组查询 -->
-	<select id="getAudit" parameterType="String" resultType="String">
-		SELECT GROUP_CONCAT(a.usergroup_id) FROM `t_usergroup_user_map` a
+	<!-- 审核组列表查询 -->
+	<select id="getAuditList" parameterType="String" resultType="pd">
+		SELECT c.type, GROUP_CONCAT(DISTINCT a.usergroup_id) userGroupId FROM `t_usergroup_user_map` a
 		inner join t_usergroup b on b.id=a.usergroup_id
-		inner JOIN sys_role c on b.ROLE_ID=c.ROLE_ID and c.type='audit'
+		inner JOIN sys_role c on c.ROLE_ID=b.ROLE_ID and c.type='audit'
 		where a.USERNAME=#{applyUserId}
+		GROUP BY c.type
 	</select>
 	
 	<!-- 虚机总量查询 -->
 	<select id="getVirNum" parameterType="pd" resultType="Long">
 		select count(1) from t_virtualmachine a
-		<if test="(audit == null or audit == '') and applyUserId != null and applyUserId != ''">
-		where exists (select 1 from cmp_workorder b where a.appNo=b.appNo and b.applyUserId=#{applyUserId})
+		<if test="applicant != null and applicant != ''">
+		where exists (select 1 from cmp_workorder b where a.appNo=b.appNo and b.applyUserId=#{applicant})
 		</if>
 		<if test="audit != null and audit != ''">
 		where exists (select 1 from cmp_workorder b where a.appNo in (

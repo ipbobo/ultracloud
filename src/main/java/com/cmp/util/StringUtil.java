@@ -1,5 +1,7 @@
 package com.cmp.util;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.session.Session;
@@ -78,5 +80,18 @@ public class StringUtil {
 		} catch (Exception e) {
 	    	return null;
 	    }
+	}
+	
+	//获取用户的角色类型
+	public static String getRoleType(Map<String, String> auditMap){
+		if(auditMap.containsKey("admin")){//管理员
+			return "admin";
+		}else if(auditMap.containsKey("executor")){//实施者
+			return "executor";
+		}else if(auditMap.containsKey("audit")){//审核者
+			return "audit";
+		}else{//申请者
+			return "applicant";
+		}
 	}
 }

@@ -1,6 +1,8 @@
 package com.cmp.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -19,8 +21,17 @@ public class DashboardService {
 	private DaoSupport dao;
 
 	//审核组查询
-	public String getAudit(String applyUserId) throws Exception {
-		return (String)dao.findForObject("DashboardMapper.getAudit", applyUserId);
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getAuditMap(String applyUserId) throws Exception {
+		Map<String, String> map=new HashMap<String, String>();
+		List<PageData> list=(List<PageData>)dao.findForObject("DashboardMapper.getAuditList", applyUserId);
+		if(list!=null && !list.isEmpty()){
+			for(PageData pd: list){
+				map.put(pd.getString("type"), pd.getString("userGroupId"));
+			}
+		}
+		
+		return map;
 	}
 	
 	//虚机总量查询

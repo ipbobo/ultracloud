@@ -84,8 +84,10 @@ public class LoginController extends BaseController {
 		String resType=request.getParameter("resType");//资源类型
 		String chkFlag=request.getParameter("chkFlag");//复选框是否选中：0-否；1-是
 		String applyUserId=StringUtil.getUserName();
+		Map<String, String> auditMap=dashboardService.getAuditMap(applyUserId);//审核组查询
+		String roleType=StringUtil.getRoleType(auditMap);//获取用户的角色类型
+		PageData pd = getPageData("applyUserId", applyUserId, "applicant", "applicant".equals(roleType)?applyUserId:null, "audit", "audit".equals(roleType)?auditMap.get("audit"):null);
 		ModelAndView mv = this.getModelAndView();
-		PageData pd = getPageData("applyUserId", applyUserId, "audit", dashboardService.getAudit(applyUserId));
 		mv.addObject("cpuTimeType", cpuTimeType);//CPU时间类型
 		mv.addObject("memTimeType", memTimeType);//内存时间类型
 		mv.addObject("storeTimeType", storeTimeType);//磁盘时间类型
