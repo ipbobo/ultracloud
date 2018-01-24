@@ -17,7 +17,7 @@
 <%@ include file="../system/index/top.jsp"%>
 <script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
 </head>
-<body class="no-skin">
+<body class="no-skin" style="height:100%;">
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<!-- /section:basics/sidebar -->
@@ -30,24 +30,24 @@
 							<div class="span6" style="padding-top: 13px;">
 								<div class="tabbable">
 									<ul class="nav nav-tabs" id="myTab">
-										<li id="hostmachine_li"><a id="hostmachinea" data-toggle="tab" href="#vmware"><i class="green icon-cog bigger-110"></i>宿主机管理</a></li>
-										<li id="virtual_li"><a id="virtual_a" data-toggle="tab" href="#OpenStack"><i class="green icon-cog bigger-110"></i>虚拟机管理</a></li>
-										<li id="template_li"><a id="template_a" data-toggle="tab" href="#OpenStack"><i class="green icon-cog bigger-110"></i>模板管理</a></li>
+										<li id="hostmachine_li"><a id="hostmachine_a" data-toggle="tab" href="#hostmachine"><i class="green icon-cog bigger-110"></i>宿主机管理</a></li>
+										<li id="virtual_li"><a id="virtual_a" data-toggle="tab" href="#virtual"><i class="green icon-cog bigger-110"></i>虚拟机管理</a></li>
+										<li id="template_li"><a id="template_a" data-toggle="tab" href="#template"><i class="green icon-cog bigger-110"></i>模板管理</a></li>
 									</ul>
 									<div class="tab-content" style="height:100%;">
-										<div id="hostmachine" class="tab-pane in active" style="height:500px;">
+										<div id="hostmachine" class="tab-pane in active" style="height:700px;">
 											<table id="table_hostmachine" class="table table-striped table-bordered table-hover">
 												<iframe name="hostmachineFrame" id="hostmachineFrame" frameborder="0" src="<%=basePath%>/kvm/listHostmachine.do" style="margin:0 auto;width:100%;height:100%;"></iframe>
 											</table>
 										</div>
-										<div id="virtual" class="tab-pane" style="height:500px;">
+										<div id="virtual" class="tab-pane" style="height:700px;">
 											<table id="table_virtual" class="table table-striped table-bordered table-hover">
-												<iframe name="virtualFrame" id="virtualFrame" frameborder="0" src="<%=basePath%>/kvm/listVirtual" style="margin:0 auto;width:100%;height:100%;"></iframe>
+												<iframe name="virtualFrame" id="virtualFrame" frameborder="0" src="<%=basePath%>/kvm/listVirtual.do" style="margin:0 auto;width:100%;height:100%;"></iframe>
 											</table>
 										</div>
-										<div id="template" class="tab-pane" style="height:500px;">
+										<div id="template" class="tab-pane" style="height:700px;">
 											<table id="table_template" class="table table-striped table-bordered table-hover">
-												<iframe name="templateFrame" id="templateFrame" frameborder="0" src="<%=basePath%>/kvm/listTemplate" style="margin:0 auto;width:100%;height:100%;"></iframe>
+												<iframe name="templateFrame" id="templateFrame" frameborder="0" src="<%=basePath%>/kvm/listTemplate.do" style="margin:0 auto;width:100%;height:100%;"></iframe>
 											</table>
 										</div>
 									</div>

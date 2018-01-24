@@ -328,4 +328,28 @@ public class CloudplatformController extends BaseController {
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
+	
+	/**虚拟机列表
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/goListVirtualmachine")
+	public ModelAndView goListVirtualmachine(Page page) throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+		
+		List<PageData> varList = hostmachineService.listVirtual(page, false); 
+		mv.addObject("varList", varList);
+		mv.setViewName("resource/virtual_list_windows");
+		mv.addObject("pd", pd);
+		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		return mv;
+	}
 }

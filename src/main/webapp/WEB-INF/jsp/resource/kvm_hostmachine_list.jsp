@@ -28,7 +28,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="kvm/list.do?type=kvm" method="post" name="Form" id="Form">
+						<form action="kvm/listHostmachine" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
@@ -83,7 +83,9 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.name}</td>
+											<td class='center'>
+												<a onclick="listVirtual('${var.id}');" style="cursor:pointer;">${var.name}</a>
+											</td>
 											<td class='center'>${var.ip}</td>
 											<td class='center'>${var.port}</td>
 											<td class='center'>${var.account}</td>
@@ -96,7 +98,6 @@
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
-													<a class="btn btn-xs btn-purple" onclick="listVirtual('${var.id}');"><i class="icon-pencil"></i>虚拟机管理</a>
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
@@ -321,8 +322,8 @@
 			 diag.Drag=true;
 			 diag.Title ="虚拟机管理";
 			 diag.URL = '<%=basePath%>kvm/goListVirtualmachine.do?hostmachine_id='+id;
-			 diag.Width = 800;
-			 diag.Height = 400;
+			 diag.Width = document.documentElement.clientWidth * 0.7+"px";
+			 diag.Height = 400;;
 			 diag.CancelEvent = function(){ //关闭事件
 				 diag.close();
 			 };
