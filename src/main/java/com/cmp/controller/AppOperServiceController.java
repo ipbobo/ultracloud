@@ -374,10 +374,14 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setVipNum(vip_num);
 			opServe.setWorkflow(CmpOpServe.OP_VIP_ADD);
 		}
+		
 		cmpOpServeService.saveCmpOpServe(opServe);
 		Session session = Jurisdiction.getSession();
 		User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
 		CmpWorkOrder workworder = new CmpWorkOrder();
+		if (file_name != null && !"".equals(file_name)) {
+			workworder.setUploadFileName(file_name);
+		}
 		workworder.setOrderNo(String.valueOf(opServe.getId() == null ? "" : opServe.getId()));
 		workworder.setAppType("2"); //运维服务申请
 		workworder.setStatus("0");  //工作流初始状态

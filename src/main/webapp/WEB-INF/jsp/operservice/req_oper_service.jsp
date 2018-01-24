@@ -790,6 +790,16 @@
 	}
 	
 	function doUpload() {  
+		
+		var uploadFile = document.getElementById("uploadFile").value;
+		if (uploadFile != null && uploadFile != ''){
+			if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG|txt|xls|doc|docx|pdf)$/.test(uploadFile))
+	        {
+				showDialog("上传的文件必须是.gif,jpeg,jpg,png,txt,doc,xls,pdf中的一种")
+	          return false;
+	        }
+		}
+		
 	     var formData = new FormData($( "#subOperService" )[0]);  
 	     $.ajax({  
 	          url: 'appFileUpload.do' ,  
