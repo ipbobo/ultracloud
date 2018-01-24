@@ -78,7 +78,9 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.name}</td>
+											<td class='center'>
+												<a onclick="listVirtual('${var.id}');" style="cursor:pointer;">${var.name}</a>
+											</td>
 											<td class='center'>${var.ip}</td>
 											<td class='center'>${var.cluster_name}</td>
 											<td class='center'>${var.cpu}</td>
@@ -156,6 +158,21 @@
 				});
 			});
 		});
+		
+		//打开虚拟机管理窗口
+		function listVirtual(id){
+				top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="虚拟机管理";
+			 diag.URL = '<%=basePath%>cloudplatform/goListVirtualmachine.do?hostmachine_id='+id;
+			 diag.Width = document.documentElement.clientWidth * 0.7+"px";
+			 diag.Height = 400;;
+			 diag.CancelEvent = function(){ //关闭事件
+				 diag.close();
+			 };
+			 diag.show();
+		}
 	</script>
 
 

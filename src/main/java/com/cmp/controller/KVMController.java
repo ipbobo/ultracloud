@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.resourcemgt.HostmachineService;
+import com.cmp.service.resourcemgt.VirtualMService;
+import com.cmp.service.servicemgt.MirrorService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
@@ -31,6 +33,12 @@ public class KVMController extends BaseController {
 
 	@Resource(name = "hostmachineService")
 	private HostmachineService hostmachineService;
+	
+	@Resource(name = "virtualMService")
+	private VirtualMService virtualMService;
+	
+	@Resource(name = "mirrorService")
+	private MirrorService mirrorService;
 	
 	/**
 	 * 按类型查询列表
@@ -70,6 +78,7 @@ public class KVMController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("type", "kvm");
 		String keywords = pd.getString("keywords"); // 关键词检索条件
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
@@ -96,13 +105,14 @@ public class KVMController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("type", "kvm");
 		String keywords = pd.getString("keywords"); // 关键词检索条件
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
 		// 分页查询kvm主机
-		List<PageData> varList = hostmachineService.listKVM(page, false);
+		List<PageData> varList = virtualMService.list(page);
 		mv.setViewName("resource/kvm_virtual_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -122,13 +132,14 @@ public class KVMController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("type", "kvm");
 		String keywords = pd.getString("keywords"); // 关键词检索条件
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
 		// 分页查询kvm主机
-		List<PageData> varList = hostmachineService.listKVM(page, false);
+		List<PageData> varList = mirrorService.listTemplateByType(page);
 		mv.setViewName("resource/kvm_template_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);

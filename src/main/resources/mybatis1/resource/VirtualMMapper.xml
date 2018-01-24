@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VirtualMMapper">
+	
+	<!--表名 -->
+	<sql id="virtualTableName">
+		t_virtualmachine
+	</sql>  
+	<!--表名 -->
+	<sql id="workorderTableName">
+		t_workorder
+	</sql>
+	<!--表名 -->
+	<sql id="hostmachineTableName">
+		t_hostmachine
+	</sql>
+	<!--表名 -->
+	<sql id="clusterTableName">
+		t_cluster
+	</sql>
+		
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		SELECT  a.id,
+				a.name,
+				a.status,
+				a.ip,
+				a.hostmachine_id,
+				b.name as hostmachine_name
+		from <include refid="virtualTableName"></include> a, <include refid="hostmachineTableName"></include> b
+		WHERE a.hostmachine_id=b.id
+		AND a.type=#{pd.type}
+		<if test="pd.hostmachine_id != null and pd.hostmachine_id != ''">
+			and a.hostmachine_id=#{pd.hostmachine_id}
+		</if>
+		ORDER BY a.gmt_modified desc
+	</select>
+
+</mapper>

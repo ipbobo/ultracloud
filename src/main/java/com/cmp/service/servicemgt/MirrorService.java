@@ -1,10 +1,9 @@
-package com.cmp.service;
+package com.cmp.service.servicemgt;
 
 import java.math.BigInteger;
 import java.util.List;
 
 import com.cmp.entity.MirrorTemplateMap;
-import com.cmp.entity.UserGroupUserMap;
 import com.cmp.sid.CmpDict;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -48,6 +47,14 @@ public interface MirrorService {
 	 * @throws Exception
 	 */
 	public List<PageData> list(Page page) throws Exception;
+	
+	/**
+	 * 列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	public List<PageData> listTemplateByType(Page page) throws Exception;
 
 	/**
 	 * 列表(全部)
