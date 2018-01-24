@@ -138,11 +138,11 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 			// @formatter:off
 			String domainDef =
 				xmls.replace("${name}", request.getVmName())
-					.replace("${uuid}", request.getVmName())
-					.replace("${memory}", request.getVmName())
-					.replace("${vcpu}", request.getVmName())
+					.replace("${uuid}", UUID.randomUUID().toString())
+					.replace("${memory}", String.valueOf(request.getMemSizeMB()))
+					.replace("${vcpu}", String.valueOf(request.getCupCount()))
 					.replace("${disk-file-name}", request.getVmName())
-					.replace("${image-path}", request.getVmName());
+					.replace("${image-path}", request.getImagePath());
 			// @formatter:on
 
 			getLibvirtConnect().domainCreateLinux(domainDef, 0);

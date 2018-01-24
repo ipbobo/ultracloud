@@ -24,6 +24,8 @@ public class CreateVmRequest {
 
 	private String rpName;
 
+	private String imagePath;
+
 	public String getDcName() {
 		return dcName;
 	}
@@ -110,6 +112,14 @@ public class CreateVmRequest {
 
 	public void setRpName(String rpName) {
 		this.rpName = rpName;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 }
