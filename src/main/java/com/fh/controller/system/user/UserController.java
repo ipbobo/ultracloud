@@ -522,7 +522,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value="/editU")
 	public ModelAndView editU() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"修改ser");
+		logBefore(logger, Jurisdiction.getUsername()+"修改user");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -548,7 +548,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"修改ser");
+		logBefore(logger, Jurisdiction.getUsername()+"修改user");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
