@@ -23,6 +23,7 @@ public class KvmConverters {
 				vm.setMemory(domain.getMaxMemory());
 				vm.setXmlDesc(domain.getXMLDesc(0));
 				vm.setUUID(domain.getUUIDString());
+				vm.setActive(domain.isActive());
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
