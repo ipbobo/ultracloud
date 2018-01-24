@@ -1,4 +1,4 @@
-package com.cmp.service;
+package com.cmp.service.servicemgt;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -65,6 +65,17 @@ public class MirrorServiceImpl implements MirrorService {
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("MirrorMapper.datalistPage", page);
+	}
+	
+	/**
+	 * 列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listTemplateByType(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("MirrorMapper.listTemplateByType", page);
 	}
 
 	/**

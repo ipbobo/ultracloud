@@ -15,7 +15,6 @@
 <base href="<%=basePath%>">
 <!-- jsp文件头和头部 -->
 <%@ include file="../system/index/top.jsp"%>
-<script src="js/commonUtil.js"></script>
 </head>
 <body class="no-skin">
 
@@ -29,8 +28,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="cloudplatform/listType.do" method="post" name="Form" id="Form">
-						<input type="hidden" name="type" id="type" value="${pd.type}"/>
+						<form action="kvm/listHostmachine" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
@@ -62,11 +60,14 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">云平台名称</th>
-									<th class="center">类型</th>
-									<th class="center">地址</th>
-									<th class="center">创建时间</th>
-									<th class="center">修改时间</th>
+									<th class="center">KVM主机</th>
+									<th class="center">IP地址</th>
+									<th class="center">端口</th>
+									<th class="center">帐号</th>
+									<th class="center">密码</th>
+									<th class="center">CPU</th>
+									<th class="center">内存</th>
+									<th class="center">磁盘</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -82,21 +83,21 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.name}</td>
-											<td class='center'>${var.type}</td>
+											<td class='center'>
+												<a onclick="listVirtual('${var.id}');" style="cursor:pointer;">${var.name}</a>
+											</td>
 											<td class='center'>${var.ip}</td>
-											<td class='center' style="width: 170px;">${var.gmt_create}</td>
-											<td class='center' style="width: 170px;">${var.gmt_modified}</td>
+											<td class='center'>${var.port}</td>
+											<td class='center'>${var.account}</td>
+											<td class='center'>${var.password_ssh}</td>
+											<td class='center'>${var.cpu}</td>
+											<td class='center'>${var.memory}</td>
+											<td class='center'>${var.localdisk}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
-													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="数据同步" onclick="sync('${var.id}','${var.type}');">
-														<i class="ace-icon fa fa-wrench bigger-120 icon-only" title="数据同步"></i>
-													</a>
-													</c:if>
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
@@ -158,6 +159,7 @@
 						<div class="page-header position-relative">
 						<table style="width:100%;">
 							<tr>
+
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
 						</table>
@@ -211,38 +213,15 @@
 			});
 		});
 		
-		//资源同步
-		function sync(id, type) {
-			bootbox.confirm("确定开始同步云平台数据吗?", function(result) {
-				if(result) {
-					top.jzts();
-					var url = "<%=basePath%>cloudplatform/init.do?id="+id;
-					$.get(url,function(data){
-						console.log(data + '-------------->');
-						 var diag = new top.Dialog();
-						 diag.Drag=true;
-						 diag.Title ="已同步资源选择";
-						 diag.URL = '<%=basePath%>cloudplatform/goInit.do?id=' + id;
-						 diag.Width = document.documentElement.clientWidth * 0.85+"px";
-						 diag.Height = 600;//document.documentElement.clientHeight * 0.85+"px";
-						 diag.CancelEvent = function(){ //关闭事件
-							 diag.close();
-						 };
-						 diag.show();
-					});
-				}
-			});
-		}
-		
 		//新增
 		function add(){
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>cloudplatform/goAdd.do?type=vmware';
-			 diag.Width = 600;
-			 diag.Height = 430;
+			 diag.URL = '<%=basePath%>kvm/goAdd.do';
+			 diag.Width = 450;
+			 diag.Height = 358;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
@@ -259,10 +238,11 @@
 		
 		//删除
 		function del(Id){
+			console.log(Id);
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>cloudplatform/delete.do?id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>kvm/delete.do?id="+Id;
 					$.get(url,function(data){
 						nextPage(${page.currentPage});
 					});
@@ -276,9 +256,9 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>cloudplatform/goEdit.do?id='+Id+'&type=vmware';
-			 diag.Width = 600;
-			 diag.Height = 500;
+			 diag.URL = '<%=basePath%>kvm/goEdit.do?id='+Id;
+			 //diag.Width = 450;
+			 diag.Height = 358;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 nextPage(${page.currentPage});
@@ -317,7 +297,7 @@
 							top.jzts();
 							$.ajax({
 								type: "POST",
-								url: '<%=basePath%>cloudplatform/deleteAll.do?tm='+new Date().getTime(),
+								url: '<%=basePath%>kvm/deleteAll.do?tm='+new Date().getTime(),
 						    	data: {DATA_IDS:str},
 								dataType:'json',
 								//beforeSend: validateData,
@@ -332,8 +312,23 @@
 					}
 				}
 			});
-		};
+		}
 		
+		
+		//打开虚拟机管理窗口
+		function listVirtual(id){
+				top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="虚拟机管理";
+			 diag.URL = '<%=basePath%>kvm/goListVirtualmachine.do?hostmachine_id='+id;
+			 diag.Width = document.documentElement.clientWidth * 0.7+"px";
+			 diag.Height = 400;;
+			 diag.CancelEvent = function(){ //关闭事件
+				 diag.close();
+			 };
+			 diag.show();
+		}
 	</script>
 
 

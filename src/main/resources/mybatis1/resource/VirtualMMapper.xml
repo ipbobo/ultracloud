@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VirtualMMapper">
+	
+	<!--表名 -->
+	<sql id="virtualTableName">
+		t_virtualmachine
+	</sql>  
+	<!--表名 -->
+	<sql id="workorderTableName">
+		t_workorder
+	</sql>
+	<!--表名 -->
+	<sql id="hostmachineTableName">
+		t_hostmachine
+	</sql>
+	<!--表名 -->
+	<sql id="clusterTableName">
+		t_cluster
+	</sql>
+		
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		SELECT  a.id,
+				a.name,
+				a.status,
+				a.ip,
+				a.hostmachine_id,
+				b.name as hostmachine_name
+		from <include refid="virtualTableName"></include> a, <include refid="hostmachineTableName"></include> b
+		WHERE a.hostmachine_id=b.id
+		AND a.type=#{pd.type}
+		<if test="pd.hostmachine_id != null and pd.hostmachine_id != ''">
+			and a.hostmachine_id=#{pd.hostmachine_id}
+		</if>
+		ORDER BY a.gmt_modified desc
+	</select>
+	
+	<select id="vmlistPage" resultType="pd">
+		SELECT *
+		FROM t_virtualmachine t
+		WHERE t.type='kvm'
+		ORDER BY t.gmt_modified desc
+	</select>
+	
+	<select id="findById" resultType="pd">
+		SELECT * FROM t_virtualmachine t WHERE t.id=#{id}
+	</select>
+	
+	<select id="findPlatformById" resultType="pd">
+		SELECT * FROM t_cloudplatform t WHERE t.id=#{id}
+	</select>
+	
+	<update id="updateStatus" parameterType="pd">
+		UPDATE
+			t_virtualmachine t
+		SET
+			t.status=#{status}
+		WHERE
+			t.id=#{id}
+	</update>
+	
+	<delete id="deleteById">
+		DELETE t FROM t_cloudplatform t WHERE t.id=#{id}
+	</delete>
+	
+	<insert id="addVirtualMachine" parameterType="com.cmp.entity.tcc.TccVirtualMachine">
+		INSERT INTO t_virtualmachine(uuid, name, type, cpu, memory, ip, status, hostmachine_id)
+			VALUES(#{UUID}, #{name}, 'kvm', #{vcpus}, #{memory}, #{ipAddress}, #{active}, '182837323')
+	</insert>
+
+</mapper>

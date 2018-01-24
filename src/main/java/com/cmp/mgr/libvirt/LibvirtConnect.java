@@ -6,7 +6,6 @@ public class LibvirtConnect extends org.libvirt.Connect {
 
 	public LibvirtConnect(String uri, boolean readOnly) throws LibvirtException {
 		super(uri, readOnly);
-		this.VCP = null;
 	}
 
 }

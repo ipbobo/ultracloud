@@ -1,25 +1,24 @@
 package com.cmp.entity.tcc;
 
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 public class TccVirtualMachine implements java.io.Serializable {
 
 	private static final long serialVersionUID = 7988690078199521573L;
 
 	private int		id;
-	private long	maxMemory;
-	private int		maxVcpus;
 	private String	name;
-	private String	OSType;
 	private String	UUID;
-	private String	xmlDesc;
+	private long	memory;
+	private int		vcpus;
+	private String	OSType;
+	private String	ipAddress;
 	private int		active;
 	private String	state;
 	private int		persistent;
-	private String	domainInfo;
-	private String	memoryStatistic;
-	private String	cpuInfo;
-	private String	ipAddress;
-	private String	xmlDesc0;
-	private String	xmlDesc2;
+	private String	xmlDesc;
 
 	public int getId() {
 		return id;
@@ -27,22 +26,6 @@ public class TccVirtualMachine implements java.io.Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public long getMaxMemory() {
-		return maxMemory;
-	}
-
-	public void setMaxMemory(long maxMemory) {
-		this.maxMemory = maxMemory;
-	}
-
-	public int getMaxVcpus() {
-		return maxVcpus;
-	}
-
-	public void setMaxVcpus(int maxVcpus) {
-		this.maxVcpus = maxVcpus;
 	}
 
 	public String getName() {
@@ -53,14 +36,6 @@ public class TccVirtualMachine implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public String getOSType() {
-		return OSType;
-	}
-
-	public void setOSType(String oSType) {
-		OSType = oSType;
-	}
-
 	public String getUUID() {
 		return UUID;
 	}
@@ -69,12 +44,36 @@ public class TccVirtualMachine implements java.io.Serializable {
 		UUID = uUID;
 	}
 
-	public String getXmlDesc() {
-		return xmlDesc;
+	public long getMemory() {
+		return memory;
 	}
 
-	public void setXmlDesc(String xmlDesc) {
-		this.xmlDesc = xmlDesc;
+	public void setMemory(long memory) {
+		this.memory = memory;
+	}
+
+	public int getVcpus() {
+		return vcpus;
+	}
+
+	public void setVcpus(int vcpus) {
+		this.vcpus = vcpus;
+	}
+
+	public String getOSType() {
+		return OSType;
+	}
+
+	public void setOSType(String oSType) {
+		OSType = oSType;
+	}
+
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 
 	public int getActive() {
@@ -101,52 +100,18 @@ public class TccVirtualMachine implements java.io.Serializable {
 		this.persistent = persistent;
 	}
 
-	public String getDomainInfo() {
-		return domainInfo;
+	public String getXmlDesc() {
+		return xmlDesc;
 	}
 
-	public void setDomainInfo(String domainInfo) {
-		this.domainInfo = domainInfo;
+	public void setXmlDesc(String xmlDesc) {
+		this.xmlDesc = xmlDesc;
 	}
 
-	public String getMemoryStatistic() {
-		return memoryStatistic;
-	}
-
-	public void setMemoryStatistic(String memoryStatistic) {
-		this.memoryStatistic = memoryStatistic;
-	}
-
-	public String getCpuInfo() {
-		return cpuInfo;
-	}
-
-	public void setCpuInfo(String cpuInfo) {
-		this.cpuInfo = cpuInfo;
-	}
-
-	public String getIpAddress() {
-		return ipAddress;
-	}
-
-	public void setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
-	}
-
-	public String getXmlDesc0() {
-		return xmlDesc0;
-	}
-
-	public void setXmlDesc0(String xmlDesc0) {
-		this.xmlDesc0 = xmlDesc0;
-	}
-
-	public String getXmlDesc2() {
-		return xmlDesc2;
-	}
-
-	public void setXmlDesc2(String xmlDesc2) {
-		this.xmlDesc2 = xmlDesc2;
+	@Override
+	public String toString() {
+		return new ReflectionToStringBuilder(this, MULTI_LINE_STYLE)
+				.setExcludeFieldNames("xmlDesc").toString();
 	}
 
 }

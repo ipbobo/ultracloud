@@ -24,7 +24,7 @@ public class DashboardService {
 	@SuppressWarnings("unchecked")
 	public Map<String, String> getAuditMap(String applyUserId) throws Exception {
 		Map<String, String> map=new HashMap<String, String>();
-		List<PageData> list=(List<PageData>)dao.findForObject("DashboardMapper.getAuditList", applyUserId);
+		List<PageData> list=(List<PageData>)dao.findForList("DashboardMapper.getAuditList", applyUserId);
 		if(list!=null && !list.isEmpty()){
 			for(PageData pd: list){
 				map.put(pd.getString("type"), pd.getString("userGroupId"));

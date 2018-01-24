@@ -97,7 +97,12 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public TccVirtualMachine getVirtualMachineByName(String name) {
-		return null;
+		try {
+			Domain dom = getLibvirtConnect().domainLookupByName(name);
+			return converters.toVirtualMachine().apply(dom);
+		} catch (LibvirtException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private Connect getLibvirtConnect() throws LibvirtException {
@@ -138,14 +143,14 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 			// @formatter:off
 			String domainDef =
 				xmls.replace("${name}", request.getVmName())
-					.replace("${uuid}", request.getVmName())
-					.replace("${memory}", request.getVmName())
-					.replace("${vcpu}", request.getVmName())
+					.replace("${uuid}", UUID.randomUUID().toString())
+					.replace("${memory}", String.valueOf(request.getMemSizeMB()))
+					.replace("${vcpu}", String.valueOf(request.getCupCount()))
 					.replace("${disk-file-name}", request.getVmName())
-					.replace("${image-path}", request.getVmName());
+					.replace("${image-path}", request.getImagePath());
 			// @formatter:on
 
-			getLibvirtConnect().domainCreateLinux(domainDef, 0);
+			getLibvirtConnect().domainCreateXML(domainDef, 0);
 		} catch (LibvirtException e) {
 			throw new RuntimeException(e);
 		} catch (IOException e) {
@@ -159,7 +164,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 			Connect conn = getLibvirtConnect();
 			Domain dom = conn.domainLookupByName(name);
 			if (dom.isActive() != 1) {
-				dom.resume();
+				dom.create();
 			}
 		} catch (LibvirtException e) {
 			throw new RuntimeException(e);
@@ -210,7 +215,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 		try {
 			Connect conn = getLibvirtConnect();
 			Domain dom = conn.domainLookupByName(name);
-			if (dom.isActive() != 1) {
+			if (dom.isActive() == 1) {
 				dom.resume();
 			}
 		} catch (LibvirtException e) {

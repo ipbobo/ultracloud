@@ -31,7 +31,16 @@
 						<form action="hostmachine/listType.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;width:100%">
 							<tr>
-								<td style="vertical-align: top;">
+								<td style="vertical-align:top;">
+									<c:if test="${QX.add == 1 }">
+									<a class="btn btn-sm btn-success" onclick="add();">新增</a>
+									</c:if>
+									<c:if test="${QX.del == 1 }">
+									<a class="btn btn-sm btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
+									</c:if>
+									<c:if test="${QX.add == 1 }">
+									<a class="btn btn-sm btn-success" onclick="syncOpenStackNetwork();">同步网络</a>
+									</c:if>
 								</td>
 								
 								<td style="vertical-align:top;padding-left:5px;width:150px;">

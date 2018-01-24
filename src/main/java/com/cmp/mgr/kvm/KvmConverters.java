@@ -1,7 +1,5 @@
 package com.cmp.mgr.kvm;
 
-import static java.util.Arrays.asList;
-
 import java.util.function.Function;
 
 import org.dom4j.Document;
@@ -21,12 +19,11 @@ public class KvmConverters {
 				vm.setId(domain.getID());
 				vm.setName(domain.getName());
 				vm.setOSType(domain.getOSType());
-				vm.setMaxVcpus(domain.getMaxVcpus());
+				vm.setVcpus(domain.getMaxVcpus());
+				vm.setMemory(Math.round(domain.getMaxMemory() / 1024 / 1024f));
 				vm.setXmlDesc(domain.getXMLDesc(0));
 				vm.setUUID(domain.getUUIDString());
-				vm.setDomainInfo(domain.getInfo().toString());
-				vm.setMemoryStatistic((asList(domain.memoryStats(8))).toString());
-				vm.setCpuInfo((asList(domain.getVcpusInfo())).toString());
+				vm.setActive(domain.isActive());
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

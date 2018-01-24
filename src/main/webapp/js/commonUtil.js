@@ -363,3 +363,9 @@ function sendHttpPost(url, jsonObj, func){
 	    }
 	});
 }
+
+//格式化mysql中的datetime时间格式
+function formatDateTime(datetime) {
+	var len = datetime.length;
+	return datetime.substring(0, len-2);
+}
