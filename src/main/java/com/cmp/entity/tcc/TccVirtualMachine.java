@@ -1,5 +1,9 @@
 package com.cmp.entity.tcc;
 
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 public class TccVirtualMachine implements java.io.Serializable {
 
 	private static final long serialVersionUID = 7988690078199521573L;
@@ -102,6 +106,12 @@ public class TccVirtualMachine implements java.io.Serializable {
 
 	public void setXmlDesc(String xmlDesc) {
 		this.xmlDesc = xmlDesc;
+	}
+
+	@Override
+	public String toString() {
+		return new ReflectionToStringBuilder(this, MULTI_LINE_STYLE)
+				.setExcludeFieldNames("xmlDesc").toString();
 	}
 
 }

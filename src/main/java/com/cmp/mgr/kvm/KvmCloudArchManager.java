@@ -159,7 +159,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 			Connect conn = getLibvirtConnect();
 			Domain dom = conn.domainLookupByName(name);
 			if (dom.isActive() != 1) {
-				dom.resume();
+				dom.create();
 			}
 		} catch (LibvirtException e) {
 			throw new RuntimeException(e);
@@ -172,7 +172,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 			Connect conn = getLibvirtConnect();
 			Domain dom = conn.domainLookupByName(name);
 			if (dom.isActive() == 1) {
-				dom.shutdown();
+				dom.destroy();
 			}
 		} catch (LibvirtException e) {
 			throw new RuntimeException(e);
@@ -210,7 +210,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 		try {
 			Connect conn = getLibvirtConnect();
 			Domain dom = conn.domainLookupByName(name);
-			if (dom.isActive() != 1) {
+			if (dom.isActive() == 1) {
 				dom.resume();
 			}
 		} catch (LibvirtException e) {
