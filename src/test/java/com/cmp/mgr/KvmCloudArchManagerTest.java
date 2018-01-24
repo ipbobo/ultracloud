@@ -31,14 +31,13 @@ public class KvmCloudArchManagerTest implements CloudArchTest {
 		});
 	}
 
-	// @Test
+	@Test
 	public void testGreateVirtualMachine() {
 		execute("GreateVirtualMachine", () -> {
 			CreateVmRequest request = new CreateVmRequest();
 			request.setVmName("centos62");
 			request.setCupCount(1);
 			request.setMemSizeMB(1024);
-			request.setDiskSizeKB(16 * 1024 * 1024);
 			request.setImagePath("/root/CentOS-6-x86_64-GenericCloud-1710.qcow2");
 
 			cloudArchManager.createVirtualMachine(request);
