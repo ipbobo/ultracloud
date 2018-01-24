@@ -145,7 +145,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 					.replace("${image-path}", request.getImagePath());
 			// @formatter:on
 
-			getLibvirtConnect().domainCreateLinux(domainDef, 0);
+			getLibvirtConnect().domainCreateXML(domainDef, 0);
 		} catch (LibvirtException e) {
 			throw new RuntimeException(e);
 		} catch (IOException e) {
