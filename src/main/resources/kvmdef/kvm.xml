@@ -1,8 +1,8 @@
 <domain type="qemu">
 	<name>${name}</name>
 	<uuid>${uuid}</uuid>
-	<memory>${memory}</memory>
 	<vcpu>${vcpu}</vcpu>
+	<memory unit="MB">${memory}</memory>
 	<os>
 		<type arch="x86_64">hvm</type>
 		<boot dev="cdrom"/>
@@ -19,16 +19,16 @@
 	<devices>
 		<emulator>/usr/libexec/qemu-kvm</emulator>
 		<disk type="file" device="disk">
-			<source file="/var/lib/libvirt/images/${disk-file-name}.img"/>
-			<target dev="hda" bus="ide"/>
-		</disk>
-		<disk type="file" device="cdrom">
+			<driver name="qemu" type="qcow2" queues="4"/>
 			<source file="${image-path}"/>
-			<target dev="hdb" bus="ide"/>
-			<readonly/>
+			<target dev="vdd" bus="virtio"/>
 		</disk>
 		<interface type="bridge">
 			<source bridge="br0"/>
 		</interface>
+		<console type='pty'>
+		    <source path='/dev/pts/4'/>
+		    <target port='0'/>
+		</console>
 	</devices>
 </domain>
