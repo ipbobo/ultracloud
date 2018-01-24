@@ -9,10 +9,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+
+import net.sf.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,7 +41,6 @@ public class HttpUtil {
         	//请求参数
         	StringEntity se = new StringEntity(jsonStr, CHARSETNAME);//URLEncoder.encode(jsonStr, CHARSETNAME)
             se.setContentType(PARAM_CONTENTTYPE);//设置类型
-            se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, CONTENTTYPE));//设置编码方式
             httpPost.setEntity(se);//设置表单实体
             
             //执行请求
@@ -134,5 +134,19 @@ public class HttpUtil {
 		}
 		
 		return baos.toString(charset);
+	}
+	
+	//调用Zabbix API
+	public static String getZabbixJson(String url, String auth, String method, String params){
+		JSONObject jsonObj=JSONObject.fromObject("{\"jsonrpc\": \"2.0\", \"method\": null, \"params\": null, \"auth\": null, \"id\": 1}");//返回json对象
+		jsonObj.put("method", method);
+		jsonObj.put("params", params);
+		jsonObj.put("auth", auth);
+		return sendHttpPost(url, jsonObj.toString(), false);
+	}
+	
+	public static void main(String[] args){
+		String jsonStr=HttpUtil.getZabbixJson("http://180.169.225.158:86/zabbix/api_jsonrpc.php", "b94ca40ac2ae0fda99444bf30ef0b8a3", "host.get", "{\"output\": [ \"hostid\", \"host\" ], \"selectInterfaces\": [ \"interfaceid\", \"ip\" ]}");
+		System.out.println(jsonStr);
 	}
 }
