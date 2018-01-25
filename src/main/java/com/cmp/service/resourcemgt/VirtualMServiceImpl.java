@@ -13,6 +13,7 @@ import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.mgr.CloudArchManager;
 import com.cmp.mgr.CloudArchManagerAdapter;
 import com.cmp.mgr.bean.CreateVmRequest;
+import com.cmp.util.PageDataUtil;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -59,8 +60,10 @@ public class VirtualMServiceImpl implements VirtualMService {
 
 		cloudArchManager.createVirtualMachine(request);
 		TccVirtualMachine vm = cloudArchManager.getVirtualMachineByName(vmName);
+		PageData _pd_ = PageDataUtil.mapFromObject(vm);
+		_pd_.put("platform", platformId);
 
-		dao.save("VirtualMMapper.addVirtualMachine", vm);
+		dao.save("VirtualMMapper.addVirtualMachine", _pd_);
 	}
 
 	@Override
@@ -191,7 +194,7 @@ public class VirtualMServiceImpl implements VirtualMService {
 			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
 			cloudArchManager.destroyVirtualMachine(pd.getString("name"));
 
-			dao.delete("CloudHostMapper.deleteById", id);
+			dao.delete("VirtualMMapper.deleteById", id);
 		}
 	}
 
