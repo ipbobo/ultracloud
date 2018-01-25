@@ -1,5 +1,7 @@
 package com.cmp.controller;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,9 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,17 +34,20 @@ import com.fh.util.PageData;
 @RequestMapping(value = "/kvm")
 public class KVMController extends BaseController {
 
+	private static final String	SUCCESS	= "SUCCESS";
+	private static final String	FAILURE	= "FAILURE";
+
 	String menuUrl = "kvm/list.do"; // 菜单地址(权限用)
 
 	@Resource(name = "hostmachineService")
 	private HostmachineService hostmachineService;
-	
+
 	@Resource(name = "virtualMService")
 	private VirtualMService virtualMService;
-	
+
 	@Resource(name = "mirrorService")
 	private MirrorService mirrorService;
-	
+
 	/**
 	 * 按类型查询列表
 	 * 
@@ -58,14 +66,14 @@ public class KVMController extends BaseController {
 		}
 		page.setPd(pd);
 		// 分页查询kvm主机
-		//List<PageData> varList = hostmachineService.listKVM(page, false);
+		// List<PageData> varList = hostmachineService.listKVM(page, false);
 		mv.setViewName("resource/kvm_list");
-		//mv.addObject("varList", varList);
+		// mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-	
+
 	/**
 	 * 查询宿主机列表
 	 * 
@@ -92,7 +100,7 @@ public class KVMController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-	
+
 	/**
 	 * 查询虚拟机列表
 	 * 
@@ -106,20 +114,21 @@ public class KVMController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("type", "kvm");
-		String keywords = pd.getString("keywords"); // 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		// 分页查询kvm主机
-		List<PageData> varList = virtualMService.list(page);
+
+		List<PageData> varList = virtualMService.vmList(page);
 		mv.setViewName("resource/kvm_virtual_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());
+
 		return mv;
 	}
-	
+
 	/**
 	 * 查询模板列表
 	 * 
@@ -146,7 +155,7 @@ public class KVMController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-	
+
 	/**
 	 * 保存
 	 * 
@@ -168,7 +177,7 @@ public class KVMController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
-	
+
 	/**
 	 * 删除
 	 * 
@@ -187,7 +196,7 @@ public class KVMController extends BaseController {
 		out.write("success");
 		out.close();
 	}
-	
+
 	/**
 	 * 修改
 	 * 
@@ -209,7 +218,7 @@ public class KVMController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
-	
+
 	/**
 	 * 去新增页面
 	 * 
@@ -231,7 +240,7 @@ public class KVMController extends BaseController {
 		mv.addObject("pd", pd);
 		return mv;
 	}
-	
+
 	/**
 	 * 去修改页面
 	 * 
@@ -247,14 +256,14 @@ public class KVMController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
-		
+
 		pd = hostmachineService.findById(pd, false); // 根据ID读取
 		mv.setViewName("resource/kvm_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
 	}
-	
+
 	/**
 	 * 批量删除
 	 * 
@@ -284,29 +293,108 @@ public class KVMController extends BaseController {
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-	
-	/**弹窗显示未绑定虚拟机列表
+
+	/**
+	 * 弹窗显示未绑定虚拟机列表
+	 * 
 	 * @param page
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/goListVirtualmachine")
+	@RequestMapping(value = "/goListVirtualmachine")
 	public ModelAndView goListVirtualmachine(Page page) throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
-		if(null != keywords && !"".equals(keywords)){
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		
-		List<PageData> varList = hostmachineService.listVirtual(page, false); 
+
+		List<PageData> varList = hostmachineService.listVirtual(page, false);
 		mv.addObject("varList", varList);
 		mv.setViewName("resource/virtual_list_windows");
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
+	}
+
+	@RequestMapping(value = "/createVm")
+	public ResponseEntity<String> createVm(HttpServletRequest req) {
+		try {
+			virtualMService.createVm(null);
+			return ok(SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
+		}
+	}
+
+	@RequestMapping(value = "/startVm")
+	public ResponseEntity<String> startVm(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			virtualMService.startVm(ls);
+			return ok(SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
+		}
+	}
+
+	@RequestMapping(value = "/stopVm")
+	public ResponseEntity<String> stopVm(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			virtualMService.stopVm(ls);
+			return ok(SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
+		}
+	}
+
+	@RequestMapping(value = "/rebootVm")
+	public ResponseEntity<String> rebootVm(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			virtualMService.rebootVm(ls);
+			return ok(SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
+		}
+	}
+
+	@RequestMapping(value = "/suspendVm")
+	public ResponseEntity<String> suspendVm(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			virtualMService.suspendVm(ls);
+			return ok(SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
+		}
+	}
+
+	@RequestMapping(value = "/resumeVm")
+	public ResponseEntity<String> resumeVm(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			virtualMService.resumeVm(ls);
+			return ok(SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
+		}
+	}
+
+	@RequestMapping(value = "/destroyVm")
+	public ResponseEntity<String> destroyVm(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			virtualMService.destroyVm(ls);
+			return ok(SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
+		}
 	}
 
 }

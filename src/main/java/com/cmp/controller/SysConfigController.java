@@ -22,6 +22,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.FileUpload;
 import com.fh.util.PageData;
+import com.fh.util.PathUtil;
 
 @Controller
 @RequestMapping(value = "/sysconfig")
@@ -79,7 +80,7 @@ public class SysConfigController extends BaseController{
 		SysConfigInfo initConfig = SysConfigInfo.getInstance();
 		String newlogoPath = initConfig.getLogo();;
 		if (null != logo && !logo.isEmpty()) {
-			String filePath = "static/login";	//文件上传路径
+			String filePath = PathUtil.getClasspath() + "static/login";	//文件上传路径
 			String upfileName = logo.getOriginalFilename();
 			newlogoPath = filePath + "/" + upfileName;
 			FileUpload.fileUp(logo, filePath, upfileName);			//执行上传

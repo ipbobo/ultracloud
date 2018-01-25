@@ -35,6 +35,7 @@ public class CmpWorkOrder {
 	private String applyUserName; //申请者用户名
 	private String virtualMachineId; //虚拟机ID
 	private String executeStatus;//工单实施状态   0 新建  1 实施中  2 完成  3 异常
+	private String uploadFileName; //上传文件名称
 
 	public String getAppNo() {
 		return appNo;
@@ -302,6 +303,14 @@ public class CmpWorkOrder {
 	}
 	public void setExecuteStatus(String executeStatus) {
 		this.executeStatus = executeStatus;
+	}
+
+	public String getUploadFileName() {
+		return uploadFileName;
+	}
+
+	public void setUploadFileName(String uploadFileName) {
+		this.uploadFileName = uploadFileName;
 	}
 	
 	
