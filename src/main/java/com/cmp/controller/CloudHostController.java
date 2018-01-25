@@ -30,6 +30,9 @@ import com.fh.util.PageData;
 @RequestMapping(value = "/cloudhost")
 public class CloudHostController extends BaseController {
 
+	private static final String	SUCCESS	= "SUCCESS";
+	private static final String	FAILURE	= "FAILURE";
+
 	String menuUrl = "cloudhost/list.do";
 
 	@Resource(name = "cloudHostService")
@@ -70,10 +73,11 @@ public class CloudHostController extends BaseController {
 		try {
 			cloudHostService.start(ls);
 		} catch (Exception e) {
-			return ok("FAILURE");
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
 		}
 
-		return ok("SUCCESS");
+		return ok(SUCCESS);
 	}
 
 	@RequestMapping(value = "/stop")
@@ -81,21 +85,23 @@ public class CloudHostController extends BaseController {
 		try {
 			cloudHostService.stop(ls);
 		} catch (Exception e) {
-			return ok("FAILURE");
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
 		}
 
-		return ok("SUCCESS");
+		return ok(SUCCESS);
 	}
 
-	@RequestMapping(value = "/restart")
-	public ResponseEntity<String> restart(@RequestParam("ls[]") List<Integer> ls) {
+	@RequestMapping(value = "/reboot")
+	public ResponseEntity<String> reboot(@RequestParam("ls[]") List<Integer> ls) {
 		try {
-			cloudHostService.restart(ls);
+			cloudHostService.reboot(ls);
 		} catch (Exception e) {
-			return ok("FAILURE");
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
 		}
 
-		return ok("SUCCESS");
+		return ok(SUCCESS);
 	}
 
 	@RequestMapping(value = "/suspend")
@@ -103,10 +109,11 @@ public class CloudHostController extends BaseController {
 		try {
 			cloudHostService.suspend(ls);
 		} catch (Exception e) {
-			return ok("FAILURE");
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
 		}
 
-		return ok("SUCCESS");
+		return ok(SUCCESS);
 	}
 
 	@RequestMapping(value = "/resume")
@@ -114,10 +121,11 @@ public class CloudHostController extends BaseController {
 		try {
 			cloudHostService.resume(ls);
 		} catch (Exception e) {
-			return ok("FAILURE");
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
 		}
 
-		return ok("SUCCESS");
+		return ok(SUCCESS);
 	}
 
 	@RequestMapping(value = "/destroy")
@@ -125,10 +133,11 @@ public class CloudHostController extends BaseController {
 		try {
 			cloudHostService.destroy(ls);
 		} catch (Exception e) {
-			return ok("FAILURE");
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
 		}
 
-		return ok("SUCCESS");
+		return ok(SUCCESS);
 	}
 
 	@InitBinder

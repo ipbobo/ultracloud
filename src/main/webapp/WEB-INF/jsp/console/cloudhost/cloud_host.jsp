@@ -26,7 +26,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td style="padding-left:6px;"><a class="btn btn-primary btn-sm" onclick="apply()">申请</a></td>
 										<td style="padding-left:6px;"><a class="btn btn-success btn-sm" onclick="start()">开机</a></td>
 										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="stop()">关机</a></td>
-										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="restart()">重启</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="reboot()">重启</a></td>
 										<td style="padding-left:6px;"><a class="btn btn-warning btn-sm" onclick="suspend()">挂起</a></td>
 										<td style="padding-left:6px;"><a class="btn btn-success btn-sm" onclick="resume()">恢复</a></td>
 										<td style="padding-left:6px;">
@@ -48,10 +48,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td style="padding-left:6px;">
 											<div class="nav-search">
 												<span class="input-icon">
-													<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+													<input type="text" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
 													<i class="ace-icon fa fa-search nav-search-icon"></i>
 												</span>
 											</div>
+										</td>
+										<td style="vertical-align: top; padding-left: 2px; width: 32px;">
+											<a class="btn btn-light btn-xs" onclick="searchs();" title="检索">
+												<i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i>
+											</a>
 										</td>
 									</tr>
 								</table>
@@ -143,7 +148,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<script src="static/ace/js/bootbox.js"></script>
 	<script src="static/ace/js/ace/ace.js"></script>
 	<script src="static/ace/js/chosen.jquery.js"></script>
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 	<script src="static/js/jquery.tips.js"></script>
 	<script src="static/js/myjs/head.js"></script>
 	<script type="text/javascript">
@@ -168,75 +172,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			});
 		});
 		
-		<%-- //删除
-		function del(ztid, STATUS, type, Id, SANME_ID){
-			bootbox.confirm("确定要删除吗?", function(result) {
-				if(type == "1" && STATUS == '2' && $("#"+ztid).html() == '<span class="label label-important arrowed-in">未读</span>'){
-					top.readFhsms();//读取站内信时减少未读总数  <!-- readFhsms()函数在 WebRoot\static\js\myjs\head.js中 -->
-				}
-				if(result) {
-					top.jzts();
-					var url = "<%=basePath%>fhsms/delete.do?FHSMS_ID="+Id+"&tm="+new Date().getTime();
-					$.get(url,function(data){
-						nextPage(${page.currentPage});
-					});
-				}
-			});
-		} --%>
-		
-		//批量操作
-		function makeAll(msg){
-			bootbox.confirm(msg, function(result) {
-				if(result) {
-					var str = '';
-					var username = '';
-					for(var i=0;i < document.getElementsByName('ids').length;i++){
-					  if(document.getElementsByName('ids')[i].checked){
-					  	if(str=='') str += document.getElementsByName('ids')[i].value;
-					  	else str += ',' + document.getElementsByName('ids')[i].value;
-					  	
-					  	if(username=='') username += document.getElementsByName('ids')[i].id;
-					  	else username += ';' + document.getElementsByName('ids')[i].id;
-					  }
-					}
-					if(str==''){
-						bootbox.dialog({
-							message: "<span class='bigger-110'>您没有选择任何内容!</span>",
-							buttons: 			
-							{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
-						});
-						$("#zcheckbox").tips({
-							side:1,
-				            msg:'点这里全选',
-				            bg:'#AE81FF',
-				            time:8
-				        });
-						return;
-					}else{
-						if(msg == '确定要删除选中的数据吗?'){
-							top.jzts();
-							$.ajax({
-								type: "POST",
-								url: '<%=basePath%>fhsms/deleteAll.do?tm='+new Date().getTime(),
-						    	data: {DATA_IDS:str},
-								dataType:'json',
-								//beforeSend: validateData,
-								cache: false,
-								success: function(data){
-									 $.each(data.list, function(i, list){
-											nextPage(${page.currentPage});//刷新当前页面
-											top.getFhsmsCount();//更新未读站内信
-									 });
-								}
-							});
-						}else if(msg == '确定要给选中的用户发送站内信吗?'){
-							sendFhsms(username);
-						}
-					}
-				}
-			});
-		};
-		
 		function getSelected() {
 			return $('#datagrid').find('input:checked').map(function() { return $(this).val(); }).get();
 		}
@@ -247,30 +182,35 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		
 		function start() {
 			$.post('cloudhost/start', { ls: getSelected() }, function(result) {
+				nextPage(${page.currentPage});
 				consol.log(result);
 			});
 		}
 		
 		function stop() {
 			$.post('cloudhost/stop', { ls: getSelected() }, function(result) {
+				nextPage(${page.currentPage});
 				consol.log(result);
 			});
 		}
 		
-		function restart() {
-			$.post('cloudhost/restart', { ls: getSelected() }, function(result) {
+		function reboot() {
+			$.post('cloudhost/reboot', { ls: getSelected() }, function(result) {
+				nextPage(${page.currentPage});
 				consol.log(result);
 			});
 		}
 		
 		function suspend() {
 			$.post('cloudhost/suspend', { ls: getSelected() }, function(result) {
+				nextPage(${page.currentPage});
 				consol.log(result);
 			});
 		}
 		
 		function resume() {
 			$.post('cloudhost/resume', { ls: getSelected() }, function(result) {
+				nextPage(${page.currentPage});
 				consol.log(result);
 			});
 		}
@@ -291,18 +231,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		
 		function clone() {
 			$.post('cloudhost/clone', { ls: getSelected() }, function(result) {
+				nextPage(${page.currentPage});
 				consol.log(result);
 			});
 		}
 		
 		function snapshot() {
 			$.post('cloudhost/snapshot', { ls: getSelected() }, function(result) {
+				nextPage(${page.currentPage});
 				consol.log(result);
 			});
 		}
 		
 		function destory() {
 			$.post('cloudhost/destory', { ls: getSelected() }, function(result) {
+				nextPage(${page.currentPage});
 				consol.log(result);
 			});
 		} 
