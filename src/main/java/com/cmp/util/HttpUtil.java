@@ -135,18 +135,4 @@ public class HttpUtil {
 		
 		return baos.toString(charset);
 	}
-	
-	//调用Zabbix API
-	public static String getZabbixJson(String url, String auth, String method, String params){
-		JSONObject jsonObj=JSONObject.fromObject("{\"jsonrpc\": \"2.0\", \"method\": null, \"params\": null, \"auth\": null, \"id\": 1}");//返回json对象
-		jsonObj.put("method", method);
-		jsonObj.put("params", params);
-		jsonObj.put("auth", auth);
-		return sendHttpPost(url, jsonObj.toString(), false);
-	}
-	
-	public static void main(String[] args){
-		String jsonStr=HttpUtil.getZabbixJson("http://180.169.225.158:86/zabbix/api_jsonrpc.php", "b94ca40ac2ae0fda99444bf30ef0b8a3", "host.get", "{\"output\": [ \"hostid\", \"host\" ], \"selectInterfaces\": [ \"interfaceid\", \"ip\" ]}");
-		System.out.println(jsonStr);
-	}
 }
