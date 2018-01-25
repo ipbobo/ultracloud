@@ -813,14 +813,14 @@ public class CmpWorkOrderController extends BaseController{
 	}
 	
 	
-	@RequestMapping(value = "/appFileUpload")
+	@RequestMapping(value = "/appFileUpload" ,produces={"text/html;charset=UTF-8;","application/json;"})
 	@ResponseBody
 	public String update(HttpServletRequest request,
 			@RequestParam(value="uploadFile",required=false) MultipartFile uploadFile,  ModelMap model) throws Exception {
 		Map<String,String> map = new HashMap<String,String>();
 		String filePath =PathUtil.getClasspath() + "static/upload";	//文件上传路径
-		String uploadfileName = System.currentTimeMillis() + "_" + uploadFile.getName();
-		String fullName = FileUpload.fileUp(uploadFile, filePath, uploadfileName);			//执行上传
+		String uploadfileName = System.currentTimeMillis() + "_" + uploadFile.getOriginalFilename();
+		String fullName = FileUpload.fileUpEx(uploadFile, filePath, uploadfileName);			//执行上传
 		return fullName;
 	}
 	

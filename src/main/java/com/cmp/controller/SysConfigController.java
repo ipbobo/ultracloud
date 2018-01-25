@@ -83,7 +83,7 @@ public class SysConfigController extends BaseController{
 			String filePath = PathUtil.getClasspath() + "static/login";	//文件上传路径
 			String upfileName = logo.getOriginalFilename();
 			newlogoPath = filePath + "/" + upfileName;
-			FileUpload.fileUp(logo, filePath, upfileName);			//执行上传
+			FileUpload.fileUpEx(logo, filePath, upfileName);			//执行上传
 			pd.put("logo", newlogoPath);									//路径
 		}else{
 			//不修改图

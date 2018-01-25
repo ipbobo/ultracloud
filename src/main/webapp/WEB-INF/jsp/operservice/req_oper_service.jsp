@@ -8,6 +8,11 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
+<%
+     //解决post/get 请求中文乱码
+    request.setCharacterEncoding("UTF-8");
+    response.setCharacterEncoding("UTF-8");
+%>  
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -811,7 +816,7 @@
 	          processData: false,  
 	          success: function (data) {  
 	        	  $("#file_name").val(data);
-	              showDialog("文件上传成功");
+	              showDialog("文件上传成功" +  data);
 	          },  
 	          error: function (data) {  
 	        	  showDialog("文件上传异常"); 
