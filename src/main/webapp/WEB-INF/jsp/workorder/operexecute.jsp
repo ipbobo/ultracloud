@@ -44,6 +44,14 @@
 	<div>
 		<jsp:include page="operview_pv.jsp"></jsp:include>
 		<table>
+			<c:if test="${workorder.uploadFileName != ''}">
+				<tr>
+					<td align="right" style="width: 120px;padding:10px;">附件信息：</td>
+					<td align="left" style="padding:10px;" width="90%">
+						<a href="static/upload/${workorder.uploadFileName}" download="w3logo">${workorder.uploadFileName}</a>
+					</td>
+				</tr>
+			</c:if>
 			<tr>
 				<td align="right" style="width: 120px;padding:10px;">退回：</td>
 				<td align="left" style="padding:10px;" width="90%">

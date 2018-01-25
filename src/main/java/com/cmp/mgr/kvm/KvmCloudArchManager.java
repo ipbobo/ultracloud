@@ -97,7 +97,12 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public TccVirtualMachine getVirtualMachineByName(String name) {
-		return null;
+		try {
+			Domain dom = getLibvirtConnect().domainLookupByName(name);
+			return converters.toVirtualMachine().apply(dom);
+		} catch (LibvirtException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private Connect getLibvirtConnect() throws LibvirtException {
@@ -159,7 +164,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 			Connect conn = getLibvirtConnect();
 			Domain dom = conn.domainLookupByName(name);
 			if (dom.isActive() != 1) {
-				dom.resume();
+				dom.create();
 			}
 		} catch (LibvirtException e) {
 			throw new RuntimeException(e);
@@ -210,7 +215,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 		try {
 			Connect conn = getLibvirtConnect();
 			Domain dom = conn.domainLookupByName(name);
-			if (dom.isActive() != 1) {
+			if (dom.isActive() == 1) {
 				dom.resume();
 			}
 		} catch (LibvirtException e) {
@@ -229,7 +234,6 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 			Connect conn = getLibvirtConnect();
 			Domain dom = conn.domainLookupByName(name);
 			dom.destroy();
-			dom.undefine();
 		} catch (LibvirtException e) {
 			throw new RuntimeException(e);
 		}

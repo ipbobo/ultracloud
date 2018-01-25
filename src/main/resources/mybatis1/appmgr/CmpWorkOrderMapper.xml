@@ -48,7 +48,8 @@
 		imgPath,
 		expireDate,
 		virNum,
-		executeStatus
+		executeStatus,
+		uploadFileName
 	</sql>
 	
 	<!-- 字段值 -->
@@ -84,7 +85,8 @@
 		#{imgPath},
 		#{expireDate},
 		#{virNum},
-		#{executeStatus}
+		#{executeStatus},
+		#{uploadFileName}
 	</sql>
 	
 	<!-- 字段 -->
@@ -118,7 +120,8 @@
 		imgPath,
 		expireDate,
 		virNum,
-		executeStatus
+		executeStatus,
+		uploadFileName
 	</sql>
 	
 	<sql id="saveFieldValue">
@@ -151,7 +154,8 @@
 		#{imgPath},
 		#{expireDate},
 		#{virNum},
-		#{executeStatus}
+		#{executeStatus},
+		#{uploadFileName}
 	</sql>
 	
 	<!-- 获取申请编号 -->

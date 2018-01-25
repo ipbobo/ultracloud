@@ -20,9 +20,10 @@ public class KvmConverters {
 				vm.setName(domain.getName());
 				vm.setOSType(domain.getOSType());
 				vm.setVcpus(domain.getMaxVcpus());
-				vm.setMemory(domain.getMaxMemory());
+				vm.setMemory(Math.round(domain.getMaxMemory() / 1024 / 1024f));
 				vm.setXmlDesc(domain.getXMLDesc(0));
 				vm.setUUID(domain.getUUIDString());
+				vm.setActive(0);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
