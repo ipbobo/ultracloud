@@ -28,17 +28,16 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="hostmachine/listType.do" method="post" name="Form" id="Form">
+						<form action="datacenternetwork/listType.do" method="post" name="Form" id="Form">
+						<input name="type" id="type" value="${pd.type}" type="hidden" />
 						<table style="margin-top:5px;width:100%">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
+									<c:if test="${pd.type == 'vmware' }">
 									<a class="btn btn-sm btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
 									<a class="btn btn-sm btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
 									</c:if>
-									<c:if test="${QX.add == 1 }">
+									<c:if test="${pd.type == 'OpenStack' }">
 									<a class="btn btn-sm btn-success" onclick="syncOpenStackNetwork();">同步网络</a>
 									</c:if>
 								</td>
@@ -115,6 +114,15 @@
 							</c:choose>
 							</tbody>
 						</table>
+						
+						<div class="page-header position-relative">
+							<table style="width:100%;">
+								<tr>
+									<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
+								</tr>
+							</table>
+						</div>
+					
 						</form>
 					
 						</div>
@@ -163,6 +171,30 @@
 				});
 			});
 		});
+		
+		//新增
+		function add(){
+			 var type = $("#type").val()
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="新增";
+			 diag.URL = '<%=basePath%>datacenternetwork/goAdd.do?type='+type;
+			 diag.Width = 600;
+			 diag.Height = 520;
+			 diag.CancelEvent = function(){ //关闭事件
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 if('${page.currentPage}' == '0'){
+						 top.jzts();
+						 setTimeout("self.location=self.location",100);
+					 }else{
+						 nextPage(${page.currentPage});
+					 }
+				}
+				diag.close();
+			 };
+			 diag.show();
+		}
 	</script>
 
 

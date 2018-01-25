@@ -95,4 +95,52 @@ public class DatacenterNetworkController extends BaseController {
 		return mv;
 	}
 
+	/**
+	 * 去新增页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goAdd")
+	public ModelAndView goAdd() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		
+		List<PageData> varList = datacenterService.listAll(pd);
+		mv.addObject("varList", varList);
+		
+		mv.setViewName("resource/datacenternetwork_edit");
+		mv.addObject("msg", "save");
+		mv.addObject("pd", pd);
+		return mv;
+	}
+	
+	/**
+	 * 保存
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/save")
+	public ModelAndView save() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "新增Datacenternetwork");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			return null;
+		} // 校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("id", this.get32UUID());
+		pd.put("uuid", pd.getString("id"));
+		datacenternetworkService.save(pd, false);
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+
 }

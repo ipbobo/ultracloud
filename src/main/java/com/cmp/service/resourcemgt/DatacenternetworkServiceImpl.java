@@ -11,7 +11,7 @@ import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /**
- * 集群业务层实现类
+ * 业务层实现类
  * 
  * @author liuweixing
  *
