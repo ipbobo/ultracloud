@@ -13,7 +13,7 @@ public interface CloudHostService {
 
 	public void stop(List<Integer> ls) throws Exception;
 
-	public void restart(List<Integer> ls) throws Exception;
+	public void reboot(List<Integer> ls) throws Exception;
 
 	public void suspend(List<Integer> ls) throws Exception;
 

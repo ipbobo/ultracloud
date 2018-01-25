@@ -15,7 +15,7 @@ import com.alibaba.druid.proxy.jdbc.ClobProxyImpl;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class PageData extends HashMap implements Map {
 
-	
+	private static final long serialVersionUID = -422471857894681622L;
 
 	Map map = null;
 
@@ -51,6 +51,10 @@ public class PageData extends HashMap implements Map {
 
 	public PageData() {
 		map = new HashMap();
+	}
+
+	public PageData(Map m) {
+		map = m;
 	}
 
 	@Override
@@ -96,13 +100,13 @@ public class PageData extends HashMap implements Map {
 	public Object remove(Object key) {
 		return map.remove(key);
 	}
-	
-	@Override  
-    public PageData clone() {  
-        PageData pd = null;  
-        pd = (PageData)super.clone();  
-        return pd;  
-    }
+
+	@Override
+	public PageData clone() {
+		PageData pd = null;
+		pd = (PageData) super.clone();
+		return pd;
+	}
 
 	public void clear() {
 		map.clear();

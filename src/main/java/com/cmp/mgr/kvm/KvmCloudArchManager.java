@@ -234,7 +234,6 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 			Connect conn = getLibvirtConnect();
 			Domain dom = conn.domainLookupByName(name);
 			dom.destroy();
-			dom.undefine();
 		} catch (LibvirtException e) {
 			throw new RuntimeException(e);
 		}

@@ -6,19 +6,35 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.cmp.activiti.CustomGroupEntityManager;
 import com.cmp.sid.CmpAxis;
 import com.cmp.sid.CmpRes;
+import com.cmp.util.HttpUtil;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
+import net.sf.json.JSONObject;
+
 //仪表盘服务
 @Service
 public class DashboardService {
+	private static Logger logger = Logger.getLogger(CustomGroupEntityManager.class);
+	private static String ZABBIX_JSONSTR="{\"jsonrpc\": \"2.0\", \"method\": null, \"params\": null, \"auth\": null, \"id\": 1}";
+	private static String ZABBIX_TOKEN=null;//Zabbix请求token
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
+	@Value("${zabbix.url}")
+	private String ZABBIX_URL;//Zabbix请求地址
+	@Value("${zabbix.user}")
+	private String ZABBIX_USER;//Zabbix用户名
+	@Value("${zabbix.password}")
+	private String ZABBIX_PASSWORD;//Zabbix密码
 
 	//审核组查询
 	@SuppressWarnings("unchecked")
@@ -209,5 +225,56 @@ public class DashboardService {
         }
         
         return null;
+	}
+	
+	//调用Zabbix API
+	public JSONObject getZabbixJson(String method, String params){
+		ZABBIX_TOKEN=StringUtils.isBlank(ZABBIX_TOKEN)?getZabbixToken():ZABBIX_TOKEN;//获取Zabbix token
+		JSONObject jsonObj=JSONObject.fromObject(ZABBIX_JSONSTR);//返回json对象
+		jsonObj.put("method", method);
+		jsonObj.put("params", params);
+		jsonObj.put("auth", ZABBIX_TOKEN);
+		String retJsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, jsonObj.toString(), false);
+		JSONObject retJsonObj=null;
+		if(StringUtils.isBlank(retJsonStr) || (retJsonObj=JSONObject.fromObject(retJsonStr))==null || retJsonObj.isNullObject()){//接口返回错误
+			logger.error("调用Zabbix API时错误："+retJsonStr);
+			return null;
+		}
+		
+		JSONObject errorJsonObj=retJsonObj.getJSONObject("error");
+		if(errorJsonObj!=null && !errorJsonObj.isNullObject()){//接口返回错误
+			String code=errorJsonObj.getString("code");
+			String data=errorJsonObj.getString("data");
+			if(data!=null && "-32602".equals(code) && data.indexOf("re-login")>=0){//Zabbix token失效
+				if(getZabbixToken()!=null){//获取Zabbix token
+					return getZabbixJson(method, params);
+				}
+			}
+			
+			logger.error("调用Zabbix API时错误：code=["+code+"]、message=["+errorJsonObj.getString("message")+"]、data=["+data+"]");
+			return null;
+		}
+		
+		return jsonObj;
+	}
+	
+	//获取Zabbix token
+	private String getZabbixToken(){
+		String jsonStr="{\"jsonrpc\": \"2.0\", \"method\": \"user.login\", \"params\": {\"user\": \""+ZABBIX_USER+"\", \"password\": \""+ZABBIX_PASSWORD+"\"}, \"auth\": null, \"id\": 1}";
+		String retJsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, jsonStr, false);
+		JSONObject retJsonObj=null;
+		if(StringUtils.isBlank(retJsonStr) || (retJsonObj=JSONObject.fromObject(retJsonStr))==null || retJsonObj.isNullObject()){//接口返回错误
+			logger.error("调用Zabbix登录API时错误："+retJsonStr);
+			return null;
+		}
+		
+		JSONObject errorJsonObj=retJsonObj.getJSONObject("error");
+		if(errorJsonObj!=null && !errorJsonObj.isNullObject()){//接口返回错误
+			logger.error("调用Zabbix登录API时错误：code=["+errorJsonObj.getString("code")+"]、message=["+errorJsonObj.getString("message")+"]、data=["+errorJsonObj.getString("data")+"]");
+			return null;
+		}
+		
+		ZABBIX_TOKEN=retJsonObj.getString("result");
+		return ZABBIX_TOKEN;//Zabbix请求token
 	}
 }

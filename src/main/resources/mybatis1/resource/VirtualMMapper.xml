@@ -61,12 +61,12 @@
 	</update>
 	
 	<delete id="deleteById">
-		DELETE t FROM t_cloudplatform t WHERE t.id=#{id}
+		DELETE t FROM t_virtualmachine t WHERE t.id=#{id}
 	</delete>
 	
-	<insert id="addVirtualMachine" parameterType="com.cmp.entity.tcc.TccVirtualMachine">
-		INSERT INTO t_virtualmachine(uuid, name, type, cpu, memory, ip, status, hostmachine_id)
-			VALUES(#{UUID}, #{name}, 'kvm', #{vcpus}, #{memory}, #{ipAddress}, #{active}, '182837323')
+	<insert id="addVirtualMachine" parameterType="pd">
+		INSERT INTO t_virtualmachine(uuid, name, type, cpu, memory, datadisk, ip, status, platform, hostmachine_id)
+			VALUES(#{UUID}, #{name}, 'kvm', #{vcpus}, #{memory}, 20, #{ipAddress}, #{active}, #{platform}, '182837323')
 	</insert>
 
 </mapper>

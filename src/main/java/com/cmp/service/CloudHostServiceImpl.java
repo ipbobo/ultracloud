@@ -34,7 +34,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 			PageData pd = findById(id);
 
 			Integer status = (Integer) pd.get("status");
-			if (Integer.valueOf(0).equals(status)) {
+			if (!Integer.valueOf(2).equals(status)) { // 非停止状态不可启动
 				continue;
 			}
 
@@ -46,7 +46,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
 			cloudArchManager.startVirtualMachine(pd.getString("name"));
 
-			dao.update("CloudHostMapper.updateStatus", status);
+			updateVmStatusById(id, 0);
 		}
 	}
 
@@ -56,7 +56,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 			PageData pd = findById(id);
 
 			Integer status = (Integer) pd.get("status");
-			if (Integer.valueOf(0).equals(status)) {
+			if (!Integer.valueOf(0).equals(status)) { // 非运行状态不可停止
 				continue;
 			}
 
@@ -68,17 +68,17 @@ public class CloudHostServiceImpl implements CloudHostService {
 			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
 			cloudArchManager.stopVirtualMachine(pd.getString("name"));
 
-			dao.update("CloudHostMapper.updateStatus", status);
+			updateVmStatusById(id, 2);
 		}
 	}
 
 	@Override
-	public void restart(List<Integer> ls) throws Exception {
+	public void reboot(List<Integer> ls) throws Exception {
 		for (Integer id : ls) {
 			PageData pd = findById(id);
 
 			Integer status = (Integer) pd.get("status");
-			if (Integer.valueOf(0).equals(status)) {
+			if (!Integer.valueOf(0).equals(status)) { // 非运行状态不可重启
 				continue;
 			}
 
@@ -88,9 +88,9 @@ public class CloudHostServiceImpl implements CloudHostService {
 			}
 
 			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
-			cloudArchManager.resetVirtualMachine(pd.getString("name"));
+			cloudArchManager.rebootVirtualMachine(pd.getString("name"));
 
-			dao.update("CloudHostMapper.updateStatus", status);
+			updateVmStatusById(id, 0);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 			PageData pd = findById(id);
 
 			Integer status = (Integer) pd.get("status");
-			if (Integer.valueOf(0).equals(status)) {
+			if (!Integer.valueOf(0).equals(status)) { // 非运行状态不可挂起
 				continue;
 			}
 
@@ -112,7 +112,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
 			cloudArchManager.suspendVirtualMachine(pd.getString("name"));
 
-			dao.update("CloudHostMapper.updateStatus", status);
+			updateVmStatusById(id, 1);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 			PageData pd = findById(id);
 
 			Integer status = (Integer) pd.get("status");
-			if (Integer.valueOf(0).equals(status)) {
+			if (!Integer.valueOf(1).equals(status)) { // 非挂起状态不可恢复
 				continue;
 			}
 
@@ -134,7 +134,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
 			cloudArchManager.resumeVirtualMachine(pd.getString("name"));
 
-			dao.update("CloudHostMapper.updateStatus", status);
+			updateVmStatusById(id, 0);
 		}
 	}
 
@@ -142,11 +142,6 @@ public class CloudHostServiceImpl implements CloudHostService {
 	public void destroy(List<Integer> ls) throws Exception {
 		for (Integer id : ls) {
 			PageData pd = findById(id);
-
-			Integer status = (Integer) pd.get("status");
-			if (Integer.valueOf(0).equals(status)) {
-				continue;
-			}
 
 			String platformId = pd.getString("platform");
 			if (StringUtils.isBlank(platformId)) {
@@ -156,7 +151,7 @@ public class CloudHostServiceImpl implements CloudHostService {
 			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
 			cloudArchManager.destroyVirtualMachine(pd.getString("name"));
 
-			dao.update("CloudHostMapper.updateStatus", status);
+			dao.delete("CloudHostMapper.deleteById", id);
 		}
 	}
 
@@ -178,6 +173,14 @@ public class CloudHostServiceImpl implements CloudHostService {
 
 	private PageData findPlatformById(String id) throws Exception {
 		return (PageData) dao.findForObject("CloudHostMapper.findPlatformById", id);
+	}
+
+	private void updateVmStatusById(Integer id, Integer status) throws Exception {
+		PageData pd = new PageData();
+		pd.put("id", id);
+		pd.put("status", status);
+
+		dao.update("CloudHostMapper.updateStatus", pd);
 	}
 
 }

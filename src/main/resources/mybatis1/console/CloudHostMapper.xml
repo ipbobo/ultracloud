@@ -18,6 +18,8 @@
 			t_virtualmachine vm JOIN t_cloudplatform cp ON vm.platform = cp.id
 		WHERE
 			1 = 1
+		ORDER BY
+			vm.gmt_modified DESC
 	</select>
 	
 	<select id="findById" resultType="pd">
@@ -28,7 +30,7 @@
 		SELECT * FROM t_cloudplatform t WHERE t.id=#{id}
 	</select>
 	
-	<update id="updateStatus">
+	<update id="updateStatus" parameterType="pd">
 		UPDATE
 			t_virtualmachine t
 		SET
@@ -36,5 +38,9 @@
 		WHERE
 			t.id=#{id}
 	</update>
+	
+	<delete id="deleteById">
+		DELETE t FROM t_virtualmachine t WHERE t.id=#{id}
+	</delete>
 	
 </mapper>
