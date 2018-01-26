@@ -80,26 +80,26 @@ public class CmpAxis {
 		String unit=null;
 		if("hour".equals(timeType)){//小时
 			pattern="mm";
-			unit="(分)";
+			unit="分";
 		}else if("day".equals(timeType)){//天
 			pattern="HH";
-			unit="(时)";
+			unit="时";
 		}else if("week".equals(timeType)){//周
 			pattern="dd";
-			unit="(日)";
+			unit="日";
 		}else if("month".equals(timeType)){//月
 			pattern="dd";
-			unit="(日)";
+			unit="日";
 		}else if("halfyear".equals(timeType)){//半年
 			pattern="MM";
-			unit="(月)";
+			unit="月";
 		}else if("year".equals(timeType)){//年
 			pattern="MM";
-			unit="(月)";
+			unit="月";
 		}
 		
 		SimpleDateFormat sdf=new SimpleDateFormat(pattern);
-		return sdf.format(xaxis1)+","+sdf.format(xaxis2)+","+sdf.format(xaxis3)+","+sdf.format(xaxis4)+","+sdf.format(xaxis5)+","+sdf.format(xaxis6)+unit;
+		return sdf.format(xaxis1)+unit+","+sdf.format(xaxis2)+unit+","+sdf.format(xaxis3)+unit+","+sdf.format(xaxis4)+unit+","+sdf.format(xaxis5)+unit+","+sdf.format(xaxis6)+unit;
 	}
 	
 	public Date getXaxis1() {
