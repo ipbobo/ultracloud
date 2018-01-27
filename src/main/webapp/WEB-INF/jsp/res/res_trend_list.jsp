@@ -1,7 +1,11 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<% String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/"; %>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,35 +14,29 @@
 <link rel="stylesheet" href="css/style.css"/>
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
-</head>
-<body onload="init();">
-<div class="main-container">
-	<div class="page-content">
-		<div style="height:5px;"></div>
-		<div style="padding: 0px;margin: 0px" class="alert alert-block">
-			<table style="width:100%;height:300px;padding:0px;">
-				<tr>
-					<td id="line1" align="center" width="40%"></td>
-					<td id="line2" align="center" width="40%"></td>
-				</tr>
-			</table>
-		</div>
-	</div>
-</div>
-<%@ include file="../system/index/foot.jsp"%>
 <script type="text/javascript">
-$(top.hangge());//关闭加载状态
-
-
 function init(){
+	 jQuery.ajax({  
+			url : "restrend/queryLine.do",  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				loadLineChart(data[0].chartTitle, "line1", data[0].titleArr, data[0].xDataArr, data[0].yDataArr);
+				loadLineChart(data[0].chartTitle, "line2", data[0].titleArr, data[0].xDataArr, data[0].yDataArr);
+				loadLineChart(data[0].chartTitle, "line3", data[0].titleArr, data[0].xDataArr, data[0].yDataArr);
+				loadLineChart(data[0].chartTitle, "line4", data[0].titleArr, data[0].xDataArr, data[0].yDataArr);
+			}
+		});  
 	
 }
-function loadLineChart(chartId, titleArr, xdataArr, ydataArr){
+function loadLineChart(chartTitle, chartId, titleArr, xdataArr, ydataArr){
+	
 	var option = {
+			title: {text: chartTitle},
 		    tooltip: {trigger: 'axis'},//item或axis
 		    legend: {data: titleArr},
 		    calculable: true,
-		    grid: {x: 25, y: 5, x2: 15, y2: 25},
 		    xAxis: [
 		        {
 		        	show: true,
@@ -63,17 +61,42 @@ function loadLineChart(chartId, titleArr, xdataArr, ydataArr){
 }
 
 function lineSerrie(data){
-    var serie = [];
-    for(var i = 0; i < data.length; i++){
-        var item = {
-            name:data[i].name,
-            type: 'line',
-            data: data[i].value
-        }
-        serie.push(item );
-    };
-     return serrie;
+   var serrie = [];
+   for(var i = 0; i < data.length; i++){
+       var item = {
+           name:data[i].name,
+           type: 'line',
+           data: data[i].value
+       }
+       serrie.push(item );
+   };
+    return serrie;
 }
+</script>
+</head>
+<body onload="init();">
+<div class="main-container">
+	<div class="page-content">
+		<div style="height:5px;"></div>
+		<div style="padding: 0px;margin: 0px" class="alert alert-block">
+			<table style="width:80%;">
+				<tr style="height: 200px;">
+					<td id="line1" align="center" style="width: 400px;"></td>
+					<td id="line2" align="center" style="width: 400px;" ></td>
+				</tr>
+				<tr style="height: 200px;">
+					<td id="line3" align="center" style="width: 400px;" ></td>
+					<td id="line4" align="center" style="width: 400px;" ></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<%@ include file="../system/index/foot.jsp"%>
+<script type="text/javascript">
+$(top.hangge());//关闭加载状态
+
+
 </script>
 </body>
 </html>
