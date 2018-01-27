@@ -1,9 +1,14 @@
 package com.cmp.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.session.Session;
 
 import com.fh.entity.system.User;
@@ -95,5 +100,43 @@ public class StringUtil {
 		}else{
 			return null;
 		}
+	}
+	
+	//获取指定格式的日期
+	public static Date getFmtDate(Date date, String pattern) {
+		try {
+			SimpleDateFormat sdf=new SimpleDateFormat(pattern);
+			return sdf.parse(sdf.format(date));//获取指定格式的日期
+		} catch (ParseException e) {
+			return null;
+		}
+	}
+	
+	//计算指定日期间隔num天的日期
+	public static Date getRaiseDay(Date date, int field, int num){
+		Calendar cal=Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(field, num);
+		return cal.getTime();
+	}
+	
+	//获取指定日期的星期
+	public static String getWeekOfDate(Date date) {
+		String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return weekDays[cal.get(Calendar.DAY_OF_WEEK) - 1];
+	}
+	
+	//获取指定日期前一周的星期字符串
+	public static String getWeekStr(Date date) {
+		String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int indx=cal.get(Calendar.DAY_OF_WEEK)-1;//0-6，对应星期日到星期六
+		String[] newWeekDays=new String[7];
+		System.arraycopy(weekDays, (indx+1)%7, newWeekDays, 0, (6-indx==0?7:6-indx));
+		System.arraycopy(weekDays, 0, newWeekDays, 6-indx, (indx+1)%7);
+		return StringUtils.join(newWeekDays, ",");
 	}
 }

@@ -163,13 +163,7 @@ public class DashboardService {
 	
 	//CPU资源使用量趋势
 	public CmpAxis getCpuResRate(String timeType) throws Exception {
-		CmpAxis cmpAxis=new CmpAxis();
-		cmpAxis.setXaxis1("12/2");
-		cmpAxis.setXaxis2("12/4");
-		cmpAxis.setXaxis3("12/5");
-		cmpAxis.setXaxis4("12/12");
-		cmpAxis.setXaxis5("12/18");
-		cmpAxis.setXaxis6("12/22");
+		CmpAxis cmpAxis=new CmpAxis(timeType);
 		cmpAxis.setYaxis1("0.1");
 		cmpAxis.setYaxis2("0.3");
 		cmpAxis.setYaxis3("0.5");
@@ -178,16 +172,10 @@ public class DashboardService {
 		cmpAxis.setYaxis6("1");
 		return cmpAxis;
 	}
-		
+	
 	//内存资源使用量趋势
 	public CmpAxis getMemResRate(String timeType) throws Exception {
-		CmpAxis cmpAxis=new CmpAxis();
-		cmpAxis.setXaxis1("12/1");
-		cmpAxis.setXaxis2("12/2");
-		cmpAxis.setXaxis3("12/3");
-		cmpAxis.setXaxis4("12/4");
-		cmpAxis.setXaxis5("12/5");
-		cmpAxis.setXaxis6("12/6");
+		CmpAxis cmpAxis=new CmpAxis(timeType);
 		cmpAxis.setYaxis1("0.2");
 		cmpAxis.setYaxis2("0.4");
 		cmpAxis.setYaxis3("0.5");
@@ -199,13 +187,7 @@ public class DashboardService {
 	
 	//磁盘资源使用量趋势
 	public CmpAxis getStoreResRate(String timeType) throws Exception {
-		CmpAxis cmpAxis=new CmpAxis();
-		cmpAxis.setXaxis1("12/11");
-		cmpAxis.setXaxis2("12/12");
-		cmpAxis.setXaxis3("12/13");
-		cmpAxis.setXaxis4("12/14");
-		cmpAxis.setXaxis5("12/15");
-		cmpAxis.setXaxis6("12/16");
+		CmpAxis cmpAxis=new CmpAxis(timeType);
 		cmpAxis.setYaxis1("0.1");
 		cmpAxis.setYaxis2("0.5");
 		cmpAxis.setYaxis3("0.6");
