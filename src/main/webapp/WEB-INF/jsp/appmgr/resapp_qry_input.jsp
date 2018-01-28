@@ -552,7 +552,7 @@ $(window).scroll(function() {
 <div id="zdysq" class="tab-pane fade in active">
 	<form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="areaCode" id="areaCode" value="1"/>
-	<input type="hidden" name="platType" id="platType" value="vmware"/>
+	<input type="hidden" name="platType" id="platType" value="${defaultPlatType}"/>
 	<input type="hidden" name="deployType" id="deployType" value="1"/>
 	<input type="hidden" name="envCode" id="envCode" value="${defaultEnvCode}"/>
 	<input type="hidden" name="resType" id="resType" value="1"/>

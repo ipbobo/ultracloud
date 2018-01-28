@@ -24,6 +24,7 @@ import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
+import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.service.servicemgt.MirrorService;
 import com.cmp.sid.CmpDict;
@@ -58,6 +59,8 @@ public class AppMgrController extends BaseController {
 	@Resource
 	private MirrorService mirrorService;
 	@Resource
+	private CloudplatformService cloudplatformService;
+	@Resource
 	private CmpLogService cmpLogService;
 	
 	//资源申请预查询
@@ -66,7 +69,14 @@ public class AppMgrController extends BaseController {
 		String orderNo=request.getParameter("orderNo");
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
-		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
+		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList();//平台类型列表
+		if(platTypeList!=null && !platTypeList.isEmpty()){
+			CmpDict cmpDict=platTypeList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultPlatType", cmpDict.getDictCode());//默认平台类型
+			mv.addObject("platTypeList", platTypeList);//环境列表
+		}
+		
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
 		String applyUserId=StringUtil.getUserName();//申请者
 		List<CmpDict> envList=environmentService.getEnvList();
@@ -101,7 +111,14 @@ public class AppMgrController extends BaseController {
 	public ModelAndView pckgAppPre() throws Exception{
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
-		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
+		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList();//平台类型列表
+		if(platTypeList!=null && !platTypeList.isEmpty()){
+			CmpDict cmpDict=platTypeList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultTcplatType", cmpDict.getDictCode());//默认平台类型
+			mv.addObject("platTypeList", platTypeList);//环境列表
+		}
+		
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
 		mv.addObject("envCodeList", environmentService.getEnvList());//环境列表
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
