@@ -152,7 +152,7 @@
 	<select id="getPckgList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
 		select a.orderNo, a.createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
 		, b.dictValue areaCodeName
-		, c.dictValue platTypeName
+		, c.name platTypeName
 		, d.dictValue deployTypeName
 		, e.name envCodeName
 		, f.dictValue resTypeName
@@ -165,7 +165,7 @@
 		from 
 		<include refid="tableName"/> a
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
-		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
+		left join t_cloudplatform c on c.id=a.platType
 		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
 		left join t_environment e on e.id=a.envCode
 		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
@@ -180,7 +180,7 @@
 	<select id="getShoppingCartList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
 		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
 		, b.dictValue areaCodeName
-		, c.dictValue platTypeName
+		, c.name platTypeName
 		, d.dictValue deployTypeName
 		, e.name envCodeName
 		, f.dictValue resTypeName
@@ -193,7 +193,7 @@
 		from 
 		<include refid="tableName"/> a
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
-		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
+		left join t_cloudplatform c on c.id=a.platType
 		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
 		left join t_environment e on e.id=a.envCode
 		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
@@ -217,7 +217,7 @@
 	<select id="getBuyHisList" parameterType="pd" resultType="com.cmp.sid.CmpOrder">
 		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
 		, b.dictValue areaCodeName
-		, c.dictValue platTypeName
+		, c.name platTypeName
 		, d.dictValue deployTypeName
 		, e.name envCodeName
 		, f.dictValue resTypeName
@@ -230,7 +230,7 @@
 		from 
 		<include refid="tableName"/> a
 		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
-		left join cmp_dict c on c.dictType='plat_type' and c.dictCode=a.platType
+		left join t_cloudplatform c on c.id=a.platType
 		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
 		left join t_environment e on e.id=a.envCode
 		left join cmp_dict f on f.dictType='res_type' and f.dictCode=a.resType
