@@ -53,15 +53,22 @@ function batchBuy(){
     }
     
     var orderNoArr=new Array();
+    var totalAmtArr=new Array();
 	$("input:checkbox[name='orderNo']:checked").each(function() {
 		orderNoArr.push($(this).val());
+		var dayNum=getDateDiff(getCurrDate(), $(this).siblings(".expireDate").val());
+		var virNum=dayNum*($(this).siblings(".virNum").val());
+		var cpuNum=virNum*($(this).siblings(".cpu").val());
+		var memNum=virNum*($(this).siblings(".mem").val());
+		var storeNum=virNum*getStoreNum($(this).siblings(".store").val());
+		totalAmtArr.push((cpuNum*cpuPrice+memNum*memPrice+storeNum*storePrice).toFixed(2)+"");
 	});
 	
 	$.ajax({
-	    type: 'post',  
+	    type: 'post',
 	    url: "appCommit.do",
-	    data: {"orderNoStr": orderNoArr.join()},
-	    dataType: 'json',  
+	    data: {"orderNoStr": orderNoArr.join(), "totalAmtStr": totalAmtArr.join()},
+	    dataType: 'json',
 	    success: function(data){
 	    	alert(data.retMsg);
 		    $("#shoppingCartNum").html(($("#shoppingCartNum").html())*1-len);

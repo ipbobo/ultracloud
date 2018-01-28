@@ -36,6 +36,8 @@
 		imgPath,
 		expireDate,
 		virNum,
+		totalAmt,
+		fileName
 		pckgName
 	</sql>
 	
@@ -69,6 +71,8 @@
 		#{imgPath},
 		#{expireDate},
 		#{virNum},
+		#{totalAmt},
+		#{fileName},
 		#{pckgName}
 	</sql>
 	
@@ -100,6 +104,8 @@
 		imgPath,
 		expireDate,
 		virNum,
+		totalAmt,
+		fileName,
 		pckgName
 	</sql>
 	
@@ -130,6 +136,8 @@
 		#{imgPath},
 		#{expireDate},
 		#{virNum},
+		#{totalAmt},
+		#{fileName},
 		#{pckgName}
 	</sql>
 	
@@ -150,7 +158,7 @@
 	
 	<!-- 套餐列表查询 -->
 	<select id="getPckgList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
-		select a.orderNo, a.createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
+		select a.orderNo, a.createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.totalAmt, a.fileName, a.pckgName
 		, b.dictValue areaCodeName
 		, c.name platTypeName
 		, d.dictValue deployTypeName
@@ -178,7 +186,7 @@
 	
 	<!-- 购物车列表查询 -->
 	<select id="getShoppingCartList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
-		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
+		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.totalAmt, a.fileName, a.pckgName
 		, b.dictValue areaCodeName
 		, c.name platTypeName
 		, d.dictValue deployTypeName
@@ -215,7 +223,7 @@
 	
 	<!-- 已购历史列表查询 -->
 	<select id="getBuyHisList" parameterType="pd" resultType="com.cmp.sid.CmpOrder">
-		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.pckgName
+		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.totalAmt, a.fileName, a.pckgName
 		, b.dictValue areaCodeName
 		, c.name platTypeName
 		, d.dictValue deployTypeName
@@ -271,15 +279,15 @@
 	<!-- 新增套餐清单 -->
 	<insert id="addPckgList" parameterType="com.cmp.sid.CmpOrder" >
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select func_nextval('cmp_order'), #{status}, #{applyUserId}, #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, ''
+		select func_nextval('cmp_order'), #{status}, #{applyUserId}, #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, ''
 		from 
 		<include refid="tableName"/>
 		where orderNo=#{orderNo}
 	</insert>
 	
 	<!-- 更新清单状态 -->
-	<select id="updateCmpOrderStatus" parameterType="String">
-		update <include refid="tableName"/> set status='1' where orderNo=#{orderNo}
+	<select id="updateCmpOrderStatus" parameterType="pd">
+		update <include refid="tableName"/> set status='1', totalAmt=#{totalAmt} where orderNo=#{orderNo}
 	</select>
 	
 	<!-- 清空购物车 -->

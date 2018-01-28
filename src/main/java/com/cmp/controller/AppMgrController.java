@@ -219,16 +219,18 @@ public class AppMgrController extends BaseController {
 			Session session = Jurisdiction.getSession();
 			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
 			String orderNoStr=request.getParameter("orderNoStr");//清单ID字符串
+			String totalAmtStr=request.getParameter("totalAmtStr");//总价格字符串
 			String[] orderNos=orderNoStr.split(",");
 			if(orderNos!=null && orderNos.length>0){
+				String[] totalAmts=totalAmtStr.split(",");//总价格
 				String applyUserId=StringUtil.getUserName();//获取登录用户
-				for(String orderNo: orderNos){
+				for(int i=0;i<orderNos.length;i++){
 					String appNo=cmpCommonService.getAppNo("cmp_workorder");
 					Map<String, Object> variables=new HashMap<String, Object>();
 					variables.put("btnName", "提交");
 					variables.put("USERNAME", user.getUSERNAME());
 					String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动
-					cmpWorkOrderService.addWorkOrder(appNo, orderNo, applyUserId, procInstId);//提交申请
+					cmpWorkOrderService.addWorkOrder(appNo, orderNos[i], totalAmts[i], applyUserId, procInstId);//提交申请
 					//添加任务拾取
 					List<Task> userTaskList = activitiService.findGroupList(applyUserId, 1, 100);
 					for (Task task : userTaskList) {
@@ -245,7 +247,7 @@ public class AppMgrController extends BaseController {
 					updateParams.put("procInstId", procInstId);
 					updateParams.put("status", "1");
 					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
-					cmpOrderService.updateCmpOrderStatus(orderNo);//更新清单状态
+					cmpOrderService.updateCmpOrderStatus(getPageData("orderNo", orderNos[i], "totalAmt", totalAmts[i]));//更新清单状态
 				}
 			}
 			
