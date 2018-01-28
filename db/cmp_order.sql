@@ -28,6 +28,7 @@ CREATE TABLE `cmp_order` (
   `imgPath` varchar(300) DEFAULT NULL COMMENT '镜像路径',
   `expireDate` varchar(19) DEFAULT NULL COMMENT '到期时间',
   `virNum` varchar(10) DEFAULT NULL COMMENT '虚拟机数量',
+  `totalAmt` varchar(10) DEFAULT NULL COMMENT '总价格',
   `pckgName` varchar(60) DEFAULT NULL COMMENT '套餐名称',
   PRIMARY KEY (`orderNo`),
   KEY `indx_cmp_order_status` (`status`) USING BTREE
