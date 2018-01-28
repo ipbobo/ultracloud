@@ -11,6 +11,7 @@ import com.cmp.entity.tcc.TccResourcePool;
 import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.entity.tcc.TccVmSnapshot;
 import com.vmware.vim25.GuestInfo;
+import com.vmware.vim25.VirtualMachineConfigInfo;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
@@ -62,10 +63,15 @@ public class VMWareConvertors {
 
 	public Function<VirtualMachine, TccVirtualMachine> toVirtualMachine() {
 		return vm -> {
+			VirtualMachineConfigInfo config = vm.getConfig();
+
 			TccVirtualMachine tccVm = new TccVirtualMachine();
-			tccVm.setUUID(vm.getMOR().getVal());
+			tccVm.setUUID(config.getUuid());
 			tccVm.setName(vm.getName());
-			
+
+			tccVm.setVcpus(config.getHardware().getNumCPU());
+			tccVm.setMemory(config.getHardware().getMemoryMB());
+
 			GuestInfo guestInfo = vm.getGuest();
 			tccVm.setIpAddress(guestInfo.getIpAddress());
 
