@@ -145,6 +145,10 @@ function getAllTotalAmt(){
 				<td align="left" colspan="2">${var.resTypeName}</td>
 			</tr>
 			<tr>
+				<td align="left" style="width: 60px;">虚拟机名称：</td>
+				<td align="left" colspan="2">${var.virName}</td>
+			</tr>
+			<tr>
 				<td align="left" style="width: 60px;">实例规格：</td>
 				<td align="left" colspan="2">${var.cpu}&nbsp;核&nbsp;${var.memory}&nbsp;GB</td>
 			</tr>
