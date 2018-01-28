@@ -167,6 +167,13 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 		});
 	}
 
+	@Test
+	public void testGetCapability() {
+		execute("GetCapability", () -> {
+			System.out.println(cloudArchManager.getCapability());
+		});
+	}
+
 	@After
 	public void cleanup() {
 		cloudArchManager = null;

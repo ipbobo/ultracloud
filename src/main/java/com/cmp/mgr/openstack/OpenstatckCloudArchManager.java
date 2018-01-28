@@ -13,6 +13,7 @@ import org.openstack4j.model.compute.RebootType;
 import org.openstack4j.model.storage.block.VolumeSnapshot;
 import org.openstack4j.openstack.OSFactory;
 
+import com.cmp.entity.tcc.TccCapability;
 import com.cmp.entity.tcc.TccCluster;
 import com.cmp.entity.tcc.TccDatacenter;
 import com.cmp.entity.tcc.TccDatastore;
@@ -203,6 +204,11 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
 			client.blockStorage().snapshots().create(volumeSnapshot);
 		});
+	}
+
+	@Override
+	public TccCapability getCapability() {
+		return null;
 	}
 
 }

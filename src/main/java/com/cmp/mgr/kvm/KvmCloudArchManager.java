@@ -14,6 +14,7 @@ import org.libvirt.Domain;
 import org.libvirt.DomainSnapshot;
 import org.libvirt.LibvirtException;
 
+import com.cmp.entity.tcc.TccCapability;
 import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.entity.tcc.TccCluster;
 import com.cmp.entity.tcc.TccDatacenter;
@@ -307,6 +308,11 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	@Override
 	public void createVolumeSnapshot(String volumeId, String name, String desc) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public TccCapability getCapability() {
+		return null;
 	}
 
 }
