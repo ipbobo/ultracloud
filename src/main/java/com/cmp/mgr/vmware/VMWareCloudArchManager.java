@@ -18,6 +18,7 @@ import java.util.function.Function;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.cmp.entity.tcc.TccCapability;
 import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.entity.tcc.TccCluster;
 import com.cmp.entity.tcc.TccDatacenter;
@@ -793,6 +794,26 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
+	}
+
+	public TccCapability getCapability() {
+		List<HostSystem> hostMachines = searchManagedEntities(HostSystem.class);
+
+		TccCapability capability = new TccCapability();
+		for (HostSystem hostSystem : hostMachines) {
+			capability.setSupportedVcpus(capability.getSupportedVcpus()
+					+ hostSystem.getCapability().getMaxSupportedVcpus());
+			capability.setSupportedMemory(capability.getSupportedMemory()
+					+ hostSystem.getHardware().getMemorySize());
+		}
+
+		List<Datastore> datastores = searchManagedEntities(Datastore.class);
+		for (Datastore datastore : datastores) {
+			capability.setSupportedStorage(capability.getSupportedStorage()
+					+ datastore.getInfo().getFreeSpace());
+		}
+
+		return capability;
 	}
 
 	@Override

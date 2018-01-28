@@ -3,6 +3,7 @@ package com.cmp.mgr;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.cmp.entity.tcc.TccCapability;
 import com.cmp.entity.tcc.TccCluster;
 import com.cmp.entity.tcc.TccDatacenter;
 import com.cmp.entity.tcc.TccDatastore;
@@ -71,5 +72,7 @@ public interface CloudArchManager {
 	public void createVolume(CreateVolumeRequest request);
 
 	public void createVolumeSnapshot(String volumeId, String name, String desc);
+
+	public TccCapability getCapability();
 
 }
