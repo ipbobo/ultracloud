@@ -9,7 +9,7 @@ CREATE TABLE `cmp_workorder` (
   `procInstId` varchar(64) DEFAULT NULL COMMENT '流程实例ID',
   `applyUserId` varchar(20) NOT NULL COMMENT '申请者',
   `areaCode` varchar(20) DEFAULT NULL COMMENT '地域代码',
-  `platType` varchar(20) DEFAULT NULL COMMENT '平台类型',
+  `platType` varchar(32) DEFAULT NULL COMMENT '平台类型',
   `deployType` varchar(20) DEFAULT NULL COMMENT '部署类型',
   `envCode` varchar(20) DEFAULT NULL COMMENT '环境代码',
   `resType` varchar(20) DEFAULT NULL COMMENT '资源类型',
