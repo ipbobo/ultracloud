@@ -31,11 +31,12 @@ function clearShoppingCart(){
 		    url: "clearShoppingCart.do",
 		    dataType: 'json',  
 		    success: function(data){
+		    	showAlert(data.retMsg);
 		    	$("input:checkbox[name='orderNo']").each(function() {
 					$(this).parent().parent().remove();
 					$("#shoppingCartNum").html(0);
 				});
-		    	showAlert(data.retMsg);
+				$("#allTotalAmt").html("￥0.00");
 		    },
 		    error: function(data) {
 		    	showAlert(data.retMsg);
@@ -70,10 +71,10 @@ function batchBuy(){
 	    data: {"orderNoStr": orderNoArr.join(), "totalAmtStr": totalAmtArr.join()},
 	    dataType: 'json',
 	    success: function(data){
+	    	showAlert(data.retMsg);
 		    $("#shoppingCartNum").html(($("#shoppingCartNum").html())*1-len);
 		    $("#buyHisNum").html(($("#buyHisNum").html())*1+len);
 		    maskLayerClick();//关闭遮罩层
-	    	showAlert(data.retMsg);
 	    },
 	    error: function(data) {
 	    	showAlert(data.retMsg);
