@@ -6,6 +6,7 @@
 <html lang="en">
 <head>
 <base href="<%=basePath%>">
+<jsp:include page="../common/showdialog.jsp"/>
 <%@ include file="../system/index/top.jsp"%>
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
 <link rel="stylesheet" href="static/ace/css/chosen.css" />
@@ -34,22 +35,19 @@ function doSearch(){
 	var beginDate=$("#beginDate").val();
 	var endDate=$("#endDate").val();
 	if(beginDate!="" && !isDate(beginDate)){
-    	alert("开始日期不正确，请重新输入！");
-        $("#beginDate").focus();
+    	showAlert("开始日期不正确，请重新输入！", "beginDate");
         return;
     }
     
     if(endDate!="" && !isDate(endDate)){
-    	alert("结束日期不正确，请重新输入！");
-        $("#endDate").focus();
+    	showAlert("结束日期不正确，请重新输入！", "endDate");
         return;
     }
     
     //比较起始日期是否大于等于结束日期
 	if(beginDate!="" && endDate!=""){
 	    if(beginDate>endDate){
-	    	alert("结束日期必须大于等于开始日期，请重新输入！");
-	       	$("#endDate").focus();
+	    	showAlert("结束日期必须大于等于开始日期，请重新输入！", "endDate");
 	        return;
 	    }
 	}

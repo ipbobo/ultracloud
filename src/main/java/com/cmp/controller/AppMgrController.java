@@ -1,5 +1,7 @@
 package com.cmp.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.activiti.service.ActivitiService;
@@ -33,6 +38,7 @@ import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.system.User;
 import com.fh.util.Const;
+import com.fh.util.FileUpload;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 
@@ -62,6 +68,8 @@ public class AppMgrController extends BaseController {
 	private CloudplatformService cloudplatformService;
 	@Resource
 	private CmpLogService cmpLogService;
+	@Value("${uploadFilePath}")
+	private String uploadFilePath;//上传文件路径
 	
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
@@ -337,6 +345,12 @@ public class AppMgrController extends BaseController {
 		}
 	}
 	
+	@RequestMapping(value="/uploadFile", produces={"text/html;charset=UTF-8;", "application/json;"})
+	@ResponseBody
+	public String uploadFile(HttpServletRequest request, @RequestParam(value = "uploadFile", required = true) MultipartFile uploadFile) throws Exception {
+		return FileUpload.fileUpEx(uploadFile, uploadFilePath, new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())+"_"+uploadFile.getOriginalFilename());//上传
+	}
+	
 	//获取参数Bean
 	private CmpOrder getParam(HttpServletRequest request){
 		CmpOrder cmpOrder=new CmpOrder();
@@ -363,6 +377,7 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setImgPath(request.getParameter("imgPath"));//镜像路径
 		cmpOrder.setExpireDate(request.getParameter("expireDate"));//到期时间
 		cmpOrder.setVirNum(request.getParameter("virNum"));//数量
+		cmpOrder.setFileName(request.getParameter("fileName"));//文件名
 		cmpOrder.setStatus(request.getParameter("status"));//状态：0-待提交；1-已提交；T-套餐
 		cmpOrder.setPckgName(request.getParameter("pckgName"));//套餐名称
 		return cmpOrder;

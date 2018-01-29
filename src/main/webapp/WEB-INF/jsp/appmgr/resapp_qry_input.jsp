@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="../common/showdialog.jsp"/>
 <link rel="stylesheet" href="css/style.css"/>
 <link rel="stylesheet" href="css/bootstrap.min.css"/>
 <link rel="stylesheet" href="css/font-awesome.min.css"/>
@@ -128,7 +129,7 @@ function checkPckgData(){
 			$("#tctableId").tips({side:3, msg:'请选择套餐', bg:'#AE81FF', time:2});
 			$("#tctableId").focus();
 		}else{
-			alert("请选择套餐");
+			showAlert("请选择套餐");
 		}
 		
 		return false;
@@ -284,6 +285,7 @@ function addList(){
 		jsonObj.imgPath=$("#imgPath").val();//镜像路径                        
 		jsonObj.expireDate=$("#expireDate").val();//到期时间                     
 		jsonObj.virNum=$("#virNum").val();//虚拟机数量                       
+		jsonObj.fileName=$("#fileName").val();//文件名
 		jsonObj.pckgName=$("#pckgName").val();//套餐名称                       
 		jsonObj.status=$("#status").val();//状态：0-待提交；1-已提交；T-套餐
 		ajaxHttpPost("addList.do", jsonObj, "addListBtnId", "shoppingCartNum");//发送Ajax请求
@@ -530,6 +532,36 @@ function virNumFunc(operType){
 	getTotalAmt(virNum);//计算金额
 }
 
+//上传附件：.txt,.doc,.docx,.xls,.xlsx,image/*
+function uploadFileFunc() {
+	var uploadFile = $('#uploadFile').val();
+	if (uploadFile==null || uploadFile=='') {
+		return;
+	}
+
+	if (!/\.(txt|TXT|doc|docx|DOC|DOCX|xls|xlsx|XLS|XLSX|gif|jpg|jpeg|png|bmp|GIF|JPG|JPEG|PNG|BMP)$/.test(uploadFile)) {
+		showAlert("待上传的文件必须是.txt,.doc,.docx,.xls,.xlsx,image中的一种");
+		return false;
+	}
+	
+	$.ajax({
+		url : 'uploadFile.do',
+		type : 'POST',
+		data : new FormData($("#mainForm")[0]),
+		async : false,
+		cache : false,
+		contentType : false,
+		processData : false,
+		success : function(data) {
+			$("#fileName").val(data);
+			showAlert("文件上传成功" + data);
+		},
+		error : function(data) {
+			showAlert("文件上传异常");
+		}
+	});
+}
+	
 //必须加<!DOCTYPE html>
 //$(document).height();//整个网页的高度
 //$(window).height();//浏览器可视窗口的高度
@@ -563,6 +595,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="diskEncryptStr" id="diskEncryptStr" value=""/><!-- 磁盘加密字符串 -->
 	<input type="hidden" name="softCodeStr" id="softCodeStr" value=""/><!-- 软件代码字符串 -->
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
+	<input type="text" name="fileName" id="fileName" value=""><!-- 文件名 -->
 	<input type="hidden" name="status" id="status" value="0"/><!-- 状态：0-待提交；1-已提交；T-套餐 -->
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
 	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
@@ -818,6 +851,15 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;上传附件</td>
+			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td style="padding:10px;" colspan="6">
+				<input type="file" name="uploadFile" id="uploadFile" value="选择文件" accept=".txt,.doc,.docx,.xls,.xlsx,image/*"/>
+				<input type="button" value="上传" onclick="uploadFileFunc()">
+			</td>
+		</tr>
+		<tr><td colspan="8" height="10px"></td>
+		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;当前配置</td>
 			<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>
 			<td id="resTypeLabel" align="left" valign="top" style="width: 180px;padding:10px;">云主机</td>
@@ -854,7 +896,7 @@ $(window).scroll(function() {
 </table>
 <table style="width:100%;border-top:1px solid #f5f5f5;"><tr><td style="padding:10px;"><div class="divbtn"></div></td></tr></table>
 <!-- 购物车 -->
-<table id="shoppingCartTable" style="position: fixed; right: 0; top: 130px; z-index: 999999999;">
+<table id="shoppingCartTable" style="position: fixed; right: 0; top: 130px; z-index: 99;">
 	<tr>
 		<td onclick="maskLayerClick('shoppingCart')" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-shopping-cart"></span><div style="width: 10px;">购买清单</div><span id="shoppingCartNum" style="color: #f5620a;">0</span></div></td>
 		<td id="shoppingCartId" class="shoppingCart">
@@ -869,7 +911,7 @@ $(window).scroll(function() {
 	</tr>
 </table>
 <!-- 购买历史 -->
-<table id="buyHisTable" style="position: fixed; right: 0; top: 280px; z-index: 999999999;">
+<table id="buyHisTable" style="position: fixed; right: 0; top: 280px; z-index: 99;">
 	<tr>
 		<td onclick="maskLayerClick('buyHis')" align="center"><div style="cursor:pointer; float: left;width: 50px;padding:10px;background-color:#cccccc;"><span class="glyphicon glyphicon-time"></span><div style="width: 10px;">已购历史</div><span id="buyHisNum" style="color: #f5620a">0</span></div></td>
 		<td id="buyHisId" class="shoppingCart">

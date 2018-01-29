@@ -15,22 +15,19 @@ function doSearch(){
 	var endDate=$("#endDate").val();//结束日期
 	var projCode=$("#projCode").val();//项目
 	if(beginDate!="" && !isDate(beginDate)){
-    	alert("开始日期不正确，请重新输入！");
-        $("#beginDate").focus();
+    	showAlert("开始日期不正确，请重新输入！", "beginDate");
         return;
     }
     
     if(endDate!="" && !isDate(endDate)){
-    	alert("结束日期不正确，请重新输入！");
-        $("#endDate").focus();
+    	showAlert("结束日期不正确，请重新输入！", "endDate");
         return;
     }
     
     //比较起始日期是否大于等于结束日期
 	if(beginDate!="" && endDate!=""){
 	    if(beginDate>endDate){
-	    	alert("结束日期必须大于等于开始日期，请重新输入！");
-	       	$("#endDate").focus();
+	    	showAlert("结束日期必须大于等于开始日期，请重新输入！", "endDate");
 	        return;
 	    }
 	}

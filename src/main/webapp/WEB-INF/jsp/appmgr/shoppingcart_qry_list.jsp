@@ -31,14 +31,14 @@ function clearShoppingCart(){
 		    url: "clearShoppingCart.do",
 		    dataType: 'json',  
 		    success: function(data){
-		    	alert(data.retMsg);
 		    	$("input:checkbox[name='orderNo']").each(function() {
 					$(this).parent().parent().remove();
 					$("#shoppingCartNum").html(0);
 				});
+		    	showAlert(data.retMsg);
 		    },
 		    error: function(data) {
-		    	alert(data.retMsg);
+		    	showAlert(data.retMsg);
 		    }
 		});
 	}
@@ -48,7 +48,7 @@ function clearShoppingCart(){
 function batchBuy(){
 	var len = $("input:checkbox[name='orderNo']:checked").length;
     if(len==0){
-    	alert("请选择清单");
+    	showAlert("请选择清单");
     	return;
     }
     
@@ -70,13 +70,13 @@ function batchBuy(){
 	    data: {"orderNoStr": orderNoArr.join(), "totalAmtStr": totalAmtArr.join()},
 	    dataType: 'json',
 	    success: function(data){
-	    	alert(data.retMsg);
 		    $("#shoppingCartNum").html(($("#shoppingCartNum").html())*1-len);
 		    $("#buyHisNum").html(($("#buyHisNum").html())*1+len);
 		    maskLayerClick();//关闭遮罩层
+	    	showAlert(data.retMsg);
 	    },
 	    error: function(data) {
-	    	alert(data.retMsg);
+	    	showAlert(data.retMsg);
 	    }
 	});
 }
