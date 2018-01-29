@@ -377,7 +377,7 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setImgPath(request.getParameter("imgPath"));//镜像路径
 		cmpOrder.setExpireDate(request.getParameter("expireDate"));//到期时间
 		cmpOrder.setVirNum(request.getParameter("virNum"));//数量
-		cmpOrder.setFileName(request.getParameter("fileName"));//文件名
+		cmpOrder.setFileName(uploadFilePath+request.getParameter("fileName"));//文件名
 		cmpOrder.setStatus(request.getParameter("status"));//状态：0-待提交；1-已提交；T-套餐
 		cmpOrder.setPckgName(request.getParameter("pckgName"));//套餐名称
 		return cmpOrder;
