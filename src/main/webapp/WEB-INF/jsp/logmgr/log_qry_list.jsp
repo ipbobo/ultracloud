@@ -6,11 +6,12 @@
 <html lang="en">
 <head>
 <base href="<%=basePath%>">
-<jsp:include page="../common/showdialog.jsp"/>
 <%@ include file="../system/index/top.jsp"%>
-<link rel="stylesheet" href="static/ace/css/datepicker.css" />
-<link rel="stylesheet" href="static/ace/css/chosen.css" />
+<link rel="stylesheet" href="static/ace/css/datepicker.css"/>
+<link rel="stylesheet" href="static/ace/css/chosen.css"/>
 <script type="text/javascript" src="static/ace/js/chosen.jquery.js"></script><!-- 下拉框 -->
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript">
 var title='';
@@ -35,19 +36,19 @@ function doSearch(){
 	var beginDate=$("#beginDate").val();
 	var endDate=$("#endDate").val();
 	if(beginDate!="" && !isDate(beginDate)){
-    	showAlert("开始日期不正确，请重新输入！", "beginDate");
+    	$("#beginDate").tips({side:3, msg:'开始日期不正确，请重新输入！', bg:'#AE81FF', time:2});
         return;
     }
     
     if(endDate!="" && !isDate(endDate)){
-    	showAlert("结束日期不正确，请重新输入！", "endDate");
+    	$("#endDate").tips({side:3, msg:'结束日期不正确，请重新输入！', bg:'#AE81FF', time:2});
         return;
     }
     
     //比较起始日期是否大于等于结束日期
 	if(beginDate!="" && endDate!=""){
 	    if(beginDate>endDate){
-	    	showAlert("结束日期必须大于等于开始日期，请重新输入！", "endDate");
+	    	$("#endDate").tips({side:3, msg:'结束日期必须大于等于开始日期，请重新输入！', bg:'#AE81FF', time:2});
 	        return;
 	    }
 	}

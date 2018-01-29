@@ -129,6 +129,10 @@ function getAllTotalAmt(){
 				<td align="right" style="padding-right: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.orderNo}')" class="img_close"></div></td>
 			</tr>
 			<tr>
+				<td align="left" style="width: 60px;">虚拟机名称：</td>
+				<td align="left" colspan="2">${var.virName}</td>
+			</tr>
+			<tr>
 				<td align="left" style="width: 60px;">地域：</td>
 				<td align="left" colspan="2">${var.areaCodeName}</td>
 			</tr>
@@ -143,10 +147,6 @@ function getAllTotalAmt(){
 			<tr>
 				<td align="left" style="width: 60px;">资源类型：</td>
 				<td align="left" colspan="2">${var.resTypeName}</td>
-			</tr>
-			<tr>
-				<td align="left" style="width: 60px;">虚拟机名称：</td>
-				<td align="left" colspan="2">${var.virName}</td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">实例规格：</td>

@@ -15,19 +15,19 @@ function doSearch(){
 	var endDate=$("#endDate").val();//结束日期
 	var projCode=$("#projCode").val();//项目
 	if(beginDate!="" && !isDate(beginDate)){
-    	showAlert("开始日期不正确，请重新输入！", "beginDate");
+    	$("#beginDate").tips({side:3, msg:'开始日期不正确，请重新输入！', bg:'#AE81FF', time:2});
         return;
     }
     
     if(endDate!="" && !isDate(endDate)){
-    	showAlert("结束日期不正确，请重新输入！", "endDate");
+    	$("#endDate").tips({side:3, msg:'结束日期不正确，请重新输入！', bg:'#AE81FF', time:2});
         return;
     }
     
     //比较起始日期是否大于等于结束日期
 	if(beginDate!="" && endDate!=""){
 	    if(beginDate>endDate){
-	    	showAlert("结束日期必须大于等于开始日期，请重新输入！", "endDate");
+	    	$("#endDate").tips({side:3, msg:'结束日期必须大于等于开始日期，请重新输入！', bg:'#AE81FF', time:2});
 	        return;
 	    }
 	}
@@ -65,6 +65,10 @@ function doSearch(){
 				<td align="right" style="padding-right: 10px;">${var.virNum}台</td>
 			</tr>
 			<tr>
+				<td align="left" style="width: 60px;">虚拟机名称：</td>
+				<td align="left" colspan="2">${var.virName}</td>
+			</tr>
+			<tr>
 				<td align="left" style="width: 60px;">地域：</td>
 				<td align="left" colspan="2">${var.areaCodeName}</td>
 			</tr>
@@ -79,10 +83,6 @@ function doSearch(){
 			<tr>
 				<td align="left" style="width: 60px;">资源类型：</td>
 				<td align="left" colspan="2">${var.resTypeName}</td>
-			</tr>
-			<tr>
-				<td align="left" style="width: 60px;">虚拟机名称：</td>
-				<td align="left" colspan="2">${var.virName}</td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">实例规格：</td>

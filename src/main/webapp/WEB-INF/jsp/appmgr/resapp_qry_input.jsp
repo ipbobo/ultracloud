@@ -536,11 +536,12 @@ function virNumFunc(operType){
 function uploadFileFunc() {
 	var uploadFile = $('#uploadFile').val();
 	if (uploadFile==null || uploadFile=='') {
+		$("#uploadFile").tips({side:3, msg:'请选择文件', bg:'#AE81FF', time:2});
 		return;
 	}
 
 	if (!/\.(txt|TXT|doc|docx|DOC|DOCX|xls|xlsx|XLS|XLSX|gif|jpg|jpeg|png|bmp|GIF|JPG|JPEG|PNG|BMP)$/.test(uploadFile)) {
-		showAlert("待上传的文件必须是.txt,.doc,.docx,.xls,.xlsx,image中的一种");
+		$("#uploadFile").tips({side:3, msg:'待上传的文件必须是.txt,.doc,.docx,.xls,.xlsx,image中的一种', bg:'#AE81FF', time:2});
 		return false;
 	}
 	
@@ -554,10 +555,10 @@ function uploadFileFunc() {
 		processData : false,
 		success : function(data) {
 			$("#fileName").val(data);
-			showAlert("文件上传成功" + data);
+			$("#uploadFile").tips({side:3, msg:"文件上传成功["+data+"]", bg:'#AE81FF', time:2});
 		},
 		error : function(data) {
-			showAlert("文件上传异常");
+			$("#uploadFile").tips({side:3, msg:"文件上传失败["+data+"]", bg:'#AE81FF', time:2});
 		}
 	});
 }
@@ -595,7 +596,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="diskEncryptStr" id="diskEncryptStr" value=""/><!-- 磁盘加密字符串 -->
 	<input type="hidden" name="softCodeStr" id="softCodeStr" value=""/><!-- 软件代码字符串 -->
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
-	<input type="text" name="fileName" id="fileName" value=""><!-- 文件名 -->
+	<input type="hidden" name="fileName" id="fileName" value=""><!-- 文件名 -->
 	<input type="hidden" name="status" id="status" value="0"/><!-- 状态：0-待提交；1-已提交；T-套餐 -->
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
 	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
@@ -853,10 +854,8 @@ $(window).scroll(function() {
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;上传附件</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
-			<td style="padding:10px;" colspan="6">
-				<input type="file" name="uploadFile" id="uploadFile" value="选择文件" accept=".txt,.doc,.docx,.xls,.xlsx,image/*"/>
-				<input type="button" value="上传" onclick="uploadFileFunc()">
-			</td>
+			<td style="padding:10px;"><input style="background-color:#cccccc;" type="file" name="uploadFile" id="uploadFile" value="选择文件" accept=".txt,.doc,.docx,.xls,.xlsx,image/*"/></td>
+			<td colspan="5"><input type="button" value="上传" onclick="uploadFileFunc()"></td>
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
