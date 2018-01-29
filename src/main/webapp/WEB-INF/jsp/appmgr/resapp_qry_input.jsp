@@ -339,6 +339,7 @@ function savePckg(){
 	jsonObj.imgPath=$("#imgPath").val();//镜像路径                        
 	jsonObj.expireDate=$("#expireDate").val();//到期时间                     
 	jsonObj.virNum=$("#virNum").val();//虚拟机数量                       
+	jsonObj.uploadFileName=$("#uploadFileName").val();//文件名
 	jsonObj.pckgName=$("#pckgName").val();//套餐名称                       
 	jsonObj.status=$("#status").val();//状态：0-待提交；1-已提交；T-套餐
 	ajaxHttpPost("savePckg.do", jsonObj, "savePckgBtnId");//发送Ajax请求
