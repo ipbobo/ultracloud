@@ -202,7 +202,7 @@ public class AppMgrController extends BaseController {
 	public String addPckgList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		try{
 			CmpOrder cmpOrder=getPckgParam(request);//获取套餐参数Bean
-			String errMsg = checkParam(cmpOrder);//参数校验
+			String errMsg = checkPckgParam(cmpOrder);//参数校验
 			if (errMsg != null) {
 				logger.error(errMsg);
 			}
@@ -377,7 +377,7 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setImgPath(request.getParameter("imgPath"));//镜像路径
 		cmpOrder.setExpireDate(request.getParameter("expireDate"));//到期时间
 		cmpOrder.setVirNum(request.getParameter("virNum"));//数量
-		cmpOrder.setFileName(uploadFilePath+request.getParameter("fileName"));//文件名
+		cmpOrder.setFileName(request.getParameter("uploadFileName"));//文件名
 		cmpOrder.setStatus(request.getParameter("status"));//状态：0-待提交；1-已提交；T-套餐
 		cmpOrder.setPckgName(request.getParameter("pckgName"));//套餐名称
 		return cmpOrder;
@@ -396,6 +396,15 @@ public class AppMgrController extends BaseController {
 	
 	//参数校验
 	private String checkParam(CmpOrder cmpOrder) {
+		if(!StringUtils.isBlank(cmpOrder.getFileName())){
+			cmpOrder.setFileName(uploadFilePath+cmpOrder.getFileName());
+		}
+		
+		return null;
+	}
+		
+	//套餐参数校验
+	private String checkPckgParam(CmpOrder cmpOrder) {
 		return null;
 	}
 }

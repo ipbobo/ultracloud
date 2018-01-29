@@ -285,7 +285,7 @@ function addList(){
 		jsonObj.imgPath=$("#imgPath").val();//镜像路径                        
 		jsonObj.expireDate=$("#expireDate").val();//到期时间                     
 		jsonObj.virNum=$("#virNum").val();//虚拟机数量                       
-		jsonObj.fileName=$("#fileName").val();//文件名
+		jsonObj.uploadFileName=$("#uploadFileName").val();//文件名
 		jsonObj.pckgName=$("#pckgName").val();//套餐名称                       
 		jsonObj.status=$("#status").val();//状态：0-待提交；1-已提交；T-套餐
 		ajaxHttpPost("addList.do", jsonObj, "addListBtnId", "shoppingCartNum");//发送Ajax请求
@@ -554,7 +554,7 @@ function uploadFileFunc() {
 		contentType : false,
 		processData : false,
 		success : function(data) {
-			$("#fileName").val(data);
+			$("#uploadFileName").val(data);
 			$("#uploadFile").tips({side:3, msg:"文件上传成功["+data+"]", bg:'#AE81FF', time:2});
 		},
 		error : function(data) {
@@ -596,7 +596,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="diskEncryptStr" id="diskEncryptStr" value=""/><!-- 磁盘加密字符串 -->
 	<input type="hidden" name="softCodeStr" id="softCodeStr" value=""/><!-- 软件代码字符串 -->
 	<input type="hidden" name="softParamStr" id="softParamStr" value=""/><!-- 软件参数字符串 -->
-	<input type="hidden" name="fileName" id="fileName" value=""><!-- 文件名 -->
+	<input type="hidden" name="uploadFileName" id="uploadFileName" value=""><!-- 文件名 -->
 	<input type="hidden" name="status" id="status" value="0"/><!-- 状态：0-待提交；1-已提交；T-套餐 -->
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
 	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
