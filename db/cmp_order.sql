@@ -6,7 +6,7 @@ CREATE TABLE `cmp_order` (
   `status` varchar(10) DEFAULT NULL COMMENT '状态：0-待提交；1-已提交；T-套餐',
   `applyUserId` varchar(20) NOT NULL COMMENT '申请者',
   `areaCode` varchar(20) DEFAULT NULL COMMENT '地域代码',
-  `platType` varchar(20) DEFAULT NULL COMMENT '平台类型',
+  `platType` varchar(32) DEFAULT NULL COMMENT '平台类型',
   `deployType` varchar(20) DEFAULT NULL COMMENT '部署类型',
   `envCode` varchar(20) DEFAULT NULL COMMENT '环境代码',
   `resType` varchar(20) DEFAULT NULL COMMENT '资源类型',
@@ -28,6 +28,8 @@ CREATE TABLE `cmp_order` (
   `imgPath` varchar(300) DEFAULT NULL COMMENT '镜像路径',
   `expireDate` varchar(19) DEFAULT NULL COMMENT '到期时间',
   `virNum` varchar(10) DEFAULT NULL COMMENT '虚拟机数量',
+  `totalAmt` varchar(20) DEFAULT NULL COMMENT '总价格',
+  `fileName` varchar(200) DEFAULT NULL COMMENT '文件名',
   `pckgName` varchar(60) DEFAULT NULL COMMENT '套餐名称',
   PRIMARY KEY (`orderNo`),
   KEY `indx_cmp_order_status` (`status`) USING BTREE

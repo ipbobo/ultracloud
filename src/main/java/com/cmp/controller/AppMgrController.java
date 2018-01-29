@@ -1,5 +1,7 @@
 package com.cmp.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.activiti.service.ActivitiService;
@@ -24,6 +29,7 @@ import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
+import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.service.servicemgt.MirrorService;
 import com.cmp.sid.CmpDict;
@@ -32,8 +38,10 @@ import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.system.User;
 import com.fh.util.Const;
+import com.fh.util.FileUpload;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
+import com.fh.util.PathUtil;
 
 //申请管理
 @Controller
@@ -58,7 +66,11 @@ public class AppMgrController extends BaseController {
 	@Resource
 	private MirrorService mirrorService;
 	@Resource
+	private CloudplatformService cloudplatformService;
+	@Resource
 	private CmpLogService cmpLogService;
+	@Value("${uploadFilePath}")
+	private String uploadFilePath;//上传文件路径
 	
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
@@ -66,7 +78,14 @@ public class AppMgrController extends BaseController {
 		String orderNo=request.getParameter("orderNo");
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
-		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
+		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList();//平台类型列表
+		if(platTypeList!=null && !platTypeList.isEmpty()){
+			CmpDict cmpDict=platTypeList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultPlatType", cmpDict.getDictCode());//默认平台类型
+			mv.addObject("platTypeList", platTypeList);//环境列表
+		}
+		
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
 		String applyUserId=StringUtil.getUserName();//申请者
 		List<CmpDict> envList=environmentService.getEnvList();
@@ -101,7 +120,14 @@ public class AppMgrController extends BaseController {
 	public ModelAndView pckgAppPre() throws Exception{
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
-		mv.addObject("platTypeList", cmpDictService.getCmpDictList("plat_type"));//平台类型列表
+		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList();//平台类型列表
+		if(platTypeList!=null && !platTypeList.isEmpty()){
+			CmpDict cmpDict=platTypeList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultTcplatType", cmpDict.getDictCode());//默认平台类型
+			mv.addObject("platTypeList", platTypeList);//环境列表
+		}
+		
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
 		mv.addObject("envCodeList", environmentService.getEnvList());//环境列表
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
@@ -177,7 +203,7 @@ public class AppMgrController extends BaseController {
 	public String addPckgList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		try{
 			CmpOrder cmpOrder=getPckgParam(request);//获取套餐参数Bean
-			String errMsg = checkParam(cmpOrder);//参数校验
+			String errMsg = checkPckgParam(cmpOrder);//参数校验
 			if (errMsg != null) {
 				logger.error(errMsg);
 			}
@@ -202,16 +228,18 @@ public class AppMgrController extends BaseController {
 			Session session = Jurisdiction.getSession();
 			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
 			String orderNoStr=request.getParameter("orderNoStr");//清单ID字符串
+			String totalAmtStr=request.getParameter("totalAmtStr");//总价格字符串
 			String[] orderNos=orderNoStr.split(",");
 			if(orderNos!=null && orderNos.length>0){
+				String[] totalAmts=totalAmtStr.split(",");//总价格
 				String applyUserId=StringUtil.getUserName();//获取登录用户
-				for(String orderNo: orderNos){
+				for(int i=0;i<orderNos.length;i++){
 					String appNo=cmpCommonService.getAppNo("cmp_workorder");
 					Map<String, Object> variables=new HashMap<String, Object>();
 					variables.put("btnName", "提交");
 					variables.put("USERNAME", user.getUSERNAME());
 					String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动
-					cmpWorkOrderService.addWorkOrder(appNo, orderNo, applyUserId, procInstId);//提交申请
+					cmpWorkOrderService.addWorkOrder(appNo, orderNos[i], totalAmts[i], applyUserId, procInstId);//提交申请
 					//添加任务拾取
 					List<Task> userTaskList = activitiService.findGroupList(applyUserId, 1, 100);
 					for (Task task : userTaskList) {
@@ -228,7 +256,7 @@ public class AppMgrController extends BaseController {
 					updateParams.put("procInstId", procInstId);
 					updateParams.put("status", "1");
 					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
-					cmpOrderService.updateCmpOrderStatus(orderNo);//更新清单状态
+					cmpOrderService.updateCmpOrderStatus(getPageData("orderNo", orderNos[i], "totalAmt", totalAmts[i]));//更新清单状态
 				}
 			}
 			
@@ -318,6 +346,12 @@ public class AppMgrController extends BaseController {
 		}
 	}
 	
+	@RequestMapping(value="/uploadFile", produces={"text/html;charset=UTF-8;", "application/json;"})
+	@ResponseBody
+	public String uploadFile(HttpServletRequest request, @RequestParam(value = "uploadFile", required = true) MultipartFile uploadFile) throws Exception {
+		return FileUpload.fileUpEx(uploadFile, PathUtil.getClasspath()+uploadFilePath, new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())+"_"+uploadFile.getOriginalFilename());//上传
+	}
+	
 	//获取参数Bean
 	private CmpOrder getParam(HttpServletRequest request){
 		CmpOrder cmpOrder=new CmpOrder();
@@ -344,6 +378,7 @@ public class AppMgrController extends BaseController {
 		cmpOrder.setImgPath(request.getParameter("imgPath"));//镜像路径
 		cmpOrder.setExpireDate(request.getParameter("expireDate"));//到期时间
 		cmpOrder.setVirNum(request.getParameter("virNum"));//数量
+		cmpOrder.setFileName(request.getParameter("uploadFileName"));//文件名
 		cmpOrder.setStatus(request.getParameter("status"));//状态：0-待提交；1-已提交；T-套餐
 		cmpOrder.setPckgName(request.getParameter("pckgName"));//套餐名称
 		return cmpOrder;
@@ -362,6 +397,15 @@ public class AppMgrController extends BaseController {
 	
 	//参数校验
 	private String checkParam(CmpOrder cmpOrder) {
+		if(!StringUtils.isBlank(cmpOrder.getFileName())){
+			cmpOrder.setFileName(cmpOrder.getFileName());
+		}
+		
+		return null;
+	}
+		
+	//套餐参数校验
+	private String checkPckgParam(CmpOrder cmpOrder) {
 		return null;
 	}
 }

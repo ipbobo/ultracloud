@@ -43,6 +43,8 @@ public class CmpOrder {
 	private String imgPath;//镜像路径
 	private String expireDate;//到期时间
 	private String virNum;//虚拟机数量
+	private String totalAmt;//总价格
+	private String fileName;//文件名称
 	private String pckgName;//套餐名称
 	private Map<String, String> diskTypeMap=new LinkedHashMap<String, String>();//套餐名称
 
@@ -358,6 +360,22 @@ public class CmpOrder {
 		this.virNum = virNum;
 	}
 
+	public String getTotalAmt() {
+		return totalAmt;
+	}
+
+	public void setTotalAmt(String totalAmt) {
+		this.totalAmt = totalAmt;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	
 	public String getPckgName() {
 		return pckgName;
 	}

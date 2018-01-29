@@ -31,14 +31,15 @@ function clearShoppingCart(){
 		    url: "clearShoppingCart.do",
 		    dataType: 'json',  
 		    success: function(data){
-		    	alert(data.retMsg);
+		    	showAlert(data.retMsg);
 		    	$("input:checkbox[name='orderNo']").each(function() {
 					$(this).parent().parent().remove();
 					$("#shoppingCartNum").html(0);
 				});
+				$("#allTotalAmt").html("￥0.00");
 		    },
 		    error: function(data) {
-		    	alert(data.retMsg);
+		    	showAlert(data.retMsg);
 		    }
 		});
 	}
@@ -48,28 +49,35 @@ function clearShoppingCart(){
 function batchBuy(){
 	var len = $("input:checkbox[name='orderNo']:checked").length;
     if(len==0){
-    	alert("请选择清单");
+    	showAlert("请选择清单");
     	return;
     }
     
     var orderNoArr=new Array();
+    var totalAmtArr=new Array();
 	$("input:checkbox[name='orderNo']:checked").each(function() {
 		orderNoArr.push($(this).val());
+		var dayNum=getDateDiff(getCurrDate(), $(this).siblings(".expireDate").val());
+		var virNum=dayNum*($(this).siblings(".virNum").val());
+		var cpuNum=virNum*($(this).siblings(".cpu").val());
+		var memNum=virNum*($(this).siblings(".mem").val());
+		var storeNum=virNum*getStoreNum($(this).siblings(".store").val());
+		totalAmtArr.push((cpuNum*cpuPrice+memNum*memPrice+storeNum*storePrice).toFixed(2)+"");
 	});
 	
 	$.ajax({
-	    type: 'post',  
+	    type: 'post',
 	    url: "appCommit.do",
-	    data: {"orderNoStr": orderNoArr.join()},
-	    dataType: 'json',  
+	    data: {"orderNoStr": orderNoArr.join(), "totalAmtStr": totalAmtArr.join()},
+	    dataType: 'json',
 	    success: function(data){
-	    	alert(data.retMsg);
+	    	showAlert(data.retMsg);
 		    $("#shoppingCartNum").html(($("#shoppingCartNum").html())*1-len);
 		    $("#buyHisNum").html(($("#buyHisNum").html())*1+len);
 		    maskLayerClick();//关闭遮罩层
 	    },
 	    error: function(data) {
-	    	alert(data.retMsg);
+	    	showAlert(data.retMsg);
 	    }
 	});
 }
@@ -120,6 +128,10 @@ function getAllTotalAmt(){
 			<tr>
 				<td align="left" style="width: 60px;" colspan="2">ECS（${var.orderNo}）</td>
 				<td align="right" style="padding-right: 10px;">${var.virNum}台&nbsp;&nbsp;<div style="float: right;background-image: url(images/close.gif);" onmouseover="$(this).addClass('img_close_mouseover')" onmouseout="$(this).removeClass('img_close_mouseover')" onclick="delCmpOrder(this, '${var.orderNo}')" class="img_close"></div></td>
+			</tr>
+			<tr>
+				<td align="left" style="width: 60px;">虚拟机名称：</td>
+				<td align="left" colspan="2">${var.virName}</td>
 			</tr>
 			<tr>
 				<td align="left" style="width: 60px;">地域：</td>

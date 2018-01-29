@@ -2,6 +2,7 @@ package com.cmp.service.resourcemgt;
 
 import java.util.List;
 
+import com.cmp.sid.CmpDict;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -69,4 +70,6 @@ public interface CloudplatformService {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS, boolean isSyncTable) throws Exception;
 
+	//平台类型列表查询
+	public List<CmpDict> getPlatTypeList() throws Exception;
 }

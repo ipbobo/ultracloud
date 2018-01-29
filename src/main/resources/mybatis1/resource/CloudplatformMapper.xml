@@ -139,4 +139,8 @@
 		</foreach>
 	</delete>
 	
+	<!-- 平台类型列表查询 -->
+	<select id="getPlatTypeList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_cloudplatform where type in ('vmware', 'openstack')
+	</select>
 </mapper>

@@ -126,7 +126,7 @@ function getCurrConf(jsonObj){
 <body>
 <form id="tcmainForm" name="tcmainForm" action="" enctype="multipart/form-data" method="post">
 <input type="hidden" name="tcareaCode" id="tcareaCode" value="1"/>
-<input type="hidden" name="tcplatType" id="tcplatType" value="vmware"/>
+<input type="hidden" name="tcplatType" id="tcplatType" value="${defaultTcplatType}"/>
 <input type="hidden" name="tcdeployType" id="tcdeployType" value="1"/>
 <input type="hidden" name="pckgId" id="pckgId" value=""/>
 <table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">

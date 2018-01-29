@@ -79,8 +79,8 @@ public class CmpOrderService {
 	}
 	
 	//更新清单状态
-	public void updateCmpOrderStatus(String orderNo) throws Exception {
-		dao.update("CmpOrderMapper.updateCmpOrderStatus", orderNo);
+	public void updateCmpOrderStatus(PageData pd) throws Exception {
+		dao.update("CmpOrderMapper.updateCmpOrderStatus", pd);
 	}
 	
 	//清空购物车

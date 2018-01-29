@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -122,4 +123,9 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 		}
 	}
 
+	//平台类型列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpDict> getPlatTypeList() throws Exception {
+		return (List<CmpDict>) dao.findForList("CloudplatformMapper.getPlatTypeList", null);
+	}
 }
