@@ -114,4 +114,8 @@ public class CmpOrderService {
 		
 		return cmpPrice;
 	}
+	
+	public List<PageData> selectByCurrentDate() throws Exception {
+		return (List<PageData>)dao.findForList("CmpOrderMapper.selectByCurrentDate", null);
+	}
 }

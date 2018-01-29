@@ -301,4 +301,10 @@
 	<select id="getCmpPrice" parameterType="String" resultType="String">
 		SELECT ifnull(group_concat(round(price_cur/unit, 2) ORDER BY type asc), '0,0,0') FROM t_product
 	</select>
+	
+	<select id="selectByCurrentDate"  parameterType="page" resultType="pd">
+		<![CDATA[
+		select  date_format(createTime, '%Y-%m-%d') as ordertime, t.* from cmp_order t where date_sub(CURDATE(),interval 7 day) <= date(createTime);
+		]]>
+	</select>
 </mapper>

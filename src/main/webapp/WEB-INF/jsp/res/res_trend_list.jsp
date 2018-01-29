@@ -22,10 +22,10 @@ function init(){
 			cache : false,  
 			dataType : "json",  
 			success:function(data){
-				loadLineChart(data[0].chartTitle, "line1", data[0].titleArr, data[0].xDataArr, data[0].yDataArr);
-				loadLineChart(data[0].chartTitle, "line2", data[0].titleArr, data[0].xDataArr, data[0].yDataArr);
-				loadLineChart(data[0].chartTitle, "line3", data[0].titleArr, data[0].xDataArr, data[0].yDataArr);
-				loadLineChart(data[0].chartTitle, "line4", data[0].titleArr, data[0].xDataArr, data[0].yDataArr);
+				loadLineChart(data.cpu.chartTitle, "line1", data.cpu.titleArr, data.cpu.xDataArr, data.cpu.yDataArr);
+				loadLineChart(data.disk.chartTitle, "line2", data.disk.titleArr, data.disk.xDataArr, data.disk.yDataArr);
+				loadLineChart(data.vm.chartTitle, "line3", data.vm.titleArr, data.vm.xDataArr, data.vm.yDataArr);
+				loadLineChart(data.memory.chartTitle, "line4", data.memory.titleArr, data.memory.xDataArr, data.memory.yDataArr);
 			}
 		});  
 	
@@ -68,7 +68,7 @@ function lineSerrie(data){
            type: 'line',
            data: data[i].value
        }
-       serrie.push(item );
+       serrie.push(item);
    };
     return serrie;
 }

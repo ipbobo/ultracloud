@@ -1,6 +1,6 @@
 package com.cmp.sid;
 
-public class ResTrendItem {
+public class ResChartItem {
 	private String chartTitle;
 	private String[] titleArr;
 	private String[] xDataArr;
