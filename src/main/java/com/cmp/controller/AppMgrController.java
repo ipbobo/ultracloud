@@ -41,6 +41,7 @@ import com.fh.util.Const;
 import com.fh.util.FileUpload;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
+import com.fh.util.PathUtil;
 
 //申请管理
 @Controller
@@ -348,7 +349,7 @@ public class AppMgrController extends BaseController {
 	@RequestMapping(value="/uploadFile", produces={"text/html;charset=UTF-8;", "application/json;"})
 	@ResponseBody
 	public String uploadFile(HttpServletRequest request, @RequestParam(value = "uploadFile", required = true) MultipartFile uploadFile) throws Exception {
-		return FileUpload.fileUpEx(uploadFile, uploadFilePath, new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())+"_"+uploadFile.getOriginalFilename());//上传
+		return FileUpload.fileUpEx(uploadFile, PathUtil.getClasspath()+uploadFilePath, new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())+"_"+uploadFile.getOriginalFilename());//上传
 	}
 	
 	//获取参数Bean
@@ -397,7 +398,7 @@ public class AppMgrController extends BaseController {
 	//参数校验
 	private String checkParam(CmpOrder cmpOrder) {
 		if(!StringUtils.isBlank(cmpOrder.getFileName())){
-			cmpOrder.setFileName(uploadFilePath+cmpOrder.getFileName());
+			cmpOrder.setFileName(cmpOrder.getFileName());
 		}
 		
 		return null;
