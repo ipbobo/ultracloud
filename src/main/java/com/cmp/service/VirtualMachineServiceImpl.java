@@ -39,4 +39,9 @@ public class VirtualMachineServiceImpl implements VirtualMachineService {
 	public int countByProject(String projectId) throws Exception {
 		return (int)dao.findForObject("VirtualMachineMapper.countByProject", projectId);
 	}
+
+	@Override
+	public List<VirtualMachine> findAll() throws Exception {
+		return (List)dao.findForList("VirtualMachineMapper.findAll", null);
+	}
 }
