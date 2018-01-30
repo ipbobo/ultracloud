@@ -33,43 +33,54 @@ public class BizviewService {
 		cmpRes.setBizviewType(bizviewType);
 		cmpRes.setBizviewTypeName(cmpDictService.getDictValue("bizview_type", bizviewType));
 		cmpRes.setSubBizviewType(subBizviewType);
-		PageData pd = new PageData();
 		String subBizviewTypeName="全部"+cmpRes.getBizviewTypeName();
 		if("env".equals(bizviewType)){//环境
 			if(!StringUtils.isBlank(subBizviewType)){
-				pd.put("id", subBizviewType);
-				subBizviewTypeName=(String)environmentService.findById(pd).get("name");
+				subBizviewTypeName=(String)environmentService.findById(new PageData("id", subBizviewType)).get("name");
 			}
 		}else if("dept".equals(bizviewType)){//部门
 			if(!StringUtils.isBlank(subBizviewType)){
-				pd.put("DEPARTMENT_ID", subBizviewType);
-				subBizviewTypeName=(String)departmentService.findById(pd).get("NAME");
+				subBizviewTypeName=(String)departmentService.findById(new PageData("DEPARTMENT_ID", subBizviewType)).get("NAME");
 			}
 		}else if("proj".equals(bizviewType)){//项目
 			if(!StringUtils.isBlank(subBizviewType)){
-				pd.put("id", subBizviewType);
-				subBizviewTypeName=(String)projectService.findById(pd).get("name");
+				subBizviewTypeName=(String)projectService.findById(new PageData("id", subBizviewType)).get("name");
 			}
 		}
 		
+		PageData pd = new PageData("bizviewType", bizviewType, "subBizviewType", subBizviewType);
 		cmpRes.setSubBizviewTypeName(subBizviewTypeName);
-		if("cal".equals(operType)){//计算
-			cmpRes.setCpuTotalNum("10");
-			cmpRes.setCpuAppNum("2");
-			cmpRes.setCpuUseNum("5");
-			cmpRes.setCpuRestNum("3");
-			cmpRes.setMemTotalNum("10");
-			cmpRes.setMemAppNum("2");
-			cmpRes.setMemUseNum("5");
-			cmpRes.setMemRestNum("3");
-		}else if("store".equals(operType)){//存储
-			cmpRes.setStoreTotalNum("10");
-			cmpRes.setStoreAppNum("2");
-			cmpRes.setStoreUseNum("5");
-			cmpRes.setStoreRestNum("3");
-		}
-		
+		getTotalNum(pd, cmpRes);//总量查询(cpu、内存、磁盘)
+		getUseNum(pd, cmpRes);//使用量查询(cpu、内存、磁盘)
+		getAppNum(pd, cmpRes);//申请中查询(cpu、内存、磁盘)
+		cmpRes.setCpuRestNum(String.valueOf(Integer.parseInt(cmpRes.getCpuTotalNum())-Integer.parseInt(cmpRes.getCpuUseNum())-Integer.parseInt(cmpRes.getCpuAppNum())));
+		cmpRes.setMemRestNum(String.valueOf(Integer.parseInt(cmpRes.getMemTotalNum())-Integer.parseInt(cmpRes.getMemUseNum())-Integer.parseInt(cmpRes.getMemAppNum())));
+		cmpRes.setStoreRestNum(String.valueOf(Integer.parseInt(cmpRes.getStoreTotalNum())-Integer.parseInt(cmpRes.getStoreUseNum())-Integer.parseInt(cmpRes.getStoreAppNum())));
 		return cmpRes;
+	}
+	
+	//总量查询(cpu、内存、磁盘)
+	public void getTotalNum(PageData pd, CmpRes cmpRes) throws Exception {
+		CmpRes cr=(CmpRes) dao.findForObject("BizviewMapper.getTotalNum", pd);
+		cmpRes.setCpuTotalNum(cr.getCpuTotalNum());
+		cmpRes.setMemTotalNum(cr.getMemTotalNum());
+		cmpRes.setStoreTotalNum(cr.getStoreTotalNum());
+	}
+	
+	//使用量查询(cpu、内存、磁盘)
+	public void getUseNum(PageData pd, CmpRes cmpRes) throws Exception {
+		CmpRes cr=(CmpRes) dao.findForObject("BizviewMapper.getUseNum", pd);
+		cmpRes.setCpuUseNum(cr.getCpuUseNum());
+		cmpRes.setMemUseNum(cr.getMemUseNum());
+		cmpRes.setStoreUseNum(cr.getStoreUseNum());
+	}
+	
+	//申请中查询(cpu、内存、磁盘)
+	public void getAppNum(PageData pd, CmpRes cmpRes) throws Exception {
+		CmpRes cr=(CmpRes) dao.findForObject("BizviewMapper.getAppNum", pd);
+		cmpRes.setCpuAppNum(cr.getCpuAppNum());
+		cmpRes.setMemAppNum(cr.getMemAppNum());
+		cmpRes.setStoreAppNum(cr.getStoreAppNum());
 	}
 	
 	//云主机列表分页查询

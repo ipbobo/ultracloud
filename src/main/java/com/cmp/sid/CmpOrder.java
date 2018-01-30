@@ -9,6 +9,7 @@ public class CmpOrder {
 	private String lastUpdateTime;//最后修改时间
 	private String status;//状态：0-待提交；1-已提交；T-套餐
 	private String applyUserId;//申请者
+	private String deptId;//部门ID
 	private String areaCode;//地域代码
 	private String areaCodeName;//地域代码名称
 	private String platType;//平台类型
@@ -88,6 +89,14 @@ public class CmpOrder {
 		this.applyUserId = applyUserId;
 	}
 
+	public String getDeptId() {
+		return deptId;
+	}
+
+	public void setDeptId(String deptId) {
+		this.deptId = deptId;
+	}
+	
 	public String getAreaCode() {
 		return areaCode;
 	}

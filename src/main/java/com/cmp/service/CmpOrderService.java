@@ -115,6 +115,7 @@ public class CmpOrderService {
 		return cmpPrice;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<PageData> selectByCurrentDate() throws Exception {
 		return (List<PageData>)dao.findForList("CmpOrderMapper.selectByCurrentDate", null);
 	}

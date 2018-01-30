@@ -185,8 +185,10 @@ public class AppMgrController extends BaseController {
 				logger.error(errMsg);
 			}
 			
+			User user=StringUtil.getUserInfo();//获取登录用户
+			cmpOrder.setApplyUserId(user.getNAME());//用户名
+			cmpOrder.setDeptId(user.getDeptId());//部门ID
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
-			cmpOrder.setApplyUserId(StringUtil.getUserName());//获取登录用户
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpLogService.addCmpLog("1", "加入清单", "加入清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "加入清单成功");
@@ -209,7 +211,6 @@ public class AppMgrController extends BaseController {
 			}
 			
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
-			cmpOrder.setApplyUserId(StringUtil.getUserName());//获取登录用户
 			cmpOrderService.addPckgList(cmpOrder);//新增套餐清单
 			cmpLogService.addCmpLog("1", "加入套餐清单", "加入套餐清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "加入套餐清单成功");
@@ -288,7 +289,9 @@ public class AppMgrController extends BaseController {
 				logger.error(errMsg);
 			}
 			
-			cmpOrder.setApplyUserId(StringUtil.getUserName());//获取登录用户
+			User user=StringUtil.getUserInfo();//获取登录用户
+			cmpOrder.setApplyUserId(user.getNAME());//用户名
+			cmpOrder.setDeptId(user.getDeptId());//部门ID
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpLogService.addCmpLog("1", "保存套餐", "保存套餐成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "保存套餐成功");

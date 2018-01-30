@@ -9,6 +9,7 @@ public class CmpWorkOrder {
 	private String status;//状态：0-初始化；1-审批中；2-审批通过；3-审批不通过  4-运维执行   5-工单完成
 	private String procInstId;//流程实例ID
 	private String applyUserId;//申请者
+	private String deptId;//部门ID
 	private String areaCode;//地域代码
 	private String platType;//平台类型
 	private String deployType;//部署类型
@@ -99,6 +100,14 @@ public class CmpWorkOrder {
 
 	public void setApplyUserId(String applyUserId) {
 		this.applyUserId = applyUserId;
+	}
+	
+	public String getDeptId() {
+		return deptId;
+	}
+
+	public void setDeptId(String deptId) {
+		this.deptId = deptId;
 	}
 	
 	public String getAreaCode() {
