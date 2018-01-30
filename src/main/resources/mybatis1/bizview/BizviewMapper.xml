@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="BizviewMapper">
+	<!-- 总量查询(cpu、内存、磁盘) -->
+	<select id="getTotalNum" parameterType="pd" resultType="com.cmp.sid.CmpRes">
+		SELECT ifnull(sum(a.cpu), 0) cpuTotalNum, ifnull(sum(a.memory), 0) memTotalNum, ifnull(sum(a.localdisk), 0) storeTotalNum FROM t_hostmachine a
+		<if test="subBizviewType != null and subBizviewType != ''">
+			<if test="bizviewType != null and bizviewType = 'env'">
+				where exists (select 1 from t_virtualmachine b where b.hostmachine_id=a.id and b.envCode=#{subBizviewType})
+			</if>
+			<if test="bizviewType != null and bizviewType = 'dept'">
+				where exists (select 1 from t_virtualmachine b where b.hostmachine_id=a.id and b.deptId=#{subBizviewType})
+			</if>
+			<if test="bizviewType != null and bizviewType = 'proj'">
+				where exists (select 1 from t_virtualmachine b where b.hostmachine_id=a.id and b.project_id=#{subBizviewType})
+			</if>
+		</if>
+	</select>
+	
+	<!-- 使用量查询(cpu、内存、磁盘) -->
+	<select id="getUseNum" parameterType="pd" resultType="com.cmp.sid.CmpRes">
+		SELECT ifnull(sum(a.cpu), 0) cpuUseNum, ifnull(sum(a.memory), 0) memUseNum, ifnull(sum(a.datadisk), 0) storeUseNum FROM t_virtualmachine a
+		<if test="subBizviewType != null and subBizviewType != ''">
+			<if test="bizviewType != null and bizviewType = 'env'">
+				where a.envCode=#{subBizviewType}
+			</if>
+			<if test="bizviewType != null and bizviewType = 'dept'">
+				where a.deptId=#{subBizviewType}
+			</if>
+			<if test="bizviewType != null and bizviewType = 'proj'">
+				where a.project_id=#{subBizviewType}
+			</if>
+		</if>
+	</select>
+	
+	<!-- 申请中查询(cpu、内存、磁盘) -->
+	<select id="getAppNum" parameterType="pd" resultType="com.cmp.sid.CmpRes">
+		SELECT ifnull(sum(a.cpu), 0) cpuAppNum, ifnull(sum(a.memory), 0) memAppNum, ifnull(sum(a.diskSize), 0) storeAppNum FROM cmp_workorder where status in ('0', '1')
+		<if test="subBizviewType != null and subBizviewType != ''">
+			<if test="bizviewType != null and bizviewType = 'env'">
+				and a.envCode=#{subBizviewType}
+			</if>
+			<if test="bizviewType != null and bizviewType = 'dept'">
+				and a.deptId=#{subBizviewType}
+			</if>
+			<if test="bizviewType != null and bizviewType = 'proj'">
+				and a.projectCode=#{subBizviewType}
+			</if>
+		</if>
+	</select>
+	
 	<!-- 云主机列表分页查询 -->
 	<select id="getCloudHostPageList" parameterType="page" resultType="pd">
 		select a.id, a.appNo, a.user, a.project_id, a.name, a.envCode, a.ip, a.cpu, a.memory, a.datadisk, a.status, a.hostmachine_id, a.platform, a.os, a.os_status, a.soft, a.soft_status, a.duedate, a.username, a.password, DATE_FORMAT(a.gmt_create, '%Y-%m-%d %H:%i:%s') gmt_create, a.gmt_modified

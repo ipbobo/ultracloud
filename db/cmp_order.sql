@@ -5,6 +5,7 @@ CREATE TABLE `cmp_order` (
   `lastUpdateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `status` varchar(10) DEFAULT NULL COMMENT '状态：0-待提交；1-已提交；T-套餐',
   `applyUserId` varchar(20) NOT NULL COMMENT '申请者',
+  `deptId` varchar(32) NOT NULL COMMENT '部门ID',
   `areaCode` varchar(20) DEFAULT NULL COMMENT '地域代码',
   `platType` varchar(32) DEFAULT NULL COMMENT '平台类型',
   `deployType` varchar(20) DEFAULT NULL COMMENT '部署类型',

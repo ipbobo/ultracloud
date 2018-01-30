@@ -87,6 +87,16 @@ public class StringUtil {
 	    }
 	}
 	
+	//获取登录用户
+	public static User getUserInfo(){
+		try{
+			Session session = Jurisdiction.getSession();
+			return (User)session.getAttribute(Const.SESSION_USER);
+		} catch (Exception e) {
+	    	return null;
+	    }
+	}
+	
 	//获取用户的角色类型
 	public static String getRoleType(Map<String, String> auditMap){
 		if(auditMap.containsKey("admin")){//管理员

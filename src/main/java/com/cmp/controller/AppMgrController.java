@@ -75,7 +75,7 @@ public class AppMgrController extends BaseController {
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
 	public ModelAndView resAppPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String orderNo=request.getParameter("orderNo");
+		//String orderNo=request.getParameter("orderNo");
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
 		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList();//平台类型列表
@@ -105,9 +105,9 @@ public class AppMgrController extends BaseController {
 		mv.addObject("osBitNumList", cmpDictService.getCmpDictList("os_bit_num"));//位数列表
 		mv.addObject("imgCodeList", mirrorService.getImgList());//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
-		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
+		//mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
-		mv.addObject("cmpOrder", StringUtils.isBlank(orderNo)?null:cmpOrderService.getOrderDtl(orderNo));//清单详细信息
+		//mv.addObject("cmpOrder", StringUtils.isBlank(orderNo)?null:cmpOrderService.getOrderDtl(orderNo));//清单详细信息
 		mv.addObject("shoppingCartNum", cmpOrderService.getShoppingCartNum(applyUserId));//购物车列表大小
 		mv.addObject("buyHisNum", cmpOrderService.getBuyHisNum(applyUserId));//已购历史列表大小
 		mv.addObject("cmpPrice", cmpOrderService.getCmpPrice());//计算价格
@@ -185,8 +185,10 @@ public class AppMgrController extends BaseController {
 				logger.error(errMsg);
 			}
 			
+			User user=StringUtil.getUserInfo();//获取登录用户
+			cmpOrder.setApplyUserId(user.getNAME());//用户名
+			cmpOrder.setDeptId(user.getDeptId());//部门ID
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
-			cmpOrder.setApplyUserId(StringUtil.getUserName());//获取登录用户
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpLogService.addCmpLog("1", "加入清单", "加入清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "加入清单成功");
@@ -209,7 +211,6 @@ public class AppMgrController extends BaseController {
 			}
 			
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
-			cmpOrder.setApplyUserId(StringUtil.getUserName());//获取登录用户
 			cmpOrderService.addPckgList(cmpOrder);//新增套餐清单
 			cmpLogService.addCmpLog("1", "加入套餐清单", "加入套餐清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "加入套餐清单成功");
@@ -288,7 +289,9 @@ public class AppMgrController extends BaseController {
 				logger.error(errMsg);
 			}
 			
-			cmpOrder.setApplyUserId(StringUtil.getUserName());//获取登录用户
+			User user=StringUtil.getUserInfo();//获取登录用户
+			cmpOrder.setApplyUserId(user.getNAME());//用户名
+			cmpOrder.setDeptId(user.getDeptId());//部门ID
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpLogService.addCmpLog("1", "保存套餐", "保存套餐成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "保存套餐成功");

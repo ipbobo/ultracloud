@@ -8,6 +8,7 @@ CREATE TABLE `cmp_workorder` (
   `status` varchar(10) DEFAULT NULL COMMENT '状态：0-待提交；1-审批中；2-审批通过；3-审批不通过',
   `procInstId` varchar(64) DEFAULT NULL COMMENT '流程实例ID',
   `applyUserId` varchar(20) NOT NULL COMMENT '申请者',
+  `deptId` varchar(32) NOT NULL COMMENT '部门ID',
   `areaCode` varchar(20) DEFAULT NULL COMMENT '地域代码',
   `platType` varchar(32) DEFAULT NULL COMMENT '平台类型',
   `deployType` varchar(20) DEFAULT NULL COMMENT '部署类型',
