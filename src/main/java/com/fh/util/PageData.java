@@ -57,6 +57,15 @@ public class PageData extends HashMap implements Map {
 		map = m;
 	}
 
+	//简化Page赋值操作，采用key/value，add by kfzx-chenwm
+	public PageData(Object ... params) {
+		if(params!=null && params.length>0 && params.length%2==0){//key/value
+    		for(int i=0;i<params.length/2;i++){
+    			put(params[i*2], params[i*2+1]);
+    		}
+    	}
+	}
+		
 	@Override
 	public Object get(Object key) {
 		Object obj = null;
