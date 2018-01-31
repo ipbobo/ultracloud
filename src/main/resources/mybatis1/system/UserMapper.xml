@@ -102,7 +102,7 @@
 	
 	<!-- 判断用户名和密码 -->
 	<select id="getUserInfo" parameterType="pd" resultType="pd">
-		select <include refid="Field"></include> from
+		select <include refid="Field_new"></include> from
 		<include refid="tableName"></include>
 		where 1=1
 		<if test="USERNAME!=null and PASSWORD!=null">

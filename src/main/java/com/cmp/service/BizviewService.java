@@ -48,8 +48,8 @@ public class BizviewService {
 			}
 		}
 		
-		PageData pd = new PageData("bizviewType", bizviewType, "subBizviewType", subBizviewType);
 		cmpRes.setSubBizviewTypeName(subBizviewTypeName);
+		PageData pd = new PageData("bizviewType", bizviewType, "subBizviewType", subBizviewType);
 		getTotalNum(pd, cmpRes);//总量查询(cpu、内存、磁盘)
 		getUseNum(pd, cmpRes);//使用量查询(cpu、内存、磁盘)
 		getAppNum(pd, cmpRes);//申请中查询(cpu、内存、磁盘)

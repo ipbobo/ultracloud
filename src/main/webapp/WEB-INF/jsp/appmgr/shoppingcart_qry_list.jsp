@@ -170,12 +170,12 @@ function getAllTotalAmt(){
 				<td align="left" colspan="2">${var.virNum}&nbsp;台</td>
 			</tr>
 			<tr>
-				<td align="left">申请时间：</td>
-				<td align="left" colspan="2">${var.createTime}</td>
-			</tr>
-			<tr>
 				<td align="left">到期时间：</td>
 				<td align="left" colspan="2">${var.expireDate}</td>
+			</tr>
+			<tr>
+				<td align="left">申请时间：</td>
+				<td align="left" colspan="2">${var.createTime}</td>
 			</tr>
 			</table>
 		</td>

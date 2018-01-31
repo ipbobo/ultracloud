@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ResviewMapper">
+	<!-- 总量查询(cpu、内存、磁盘) -->
+	<select id="getTotalNum" parameterType="pd" resultType="com.cmp.sid.CmpRes">
+		SELECT ifnull(sum(a.cpu), 0) cpuTotalNum, ifnull(sum(a.memory), 0) memTotalNum, ifnull(sum(a.localdisk), 0) storeTotalNum, ifnull(sum(a.localdisk), 0) storeAssignNum FROM t_hostmachine a
+		where 1=1
+		<if test="bizviewType != null and bizviewType != ''">
+			and a.datacenter_id=#{bizviewType}
+		</if>
+		<if test="subBizviewType != null and subBizviewType != ''">
+			and a.cluster_id=#{subBizviewType}
+		</if>
+	</select>
+	
+	<!-- 使用量查询(cpu、内存、磁盘) -->
+	<select id="getUseNum" parameterType="pd" resultType="com.cmp.sid.CmpRes">
+		SELECT ifnull(sum(a.cpu), 0) cpuUseNum, ifnull(sum(a.memory), 0) memUseNum, ifnull(sum(a.datadisk), 0) storeUseNum FROM t_virtualmachine a
+		inner join t_hostmachine b on a.hostmachine_id=b.id
+		where 1=1
+		<if test="bizviewType != null and bizviewType != ''">
+			and b.datacenter_id=#{bizviewType}
+		</if>
+		<if test="subBizviewType != null and subBizviewType != ''">
+			and b.cluster_id=#{subBizviewType}
+		</if>
+	</select>
+	
 	<!-- 物理机列表分页查询 -->
 	<select id="getHostPageList" parameterType="page" resultType="pd">
 		select a.id, a.name, a.uuid, a.type, a.cpf_id, a.datacenter_id, a.cluster_id, a.status, a.ip, a.port, ifnull(a.cpu, '0') cpu, ifnull(a.memory, '0') memory, a.localdisk, a.devicenum, a.duedate, a.account, a.password_ssh, DATE_FORMAT(a.gmt_create, '%Y-%m-%d %H:%i:%s') gmt_create, a.gmt_modified

@@ -11,38 +11,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cmp.service.CloudHostService;
-import com.cmp.service.CmpDictService;
-import com.cmp.service.ProjectService;
 import com.cmp.service.ResviewService;
 import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
-import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.sid.CmpDict;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.service.fhoa.department.impl.DepartmentService;
 import com.fh.util.PageData;
 
 //业务视图总览
 @Controller
 public class ResviewController extends BaseController {
 	@Resource
-	private CmpDictService cmpDictService;
-	@Resource
 	private ResviewService resviewService;
-	@Resource
-	private EnvironmentService environmentService;
-	@Resource
-	private DepartmentService departmentService;
-	@Resource
-	private ProjectService projectService;
 	@Resource
 	private DatacenterService datacenterService;
 	@Resource
 	private ClusterService clusterService;
-	@Resource
-	private CloudHostService cloudHostService;
 	
 	//业务视图总览列表查询
 	@RequestMapping(value="/resview/list")
