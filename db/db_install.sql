@@ -260,6 +260,7 @@ DROP TABLE IF EXISTS `t_virtualmachine`;
 CREATE TABLE `t_virtualmachine` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user` varchar(20) NOT NULL COMMENT '虚拟机用户',
+  `deptId` varchar(32) DEFAULT NULL COMMENT '部门ID',
   `appNo` varchar(20) NOT NULL COMMENT '工单编号',
   `project_id` varchar(32) NOT NULL COMMENT '项目名称',
   `name` varchar(50) NOT NULL COMMENT '名称',
