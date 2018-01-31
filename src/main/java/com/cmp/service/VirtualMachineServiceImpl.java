@@ -44,4 +44,11 @@ public class VirtualMachineServiceImpl implements VirtualMachineService {
 	public List<VirtualMachine> findAll() throws Exception {
 		return (List)dao.findForList("VirtualMachineMapper.findAll", null);
 	}
+
+	@Override
+	public List<VirtualMachine> findCurrentDay(String dateNum) throws Exception {
+		return (List)dao.findForList("VirtualMachineMapper.findCurrentDay", dateNum);
+	}
+	
+	
 }

@@ -203,6 +203,7 @@
 						}
 				}
 			});
+			
 		}
 		queryPersonalTask();
 		function goTaskDetail(type){

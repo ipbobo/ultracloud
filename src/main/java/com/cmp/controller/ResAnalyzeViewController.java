@@ -1,5 +1,6 @@
 package com.cmp.controller;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,8 +10,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.libvirt.jna.virConnectAuth;
-import org.springframework.security.authentication.encoding.PlaintextPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -121,7 +120,7 @@ public class ResAnalyzeViewController extends BaseController {
 			
 			String[] plNameArr = plNameList.toArray(new String[plNameList.size()]);
 			//CPU使用情况
-			Map<String, ResChartItem> analyzeMap = new HashMap<String, ResChartItem>();
+			Map<String, Object> analyzeMap = new HashMap<String, Object>();
 			
 			ResChartItem cpuUsedItem = new ResChartItem();
 			cpuUsedItem.setChartTitle("CPU使用情况");
@@ -161,9 +160,67 @@ public class ResAnalyzeViewController extends BaseController {
 			diskserrie2.setValue(diskUsedNumstr);
 			diskUsedItem.setyDataArr(new Serrie[]{diskserrie1, diskserrie2});
 			
+			
+			//资源分析
+			int currDate = 7;	//分析天数
+			int[] currAppCpuNum =  new int[plNameList.size()];
+			int[] currAppDiskNum =  new int[plNameList.size()];
+			int[] currAppMemoryNum =  new int[plNameList.size()];
+			List<VirtualMachine> currAppVmList = virtualMachineService.findCurrentDay(String.valueOf(currDate));
+			if (currAppVmList != null && currAppVmList.size() >0) {
+				for (VirtualMachine appVm : currAppVmList) {
+					int index = plIdList.indexOf(appVm.getPlatform());
+					if (index < 0) {
+						continue;
+					}
+					currAppCpuNum[index] = currAppCpuNum[index]  + Integer.parseInt(appVm.getCpu() == null ? "0" : appVm.getCpu());
+					currAppDiskNum[index] = currAppDiskNum[index]  +  Integer.parseInt(appVm.getDatadisk() == null ? "0" : appVm.getDatadisk());
+					currAppMemoryNum[index] = currAppMemoryNum[index]  + Integer.parseInt(appVm.getMemory() == null ? "0" : appVm.getMemory());
+				}
+			}
+			List<PlatformAnalyze> platformAnalyzeList = new ArrayList<PlatformAnalyze>();
+			for (int i = 0 ; i < plNameList.size() ;i++) {
+				PlatformAnalyze platformAnalyze = new PlatformAnalyze();
+				if (plNameList.get(i) == null) {
+					continue;
+				}
+				platformAnalyze.setPlatformName(plNameList.get(i));
+				platformAnalyze.setCputotal(String.valueOf(cpuNums[i]));
+				platformAnalyze.setCpuUsedPercent(getNumberPercent(Integer.parseInt(cpuUsedNumstr[i]), cpuNums[i]));
+				platformAnalyze.setCpuAppPerDays(String.valueOf(getDiv(currAppCpuNum[i], currDate)));
+				if ((Integer.parseInt(cpuUsedNumstr[i])/cpuNums[i]) > 1) {
+					platformAnalyze.setCpuSupportAppDays("0");
+				}else {
+					int z =  cpuNums[i] - Integer.parseInt(cpuUsedNumstr[i]);
+					platformAnalyze.setCpuSupportAppDays(String.valueOf(getDiv(z, Integer.parseInt(platformAnalyze.getCpuAppPerDays()))));
+				}
+				
+				platformAnalyze.setMemorytotal(String.valueOf(memoryNums[i]));
+				platformAnalyze.setMemoryUsedPercent(getNumberPercent(Integer.parseInt(memoryUsedNumstr[i]), memoryNums[i]));
+				platformAnalyze.setMemoryAppPerDays(String.valueOf(getDiv(currAppMemoryNum[i], currDate)));
+				if ((Integer.parseInt(memoryUsedNumstr[i])/memoryNums[i]) > 1) {
+					platformAnalyze.setMemorySupportAppDays("0");
+				}else {
+					int z =  memoryNums[i] - Integer.parseInt(memoryUsedNumstr[i]);
+					platformAnalyze.setMemorySupportAppDays(String.valueOf(getDiv(z, Integer.parseInt(platformAnalyze.getMemoryAppPerDays()))));
+				}
+				
+				platformAnalyze.setDisktotal(String.valueOf(diskNums[i]));
+				platformAnalyze.setDiskUsedPercent(getNumberPercent(Integer.parseInt(diskUsedNumstr[i]), diskNums[i]));
+				platformAnalyze.setDiskAppPerDays(String.valueOf(getDiv(currAppDiskNum[i], currDate)));
+				if ((Integer.parseInt(diskUsedNumstr[i])/diskNums[i]) > 1) {
+					platformAnalyze.setDiskSupportAppDays("0");
+				}else {
+					int z =  diskNums[i] - Integer.parseInt(diskUsedNumstr[i]);
+					platformAnalyze.setDiskSupportAppDays(String.valueOf(getDiv(z, Integer.parseInt(platformAnalyze.getDiskAppPerDays()))));
+				}
+				platformAnalyzeList.add(platformAnalyze);
+			}
+			
 			analyzeMap.put("cpu", cpuUsedItem);
 			analyzeMap.put("memory", memoryUsedItem);
 			analyzeMap.put("disk", diskUsedItem);
+			analyzeMap.put("platformAnalyzeList", platformAnalyzeList);
 			return analyzeMap;
 		}
 		
@@ -199,5 +256,113 @@ public class ResAnalyzeViewController extends BaseController {
 			
 			
 		}
+		
+		class PlatformAnalyze{
+			private String platformName;
+			private String cputotal;
+			private String cpuUsedPercent;
+			private String cpuAppPerDays;
+			private String cpuSupportAppDays;
+			private String memorytotal;
+			private String memoryUsedPercent;
+			private String memoryAppPerDays;
+			private String memorySupportAppDays;
+			private String disktotal;
+			private String diskUsedPercent;
+			private String diskAppPerDays;
+			private String diskSupportAppDays;
+			public String getCputotal() {
+				return cputotal;
+			}
+			public String getPlatformName() {
+				return platformName;
+			}
+
+			public void setPlatformName(String platformName) {
+				this.platformName = platformName;
+			}
+
+			public void setCputotal(String cputotal) {
+				this.cputotal = cputotal;
+			}
+			public String getCpuUsedPercent() {
+				return cpuUsedPercent;
+			}
+			public void setCpuUsedPercent(String cpuUsedPercent) {
+				this.cpuUsedPercent = cpuUsedPercent;
+			}
+			public String getCpuAppPerDays() {
+				return cpuAppPerDays;
+			}
+			public void setCpuAppPerDays(String cpuAppPerDays) {
+				this.cpuAppPerDays = cpuAppPerDays;
+			}
+			public String getCpuSupportAppDays() {
+				return cpuSupportAppDays;
+			}
+			public void setCpuSupportAppDays(String cpuSupportAppDays) {
+				this.cpuSupportAppDays = cpuSupportAppDays;
+			}
+			public String getMemorytotal() {
+				return memorytotal;
+			}
+			public void setMemorytotal(String memorytotal) {
+				this.memorytotal = memorytotal;
+			}
+			public String getMemoryUsedPercent() {
+				return memoryUsedPercent;
+			}
+			public void setMemoryUsedPercent(String memoryUsedPercent) {
+				this.memoryUsedPercent = memoryUsedPercent;
+			}
+			public String getMemoryAppPerDays() {
+				return memoryAppPerDays;
+			}
+			public void setMemoryAppPerDays(String memoryAppPerDays) {
+				this.memoryAppPerDays = memoryAppPerDays;
+			}
+			public String getMemorySupportAppDays() {
+				return memorySupportAppDays;
+			}
+			public void setMemorySupportAppDays(String memorySupportAppDays) {
+				this.memorySupportAppDays = memorySupportAppDays;
+			}
+			public String getDisktotal() {
+				return disktotal;
+			}
+			public void setDisktotal(String disktotal) {
+				this.disktotal = disktotal;
+			}
+			public String getDiskUsedPercent() {
+				return diskUsedPercent;
+			}
+			public void setDiskUsedPercent(String diskUsedPercent) {
+				this.diskUsedPercent = diskUsedPercent;
+			}
+			public String getDiskAppPerDays() {
+				return diskAppPerDays;
+			}
+			public void setDiskAppPerDays(String diskAppPerDays) {
+				this.diskAppPerDays = diskAppPerDays;
+			}
+			public String getDiskSupportAppDays() {
+				return diskSupportAppDays;
+			}
+			public void setDiskSupportAppDays(String diskSupportAppDays) {
+				this.diskSupportAppDays = diskSupportAppDays;
+			}
+			
+			
+		}
+		
+		public String getNumberPercent(int num1, int num2) {
+			NumberFormat numberFormat = NumberFormat.getInstance();  
+			String result = numberFormat.format((float) 50 / (float) 100 * 100); 
+			return (result + "%");
+		} 
 	
+		
+		public int getDiv(int a, int b) {
+			return a%b==0?a/b:a/b+1;
+		}
 }

@@ -17,5 +17,7 @@ public interface VirtualMachineService {
 	public int countByProject(String projectId) throws Exception;
 	
 	public List<VirtualMachine> findAll() throws Exception;
+	
+	public List<VirtualMachine> findCurrentDay(String dateNum) throws Exception;
 
 }

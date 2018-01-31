@@ -175,4 +175,17 @@
 		select * from  <include refid="tableName"/>
 	</select>
 	
+	<!-- 查询最近固定时间虚拟机申请 -->
+	<select id="findCurrentDay" resultMap="virtualMachine" parameterType="String">
+		select * from  <include refid="tableName"/> where 1=1
+		<![CDATA[
+		and  date_sub(CURDATE(),interval
+		]]>
+		 #{date} 
+		 <![CDATA[
+		 day) <= date(gmt_create) 
+		 ]]>
+		
+	</select>
+	
 </mapper>
