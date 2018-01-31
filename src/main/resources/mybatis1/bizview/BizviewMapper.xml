@@ -5,13 +5,13 @@
 	<select id="getTotalNum" parameterType="pd" resultType="com.cmp.sid.CmpRes">
 		SELECT ifnull(sum(a.cpu), 0) cpuTotalNum, ifnull(sum(a.memory), 0) memTotalNum, ifnull(sum(a.localdisk), 0) storeTotalNum FROM t_hostmachine a
 		<if test="subBizviewType != null and subBizviewType != ''">
-			<if test="bizviewType != null and bizviewType = 'env'">
+			<if test="bizviewType != null and bizviewType == 'env'">
 				where exists (select 1 from t_virtualmachine b where b.hostmachine_id=a.id and b.envCode=#{subBizviewType})
 			</if>
-			<if test="bizviewType != null and bizviewType = 'dept'">
+			<if test="bizviewType != null and bizviewType == 'dept'">
 				where exists (select 1 from t_virtualmachine b where b.hostmachine_id=a.id and b.deptId=#{subBizviewType})
 			</if>
-			<if test="bizviewType != null and bizviewType = 'proj'">
+			<if test="bizviewType != null and bizviewType == 'proj'">
 				where exists (select 1 from t_virtualmachine b where b.hostmachine_id=a.id and b.project_id=#{subBizviewType})
 			</if>
 		</if>
@@ -21,13 +21,13 @@
 	<select id="getUseNum" parameterType="pd" resultType="com.cmp.sid.CmpRes">
 		SELECT ifnull(sum(a.cpu), 0) cpuUseNum, ifnull(sum(a.memory), 0) memUseNum, ifnull(sum(a.datadisk), 0) storeUseNum FROM t_virtualmachine a
 		<if test="subBizviewType != null and subBizviewType != ''">
-			<if test="bizviewType != null and bizviewType = 'env'">
+			<if test="bizviewType != null and bizviewType == 'env'">
 				where a.envCode=#{subBizviewType}
 			</if>
-			<if test="bizviewType != null and bizviewType = 'dept'">
+			<if test="bizviewType != null and bizviewType == 'dept'">
 				where a.deptId=#{subBizviewType}
 			</if>
-			<if test="bizviewType != null and bizviewType = 'proj'">
+			<if test="bizviewType != null and bizviewType == 'proj'">
 				where a.project_id=#{subBizviewType}
 			</if>
 		</if>
@@ -38,13 +38,13 @@
 		SELECT ifnull(sum(a.cpu), 0) cpuAppNum, ifnull(sum(a.memory), 0) memAppNum, ifnull(sum((SELECT sum(substring_index(substring_index(a.diskSize,',', help_topic_id+1), ',', -1)) from mysql.help_topic where (LENGTH(a.diskSize)-LENGTH(REPLACE(a.diskSize, ',', ''))+1)>help_topic_id)), 0) storeAppNum FROM cmp_workorder a 
 		where a.status in ('0', '1')
 		<if test="subBizviewType != null and subBizviewType != ''">
-			<if test="bizviewType != null and bizviewType = 'env'">
+			<if test="bizviewType != null and bizviewType == 'env'">
 				and a.envCode=#{subBizviewType}
 			</if>
-			<if test="bizviewType != null and bizviewType = 'dept'">
+			<if test="bizviewType != null and bizviewType == 'dept'">
 				and a.deptId=#{subBizviewType}
 			</if>
-			<if test="bizviewType != null and bizviewType = 'proj'">
+			<if test="bizviewType != null and bizviewType == 'proj'">
 				and a.projectCode=#{subBizviewType}
 			</if>
 		</if>
