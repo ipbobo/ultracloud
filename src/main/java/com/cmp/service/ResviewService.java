@@ -37,29 +37,30 @@ public class ResviewService {
 	public CmpRes getCmpResDtl(String operType, String bizviewType, String subBizviewType) throws Exception{
 		CmpRes cmpRes=new CmpRes();
 		cmpRes.setBizviewType(bizviewType);
-		PageData pd = new PageData();
-		String bizviewTypeName="全部数据中心";
-		if(!StringUtils.isBlank(bizviewType)){
-			pd.put("id", bizviewType);
-			bizviewTypeName=(String)datacenterService.findById(pd).get("name");
-		}
-		
-		cmpRes.setBizviewTypeName(bizviewTypeName);
+		cmpRes.setBizviewTypeName(StringUtils.isBlank(bizviewType)?"全部数据中心":(String)datacenterService.findById(new PageData("id", bizviewType)).get("name"));
 		cmpRes.setSubBizviewType(subBizviewType);
 		cmpRes.setSubBizviewTypeName(null);
-		if("cal".equals(operType)){//计算
-			cmpRes.setCpuTotalNum("10");
-			cmpRes.setCpuUseNum("5");
-			cmpRes.setStoreUseNum("5");
-			cmpRes.setMemTotalNum("10");
-			cmpRes.setMemUseNum("5");
-		}else if("store".equals(operType)){//存储
-			cmpRes.setStoreTotalNum("10");
-			cmpRes.setStoreUseNum("5");
-			cmpRes.setStoreAssignNum("3");
-		}
-		
+		PageData pd = new PageData("bizviewType", bizviewType, "subBizviewType", subBizviewType);
+		getTotalNum(pd, cmpRes);//总量查询(cpu、内存、磁盘)
+		getUseNum(pd, cmpRes);//使用量查询(cpu、内存、磁盘)
 		return cmpRes;
+	}
+	
+	//总量查询(cpu、内存、磁盘)
+	public void getTotalNum(PageData pd, CmpRes cmpRes) throws Exception {
+		CmpRes cr=(CmpRes) dao.findForObject("ResviewMapper.getTotalNum", pd);
+		cmpRes.setCpuTotalNum(cr.getCpuTotalNum());
+		cmpRes.setMemTotalNum(cr.getMemTotalNum());
+		cmpRes.setStoreTotalNum(cr.getStoreTotalNum());
+		cmpRes.setStoreAssignNum(cr.getStoreAssignNum());
+	}
+	
+	//使用量查询(cpu、内存、磁盘)
+	public void getUseNum(PageData pd, CmpRes cmpRes) throws Exception {
+		CmpRes cr=(CmpRes) dao.findForObject("ResviewMapper.getUseNum", pd);
+		cmpRes.setCpuUseNum(cr.getCpuUseNum());
+		cmpRes.setMemUseNum(cr.getMemUseNum());
+		cmpRes.setStoreUseNum(cr.getStoreUseNum());
 	}
 	
 	//物理机列表分页查询
