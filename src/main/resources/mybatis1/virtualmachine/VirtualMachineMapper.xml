@@ -170,4 +170,9 @@
 		select count(*) from  <include refid="tableName"/> where project_id = #{projectId}
 	</select>
 	
+	<!-- 通过用户 查询 -->
+	<select id="findAll" resultMap="virtualMachine" parameterType="String">
+		select * from  <include refid="tableName"/>
+	</select>
+	
 </mapper>
