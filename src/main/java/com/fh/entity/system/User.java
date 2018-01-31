@@ -25,7 +25,7 @@ public class User {
 	private Role role;			//角色对象
 	private Page page;			//分页对象
 	private String SKIN;		//皮肤
-	private String deptId;		//部门ID
+	private String DEPARTMENT_ID;//部门ID
 	
 	public String getSKIN() {
 		return SKIN;
@@ -104,11 +104,11 @@ public class User {
 		this.page = page;
 	}
 
-	public String getDeptId() {
-		return deptId;
+	public String getDEPARTMENT_ID() {
+		return DEPARTMENT_ID;
 	}
 
-	public void setDeptId(String deptId) {
-		this.deptId = deptId;
+	public void setDEPARTMENT_ID(String dEPARTMENT_ID) {
+		DEPARTMENT_ID = dEPARTMENT_ID;
 	}
 }
