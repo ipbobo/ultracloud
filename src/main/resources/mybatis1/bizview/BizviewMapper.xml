@@ -35,7 +35,7 @@
 	
 	<!-- 申请中查询(cpu、内存、磁盘) -->
 	<select id="getAppNum" parameterType="pd" resultType="com.cmp.sid.CmpRes">
-		SELECT ifnull(sum(a.cpu), 0) cpuAppNum, ifnull(sum(a.memory), 0) memAppNum, ifnull(sum((SELECT sum(substring_index(substring_index(a.diskSize,',', help_topic_id+1), ',', -1)) from mysql.help_topic where help_topic_id<(LENGTH(a.diskSize)-LENGTH(REPLACE(a.diskSize, ',', ''))+1))), 0) storeAppNum FROM cmp_workorder a 
+		SELECT ifnull(sum(a.cpu), 0) cpuAppNum, ifnull(sum(a.memory), 0) memAppNum, ifnull(sum((SELECT sum(substring_index(substring_index(a.diskSize,',', help_topic_id+1), ',', -1)) from mysql.help_topic where (LENGTH(a.diskSize)-LENGTH(REPLACE(a.diskSize, ',', ''))+1)>help_topic_id)), 0) storeAppNum FROM cmp_workorder a 
 		where a.status in ('0', '1')
 		<if test="subBizviewType != null and subBizviewType != ''">
 			<if test="bizviewType != null and bizviewType = 'env'">
