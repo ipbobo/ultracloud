@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.BizviewService;
-import com.cmp.service.CloudHostService;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.servicemgt.EnvironmentService;
@@ -36,8 +35,6 @@ public class BizviewController extends BaseController {
 	private DepartmentService departmentService;
 	@Resource
 	private ProjectService projectService;
-	@Resource
-	private CloudHostService cloudHostService;
 	
 	//业务视图总览列表查询
 	@RequestMapping(value="/bizview/list")
