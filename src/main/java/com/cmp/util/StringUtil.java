@@ -35,7 +35,6 @@ public class StringUtil {
         return retObj.toString();
 	}
 	
-	
 	//字符串中提取数字
 	public static String getInteger(String str) {
 		String str2 = "";
