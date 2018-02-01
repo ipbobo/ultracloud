@@ -13,11 +13,11 @@
 <script type="text/javascript">
 //复选框选择
 function checkFunc(){
-	if($("#chkId").is(":checked")){
+	//if($("#chkId").is(":checked")){
 		timeRefresh=window.setInterval(getDashboard, 300000)
-	}else{
-		clearInterval(timeRefresh);
-	}
+	//}else{
+	//	clearInterval(timeRefresh);
+	//}
 }
 
 //获取仪表盘
