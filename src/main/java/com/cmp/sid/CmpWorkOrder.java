@@ -33,6 +33,7 @@ public class CmpWorkOrder {
 	private String imgPath;//镜像路径
 	private String expireDate;//到期时间
 	private String virNum;//虚拟机数量
+	private String totalAmt;//总价格
 	private String applyUserName; //申请者用户名
 	private String virtualMachineId; //虚拟机ID
 	private String executeStatus;//工单实施状态   0 新建  1 实施中  2 完成  3 异常
@@ -320,6 +321,12 @@ public class CmpWorkOrder {
 
 	public void setUploadFileName(String uploadFileName) {
 		this.uploadFileName = uploadFileName;
+	}
+	public String getTotalAmt() {
+		return totalAmt;
+	}
+	public void setTotalAmt(String totalAmt) {
+		this.totalAmt = totalAmt;
 	}
 	
 	

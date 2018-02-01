@@ -24,6 +24,7 @@ function init(){
 			success:function(data){
 				loadBarChart(data.cpu.chartTitle, "bar1", data.cpu.titleArr, data.cpu.xDataArr, data.cpu.yDataArr);
 				loadBarChart(data.vm.chartTitle, "bar2", data.vm.titleArr, data.vm.xDataArr, data.vm.yDataArr);
+				loadBarChart(data.disk.chartTitle, "bar3", data.disk.titleArr, data.disk.xDataArr, data.disk.yDataArr);
 			}
 		});  
 	
@@ -78,58 +79,62 @@ function barSerrie(data){
 		<div style="padding: 0px;margin: 0px" class="alert alert-block">
 			<table style="width:80%;">
 				<tr style="height: 200px;">
-					<td id="bar1" align="center" style="width: 400px;"></td>
-					<td id="bar2" align="center" style="width: 400px;" ></td>
-				</tr>
-				<tr style="height: 200px;">
-					<td id="bar3" align="center" style="width: 400px;" ></td>
-					<td id="bar4" align="center" style="width: 400px;" ></td>
+					<td id="bar1" align="center" style="width: 300px;"></td>
+					<td id="bar2" align="center" style="width: 300px;" ></td>
+					<td id="bar3" align="center" style="width: 300px;" ></td>
 				</tr>
 				</table>
 				<table>
-				<tr style="padding-top: 20px;">
-					<td style="width:120px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;vmware1:</td>
-					<td>
-						<table border="1" style="border: 2px; border-color: black;">
-							<thead>
-								<tr>
-									<th class="center" style="width: 200px;">CPU总量(核)/使用百分比</th>
-									<th class="center" style="width: 200px;">日均申请量(核)</th>
-									<th class="center" style="width: 200px;">支持分配天数</th>
+				
+				<c:choose>
+					<c:when test="${not empty platformAnalyzeList}">
+						<c:forEach items="${platformAnalyzeList}" var="var" varStatus="vs">
+								<tr style="padding-top: 20px;">
+									<td style="width:120px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;${var.platformName}:</td>
+									<td>
+										<table border="1" style="border: 2px; border-color: black;">
+											<thead>
+												<tr>
+													<th class="center" style="width: 200px;">CPU总量(核)/使用百分比</th>
+													<th class="center" style="width: 200px;">日均申请量(核)</th>
+													<th class="center" style="width: 200px;">支持分配天数</th>
+												</tr>
+											</thead>
+												<tr>
+													<td>${var.cputotal}/${var.cpuUsedPercent} </td>
+													<td>${var.cpuAppPerDays}</td>
+													<td>${var.cpuSupportAppDays}</td>
+												</tr>
+											<thead>
+												<tr>
+													<th class="center">内存总量(G)/使用百分比</th>
+													<th class="center">日均申请量(G)</th>
+													<th class="center">支持分配天数</th>
+												</tr>
+											</thead>
+												<tr>
+													<td>${var.memorytotal}/${var.memoryUsedPercent} </td>
+													<td>${var.memoryAppPerDays}</td>
+													<td>${var.memorySupportAppDays}</td>
+												</tr>
+											<thead>
+												<tr>
+													<th class="center">磁盘总量(G)/使用百分比</th>
+													<th class="center">日均申请量(G)</th>
+													<th class="center">支持分配天数</th>
+												</tr>
+											</thead>
+												<tr>
+													<td>${var.disktotal}/${var.diskUsedPercent} </td>
+													<td>${var.diskAppPerDays}</td>
+													<td>${var.diskSupportAppDays}</td>
+												</tr>
+										</table>
+									</td>
 								</tr>
-							</thead>
-								<tr>
-									<td>1 </td>
-									<td> 1</td>
-									<td>1 </td>
-								</tr>
-							<thead>
-								<tr>
-									<th class="center">内存总量(G)/使用百分比</th>
-									<th class="center">日均申请量(G)</th>
-									<th class="center">支持分配天数</th>
-								</tr>
-							</thead>
-								<tr>
-									<td>1 </td>
-									<td> 1</td>
-									<td>1 </td>
-								</tr>
-							<thead>
-								<tr>
-									<th class="center">磁盘总量(G)/使用百分比</th>
-									<th class="center">日均申请量(G)</th>
-									<th class="center">支持分配天数</th>
-								</tr>
-							</thead>
-								<tr>
-									<td>1 </td>
-									<td> 1</td>
-									<td>1 </td>
-								</tr>
-						</table>
-					</td>
-				</tr>
+						</c:forEach>
+					</c:when>
+				</c:choose>
 			</table>
 		</div>
 	</div>
