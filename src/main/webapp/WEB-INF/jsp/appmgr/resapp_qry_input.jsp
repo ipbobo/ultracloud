@@ -533,7 +533,7 @@ function virNumFunc(operType){
 	getTotalAmt(virNum);//计算金额
 }
 
-//上传附件：.txt,.doc,.docx,.xls,.xlsx,image/*
+//上传附件：txt,word,excel,image
 function uploadFileFunc() {
 	var uploadFile = $('#uploadFile').val();
 	if (uploadFile==null || uploadFile=='') {
@@ -542,7 +542,7 @@ function uploadFileFunc() {
 	}
 
 	if (!/\.(txt|TXT|doc|docx|DOC|DOCX|xls|xlsx|XLS|XLSX|gif|jpg|jpeg|png|bmp|GIF|JPG|JPEG|PNG|BMP)$/.test(uploadFile)) {
-		$("#uploadFile").tips({side:3, msg:'待上传的文件必须是.txt,.doc,.docx,.xls,.xlsx,image中的一种', bg:'#AE81FF', time:2});
+		$("#uploadFile").tips({side:3, msg:'待上传的文件必须是txt,word,excel,image中的一种', bg:'#AE81FF', time:2});
 		return false;
 	}
 	
@@ -856,7 +856,7 @@ $(window).scroll(function() {
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;上传附件</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="padding:10px;"><input style="background-color:#cccccc;" type="file" name="uploadFile" id="uploadFile" value="选择文件" accept=".txt,.doc,.docx,.xls,.xlsx,image/*"/></td>
-			<td colspan="5"><input type="button" value="上传" onclick="uploadFileFunc()"></td>
+			<td colspan="5"><input type="button" value="上传" onclick="uploadFileFunc()">&nbsp;格式要求：txt,word,excel,image</td>
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
