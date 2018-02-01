@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.cmp.activiti.CustomGroupEntityManager;
 import com.cmp.sid.CmpAxis;
-import com.cmp.sid.CmpRes;
+import com.cmp.sid.CmpDashboard;
 import com.cmp.util.HttpUtil;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
@@ -81,84 +81,84 @@ public class DashboardService {
 	}
 	
 	//虚机详细信息查询
-	public CmpRes getVirDtl() throws Exception {
-		CmpRes cmpRes=new CmpRes();
-		cmpRes.setCpuUseNum("1");
-		cmpRes.setCpuTotalNum("10");
-		cmpRes.setMemUseNum("2");
-		cmpRes.setMemTotalNum("20");
-		cmpRes.setStoreUseNum("21");
-		cmpRes.setStoreTotalNum("100");
-		return cmpRes;
+	public CmpDashboard getVirDtl() throws Exception {
+		CmpDashboard cd=new CmpDashboard();
+		cd.setCpuUseNum("1");
+		cd.setCpuTotalNum("10");
+		cd.setMemUseNum("2");
+		cd.setMemTotalNum("20");
+		cd.setStoreUseNum("21");
+		cd.setStoreTotalNum("100");
+		return cd;
 	}
 	
 	//物理机详细信息查询
-	public CmpRes getPhysDtl() throws Exception {
-		CmpRes cmpRes=new CmpRes();
-		cmpRes.setCpuUseNum("3");
-		cmpRes.setCpuTotalNum("10");
-		cmpRes.setMemUseNum("28");
-		cmpRes.setMemTotalNum("36");
-		cmpRes.setStoreUseNum("60");
-		cmpRes.setStoreTotalNum("100");
-		return cmpRes;
+	public CmpDashboard getPhysDtl() throws Exception {
+		CmpDashboard cd=new CmpDashboard();
+		cd.setCpuUseNum("3");
+		cd.setCpuTotalNum("10");
+		cd.setMemUseNum("28");
+		cd.setMemTotalNum("36");
+		cd.setStoreUseNum("60");
+		cd.setStoreTotalNum("100");
+		return cd;
 	}
 	
 	//虚拟机负载
-	public CmpRes getVirLoad() throws Exception {
-		CmpRes cmpRes=new CmpRes();
-		cmpRes.setLoadLittleNum("2");
-		cmpRes.setLoadMiddleNum("3");
-		cmpRes.setLoadHeightNum("4");
-		cmpRes.setLoadStopNum("5");
-		return cmpRes;
+	public CmpDashboard getVirLoad() throws Exception {
+		CmpDashboard cd=new CmpDashboard();
+		cd.setLoadLittleNum("2");
+		cd.setLoadMiddleNum("3");
+		cd.setLoadHeightNum("4");
+		cd.setLoadStopNum("5");
+		return cd;
 	}
 	
 	//宿主机负载
-	public CmpRes getHostLoad() throws Exception {
-		CmpRes cmpRes=new CmpRes();
-		cmpRes.setLoadLittleNum("12");
-		cmpRes.setLoadMiddleNum("13");
-		cmpRes.setLoadHeightNum("14");
-		cmpRes.setLoadStopNum("15");
-		return cmpRes;
+	public CmpDashboard getHostLoad() throws Exception {
+		CmpDashboard cd=new CmpDashboard();
+		cd.setLoadLittleNum("12");
+		cd.setLoadMiddleNum("13");
+		cd.setLoadHeightNum("14");
+		cd.setLoadStopNum("15");
+		return cd;
 	}
 	
 	//物理机负载
-	public CmpRes getPhysLoad() throws Exception {
-		CmpRes cmpRes=new CmpRes();
-		cmpRes.setLoadLittleNum("22");
-		cmpRes.setLoadMiddleNum("23");
-		cmpRes.setLoadHeightNum("24");
-		cmpRes.setLoadStopNum("25");
-		return cmpRes;
+	public CmpDashboard getPhysLoad() throws Exception {
+		CmpDashboard cd=new CmpDashboard();
+		cd.setLoadLittleNum("22");
+		cd.setLoadMiddleNum("23");
+		cd.setLoadHeightNum("24");
+		cd.setLoadStopNum("25");
+		return cd;
 	}
 	
 	//虚拟机运行
-	public CmpRes getVirRun() throws Exception {
-		CmpRes cmpRes=new CmpRes();
-		cmpRes.setRunRunnigNum("2");
-		cmpRes.setRunHangupNum("3");
-		cmpRes.setRunCloseNum("4");
-		return cmpRes;
+	public CmpDashboard getVirRun() throws Exception {
+		CmpDashboard cd=new CmpDashboard();
+		cd.setRunRunnigNum("2");
+		cd.setRunHangupNum("3");
+		cd.setRunCloseNum("4");
+		return cd;
 	}
 	
 	//宿主机运行
-	public CmpRes getHostRun() throws Exception {
-		CmpRes cmpRes=new CmpRes();
-		cmpRes.setRunRunnigNum("12");
-		cmpRes.setRunHangupNum("13");
-		cmpRes.setRunCloseNum("14");
-		return cmpRes;
+	public CmpDashboard getHostRun() throws Exception {
+		CmpDashboard cd=new CmpDashboard();
+		cd.setRunRunnigNum("12");
+		cd.setRunHangupNum("13");
+		cd.setRunCloseNum("14");
+		return cd;
 	}
 	
 	//物理机运行
-	public CmpRes getPhysRun() throws Exception {
-		CmpRes cmpRes=new CmpRes();
-		cmpRes.setRunRunnigNum("22");
-		cmpRes.setRunHangupNum("23");
-		cmpRes.setRunCloseNum("24");
-		return cmpRes;
+	public CmpDashboard getPhysRun() throws Exception {
+		CmpDashboard cd=new CmpDashboard();
+		cd.setRunRunnigNum("22");
+		cd.setRunHangupNum("23");
+		cd.setRunCloseNum("24");
+		return cd;
 	}
 	
 	//CPU资源使用量趋势

@@ -19,13 +19,6 @@ public class CmpRes {
 	private String storeAppNum;//存储申请中
 	private String storeRestNum;//存储剩余
 	private String storeAssignNum;//存储已分配
-	private String loadLittleNum;//轻度负载
-	private String loadMiddleNum;//中度负载
-	private String loadHeightNum;//高度负载
-	private String loadStopNum;//停机负载
-	private String runRunnigNum;//运行
-	private String runHangupNum;//挂起
-	private String runCloseNum;//关机
 
 	public String getBizviewType() {
 		return bizviewType;
@@ -161,71 +154,5 @@ public class CmpRes {
 
 	public void setStoreAssignNum(String storeAssignNum) {
 		this.storeAssignNum = storeAssignNum;
-	}
-
-	public String getLoadLittleNum() {
-		return loadLittleNum;
-	}
-
-	public void setLoadLittleNum(String loadLittleNum) {
-		this.loadLittleNum = loadLittleNum;
-	}
-
-	public String getLoadMiddleNum() {
-		return loadMiddleNum;
-	}
-
-	public void setLoadMiddleNum(String loadMiddleNum) {
-		this.loadMiddleNum = loadMiddleNum;
-	}
-
-	public String getLoadHeightNum() {
-		return loadHeightNum;
-	}
-
-	public void setLoadHeightNum(String loadHeightNum) {
-		this.loadHeightNum = loadHeightNum;
-	}
-
-	public String getLoadStopNum() {
-		return loadStopNum;
-	}
-
-	public void setLoadStopNum(String loadStopNum) {
-		this.loadStopNum = loadStopNum;
-	}
-
-	//负载总数
-	public String getLoadTotalNum() {
-		return String.valueOf(Integer.parseInt(loadLittleNum)+Integer.parseInt(loadMiddleNum)+Integer.parseInt(loadHeightNum)+Integer.parseInt(loadStopNum));
-	}
-
-	public String getRunRunnigNum() {
-		return runRunnigNum;
-	}
-
-	public void setRunRunnigNum(String runRunnigNum) {
-		this.runRunnigNum = runRunnigNum;
-	}
-	
-	public String getRunHangupNum() {
-		return runHangupNum;
-	}
-	
-	public void setRunHangupNum(String runHangupNum) {
-		this.runHangupNum = runHangupNum;
-	}
-
-	public String getRunCloseNum() {
-		return runCloseNum;
-	}
-	
-	public void setRunCloseNum(String runCloseNum) {
-		this.runCloseNum = runCloseNum;
-	}
-	
-	//运行总数
-	public String getRunTotalNum() {
-		return String.valueOf(Integer.parseInt(runRunnigNum)+Integer.parseInt(runHangupNum)+Integer.parseInt(runCloseNum));
 	}
 }
