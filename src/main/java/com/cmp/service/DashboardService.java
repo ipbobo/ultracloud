@@ -25,16 +25,15 @@ import net.sf.json.JSONObject;
 @Service
 public class DashboardService {
 	private static Logger logger = Logger.getLogger(CustomGroupEntityManager.class);
-	private static String ZABBIX_JSONSTR="{\"jsonrpc\": \"2.0\", \"method\": null, \"params\": null, \"auth\": null, \"id\": 1}";
 	private static String ZABBIX_TOKEN=null;//Zabbix请求token
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
 	@Value("${zabbix.url}")
-	private String ZABBIX_URL;//Zabbix请求地址
+	private String ZABBIX_URL="http://180.169.225.158:86/zabbix/api_jsonrpc.php";//Zabbix请求地址
 	@Value("${zabbix.user}")
-	private String ZABBIX_USER;//Zabbix用户名
+	private String ZABBIX_USER="Admin";//Zabbix用户名
 	@Value("${zabbix.password}")
-	private String ZABBIX_PASSWORD;//Zabbix密码
+	private String ZABBIX_PASSWORD="zabbix";//Zabbix密码
 
 	//审核组查询
 	@SuppressWarnings("unchecked")
@@ -210,13 +209,15 @@ public class DashboardService {
 	}
 	
 	//调用Zabbix API
-	public JSONObject getZabbixJson(String method, String params){
-		ZABBIX_TOKEN=StringUtils.isBlank(ZABBIX_TOKEN)?getZabbixToken():ZABBIX_TOKEN;//获取Zabbix token
-		JSONObject jsonObj=JSONObject.fromObject(ZABBIX_JSONSTR);//返回json对象
-		jsonObj.put("method", method);
-		jsonObj.put("params", params);
-		jsonObj.put("auth", ZABBIX_TOKEN);
-		String retJsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, jsonObj.toString(), false);
+	public JSONObject getZabbixJson(String method, String params, boolean ... bools){
+		boolean isLogin=(bools!=null && bools.length==1)?bools[0]:false;//是否登录
+		if(!isLogin && StringUtils.isBlank(ZABBIX_TOKEN)){
+			if(getZabbixJson("user.login", "{\"user\": \""+ZABBIX_USER+"\", \"password\": \""+ZABBIX_PASSWORD+"\"}", true)==null){//调用Zabbix API
+				return null;
+			}
+		}
+		
+		String retJsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, getJsonStr("2.0", method, params, ZABBIX_TOKEN), false);//发送post请求(JSON)
 		JSONObject retJsonObj=null;
 		if(StringUtils.isBlank(retJsonStr) || (retJsonObj=JSONObject.fromObject(retJsonStr))==null || retJsonObj.isNullObject()){//接口返回错误
 			logger.error("调用Zabbix API时错误："+retJsonStr);
@@ -227,8 +228,8 @@ public class DashboardService {
 		if(errorJsonObj!=null && !errorJsonObj.isNullObject()){//接口返回错误
 			String code=errorJsonObj.getString("code");
 			String data=errorJsonObj.getString("data");
-			if(data!=null && "-32602".equals(code) && data.indexOf("re-login")>=0){//Zabbix token失效
-				if(getZabbixToken()!=null){//获取Zabbix token
+			if(!isLogin && data!=null && "-32602".equals(code) && data.indexOf("re-login")>=0){//Zabbix token失效
+				if(getZabbixJson("user.login", "{\"user\": \""+ZABBIX_USER+"\", \"password\": \""+ZABBIX_PASSWORD+"\"}", true)!=null){//调用Zabbix API
 					return getZabbixJson(method, params);
 				}
 			}
@@ -237,26 +238,23 @@ public class DashboardService {
 			return null;
 		}
 		
-		return jsonObj;
+		if(isLogin) ZABBIX_TOKEN=retJsonObj.getString("result");//获取Zabbix token
+		return retJsonObj;
 	}
 	
-	//获取Zabbix token
-	private String getZabbixToken(){
-		String jsonStr="{\"jsonrpc\": \"2.0\", \"method\": \"user.login\", \"params\": {\"user\": \""+ZABBIX_USER+"\", \"password\": \""+ZABBIX_PASSWORD+"\"}, \"auth\": null, \"id\": 1}";
-		String retJsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, jsonStr, false);
-		JSONObject retJsonObj=null;
-		if(StringUtils.isBlank(retJsonStr) || (retJsonObj=JSONObject.fromObject(retJsonStr))==null || retJsonObj.isNullObject()){//接口返回错误
-			logger.error("调用Zabbix登录API时错误："+retJsonStr);
-			return null;
-		}
-		
-		JSONObject errorJsonObj=retJsonObj.getJSONObject("error");
-		if(errorJsonObj!=null && !errorJsonObj.isNullObject()){//接口返回错误
-			logger.error("调用Zabbix登录API时错误：code=["+errorJsonObj.getString("code")+"]、message=["+errorJsonObj.getString("message")+"]、data=["+errorJsonObj.getString("data")+"]");
-			return null;
-		}
-		
-		ZABBIX_TOKEN=retJsonObj.getString("result");
-		return ZABBIX_TOKEN;//Zabbix请求token
+	//获取json字符串
+	public String getJsonStr(String jsonrpc, String method, String params, String auth, String ... ids){
+		JSONObject jsonObj=new JSONObject();//返回json对象
+		jsonObj.put("jsonrpc", jsonrpc);
+		jsonObj.put("method", method);
+		jsonObj.put("params", params);
+		jsonObj.put("auth", auth);
+		jsonObj.put("id", (ids!=null && ids.length==1)?ids[0]:1);
+		return jsonObj.toString();
+	}
+	
+	public static void main(String[] args){
+		DashboardService aa=new DashboardService();
+		aa.getZabbixJson("host.get", "{\"filter\":{\"host\":[\"Zabbixserver\",\"Linuxserver\"]}}");
 	}
 }

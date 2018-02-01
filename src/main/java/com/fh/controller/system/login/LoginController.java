@@ -91,7 +91,7 @@ public class LoginController extends BaseController {
 		String applyUserId=StringUtil.getUserName();
 		Map<String, String> auditMap=dashboardService.getAuditMap(applyUserId);//审核组查询
 		String roleType=StringUtil.getRoleType(auditMap);//获取用户的角色类型
-		PageData pd = getPageData("applyUserId", applyUserId, "roleType", roleType, "applicant", "applicant".equals(roleType)?applyUserId:null, "audit", "audit".equals(roleType)?auditMap.get("audit"):null);
+		PageData pd = getPageData("applyUserId", applyUserId, "roleType", roleType, "audit", auditMap.get("audit"));
 		ModelAndView mv = this.getModelAndView();
 		mv.addObject("cpuTimeType", dbReq.getCpuTimeType());//CPU时间类型
 		mv.addObject("memTimeType", dbReq.getMemTimeType());//内存时间类型
