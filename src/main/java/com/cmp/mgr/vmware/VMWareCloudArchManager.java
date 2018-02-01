@@ -33,6 +33,13 @@ import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.bean.CreateVolumeRequest;
 import com.vmware.vim25.AboutInfo;
+import com.vmware.vim25.CustomizationAdapterMapping;
+import com.vmware.vim25.CustomizationDhcpIpGenerator;
+import com.vmware.vim25.CustomizationGlobalIPSettings;
+import com.vmware.vim25.CustomizationIPSettings;
+import com.vmware.vim25.CustomizationLinuxPrep;
+import com.vmware.vim25.CustomizationPrefixName;
+import com.vmware.vim25.CustomizationSpec;
 import com.vmware.vim25.Description;
 import com.vmware.vim25.DynamicProperty;
 import com.vmware.vim25.ManagedObjectReference;
@@ -575,11 +582,35 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			relocateSpec.setDatastore(datastore.getMOR());
 			relocateSpec.setHost(hostSystemT.getMOR());
 
+			CustomizationSpec customSpec = new CustomizationSpec();
+			customSpec.setGlobalIPSettings(new CustomizationGlobalIPSettings());
+			CustomizationLinuxPrep clp = new CustomizationLinuxPrep();
+			clp.setDomain("localdomain");
+			// clp.setDomain(domainName);
+			// To set the host name of the clone
+			CustomizationPrefixName cn = new CustomizationPrefixName();
+			cn.setBase("localhost");
+			// cn.setBase(baseName);
+			clp.setHostName(cn);
+			customSpec.setIdentity(clp);
+			// To set nicSettingMap
+			CustomizationAdapterMapping cam = new CustomizationAdapterMapping();
+			CustomizationIPSettings cip = new CustomizationIPSettings();
+			cip.setIp(new CustomizationDhcpIpGenerator());
+			cam.setAdapter(cip);
+			customSpec.setNicSettingMap(new CustomizationAdapterMapping[] { cam });
+
 			VirtualMachineCloneSpec cloneSpec = new VirtualMachineCloneSpec();
 			cloneSpec.setConfig(configSpec);
 			cloneSpec.setLocation(relocateSpec);
 			cloneSpec.setPowerOn(true);
 			cloneSpec.setTemplate(false);
+			cloneSpec.setCustomization(customSpec);
+
+			// GuestNicInfo nic = new GuestNicInfo();
+			// nic.setIpAddress(new String[] { req.getIp() });
+			// nic.setMacAddress("00:51:56:A4:6D:CE");
+			// vm.getGuest().setNet(new GuestNicInfo[] { nic });
 
 			vm.cloneVM_Task(dc.getVmFolder(), req.getVmName(), cloneSpec).waitForMe();
 		} catch (Exception e) {
@@ -802,7 +833,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		TccCapability capability = new TccCapability();
 		for (HostSystem hostSystem : hostMachines) {
 			capability.setSupportedVcpus(capability.getSupportedVcpus()
-					+ hostSystem.getCapability().getMaxSupportedVcpus());
+					+ hostSystem.getCapability().getMaxHostSupportedVcpus());
 			capability.setSupportedMemory(capability.getSupportedMemory()
 					+ hostSystem.getHardware().getMemorySize());
 		}

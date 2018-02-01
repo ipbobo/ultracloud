@@ -14,6 +14,8 @@ public class CloneVmRequest {
 
 	private long ramSize;
 
+	private String ip;
+
 	public String getDcName() {
 		return dcName;
 	}
@@ -60,6 +62,14 @@ public class CloneVmRequest {
 
 	public void setRamSize(long ramSize) {
 		this.ramSize = ramSize;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 }
