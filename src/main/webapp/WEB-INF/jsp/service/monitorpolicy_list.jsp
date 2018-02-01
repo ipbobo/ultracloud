@@ -54,9 +54,12 @@
 											</td>
 											<td class='center'><a onclick="edit('${var.id}')" style="cursor:pointer;">${var.name}</a></td>
 											<td class="center">${var.cycle }</td>
-											<td class='center'>${var.max}</td>
 											<td class='center'>${var.min}</td>
-											<td class='center'>${var.isemail}</td>
+											<td class='center'>${var.max}</td>
+											<td class='center'>
+												<c:if test="${var.isemail == 1 }">是</c:if>
+												<c:if test="${var.isemail == 0 }">否</c:if>
+											</td>
 										</tr>
 									</c:forEach>
 									</c:if>
