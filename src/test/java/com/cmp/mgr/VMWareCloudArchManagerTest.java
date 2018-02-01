@@ -145,16 +145,17 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 		});
 	}
 
-	// @Test
+	@Test
 	public void testCloneVM() {
 		execute("CloneVirtualMachine", () -> {
 			CloneVmRequest request = new CloneVmRequest();
-			request.setVmName("TestVM2");
+			request.setVmName("TestVM");
 			request.setTplName("rhel6.0_x64_template");
 			request.setDcName("DC1");
 			request.setRpName("Resources");
 			request.setCpuSize(1);
-			request.setRamSize(768);
+			request.setRamSize(1024);
+			request.setIp("192.168.0.131");
 
 			cloudArchManager.cloneVirtualMachine(request);
 		});

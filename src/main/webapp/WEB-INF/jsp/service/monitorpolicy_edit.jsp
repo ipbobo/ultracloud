@@ -54,7 +54,7 @@
 			<div class="page-content">
 				<div class="row"  >
 					
-					<form action="project/${msg }.do" name="Form1" id="Form1" method="post" >
+					<form action="monitorpolicy/${msg }.do" name="Form1" id="Form1" method="post" >
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<input type="hidden" name="DATA_IDS" id="DATA_IDS" />
 						<div id="zhongxin" style="padding-top: 13px;padding-left: 13px;">
@@ -64,19 +64,28 @@
 								<td><input readonly="readonly" type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;统计范围:</td>
-								<td><input type="text" name="name" id="name" value="${pd.cycle}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;统计周期:</td>
+								<td><input type="text" name="cycle" id="cycle" value="${pd.cycle}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:50%;"/>&nbsp;天</td>
 							</tr>
 							<tr>
 								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;阀值范围:</td>
 								<td style="padding-top: 13px;">
-								<input type="number" name="min" id="min" value="${pd.min}" maxlength="2" title="最小值" style="width:30%;"/>&nbsp;-&nbsp;
-								<input type="number" name="max" id="max" value="${pd.max}" maxlength="2" title="最大值" style="width:30%;"/>
+								<input readonly="readonly" type="number" name="min" id="min" value="${pd.min}" maxlength="2" title="最小值" style="width:30%;"/>&nbsp;-&nbsp;
+								<input readonly="readonly" type="number" name="max" id="max" value="${pd.max}" maxlength="2" title="最大值" style="width:30%;"/>
 								<!-- <p style="vertical-align: middle;">前后输入框分别为阀值更好限和上限</p> -->
 								<div style="padding-top: 5px;">
 									<div class="space-4"></div>
 									<div id="slider"></div>
 								</div>
+								</td>
+							</tr>
+							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;是否邮件通知:</td>
+								<td id="js">
+									<select class="chosen-select form-control" name="isemail" id="isemail"  style="vertical-align:top;width:50%;" >
+									<option value="1" <c:if test="${pd.isemail == 1 }">selected</c:if>>是</option>
+									<option value="0" <c:if test="${pd.isemail == 0 }">selected</c:if>>否</option>
+									</select>
 								</td>
 							</tr>
 							<tr>
@@ -113,7 +122,11 @@
 				range: true,
 				min: 0,
 				max: 100,
-				values: [ 10, 80 ]
+				values: [ 10, 80 ],
+				slide: function( event, ui ) {
+			        $( "#min" ).val(ui.values[ 0 ]);
+			        $( "#max" ).val(ui.values[ 1 ]);
+			    }
 			});
 
 		});
