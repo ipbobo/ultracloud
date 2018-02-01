@@ -838,11 +838,22 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 					+ hostSystem.getHardware().getMemorySize());
 		}
 
-		List<Datastore> datastores = searchManagedEntities(Datastore.class);
-		for (Datastore datastore : datastores) {
-			capability.setSupportedStorage(capability.getSupportedStorage()
-					+ datastore.getInfo().getFreeSpace());
-		}
+		Function<HostSystem, HostDatastoreBrowser> getDatastoreBrowser = host -> {
+			try {
+				return host.getDatastoreBrowser();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		};
+
+		searchManagedEntities(HostSystem.class).stream()
+				.map(getDatastoreBrowser)
+				.map(HostDatastoreBrowser::getDatastores)
+				.filter(ArrayUtils::isNotEmpty)
+				.flatMap(Arrays::stream).forEach(datastore -> {
+					capability.setSupportedStorage(capability.getSupportedStorage()
+							+ datastore.getInfo().getFreeSpace());
+				});
 
 		return capability;
 	}
