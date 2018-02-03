@@ -73,6 +73,24 @@
 		</if>
 	</select>
 	
+	<!-- 宿主机列表查询 -->
+	<select id="getHostList" parameterType="pd" resultType="pd">
+		select a.id, a.name, a.uuid from t_hostmachine a
+		inner join t_virtualmachine b on b.hostmachine_id=a.id
+		where a.type=='kvm'
+		<if test="roleType != null and roleType == 'applicant'">
+		  	and b.user=#{applyUserId}
+		</if>
+		<if test="roleType != null and roleType == 'audit'">
+			and exists (
+				SELECT 1 FROM act_hi_procinst c
+				INNER JOIN act_hi_actinst d on d.PROC_INST_ID_=c.PROC_INST_ID_
+				where exists (select 1 from t_usergroup_user_map e where e.USERNAME=d.ASSIGNEE_ and FIND_IN_SET(e.usergroup_id, #{audit}))
+					  and c.BUSINESS_KEY_=b.appNo
+			)
+		</if>
+	</select>
+	
 	<!-- 物理机列表查询 -->
 	<select id="getPhysList" parameterType="pd" resultType="pd">
 		select a.id, a.name, a.uuid from t_virtualmachine a
