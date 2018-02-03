@@ -67,7 +67,8 @@
 			and exists (
 				SELECT 1 FROM act_hi_procinst b
 				INNER JOIN act_hi_actinst c on c.PROC_INST_ID_=b.PROC_INST_ID_
-				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit})) and b.BUSINESS_KEY_=a.appNo
+				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit})) 
+					  and b.BUSINESS_KEY_=a.appNo
 			)
 		</if>
 	</select>

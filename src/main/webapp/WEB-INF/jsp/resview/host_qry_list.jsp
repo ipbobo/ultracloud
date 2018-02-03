@@ -52,9 +52,9 @@
 				<td class='center'>${var.name}</td>
 				<td class='center'>${var.ip}</td>
 				<td class='center'>${var.cpu}&nbsp;核/${var.memory}&nbsp;GB</td>
-				<td class='center'></td>
-				<td class='center'></td>
-				<td class='center'></td>
+				<td class='center'>${var.cpu==0?0:var.cpuUse/var.cpu}</td>
+				<td class='center'>${var.memory==0?0:var.memUse/var.memory}</td>
+				<td class='center'>${var.localdisk==0?0:var.storeUse/var.localdisk}</td>
 			</c:if>
 			<c:if test="${pd.operType=='store'}">
 				<td class='center'>${var.name}</td>
