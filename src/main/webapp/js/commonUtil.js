@@ -122,7 +122,7 @@ function getAnnularChart(chartId, titleArr, legendArr, radiusArr, centerArr, key
 	            center: centerArr,//饼图的位置['50%', '75%']
 	            itemStyle: {
 	            	normal: {label: {show: false}, labelLine: {show: false}}, 
-	            	emphasis: {label: {show: true, position: 'inside', textStyle: {fontSize: '12', fontWeight: 'bold'}}}
+	            	emphasis: {label: {show: false, position: 'inside', textStyle: {fontSize: '12', fontWeight: 'bold'}}}
 	            },
 	            data: dataArr
 	        }
