@@ -147,8 +147,8 @@ public class DashboardService {
 		}
 		
 		PageData pageData=(PageData)dao.findForObject(sqlStr, pd);
-		String idStr=(String)pageData.get("idStr");
-		if(StringUtils.isBlank(idStr)){
+		String idStr=null;
+		if(pageData==null || (idStr=(String)pageData.get("idStr"))==null || StringUtils.isBlank(idStr)){
 			return new CmpDashboard();
 		}
 		
