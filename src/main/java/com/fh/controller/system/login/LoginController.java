@@ -111,9 +111,9 @@ public class LoginController extends BaseController {
 		mv.addObject("virLoad", dashboardService.getVirLoad());//虚拟机负载
 		mv.addObject("hostLoad", dashboardService.getHostLoad());//宿主机负载
 		mv.addObject("physLoad", dashboardService.getPhysLoad());//物理机负载
-		mv.addObject("virRun", dashboardService.getVirRun());//虚拟机运行
-		mv.addObject("hostRun", dashboardService.getHostRun());//宿主机运行
-		mv.addObject("physRun", dashboardService.getPhysRun());//物理机运行
+		mv.addObject("virRun", dashboardService.getRunDtl("vir", pd));//虚拟机运行
+		mv.addObject("hostRun", dashboardService.getRunDtl("host", pd));//宿主机运行
+		mv.addObject("physRun", dashboardService.getRunDtl("phys", pd));//物理机运行
 		mv.addObject("cpuResRate", dashboardService.getCpuResRate(dbReq.getCpuTimeType()));//CPU资源使用量趋势
 		mv.addObject("memResRate", dashboardService.getMemResRate(dbReq.getMemTimeType()));//存储资源使用量趋势
 		mv.addObject("storeResRate", dashboardService.getStoreResRate(dbReq.getStoreTimeType()));//磁盘资源使用量趋势

@@ -14,7 +14,11 @@ import org.springframework.stereotype.Service;
 import com.cmp.activiti.CustomGroupEntityManager;
 import com.cmp.sid.CmpAxis;
 import com.cmp.sid.CmpDashboard;
+import com.cmp.sid.zabbix.ResBean;
+import com.cmp.sid.zabbix.ResBody;
+import com.cmp.sid.zabbix.ResError;
 import com.cmp.util.HttpUtil;
+import com.cmp.util.StringUtil;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -82,81 +86,91 @@ public class DashboardService {
 	//虚机详细信息查询
 	public CmpDashboard getVirDtl() throws Exception {
 		CmpDashboard cd=new CmpDashboard();
-		cd.setCpuUseNum("1");
-		cd.setCpuTotalNum("10");
-		cd.setMemUseNum("2");
-		cd.setMemTotalNum("20");
-		cd.setStoreUseNum("21");
-		cd.setStoreTotalNum("100");
+		cd.setCpuUseNum(1);
+		cd.setCpuTotalNum(10);
+		cd.setMemUseNum(2);
+		cd.setMemTotalNum(20);
+		cd.setStoreUseNum(21);
+		cd.setStoreTotalNum(100);
 		return cd;
 	}
 	
 	//物理机详细信息查询
 	public CmpDashboard getPhysDtl() throws Exception {
 		CmpDashboard cd=new CmpDashboard();
-		cd.setCpuUseNum("3");
-		cd.setCpuTotalNum("10");
-		cd.setMemUseNum("28");
-		cd.setMemTotalNum("36");
-		cd.setStoreUseNum("60");
-		cd.setStoreTotalNum("100");
+		cd.setCpuUseNum(3);
+		cd.setCpuTotalNum(10);
+		cd.setMemUseNum(28);
+		cd.setMemTotalNum(36);
+		cd.setStoreUseNum(60);
+		cd.setStoreTotalNum(100);
 		return cd;
 	}
 	
 	//虚拟机负载
 	public CmpDashboard getVirLoad() throws Exception {
 		CmpDashboard cd=new CmpDashboard();
-		cd.setLoadLittleNum("2");
-		cd.setLoadMiddleNum("3");
-		cd.setLoadHeightNum("4");
-		cd.setLoadStopNum("5");
+		cd.setLoadLittleNum(2);
+		cd.setLoadMiddleNum(3);
+		cd.setLoadHeightNum(4);
+		cd.setLoadStopNum(5);
 		return cd;
 	}
 	
 	//宿主机负载
 	public CmpDashboard getHostLoad() throws Exception {
 		CmpDashboard cd=new CmpDashboard();
-		cd.setLoadLittleNum("12");
-		cd.setLoadMiddleNum("13");
-		cd.setLoadHeightNum("14");
-		cd.setLoadStopNum("15");
+		cd.setLoadLittleNum(12);
+		cd.setLoadMiddleNum(13);
+		cd.setLoadHeightNum(14);
+		cd.setLoadStopNum(15);
 		return cd;
 	}
 	
 	//物理机负载
 	public CmpDashboard getPhysLoad() throws Exception {
 		CmpDashboard cd=new CmpDashboard();
-		cd.setLoadLittleNum("22");
-		cd.setLoadMiddleNum("23");
-		cd.setLoadHeightNum("24");
-		cd.setLoadStopNum("25");
+		cd.setLoadLittleNum(22);
+		cd.setLoadMiddleNum(23);
+		cd.setLoadHeightNum(24);
+		cd.setLoadStopNum(25);
 		return cd;
 	}
 	
-	//虚拟机运行
-	public CmpDashboard getVirRun() throws Exception {
+	//运行情况
+	public CmpDashboard getRunDtl(String operType, PageData pd) throws Exception {
+		String sqlStr="DashboardMapper.getVirList";//虚拟机运行
+		if("host".equals(operType)){//宿主机运行
+			sqlStr="DashboardMapper.getHostList";
+		}else if("phys".equals(operType)){//物理机运行
+			sqlStr="DashboardMapper.getPhysList";
+		}
+		
+		PageData pageData=(PageData)dao.findForObject(sqlStr, pd);
+		String idStr=(String)pageData.get("idStr");
+		if(StringUtils.isBlank(idStr)){
+			return new CmpDashboard();
+		}
+		
+		ResBody resBody=getZabbixJson("host.get", StringUtil.getParams("output", new String[]{"status"}, "filter", StringUtil.getParams("hostid", idStr.split(","))));
+		ResBean[] rbs=null;
+		if(resBody==null || (rbs=resBody.getResult())==null){//接口返回错误
+			return null;
+		}
+		
 		CmpDashboard cd=new CmpDashboard();
-		cd.setRunRunnigNum("2");
-		cd.setRunHangupNum("3");
-		cd.setRunCloseNum("4");
-		return cd;
-	}
-	
-	//宿主机运行
-	public CmpDashboard getHostRun() throws Exception {
-		CmpDashboard cd=new CmpDashboard();
-		cd.setRunRunnigNum("12");
-		cd.setRunHangupNum("13");
-		cd.setRunCloseNum("14");
-		return cd;
-	}
-	
-	//物理机运行
-	public CmpDashboard getPhysRun() throws Exception {
-		CmpDashboard cd=new CmpDashboard();
-		cd.setRunRunnigNum("22");
-		cd.setRunHangupNum("23");
-		cd.setRunCloseNum("24");
+		if(rbs!=null && rbs.length>0){
+			for(ResBean rb: rbs){
+				if("0".equals(rb.getStatus())){//运行
+					cd.setRunRunnigNum();
+				}else if("1".equals(rb.getStatus())){//挂起
+					cd.setRunHangupNum();
+				}else if("2".equals(rb.getStatus())){//关机
+					cd.setRunCloseNum();
+				}
+			}
+		}
+		
 		return cd;
 	}
 	
@@ -209,52 +223,59 @@ public class DashboardService {
 	}
 	
 	//调用Zabbix API
-	public JSONObject getZabbixJson(String method, String params, boolean ... bools){
-		boolean isLogin=(bools!=null && bools.length==1)?bools[0]:false;//是否登录
-		if(!isLogin && StringUtils.isBlank(ZABBIX_TOKEN)){
-			if(getZabbixJson("user.login", "{\"user\": \""+ZABBIX_USER+"\", \"password\": \""+ZABBIX_PASSWORD+"\"}", true)==null){//调用Zabbix API
-				return null;
-			}
-		}
-		
-		String retJsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, getJsonStr("2.0", method, params, ZABBIX_TOKEN), false);//发送post请求(JSON)
-		JSONObject retJsonObj=null;
-		if(StringUtils.isBlank(retJsonStr) || (retJsonObj=JSONObject.fromObject(retJsonStr))==null || retJsonObj.isNullObject()){//接口返回错误
-			logger.error("调用Zabbix API时错误："+retJsonStr);
+	public ResBody getZabbixJson(String method, JSONObject params){
+		if(StringUtils.isBlank(ZABBIX_TOKEN) && !loginZabbix()){//调用Zabbix登录API
 			return null;
 		}
 		
-		JSONObject errorJsonObj=retJsonObj.getJSONObject("error");
-		if(errorJsonObj!=null && !errorJsonObj.isNullObject()){//接口返回错误
-			String code=errorJsonObj.getString("code");
-			String data=errorJsonObj.getString("data");
-			if(!isLogin && data!=null && "-32602".equals(code) && data.indexOf("re-login")>=0){//Zabbix token失效
-				if(getZabbixJson("user.login", "{\"user\": \""+ZABBIX_USER+"\", \"password\": \""+ZABBIX_PASSWORD+"\"}", true)!=null){//调用Zabbix API
+		String jsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, StringUtil.getReqBody(method, params, ZABBIX_TOKEN), false);//发送post请求(JSON)
+		ResBody resBody=null;
+		if(StringUtils.isBlank(jsonStr) || (resBody=StringUtil.json2Obj(jsonStr, ResBody.class))==null){//接口返回错误
+			logger.error("调用Zabbix API时错误："+jsonStr);
+			return null;
+		}
+		
+		ResError resError=resBody.getError();
+		if(resError!=null){//接口返回错误
+			String code=resError.getCode();
+			String data=resError.getData();
+			if(data!=null && "-32602".equals(code) && data.indexOf("re-login")>=0){//Zabbix token失效
+				if(loginZabbix()){//调用Zabbix登录API
 					return getZabbixJson(method, params);
 				}
 			}
 			
-			logger.error("调用Zabbix API时错误：code=["+code+"]、message=["+errorJsonObj.getString("message")+"]、data=["+data+"]");
+			logger.error("调用Zabbix API时错误：code=["+code+"]、message=["+resError.getMessage()+"]、data=["+data+"]");
 			return null;
 		}
 		
-		if(isLogin) ZABBIX_TOKEN=retJsonObj.getString("result");//获取Zabbix token
-		return retJsonObj;
+		return resBody;
 	}
 	
-	//获取json字符串
-	public String getJsonStr(String jsonrpc, String method, String params, String auth, String ... ids){
-		JSONObject jsonObj=new JSONObject();//返回json对象
-		jsonObj.put("jsonrpc", jsonrpc);
-		jsonObj.put("method", method);
-		jsonObj.put("params", params);
-		jsonObj.put("auth", auth);
-		jsonObj.put("id", (ids!=null && ids.length==1)?ids[0]:1);
-		return jsonObj.toString();
+	//调用Zabbix登录API
+	public boolean loginZabbix(){
+		String retJsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, StringUtil.getReqBody("user.login", StringUtil.getParams("user", ZABBIX_USER, "password", ZABBIX_PASSWORD), ZABBIX_TOKEN), false);//发送post请求(JSON)
+		JSONObject retJsonObj=null;
+		if(StringUtils.isBlank(retJsonStr) || (retJsonObj=JSONObject.fromObject(retJsonStr))==null || retJsonObj.isNullObject()){//接口返回错误
+			logger.error("调用Zabbix登录API时错误："+retJsonStr);
+			return false;
+		}
+		
+		JSONObject errorJsonObj=retJsonObj.getJSONObject("error");
+		if(errorJsonObj!=null && !errorJsonObj.isNullObject()){//接口返回错误
+			logger.error("调用Zabbix登录API时错误：code=["+errorJsonObj.getString("code")+"]、message=["+errorJsonObj.getString("message")+"]、data=["+errorJsonObj.getString("data")+"]");
+			return false;
+		}
+		
+		ZABBIX_TOKEN=retJsonObj.getString("result");//获取Zabbix token
+		return true;
 	}
 	
 	public static void main(String[] args){
 		DashboardService aa=new DashboardService();
-		aa.getZabbixJson("host.get", "{\"filter\":{\"host\":[\"Zabbixserver\",\"Linuxserver\"]}}");
+		//JSONObject jsonObj=aa.getZabbixJson("item.get", StringUtil.getParams("hostids", new String[]{"10084", "10257"}));
+		//JSONObject jsonObj=aa.getZabbixJson("host.get", StringUtil.getParams("filter", StringUtil.getParams("hostid", new String[]{"10084", "10257"})));
+		ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("output",  new String[]{"status"}, "filter", StringUtil.getParams("hostid", "10084,10257".split(","))));
+		System.out.println(resBody.toString());
 	}
 }

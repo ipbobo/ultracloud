@@ -2,131 +2,143 @@ package com.cmp.sid;
 
 //仪表盘
 public class CmpDashboard {
-	private String cpuTotalNum;//CPU总量
-	private String cpuUseNum;//CPU已分配
-	private String memTotalNum;//内存总量
-	private String memUseNum;//内存已分配
-	private String storeTotalNum;//存储总量
-	private String storeUseNum;//存储已分配
-	private String loadLittleNum;//轻度负载
-	private String loadMiddleNum;//中度负载
-	private String loadHeightNum;//高度负载
-	private String loadStopNum;//停机负载
-	private String runRunnigNum;//运行
-	private String runHangupNum;//挂起
-	private String runCloseNum;//关机
+	private int cpuTotalNum=0;//CPU总量
+	private int cpuUseNum=0;//CPU已分配
+	private int memTotalNum=0;//内存总量
+	private int memUseNum=0;//内存已分配
+	private int storeTotalNum=0;//存储总量
+	private int storeUseNum=0;//存储已分配
+	private int loadLittleNum=0;//轻度负载
+	private int loadMiddleNum=0;//中度负载
+	private int loadHeightNum=0;//高度负载
+	private int loadStopNum=0;//停机负载
+	private int runRunnigNum=0;//运行
+	private int runHangupNum=0;//挂起
+	private int runCloseNum=0;//关机
 
-	public String getCpuTotalNum() {
+	public int getCpuTotalNum() {
 		return cpuTotalNum;
 	}
 
-	public void setCpuTotalNum(String cpuTotalNum) {
+	public void setCpuTotalNum(int cpuTotalNum) {
 		this.cpuTotalNum = cpuTotalNum;
 	}
 
-	public String getCpuUseNum() {
+	public int getCpuUseNum() {
 		return cpuUseNum;
 	}
 
-	public void setCpuUseNum(String cpuUseNum) {
+	public void setCpuUseNum(int cpuUseNum) {
 		this.cpuUseNum = cpuUseNum;
 	}
 
-	public String getMemTotalNum() {
+	public int getMemTotalNum() {
 		return memTotalNum;
 	}
 
-	public void setMemTotalNum(String memTotalNum) {
+	public void setMemTotalNum(int memTotalNum) {
 		this.memTotalNum = memTotalNum;
 	}
 
-	public String getMemUseNum() {
+	public int getMemUseNum() {
 		return memUseNum;
 	}
 
-	public void setMemUseNum(String memUseNum) {
+	public void setMemUseNum(int memUseNum) {
 		this.memUseNum = memUseNum;
 	}
 
-	public String getStoreTotalNum() {
+	public int getStoreTotalNum() {
 		return storeTotalNum;
 	}
 
-	public void setStoreTotalNum(String storeTotalNum) {
+	public void setStoreTotalNum(int storeTotalNum) {
 		this.storeTotalNum = storeTotalNum;
 	}
 
-	public String getStoreUseNum() {
+	public int getStoreUseNum() {
 		return storeUseNum;
 	}
 
-	public void setStoreUseNum(String storeUseNum) {
+	public void setStoreUseNum(int storeUseNum) {
 		this.storeUseNum = storeUseNum;
 	}
 
-	public String getLoadLittleNum() {
+	public int getLoadLittleNum() {
 		return loadLittleNum;
 	}
 
-	public void setLoadLittleNum(String loadLittleNum) {
+	public void setLoadLittleNum(int loadLittleNum) {
 		this.loadLittleNum = loadLittleNum;
 	}
 
-	public String getLoadMiddleNum() {
+	public int getLoadMiddleNum() {
 		return loadMiddleNum;
 	}
 
-	public void setLoadMiddleNum(String loadMiddleNum) {
+	public void setLoadMiddleNum(int loadMiddleNum) {
 		this.loadMiddleNum = loadMiddleNum;
 	}
 
-	public String getLoadHeightNum() {
+	public int getLoadHeightNum() {
 		return loadHeightNum;
 	}
 
-	public void setLoadHeightNum(String loadHeightNum) {
+	public void setLoadHeightNum(int loadHeightNum) {
 		this.loadHeightNum = loadHeightNum;
 	}
 
-	public String getLoadStopNum() {
+	public int getLoadStopNum() {
 		return loadStopNum;
 	}
 
-	public void setLoadStopNum(String loadStopNum) {
+	public void setLoadStopNum(int loadStopNum) {
 		this.loadStopNum = loadStopNum;
 	}
 
 	//负载总数
-	public String getLoadTotalNum() {
-		return String.valueOf(Integer.parseInt(loadLittleNum)+Integer.parseInt(loadMiddleNum)+Integer.parseInt(loadHeightNum)+Integer.parseInt(loadStopNum));
+	public int getLoadTotalNum() {
+		return loadLittleNum+loadMiddleNum+loadHeightNum+loadStopNum;
 	}
 
-	public String getRunRunnigNum() {
+	public int getRunRunnigNum() {
 		return runRunnigNum;
 	}
 
-	public void setRunRunnigNum(String runRunnigNum) {
+	public void setRunRunnigNum(int runRunnigNum) {
 		this.runRunnigNum = runRunnigNum;
 	}
 	
-	public String getRunHangupNum() {
+	public void setRunRunnigNum() {
+		this.runRunnigNum+=1;
+	}
+	
+	public int getRunHangupNum() {
 		return runHangupNum;
 	}
 	
-	public void setRunHangupNum(String runHangupNum) {
+	public void setRunHangupNum(int runHangupNum) {
 		this.runHangupNum = runHangupNum;
 	}
+	
+	public void setRunHangupNum() {
+		this.runHangupNum+=1;
+	}
 
-	public String getRunCloseNum() {
+	public int getRunCloseNum() {
 		return runCloseNum;
 	}
 	
-	public void setRunCloseNum(String runCloseNum) {
+	public void setRunCloseNum(int runCloseNum) {
 		this.runCloseNum = runCloseNum;
 	}
 	
+	public void setRunCloseNum() {
+		this.runCloseNum+=1;
+	}
+	
 	//运行总数
-	public String getRunTotalNum() {
-		return String.valueOf(Integer.parseInt(runRunnigNum)+Integer.parseInt(runHangupNum)+Integer.parseInt(runCloseNum));
+	public int getRunTotalNum() {
+		return runRunnigNum+runHangupNum+runCloseNum;
 	}
 }
