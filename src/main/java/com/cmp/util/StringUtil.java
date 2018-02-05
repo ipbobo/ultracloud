@@ -61,6 +61,15 @@ public class StringUtil {
         return retObj;
 	}
 	
+	//获取请求参数
+	public static int getInt(String str) {
+		try{
+			return Integer.parseInt(str);
+		}catch(Exception e){
+			return 0;
+		}
+	}
+	
 	//字符串中提取数字
 	public static String getInteger(String str) {
 		String str2 = "";
