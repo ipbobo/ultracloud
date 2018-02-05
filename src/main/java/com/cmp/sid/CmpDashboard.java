@@ -23,6 +23,10 @@ public class CmpDashboard {
 	public void setCpuTotalNum(int cpuTotalNum) {
 		this.cpuTotalNum = cpuTotalNum;
 	}
+	
+	public void addCpuTotalNum(int cpuTotalNum) {
+		this.cpuTotalNum += cpuTotalNum;
+	}
 
 	public int getCpuUseNum() {
 		return cpuUseNum;
@@ -30,6 +34,10 @@ public class CmpDashboard {
 
 	public void setCpuUseNum(int cpuUseNum) {
 		this.cpuUseNum = cpuUseNum;
+	}
+	
+	public void addCpuUseNum(int cpuUseNum) {
+		this.cpuUseNum += cpuUseNum;
 	}
 
 	public int getMemTotalNum() {
@@ -39,6 +47,10 @@ public class CmpDashboard {
 	public void setMemTotalNum(int memTotalNum) {
 		this.memTotalNum = memTotalNum;
 	}
+	
+	public void addMemTotalNum(int memTotalNum) {
+		this.memTotalNum += memTotalNum;
+	}
 
 	public int getMemUseNum() {
 		return memUseNum;
@@ -46,6 +58,10 @@ public class CmpDashboard {
 
 	public void setMemUseNum(int memUseNum) {
 		this.memUseNum = memUseNum;
+	}
+	
+	public void addMemUseNum(int memUseNum) {
+		this.memUseNum += memUseNum;
 	}
 
 	public int getStoreTotalNum() {
@@ -55,6 +71,10 @@ public class CmpDashboard {
 	public void setStoreTotalNum(int storeTotalNum) {
 		this.storeTotalNum = storeTotalNum;
 	}
+	
+	public void addStoreTotalNum(int storeTotalNum) {
+		this.storeTotalNum += storeTotalNum;
+	}
 
 	public int getStoreUseNum() {
 		return storeUseNum;
@@ -62,6 +82,10 @@ public class CmpDashboard {
 
 	public void setStoreUseNum(int storeUseNum) {
 		this.storeUseNum = storeUseNum;
+	}
+	
+	public void addStoreUseNum(int storeUseNum) {
+		this.storeUseNum += storeUseNum;
 	}
 
 	public int getLoadLittleNum() {
@@ -71,6 +95,10 @@ public class CmpDashboard {
 	public void setLoadLittleNum(int loadLittleNum) {
 		this.loadLittleNum = loadLittleNum;
 	}
+	
+	public void addLoadLittleNum(int loadLittleNum) {
+		this.loadLittleNum += loadLittleNum;
+	}
 
 	public int getLoadMiddleNum() {
 		return loadMiddleNum;
@@ -78,6 +106,10 @@ public class CmpDashboard {
 
 	public void setLoadMiddleNum(int loadMiddleNum) {
 		this.loadMiddleNum = loadMiddleNum;
+	}
+	
+	public void addLoadMiddleNum(int loadMiddleNum) {
+		this.loadMiddleNum += loadMiddleNum;
 	}
 
 	public int getLoadHeightNum() {
@@ -87,6 +119,10 @@ public class CmpDashboard {
 	public void setLoadHeightNum(int loadHeightNum) {
 		this.loadHeightNum = loadHeightNum;
 	}
+	
+	public void addLoadHeightNum(int loadHeightNum) {
+		this.loadHeightNum += loadHeightNum;
+	}
 
 	public int getLoadStopNum() {
 		return loadStopNum;
@@ -94,6 +130,10 @@ public class CmpDashboard {
 
 	public void setLoadStopNum(int loadStopNum) {
 		this.loadStopNum = loadStopNum;
+	}
+	
+	public void addLoadStopNum(int loadStopNum) {
+		this.loadStopNum += loadStopNum;
 	}
 
 	//负载总数
@@ -109,8 +149,8 @@ public class CmpDashboard {
 		this.runRunnigNum = runRunnigNum;
 	}
 	
-	public void setRunRunnigNum() {
-		this.runRunnigNum+=1;
+	public void addRunRunnigNum(int runRunnigNum) {
+		this.runRunnigNum += runRunnigNum;
 	}
 	
 	public int getRunHangupNum() {
@@ -121,8 +161,8 @@ public class CmpDashboard {
 		this.runHangupNum = runHangupNum;
 	}
 	
-	public void setRunHangupNum() {
-		this.runHangupNum+=1;
+	public void addRunHangupNum(int runHangupNum) {
+		this.runHangupNum += runHangupNum;
 	}
 
 	public int getRunCloseNum() {
@@ -133,8 +173,8 @@ public class CmpDashboard {
 		this.runCloseNum = runCloseNum;
 	}
 	
-	public void setRunCloseNum() {
-		this.runCloseNum+=1;
+	public void addRunCloseNum(int runCloseNum) {
+		this.runCloseNum += runCloseNum;
 	}
 	
 	//运行总数

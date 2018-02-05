@@ -83,15 +83,55 @@ public class DashboardService {
 		return (Long)dao.findForObject("DashboardMapper.getWorkOrderNum", pd);
 	}
 	
+	//主机ID查询
+	public String getIdStr(String operType, PageData pd) throws Exception {
+		String sqlStr="DashboardMapper.getVirList";//虚拟机运行
+		if("host".equals(operType)){//宿主机运行
+			sqlStr="DashboardMapper.getHostList";
+		}else if("phys".equals(operType)){//物理机运行
+			sqlStr="DashboardMapper.getPhysList";
+		}
+		
+		PageData pageData=(PageData)dao.findForObject(sqlStr, pd);
+		String idStr=null;
+		if(pageData!=null && (idStr=(String)pageData.get("idStr"))!=null && !StringUtils.isBlank(idStr)){
+			return idStr;
+		}
+		
+		return null;
+	}
+	
 	//虚机详细信息查询
-	public CmpDashboard getVirDtl() throws Exception {
+	public CmpDashboard getVirDtl(String idStr, PageData pd) throws Exception {
+		if(idStr==null){
+			return new CmpDashboard();
+		}
+		
+		ResBody resBody=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"status"}, "hostids", idStr.split(",")));
+		ResBean[] rbs=null;
+		if(resBody==null || (rbs=resBody.getResult())==null){//接口返回错误
+			return null;
+		}
+		
 		CmpDashboard cd=new CmpDashboard();
-		cd.setCpuUseNum(1);
-		cd.setCpuTotalNum(10);
-		cd.setMemUseNum(2);
-		cd.setMemTotalNum(20);
-		cd.setStoreUseNum(21);
-		cd.setStoreTotalNum(100);
+		if(rbs!=null && rbs.length>0){
+			for(ResBean rb: rbs){
+				if("0".equals(rb.getStatus())){//运行
+					cd.addRunRunnigNum(1);
+				}else if("1".equals(rb.getStatus())){//挂起
+					cd.addRunHangupNum(1);
+				}else if("2".equals(rb.getStatus())){//关机
+					cd.addRunCloseNum(1);
+				}
+			}
+		}
+		
+		cd.addCpuUseNum(1);
+		cd.addCpuTotalNum(10);
+		cd.addMemUseNum(2);
+		cd.addMemTotalNum(20);
+		cd.addStoreUseNum(21);
+		cd.addStoreTotalNum(100);
 		return cd;
 	}
 	
@@ -138,17 +178,8 @@ public class DashboardService {
 	}
 	
 	//运行情况
-	public CmpDashboard getRunDtl(String operType, PageData pd) throws Exception {
-		String sqlStr="DashboardMapper.getVirList";//虚拟机运行
-		if("host".equals(operType)){//宿主机运行
-			sqlStr="DashboardMapper.getHostList";
-		}else if("phys".equals(operType)){//物理机运行
-			sqlStr="DashboardMapper.getPhysList";
-		}
-		
-		PageData pageData=(PageData)dao.findForObject(sqlStr, pd);
-		String idStr=null;
-		if(pageData==null || (idStr=(String)pageData.get("idStr"))==null || StringUtils.isBlank(idStr)){
+	public CmpDashboard getRunDtl(String idStr, PageData pd) throws Exception {
+		if(idStr==null){//主机ID为空
 			return new CmpDashboard();
 		}
 		
@@ -162,11 +193,11 @@ public class DashboardService {
 		if(rbs!=null && rbs.length>0){
 			for(ResBean rb: rbs){
 				if("0".equals(rb.getStatus())){//运行
-					cd.setRunRunnigNum();
+					cd.addRunRunnigNum(1);
 				}else if("1".equals(rb.getStatus())){//挂起
-					cd.setRunHangupNum();
+					cd.addRunHangupNum(1);
 				}else if("2".equals(rb.getStatus())){//关机
-					cd.setRunCloseNum();
+					cd.addRunCloseNum(1);
 				}
 			}
 		}
@@ -275,7 +306,8 @@ public class DashboardService {
 		DashboardService aa=new DashboardService();
 		//JSONObject jsonObj=aa.getZabbixJson("item.get", StringUtil.getParams("hostids", new String[]{"10084", "10257"}));
 		//JSONObject jsonObj=aa.getZabbixJson("host.get", StringUtil.getParams("filter", StringUtil.getParams("hostid", new String[]{"10084", "10257"})));
-		ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("output",  new String[]{"status"}, "filter", StringUtil.getParams("hostid", "10084,10257".split(","))));
+		//ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("output",  new String[]{"status"}, "filter", StringUtil.getParams("hostid", "10084,10257".split(","))));
+		ResBody resBody=aa.getZabbixJson("item.get", StringUtil.getParams("hostids", "10084,10257".split(","), "search", StringUtil.getParams("key_", "system.cpu.util")));
 		System.out.println(resBody.toString());
 	}
 }
