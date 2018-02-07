@@ -8,7 +8,11 @@ body,.main-container,.page-content{
     height: auto;
 }
 .page-content {
-    padding: 0px 24px 0px;
+    padding: 0px 12px 0px;
+}
+.page-content .row .col-md-6 {
+    padding-left: 6px;
+    padding-right: 6px;
 }
 .head-title {
     height: 40px;
@@ -211,4 +215,7 @@ div#tip{
     background: #ffffff;
     white-space:nowrap;
     font-weight: bold;
+}
+#left-container .col-xs-4 {
+    padding: 0;
 }

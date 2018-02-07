@@ -72,7 +72,7 @@ function getDashboard(){
 	<div class="page-content">
 	<!--新的界面优化代码 start @zjb 2018-2-7 -->
 <div class="row">
-			<div class="col-xs-12 col-md-6 col-sm-12" style="margin-top: 20px;">
+			<div class="col-xs-6 col-md-6 col-sm-12" style="margin-top: 20px;">
 				<div class="mem-panel">
 					<div class="inner-box">
 						<div class="head-box">
@@ -96,7 +96,7 @@ function getDashboard(){
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-12 col-md-6 col-sm-12" style="margin-top: 20px;">
+			<div class="col-xs-6 col-md-6 col-sm-12" style="margin-top: 20px;">
 				<div class="mem-panel">
 					<div class="inner-box">
 						<div class="head-box">
@@ -123,7 +123,7 @@ function getDashboard(){
 		</div>
 
 		<div class="row">
-			<div class="col-xs-12 col-md-6 col-sm-12" style="margin-top: 20px">
+			<div class="col-xs-6 col-md-6 col-sm-12" style="margin-top: 20px">
 				<div class="mem-panel">
 					<div class="inner-box">
 						<div class="head-box">
@@ -153,7 +153,7 @@ function getDashboard(){
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-12 col-md-6 col-sm-12" style="margin-top: 20px">
+			<div class="col-xs-6 col-md-6 col-sm-12" style="margin-top: 20px">
 				<div class="mem-panel">
 					<div class="inner-box">
 						<div class="head-box">
@@ -185,7 +185,7 @@ function getDashboard(){
 		</div>
 
 		<div class="row">
-			<div class="col-xs-12 col-md-6 col-sm-12" style="margin-top: 20px">
+			<div class="col-xs-6 col-md-6 col-sm-12" style="margin-top: 20px">
 				<div class="mem-panel">
 					<div class="inner-box">
 						<div class="head-box">
@@ -233,7 +233,7 @@ function getDashboard(){
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-12 col-md-6 col-sm-12" style="margin-top: 20px">
+			<div class="col-xs-6 col-md-6 col-sm-12" style="margin-top: 20px">
 				<div class="mem-panel">
 					<div class="inner-box">
 						<div class="head-box">
@@ -245,7 +245,7 @@ function getDashboard(){
 							</select>
 						</div>
 						<div class="body-box">
-							<div id="right-container" class="container-fluid" style="height: 240px;padding: 20px">
+							<div id="right-container" class="container-fluid" style="height: auto;padding: 20px">
 								<table id="simple-table" class="simple-table">
 									<thead>
 									<tr>
@@ -468,7 +468,13 @@ $(top.hangge());//关闭加载状态
 //getAnnularChart('hostRunChart', ['${hostRun.runTotalNum}台','宿主机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${hostRun.runRunnigNum}台(运)','${hostRun.runHangupNum}台(挂)','${hostRun.runCloseNum}台(关)'], ['${hostRun.runRunnigNum}','${hostRun.runHangupNum}','${hostRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
 //getAnnularChart('physRunChart', ['${physRun.runTotalNum}台','物理机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${physRun.runRunnigNum}台(运)','${physRun.runHangupNum}台(挂)','${physRun.runCloseNum}台(关)'], ['${physRun.runRunnigNum}','${physRun.runHangupNum}','${physRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
 $('#cpuChart,#memChart,#storeChart').css("height",$('#cpuChart').width());
-$('#right-container').css("height",$('#left-container').height());
+var leftH=$('#left-container').height();
+var rightH=$('#right-container').height();
+if(leftH>=rightH){
+	$('#right-container').css("height",$('#left-container').height());
+} else {
+	$('#left-container').css("height",$('#right-container').height()+40);
+}
 getLineChart('cpuChart', ['资源使用量趋势'], '${cpuResRate.xaxis}'.split(","), '${cpuResRate.yaxis}'.split(","));//获取图表
 getLineChart('memChart', ['资源使用量趋势'], '${memResRate.xaxis}'.split(","), '${memResRate.yaxis}'.split(","));//获取图表
 getLineChart('storeChart', ['资源使用量趋势'], '${storeResRate.xaxis}'.split(","), '${storeResRate.yaxis}'.split(","));//获取图表
