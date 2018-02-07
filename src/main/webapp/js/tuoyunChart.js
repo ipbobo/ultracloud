@@ -263,6 +263,9 @@ function toCanvasStyle2(id ,title1,title2,littleNum,middleNum,heightNum,stopNum,
         lineWidth = 25,  //圆形线条的宽度
         fontSize = 20, //字体大小
         space=1;//间隔
+    if(littleNum+middleNum+heightNum+stopNum==1){
+        space=0;
+    }
     function smallcircle(cx, cy, r,color) {
         ctx.beginPath();
         //ctx.moveTo(cx + r, cy);
@@ -316,14 +319,16 @@ function toCanvasStyle2(id ,title1,title2,littleNum,middleNum,heightNum,stopNum,
         ctx.strokeStyle = '#ffc300';
         var startAngle=0;
         if (process >= percent1) {//进入percent2
-            ctx.strokeStyle = '#ffc300';
-            startAngle=percent1/100*Math.PI*2;
-            ctx.arc(cx, cy, r,0,(percent1-space)/100*Math.PI*2,false);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.strokeStyle = '#ffffff';
-            ctx.arc(cx, cy, r,(percent1-space)/100*Math.PI*2,startAngle,false);
-            ctx.stroke();
+            if(percent1!=0){
+                ctx.strokeStyle = '#ffc300';
+                startAngle=percent1/100*Math.PI*2;
+                ctx.arc(cx, cy, r,0,(percent1-space)/100*Math.PI*2,false);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.strokeStyle = '#ffffff';
+                ctx.arc(cx, cy, r,(percent1-space)/100*Math.PI*2,startAngle,false);
+                ctx.stroke();
+            }
             if(process < percent1+percent2) {
                 ctx.beginPath();
                 ctx.strokeStyle = '#f77275';
@@ -333,16 +338,18 @@ function toCanvasStyle2(id ,title1,title2,littleNum,middleNum,heightNum,stopNum,
             }
         }
         if(process >= percent1+percent2) {//进入percent3
-            ctx.beginPath();
-            ctx.strokeStyle = '#f77275';
-            ctx.lineWidth = 30;
-            startAngle=(percent1+percent2)/100*Math.PI*2;
-            ctx.arc(cx, cy, r+2.5,percent1/100*Math.PI*2,(percent1+percent2-space)/100*Math.PI*2,false);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.strokeStyle = '#ffffff';
-            ctx.arc(cx, cy, r,(percent1+percent2-space)/100*Math.PI*2,startAngle,false);
-            ctx.stroke();
+            if(percent2!=0) {
+                ctx.beginPath();
+                ctx.strokeStyle = '#f77275';
+                ctx.lineWidth = 30;
+                startAngle = (percent1 + percent2) / 100 * Math.PI * 2;
+                ctx.arc(cx, cy, r + 2.5, percent1 / 100 * Math.PI * 2, (percent1 + percent2 - space) / 100 * Math.PI * 2, false);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.strokeStyle = '#ffffff';
+                ctx.arc(cx, cy, r, (percent1 + percent2 - space) / 100 * Math.PI * 2, startAngle, false);
+                ctx.stroke();
+            }
             if(process < percent1+percent2+percent3) {
                 ctx.beginPath();
                 ctx.strokeStyle = '#3ba1df';
@@ -351,16 +358,18 @@ function toCanvasStyle2(id ,title1,title2,littleNum,middleNum,heightNum,stopNum,
             }
         }
         if(process >= percent1+percent2+percent3) {//进入percent4
-            ctx.beginPath();
-            ctx.strokeStyle = '#3ba1df';
-            ctx.lineWidth = lineWidth;
-            startAngle=(percent1+percent2+percent3)/100*Math.PI*2;
-            ctx.arc(cx, cy, r,(percent1+percent2)/100*Math.PI*2,(percent1+percent2+percent3-space)/100*Math.PI*2,false);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.strokeStyle = '#ffffff';
-            ctx.arc(cx, cy, r,(percent1+percent2+percent3-space)/100*Math.PI*2,startAngle,false);
-            ctx.stroke();
+            if(percent3!=0) {
+                ctx.beginPath();
+                ctx.strokeStyle = '#3ba1df';
+                ctx.lineWidth = lineWidth;
+                startAngle = (percent1 + percent2 + percent3) / 100 * Math.PI * 2;
+                ctx.arc(cx, cy, r, (percent1 + percent2) / 100 * Math.PI * 2, (percent1 + percent2 + percent3 - space) / 100 * Math.PI * 2, false);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.strokeStyle = '#ffffff';
+                ctx.arc(cx, cy, r, (percent1 + percent2 + percent3 - space) / 100 * Math.PI * 2, startAngle, false);
+                ctx.stroke();
+            }
             if(process <= 100) {
                 ctx.beginPath();
                 ctx.strokeStyle = '#c6c6c6';
@@ -394,7 +403,7 @@ function toCanvasStyle2(id ,title1,title2,littleNum,middleNum,heightNum,stopNum,
         ctx.clearRect(0, 0, circleX * 2, circleY * 2);
 
         //中间的字
-        ctx.font = '16px April';
+        ctx.font = '14px April';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#000000';
@@ -434,7 +443,7 @@ function toCanvasStyle2(id ,title1,title2,littleNum,middleNum,heightNum,stopNum,
         ctx.clearRect(0, 0, circleX * 2, circleY * 2);
 
         //中间的字
-        ctx.font = '16px April';
+        ctx.font = '14px April';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#000000';
