@@ -61,10 +61,19 @@ public class StringUtil {
         return retObj;
 	}
 	
-	//获取请求参数
+	//获取整数
 	public static int getInt(String str) {
 		try{
 			return Integer.parseInt(str);
+		}catch(Exception e){
+			return 0;
+		}
+	}
+	
+	//获取浮点数
+	public static float getFloat(String str) {
+		try{
+			return Float.parseFloat(str);
 		}catch(Exception e){
 			return 0;
 		}
