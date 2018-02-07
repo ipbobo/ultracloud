@@ -263,8 +263,26 @@ function getLineChart(chartId, titleArr, xdataArr, ydataArr){
 	            boundaryGap : false,
 	            axisLabel : {
 	                formatter: '{value}',
-	                interval: 0//全部显示，仅type为category有效
+	                interval: 0,//全部显示，仅type为category有效
+                    textStyle: {
+                        color: '#888888',//坐标值得具体的颜色
+
+                    }
 	            },
+                axisLine: {
+                    lineStyle: {
+                        type: 'solid',
+                        color: '#ffffff'//左边线的颜色
+                    }
+                },
+                axisTick:{
+                    show:false
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: ['#f8f8f8']
+                    }
+                },
 	            data : xdataArr
 	        }
 	    ],
@@ -275,12 +293,30 @@ function getLineChart(chartId, titleArr, xdataArr, ydataArr){
 	            min : '0',
 	            max : '1',
 	            splitNumber: '6',
-	            axisLine : {onZero: false},
 	            scale: true,
 	            boundaryGap : false,
 	            axisLabel : {
-	                formatter: '{value}'
-	            }
+	                formatter: '{value}',
+                    textStyle: {
+                        color: '#888888',//坐标值得具体的颜色
+
+                    }
+	            },
+                axisLine: {
+                    onZero: false,
+                    lineStyle: {
+                        type: 'solid',
+                        color: '#ffffff'//左边线的颜色
+                    }
+                },
+                axisTick:{
+                    show:false
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: ['#f8f8f8']
+                    }
+                }
 	        }
 	    ],
 	    series: [
@@ -291,8 +327,10 @@ function getLineChart(chartId, titleArr, xdataArr, ydataArr){
 	            showAllSymbol : true,
 	            itemStyle: {
 	            	normal: {
-	                    lineStyle: {
-	                        shadowColor : 'rgba(0,0,0,0.4)'
+                        color:'#3dbfa7',
+                        lineStyle: {
+	                        shadowColor : 'rgba(0,0,0,0.4)',
+							color:'#3dbfa7'
 	                    }
 	                }
 	            },
