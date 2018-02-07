@@ -104,9 +104,11 @@ public class CmpWorkOrderController extends BaseController{
 		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		
 		pd.put("USERNAME", userr.getUSERNAME());
 		pd.put("userType", userr.getRole().getTYPE());
 		page.setPd(pd);
+		
 		
 		
 		//工单查询  根据传入的查询参数， 查询部分或者全部     queryType :  不传或者1 = 全部，  2=今日的工单    3 = 待执行工单

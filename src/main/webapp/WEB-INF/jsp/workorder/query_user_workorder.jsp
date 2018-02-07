@@ -23,6 +23,8 @@
 			<form action="queryUserApplyWorkOrderPre.do" method="post"
 									name="queryForm" id="queryForm">
 				<input type="hidden" id="queryType" name="queryType" value="${pd.queryType}">
+				<input type="hidden" name="sortCol" id="sortCol" value="${pd.sortCol}"/>
+				<input type="hidden" name="sortType" id="sortType" value="${pd.sortType}"/>
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
@@ -98,17 +100,16 @@
 							<table id="simple-table"
 								class="table table-striped table-bordered table-hover"
 								style="margin-top: 5px;">
+								
 								<thead>
 									<tr>
-										<th class="center" style="width: 35px;"><label
-											class="pos-rel"><input type="checkbox" class="ace"
-												id="zcheckbox" /><span class="lbl"></span></label></th>
+										<th class="center" style="width: 35px;"></th>
 										<th class="center" style="width: 50px;">序号</th>
-										<th class="center">工单号</th>
-										<th class="center">工单类型</th>
-										<th class="center">工单状态</th>
-										<th class="center">项目名称</th>
-										<th class="center">工单时间</th>
+										<th class="center" onclick="sortTable(this, 'appNo');"><span id="appNo">工单号</span></th>
+										<th class="center" onclick="sortTable(this, 'appType');"><span id="appType">工单类型</span></th>
+										<th class="center" onclick="sortTable(this, 'status');"><span id="status">工单状态</span></th>
+										<th class="center" onclick="sortTable(this, 'projectCode');"><span id="projectCode">项目名称</span></th>
+										<th class="center" onclick="sortTable(this, 'createTime');"><span id="createTime">工单时间</span></th>
 										<th class="center">操作</th>
 									</tr>
 								</thead>
@@ -270,6 +271,17 @@
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
+	$(document).ready(function(){
+		var sortColVal = $('#sortCol').val();
+		var sortTypeVal = $('#sortType').val();
+		if (sortTypeVal != null && sortTypeVal == 'asc'){
+			$("#" + sortColVal).text($("#" + sortColVal).text() + '↑');
+		}
+		if (sortTypeVal != null && sortTypeVal == 'desc'){
+			$("#" + sortColVal).text($("#" + sortColVal).text() + '↓');
+		}
+		
+	});
 	$(top.hangge());//关闭加载状态
 	//检索
 	function tosearch(){
@@ -358,6 +370,22 @@
 		'&workorder_appNo='+$('#workorder_appNo').val()+'&workorder_time='+$('#workorder_time').val()+ '&showCount='+$('#showCount').val();
 	}
 	
+	function sortTable(th, sortCol){
+		var old_sortCol = $('#sortCol').val();
+		var old_sortType = $('#sortType').val();
+		if (old_sortType == null || old_sortType == ''){
+			$('#sortType').val('desc');
+		}
+		if (old_sortType != null && old_sortType != ''){
+			if (old_sortType == 'asc'){
+				$('#sortType').val('desc');
+			}else if (old_sortType == 'desc'){
+				$('#sortType').val('asc');
+			}
+		}
+		$('#sortCol').val(sortCol);
+		$("#queryForm").submit();
+	}
 
 	</script>
 
