@@ -58,7 +58,7 @@
 									<th class="center">ID</th>
 									<th class="center">名称</th>
 									<th class="center">KEY</th>
-									<th class="center">版本号</th>
+									<!-- <th class="center">版本号</th> -->
 									<th class="center">创建时间</th>
 									<th class="center">更新时间</th>
 									<th class="center">描述</th>
@@ -79,7 +79,7 @@
 											<td class='center'>${var.id}</td>
 											<td class='center'>${var.name}</td>
 											<td class="center">${var.key}</td> 
-											<td class="center">${var.version}</td>
+											<!-- <td class="center">${var.version}</td> -->
 											<td class='center'>${var.ceateTime}</td>
 											<td class='center'>${var.lastUpdateTime}</td>
 											<td class='center' style="width:350px;">${var.metaInfo}</td>
@@ -95,12 +95,12 @@
 													</c:if>
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="部署" onclick="deploy('${var.id}');">
-														<i class="ace-icon fa fa-wrench bigger-120 icon-only" title="部署"></i>
+														<i class="ace-icon fa fa-wrench bigger-120" title="部署"></i>
 													</a>
 													</c:if>
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="导出" onclick="exportFile('${var.id}');">
-														<i class="ace-icon fa fa-download bigger-110 nav-search-icon" title="导出"></i>
+														<i class="ace-icon fa fa-download bigger-110" title="导出"></i>
 													</a>
 													</c:if>
 													<c:if test="${QX.del == 1 }">

@@ -479,10 +479,10 @@ public class CmpWorkOrderController extends BaseController{
 					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					
 					//更新工单(流程实例ID 和 工单状态)
-					Map<String, String> updateParams = new HashMap<String, String>();
-					updateParams.put("status", "3");  //审批不通过,退回
-					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
-					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+//					Map<String, String> updateParams = new HashMap<String, String>();
+//					updateParams.put("status", "3");  //审批不通过,退回
+//					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
+//					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 					cmpLogService.addCmpLog("1", "工单审核完成", "工单审核完成", "0", StringUtil.getClientIp(getRequest()));
 					resultInfo = "审核完成";
 					map.put("result", resultInfo);	
@@ -492,10 +492,10 @@ public class CmpWorkOrderController extends BaseController{
 					variables.put("rejectFlag", 1);
 					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					//更新工单(流程实例ID 和 工单状态)
-					Map<String, String> updateParams = new HashMap<String, String>();
-					updateParams.put("status", "2");  //进入运维执行状态
-					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
-					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+//					Map<String, String> updateParams = new HashMap<String, String>();
+//					updateParams.put("status", "2");  //进入运维执行状态
+//					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
+//					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 					cmpLogService.addCmpLog("1", "工单审核完成", "工单审核完成", "0", StringUtil.getClientIp(getRequest()));
 					resultInfo = "审核完成";
 					map.put("result", resultInfo);	
@@ -610,19 +610,19 @@ public class CmpWorkOrderController extends BaseController{
 					variables.put("rejectFlag", 0);
 					activitiService.handleTask(appNo, toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					//更新工单(流程实例ID 和 工单状态)
-					Map<String, String> updateParams = new HashMap<String, String>();
-					updateParams.put("status", "3");  //退回
-					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
-					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+//					Map<String, String> updateParams = new HashMap<String, String>();
+//					updateParams.put("status", "3");  //退回
+//					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
+//					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 				}else {
 					variables.put("USERNAME", userr.getUSERNAME());
 					variables.put("rejectFlag", 1);
 					activitiService.handleTask(appNo, toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					//更新工单(流程实例ID 和 工单状态)
-					Map<String, String> updateParams = new HashMap<String, String>();
-					updateParams.put("status", "5");  //进入运维执行状态
-					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
-					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+//					Map<String, String> updateParams = new HashMap<String, String>();
+//					updateParams.put("status", "5");  //进入运维执行状态
+//					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
+//					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 				}
 				cmpLogService.addCmpLog("1", "工单执行确认完成", "工单执行确认完成", "0", StringUtil.getClientIp(getRequest()));
 				resultInfo = "执行成功";
