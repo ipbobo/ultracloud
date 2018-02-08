@@ -110,21 +110,12 @@ public class DashboardService {
 	
 	//资源详细信息查询
 	public CmpDashboard getResDtl(String[] hostIds) throws Exception {
-		CmpDashboard cd=new CmpDashboard();
 		if(hostIds!=null && hostIds.length>0){//主机ID列表不为空
 			String hostIdStr=StringUtils.join(hostIds, ",");
-			PageData pageData=(PageData)dao.findForObject("DashboardMapper.getResDtl", hostIdStr);//主机ID列表查询
-			if(pageData!=null && !pageData.isEmpty()){
-				cd.setCpuUseNum(StringUtil.getInt(pageData.getString("cpuUseNum")));
-				cd.setCpuTotalNum(StringUtil.getInt(pageData.getString("cpuTotalNum")));
-				cd.setMemUseNum(StringUtil.getInt(pageData.getString("memUseNum")));
-				cd.setMemTotalNum(StringUtil.getInt(pageData.getString("memTotalNum")));
-				cd.setStoreUseNum(StringUtil.getInt(pageData.getString("storeUseNum")));
-				cd.setStoreTotalNum(StringUtil.getInt(pageData.getString("storeTotalNum")));
-			}
+			return (CmpDashboard)dao.findForObject("DashboardMapper.getResDtl", hostIdStr);//主机ID列表查询
 		}
 		
-		return cd;
+		return new CmpDashboard();
 	}
 	
 	//负载情况
