@@ -1,6 +1,7 @@
 package com.cmp.service;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.cmp.activiti.CustomGroupEntityManager;
 import com.cmp.sid.CmpAxis;
+import com.cmp.sid.CmpCdLoad;
 import com.cmp.sid.CmpDashboard;
 import com.cmp.sid.zabbix.ResBean;
 import com.cmp.sid.zabbix.ResBody;
@@ -121,10 +123,41 @@ public class DashboardService {
 	//负载情况
 	public CmpDashboard getLoadDtl(String[] hostIds) throws Exception {
 		CmpDashboard cd=new CmpDashboard();
-		cd.setLoadLittleNum(2);
-		cd.setLoadMiddleNum(3);
-		cd.setLoadHeightNum(4);
-		cd.setLoadStopNum(5);
+		if(hostIds!=null && hostIds.length>0){//主机ID列表不为空
+			//CPU
+			Map<String, CmpCdLoad> loadMap=new HashMap<String, CmpCdLoad>();
+			ResBean[] rbs=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "lastvalue"}, "hostids", hostIds, "search", StringUtil.getParams("key_", "system.cpu.util[all, user, avg5]")));
+			if(rbs!=null && rbs.length>0){
+				for(ResBean rb: rbs){
+					getLoadMap("cpu", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
+				}
+			}
+			
+			//内存
+			rbs=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "lastvalue"}, "hostids", hostIds, "search", StringUtil.getParams("key_", "vm.memory.size[pused]")));
+			if(rbs!=null && rbs.length>0){
+				for(ResBean rb: rbs){
+					getLoadMap("mem", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
+				}
+			}
+			
+			//磁盘
+			rbs=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "lastvalue"}, "hostids", hostIds, "search", StringUtil.getParams("key_", "vfs.fs.size[*, pused]")));
+			if(rbs!=null && rbs.length>0){
+				for(ResBean rb: rbs){
+					getLoadMap("store", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
+				}
+			}
+			
+			//统计负载
+			if(loadMap!=null && !loadMap.isEmpty()){
+				Iterator<String> it=loadMap.keySet().iterator();
+				while(it.hasNext()){
+					addLoadNum(cd, loadMap.get(it.next()));//增加负载数
+				}
+			}
+		}
+		
 		return cd;
 	}
 	
@@ -204,6 +237,7 @@ public class DashboardService {
 		}
 		
 		String jsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, StringUtil.getReqBody(method, params, ZABBIX_TOKEN), false);//发送post请求(JSON)
+		//String jsonStr="{\"jsonrpc\": \"2.0\",\"result\": [{\"hostid\":\"10255\",\"lastvalue\":\"0.08\"}, {\"hostid\":\"10256\",\"lastvalue\":\"0.12\"}, {\"hostid\":\"10257\",\"lastvalue\":\"0.52\"}, {\"hostid\":\"10258\",\"lastvalue\":\"0.82\"}],\"id\": \"1\"}";
  		ResBody resBody=null;
 		if(StringUtils.isBlank(jsonStr) || (resBody=StringUtil.json2Obj(jsonStr, ResBody.class))==null){//接口返回错误
 			logger.error("调用Zabbix API时错误："+jsonStr);
@@ -249,6 +283,39 @@ public class DashboardService {
 		
 		ZABBIX_TOKEN=retJsonObj.getString("result");//获取Zabbix token
 		return true;
+	}
+	
+	//获取负载情况
+	private void getLoadMap(String operType, Map<String, CmpCdLoad> loadMap, String hostId, String rate) {
+		CmpCdLoad cmpCdLoad=null;
+		if(loadMap.containsKey(hostId)){
+			cmpCdLoad=loadMap.get(hostId);
+		}else{
+			cmpCdLoad=new CmpCdLoad();
+			loadMap.put(hostId, cmpCdLoad);
+		}
+		
+		if("cpu".equals(operType)){//CPU
+			cmpCdLoad.setCpuLoad(StringUtil.getFloat(rate));
+		}else if("mem".equals(operType)){//内存
+			cmpCdLoad.setMemLoad(StringUtil.getFloat(rate));
+		}else if("store".equals(operType)){//磁盘
+			cmpCdLoad.setStoreLoad(StringUtil.getFloat(rate));
+		}
+	}
+	
+	//增加负载数
+	private void addLoadNum(CmpDashboard cd, CmpCdLoad cmpCdLoad) {
+		float maxLoad=cmpCdLoad.getMaxLoad();
+		if(maxLoad<ZABBIX_LOADLITTLE){//轻度负载(%)
+			cd.addLoadLittleNum(1);
+		}else if(ZABBIX_LOADLITTLE<=maxLoad && maxLoad<ZABBIX_LOADMIDDLE){//中度负载(%)
+			cd.addLoadMiddleNum(1);
+		}else if(ZABBIX_LOADMIDDLE<=maxLoad && maxLoad<ZABBIX_LOADHEIGHT){//高度负载(%)
+			cd.addLoadHeightNum(1);
+		}else if(ZABBIX_LOADMIDDLE<=maxLoad && maxLoad<ZABBIX_LOADSTOP){//停机负载(%)
+			cd.addLoadStopNum(1);
+		}
 	}
 	
 	public static void main(String[] args){
