@@ -443,7 +443,7 @@ $(top.hangge());//关闭加载状态
 	/* 新的界面优化代码 start @zjb 2018-2-7 */
 	getTuoyunChart('virCpuChart','CPU(${vir.cpuUseNum}/${vir.cpuTotalNum}核)','${(vir.cpuTotalNum==0?0:vir.cpuUseNum/vir.cpuTotalNum)*100}','meterStyle1');
 	getTuoyunChart('virMemChart','内存(${vir.memUseNum}/${vir.memTotalNum}GB)','${(vir.memTotalNum==0?0:vir.memUseNum/vir.memTotalNum)*100}','meterStyle1');
-	getTuoyunChart('virStoreChart','磁盘(${vir.storeUseNum}/${vir.storeTotalNum})','${(vir.storeTotalNum==0?0:vir.storeUseNum/vir.storeTotalNum)*100}','meterStyle1');
+	getTuoyunChart('virStoreChart','磁盘(${vir.storeUseNum}/${vir.storeTotalNum}GB)','${(vir.storeTotalNum==0?0:vir.storeUseNum/vir.storeTotalNum)*100}','meterStyle1');
 	getTuoyunChart('physCpuChart','CPU(${phys.cpuUseNum}/${phys.cpuTotalNum}核)','${(phys.cpuTotalNum==0?0:phys.cpuUseNum/phys.cpuTotalNum)*100}','meterStyle1');
 	getTuoyunChart('physMemChart','内存(${phys.memUseNum}/${phys.memTotalNum}GB)','${(phys.memTotalNum==0?0:phys.memUseNum/phys.memTotalNum)*100}','meterStyle1');
 	getTuoyunChart('physStoreChart','磁盘(${phys.storeUseNum}/${phys.storeTotalNum}GB)','${(phys.storeTotalNum==0?0:phys.storeUseNum/phys.storeTotalNum)*100}','meterStyle1');
