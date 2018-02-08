@@ -414,7 +414,7 @@ public class AppOperServiceController  extends BaseController {
 		//更新工单(流程实例ID 和 工单状态)
 		Map<String, String> updateParams = new HashMap<String, String>();
 		updateParams.put("procInstId", procInstId);
-		updateParams.put("status", "1");
+		//updateParams.put("status", "1");
 		cmpWorkOrderService.updateWorkOrder(workworder.getAppNo(), updateParams);
 		
 		cmpLogService.addCmpLog("1", "申请运维服务", "申请运维服务成功", "0", StringUtil.getClientIp(getRequest()));

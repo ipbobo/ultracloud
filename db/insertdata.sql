@@ -78,6 +78,12 @@ INSERT INTO `cmp_dict` VALUES ('127', '2017-11-20 17:59:36', '2017-11-20 18:34:4
 INSERT INTO `cmp_dict` VALUES ('128', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_res_type', 'cpu', 'CPU', '仪表盘资源类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES ('129', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_res_type', 'mem', '内存', '仪表盘资源类型', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('130', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'dashboard_res_type', 'store', '磁盘', '仪表盘资源类型', '0', '3');
+INSERT INTO `cmp_dict` VALUES ('131', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '10', '审批中', '工单状态', '0', '2');
+INSERT INTO `cmp_dict` VALUES ('132', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '20', '审批通过', '工单状态', '0', '3');
+INSERT INTO `cmp_dict` VALUES ('133', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '30', '审批不通过/实施退回', '工单状态', '0', '4');
+INSERT INTO `cmp_dict` VALUES ('134', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '40', '平台实施中', '工单状态', '0', '5');
+INSERT INTO `cmp_dict` VALUES ('135', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '41', '业务实施中', '工单状态', '0', '6');
+INSERT INTO `cmp_dict` VALUES ('136', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'workorder_status', '90', '工单完成', '工单状态', '0', '7');
 
 INSERT INTO `cmp_sequence` VALUES ('cmp_order', '1', '1', '5', 'O');
 

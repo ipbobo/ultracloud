@@ -250,12 +250,12 @@ public class AppMgrController extends BaseController {
 					}
 					//更新工单状态
 					Map<String, Object> variablesMap = new HashMap<String, Object>();
-					variablesMap.put("appNo", appNo);
+					
 					activitiService.handleTask(appNo, procInstId, applyUserId, null, variablesMap);
 					//更新工单(流程实例ID 和 工单状态)
 					Map<String, String> updateParams = new HashMap<String, String>();
 					updateParams.put("procInstId", procInstId);
-					updateParams.put("status", "1");
+					//updateParams.put("status", "1");
 					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 					cmpOrderService.updateCmpOrderStatus(getPageData("orderNo", orderNos[i], "totalAmt", totalAmts[i]));//更新清单状态
 				}

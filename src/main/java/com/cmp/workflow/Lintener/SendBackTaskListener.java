@@ -21,14 +21,14 @@ import com.fh.service.system.user.UserManager;
 import com.fh.util.PageData;
 
 /**
- * 审核-任务监听器
+ * 审核不通过/实施退回-任务监听器
  * 
  * @author liuweixing
  *
  */
-public class AuditTaskListener implements Serializable, TaskListener {
+public class SendBackTaskListener implements Serializable, TaskListener {
 
-	private static final long serialVersionUID = -7248797460315299154L;
+	private static final long serialVersionUID = 5651614307261155160L;
 
 	private FixedValue usergroup = null;
 
@@ -45,7 +45,7 @@ public class AuditTaskListener implements Serializable, TaskListener {
 		CmpWorkOrderService cmpWorkOrderService = (CmpWorkOrderService) webctx.getBean("cmpWorkOrderService");
 		try {
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("status", Constants.WORKORDER_STATUS_10);
+			params.put("status", Constants.WORKORDER_STATUS_30);
 			cmpWorkOrderService.updateWorkOrder(appNo, params);
 		} catch (Exception e) {
 			e.printStackTrace();

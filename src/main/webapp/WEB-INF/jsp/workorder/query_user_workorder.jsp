@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -141,14 +142,14 @@
 																class="ace-icon fa fa-lock" title="无权限"></i></span>
 														</c:if>
 														<div class="hidden-sm hidden-xs btn-group">
-															<c:if test="${QX.check == 1  and var.status != '1'}">
+															<c:if test="${QX.check == 1  and var.status != '10'}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
 																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="查看"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.check == 1  and var.status == '1'}">
+															<c:if test="${QX.check == 1  and var.status == '10'}">
 																<a class="btn btn-xs btn-danger"
 																	onclick="check('${var.appNo}');"> <i
 																	class="ace-icon fa fa-pencil-square-o bigger-120" title="审核"></i>
@@ -168,14 +169,14 @@
 																	title="确认"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.execute == 1  and var.status != '2'}">
+															<c:if test="${QX.execute == 1 and !fn:startsWith(var.status,'4')}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
 																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="查看"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.execute == 1  and var.status == '2'}">
+															<c:if test="${QX.execute == 1 and fn:startsWith(var.status,'4')}">
 																<a class="btn btn-xs btn-danger"
 																	onclick="execute('${var.appNo}');"> <i
 																	class="ace-icon fa fa-wrench  bigger-120 icon-only" title="实施"></i>
