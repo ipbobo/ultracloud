@@ -78,9 +78,9 @@
 		</if>
 	</select>
 	
-	<!-- 虚机列表查询 -->
-	<select id="getVirList" parameterType="pd" resultType="pd">
-		select GROUP_CONCAT(a.id) idStr, GROUP_CONCAT(a.name) nameStr, GROUP_CONCAT(a.uuid) uuidStr from t_virtualmachine a
+	<!-- 主机ID列表查询：vir-虚拟机；host-宿主机；phys-物理机 -->
+	<select id="getHostIdList" parameterType="pd" resultType="pd">
+		select 'vir' opetType, GROUP_CONCAT(a.id) idStr from t_virtualmachine a
 		where a.type!='kvm'
 		<if test="roleType != null and roleType == 'applicant'">
 			and a.user=#{applyUserId}
@@ -93,11 +93,8 @@
 					  and b.BUSINESS_KEY_=a.appNo
 			)
 		</if>
-	</select>
-	
-	<!-- 宿主机列表查询 -->
-	<select id="getHostList" parameterType="pd" resultType="pd">
-		select GROUP_CONCAT(a.id) idStr, GROUP_CONCAT(a.name) nameStr, GROUP_CONCAT(a.uuid) uuidStr from t_hostmachine a
+		union all
+		select 'host' opetType, GROUP_CONCAT(a.id) idStr from t_hostmachine a
 		where 1=1
 		<if test="roleType != null and roleType == 'applicant'">
 			and exists (
@@ -118,11 +115,8 @@
 					  )
 			)
 		</if>
-	</select>
-	
-	<!-- 物理机列表查询 -->
-	<select id="getPhysList" parameterType="pd" resultType="pd">
-		select GROUP_CONCAT(a.id) idStr, GROUP_CONCAT(a.name) nameStr, GROUP_CONCAT(a.uuid) uuidStr from t_virtualmachine a
+		union all
+		select 'phys' opetType, GROUP_CONCAT(a.id) idStr from t_virtualmachine a
 		where a.type='kvm'
 		<if test="roleType != null and roleType == 'applicant'">
 			and a.user=#{applyUserId}

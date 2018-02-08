@@ -83,31 +83,30 @@ public class DashboardService {
 		return (Long)dao.findForObject("DashboardMapper.getWorkOrderNum", pd);
 	}
 	
-	//主机ID查询
-	public String getIdStr(String operType, PageData pd) throws Exception {
-		String sqlStr="DashboardMapper.getVirList";//虚拟机运行
-		if("host".equals(operType)){//宿主机运行
-			sqlStr="DashboardMapper.getHostList";
-		}else if("phys".equals(operType)){//物理机运行
-			sqlStr="DashboardMapper.getPhysList";
+	//主机ID列表查询
+	@SuppressWarnings("unchecked")
+	public Map<String, String[]> getHostIdMap(PageData pd) throws Exception {
+		Map<String, String[]> map=new HashMap<String, String[]>();
+		List<PageData> list=(List<PageData>)dao.findForList("DashboardMapper.getHostIdList", pd);//主机ID列表查询
+		if(list!=null && !list.isEmpty()){
+			for(PageData pageData: list){
+				String idStr=null;
+				if(list!=null && (idStr=(String)pageData.get("idStr"))!=null && !StringUtils.isBlank(idStr)){
+					map.put((String)pageData.get("operType"), idStr.split(","));
+				}
+			}
 		}
 		
-		PageData pageData=(PageData)dao.findForObject(sqlStr, pd);
-		String idStr=null;
-		if(pageData!=null && (idStr=(String)pageData.get("idStr"))!=null && !StringUtils.isBlank(idStr)){
-			return idStr;
-		}
-		
-		return null;
+		return map;
 	}
 	
-	//虚机详细信息查询
-	public CmpDashboard getVirDtl(String idStr, PageData pd) throws Exception {
-		if(idStr==null){
+	//资源详细信息查询
+	public CmpDashboard getResDtl(String[] hostIds) throws Exception {
+		if(hostIds==null){
 			return new CmpDashboard();
 		}
 		
-		ResBody resBody=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"status"}, "hostids", idStr.split(",")));
+		ResBody resBody=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"status"}, "hostids", hostIds));
 		ResBean[] rbs=null;
 		if(resBody==null || (rbs=resBody.getResult())==null){//接口返回错误
 			return null;
@@ -135,20 +134,8 @@ public class DashboardService {
 		return cd;
 	}
 	
-	//物理机详细信息查询
-	public CmpDashboard getPhysDtl() throws Exception {
-		CmpDashboard cd=new CmpDashboard();
-		cd.setCpuUseNum(3);
-		cd.setCpuTotalNum(10);
-		cd.setMemUseNum(28);
-		cd.setMemTotalNum(36);
-		cd.setStoreUseNum(60);
-		cd.setStoreTotalNum(100);
-		return cd;
-	}
-	
-	//虚拟机负载
-	public CmpDashboard getVirLoad() throws Exception {
+	//负载情况
+	public CmpDashboard getLoadDtl(String[] hostIds) throws Exception {
 		CmpDashboard cd=new CmpDashboard();
 		cd.setLoadLittleNum(2);
 		cd.setLoadMiddleNum(3);
@@ -157,33 +144,13 @@ public class DashboardService {
 		return cd;
 	}
 	
-	//宿主机负载
-	public CmpDashboard getHostLoad() throws Exception {
-		CmpDashboard cd=new CmpDashboard();
-		cd.setLoadLittleNum(12);
-		cd.setLoadMiddleNum(13);
-		cd.setLoadHeightNum(14);
-		cd.setLoadStopNum(15);
-		return cd;
-	}
-	
-	//物理机负载
-	public CmpDashboard getPhysLoad() throws Exception {
-		CmpDashboard cd=new CmpDashboard();
-		cd.setLoadLittleNum(22);
-		cd.setLoadMiddleNum(23);
-		cd.setLoadHeightNum(24);
-		cd.setLoadStopNum(25);
-		return cd;
-	}
-	
 	//运行情况
-	public CmpDashboard getRunDtl(String idStr, PageData pd) throws Exception {
-		if(idStr==null){//主机ID为空
+	public CmpDashboard getRunDtl(String[] hostIds) throws Exception {
+		if(hostIds==null){//主机ID为空
 			return new CmpDashboard();
 		}
 		
-		ResBody resBody=getZabbixJson("host.get", StringUtil.getParams("output", new String[]{"status"}, "filter", StringUtil.getParams("hostid", idStr.split(","))));
+		ResBody resBody=getZabbixJson("host.get", StringUtil.getParams("output", new String[]{"status"}, "filter", StringUtil.getParams("hostid", hostIds)));
 		ResBean[] rbs=null;
 		if(resBody==null || (rbs=resBody.getResult())==null){//接口返回错误
 			return null;

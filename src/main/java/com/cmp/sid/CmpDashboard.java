@@ -2,12 +2,12 @@ package com.cmp.sid;
 
 //仪表盘
 public class CmpDashboard {
-	private int cpuTotalNum=0;//CPU总量
 	private int cpuUseNum=0;//CPU已分配
-	private int memTotalNum=0;//内存总量
+	private int cpuTotalNum=0;//CPU总量
 	private int memUseNum=0;//内存已分配
-	private int storeTotalNum=0;//存储总量
+	private int memTotalNum=0;//内存总量
 	private int storeUseNum=0;//存储已分配
+	private int storeTotalNum=0;//存储总量
 	private int loadLittleNum=0;//轻度负载
 	private int loadMiddleNum=0;//中度负载
 	private int loadHeightNum=0;//高度负载
@@ -15,18 +15,6 @@ public class CmpDashboard {
 	private int runRunnigNum=0;//运行
 	private int runHangupNum=0;//挂起
 	private int runCloseNum=0;//关机
-
-	public int getCpuTotalNum() {
-		return cpuTotalNum;
-	}
-
-	public void setCpuTotalNum(int cpuTotalNum) {
-		this.cpuTotalNum = cpuTotalNum;
-	}
-	
-	public void addCpuTotalNum(int cpuTotalNum) {
-		this.cpuTotalNum += cpuTotalNum;
-	}
 
 	public int getCpuUseNum() {
 		return cpuUseNum;
@@ -40,18 +28,18 @@ public class CmpDashboard {
 		this.cpuUseNum += cpuUseNum;
 	}
 
-	public int getMemTotalNum() {
-		return memTotalNum;
+	public int getCpuTotalNum() {
+		return cpuTotalNum;
 	}
 
-	public void setMemTotalNum(int memTotalNum) {
-		this.memTotalNum = memTotalNum;
+	public void setCpuTotalNum(int cpuTotalNum) {
+		this.cpuTotalNum = cpuTotalNum;
 	}
 	
-	public void addMemTotalNum(int memTotalNum) {
-		this.memTotalNum += memTotalNum;
+	public void addCpuTotalNum(int cpuTotalNum) {
+		this.cpuTotalNum += cpuTotalNum;
 	}
-
+	
 	public int getMemUseNum() {
 		return memUseNum;
 	}
@@ -64,18 +52,18 @@ public class CmpDashboard {
 		this.memUseNum += memUseNum;
 	}
 
-	public int getStoreTotalNum() {
-		return storeTotalNum;
+	public int getMemTotalNum() {
+		return memTotalNum;
 	}
 
-	public void setStoreTotalNum(int storeTotalNum) {
-		this.storeTotalNum = storeTotalNum;
+	public void setMemTotalNum(int memTotalNum) {
+		this.memTotalNum = memTotalNum;
 	}
 	
-	public void addStoreTotalNum(int storeTotalNum) {
-		this.storeTotalNum += storeTotalNum;
+	public void addMemTotalNum(int memTotalNum) {
+		this.memTotalNum += memTotalNum;
 	}
-
+	
 	public int getStoreUseNum() {
 		return storeUseNum;
 	}
@@ -86,6 +74,18 @@ public class CmpDashboard {
 	
 	public void addStoreUseNum(int storeUseNum) {
 		this.storeUseNum += storeUseNum;
+	}
+	
+	public int getStoreTotalNum() {
+		return storeTotalNum;
+	}
+
+	public void setStoreTotalNum(int storeTotalNum) {
+		this.storeTotalNum = storeTotalNum;
+	}
+	
+	public void addStoreTotalNum(int storeTotalNum) {
+		this.storeTotalNum += storeTotalNum;
 	}
 
 	public int getLoadLittleNum() {
