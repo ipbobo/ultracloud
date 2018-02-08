@@ -2,6 +2,7 @@ package com.cmp.workflow.Lintener;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.activiti.engine.delegate.TaskListener;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.cmp.common.Constants;
 import com.cmp.entity.UserGroupUserMap;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.ProjectService;
@@ -28,12 +30,9 @@ import com.fh.util.PageData;
 public class AuditTaskListener implements Serializable, TaskListener {
 
 	private static final long serialVersionUID = 667530869305257754L;
-	
-	private String name;
 
 	@Override
 	public void notify(DelegateTask delegateTask) {
-		Map<String, Object> map = delegateTask.getVariables();
 		String appNo = (String) delegateTask.getVariable("appNo");
 		
 		WebApplicationContext webctx=ContextLoader.getCurrentWebApplicationContext();
@@ -41,6 +40,9 @@ public class AuditTaskListener implements Serializable, TaskListener {
 		CmpWorkOrder workOrder = null;
 		try {
 			workOrder = cmpWorkOrderService.findByAppNo(appNo);
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("status", Constants.WORKORDER_STATUS_10);
+			cmpWorkOrderService.updateWorkOrder(appNo, params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
