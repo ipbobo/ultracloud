@@ -80,7 +80,7 @@
 	
 	<!-- 主机ID列表查询：vir-虚拟机；host-宿主机；phys-物理机 -->
 	<select id="getHostIdList" parameterType="pd" resultType="pd">
-		select 'vir' opetType, GROUP_CONCAT(a.id) idStr from t_virtualmachine a
+		select 'vir' operType, GROUP_CONCAT(a.id) hostIdStr from t_virtualmachine a
 		where a.type!='kvm'
 		<if test="roleType != null and roleType == 'applicant'">
 			and a.user=#{applyUserId}
@@ -94,7 +94,7 @@
 			)
 		</if>
 		union all
-		select 'host' opetType, GROUP_CONCAT(a.id) idStr from t_hostmachine a
+		select 'host' operType, GROUP_CONCAT(a.id) hostIdStr from t_hostmachine a
 		where 1=1
 		<if test="roleType != null and roleType == 'applicant'">
 			and exists (
@@ -116,7 +116,7 @@
 			)
 		</if>
 		union all
-		select 'phys' opetType, GROUP_CONCAT(a.id) idStr from t_virtualmachine a
+		select 'phys' operType, GROUP_CONCAT(a.id) hostIdStr from t_virtualmachine a
 		where a.type='kvm'
 		<if test="roleType != null and roleType == 'applicant'">
 			and a.user=#{applyUserId}
@@ -129,5 +129,13 @@
 					  and b.BUSINESS_KEY_=a.appNo
 			)
 		</if>
+	</select>
+	
+	<!-- 资源详细信息查询 -->
+	<select id="getResDtl" parameterType="pd" resultType="pd">
+		SELECT c.cpuUseNum, ifnull(sum(a.cpu), 0) cpuTotalNum, c.memUseNum, ifnull(sum(a.memory), 0) memTotalNum, c.storeUseNum, ifnull(sum(a.localdisk), 0) storeTotalNum 
+		FROM t_hostmachine a
+		inner join (SELECT ifnull(sum(b.cpu), 0) cpuUseNum, ifnull(sum(b.memory), 0) memUseNum, ifnull(sum(b.datadisk), 0) storeUseNum FROM t_virtualmachine b where FIND_IN_SET(b.hostmachine_id, #{hostIdStr})) c
+		where FIND_IN_SET(a.id, #{hostIdStr})
 	</select>
 </mapper>

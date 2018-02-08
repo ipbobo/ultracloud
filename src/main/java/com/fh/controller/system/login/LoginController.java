@@ -92,7 +92,7 @@ public class LoginController extends BaseController {
 		Map<String, String> auditMap=dashboardService.getAuditMap(applyUserId);//审核组查询
 		String roleType=StringUtil.getRoleType(auditMap);//获取用户的角色类型
 		PageData pd = getPageData("applyUserId", applyUserId, "roleType", roleType, "audit", auditMap.get("audit"));
-		Map<String, String[]> hostIdMap=dashboardService.getHostIdMap(pd);//主机ID列表查询
+		Map<String, String[]> hostIdsMap=dashboardService.getHostIdsMap(pd);//主机ID列表查询
 		ModelAndView mv = this.getModelAndView();
 		mv.addObject("cpuTimeType", dbReq.getCpuTimeType());//CPU时间类型
 		mv.addObject("memTimeType", dbReq.getMemTimeType());//内存时间类型
@@ -107,14 +107,14 @@ public class LoginController extends BaseController {
 		mv.addObject("userNum", dashboardService.getUserNum(pd));//用户总数
 		mv.addObject("projNum", dashboardService.getProjNum(pd));//项目总数
 		mv.addObject("workOrderNum", dashboardService.getWorkOrderNum(pd));//工单总数
-		mv.addObject("vir", dashboardService.getResDtl(hostIdMap.get("vir")));//虚机详细信息查询
-		mv.addObject("phys", dashboardService.getResDtl(hostIdMap.get("phys")));//物理机详细信息查询
-		mv.addObject("virLoad", dashboardService.getLoadDtl(hostIdMap.get("vir")));//虚拟机负载
-		mv.addObject("hostLoad", dashboardService.getLoadDtl(hostIdMap.get("host")));//宿主机负载
-		mv.addObject("physLoad", dashboardService.getLoadDtl(hostIdMap.get("phys")));//物理机负载
-		mv.addObject("virRun", dashboardService.getRunDtl(hostIdMap.get("vir")));//虚拟机运行
-		mv.addObject("hostRun", dashboardService.getRunDtl(hostIdMap.get("host")));//宿主机运行
-		mv.addObject("physRun", dashboardService.getRunDtl(hostIdMap.get("phys")));//物理机运行
+		mv.addObject("vir", dashboardService.getResDtl(hostIdsMap.get("vir")));//虚机详细信息查询
+		mv.addObject("phys", dashboardService.getResDtl(hostIdsMap.get("phys")));//物理机详细信息查询
+		mv.addObject("virLoad", dashboardService.getLoadDtl(hostIdsMap.get("vir")));//虚拟机负载
+		mv.addObject("hostLoad", dashboardService.getLoadDtl(hostIdsMap.get("host")));//宿主机负载
+		mv.addObject("physLoad", dashboardService.getLoadDtl(hostIdsMap.get("phys")));//物理机负载
+		mv.addObject("virRun", dashboardService.getRunDtl(hostIdsMap.get("vir")));//虚拟机运行
+		mv.addObject("hostRun", dashboardService.getRunDtl(hostIdsMap.get("host")));//宿主机运行
+		mv.addObject("physRun", dashboardService.getRunDtl(hostIdsMap.get("phys")));//物理机运行
 		mv.addObject("cpuResRate", dashboardService.getCpuResRate(dbReq.getCpuTimeType()));//CPU资源使用量趋势
 		mv.addObject("memResRate", dashboardService.getMemResRate(dbReq.getMemTimeType()));//存储资源使用量趋势
 		mv.addObject("storeResRate", dashboardService.getStoreResRate(dbReq.getStoreTimeType()));//磁盘资源使用量趋势

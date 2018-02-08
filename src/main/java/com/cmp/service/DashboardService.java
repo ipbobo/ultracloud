@@ -38,7 +38,15 @@ public class DashboardService {
 	private String ZABBIX_USER="Admin";//Zabbix用户名
 	@Value("${zabbix.password}")
 	private String ZABBIX_PASSWORD="zabbix";//Zabbix密码
-
+	@Value("${zabbix.loadLittle}")
+	private Float ZABBIX_LOADLITTLE;//轻度负载(%)
+	@Value("${zabbix.loadMiddle}")
+	private Float ZABBIX_LOADMIDDLE;//中度负载(%)
+	@Value("${zabbix.loadHeight}")
+	private Float ZABBIX_LOADHEIGHT;//高度负载(%)
+	@Value("${zabbix.loadStop}")
+	private Float ZABBIX_LOADSTOP;//停机负载(%)
+	
 	//审核组查询
 	@SuppressWarnings("unchecked")
 	public Map<String, String> getAuditMap(String applyUserId) throws Exception {
@@ -85,14 +93,14 @@ public class DashboardService {
 	
 	//主机ID列表查询
 	@SuppressWarnings("unchecked")
-	public Map<String, String[]> getHostIdMap(PageData pd) throws Exception {
+	public Map<String, String[]> getHostIdsMap(PageData pd) throws Exception {
 		Map<String, String[]> map=new HashMap<String, String[]>();
 		List<PageData> list=(List<PageData>)dao.findForList("DashboardMapper.getHostIdList", pd);//主机ID列表查询
 		if(list!=null && !list.isEmpty()){
 			for(PageData pageData: list){
-				String idStr=null;
-				if(list!=null && (idStr=(String)pageData.get("idStr"))!=null && !StringUtils.isBlank(idStr)){
-					map.put((String)pageData.get("operType"), idStr.split(","));
+				String hostIdStr=null;
+				if(list!=null && (hostIdStr=(String)pageData.get("hostIdStr"))!=null && !StringUtils.isBlank(hostIdStr)){
+					map.put((String)pageData.get("operType"), hostIdStr.split(","));
 				}
 			}
 		}
@@ -102,35 +110,20 @@ public class DashboardService {
 	
 	//资源详细信息查询
 	public CmpDashboard getResDtl(String[] hostIds) throws Exception {
-		if(hostIds==null){
-			return new CmpDashboard();
-		}
-		
-		ResBody resBody=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"status"}, "hostids", hostIds));
-		ResBean[] rbs=null;
-		if(resBody==null || (rbs=resBody.getResult())==null){//接口返回错误
-			return null;
-		}
-		
 		CmpDashboard cd=new CmpDashboard();
-		if(rbs!=null && rbs.length>0){
-			for(ResBean rb: rbs){
-				if("0".equals(rb.getStatus())){//运行
-					cd.addRunRunnigNum(1);
-				}else if("1".equals(rb.getStatus())){//挂起
-					cd.addRunHangupNum(1);
-				}else if("2".equals(rb.getStatus())){//关机
-					cd.addRunCloseNum(1);
-				}
+		if(hostIds!=null && hostIds.length>0){//主机ID列表不为空
+			String hostIdStr=StringUtils.join(hostIds, ",");
+			PageData pageData=(PageData)dao.findForObject("DashboardMapper.getResDtl", hostIdStr);//主机ID列表查询
+			if(pageData!=null && !pageData.isEmpty()){
+				cd.setCpuUseNum(StringUtil.getInt(pageData.getString("cpuUseNum")));
+				cd.setCpuTotalNum(StringUtil.getInt(pageData.getString("cpuTotalNum")));
+				cd.setMemUseNum(StringUtil.getInt(pageData.getString("memUseNum")));
+				cd.setMemTotalNum(StringUtil.getInt(pageData.getString("memTotalNum")));
+				cd.setStoreUseNum(StringUtil.getInt(pageData.getString("storeUseNum")));
+				cd.setStoreTotalNum(StringUtil.getInt(pageData.getString("storeTotalNum")));
 			}
 		}
 		
-		cd.addCpuUseNum(1);
-		cd.addCpuTotalNum(10);
-		cd.addMemUseNum(2);
-		cd.addMemTotalNum(20);
-		cd.addStoreUseNum(21);
-		cd.addStoreTotalNum(100);
 		return cd;
 	}
 	
@@ -146,25 +139,18 @@ public class DashboardService {
 	
 	//运行情况
 	public CmpDashboard getRunDtl(String[] hostIds) throws Exception {
-		if(hostIds==null){//主机ID为空
-			return new CmpDashboard();
-		}
-		
-		ResBody resBody=getZabbixJson("host.get", StringUtil.getParams("output", new String[]{"status"}, "filter", StringUtil.getParams("hostid", hostIds)));
-		ResBean[] rbs=null;
-		if(resBody==null || (rbs=resBody.getResult())==null){//接口返回错误
-			return null;
-		}
-		
 		CmpDashboard cd=new CmpDashboard();
-		if(rbs!=null && rbs.length>0){
-			for(ResBean rb: rbs){
-				if("0".equals(rb.getStatus())){//运行
-					cd.addRunRunnigNum(1);
-				}else if("1".equals(rb.getStatus())){//挂起
-					cd.addRunHangupNum(1);
-				}else if("2".equals(rb.getStatus())){//关机
-					cd.addRunCloseNum(1);
+		if(hostIds!=null && hostIds.length>0){//主机ID列表不为空
+			ResBean[] rbs=getZabbixJson("host.get", StringUtil.getParams("output", new String[]{"status"}, "filter", StringUtil.getParams("hostid", hostIds)));
+			if(rbs!=null && rbs.length>0){
+				for(ResBean rb: rbs){
+					if("0".equals(rb.getStatus())){//运行
+						cd.addRunRunnigNum(1);
+					}else if("1".equals(rb.getStatus())){//挂起
+						cd.addRunHangupNum(1);
+					}else if("2".equals(rb.getStatus())){//关机
+						cd.addRunCloseNum(1);
+					}
 				}
 			}
 		}
@@ -221,13 +207,13 @@ public class DashboardService {
 	}
 	
 	//调用Zabbix API
-	public ResBody getZabbixJson(String method, JSONObject params){
+	public ResBean[] getZabbixJson(String method, JSONObject params){
 		if(StringUtils.isBlank(ZABBIX_TOKEN) && !loginZabbix()){//调用Zabbix登录API
 			return null;
 		}
 		
 		String jsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, StringUtil.getReqBody(method, params, ZABBIX_TOKEN), false);//发送post请求(JSON)
-		ResBody resBody=null;
+ 		ResBody resBody=null;
 		if(StringUtils.isBlank(jsonStr) || (resBody=StringUtil.json2Obj(jsonStr, ResBody.class))==null){//接口返回错误
 			logger.error("调用Zabbix API时错误："+jsonStr);
 			return null;
@@ -247,7 +233,12 @@ public class DashboardService {
 			return null;
 		}
 		
-		return resBody;
+		ResBean[] rbs=null;
+		if(resBody==null || (rbs=resBody.getResult())==null){//接口返回错误
+			return null;
+		}
+		
+		return rbs;
 	}
 	
 	//调用Zabbix登录API
@@ -274,7 +265,11 @@ public class DashboardService {
 		//JSONObject jsonObj=aa.getZabbixJson("item.get", StringUtil.getParams("hostids", new String[]{"10084", "10257"}));
 		//JSONObject jsonObj=aa.getZabbixJson("host.get", StringUtil.getParams("filter", StringUtil.getParams("hostid", new String[]{"10084", "10257"})));
 		//ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("output",  new String[]{"status"}, "filter", StringUtil.getParams("hostid", "10084,10257".split(","))));
-		ResBody resBody=aa.getZabbixJson("item.get", StringUtil.getParams("hostids", "10084,10257".split(","), "search", StringUtil.getParams("key_", "system.cpu.util")));
-		System.out.println(resBody.toString());
+		//ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("search", StringUtil.getParams("key_", "system.cpu.num")));//system.cpu.num[max]、system.cpu.util[,user]
+		//ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("output",  new String[]{"hostid"}, "filter", StringUtil.getParams()));
+		//aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"key_", "lastvalue"}, "search", StringUtil.getParams("key_", "system.cpu")));//查询system.cpu.num和system.cpu.util[,user]；"sortfield", "key_"
+		//aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"key_", "lastvalue"}, "search", StringUtil.getParams("key_", "vfs.fs.size")));//查询system.cpu.num和system.cpu.util[,user]；"sortfield", "key_"
+		//aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"key_", "lastvalue"}, "search", StringUtil.getParams("key_", "vm.memory.size")));//查询system.cpu.num和system.cpu.util[,user]；"sortfield", "key_"
+		aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "key_", "lastvalue"}, "search", StringUtil.getParams("key_", "system.cpu.load[percpu,avg5]")));//查询system.cpu.num和system.cpu.util[,user]和"sortfield", "key_"
 	}
 }
