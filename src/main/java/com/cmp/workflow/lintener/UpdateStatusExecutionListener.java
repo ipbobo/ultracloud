@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
+import org.activiti.engine.impl.el.FixedValue;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -20,6 +21,8 @@ import com.cmp.service.CmpWorkOrderService;
 public class UpdateStatusExecutionListener implements ExecutionListener {
 
 	private static final long serialVersionUID = -3374534225221434770L;
+	
+	private FixedValue status = null;
 
 	@Override
 	public void notify(DelegateExecution execution) {
@@ -29,11 +32,19 @@ public class UpdateStatusExecutionListener implements ExecutionListener {
 		CmpWorkOrderService cmpWorkOrderService = (CmpWorkOrderService) webctx.getBean("cmpWorkOrderService");
 		try {
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("status", Constants.WORKORDER_STATUS_90);
+			params.put("status", status.getExpressionText());
 			cmpWorkOrderService.updateWorkOrder(appNo, params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public FixedValue getStatus() {
+		return status;
+	}
+
+	public void setStatus(FixedValue status) {
+		this.status = status;
 	}
 
 }
