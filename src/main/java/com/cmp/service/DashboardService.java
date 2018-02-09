@@ -184,38 +184,21 @@ public class DashboardService {
 	}
 	
 	//CPU资源使用量趋势
-	public CmpAxis getCpuResRate(String timeType) throws Exception {
+	public CmpAxis getResRate(String resType, String timeType, String[] hostIds) throws Exception {
+		String key="system.cpu.util[all, user, avg5]";//CPU
+		if("mem".equals(resType)){//内存
+			key="vm.memory.size[pused]";
+		}else if("store".equals(resType)){//磁盘
+			key="vfs.fs.size[*, pused]";
+		}
+		
 		CmpAxis cmpAxis=new CmpAxis(timeType);
-		cmpAxis.setYaxis1("0.1");
-		cmpAxis.setYaxis2("0.3");
-		cmpAxis.setYaxis3("0.5");
-		cmpAxis.setYaxis4("0.7");
-		cmpAxis.setYaxis5("0.9");
-		cmpAxis.setYaxis6("1");
-		return cmpAxis;
-	}
-	
-	//内存资源使用量趋势
-	public CmpAxis getMemResRate(String timeType) throws Exception {
-		CmpAxis cmpAxis=new CmpAxis(timeType);
-		cmpAxis.setYaxis1("0.2");
-		cmpAxis.setYaxis2("0.4");
-		cmpAxis.setYaxis3("0.5");
-		cmpAxis.setYaxis4("0.6");
-		cmpAxis.setYaxis5("0.8");
-		cmpAxis.setYaxis6("1");
-		return cmpAxis;
-	}
-	
-	//磁盘资源使用量趋势
-	public CmpAxis getStoreResRate(String timeType) throws Exception {
-		CmpAxis cmpAxis=new CmpAxis(timeType);
-		cmpAxis.setYaxis1("0.1");
-		cmpAxis.setYaxis2("0.5");
-		cmpAxis.setYaxis3("0.6");
-		cmpAxis.setYaxis4("0.7");
-		cmpAxis.setYaxis5("0.9");
-		cmpAxis.setYaxis6("1");
+		cmpAxis.setYaxis1(getYaxis(hostIds, key, cmpAxis.getXaxis1().getTime(), cmpAxis.getXaxis1().getTime()));
+		cmpAxis.setYaxis2(getYaxis(hostIds, key, cmpAxis.getXaxis2().getTime(), cmpAxis.getXaxis2().getTime()));
+		cmpAxis.setYaxis3(getYaxis(hostIds, key, cmpAxis.getXaxis3().getTime(), cmpAxis.getXaxis3().getTime()));
+		cmpAxis.setYaxis4(getYaxis(hostIds, key, cmpAxis.getXaxis4().getTime(), cmpAxis.getXaxis4().getTime()));
+		cmpAxis.setYaxis5(getYaxis(hostIds, key, cmpAxis.getXaxis5().getTime(), cmpAxis.getXaxis5().getTime()));
+		cmpAxis.setYaxis6(getYaxis(hostIds, key, cmpAxis.getXaxis6().getTime(), cmpAxis.getXaxis6().getTime()));
 		return cmpAxis;
 	}
 	
@@ -350,6 +333,16 @@ public class DashboardService {
 		}else if(ZABBIX_LOADMIDDLE<=maxLoad && maxLoad<ZABBIX_LOADSTOP){//停机负载(%)
 			cd.addLoadStopNum(1);
 		}
+	}
+	
+	//获取资源使用量趋势
+	private String getYaxis(String[] hostIds, String key, long timeFrom, long timeTill) throws Exception {
+		ResBean[] rbs=getZabbixJson("history.get", StringUtil.getParams("output", "extend", "history", 0, "hostids", hostIds, "time_from", timeFrom, "time_till", timeTill, "search", StringUtil.getParams("key_", key)));
+		if(rbs!=null && rbs.length>0){
+			return rbs[0].getValue();
+		}
+		
+		return "0.0";
 	}
 	
 	public static void main(String[] args){
