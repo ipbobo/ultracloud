@@ -576,8 +576,10 @@ $(window).scroll(function() {
 	}
 })
 </script>
+	<link rel="stylesheet" href="css/newSkin.css">
 </head>
-<body>
+<body class="resapp-qry-input">
+<div class="head-nav">主页 > 资源申请</div>
 <ul class="nav nav-tabs">
 	<li class="active"><a href="#zdysq" onclick="tabFunc('zdysq')" data-toggle="tab">自定义申请</a></li>
 	<li><a href="#tcsq" onclick="tabFunc('tcsq')" data-toggle="tab">套餐申请</a></li>
@@ -602,7 +604,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
 	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 		<tr class="tablecls">
-			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;地域</td>
+			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;地域</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="areaCodeId" class="ullitab list-inline">
@@ -616,7 +618,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="platTypeId" class="ullitab list-inline">
@@ -630,7 +632,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="deployTypeId" class="ullitab list-inline">
@@ -644,7 +646,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目</td>
 			<td align="right" style="width: 120px;padding:10px;">环境：</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="envCodeId" class="ullitab list-inline">
@@ -670,7 +672,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="5"><span class="glyphicon glyphicon-cog"></span>&nbsp;基本配置</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="5"><span class="glyphicon glyphicon-cog"></span>&nbsp;基本配置</td>
 			<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="resTypeId" class="ullitab list-inline">
@@ -727,7 +729,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
 			<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 				<select class="chosen-select form-control" name="osType" id="osType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;" onchange="imgFunc()">
@@ -776,7 +778,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储</td>
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<table id="diskTableId">
@@ -805,7 +807,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<table id="softTableId">
@@ -830,7 +832,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="width: 120px;padding:10px;" colspan="6">
 				<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
@@ -844,7 +846,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="padding:10px;" colspan="6">
 				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onchange="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
@@ -853,14 +855,14 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;上传附件</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;上传附件</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="padding:10px;"><input style="background-color:#cccccc;" type="file" name="uploadFile" id="uploadFile" value="选择文件" accept=".txt,.doc,.docx,.xls,.xlsx,image/*"/></td>
 			<td colspan="5"><input type="button" value="上传" onclick="uploadFileFunc()">&nbsp;格式要求：txt,word,excel,image</td>
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;当前配置</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;当前配置</td>
 			<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>
 			<td id="resTypeLabel" align="left" valign="top" style="width: 180px;padding:10px;">云主机</td>
 			<td align="right" valign="top" style="width: 120px;padding:10px;">实例规格：</td>
@@ -887,7 +889,7 @@ $(window).scroll(function() {
 		<td align="left" style="padding:10px;">
 			<div class="divbtn">
 				配置费用(元)：<span id="totalAmt" style="font-size:26px;color: #f5620a;">￥0.00</span>
-			    <span id="addListBtnId" class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
+			    <span id="addListBtnId" class="btncls active" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>
 			    <span style="width:30px;float:right;">&nbsp;</span>
 			    <span id="savePckgBtnId" class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
 			</div>

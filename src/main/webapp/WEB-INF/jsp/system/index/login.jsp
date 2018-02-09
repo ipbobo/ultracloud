@@ -71,44 +71,53 @@
 			fhi++;
 		};
 	</script>
+	<link rel="stylesheet" href="css/newSkin.css">
 </head>
-<body>
+<body class="login">
 
 	<c:if test="${pd.isMusic == 'yes' }">
 	<div style="display: none">
 	    <audio src="static/login/music/fh1.mp3" autoplay=""></audio>
 	</div>	
 	</c:if>
-	<canvas class="cavs"></canvas>
+	<!--<canvas class="cavs"></canvas>-->
 	<div style="width:100%;text-align: center;margin: 0 auto;position: absolute;">
 		<!-- 登录 -->
 		<div id="windows1">
 		<div id="loginbox" >
 			<form action="" method="post" name="loginForm" id="loginForm">
-				<div class="control-group normal_text">
+				<!--<div class="control-group normal_text">
 					<h2>
 						<img src="${pd.logo}" alt="Logo" width="160" height="80" />${pd.SYSNAME}
 					</h2>
+				</div>-->
+				<!--样式修改 begin @zjb 2018.2.8-->
+				<div class="control-group normal_text">
+					<h2>
+						<img src="${pd.logo}" alt="Logo" width="100" height="50" />${pd.SYSNAME}
+					</h2>
+					<div class="line"></div>
 				</div>
+				<!--样式修改 end @zjb 2018.2.8-->
 				<div class="control-group">
 					<div class="controls">
 						<div class="main_input_box">
-							<span class="add-on bg_lg">
+							<!--<span class="add-on bg_lg">
 							<i><img height="37" src="static/login/user.png" /></i>
-							</span><input type="text" name="loginname" id="loginname" value="" placeholder="请输入用户名" />
+							</span>--><input type="text" name="loginname" id="loginname" value="" placeholder="请输入用户名" />
 						</div>
 					</div>
 				</div>
 				<div class="control-group">
 					<div class="controls">
 						<div class="main_input_box">
-							<span class="add-on bg_ly">
+							<!--<span class="add-on bg_ly">
 							<i><img height="37" src="static/login/suo.png" /></i>
-							</span><input type="password" name="password" id="password" placeholder="请输入密码" class="keypad" keypadMode="full" allowKeyboard="true" value="1"/>
+							</span>--><input type="password" name="password" id="password" placeholder="请输入密码" class="keypad" keypadMode="full" allowKeyboard="true" value="1"/>
 						</div>
 					</div>
 				</div>
-				<div style="float:right;padding-right:10%;">
+				<!--<div style="float:right;padding-right:10%;">
 					<div style="float: left;margin-top:3px;margin-right:2px;">
 						<font color="white">记住密码</font>
 					</div>
@@ -116,9 +125,29 @@
 						<input name="form-field-checkbox" id="saveid" type="checkbox"
 							onclick="savePaw();" style="padding-top:0px;" />
 					</div>
+				</div>-->
+				<!--样式修改 begin @zjb 2018.2.8-->
+				<div class="control-group no-margin">
+					<div class="controls" style="text-align: center">
+						<div style="width: 89%;padding: 0; margin: auto">
+							<div style="width:20%;float:left; margin-top: 10px;">
+								<div style="float: left;">
+									<input name="form-field-checkbox" id="saveid" type="checkbox" onclick="savePaw();" style="padding-top:0px;">
+								</div>
+								<div style="float: left;margin-top:3px;margin-right:2px;">
+									<font color="white">记住密码</font>
+								</div>
+							</div>
+							<div style="width:60%;float:right;margin-bottom: 40px">
+								<a onclick="severCheck();" class="flip-link btn btn-info" id="to-recover">确认登录</a>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="form-actions">
-					<div style="width:86%;padding-left:8%;">
+				<div style="clear: both"></div>
+				<!--样式修改 end @zjb 2018.2.8-->
+<!--				<div class="form-actions">
+					<div style="width:86%;padding-left:8%;">-->
 
 						<!-- <div style="float: left;padding-top:2px;">
 							<i><img src="static/login/yan.png" /></i>
@@ -132,9 +161,9 @@
 						<c:if test="${pd.isZhuce == 'yes' }">
 						<!--  <span class="pull-right" style="padding-right:3%;"><a href="javascript:changepage(1);" class="btn btn-success">注册</a></span> -->
 						</c:if>
-						<span class="pull-right"><a onclick="severCheck();" class="flip-link btn btn-info" id="to-recover">登录</a></span>
+<!--						<span class="pull-right"><a onclick="severCheck();" class="flip-link btn btn-info" id="to-recover">登录</a></span>
 					</div>
-				</div>
+				</div>-->
 			</form>
 			<div class="controls">
 				<div class="main_input_box">
@@ -224,9 +253,9 @@
 		</div>
 		
 	</div>
-	<div id="templatemo_banner_slide" class="container_wapper">
+	<!--<div id="templatemo_banner_slide" class="container_wapper">
 		<div class="camera_wrap camera_emboss" id="camera_slide">
-			<!-- 背景图片 -->
+			&lt;!&ndash; 背景图片 &ndash;&gt;
 			<c:choose>
 				<c:when test="${not empty pd.listImg}">
 					<c:forEach items="${pd.listImg}" var="var" varStatus="vs">
@@ -242,8 +271,8 @@
 				</c:otherwise>
 			</c:choose>
 		</div>
-		<!-- #camera_wrap_3 -->
-	</div>
+		&lt;!&ndash; #camera_wrap_3 &ndash;&gt;
+	</div>-->
 
 	<script type="text/javascript">
 		//服务器校验

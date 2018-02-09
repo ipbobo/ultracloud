@@ -97,19 +97,15 @@ function getPieChart(chartId, titleArr, legendArr, radiusArr, centerArr, keyArr,
 //获取环形图，必须先引入echarts.min.js
 function getAnnularChart(chartId, titleArr, legendArr, radiusArr, centerArr, keyArr, valArr, colorArr, unit){
 	var dataArr=[];
-	var isAllZero=true;//值是否全为0
 	if(keyArr.length==valArr.length && keyArr.length==colorArr.length){
 		for(var i=0;i<keyArr.length;i++){
 			dataArr.push({name: keyArr[i], value: valArr[i]});
-			if(valArr[i]!='0'){
-				isAllZero=false;
-			}
 		}
 	}
 	
 	var option = {
 		title: {text: titleArr[0], subtext: '', x:'center', y: '100', textStyle: {color: '#000000', fontSize: '12', fontWeight: 'normal'}},  
-	    tooltip: {trigger: 'item', formatter: "{b}("+(isAllZero?"0":"{d}")+unit+")", textStyle:{align:'left'}},//item或axis
+	    tooltip: {trigger: 'item', formatter: "{a}<br>{b}: {c}({d}"+unit+")", textStyle:{align:'left'}},//item或axis
 	    legend: {orient: legendArr[0], x: legendArr[1]?legendArr[1]:'center', y: legendArr[2]?legendArr[2]:'top', data: keyArr},//horizontal、vertical
 	    color: colorArr,
 	    calculable: true,  
@@ -122,7 +118,7 @@ function getAnnularChart(chartId, titleArr, legendArr, radiusArr, centerArr, key
 	            center: centerArr,//饼图的位置['50%', '75%']
 	            itemStyle: {
 	            	normal: {label: {show: false}, labelLine: {show: false}}, 
-	            	emphasis: {label: {show: false, position: 'inside', textStyle: {fontSize: '12', fontWeight: 'bold'}}}
+	            	emphasis: {label: {show: true, position: 'inside', textStyle: {fontSize: '12', fontWeight: 'bold'}}}
 	            },
 	            data: dataArr
 	        }
@@ -263,7 +259,7 @@ function getLineChart(chartId, titleArr, xdataArr, ydataArr){
 	            boundaryGap : false,
 	            axisLabel : {
 	                formatter: '{value}',
-	                interval: 0,//全部显示，仅type为category有效
+	                interval: 0,//全部显示，仅type为category有效,
                     textStyle: {
                         color: '#888888',//坐标值得具体的颜色
 

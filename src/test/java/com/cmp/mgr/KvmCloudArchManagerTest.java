@@ -12,9 +12,9 @@ public class KvmCloudArchManagerTest implements CloudArchTest {
 
 	private KvmCloudArchManager cloudArchManager;
 
-	static {
-		System.setProperty("jna.library.path", "C:/Program Files/VirtViewer v6.0-256/bin");
-	}
+	// static {
+	// 	System.setProperty("jna.library.path", "C:/Program Files/VirtViewer v6.0-256/bin");
+	// }
 
 	@Before
 	public void setup() {
@@ -32,7 +32,7 @@ public class KvmCloudArchManagerTest implements CloudArchTest {
 	}
 
 	@Test
-	public void testGreateVirtualMachine() {
+	public void testCreateVirtualMachine() {
 		execute("GreateVirtualMachine", () -> {
 			CreateVmRequest request = new CreateVmRequest();
 			request.setVmName("centos62");
