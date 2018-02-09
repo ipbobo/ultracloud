@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
@@ -96,6 +96,9 @@
 			height: 40px !important;
 			text-indent: 50px;
 			background-color: #ffffff !important;
+			-moz-appearance:none; /* Firefox */
+			-webkit-appearance:none; /* Safari 和 Chrome */
+			outline:none;
 		}
 		body.login .main_input_box #loginname {
 			background: url("static/login/images/login-icon.png") 0 -4px no-repeat;
