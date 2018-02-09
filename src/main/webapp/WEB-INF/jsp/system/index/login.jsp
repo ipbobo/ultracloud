@@ -71,7 +71,53 @@
 			fhi++;
 		};
 	</script>
-	<link rel="stylesheet" href="css/newSkin.css">
+	<style>
+		/*登录页样式*/
+		body.login {
+			background: url('static/login/images/banner.png');
+			background-size: cover;
+		}
+		body.login .normal_text {
+			padding: 50px 40px 15px 40px !important;
+		}
+		body.login .normal_text h2 {
+			text-align: left;
+			margin-bottom: 20px;
+		}
+		body.login .line {
+			height:9px;
+			background: #ffffff;
+			filter:alpha(opacity=20);
+			-moz-opacity:0.2;
+			opacity:0.2;
+		}
+		body.login .main_input_box input{
+			width: 87% !important;
+			height: 40px !important;
+			text-indent: 50px;
+			background-color: #ffffff !important;
+		}
+		body.login .main_input_box #loginname {
+			background: url("static/login/images/login-icon.png") 0 -4px no-repeat;
+		}
+		body.login .main_input_box #password {
+			background: url("static/login/images/login-icon.png") 0 -53px no-repeat;
+		}
+		body.login .no-margin {
+			padding-top: 10px !important;
+			padding-bottom: 5px!important;
+		}
+		body.login a.flip-link {
+			width: 180px;
+			height: 37px;
+			background: url("static/login/images/login-sub.png");
+			padding: 0;
+			border: 0;
+			float: right;
+			line-height: 37px;
+			text-indent: -20px;
+		}
+	</style>
 </head>
 <body class="login">
 
