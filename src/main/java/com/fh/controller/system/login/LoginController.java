@@ -90,11 +90,11 @@ public class LoginController extends BaseController {
 		}
 		
 		//若是admin角色，跳转到管理员对应的仪表盘页面
-		if("admin".equals(Jurisdiction.getUser().getRole().getTYPE())) {
-			ModelAndView mv = this.getModelAndView();
-			mv.setViewName("system/index/default_admin");
-			return mv;	
-		} 
+//		if("admin".equals(Jurisdiction.getUser().getRole().getTYPE())) {
+//			ModelAndView mv = this.getModelAndView();
+//			mv.setViewName("system/index/default_admin");
+//			return mv;	
+//		} 
 		
 		String applyUserId=StringUtil.getUserName();
 		Map<String, String> auditMap=dashboardService.getAuditMap(applyUserId);//审核组查询
@@ -190,10 +190,6 @@ public class LoginController extends BaseController {
 						user.setIP(pd.getString("IP"));
 						user.setSTATUS(pd.getString("STATUS"));
 						user.setDEPARTMENT_ID(pd.getString("DEPARTMENT_ID"));
-						
-						Role role = roleService.getRoleById(pd.getString("ROLE_ID"));
-						user.setRole(role);
-						
 						session.setAttribute(Const.SESSION_USER, user);			//把用户信息放session中
 						session.removeAttribute(Const.SESSION_SECURITY_CODE);	//清除登录验证码的session
 						//shiro加入身份验证

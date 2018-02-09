@@ -31,7 +31,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="systemnotice/list.do" method="post" name="Form" id="Form">
+						<form action="systemnotice/listSystemNotice.do" method="post" name="Form" id="Form">
 						<input type="hidden" name="TYPE" value="${pd.TYPE}" />
 						<table style="margin-top:5px;width:100%;">
 							<tr>
@@ -54,7 +54,7 @@
 								 	<select class="chosen-select form-control" name="STATUS" id="id" data-placeholder="状态" style="vertical-align:top;width: 88px;">
 									<option value="">全部</option>
 									<option value="1" <c:if test="${pd.STATUS == '1' }">selected</c:if>>已读</option>
-									<option value="2" <c:if test="${pd.STATUS == '0' }">selected</c:if>>未读</option>
+									<option value="0" <c:if test="${pd.STATUS == '0' }">selected</c:if>>未读</option>
 								  	</select>
 									</div>
 								</td>
