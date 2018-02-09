@@ -101,7 +101,7 @@ public class LoginController extends BaseController {
 		mv.addObject("cpuTimeType", dbReq.getCpuTimeType());//CPU时间类型
 		mv.addObject("memTimeType", dbReq.getMemTimeType());//内存时间类型
 		mv.addObject("storeTimeType", dbReq.getStoreTimeType());//磁盘时间类型
-		mv.addObject("resType", dbReq.getResType());//资源类型
+		mv.addObject("resType", dbReq.getResType());//资源类型：CPU、内存、磁盘
 		mv.addObject("chkFlag", dbReq.getChkFlag());//复选框是否选中：0-否；1-是
 		mv.addObject("timeTypeList", cmpDictService.getCmpDictList("dashboard_time_type"));//仪表盘时间类型列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("dashboard_res_type"));//仪表盘资源类型列表
@@ -113,9 +113,9 @@ public class LoginController extends BaseController {
 		mv.addObject("workOrderNum", dashboardService.getWorkOrderNum(pd));//工单总数
 		mv.addObject("vir", dashboardService.getResDtl(hostIdsMap.get("vir")));//虚机详细信息查询
 		mv.addObject("phys", dashboardService.getResDtl(hostIdsMap.get("phys")));//物理机详细信息查询
-		mv.addObject("virLoad", dashboardService.getLoadDtl(virLoadMap, hostIdsMap.get("vir")));//虚拟机负载
-		mv.addObject("hostLoad", dashboardService.getLoadDtl(hostLoadMap, hostIdsMap.get("host")));//宿主机负载
-		mv.addObject("physLoad", dashboardService.getLoadDtl(physLoadMap, hostIdsMap.get("phys")));//物理机负载
+		mv.addObject("virLoad", dashboardService.getLoadDtl(virLoadMap, hostIdsMap.get("vir"), dbReq.getResType()));//虚拟机负载
+		mv.addObject("hostLoad", dashboardService.getLoadDtl(hostLoadMap, hostIdsMap.get("host"), dbReq.getResType()));//宿主机负载
+		mv.addObject("physLoad", dashboardService.getLoadDtl(physLoadMap, hostIdsMap.get("phys"), dbReq.getResType()));//物理机负载
 		mv.addObject("virRun", dashboardService.getRunDtl(hostIdsMap.get("vir")));//虚拟机运行
 		mv.addObject("hostRun", dashboardService.getRunDtl(hostIdsMap.get("host")));//宿主机运行
 		mv.addObject("physRun", dashboardService.getRunDtl(hostIdsMap.get("phys")));//物理机运行
@@ -549,6 +549,10 @@ public class LoginController extends BaseController {
 		
 		if(StringUtils.isBlank(dbReq.getStoreTimeType())){//磁盘时间类型
 			dbReq.setStoreTimeType("hour");
+		}
+		
+		if(StringUtils.isBlank(dbReq.getResType())){//资源类型
+			dbReq.setResType("cpu");
 		}
 		
 		if(StringUtils.isBlank(dbReq.getChkFlag())){//复选框是否选中：0-否；1-是

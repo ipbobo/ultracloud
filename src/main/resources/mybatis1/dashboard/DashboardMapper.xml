@@ -132,10 +132,17 @@
 	</select>
 	
 	<!-- 资源详细信息查询 -->
-	<select id="getResDtl" parameterType="pd" resultType="com.cmp.sid.CmpDashboard">
+	<select id="getResDtl" parameterType="String" resultType="com.cmp.sid.CmpDashboard">
 		SELECT c.cpuUseNum, ifnull(sum(a.cpu), 0) cpuTotalNum, c.memUseNum, ifnull(sum(a.memory), 0) memTotalNum, c.storeUseNum, ifnull(sum(a.localdisk), 0) storeTotalNum 
 		FROM t_hostmachine a
 		inner join (SELECT ifnull(sum(b.cpu), 0) cpuUseNum, ifnull(sum(b.memory), 0) memUseNum, ifnull(sum(b.datadisk), 0) storeUseNum FROM t_virtualmachine b where FIND_IN_SET(b.hostmachine_id, #{hostIdStr})) c
+		where FIND_IN_SET(a.id, #{hostIdStr})
+	</select>
+	
+	<!-- TOP5云主机列表查询 -->
+	<select id="getTop5CloudHostList" parameterType="String" resultType="com.cmp.sid.VirtualMachine">
+		select a.id, a.name, a.ip, a.cpu, a.memory, a.mount_disk_size mountDiskSize
+		from t_virtualmachine a
 		where FIND_IN_SET(a.id, #{hostIdStr})
 	</select>
 </mapper>

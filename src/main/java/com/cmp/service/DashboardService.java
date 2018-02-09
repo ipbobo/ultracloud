@@ -1,5 +1,7 @@
 package com.cmp.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,13 +18,13 @@ import com.cmp.activiti.CustomGroupEntityManager;
 import com.cmp.sid.CmpAxis;
 import com.cmp.sid.CmpCdLoad;
 import com.cmp.sid.CmpDashboard;
+import com.cmp.sid.VirtualMachine;
 import com.cmp.sid.zabbix.ResBean;
 import com.cmp.sid.zabbix.ResBody;
 import com.cmp.sid.zabbix.ResError;
 import com.cmp.util.HttpUtil;
 import com.cmp.util.StringUtil;
 import com.fh.dao.DaoSupport;
-import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 import net.sf.json.JSONObject;
@@ -121,14 +123,14 @@ public class DashboardService {
 	}
 	
 	//负载情况
-	public CmpDashboard getLoadDtl(Map<String, CmpCdLoad> loadMap, String[] hostIds) throws Exception {
+	public CmpDashboard getLoadDtl(Map<String, CmpCdLoad> loadMap, String[] hostIds, String resType) throws Exception {
 		CmpDashboard cd=new CmpDashboard();
 		if(hostIds!=null && hostIds.length>0){//主机ID列表不为空
 			//CPU
 			ResBean[] rbs=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "lastvalue"}, "hostids", hostIds, "search", StringUtil.getParams("key_", "system.cpu.util[all, user, avg5]")));
 			if(rbs!=null && rbs.length>0){
 				for(ResBean rb: rbs){
-					addLoadMap("cpu", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
+					addLoadMap("cpu", loadMap, rb.getHostid(), rb.getLastvalue(), resType);//获取负载情况
 				}
 			}
 			
@@ -136,7 +138,7 @@ public class DashboardService {
 			rbs=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "lastvalue"}, "hostids", hostIds, "search", StringUtil.getParams("key_", "vm.memory.size[pused]")));
 			if(rbs!=null && rbs.length>0){
 				for(ResBean rb: rbs){
-					addLoadMap("mem", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
+					addLoadMap("mem", loadMap, rb.getHostid(), rb.getLastvalue(), resType);//获取负载情况
 				}
 			}
 			
@@ -144,7 +146,7 @@ public class DashboardService {
 			rbs=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "lastvalue"}, "hostids", hostIds, "search", StringUtil.getParams("key_", "vfs.fs.size[*, pused]")));
 			if(rbs!=null && rbs.length>0){
 				for(ResBean rb: rbs){
-					addLoadMap("store", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
+					addLoadMap("store", loadMap, rb.getHostid(), rb.getLastvalue(), resType);//获取负载情况
 				}
 			}
 			
@@ -219,21 +221,44 @@ public class DashboardService {
 	
 	//资源使用列表
 	@SuppressWarnings("unchecked")
-	public List<PageData> getResUseList(Map<String, CmpCdLoad> loadMap, String resType) throws Exception {
-		/*if(loadMap!=null && !loadMap.isEmpty()){
-			List<PageData> list=(List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", new Page());
-			if(list!=null && !list.isEmpty()){
-				int size=list.size();
-				return list.subList(0, size>=5?5:size);
+	public List<CmpCdLoad> getResUseList(Map<String, CmpCdLoad> loadMap, String resType) throws Exception {
+		if(loadMap!=null && !loadMap.isEmpty()){
+			List<CmpCdLoad> list=new ArrayList<CmpCdLoad>(loadMap.values());
+			Collections.sort(list);//排序
+			int size=list.size();
+			List<CmpCdLoad> subList= list.subList(0, size>=5?5:size);
+			StringBuffer sb=new StringBuffer();
+			for(CmpCdLoad ccl: subList){
+				if(sb.length()==0){
+					sb.append(ccl.getHostId());
+				}else{
+					sb.append(","+ccl.getHostId());
+				}
 			}
-		}*/
+			
+			String hostIdStr=sb.toString();
+			Map<String, VirtualMachine> cloudHostMap=new HashMap<String, VirtualMachine>();
+			List<VirtualMachine> cloudHostList=(List<VirtualMachine>) dao.findForList("DashboardMapper.getTop5CloudHostList", hostIdStr);
+	        if(cloudHostList!=null && !cloudHostList.isEmpty()){
+	        	for(VirtualMachine vm: cloudHostList){
+	        		cloudHostMap.put(vm.getId(), vm);
+				}
+	        }
+	        
+	        for(CmpCdLoad ccl: subList){
+	        	VirtualMachine vm=cloudHostMap.get(ccl.getHostId());
+	        	if(vm!=null){
+	        		ccl.setHostName(vm.getName());
+	        		ccl.setHostIp(vm.getIp());
+	        		ccl.setCpuNum(Float.parseFloat(vm.getCpu()));
+	        		ccl.setMemNum(Float.parseFloat(vm.getMemory()));
+	        		ccl.setStoreNum(Float.parseFloat(vm.getMountDiskSize()));
+	        	}
+			}
+	        
+	        return subList;
+		}
 		
-		List<PageData> list=(List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", new Page());
-        if(list!=null && !list.isEmpty()){
-        	int size=list.size();
-        	return list.subList(0, size>=5?5:size);
-        }
-        
         return null;
 	}
 	
@@ -244,7 +269,7 @@ public class DashboardService {
 		}
 		
 		String jsonStr=HttpUtil.sendHttpPost(ZABBIX_URL, StringUtil.getReqBody(method, params, ZABBIX_TOKEN), false);//发送post请求(JSON)
-		//String jsonStr="{\"jsonrpc\": \"2.0\",\"result\": [{\"hostid\":\"10255\",\"lastvalue\":\"0.08\"}, {\"hostid\":\"10256\",\"lastvalue\":\"0.12\"}, {\"hostid\":\"10257\",\"lastvalue\":\"0.52\"}, {\"hostid\":\"10258\",\"lastvalue\":\"0.82\"}],\"id\": \"1\"}";
+		//String jsonStr="{\"jsonrpc\": \"2.0\",\"result\": [{\"hostid\":\"10255\",\"lastvalue\":\"0.08\"}, {\"hostid\":\"10256\",\"lastvalue\":\"0.12\"}, {\"hostid\":\"10257\",\"lastvalue\":\"0.52\"}, {\"hostid\":\"10084\",\"lastvalue\":\"0.82\"}],\"id\": \"1\"}";
  		ResBody resBody=null;
 		if(StringUtils.isBlank(jsonStr) || (resBody=StringUtil.json2Obj(jsonStr, ResBody.class))==null){//接口返回错误
 			logger.error("调用Zabbix API时错误："+jsonStr);
@@ -293,7 +318,7 @@ public class DashboardService {
 	}
 	
 	//新增负载情况
-	private void addLoadMap(String operType, Map<String, CmpCdLoad> loadMap, String hostId, String rate) {
+	private void addLoadMap(String operType, Map<String, CmpCdLoad> loadMap, String hostId, String rate, String resType) {
 		CmpCdLoad cmpCdLoad=null;
 		if(loadMap.containsKey(hostId)){
 			cmpCdLoad=loadMap.get(hostId);
@@ -302,6 +327,8 @@ public class DashboardService {
 			loadMap.put(hostId, cmpCdLoad);
 		}
 		
+		cmpCdLoad.setResType(resType);//资源类型
+		cmpCdLoad.setHostId(hostId);//主机ID
 		if("cpu".equals(operType)){//CPU
 			cmpCdLoad.setCpuLoad(StringUtil.getFloat(rate));
 		}else if("mem".equals(operType)){//内存
