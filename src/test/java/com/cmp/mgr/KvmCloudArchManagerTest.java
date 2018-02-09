@@ -32,7 +32,7 @@ public class KvmCloudArchManagerTest implements CloudArchTest {
 	}
 
 	@Test
-	public void testGreateVirtualMachine() {
+	public void testCreateVirtualMachine() {
 		execute("GreateVirtualMachine", () -> {
 			CreateVmRequest request = new CreateVmRequest();
 			request.setVmName("centos62");
