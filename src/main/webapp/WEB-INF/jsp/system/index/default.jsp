@@ -39,7 +39,7 @@ function closeHeadToggle(){
 }
 </script>
 </head>
-<body onload="checkFunc()">
+<body onload="checkFunc()" class="login_default">
 <div id="tip" style="display:none">
     <table>
         <tr>
