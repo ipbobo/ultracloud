@@ -379,7 +379,7 @@ public class CmpWorkOrderController extends BaseController{
 		//获取工作流程图,查询流程定义
 		HistoricProcessInstance hpi = activitiService.findProcessInst(toViewWorkorder.getProcInstId());
 		ActivityImpl workorderImag = null;
-		if (!toViewWorkorder.getStatus().equals("5")) {
+		if (!toViewWorkorder.getStatus().equals("90")) {
 			//流程执行未完毕
 			workorderImag = activitiService.getProcessMap(hpi.getProcessDefinitionId(), hpi.getId()); 
 		}
