@@ -61,6 +61,7 @@ public class CloudHostController extends BaseController {
 		User userr = userService.getCurrrentUserAndRole();
 		if (userr != null) {
 			mv.addObject("QX", "audit".equalsIgnoreCase(userr.getRole().getTYPE()) ? 0 : 1);
+			mv.addObject("BQX", "executor".equalsIgnoreCase(userr.getRole().getTYPE()) ? 0 : 1);
 		} else {
 			mv.addObject("QX", 0);
 		}

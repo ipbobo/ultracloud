@@ -1,4 +1,5 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%--suppress ALL --%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -23,7 +24,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<c:if test="${QX == 1}">
 								<table style="margin-top:5px;">
 									<tr>
-										<td style="padding-left:6px;"><a class="btn btn-primary btn-sm" onclick="apply()">申请</a></td>
+										<c:if test="${BQX == 1}">
+											<td style="padding-left:6px;"><a class="btn btn-primary btn-sm" onclick="apply()">申请</a></td>
+										</c:if>
 										<td style="padding-left:6px;"><a class="btn btn-success btn-sm" onclick="start()">开机</a></td>
 										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="stop()">关机</a></td>
 										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="reboot()">重启</a></td>
@@ -37,8 +40,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													<!-- <span class="sr-only">Toggle Dropdown</span> -->
 												</a>
 												<ul class="dropdown-menu">
-													<li><a onclick="expandCompute()">计算扩容</a></li>
-													<li><a onclick="expandStorage()">磁盘扩容</a></li>
+													<c:if test="${BQX == 1}">
+														<li><a onclick="expandCompute()">计算扩容</a></li>
+														<li><a onclick="expandStorage()">磁盘扩容</a></li>
+													</c:if>
 													<li><a onclick="clone()">克隆</a></li>
 													<li><a onclick="snapshot()">快照</a></li>
 													<li><a onclick="destory()">删除</a></li>
@@ -128,7 +133,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="page-header position-relative">
 									<table style="width:100%;">
 										<tr>
-											<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
+											<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0;margin-top: 0;">${page.pageStr}</div></td>
 										</tr>
 									</table>
 								</div>
@@ -173,9 +178,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		});
 		
 		function getSelected() {
-			return $('#datagrid').find('input:checked').map(function() { return $(this).val(); }).get();
+            var selection = $('#datagrid').find('input:checked').map(function() { return $(this).val(); }).get();
+            if (selection.length <= 0) {
+                bootbox.alert("请选择虚拟机");
+                throw "Error: no vm selected";
+			}
+
+            return selection;
 		}
-		
+
 		function apply() {
 			siMenu('122', '121', '资源申请', 'resAppPre.do');
 		}
@@ -248,7 +259,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				nextPage(${page.currentPage});
 				consol.log(result);
 			});
-		} 
+		}
 	</script>
 
 </body>
