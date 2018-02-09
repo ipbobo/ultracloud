@@ -164,6 +164,16 @@
 						</table>
 			<div class="alert alert-info">后续任务处理</div>
 			<table>
+						<c:if test="${workorder.uploadFileName != ''}">
+								<tr>
+									<td align="right" style="width: 120px;padding:10px;">附件信息：</td>
+									<td align="left" style="padding:10px;" width="90%">
+										<a href="static/upload/${workorder.uploadFileName}" download="${workorder.uploadFileName}">${workorder.uploadFileName}</a>
+									</td>
+								</tr>
+							</c:if>
+			</table>
+			<table>
 				<tr>
 					<td align="right" style="width: 120px;padding:10px;">退回：</td>
 					<td align="left" style="padding:10px;" width="90%">
@@ -197,6 +207,7 @@
 			
 			</table>
 			</form>
+			
 	</div>
 	<div class="alert alert-info">关联任务</div>
 	<div>
