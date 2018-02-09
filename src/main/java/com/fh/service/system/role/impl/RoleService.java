@@ -41,6 +41,17 @@ public class RoleService implements RoleManager{
 		return (List<Role>) dao.findForList("RoleMapper.listAllRoles", pd);
 	}
 	
+	
+	/**列出所有的角色(超级管理员)
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Role> listAllRolesByAdministrator(PageData pd) throws Exception {
+		return (List<Role>) dao.findForList("RoleMapper.listAllRolesByAdministrator", pd);
+	}
+	
 	/**通过id查找
 	 * @param pd
 	 * @return
