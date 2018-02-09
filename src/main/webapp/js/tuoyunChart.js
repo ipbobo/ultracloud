@@ -290,7 +290,7 @@ function toCanvasStyle2(id ,title1,title2,littleNum,middleNum,heightNum,stopNum,
         ctx.fillText(middleNum+"台", msp+25+lineWidth/8, top*2);
         ctx.fillText(heightNum+"台", width/2+msp+25+lineWidth/8, top);
 
-        if(stopNum!=0){
+        if(title6!=''){
             smallcircle(width/2+msp+lineWidth/8, top*2, lineWidth/8,'#c6c6c6');
             ctx.fillStyle = '#000000';
             ctx.fillText(stopNum+"台", width/2+msp+25+lineWidth/8, top*2);
