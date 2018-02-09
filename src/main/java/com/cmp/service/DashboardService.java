@@ -121,15 +121,14 @@ public class DashboardService {
 	}
 	
 	//负载情况
-	public CmpDashboard getLoadDtl(String[] hostIds) throws Exception {
+	public CmpDashboard getLoadDtl(Map<String, CmpCdLoad> loadMap, String[] hostIds) throws Exception {
 		CmpDashboard cd=new CmpDashboard();
 		if(hostIds!=null && hostIds.length>0){//主机ID列表不为空
 			//CPU
-			Map<String, CmpCdLoad> loadMap=new HashMap<String, CmpCdLoad>();
 			ResBean[] rbs=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "lastvalue"}, "hostids", hostIds, "search", StringUtil.getParams("key_", "system.cpu.util[all, user, avg5]")));
 			if(rbs!=null && rbs.length>0){
 				for(ResBean rb: rbs){
-					getLoadMap("cpu", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
+					addLoadMap("cpu", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
 				}
 			}
 			
@@ -137,7 +136,7 @@ public class DashboardService {
 			rbs=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "lastvalue"}, "hostids", hostIds, "search", StringUtil.getParams("key_", "vm.memory.size[pused]")));
 			if(rbs!=null && rbs.length>0){
 				for(ResBean rb: rbs){
-					getLoadMap("mem", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
+					addLoadMap("mem", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
 				}
 			}
 			
@@ -145,7 +144,7 @@ public class DashboardService {
 			rbs=getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "lastvalue"}, "hostids", hostIds, "search", StringUtil.getParams("key_", "vfs.fs.size[*, pused]")));
 			if(rbs!=null && rbs.length>0){
 				for(ResBean rb: rbs){
-					getLoadMap("store", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
+					addLoadMap("store", loadMap, rb.getHostid(), rb.getLastvalue());//获取负载情况
 				}
 			}
 			
@@ -220,8 +219,16 @@ public class DashboardService {
 	
 	//资源使用列表
 	@SuppressWarnings("unchecked")
-	public List<PageData> getResUseList(String resType) throws Exception {
-        List<PageData> list=(List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", new Page());
+	public List<PageData> getResUseList(Map<String, CmpCdLoad> loadMap, String resType) throws Exception {
+		/*if(loadMap!=null && !loadMap.isEmpty()){
+			List<PageData> list=(List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", new Page());
+			if(list!=null && !list.isEmpty()){
+				int size=list.size();
+				return list.subList(0, size>=5?5:size);
+			}
+		}*/
+		
+		List<PageData> list=(List<PageData>) dao.findForList("BizviewMapper.getCloudHostPageList", new Page());
         if(list!=null && !list.isEmpty()){
         	int size=list.size();
         	return list.subList(0, size>=5?5:size);
@@ -285,8 +292,8 @@ public class DashboardService {
 		return true;
 	}
 	
-	//获取负载情况
-	private void getLoadMap(String operType, Map<String, CmpCdLoad> loadMap, String hostId, String rate) {
+	//新增负载情况
+	private void addLoadMap(String operType, Map<String, CmpCdLoad> loadMap, String hostId, String rate) {
 		CmpCdLoad cmpCdLoad=null;
 		if(loadMap.containsKey(hostId)){
 			cmpCdLoad=loadMap.get(hostId);
