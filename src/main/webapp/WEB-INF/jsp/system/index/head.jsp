@@ -34,13 +34,13 @@
 				<!-- #section:basics/navbar.dropdown -->
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
 					<ul class="nav ace-nav"  >
-						<li class="grey">
-							<a data-toggle="dropdown" class="dropdown-toggle" onmouseenter="ul_tasks_out();" href="#">
+						<li class="grey" onmouseleave="ul_tasks_out();" onmouseenter="ul_tasks_out();">
+							<a data-toggle="dropdown" class="dropdown-toggle"  href="#">
 								<i class="ace-icon fa fa-tasks"></i>
 								<span id="span_task_no" class="badge badge-grey"></span>
 							</a>
 
-							<ul onmouseleave="ul_tasks_out();"  id="ul_tasks" class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+							<ul   id="ul_tasks" class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
 								<li class="dropdown-header">
 									<i class="ace-icon fa fa-check"></i>
 									<span id="span_task_tital">目前无任务</span>
@@ -56,7 +56,7 @@
 						</li>
 
 						<!-- #section:basics/navbar.user_menu -->
-						<li class="light-blue">
+						<li class="light-blue" onmouseleave="ul_userset_out();" onmouseenter="ul_userset_out();">
 							<a data-toggle="dropdown"  class="dropdown-toggle" href="#">
 								<!-- <img class="nav-user-photo" src="static/ace/avatars/user.jpg" alt="Jason's Photo" id="userPhoto" /> -->
 								<span class="user-info" id="user_info">
@@ -64,7 +64,7 @@
 								<i class="ace-icon fa fa-caret-down"></i>
 							</a>
 
-							<ul id="ul_userset" onmouseleave="ul_userset_out();" class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+							<ul id="ul_userset"  class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
 									<a onclick="editUserH();" style="cursor:pointer;"><i class="ace-icon fa fa-user"></i>用户设置</a><!-- editUserH()在 WebRoot\static\js\myjs\head.js中 -->
 								</li>
