@@ -34,6 +34,9 @@ function getDashboard(){
 	var chkFlag=$("#chkId").is(":checked")?"1":"0";//复选框是否选中：0-否；1-是
 	window.location.href="<%=basePath%>login_default.do?cpuTimeType="+cpuTimeType+"&memTimeType="+memTimeType+"&storeTimeType="+storeTimeType+"&resType="+resType;
 }
+function closeHeadToggle(){
+    $('.head-toggle').hide();
+}
 </script>
 </head>
 <body onload="checkFunc()">
@@ -66,6 +69,7 @@ function getDashboard(){
 		<li>用户总数  ${userNum}</li>
 		<li>项目总数  ${projNum}</li>
 		<li>工单总数  ${workOrderNum}</li>
+		<li><button type="button" class="close" data-dismiss="alert" onclick="closeHeadToggle()"><i class="fa fa-close"></i></button></li>
 	</ul>
 </div>
 <div class="main-container">
