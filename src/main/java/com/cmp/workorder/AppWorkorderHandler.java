@@ -364,7 +364,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		vm.setPassword(tp_passwd);
 		vm.setStatus("0");
 		vm.setType(workOrder.getPlatType());
-		vm.setHostmachineId(182837323);
+		vm.setHostmachineId("");
 		vm.setAppNo(workOrder.getAppNo());
 		vm.setUser(workOrder.getApplyUserId());
 		virtualMachineService.add(vm);

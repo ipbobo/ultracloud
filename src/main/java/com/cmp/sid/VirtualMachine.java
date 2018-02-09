@@ -12,7 +12,7 @@ public class VirtualMachine {
 	private String status;	//虚拟机状态
 	private String mountDiskSize; //挂载磁盘
 	private String mountDiskType; //挂载磁盘类型
-	private long hostmachineId; //宿主机ID
+	private String hostmachineId; //宿主机ID
 	private String platform;  //平台
 	private String os;		//操作系统
 	private String duedate;	//到期时间
@@ -69,10 +69,11 @@ public class VirtualMachine {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public long getHostmachineId() {
+	
+	public String getHostmachineId() {
 		return hostmachineId;
 	}
-	public void setHostmachineId(long hostmachineId) {
+	public void setHostmachineId(String hostmachineId) {
 		this.hostmachineId = hostmachineId;
 	}
 	public String getPlatform() {

@@ -104,7 +104,13 @@ public class RoleController extends BaseController {
 			PageData fpd = new PageData();
 			fpd.put("ROLE_ID", "0");
 			List<Role> roleList = roleService.listAllRolesByPId(fpd);		//列出组(页面横向排列的一级组)
-			List<Role> roleList_z = roleService.listAllRoles(pd);		//列出此组下架角色
+			List<Role> roleList_z = roleService.listAllRoles(pd);		
+			if("administrator".equals(Jurisdiction.getUsername())) {
+				roleList_z = roleService.listAllRolesByAdministrator(pd);		
+			} else {
+				roleList_z = roleService.listAllRoles(pd);
+			}
+			
 			pd = roleService.findObjectById(pd);							//取得点击的角色组(横排的)
 			mv.addObject("pd", pd);
 			mv.addObject("roleList", roleList);

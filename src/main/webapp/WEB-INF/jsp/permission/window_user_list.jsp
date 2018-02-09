@@ -16,7 +16,7 @@
 <!-- 下拉框 -->
 <link rel="stylesheet" href="static/ace/css/chosen.css" />
 <!-- jsp文件头和头部 -->
-<%@ include file="../index/top.jsp"%>
+<%@ include file="../system/index/top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
 </head>
@@ -136,7 +136,7 @@
 
 	<!-- basic scripts -->
 	<!-- 页面底部js¨ -->
-	<%@ include file="../index/foot.jsp"%>
+	<%@ include file="../system/index/foot.jsp"%>
 	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
 	<!-- 日期框 -->

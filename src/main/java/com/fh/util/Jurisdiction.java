@@ -7,6 +7,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 
 import com.fh.entity.system.Menu;
+import com.fh.entity.system.User;
 
 /**
  * 权限处理
@@ -120,6 +121,13 @@ public class Jurisdiction {
 			}
 		}
 		return true;
+	}
+	
+	/**获取当前登录的用户
+	 * @return
+	 */
+	public static User getUser(){
+		return (User)getSession().getAttribute(Const.SESSION_USER);
 	}
 	
 	/**获取当前登录的用户名

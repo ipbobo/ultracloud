@@ -47,7 +47,7 @@ public class UpdateStatusTaskListener implements Serializable, TaskListener {
 		CmpWorkOrderService cmpWorkOrderService = (CmpWorkOrderService) webctx.getBean("cmpWorkOrderService");
 		try {
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("status", usergroup.getExpressionText());
+			params.put("status", status.getExpressionText());
 			cmpWorkOrderService.updateWorkOrder(appNo, params);
 		} catch (Exception e) {
 			e.printStackTrace();
