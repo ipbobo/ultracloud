@@ -1,30 +1,30 @@
-body{
+body.login_default{
     padding: 0;
-    margin: 0;
+    margin: -20px 0 0 0;
     background:#fafafa;
 }
-body,.main-container,.page-content{
+body.login_default,body.login_default .main-container,body.login_default .page-content{
     background:#fafafa;
     height: auto;
 }
-.page-content {
+body.login_default .page-content {
     padding: 0px 12px 0px;
 }
-.page-content .row .col-md-6 {
+body.login_default .page-content .row .col-md-6 {
     padding-left: 6px;
     padding-right: 6px;
 }
-.head-title {
+body.login_default .head-title {
     height: 40px;
     background:#fafafa;
 }
-.head-title h1{
+body.login_default .head-title h1{
     line-height: 40px;
     font-size: 16px;
     text-indent: 24px;
     font-weight: bold;
 }
-.head-nav {
+body.login_default .head-nav {
     height: 30px;
     line-height: 30px;
     background: #eeeeee;
@@ -33,28 +33,28 @@ body,.main-container,.page-content{
     font-weight: bold;
     color: #959595;
 }
-.head-toggle {
+body.login_default .head-toggle {
     width: 100%;
     height: 50px;
     background:#fafafa;
     display: block;
     overflow: hidden;
 }
-.head-toggle ul{
+body.login_default .head-toggle ul{
     width: 100%;
     height: 50px;
     margin:0;
     padding: 0 0 0 14px;
     list-style-type: none;
 }
-.head-toggle li {
+body.login_default .head-toggle li {
     float: left;
     border: 1px solid #e5e5e5;
     -moz-border-radius: 25px;
     -webkit-border-radius: 25px;
     border-radius:25px;
     background-color:#f8f8f8;
-    width:15%;
+    width:150px;
     height:40px;
     line-height: 40px;
     text-align: center;
@@ -63,20 +63,29 @@ body,.main-container,.page-content{
     font-weight: bold;
     color: #313131;
 }
-.row-fluid {
+body.login_default .head-toggle li:last-child{
+    width:50px;
+    border:0;
+    background: none;
+}
+body.login_default .head-toggle li:last-child i{
+    font-size: 18px;
+    margin-top: 10px;
+}
+body.login_default .row-fluid {
     height: auto;
 }
-.mem-panel {
+body.login_default .mem-panel {
     width:100%;
     height: auto;
 }
-.mem-panel .inner-box{
+body.login_default .mem-panel .inner-box{
     width: 100%;
     height: auto;
     border: 1px solid #eeeeee;
     background: #ffffff;
 }
-.mem-panel .inner-box .head-box{
+body.login_default .mem-panel .inner-box .head-box{
     width: 100%;
     height: 50px;
     line-height: 50px;
@@ -84,21 +93,21 @@ body,.main-container,.page-content{
     text-indent: 20px;
     font-size: 16px;
 }
-.mem-panel .inner-box .head-box span {
+body.login_default .mem-panel .inner-box .head-box span {
     float: left;
 }
-.mem-panel .inner-box .head-box select {
+body.login_default .mem-panel .inner-box .head-box select {
     float: right;
     margin: 10px 10px 0 0;
     height: 30px;
 }
-.mem-panel .inner-box .head-box ul {
+body.login_default .mem-panel .inner-box .head-box ul {
     width: 80%;
     float: right;
     list-style-type: none;
     margin-top: 15px;
 }
-.mem-panel .inner-box .head-box ul li{
+body.login_default .mem-panel .inner-box .head-box ul li{
     width: 100px;
     height: 22px;
     line-height: 22px;
@@ -108,114 +117,268 @@ body,.main-container,.page-content{
     text-indent: 35px;
     color: #000000;
 }
-.mem-panel .inner-box .head-box ul li.blues{
+body.login_default .mem-panel .inner-box .head-box ul li.blues{
     background: url("../images/color.png") no-repeat;
 }
-.mem-panel .inner-box .head-box ul li.yellows{
+body.login_default .mem-panel .inner-box .head-box ul li.yellows{
     background: url("../images/color.png") no-repeat 0 -22px;
 }
-.mem-panel .inner-box .head-box ul li.pinks{
+body.login_default .mem-panel .inner-box .head-box ul li.pinks{
     background: url("../images/color.png") no-repeat 0 -44px;
 }
-.mem-panel .inner-box .head-box ul li.grays{
+body.login_default .mem-panel .inner-box .head-box ul li.grays{
     background: url("../images/color.png") no-repeat 0 -66px;
 }
 
 
-.mem-panel .inner-box .body-box{
+body.login_default .mem-panel .inner-box .body-box{
     width: 100%;
     height: auto;
 }
-.meterStyle1 {
+body.login_default .meterStyle1 {
     width: 100%;
 }
-.select-box{
+body.login_default .select-box{
     width: 100%;
     height: 40px;
     padding: 20px 0 20px 0;
 }
-.select-box select{
+body.login_default .select-box select{
     float: right;
     margin-right: 15px;
     height: 30px;
 }
-.simple-table {
+body.login_default .simple-table {
     width: 100%;
     border: 1px solid #f2f2f2;
 
 }
-.simple-table td{
+body.login_default .simple-table td{
     border-bottom: 1px solid #f2f2f2;
     text-align: center;
     height: 35px;
 }
-.simple-table th{
+body.login_default .simple-table th{
     background: #f8f8f8;
     text-align: center;
     height: 35px;
 }
-.head-toggle i{
+body.login_default .head-toggle i{
     font-size: 30px;
 }
-div#tip{
+body.login_default div#tip{
     position:absolute;
     width:100px;
     height:auto;
     z-index: 9999;
 }
-#tip table td.top-left{
+body.login_default #tip table td.top-left{
     width: 10px;
     min-width: 10px;
     height: 10px;
     line-height: 10px;
     background: url("../images/top-left.png");
 }
-#tip table td.top-middle{
+body.login_default #tip table td.top-middle{
     height: 10px;
     line-height: 10px;
     background: url("../images/top-middle.png");
 }
-#tip table td.top-right{
+body.login_default #tip table td.top-right{
     width: 10px;
     min-width: 10px;
     height: 10px;
     line-height: 10px;
     background: url("../images/top-right.png");
 }
-#tip table td.bottom-left{
+body.login_default #tip table td.bottom-left{
     width: 10px;
     min-width: 10px;
     height: 10px;
     line-height: 10px;
     background: url("../images/bottom-left.png");
 }
-#tip table td.bottom-middle{
+body.login_default #tip table td.bottom-middle{
     height: 10px;
     line-height: 10px;
     background: url("../images/bottom-middle.png");
 }
-#tip table td.bottom-right{
+body.login_default #tip table td.bottom-right{
     width: 10px;
     min-width: 10px;
     height: 10px;
     line-height: 10px;
     background: url("../images/bottom-right.png");
 }
-#tip table td.center-left{
+body.login_default #tip table td.center-left{
     width: 10px;
     min-width: 10px;
     background: url("../images/center-left.png");
 }
-#tip table td.center-right{
+body.login_default #tip table td.center-right{
     width: 10px;
     min-width: 10px;
     background: url("../images/center-right.png");
 }
-#tip table td.center-middle{
+body.login_default #tip table td.center-middle{
     background: #ffffff;
     white-space:nowrap;
     font-weight: bold;
 }
-#left-container .col-xs-4 {
+body.login_default #left-container .col-xs-4 {
     padding: 0;
+}
+
+/*登录页样式*/
+body.login {
+    background: url('../images/banner.png');
+    background-size: cover;
+}
+body.login .normal_text {
+    padding: 50px 40px 15px 40px !important;
+}
+body.login .normal_text h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+body.login .line {
+    height:9px;
+    background: #ffffff;
+    filter:alpha(opacity=20);
+    -moz-opacity:0.2;
+    opacity:0.2;
+}
+body.login .main_input_box input{
+    width: 87% !important;
+    height: 40px !important;
+    text-indent: 50px;
+    background-color: #ffffff !important;
+}
+body.login .main_input_box #loginname {
+    background: url("../images/login-icon.png") 0 -4px no-repeat;
+}
+body.login .main_input_box #password {
+    background: url("../images/login-icon.png") 0 -53px no-repeat;
+}
+body.login .no-margin {
+    padding-top: 10px !important;
+    padding-bottom: 5px!important;
+}
+body.login a.flip-link {
+    width: 180px;
+    height: 37px;
+    background: url("../images/login-sub.png");
+    padding: 0;
+    border: 0;
+    float: right;
+    line-height: 37px;
+    text-indent: -20px;
+}
+
+/*资源申请页样式*/
+body.resapp-qry-input {
+    background: #fafafa;
+}
+body.resapp-qry-input .head-nav {
+    height: 40px;
+    line-height: 40px;
+    background: #fafafa;
+    font-size: 14px;
+    text-indent: 24px;
+    font-weight: bold;
+    color: #959595;
+    border-bottom: 1px solid #d5d5d5;
+}
+body.resapp-qry-input .nav-tabs{
+    background:#ffffff;
+}
+body.resapp-qry-input .nav-tabs li{
+    height: 55px;
+    border-right: 1px solid #dfdfdf;
+}
+body.resapp-qry-input .nav-tabs li.active{
+    background: #fafafa;
+}
+body.resapp-qry-input .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    width: auto;
+    padding: 0 40px 0 40px !important;
+    height: 55px;
+    line-height: 55px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    display: inline-block;
+    padding: 0;
+    color: #737373;
+}
+body.resapp-qry-input .nav-tabs > li > a, .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+    width: auto;
+    padding: 0 40px 0 40px !important;;
+    height: 55px;
+    line-height: 55px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    display: inline-block;
+    padding: 0;
+    color: #737373;
+}
+body.resapp-qry-input .tab-content {
+    border-top: 0;
+}
+body.resapp-qry-input .tab-pane table {
+    background:#fafafa !important;
+}
+body.resapp-qry-input .tablecls td{
+    background: #ffffff !important;
+}
+body.resapp-qry-input .tablecls td.first-td{
+    border: 1px solid #f6f6f6;
+    text-align: center;
+    padding-left: 0 !important;
+    width: 150px;
+}
+body.resapp-qry-input .tab-pane table ul.ullitab li {
+    border: 1px solid #e5e5e5;
+    -moz-border-radius: 18px;
+    -webkit-border-radius: 18px;
+    border-radius:18px;
+    background-color:#ffffff;
+    margin-right: 10px;
+    color:#737373;
+}
+body.resapp-qry-input .tab-pane table ul.ullitab li.active {
+    border: 1px solid #5abfdd;
+    background-color:#5abfdd;
+    color:#ffffff;
+}
+body.resapp-qry-input  .tab-pane table input[type=text],
+body.resapp-qry-input  .tab-pane table input[type=password],
+body.resapp-qry-input  .tab-pane table select {
+    -moz-border-radius: 5px !important;
+    -webkit-border-radius: 5px !important;
+    border-radius:5px !important;
+    background: #fafafa;
+}
+body.resapp-qry-input .divbtn .btncls{
+    -moz-border-radius: 5px !important;
+    -webkit-border-radius: 5px !important;
+    border-radius:5px !important;
+}
+body.resapp-qry-input .divbtn .btncls a{
+    border: 0;
+    -moz-border-radius: 5px !important;
+    -webkit-border-radius: 5px !important;
+    border-radius:5px !important;
+    color: #de7e41;
+}
+body.resapp-qry-input .divbtn .btncls a:hover{
+    color: #ffffff;
+}
+body.resapp-qry-input .divbtn .btncls.active a {
+    color: #ffffff;
 }
