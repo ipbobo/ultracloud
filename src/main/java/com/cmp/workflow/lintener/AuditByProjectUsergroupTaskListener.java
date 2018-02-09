@@ -1,4 +1,4 @@
-package com.cmp.workflow.Lintener;
+package com.cmp.workflow.lintener;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
+import org.activiti.engine.impl.el.FixedValue;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -30,6 +31,8 @@ import com.fh.util.PageData;
 public class AuditByProjectUsergroupTaskListener implements Serializable, TaskListener {
 
 	private static final long serialVersionUID = -7726817106433701217L;
+	
+	private FixedValue status = null;
 
 	@Override
 	public void notify(DelegateTask delegateTask) {
@@ -40,7 +43,7 @@ public class AuditByProjectUsergroupTaskListener implements Serializable, TaskLi
 		
 		try {
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("status", Constants.WORKORDER_STATUS_10);
+			params.put("status", status.getExpressionText());
 			cmpWorkOrderService.updateWorkOrder(appNo, params);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,5 +82,13 @@ public class AuditByProjectUsergroupTaskListener implements Serializable, TaskLi
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public FixedValue getStatus() {
+		return status;
+	}
+
+	public void setStatus(FixedValue status) {
+		this.status = status;
 	}
 }

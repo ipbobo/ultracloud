@@ -1,4 +1,4 @@
-package com.cmp.workflow.Lintener;
+package com.cmp.workflow.lintener;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -21,20 +21,22 @@ import com.fh.service.system.user.UserManager;
 import com.fh.util.PageData;
 
 /**
- * 业务实施中-任务监听器
+ * 审核不通过/实施退回-任务监听器
  * 
  * @author liuweixing
  *
  */
-public class BusinessInEffectTaskListener implements Serializable, TaskListener {
+public class UpdateStatusTaskListener implements Serializable, TaskListener {
 
-	private static final long serialVersionUID = -4371304469035089267L;
+	private static final long serialVersionUID = 5651614307261155160L;
 
 	private FixedValue usergroup = null;
 
 	private FixedValue role = null;
 
 	private FixedValue username = null;
+	
+	private FixedValue status = null;
 
 	@Override
 	public void notify(DelegateTask delegateTask) {
@@ -45,7 +47,7 @@ public class BusinessInEffectTaskListener implements Serializable, TaskListener 
 		CmpWorkOrderService cmpWorkOrderService = (CmpWorkOrderService) webctx.getBean("cmpWorkOrderService");
 		try {
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("status", Constants.WORKORDER_STATUS_41);
+			params.put("status", usergroup.getExpressionText());
 			cmpWorkOrderService.updateWorkOrder(appNo, params);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -151,5 +153,13 @@ public class BusinessInEffectTaskListener implements Serializable, TaskListener 
 
 	public void setUsergroup(FixedValue usergroup) {
 		this.usergroup = usergroup;
+	}
+
+	public FixedValue getStatus() {
+		return status;
+	}
+
+	public void setStatus(FixedValue status) {
+		this.status = status;
 	}
 }
