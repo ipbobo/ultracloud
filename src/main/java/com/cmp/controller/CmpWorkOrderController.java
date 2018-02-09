@@ -549,10 +549,10 @@ public class CmpWorkOrderController extends BaseController{
 				variables.put("USERNAME", toVerifyWorkorder.getApplyUserName());
 				activitiService.handleTask(appNo, toVerifyWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 				//更新工单(流程实例ID 和 工单状态)
-				Map<String, String> updateParams = new HashMap<String, String>();
-				updateParams.put("status", "5");  //工单完成
-				updateParams.put("procInstId", toVerifyWorkorder.getProcInstId());
-				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+//				Map<String, String> updateParams = new HashMap<String, String>();
+//				updateParams.put("status", "5");  //工单完成
+//				updateParams.put("procInstId", toVerifyWorkorder.getProcInstId());
+//				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 				cmpLogService.addCmpLog("1", "工单退回确认完成", "工单退回确认完成", "0", StringUtil.getClientIp(getRequest()));
 				resultInfo = "工单退回确认完成";
 				map.put("result", resultInfo);	
