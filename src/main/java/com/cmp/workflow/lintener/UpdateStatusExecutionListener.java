@@ -1,4 +1,4 @@
-package com.cmp.workflow.Lintener;
+package com.cmp.workflow.lintener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ import com.cmp.service.CmpWorkOrderService;
  * @author liuweixing
  *
  */
-public class CompleteExecutionListener implements ExecutionListener {
+public class UpdateStatusExecutionListener implements ExecutionListener {
 
 	private static final long serialVersionUID = -3374534225221434770L;
 
