@@ -3,6 +3,7 @@ package com.cmp.controller;
 import static org.springframework.http.ResponseEntity.ok;
 
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +12,11 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -121,8 +125,10 @@ public class KVMController extends BaseController {
 		page.setPd(pd);
 
 		List<PageData> varList = virtualMService.vmList(page);
+		List<PageData> hostList = hostmachineService.listAllHostId();
 		mv.setViewName("resource/kvm_virtual_list");
 		mv.addObject("varList", varList);
+		mv.addObject("hostList", hostList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC());
 
@@ -321,9 +327,10 @@ public class KVMController extends BaseController {
 	}
 
 	@RequestMapping(value = "/createVm")
-	public ResponseEntity<String> createVm(HttpServletRequest req) {
+	public ResponseEntity<String> createVm(Reader reader) {
 		try {
-			virtualMService.createVm(null);
+			Map map = JSON.parseObject(IOUtils.toString(reader));
+			virtualMService.createVm(new PageData(map));
 			return ok(SUCCESS);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

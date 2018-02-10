@@ -256,5 +256,9 @@
 		where hostmachine_id=#{pd.hostmachine_id} 
 		order by gmt_modified desc
 	</select>
+
+	<select id="listAllHostId" resultType="pd">
+		select t.id, t.name from t_hostmachine t where t.`type`='kvm'
+	</select>
 	
 </mapper>
