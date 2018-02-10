@@ -15,7 +15,7 @@
 	
 	<!-- 使用量查询(cpu、内存、磁盘) -->
 	<select id="getUseNum" parameterType="pd" resultType="com.cmp.sid.CmpRes">
-		SELECT ifnull(sum(a.cpu), 0) cpuUseNum, ifnull(sum(a.memory), 0) memUseNum, ifnull(sum(a.datadisk), 0) storeUseNum FROM t_virtualmachine a
+		SELECT ifnull(sum(a.cpu), 0) cpuUseNum, ifnull(sum(a.memory), 0) memUseNum, ifnull(sum(a.mount_disk_size), 0) storeUseNum FROM t_virtualmachine a
 		left join t_hostmachine b on b.id=a.hostmachine_id
 		where 1=1
 		<if test="bizviewType != null and bizviewType != ''">
@@ -35,6 +35,6 @@
 		, ifnull(c.storeUse, 0) storeUse
 		from t_hostmachine a
 		left join t_cluster b on b.id=a.cluster_id
-		left join (select hostmachine_id, sum(cpu) cpuUse, sum(memory) memUse, sum(datadisk) storeUse from t_virtualmachine group by hostmachine_id) c on c.hostmachine_id=a.id
+		left join (select hostmachine_id, sum(cpu) cpuUse, sum(memory) memUse, sum(mount_disk_size) storeUse from t_virtualmachine group by hostmachine_id) c on c.hostmachine_id=a.id
 	</select>
 </mapper>

@@ -135,7 +135,7 @@
 	<select id="getResDtl" parameterType="String" resultType="com.cmp.sid.CmpDashboard">
 		SELECT c.cpuUseNum, ifnull(sum(a.cpu), 0) cpuTotalNum, c.memUseNum, ifnull(sum(a.memory), 0) memTotalNum, c.storeUseNum, ifnull(sum(a.localdisk), 0) storeTotalNum 
 		FROM t_hostmachine a
-		inner join (SELECT ifnull(sum(b.cpu), 0) cpuUseNum, ifnull(sum(b.memory), 0) memUseNum, ifnull(sum(b.datadisk), 0) storeUseNum FROM t_virtualmachine b where FIND_IN_SET(b.hostmachine_id, #{hostIdStr})) c
+		inner join (SELECT ifnull(sum(b.cpu), 0) cpuUseNum, ifnull(sum(b.memory), 0) memUseNum, ifnull(sum(b.mount_disk_size), 0) storeUseNum FROM t_virtualmachine b where FIND_IN_SET(b.hostmachine_id, #{hostIdStr})) c
 		where FIND_IN_SET(a.id, #{hostIdStr})
 	</select>
 	
