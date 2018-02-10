@@ -161,5 +161,9 @@ public class VirtualMachineSyncServiceImpl implements VirtualMachineSyncService 
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public void saveVM(PageData pd) throws Exception {
+		dao.save("VirtualMachineSyncMapper.saveVM", pd);
+	}
 
 }
