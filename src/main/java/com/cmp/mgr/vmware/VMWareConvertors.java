@@ -10,6 +10,8 @@ import com.cmp.entity.tcc.TccNetwork;
 import com.cmp.entity.tcc.TccResourcePool;
 import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.entity.tcc.TccVmSnapshot;
+import com.vmware.vim25.DatastoreInfo;
+import com.vmware.vim25.DatastoreSummary;
 import com.vmware.vim25.GuestInfo;
 import com.vmware.vim25.VirtualMachineConfigInfo;
 import com.vmware.vim25.mo.ClusterComputeResource;
@@ -74,6 +76,7 @@ public class VMWareConvertors {
 
 			GuestInfo guestInfo = vm.getGuest();
 			tccVm.setIpAddress(guestInfo.getIpAddress());
+			tccVm.setState(guestInfo.getGuestState());
 
 			return tccVm;
 		};
@@ -83,6 +86,11 @@ public class VMWareConvertors {
 		return ds -> {
 			TccDatastore tds = new TccDatastore();
 			tds.setName(ds.getName());
+
+			DatastoreSummary summary = ds.getSummary();
+			tds.setFreeSpace(summary.getFreeSpace());
+			tds.setCapacity(summary.getCapacity());
+			tds.setMaxFileSize(ds.getInfo().getMaxFileSize());
 
 			return tds;
 		};

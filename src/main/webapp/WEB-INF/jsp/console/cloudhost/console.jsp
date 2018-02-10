@@ -1,8 +1,9 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>TCMP Cloud Console</title>
 
 	<style>
 		html, body {
@@ -19,7 +20,7 @@
 	</style>
 
 	<script>
-		document.getElementsByTagName('title')[0].innerHTML = 'Console';
+		document.getElementsByTagName('title')[0].innerHTML = 'TCMP Cloud Console';
 	</script>
 </head>
 <body>
