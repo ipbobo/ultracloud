@@ -74,7 +74,7 @@
 	<style>
 		/*登录页样式*/
 		body.login {
-			background: url('static/login/images/banner.png');
+			background: url('static/login/images/banner.png') no-repeat center center fixed;
 			background-size: cover;
 		}
 		body.login .normal_text {
