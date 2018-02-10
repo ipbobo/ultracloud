@@ -91,6 +91,9 @@
 			-moz-opacity:0.2;
 			opacity:0.2;
 		}
+		body.login .main_input_box{
+			position: relative;
+		}
 		body.login .main_input_box input{
 			width: 87% !important;
 			height: 40px !important;
@@ -99,12 +102,6 @@
 			-moz-appearance:none; /* Firefox */
 			-webkit-appearance:none; /* Safari 和 Chrome */
 			outline:none;
-		}
-		body.login .main_input_box #loginname {
-			background: url("static/login/images/login-icon.png") 0 -4px no-repeat;
-		}
-		body.login .main_input_box #password {
-			background: url("static/login/images/login-icon.png") 0 -53px no-repeat;
 		}
 		body.login .no-margin {
 			padding-top: 10px !important;
@@ -119,6 +116,26 @@
 			float: right;
 			line-height: 37px;
 			text-indent: -20px;
+		}
+		input:-webkit-autofill {
+			-webkit-box-shadow: 0 0 0px 1000px white inset;
+			border: 1px solid #CCC!important;
+		}
+		.loginname-icon {
+			position: absolute;
+			width: 41px;
+			height: 48px;
+			left: 20px;
+			top: 0;
+			background: url("static/login/images/login-icon.png") 0 -4px no-repeat;
+		}
+		.password-icon {
+			position: absolute;
+			width: 41px;
+			height: 48px;
+			left: 20px;
+			top: 0;
+			background: url("static/login/images/login-icon.png") 0 -53px no-repeat;
 		}
 	</style>
 </head>
@@ -153,7 +170,7 @@
 						<div class="main_input_box">
 							<!--<span class="add-on bg_lg">
 							<i><img height="37" src="static/login/user.png" /></i>
-							</span>--><input type="text" name="loginname" id="loginname" value="" placeholder="请输入用户名" />
+							</span>--><div class="loginname-icon"></div><input type="text" name="loginname" id="loginname" value="" placeholder="请输入用户名" />
 						</div>
 					</div>
 				</div>
@@ -162,7 +179,7 @@
 						<div class="main_input_box">
 							<!--<span class="add-on bg_ly">
 							<i><img height="37" src="static/login/suo.png" /></i>
-							</span>--><input type="password" name="password" id="password" placeholder="请输入密码" class="keypad" keypadMode="full" allowKeyboard="true" value="1"/>
+							</span>--><div class="password-icon"></div><input type="password" name="password" id="password" placeholder="请输入密码" class="keypad" keypadMode="full" allowKeyboard="true" value="1"/>
 						</div>
 					</div>
 				</div>
