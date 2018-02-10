@@ -102,9 +102,12 @@ public class DashboardService {
 		List<PageData> list=(List<PageData>)dao.findForList("DashboardMapper.getHostIdList", pd);//主机ID列表查询
 		if(list!=null && !list.isEmpty()){
 			for(PageData pageData: list){
-				String hostIdStr=null;
-				if(list!=null && (hostIdStr=(String)pageData.get("hostIdStr"))!=null && !StringUtils.isBlank(hostIdStr)){
-					map.put((String)pageData.get("operType"), hostIdStr.split(","));
+				String idStr=null;
+				if(list!=null && (idStr=(String)pageData.get("idStr"))!=null && !StringUtils.isBlank(idStr)){
+					String key=(String)pageData.get("operType");
+					map.put(key, idStr.split(","));
+					String hostIdStr=(String)pageData.get("hostIdStr");
+					map.put(key+"Str", hostIdStr.split(","));
 				}
 			}
 		}
