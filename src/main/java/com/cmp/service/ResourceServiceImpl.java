@@ -177,8 +177,6 @@ public class ResourceServiceImpl implements ResourceService {
 							String vmUuid = virtualMachine[j].getMOR().get_value();
 							BigInteger vmId = this.existUuid2(vmUuid, preVirtualMachineList);
 							if(null == vmId) {
-								//vmId = UuidUtil.get32UUID();
-								vmPD.put("id", vmId);
 								vmPD.put("name", virtualMachine[j].getName());
 								vmPD.put("uuid", vmUuid);
 								vmPD.put("type", "vmware");

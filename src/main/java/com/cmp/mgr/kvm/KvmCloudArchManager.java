@@ -241,7 +241,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void cloneVirtualMachine(CloneVmRequest request) {
+	public String cloneVirtualMachine(CloneVmRequest request) {
 		throw new UnsupportedOperationException();
 	}
 

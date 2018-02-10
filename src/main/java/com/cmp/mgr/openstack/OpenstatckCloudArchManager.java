@@ -162,8 +162,9 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public void cloneVirtualMachine(CloneVmRequest request) {
+	public String cloneVirtualMachine(CloneVmRequest request) {
 		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
