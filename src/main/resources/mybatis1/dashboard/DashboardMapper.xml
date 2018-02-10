@@ -80,7 +80,7 @@
 	
 	<!-- 主机ID列表查询：vir-虚拟机；host-宿主机；phys-物理机 -->
 	<select id="getHostIdList" parameterType="pd" resultType="pd">
-		select 'vir' operType, GROUP_CONCAT(a.id) hostIdStr from t_virtualmachine a
+		select 'vir' operType, GROUP_CONCAT(a.id) idStr, GROUP_CONCAT(a.hostmachine_id) hostIdStr from t_virtualmachine a
 		where a.type!='kvm'
 		<if test="roleType != null and roleType == 'applicant'">
 			and a.user=#{applyUserId}
@@ -94,7 +94,7 @@
 			)
 		</if>
 		union all
-		select 'host' operType, GROUP_CONCAT(a.id) hostIdStr from t_hostmachine a
+		select 'host' operType, GROUP_CONCAT(a.id) idStr, '' hostIdStr from t_hostmachine a
 		where 1=1
 		<if test="roleType != null and roleType == 'applicant'">
 			and exists (
@@ -116,7 +116,7 @@
 			)
 		</if>
 		union all
-		select 'phys' operType, GROUP_CONCAT(a.id) hostIdStr from t_virtualmachine a
+		select 'phys' operType, GROUP_CONCAT(a.id) idStr, GROUP_CONCAT(a.hostmachine_id) hostIdStr from t_virtualmachine a
 		where a.type='kvm'
 		<if test="roleType != null and roleType == 'applicant'">
 			and a.user=#{applyUserId}
