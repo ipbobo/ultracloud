@@ -2,6 +2,7 @@ package com.cmp.service;
 
 import static java.util.stream.Collectors.toList;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -174,9 +175,9 @@ public class ResourceServiceImpl implements ResourceService {
 						for(int j = 0; j< virtualMachine.length; j++) {
 							PageData vmPD = new PageData();
 							String vmUuid = virtualMachine[j].getMOR().get_value();
-							String vmId = this.existUuid(vmUuid, preVirtualMachineList);
+							BigInteger vmId = this.existUuid2(vmUuid, preVirtualMachineList);
 							if(null == vmId) {
-								vmId = UuidUtil.get32UUID();
+								//vmId = UuidUtil.get32UUID();
 								vmPD.put("id", vmId);
 								vmPD.put("name", virtualMachine[j].getName());
 								vmPD.put("uuid", vmUuid);
@@ -222,8 +223,8 @@ public class ResourceServiceImpl implements ResourceService {
 						storePD.put("cpf_id", cloudPD.getString("id"));
 						storePD.put("datacenter_id", datacenterId);
 						storePD.put("version", cloudPD.getString("version"));
-						storePD.put("allspace", store[i].getInfo().getMaxFileSize());
-						storePD.put("freespace", store[i].getInfo().getFreeSpace());
+						storePD.put("allspace", store[i].getSummary().getCapacity());
+						storePD.put("freespace", store[i].getSummary().getFreeSpace());
 						storeList.add(storePD);
 					}
 				}
@@ -416,6 +417,16 @@ public class ResourceServiceImpl implements ResourceService {
 		for(PageData pd : preList) {
 			if(uuid.equals(pd.getString("uuid"))) {
 				return pd.getString("id");
+			}
+		}
+		
+		return null;
+	}
+	
+	private BigInteger existUuid2(String uuid, List<PageData> preList) {
+		for(PageData pd : preList) {
+			if(uuid.equals(pd.getString("uuid"))) {
+				return (BigInteger)pd.get("id");
 			}
 		}
 		
