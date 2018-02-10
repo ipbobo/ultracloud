@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
+import com.fh.entity.system.User;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -49,12 +50,9 @@ public class KVMController extends BaseController {
 	@Resource(name = "virtualMService")
 	private VirtualMService virtualMService;
 
-	@Resource(name = "mirrorService")
-	private MirrorService mirrorService;
-
 	/**
 	 * 按类型查询列表
-	 * 
+	 *
 	 * @param page
 	 * @throws Exception
 	 */
@@ -77,6 +75,9 @@ public class KVMController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
+
+	@Resource(name = "mirrorService")
+	private MirrorService mirrorService;
 
 	/**
 	 * 查询宿主机列表
@@ -402,6 +403,14 @@ public class KVMController extends BaseController {
 			logger.error(e.getMessage(), e);
 			return ok(FAILURE);
 		}
+	}
+
+	@RequestMapping(value = "/console")
+	public ModelAndView console() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("console/cloudhost/console");
+
+		return mv;
 	}
 
 }

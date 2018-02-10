@@ -68,7 +68,7 @@
 												</a>
 												<ul class="dropdown-menu">
 													<li><a onclick="modifyConfig()">修改配置</a></li>
-													<li><a onclick="intoConsole()">进入控制台</a></li>
+													<li><a target="_blank" href="kvm/console">进入控制台</a></li>
 												</ul>
 											</div>
 										</td>
