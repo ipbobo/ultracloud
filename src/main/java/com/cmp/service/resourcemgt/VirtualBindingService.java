@@ -37,4 +37,16 @@ public interface VirtualBindingService {
 	 * @throws Exception
 	 */
 	public List<PageData> list(Page page) throws Exception;
+	
+	/**
+	 * 查询已分配用户的虚拟机
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	public List<PageData> datalistAlreadyBinded(PageData pd) throws Exception ;
+	
+	public List<PageData> datalistByIds(String[] ArrayDATA_IDS) throws Exception;
+	
+
 }

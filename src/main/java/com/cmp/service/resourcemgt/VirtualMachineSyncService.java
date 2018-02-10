@@ -91,5 +91,7 @@ public interface VirtualMachineSyncService {
 	 * @throws Exception
 	 */
 	public List<PageData> listBIVirtualBillByDay() throws Exception;
+	
+	public void saveVM(PageData pd) throws Exception;
 
 }

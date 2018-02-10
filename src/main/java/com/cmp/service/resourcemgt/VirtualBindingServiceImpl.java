@@ -71,4 +71,20 @@ public class VirtualBindingServiceImpl implements VirtualBindingService {
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("VirtualBindingMapper.datalistPage", page);
 	}
+	
+	/**
+	 * 查询已分配用户的虚拟机
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> datalistAlreadyBinded(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("VirtualBindingMapper.datalistAlreadyBinded", pd);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PageData> datalistByIds(String[] ArrayDATA_IDS) throws Exception {
+		return (List<PageData>) dao.findForList("VirtualBindingMapper.datalistByIds", ArrayDATA_IDS);
+	}
 }

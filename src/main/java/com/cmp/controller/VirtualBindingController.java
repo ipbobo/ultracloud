@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmp.service.VirtualMachineService;
 import com.cmp.service.resourcemgt.VirtualBindingService;
+import com.cmp.service.resourcemgt.VirtualMachineSyncService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.Jurisdiction;
@@ -28,6 +30,12 @@ public class VirtualBindingController extends BaseController {
 
 	@Resource(name = "virtualBindingService")
 	private VirtualBindingService virtualBindingService;
+	
+	@Resource(name = "virtualMachineService")
+	private VirtualMachineService virtualMachineService;
+	
+	@Resource(name = "virtualMachineSyncService")
+	private VirtualMachineSyncService virtualMachineSyncService;
 	
 	 /**去绑定页面
 	 * @param
@@ -87,11 +95,16 @@ public class VirtualBindingController extends BaseController {
 
 			if(null != virtualmachines && !"".equals(virtualmachines)){
 				String ArrayDATA_IDS[] = virtualmachines.split(",");
-				PageData pd = new PageData();
-				pd.put("project_id", project_id);
-				pd.put("user", USERNAME);
-				pd.put("ids", ArrayDATA_IDS);
-				virtualBindingService.edit(pd);
+				
+				List<PageData> vmSyncList = virtualBindingService.datalistByIds(ArrayDATA_IDS);
+				if(null != vmSyncList) {
+					for(PageData vmSyncPD : vmSyncList) {
+						vmSyncPD.put("project_id", project_id);
+						vmSyncPD.put("user", USERNAME);
+						vmSyncPD.remove("id");
+						virtualMachineSyncService.saveVM(vmSyncPD);
+					}
+				}
 			}
 			mv.addObject("retMsg", "保存成功!");
 		} catch (Exception e) {
