@@ -54,7 +54,7 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
 		#{user},
-		#{projectId},
+		#{project_Id},
 		#{name},
 		#{ip},
 		#{cpu},

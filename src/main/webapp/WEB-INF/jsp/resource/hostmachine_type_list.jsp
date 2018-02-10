@@ -83,7 +83,7 @@
 											</td>
 											<td class='center'>${var.ip}</td>
 											<td class='center'>${var.cluster_name}</td>
-											<td class='center'>${var.cpu}</td>
+											<td class='center'><fmt:formatNumber value="${var.cpu}" type="currency" pattern="#"/></td>
 											<td class='center'><fmt:formatNumber value="${var.memory/1024}" type="currency" pattern="#"/></td>
 											<td class='center'>${var.localdisk}</td>
 											<td class='center'>${var.devicenum}</td>

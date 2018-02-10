@@ -6,10 +6,10 @@ import java.util.List;
 import org.junit.Test;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
-import com.cmp.entity.tcc.TccResourcePool;
 import com.cmp.mgr.vmware.VMWareCloudArchManager;
 import com.fh.util.PageData;
 import com.fh.util.UuidUtil;
+import com.vmware.vim25.CustomFieldValue;
 import com.vmware.vim25.InvalidProperty;
 import com.vmware.vim25.RuntimeFault;
 import com.vmware.vim25.mo.Datacenter;
@@ -66,16 +66,15 @@ public class CloudInitTest {
 					String networkUuid = network[j].getMOR().get_value();
 					String networkId = networkUuid;
 
-					if (null == networkId) {
-						networkId = UuidUtil.get32UUID();
-						networkPD.put("id", networkId);
-						networkPD.put("name", network[i].getName());
-						networkPD.put("uuid", networkUuid);
-						networkPD.put("type", "vmware");
-						networkPD.put("cpf_id", cloudPD.getString("id"));
-						networkPD.put("datacenter_id", dc.getMOR().get_value());
-						networkPD.put("version", cloudPD.getString("version"));
-					}
+					networkId = UuidUtil.get32UUID();
+					networkPD.put("id", networkId);
+					networkPD.put("name", network[j].getName());
+					networkPD.put("uuid", networkUuid);
+					networkPD.put("type", "vmware");
+					networkPD.put("cpf_id", cloudPD.getString("id"));
+					networkPD.put("datacenter_id", dc.getMOR().get_value());
+					networkPD.put("version", cloudPD.getString("version"));
+					
 
 				}
 
