@@ -81,6 +81,9 @@ public class PageData extends HashMap implements Map {
 	}
 
 	public String getString(Object key) {
+		if (key == null) {
+			return null;
+		}
 		return (String) get(key);
 	}
 

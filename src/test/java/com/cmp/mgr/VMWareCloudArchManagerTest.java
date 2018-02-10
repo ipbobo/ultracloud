@@ -62,8 +62,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	@Test
 	public void testGetVirtualMachines() {
 		execute("GetVirtualMachines", () -> {
-			cloudArchManager.getVirtualMachines().stream()
-					.map(TccVirtualMachine::getUUID).forEach(System.out::println);
+			cloudArchManager.getVirtualMachines().forEach(System.out::println);
 		});
 	}
 
@@ -86,8 +85,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	@Test
 	public void testGetDatastores() {
 		execute("GetDatastores", () -> {
-			cloudArchManager.getDatastores().stream()
-					.map(TccDatastore::getName).forEach(System.out::println);
+			cloudArchManager.getDatastores().forEach(System.out::println);
 		});
 	}
 
@@ -161,10 +159,10 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 		});
 	}
 
-	// @Test
+	@Test
 	public void testDeleteVM() {
 		execute("DeleteVirtualMachine", () -> {
-			cloudArchManager.destroyVirtualMachine("TestVM");
+			cloudArchManager.destroyVirtualMachine("网商行_1");
 		});
 	}
 

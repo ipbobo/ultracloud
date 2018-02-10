@@ -38,6 +38,7 @@ import com.cmp.util.StringUtil;
 import com.fh.entity.Page;
 import com.fh.entity.system.Department;
 import com.fh.service.fhoa.department.impl.DepartmentService;
+import com.fh.util.Const;
 import com.fh.util.Logger;
 import com.fh.util.PageData;
 
@@ -286,9 +287,17 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		
 		
 		//安装虚拟机
+		ShellUtil.addMsgLog(workOrder.getAppNo(), "准备安装虚拟机: " + vmName);
 		String cloudPlatformId = pd.getString("cloudPlatformId");
 		String datacenterId = pd.getString("datacenterId");
 		String clusterId = pd.getString("clusterId");
+		
+		//判断实施平台ID和申请平台ID是否一致
+		if (cloudPlatformId == null || !cloudPlatformId.equals(orderInfo.getPlatType())) {
+			resMap.put("result", "执行异常!平台类型和申请的不一致 ");
+			ShellUtil.addMsgLog(workOrder.getAppNo(), "执行异常!平台类型和申请的不一致");
+			return resMap;
+		}
 		
 		//查询cloudplatform
 		PageData c_pd = new PageData();
@@ -298,14 +307,17 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		platForm.setCloudplatformUser(cloudplatformPd.getString("username"));
 		platForm.setCloudplatformPassword(cloudplatformPd.getString("password"));
 		platForm.setCloudplatformIp(cloudplatformPd.getString("ip"));
+		String platFormType = cloudplatformPd.getString("type");
 		String platformManagerType = "";
-		
-		if (orderInfo.getPlatType() != null && orderInfo.getPlatType().equals("vmware")) {
+		if (platFormType != null && platFormType.equals("vmware")) {
 			platformManagerType="com.cmp.mgr.vmware.VMWareCloudArchManager";
-		}else if (orderInfo.getPlatType() != null && orderInfo.getPlatType().equals("openstack")) {
+		}else if (platFormType != null && platFormType.equals("openstack")) {
 			platformManagerType="com.cmp.mgr.openstack.OpenstatckCloudArchManager";
-		}else if (orderInfo.getPlatType() != null && orderInfo.getPlatType().equals("kvm")) {
+		}else if (platFormType != null && platFormType.equals("kvm")) {
 			platformManagerType="com.cmp.mgr.KvmCloudArchManager";
+		}else {
+			resMap.put("result", "执行异常!不支持的平台类型 ");
+			return resMap;
 		}
 		
 		PageData datacenterPd = new PageData();
@@ -336,6 +348,9 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 //		cvq.setDsName("datastore2-raid5-2.5t");			//调接口获取
 //		cvq.setGuestOs(installOS);
 //		cloudArchManager.createVirtualMachine(cvq);
+		//所有安装完毕设置结束标志
+		ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机安装完毕!");
+		ShellUtil.addMsgLog(workOrder.getAppNo(), "准备安装相关软件!");
 		logger.info("远程虚拟机创建完毕");
 		
 		TccVirtualMachine  vmInst = cloudArchManager.getVirtualMachineByName(vmName);
@@ -363,40 +378,41 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		vm.setUsername(tp_username);
 		vm.setPassword(tp_passwd);
 		vm.setStatus("0");
-		vm.setType(workOrder.getPlatType());
+		vm.setType(platFormType);
+		vm.setPlatform(cloudPlatformId);
 		vm.setHostmachineId("");
 		vm.setAppNo(workOrder.getAppNo());
 		vm.setUser(workOrder.getApplyUserId());
+		vm.setDuedate(workOrder.getExpireDate());
 		virtualMachineService.add(vm);
 		
 		
 		//添加虚拟机中间件
-		for (String oneSoft : softs) {
-			PageData s_pd = new PageData();
-			s_pd.put("id", oneSoft);
-			s_pd = mediumService.findById(s_pd);
-			Medium medium = (Medium) PageDataUtil.mapToObject(s_pd, Medium.class);
-			DeployedSoft deployedSoft = new DeployedSoft();
-			deployedSoft.setVirtualmachineId(String.valueOf(vm.getId()));
-			deployedSoft.setSoftName(medium.getName());
-			deployedSoft.setStatus("0");
-			deployedSoft.setSoftType(medium.getType());
-			deployedSoft.setSoftVersion(medium.getVersion());
-			deployedSoft.setVirtualmachineName(String.valueOf(vm.getName()));
-			deployedSoftService.add(deployedSoft);
-			
-			//执行软件安装脚本
-			String scriptUrl = medium.getUrl();
-			ShellUtil shellUtil = new ShellUtil(vmIp, ShellUtil.DEF_PORT, tp_username,  
-					tp_passwd , ShellUtil.DEF_CHARSET);
-			shellUtil.exec("." + scriptUrl, workOrder.getAppNo());
+		if (workOrder.getStatus().equals(Const.STATUS_VM_INSTALL_SOFT)) {
+			for (String oneSoft : softs) {
+				PageData s_pd = new PageData();
+				s_pd.put("id", oneSoft);
+				s_pd = mediumService.findById(s_pd);
+				Medium medium = (Medium) PageDataUtil.mapToObject(s_pd, Medium.class);
+				DeployedSoft deployedSoft = new DeployedSoft();
+				deployedSoft.setVirtualmachineId(String.valueOf(vm.getId()));
+				deployedSoft.setSoftName(medium.getName());
+				deployedSoft.setStatus("0");
+				deployedSoft.setSoftType(medium.getType());
+				deployedSoft.setSoftVersion(medium.getVersion());
+				deployedSoft.setVirtualmachineName(String.valueOf(vm.getName()));
+				deployedSoftService.add(deployedSoft);
+				
+				//执行软件安装脚本
+				String scriptUrl = medium.getUrl();
+				ShellUtil shellUtil = new ShellUtil(vmIp, ShellUtil.DEF_PORT, tp_username,  
+						tp_passwd , ShellUtil.DEF_CHARSET);
+				shellUtil.exec("." + scriptUrl, workOrder.getAppNo());
+			}
 		}
+		ShellUtil.addMsgLog(workOrder.getAppNo(), "cmp:install finished");
+		resMap.put("result", "执行成功!");
 		//所有安装完毕设置结束标志
-		Map currentMsgMap = (Map) ShellUtil.getShellMsgMap().get(workOrder.getAppNo());
-		if (currentMsgMap != null) {
-			currentMsgMap.put(currentMsgMap.size() + 1,  "cmp:install finished");
-			resMap.put("result", "执行成功!");
-		}
 		Map<String , String> exeParams = new HashMap<String , String>();
 		exeParams.put("executeStatus", "2");
 		cmpWorkOrderService.updateExecuteStatus(workOrder.getAppNo(), exeParams);

@@ -627,7 +627,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 					continue;
 				}
 
-				if (dt.getSummary().accessible == true
+				if (dt.getSummary().accessible
 						&& "VMFS".equalsIgnoreCase(dt.getSummary().getType())
 						&& dt.getInfo().getFreeSpace() > datastore.getInfo().getFreeSpace()) {
 					datastore = dt;
@@ -762,7 +762,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			Class<VirtualDisk> diskClass = VirtualDisk.class;
 			for (VirtualDevice device : devices) {
 				if (device != null && device.controllerKey != null
-						&& scsiCtrl.key == (int) device.controllerKey
+						&& scsiCtrl.key == device.controllerKey
 						&& diskClass.isInstance(device)) {
 					VirtualDisk disk = (VirtualDisk) device;
 					diskMap.put(getDeviceKey(disk), disk);
@@ -798,8 +798,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			diskSpec.setOperation(VirtualDeviceConfigSpecOperation.add);
 			diskSpec.setFileOperation(VirtualDeviceConfigSpecFileOperation.create);
 			diskSpec.setDevice(disk);
-			VirtualDeviceConfigSpec vdiskSpec = diskSpec;
-			VirtualDeviceConfigSpec[] vdiskSpecArray = { vdiskSpec };
+			VirtualDeviceConfigSpec[] vdiskSpecArray = new VirtualDeviceConfigSpec[] { diskSpec };
 
 			// vm spec
 			VirtualMachineConfigSpec vmConfigSpec = new VirtualMachineConfigSpec();
@@ -810,7 +809,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				VirtualDisk addedDisk = null;
 				for (VirtualDevice device : devices) {
 					if (device.controllerKey != null
-							&& scsiCtrl.key == (int) device.controllerKey
+							&& scsiCtrl.key == device.controllerKey
 							&& device.unitNumber == firstFreeUnit) {
 						addedDisk = (VirtualDisk) device;
 					}

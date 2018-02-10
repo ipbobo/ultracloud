@@ -125,7 +125,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												</td>
 												<td class='center'>${var.platform}</td>
 												<td class='center'>${var.duedate}</td>
-												<td class='center'><a>SSH</a></td>
+												<td class='center'><a target="_blank" href="cloudhost/console">SSH</a></td>
 											</tr>
 										</c:forEach>
 									</tbody>

@@ -109,6 +109,20 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
     	
     }
     
+    public static void addMsgLog(String queryKey, String msg) {
+    	 if (queryKey == null || msg == null) {
+    		 return;
+    	 }
+    	 Map currentMsgMap = shellMsgMap.get(queryKey);
+    	 if (currentMsgMap == null) {
+			   Map<Integer, String> messageMap = new HashMap<Integer, String>();
+			   messageMap.put(1, msg);
+			   shellMsgMap.put(queryKey, messageMap);
+		 }else {
+			   currentMsgMap.put(currentMsgMap.size() + 1, msg);
+		 }
+    }
+    
 	@Override
 	public String getMybatisQryFunc() {
 		// TODO Auto-generated method stub
