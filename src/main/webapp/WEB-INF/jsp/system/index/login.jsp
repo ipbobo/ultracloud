@@ -74,8 +74,10 @@
 	<style>
 		/*登录页样式*/
 		body.login {
-			background: url('static/login/images/banner.png') no-repeat center center fixed;
-			background-size: cover;
+			background: url('static/login/images/banner.png');
+			background-size: 100%;
+			background-position: center;
+			background-attachment: fixed;
 		}
 		body.login .normal_text {
 			padding: 50px 40px 15px 40px !important;
