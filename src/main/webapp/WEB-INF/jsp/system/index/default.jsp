@@ -165,7 +165,7 @@ function closeHeadToggle(){
                           <ul>
                               <li class="blues">运行</li>
                               <li class="yellows">挂起</li>
-                              <li class="pinks">停机</li>
+                              <li class="pinks">关机</li>
                           </ul>
 				</div>
 				<div class="body-box">
