@@ -188,6 +188,7 @@ public class ResourceServiceImpl implements ResourceService {
 								vmPD.put("ip", virtualMachine[j].getGuest().getIpAddress());
 								vmPD.put("cpu", virtualMachine[j].getConfig().getHardware().getNumCPU());
 								vmPD.put("memory", virtualMachine[j].getConfig().getHardware().getMemoryMB());
+								vmPD.put("platform", cloudPD.get("id"));
 								String statusStr = virtualMachine[j].getGuest().getGuestState();
 								Integer status = null;
 								if("running".equals(statusStr)) {
