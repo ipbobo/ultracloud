@@ -59,9 +59,7 @@ function closeHeadToggle(){
         </tr>
     </table>
 </div>
-<div class="head-title"><h1>拓云管理平台</h1></div>
-<div class="head-nav">主页 > 仪表盘</div>
-<div class="head-toggle">
+<div class="head-toggle" style="margin-top: 20px">
 	<ul>
 		<li>虚机总量  ${virNum}</li>
 		<li>宿主机总量  ${hostNum}</li>

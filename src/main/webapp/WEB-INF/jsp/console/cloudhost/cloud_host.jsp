@@ -11,8 +11,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <head>
 <base href="<%=basePath%>">
 <%@ include file="../../system/index/top.jsp"%>
+	<link rel="stylesheet" href="css/newSkin.css">
 </head>
-<body class="no-skin">
+<body class="no-skin control-list">
 	<div class="main-container" id="main-container">
 		<div class="main-content">
 			<div class="main-content-inner">
@@ -28,10 +29,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td style="padding-left:6px;"><a class="btn btn-primary btn-sm" onclick="apply()">申请</a></td>
 										</c:if>
 										<td style="padding-left:6px;"><a class="btn btn-success btn-sm" onclick="start()">开机</a></td>
-										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="stop()">关机</a></td>
-										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="reboot()">重启</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-success2 btn-sm" onclick="resume()">恢复</a></td>
 										<td style="padding-left:6px;"><a class="btn btn-warning btn-sm" onclick="suspend()">挂起</a></td>
-										<td style="padding-left:6px;"><a class="btn btn-success btn-sm" onclick="resume()">恢复</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-danger2  btn-sm" onclick="reboot()">重启</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="stop()">关机</a></td>
 										<td style="padding-left:6px;">
 											<div class="btn-group">
 												<a class="btn btn-primary btn-sm">更多操作</a>

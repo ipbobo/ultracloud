@@ -49,7 +49,7 @@ $( function() {
 	});
 	tab.add( {
 		id :'tab1_index1',
-		title :"主页",
+		title :"仪表盘",
 		url :"<%=basePath%>login_default.do",
 		isClosed :false
 	});

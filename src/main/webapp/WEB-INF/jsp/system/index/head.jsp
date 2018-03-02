@@ -17,12 +17,12 @@
 				</button>
 
 				<!-- /section:basics/sidebar.mobile.toggle -->
-				<div class="navbar-header pull-left">
+				<div class="navbar-header pull-left new-navbar-font">
 					<!-- #section:basics/navbar.layout.brand -->
 					<a class="navbar-brand">
 						<!-- <small> <i class="fa fa-leaf"></i> ${pd.SYSNAME} </small> -->
 						<img src="static/login/cloud.png" alt="Logo" width="50" height="25" />
-					</a> 
+					</a>  拓云管理平台
 
 					<!-- /section:basics/navbar.layout.brand -->
 

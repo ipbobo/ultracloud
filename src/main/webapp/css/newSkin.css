@@ -253,6 +253,9 @@ body.login .main_input_box input{
     height: 40px !important;
     text-indent: 50px;
     background-color: #ffffff !important;
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari 和 Chrome */
+    outline:none;
 }
 body.login .main_input_box #loginname {
     background: url("../images/login-icon.png") 0 -4px no-repeat;
@@ -381,4 +384,167 @@ body.resapp-qry-input .divbtn .btncls a:hover{
 }
 body.resapp-qry-input .divbtn .btncls.active a {
     color: #ffffff;
+}
+
+/*
+左侧菜单*/
+.new-menu li i.menu-icon{
+    width: 20px;
+    min-width:20px;
+    height: 20px;
+    display: inline-block;
+    background: url("../images/icon-out.png");
+    vertical-align: middle;
+    margin:0 5px 0 10px;
+}
+.new-menu li.active i.menu-icon{
+    width: 20px;
+    min-width:20px;
+    height: 20px;
+    display: inline-block;
+    background: url("../images/icon-active.png");
+    vertical-align: middle;
+    margin:0 5px 0 10px;
+}
+.new-menu li i.fa-tachometer,.new-menu li.active i.fa-tachometer{
+    background-position: 0px 0px ;
+}
+.new-menu li i.fa-laptop,.new-menu li.active i.fa-laptop{
+    background-position: 0px -20px ;
+}
+.new-menu li i.fa-globe,.new-menu li.active i.fa-globe{
+    background-position: 0px -40px ;
+}
+.new-menu li i.fa-leaf,.new-menu li.active i.fa-leaf{
+    background-position: 0px -60px ;
+}
+.new-menu li i.fa-users,.new-menu li.active i.fa-users{
+    background-position: 0px -80px ;
+}
+.new-menu li i.fa-exchange,.new-menu li.active i.fa-exchange{
+    background-position: 0px -100px ;
+}
+.new-menu li i.fa-gift,.new-menu li.active i.fa-gift{
+    background-position: 0px -120px ;
+}
+.new-menu li i.fa-bullhorn,.new-menu li.active i.fa-bullhorn{
+    background-position: 0px -140px ;
+}
+.new-menu li i.fa-barcode,.new-menu li.active i.fa-barcode{
+    background-position: 0px -160px ;
+}
+.new-menu li i.fa-pencil-square-o,.new-menu li.active i.fa-pencil-square-o{
+    background-position: 0px -180px ;
+}
+.new-menu li i.fa-eye,.new-menu li.active i.fa-eye{
+    background-position: 0px -200px ;
+}
+.new-menu li i.fa-credit-card,.new-menu li.active i.fa-credit-card{
+    background-position: 0px -220px ;
+}
+.new-menu li i.fa-bar-chart-o,.new-menu li.active i.fa-bar-chart-o{
+    background-position: 0px -100px ;
+}
+.new-menu li i:before,.new-menu li.active i:before{
+    content: "";
+}
+.new-menu li span{
+    vertical-align: middle;
+
+}
+.new-menu li.active .menu-text {
+    color: #ffffff;
+}
+/*此段暂时隐藏*/
+/*.new-menu li:hover:before {
+    display: none;
+    background-color: #629cc9;
+}
+.new-menu li.active:before {
+    display: none !important;
+    background-color: #4d96c6;
+}
+
+.nav-list > li:after {
+    display: none;
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: 0;
+    z-index: 1;
+    height: 41px;
+    width: 3px;
+    max-width: 3px;
+    overflow: hidden;
+    background-color: #629cc9;
+}
+.new-menu li:hover:after {
+    display: block;
+    background-color: #629cc9;
+}
+.new-menu li.active:after {
+    display: block;
+    background-color: #4d96c6;
+}*/
+
+
+/*控制台页面样式*/
+body.control-list a.btn-success2,body.control-list .btn-success2:focus{
+    background-color: #94a775 !important;
+    border-color: #94a775;
+}
+body.control-list a.btn-success2:hover,
+body.control-list a.btn-success2:active{
+    background-color: #629b58 !important;
+    border-color: #94a775;
+}
+
+body.control-list a.btn-warning,body.control-list .btn-warning:focus{
+    background-color: #ab8b64 !important;
+    border-color: #ab8b64;
+}
+body.control-list a.btn-warning:hover,
+body.control-list a.btn-warning:active{
+    background-color: #bfa255 !important;
+    border-color: #ab8b64;
+}
+
+body.control-list a.btn-danger2,body.control-list .btn-danger2:focus{
+    background-color: #c26e52 !important;
+    border-color: #c26e52;
+}
+body.control-list a.btn-danger2:hover,
+body.control-list a.btn-danger2:active{
+    background-color: #ce5f49 !important;
+    border-color: #c26e52;
+}
+
+/*工单查询页面样式*/
+body.queryUserApplyWorkOrderPre {
+
+}
+body.queryUserApplyWorkOrderPre .table>thead>tr>th[class*=sort]:after {
+    float: right;
+    display: inline;
+    content: "\f0dc";
+    font-family: FontAwesome;
+    font-size: 13px;
+    font-weight: 400;
+    color: #555;
+}
+body.queryUserApplyWorkOrderPre .table>thead>tr>th.sorting_asc:after {
+    content: "\f0de";
+    top: 4px;
+    color: #307ECC;
+}
+body.queryUserApplyWorkOrderPre .table>thead>tr>th.sorting_desc:after {
+    content: "\f0dd";
+    top: -6px;
+    color: #307ECC;
+}
+
+/*顶栏LOGO字体*/
+.new-navbar-font {
+    font-size: 18px;
+    line-height: 40px;
 }
