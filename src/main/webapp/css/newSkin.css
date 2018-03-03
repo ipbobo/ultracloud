@@ -393,11 +393,29 @@ body.resapp-qry-input .divbtn .btncls.active a {
     min-width:20px;
     height: 20px;
     display: inline-block;
-    background: url("../images/icon-out.png");
+    /*background: url("../images/icon-out.png");*/
     vertical-align: middle;
     margin:0 5px 0 10px;
 }
 .new-menu li.active i.menu-icon{
+     width: 20px;
+     min-width:20px;
+     height: 20px;
+     display: inline-block;
+     /*background: url("../images/icon-active.png");*/
+     vertical-align: middle;
+     margin:0 5px 0 10px;
+ }
+/*.new-menu li.active .submenu i.menu-icon{
+    width: 20px;
+    min-width:20px;
+    height: 20px;
+    display: inline-block;
+    background: url("../images/icon-out.png");
+    vertical-align: middle;
+    margin:0 5px 0 10px;
+}
+.new-menu li.active .submenu li.active i.menu-icon{
     width: 20px;
     min-width:20px;
     height: 20px;
@@ -405,44 +423,109 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-active.png");
     vertical-align: middle;
     margin:0 5px 0 10px;
-}
-.new-menu li i.fa-tachometer,.new-menu li.active i.fa-tachometer{
+}*/
+.new-menu li i.fa-tachometer {
+    background: url("../images/icon-out.png");
     background-position: 0px 0px ;
 }
-.new-menu li i.fa-laptop,.new-menu li.active i.fa-laptop{
+.new-menu li.active i.fa-tachometer{
+    background: url("../images/icon-active.png");
+    background-position: 0px 0px ;
+}
+.new-menu li i.fa-laptop {
+    background: url("../images/icon-out.png");
     background-position: 0px -20px ;
 }
-.new-menu li i.fa-globe,.new-menu li.active i.fa-globe{
+.new-menu li.active i.fa-laptop{
+    background: url("../images/icon-active.png");
+    background-position: 0px -20px ;
+}
+.new-menu li i.fa-globe{
+    background: url("../images/icon-out.png");
     background-position: 0px -40px ;
 }
-.new-menu li i.fa-leaf,.new-menu li.active i.fa-leaf{
+.new-menu li.active i.fa-globe{
+    background: url("../images/icon-active.png");
+    background-position: 0px -40px ;
+}
+.new-menu li i.fa-leaf{
+    background: url("../images/icon-out.png");
     background-position: 0px -60px ;
 }
-.new-menu li i.fa-users,.new-menu li.active i.fa-users{
+.new-menu li.active i.fa-leaf{
+    background: url("../images/icon-active.png");
+    background-position: 0px -60px ;
+}
+.new-menu li i.fa-users{
+    background: url("../images/icon-out.png");
     background-position: 0px -80px ;
 }
-.new-menu li i.fa-exchange,.new-menu li.active i.fa-exchange{
+.new-menu li.active i.fa-users{
+    background: url("../images/icon-active.png");
+    background-position: 0px -80px ;
+}
+.new-menu li i.fa-exchange{
+    background: url("../images/icon-out.png");
     background-position: 0px -100px ;
 }
-.new-menu li i.fa-gift,.new-menu li.active i.fa-gift{
+.new-menu li.active i.fa-exchange{
+    background: url("../images/icon-active.png");
+    background-position: 0px -100px ;
+}
+.new-menu li i.fa-gift{
+    background: url("../images/icon-out.png");
     background-position: 0px -120px ;
 }
-.new-menu li i.fa-bullhorn,.new-menu li.active i.fa-bullhorn{
+.new-menu li.active i.fa-gift{
+    background: url("../images/icon-active.png");
+    background-position: 0px -120px ;
+}
+.new-menu li i.fa-bullhorn{
+    background: url("../images/icon-out.png");
     background-position: 0px -140px ;
 }
-.new-menu li i.fa-barcode,.new-menu li.active i.fa-barcode{
+.new-menu li.active i.fa-bullhorn{
+    background: url("../images/icon-active.png");
+    background-position: 0px -140px ;
+}
+.new-menu li i.fa-barcode{
+    background: url("../images/icon-out.png");
     background-position: 0px -160px ;
 }
-.new-menu li i.fa-pencil-square-o,.new-menu li.active i.fa-pencil-square-o{
+.new-menu li.active i.fa-barcode{
+    background: url("../images/icon-active.png");
+    background-position: 0px -160px ;
+}
+.new-menu li i.fa-pencil-square-o{
+    background: url("../images/icon-out.png");
     background-position: 0px -180px ;
 }
-.new-menu li i.fa-eye,.new-menu li.active i.fa-eye{
+.new-menu li.active i.fa-pencil-square-o{
+    background: url("../images/icon-active.png");
+    background-position: 0px -180px ;
+}
+.new-menu li i.fa-eye{
+    background: url("../images/icon-out.png");
     background-position: 0px -200px ;
 }
-.new-menu li i.fa-credit-card,.new-menu li.active i.fa-credit-card{
+.new-menu li.active i.fa-eye{
+    background: url("../images/icon-active.png");
+    background-position: 0px -200px ;
+}
+.new-menu li i.fa-credit-card{
+    background: url("../images/icon-out.png");
     background-position: 0px -220px ;
 }
-.new-menu li i.fa-bar-chart-o,.new-menu li.active i.fa-bar-chart-o{
+.new-menu li.active i.fa-credit-card{
+    background: url("../images/icon-active.png");
+    background-position: 0px -220px ;
+}
+.new-menu li i.fa-bar-chart-o{
+    background: url("../images/icon-out.png");
+    background-position: 0px -100px ;
+}
+.new-menu li.active i.fa-bar-chart-o{
+    background: url("../images/icon-active.png");
     background-position: 0px -100px ;
 }
 .new-menu li i:before,.new-menu li.active i:before{
@@ -545,7 +628,7 @@ body.queryUserApplyWorkOrderPre .table>thead>tr>th.sorting_desc:after {
 
 /*顶栏LOGO字体*/
 .new-navbar-font {
-    width:200px;
+    width:300px;
     font-size: 18px;
     line-height: 40px;
 }

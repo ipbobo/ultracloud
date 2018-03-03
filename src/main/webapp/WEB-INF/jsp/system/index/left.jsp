@@ -3,7 +3,7 @@
 		try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
 	</script>
 	<ul class="nav nav-list new-menu">
-		<li class="hover">
+		<li class="hover active" id="fhindex">
 			<a href="main/index">
 				<i class="menu-icon fa fa-tachometer blue"></i><span class="menu-text">&nbsp;仪表盘</span>
 			</a>
