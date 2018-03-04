@@ -26,6 +26,7 @@ import com.cmp.service.ProjectService;
 import com.cmp.service.VirtualMachineService;
 import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.resourcemgt.DatacenterService;
+import com.cmp.service.resourcemgt.HostmachineService;
 import com.cmp.sid.CloudInfoCollect;
 import com.cmp.sid.CmpCloudInfo;
 import com.cmp.sid.CmpOrder;
@@ -333,7 +334,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		cloneVmRequest.setVmName(vmName);
 		cloneVmRequest.setDcName(datacenterPd.getString("name"));
 		cloneVmRequest.setTplName("rhel6.0_x64_template");
-		cloudArchManager.cloneVirtualMachine(cloneVmRequest);
+		String hostMachineUUID = cloudArchManager.cloneVirtualMachine(cloneVmRequest);
 //		CreateVmRequest cvq = new CreateVmRequest();
 //		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
 //		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));

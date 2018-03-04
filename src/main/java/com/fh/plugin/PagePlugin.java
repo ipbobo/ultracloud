@@ -162,6 +162,12 @@ public class PagePlugin implements Interceptor {
 			StringBuffer pageSql = new StringBuffer();
 			if("mysql".equals(dialect)){
 				pageSql.append(sql);
+				//2018.3.2 add 增加对排序支持。如需分页排序，需在PAGE参数传入中带入sortType：排序类型  sortCol：排序字段
+				if (sql.toLowerCase().indexOf("order by") == -1) {
+					if (page.getPd() != null && page.getPd().get("sortType") != null && page.getPd().get("sortCol") != null) {
+						pageSql.append(" order by " + page.getPd().get("sortCol") + " " + page.getPd().get("sortType"));
+					}
+				}
 				pageSql.append(" limit "+page.getCurrentResult()+","+page.getShowCount());
 			}
 			return pageSql.toString();
