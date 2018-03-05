@@ -27,6 +27,7 @@ INSERT INTO `cmp_dict` VALUES ('25', '2017-11-20 17:59:36', '2017-11-20 18:34:44
 INSERT INTO `cmp_dict` VALUES ('26', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '6', '挂载磁盘', '服务类型', '0', '6');
 INSERT INTO `cmp_dict` VALUES ('27', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '7', 'ROOT权限申请', '服务类型', '0', '7');
 INSERT INTO `cmp_dict` VALUES ('28', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '8', 'VIP添加', '服务类型', '0', '8');
+INSERT INTO `cmp_dict` VALUES ('129', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '9', '计算扩容', '服务类型', '0', '9');
 INSERT INTO `cmp_dict` VALUES ('29', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'middleware', '1', '消息队列MQ', '中间件', '1', '1');
 INSERT INTO `cmp_dict` VALUES ('30', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'middleware', '2', '性能测试PTS', '中间件', '0', '2');
 INSERT INTO `cmp_dict` VALUES ('31', '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'middleware', '3', '业务实时监控ARMS', '中间件', '0', '3');
