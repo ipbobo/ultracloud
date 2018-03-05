@@ -34,7 +34,6 @@
 						<!-- 检索  -->
 						<form action="virtualbinding/goListVirtualmachine.do" method="post" name="userForm" id="userForm">
 						<input name="xzvalue" id="xzvalue" value="" type="hidden" />
-						<input name="cluster_id" id="cluster_id" value="${pd.cluster_id}" type="hidden" />
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
@@ -78,11 +77,7 @@
 											</td>
 											<td class="center">${var.name }</td>
 											<td class="center">${var.ip }</td>
-											<td class="center">
-											<c:if test="${var.status == '0' }">运行中</c:if>
-											<c:if test="${var.status == '1' }">挂起</c:if>
-											<c:if test="${var.status == '2' }">关机</c:if>
-											</td>
+											<td class="center">${var.status }</td>
 										</tr>
 									
 									</c:forEach>

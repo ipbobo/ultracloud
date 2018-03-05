@@ -2,8 +2,12 @@ package com.cmp.sid;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Transient;
+
 //数据字典
 public class CmpDict implements Comparable<CmpDict> {
+	
+	
 	private Long id;//ID
 	private Date createTime;//创建时间
 	private Date lastUpdateTime;//最后修改时间

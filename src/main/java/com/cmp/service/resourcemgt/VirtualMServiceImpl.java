@@ -24,7 +24,6 @@ import com.fh.util.PageData;
  * @author liuweixing
  *
  */
-@SuppressWarnings("Duplicates")
 @Service("virtualMService")
 public class VirtualMServiceImpl implements VirtualMService {
 
@@ -48,22 +47,21 @@ public class VirtualMServiceImpl implements VirtualMService {
 
 	@Override
 	public void createVm(PageData pd) throws Exception {
-		String hostId = pd.getString("host");
-		CloudArchManager cloudArchManager = getCloudArchManager(hostId);
+		String platformId = "2186e5aa012711e895ab000c29cf4a01";
+		CloudArchManager cloudArchManager = getCloudArchManager(platformId);
 
-		String vname = pd.getString("vname");
+		String vmName = "centos" + new Random().nextInt(100);
 
 		CreateVmRequest request = new CreateVmRequest();
-		request.setVmName(vname);
-		request.setCupCount(Integer.valueOf(pd.getString("vcpus")));
-		request.setMemSizeMB(Long.valueOf(pd.getString("vmemory")));
-		request.setDiskSizeKB(Long.valueOf(pd.getString("vdisk")));
-		request.setImagePath(pd.getString("vimage"));
+		request.setVmName(vmName);
+		request.setCupCount(1);
+		request.setMemSizeMB(1024);
+		request.setImagePath("/root/CentOS-6-x86_64-GenericCloud-1710.qcow2");
 
 		cloudArchManager.createVirtualMachine(request);
-		TccVirtualMachine vm = cloudArchManager.getVirtualMachineByName(vname);
+		TccVirtualMachine vm = cloudArchManager.getVirtualMachineByName(vmName);
 		PageData _pd_ = PageDataUtil.mapFromObject(vm);
-		_pd_.put("platform", hostId);
+		_pd_.put("platform", platformId);
 
 		dao.save("VirtualMMapper.addVirtualMachine", _pd_);
 	}
@@ -201,11 +199,13 @@ public class VirtualMServiceImpl implements VirtualMService {
 	}
 
 	private CloudArchManager getCloudArchManager(String platformId) throws Exception {
-		PageData pd = findHostMachineById(platformId);
+		PageData pd = findPlatformById(platformId);
 
 		TccCloudPlatform platform = new TccCloudPlatform();
+		platform.setCloudplatformType(pd.getString("type"));
 		platform.setCloudplatformIp(pd.getString("ip"));
-		platform.setCloudplatformType("kvm");
+		platform.setCloudplatformUser(pd.getString("username"));
+		platform.setCloudplatformPassword(pd.getString("password"));
 
 		return camAdapter.getCloudArchManagerAdaptee(platform);
 	}
@@ -214,8 +214,8 @@ public class VirtualMServiceImpl implements VirtualMService {
 		return (PageData) dao.findForObject("VirtualMMapper.findById", id);
 	}
 
-	private PageData findHostMachineById(String id) throws Exception {
-		return (PageData) dao.findForObject("VirtualMMapper.findHostMachineById", id);
+	private PageData findPlatformById(String id) throws Exception {
+		return (PageData) dao.findForObject("VirtualMMapper.findPlatformById", id);
 	}
 
 	private void updateVmStatusById(Integer id, Integer status) throws Exception {

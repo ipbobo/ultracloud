@@ -604,7 +604,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
 	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 		<tr class="tablecls">
-			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;地域&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;地域</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="areaCodeId" class="ullitab list-inline">
@@ -646,7 +646,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目</td>
 			<td align="right" style="width: 120px;padding:10px;">环境：</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="envCodeId" class="ullitab list-inline">
@@ -729,7 +729,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
 			<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 				<select class="chosen-select form-control" name="osType" id="osType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;" onchange="imgFunc()">
@@ -778,7 +778,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储</td>
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<table id="diskTableId">
@@ -832,7 +832,7 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="width: 120px;padding:10px;" colspan="6">
 				<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 

@@ -18,6 +18,8 @@ CREATE TABLE `cmp_op_serve` (
   `vipNum` varchar(20) DEFAULT NULL COMMENT 'VIP申请数量',
   `middlewareMsg` varchar(500) DEFAULT NULL COMMENT '申请中间件操作说明',
   `appmsg` varchar(500) DEFAULT NULL COMMENT '维运申请说明',
+  `expansionType` varchar(20) DEFAULT NULL COMMENT '扩容类型',
+  `expansionSize` varchar(20) DEFAULT NULL COMMENT '扩容大小',
   `remark1` varchar(200) DEFAULT NULL COMMENT '业务备用字段1',
   `remark2` varchar(200) DEFAULT NULL COMMENT '业务备用字段2',
   `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '建创时间',

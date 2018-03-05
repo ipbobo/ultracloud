@@ -14,9 +14,8 @@
 <base href="<%=basePath%>">
 <!-- jsp文件头和头部 -->
 <%@ include file="../system/index/top.jsp"%>
-	<link rel="stylesheet" href="css/newSkin.css">
 </head>
-<body class="no-skin queryUserApplyWorkOrderPre">
+<body class="no-skin">
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<!-- /section:basics/sidebar -->
@@ -107,11 +106,11 @@
 									<tr>
 										<th class="center" style="width: 35px;"></th>
 										<th class="center" style="width: 50px;">序号</th>
-										<th class="center sorting" onclick="sortTable(this, 'appNo');"><span id="appNo">工单号</span></th>
-										<th class="center sorting" onclick="sortTable(this, 'appType');"><span id="appType">工单类型</span></th>
-										<th class="center sorting" onclick="sortTable(this, 'status');"><span id="status">工单状态</span></th>
-										<th class="center sorting" onclick="sortTable(this, 'projectCode');"><span id="projectCode">项目名称</span></th>
-										<th class="center sorting" onclick="sortTable(this, 'createTime');"><span id="createTime">工单时间</span></th>
+										<th class="center" onclick="sortTable(this, 'appNo');"><span id="appNo">工单号</span></th>
+										<th class="center" onclick="sortTable(this, 'appType');"><span id="appType">工单类型</span></th>
+										<th class="center" onclick="sortTable(this, 'status');"><span id="status">工单状态</span></th>
+										<th class="center" onclick="sortTable(this, 'projectCode');"><span id="projectCode">项目名称</span></th>
+										<th class="center" onclick="sortTable(this, 'createTime');"><span id="createTime">工单时间</span></th>
 										<th class="center">操作</th>
 									</tr>
 								</thead>
@@ -156,14 +155,14 @@
 																	class="ace-icon fa fa-pencil-square-o bigger-120" title="审核"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.query == 1 and !fn:startsWith(var.status,'3')}">
+															<c:if test="${QX.query == 1 and var.status != '3'}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
 																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="查看"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.query == 1 and fn:startsWith(var.status,'3')}">
+															<c:if test="${QX.query == 1 and var.status == '3' }">
 																<a class="btn btn-xs btn-danger" title="确认"
 																	onclick="verify('${var.appNo}');"> <i
 																	class="ace-icon fa fa-print  align-top bigger-125"
@@ -274,24 +273,14 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-/*		var sortColVal = $('#sortCol').val();
+		var sortColVal = $('#sortCol').val();
 		var sortTypeVal = $('#sortType').val();
 		if (sortTypeVal != null && sortTypeVal == 'asc'){
 			$("#" + sortColVal).text($("#" + sortColVal).text() + '↑');
 		}
 		if (sortTypeVal != null && sortTypeVal == 'desc'){
 			$("#" + sortColVal).text($("#" + sortColVal).text() + '↓');
-		}*/
-        /*新的排序显示样式控制 @zjb 2018-3-1 begin*/
-        var sortColVal = $('#sortCol').val();
-        var sortTypeVal = $('#sortType').val();
-        if (sortTypeVal != null && sortTypeVal == 'asc'){
-            $("#" + sortColVal).parent().addClass('sorting_asc');
-        }
-        if (sortTypeVal != null && sortTypeVal == 'desc'){
-            $("#" + sortColVal).parent().addClass('sorting_desc');
-        }
-        /*新的排序显示样式控制 @zjb 2018-3-1 end*/
+		}
 		
 	});
 	$(top.hangge());//关闭加载状态
