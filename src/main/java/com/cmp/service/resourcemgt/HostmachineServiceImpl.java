@@ -156,4 +156,9 @@ public class HostmachineServiceImpl implements HostmachineService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllHostId() throws Exception {
+		return (List<PageData>) dao.findForList("HostmachineMapper.listAllHostId", null);
+	}
+
 }

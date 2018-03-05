@@ -2,7 +2,7 @@ function getTuoyunChart(id,title,percent,style) {
     if(style=="meterStyle1"){
         var width=$("#"+id).width();
         $("#"+id).append("<canvas  id='tuoyun_canvas_"+id+"' class='meterStyle1' width='"+width+"' height='"+width+"'></canvas>");
-        toCanvasStyle1("tuoyun_canvas_"+id,percent,title);
+        toCanvasStyle1("tuoyun_canvas_"+id,(percent>100?100:percent),title);
     }
 }
 function getTuoyunPercentChart(id,title,littleNum,middleNum,heightNum,stopNum,title3,title4,title5,title6) {

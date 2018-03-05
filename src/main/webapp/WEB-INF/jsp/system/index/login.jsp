@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
@@ -71,7 +71,75 @@
 			fhi++;
 		};
 	</script>
-	<link rel="stylesheet" href="css/newSkin.css">
+	<style>
+		/*登录页样式*/
+		body.login {
+			background: url('static/login/images/banner.png');
+			background-size: 100%;
+			background-position: center;
+			background-attachment: fixed;
+		}
+		body.login .normal_text {
+			padding: 50px 40px 15px 40px !important;
+		}
+		body.login .normal_text h2 {
+			text-align: left;
+			margin-bottom: 20px;
+		}
+		body.login .line {
+			height:9px;
+			background: #ffffff;
+			filter:alpha(opacity=20);
+			-moz-opacity:0.2;
+			opacity:0.2;
+		}
+		body.login .main_input_box{
+			position: relative;
+		}
+		body.login .main_input_box input{
+			width: 87% !important;
+			height: 40px !important;
+			text-indent: 50px;
+			background-color: #ffffff !important;
+			-moz-appearance:none; /* Firefox */
+			-webkit-appearance:none; /* Safari 和 Chrome */
+			outline:none;
+		}
+		body.login .no-margin {
+			padding-top: 10px !important;
+			padding-bottom: 5px!important;
+		}
+		body.login a.flip-link {
+			width: 180px;
+			height: 37px;
+			background: url("static/login/images/login-sub.png");
+			padding: 0;
+			border: 0;
+			float: right;
+			line-height: 37px;
+			text-indent: -20px;
+		}
+		input:-webkit-autofill {
+			-webkit-box-shadow: 0 0 0px 1000px white inset;
+			border: 1px solid #CCC!important;
+		}
+		.loginname-icon {
+			position: absolute;
+			width: 41px;
+			height: 48px;
+			left: 20px;
+			top: 0;
+			background: url("static/login/images/login-icon.png") 0 -4px no-repeat;
+		}
+		.password-icon {
+			position: absolute;
+			width: 41px;
+			height: 48px;
+			left: 20px;
+			top: 0;
+			background: url("static/login/images/login-icon.png") 0 -53px no-repeat;
+		}
+	</style>
 </head>
 <body class="login">
 
@@ -104,7 +172,7 @@
 						<div class="main_input_box">
 							<!--<span class="add-on bg_lg">
 							<i><img height="37" src="static/login/user.png" /></i>
-							</span>--><input type="text" name="loginname" id="loginname" value="" placeholder="请输入用户名" />
+							</span>--><div class="loginname-icon"></div><input type="text" name="loginname" id="loginname" value="" placeholder="请输入用户名" />
 						</div>
 					</div>
 				</div>
@@ -113,7 +181,7 @@
 						<div class="main_input_box">
 							<!--<span class="add-on bg_ly">
 							<i><img height="37" src="static/login/suo.png" /></i>
-							</span>--><input type="password" name="password" id="password" placeholder="请输入密码" class="keypad" keypadMode="full" allowKeyboard="true" value="1"/>
+							</span>--><div class="password-icon"></div><input type="password" name="password" id="password" placeholder="请输入密码" class="keypad" keypadMode="full" allowKeyboard="true" value="1"/>
 						</div>
 					</div>
 				</div>

@@ -57,9 +57,9 @@
 									<th class="center">名称</th>
 									<th class="center">平台类型</th>
 									<th class="center">所属数据中心</th>
-									<th class="center">空间总量</th>
-									<th class="center">空闲空间</th>
-									<th class="center">剩余空间</th>
+									<th class="center">空间总量(G)</th>
+									<th class="center">空闲空间(G)</th>
+									<th class="center">剩余空间(G)</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -78,9 +78,11 @@
 											<td class='center'>${var.name}</td>
 											<td class='center'>${var.type}</td>
 											<td class='center'>${var.datacenter_name}</td>
-											<td class='center'>${var.allspace}</td>
-											<td class='center'>${var.freespace}</td>
-											<td class='center'>${var.freespace}/${var.allspace}</td>
+											<td class='center'><fmt:formatNumber value="${var.allspace/1024/1024/1024}" type="currency" pattern="#"/></td>
+											<td class='center'><fmt:formatNumber value="${var.freespace/1024/1024/1024}" type="currency" pattern="#"/></td>
+											<td class='center'>
+											<fmt:formatNumber value="${var.freespace/var.allspace}" type="percent" maxIntegerDigits="2"/>
+											</td>
 											<td class="center">
 												<!-- Todo -->
 											</td>

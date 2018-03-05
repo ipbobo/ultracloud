@@ -254,8 +254,6 @@ public class AppOperServiceController  extends BaseController {
 		String exp_time_pwd = pd.getString("exp_time_pwd");
 		String remark1 =  pd.getString("remark1");
 		String file_name = pd.getString("file_name");
-		String expansionType = pd.getString("expansionType");
-		String expansionSize = pd.getString("expansionSize");
 		CmpOpServe opServe = new CmpOpServe();
 		
 		//获取申请工单虚拟机的项目信息
@@ -375,16 +373,6 @@ public class AppOperServiceController  extends BaseController {
 			opServe.setDirectory(directory3);
 			opServe.setVipNum(vip_num);
 			opServe.setWorkflow(CmpOpServe.OP_VIP_ADD);
-		}else if (serviceType.equals("9")) {
-			opServe.setAppmsg(appmsg);
-			opServe.setMiddleware("");
-			opServe.setMiddlewareMsg("");
-			opServe.setOperType(operType);
-			opServe.setServiceType(serviceType);
-			opServe.setVm(vm);			//虚拟机列表  虚拟机1，虚拟机2
-			opServe.setExpansionSize(expansionSize);
-			opServe.setExpansionType(expansionType);
-			opServe.setWorkflow(CmpOpServe.OP_EXPANSION);
 		}
 		
 		cmpOpServeService.saveCmpOpServe(opServe);

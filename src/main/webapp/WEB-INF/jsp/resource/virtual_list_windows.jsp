@@ -69,9 +69,9 @@
 									</th>
 									<th class="center">虚拟机名称</th>
 									<th class="center">IP</th>
-									<th class="center">CPU</th>
-									<th class="center">内存</th>
-									<th class="center">磁盘</th>
+									<th class="center">CPU(核)</th>
+									<th class="center">内存(G)</th>
+									<th class="center">磁盘(G)</th>
 									<th class="center">状态</th>
 								</tr>
 							</thead>
@@ -91,9 +91,16 @@
 											<td class="center">${var.name }</td>
 											<td class="center">${var.ip }</td>
 											<td class="center">${var.cpu }</td>
-											<td class="center">${var.memory }</td>
+											<td class="center"><fmt:formatNumber value="${var.memory/1024}" type="currency" pattern="#"/></td>
 											<td class="center">${var.datadisk }</td>
-											<td class="center">${var.status }</td>
+											<td class="center">
+												<c:choose>
+													<c:when test="${var.status == 0}">运行中</c:when>
+													<c:when test="${var.status == 1}">挂起</c:when>
+													<c:when test="${var.status == 2}">关机</c:when>
+													<c:otherwise>未知</c:otherwise>
+												</c:choose>
+											</td>
 										</tr>
 									
 									</c:forEach>

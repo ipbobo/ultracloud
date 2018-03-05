@@ -5,6 +5,7 @@ public class ResBean {
 	private String itemid;
 	private String status;
 	private String key_;
+	private String value;
 	private String lastvalue;
 
 	public String getHostid() {
@@ -37,6 +38,14 @@ public class ResBean {
 
 	public void setKey_(String key_) {
 		this.key_ = key_;
+	}
+	
+	public String getValue() {
+		return value;
+	}
+	
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	public String getLastvalue() {

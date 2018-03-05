@@ -43,7 +43,8 @@
 	<script type="text/javascript" src="plugins/websocketInstantMsg/websocket.js"></script>
 	<jsp:include page="../../msg/msg_dialog.jsp"></jsp:include>
 	<!-- 即时通讯 -->
-	
+
+	<link rel="stylesheet" href="css/newSkin.css">
 </head>
 	<body class="skin-1">
 		<!-- #section:basics/navbar.layout -->
