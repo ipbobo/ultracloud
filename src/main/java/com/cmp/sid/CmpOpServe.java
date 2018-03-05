@@ -30,6 +30,8 @@ public class CmpOpServe {
 	private String expTime;	//期限
 	private String vipNum; //VIP数量
 	private String breakdownLevelName; //故障级别名称
+	private String expansionType; //扩展类型
+	private String expansionSize; //扩展大小
 	private String remark1;	//业务备用字段1
 	private String remark2; //业务备用字段2
 	
@@ -42,6 +44,7 @@ public class CmpOpServe {
 	public static final String OP_MOUNT_DISK = "mount_disk";
 	public static final String OP_ROOT_APPLY = "root_apply";
 	public static final String OP_VIP_ADD = "vip_add";
+	public static final String OP_EXPANSION = "sys_expansion";
 	
 	
 	
@@ -217,6 +220,24 @@ public class CmpOpServe {
 	public void setBreakdownLevelName(String breakdownLevelName) {
 		
 		this.breakdownLevelName = breakdownLevelName;
+	}
+	public String getExpansionType() {
+		if (expansionType != null && expansionType.equals("cpu")) {
+			return "CPU";
+		}
+		if (breakdownLevel != null && breakdownLevel.equals("memory")) {
+			return "内存";
+		}
+		return expansionType;
+	}
+	public void setExpansionType(String expansionType) {
+		this.expansionType = expansionType;
+	}
+	public String getExpansionSize() {
+		return expansionSize;
+	}
+	public void setExpansionSize(String expansionSize) {
+		this.expansionSize = expansionSize;
 	}
 	
 	

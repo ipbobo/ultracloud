@@ -318,4 +318,34 @@
 								</tbody>
 						</table>
 	</c:if>
+	<c:if test="${serviceType!=null && serviceType == '9'}">
+				<table id="simple-table"
+								class="table table-striped table-bordered table-hover"
+								style="margin-top: 5px;">
+								<thead>
+									<tr>
+										<th class="center">服务类型</th>
+										<th class="center">操作类型</th>
+										<th class="center">扩容类型</th>
+										<th class="center">扩容大小</th>
+									</tr>
+								</thead>
+
+								<tbody>
+										<c:choose>
+										<c:when test="${not empty vmList}">
+											<c:forEach items="${vmList}" var="var" varStatus="vs">
+													<tr>
+														<td class='center'>${opServe.serviceTypeName}</td>
+														<td class='center'>${opServe.operTypeName}</td>
+														<td class='center'>${var.name}</td>
+														<td class='center'>${opServe.expansionType}</td>
+														<td class='center'>${opServe.expansionSize}</td>
+													</tr>
+													</c:forEach>
+												</c:when>
+											</c:choose>
+								</tbody>
+						</table>
+	</c:if>
 	
