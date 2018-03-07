@@ -5,32 +5,32 @@ import static org.springframework.http.ResponseEntity.ok;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
-import com.alibaba.fastjson.JSON;
-import com.fh.entity.system.User;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.cmp.service.resourcemgt.HostmachineService;
 import com.cmp.service.resourcemgt.VirtualMService;
 import com.cmp.service.servicemgt.MirrorService;
+import com.cmp.util.DateUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
+import com.fh.util.UuidUtil;
 
 /**
  * KVM主机 控制层
@@ -39,8 +39,8 @@ import com.fh.util.PageData;
 @RequestMapping(value = "/kvm")
 public class KVMController extends BaseController {
 
-	private static final String	SUCCESS	= "SUCCESS";
-	private static final String	FAILURE	= "FAILURE";
+	private static final String SUCCESS = "SUCCESS";
+	private static final String FAILURE = "FAILURE";
 
 	String menuUrl = "kvm/list.do"; // 菜单地址(权限用)
 
@@ -179,6 +179,7 @@ public class KVMController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("type", "kvm");
+		pd.put("id", UuidUtil.get32UUID());
 		hostmachineService.save(pd, false);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -192,16 +193,22 @@ public class KVMController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/delete")
-	public void delete(PrintWriter out) throws Exception {
+	public void delete(PrintWriter out) {
 		logBefore(logger, Jurisdiction.getUsername() + "删除kvm");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
 			return;
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		hostmachineService.delete(pd, false);
-		out.write("success");
-		out.close();
+		try {
+			hostmachineService.delete(pd, false);
+			out.write("success");
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			out.write("failure");
+			out.close();
+		}
 	}
 
 	/**
@@ -302,7 +309,7 @@ public class KVMController extends BaseController {
 	}
 
 	/**
-	 * 弹窗显示未绑定虚拟机列表
+	 * 
 	 * 
 	 * @param page
 	 * @return
@@ -325,6 +332,34 @@ public class KVMController extends BaseController {
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
+	}
+
+	/**
+	 * kvm数据同步
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/syncKVMData")
+	public void syncKVMData(PrintWriter out) {
+		logBefore(logger, Jurisdiction.getUsername() + "确认初始化kvm");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+
+		// 同步kvm数据
+		try {
+			pd = hostmachineService.findById(pd, false);
+			hostmachineService.syncKVMData(pd);
+			out.write("success");
+			out.close();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			out.write("failure");
+			out.close();
+		}
 	}
 
 	@RequestMapping(value = "/createVm")

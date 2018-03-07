@@ -86,5 +86,12 @@ public interface HostmachineService {
 	public List<PageData> listVirtual(Page page, boolean isSyncTable) throws Exception;
 
 	public List<PageData> listAllHostId() throws Exception;
+	
+	/**
+	 * 同步KVM主机数据
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void syncKVMData(PageData pd) throws Exception;
 
 }

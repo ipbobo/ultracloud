@@ -32,7 +32,7 @@ public class VirtualMachineSyncServiceImpl implements VirtualMachineSyncService 
 		if(isSyncTable) {
 			dao.save("VirtualMachineSyncMapper.save", pd);
 		} else {
-			dao.save("VirtualMachineMapper.save", pd);
+			dao.save("VirtualMachineSyncMapper.saveVM", pd);
 		}
 		
 	}

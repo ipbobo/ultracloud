@@ -18,7 +18,7 @@ import com.vmware.vim25.mo.ManagedEntity;
 import com.vmware.vim25.mo.Network;
 
 //public class CloudInitTest extends BaseJunit4Test {
-public class CloudInitTest {
+public class VmwareCloudInitTest {
 
 	// @Resource(name = "resourceService")
 	// ResourceService resourceService;
@@ -74,13 +74,12 @@ public class CloudInitTest {
 					networkPD.put("cpf_id", cloudPD.getString("id"));
 					networkPD.put("datacenter_id", dc.getMOR().get_value());
 					networkPD.put("version", cloudPD.getString("version"));
-					
-
 				}
 
 			}
 		}
 
+	
 	}
 
 	private void p(String str) {

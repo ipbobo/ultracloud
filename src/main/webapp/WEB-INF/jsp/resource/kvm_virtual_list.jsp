@@ -104,8 +104,8 @@
 													id="zcheckbox" /><span class="lbl"></span></label></th>
 											<th class="center">虚拟机名称</th>
 											<th class="center">IP</th>
-											<th class="center">CPU</th>
-											<th class="center">内存</th>
+											<th class="center">CPU(核)</th>
+											<th class="center">内存(G)</th>
 											<th class="center">磁盘</th>
 											<th class="center">状态</th>
 										</tr>
@@ -125,14 +125,8 @@
 															<td class="center">${var.name}</td>
 															<td class="center">${var.ip}</td>
 															<td class="center">${var.cpu}</td>
-															<td class="center"><c:if
-																	test="${not empty var.memory}">
-													${var.memory}G
-												</c:if></td>
-															<td class="center"><c:if
-																	test="${not empty var.datadisk}">
-													${var.datadisk}G
-												</c:if></td>
+															<td class="center"><fmt:formatNumber value="${var.memory/1024}" type="currency" pattern="#"/></td>
+															<td class="center"><c:if test="${not empty var.datadisk}">${var.datadisk}G</c:if></td>
 															<td class="center"><c:choose>
 																	<c:when test="${var.status == 0}">
 														运行中

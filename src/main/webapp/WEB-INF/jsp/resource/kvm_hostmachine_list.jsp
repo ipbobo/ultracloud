@@ -99,6 +99,11 @@
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
+													<a class="btn btn-xs btn-success" title="数据同步" onclick="sync('${var.id}','${var.type}');">
+														<i class="ace-icon fa fa-wrench bigger-120 icon-only" title="数据同步"></i>
+													</a>
+													</c:if>
+													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
 													</a>
@@ -328,6 +333,19 @@
 				 diag.close();
 			 };
 			 diag.show();
+		}
+		
+		//kvm宿主机资源同步
+		function sync(id, type) {
+			bootbox.confirm("确定开始同步KVM主机资源吗?", function(result) {
+				if(result) {
+					top.jzts();
+					var url = "<%=basePath%>kvm/syncKVMData.do?id="+id;
+					$.get(url,function(data){
+						nextPage(${page.currentPage});
+					});
+				}
+			});
 		}
 	</script>
 
