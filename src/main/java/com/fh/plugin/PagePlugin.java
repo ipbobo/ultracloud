@@ -164,7 +164,8 @@ public class PagePlugin implements Interceptor {
 				pageSql.append(sql);
 				//2018.3.2 add 增加对排序支持。如需分页排序，需在PAGE参数传入中带入sortType：排序类型  sortCol：排序字段
 				if (sql.toLowerCase().indexOf("order by") == -1) {
-					if (page.getPd() != null && page.getPd().get("sortType") != null && page.getPd().get("sortCol") != null) {
+					if (page.getPd() != null && page.getPd().get("sortType") != null  && page.getPd().get("sortType").toString().length() >0
+							&& page.getPd().get("sortCol") != null && page.getPd().get("sortCol").toString().length() >0) {
 						pageSql.append(" order by " + page.getPd().get("sortCol") + " " + page.getPd().get("sortType"));
 					}
 				}
