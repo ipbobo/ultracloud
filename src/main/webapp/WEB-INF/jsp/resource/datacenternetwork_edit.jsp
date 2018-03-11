@@ -57,6 +57,7 @@
 									</select>
 								</td>
 							</tr>
+							<!-- 
 							<tr>
 								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;网络区域:</td>
 								<td id="js">
@@ -66,6 +67,7 @@
 									</select>
 								</td>
 							</tr>
+							-->
 							<tr>
 								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;网络标签:</td>
 								<td id="js">
