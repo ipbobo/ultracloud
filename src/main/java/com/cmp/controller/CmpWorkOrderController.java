@@ -35,6 +35,7 @@ import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
+import com.cmp.service.resourcemgt.DatacenternetworkService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.RelateTask;
@@ -84,6 +85,9 @@ public class CmpWorkOrderController extends BaseController{
 	
 	@Resource
 	private ClusterService clusterService;
+	
+	@Resource
+	private DatacenternetworkService datacenternetworkService;
 	
 	@Resource
 	private CmpLogService cmpLogService;
@@ -814,6 +818,23 @@ public class CmpWorkOrderController extends BaseController{
 		return clusterList;
 	}
 	
+	/**
+	 * 数据中心选择网络
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/toNetworkQuery")
+	@ResponseBody
+	public List<PageData> toNetworkQuery(String dataCenterId) throws Exception{
+		if (dataCenterId == null || dataCenterId.length() == 0) {
+			return null;
+		}
+		PageData pd = new PageData();
+		pd.put("datacenter_id", dataCenterId);
+		List<PageData> networkList =  datacenternetworkService.findByDatacenterId(pd);
+		return networkList;
+	}
 	
 	@RequestMapping(value = "/appFileUpload" ,produces={"text/html;charset=UTF-8;","application/json;"})
 	@ResponseBody

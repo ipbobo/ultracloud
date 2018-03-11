@@ -428,7 +428,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px 0px ;
 }
-.new-menu li.active i.fa-tachometer{
+.new-menu ul:not(.submenu) li.active i.fa-tachometer,.new-menu ul.submenu li.active i.fa-tachometer{
     background: url("../images/icon-active.png");
     background-position: 0px 0px ;
 }
@@ -436,7 +436,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -20px ;
 }
-.new-menu li.active i.fa-laptop{
+.new-menu ul:not(.submenu) li.active i.fa-laptop,.new-menu ul.submenu li.active i.fa-laptop{
     background: url("../images/icon-active.png");
     background-position: 0px -20px ;
 }
@@ -444,7 +444,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -40px ;
 }
-.new-menu li.active i.fa-globe{
+.new-menu ul:not(.submenu) li.active i.fa-globe,.new-menu ul.submenu li.active i.fa-globe{
     background: url("../images/icon-active.png");
     background-position: 0px -40px ;
 }
@@ -452,7 +452,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -60px ;
 }
-.new-menu li.active i.fa-leaf{
+.new-menu ul:not(.submenu) li.active i.fa-leaf,.new-menu ul.submenu li.active i.fa-leaf{
     background: url("../images/icon-active.png");
     background-position: 0px -60px ;
 }
@@ -460,7 +460,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -80px ;
 }
-.new-menu li.active i.fa-users{
+.new-menu ul:not(.submenu) li.active i.fa-users,.new-menu ul.submenu li.active i.fa-users{
     background: url("../images/icon-active.png");
     background-position: 0px -80px ;
 }
@@ -468,7 +468,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -100px ;
 }
-.new-menu li.active i.fa-exchange{
+.new-menu ul:not(.submenu) li.active i.fa-exchange,.new-menu ul.submenu li.active i.fa-exchange{
     background: url("../images/icon-active.png");
     background-position: 0px -100px ;
 }
@@ -476,7 +476,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -120px ;
 }
-.new-menu li.active i.fa-gift{
+.new-menu ul:not(.submenu) li.active i.fa-gift,.new-menu ul.submenu li.active i.fa-gift{
     background: url("../images/icon-active.png");
     background-position: 0px -120px ;
 }
@@ -484,7 +484,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -140px ;
 }
-.new-menu li.active i.fa-bullhorn{
+.new-menu ul:not(.submenu) li.active i.fa-bullhorn,.new-menu ul.submenu li.active i.fa-bullhorn{
     background: url("../images/icon-active.png");
     background-position: 0px -140px ;
 }
@@ -492,7 +492,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -160px ;
 }
-.new-menu li.active i.fa-barcode{
+.new-menu ul:not(.submenu) li.active i.fa-barcode,.new-menu ul.submenu li.active i.fa-barcode{
     background: url("../images/icon-active.png");
     background-position: 0px -160px ;
 }
@@ -500,7 +500,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -180px ;
 }
-.new-menu li.active i.fa-pencil-square-o{
+.new-menu ul:not(.submenu) li.active i.fa-pencil-square-o,.new-menu ul.submenu li.active i.fa-pencil-square-o{
     background: url("../images/icon-active.png");
     background-position: 0px -180px ;
 }
@@ -508,7 +508,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -200px ;
 }
-.new-menu li.active i.fa-eye{
+.new-menu ul:not(.submenu) li.active i.fa-eye,.new-menu ul.submenu li.active i.fa-eye{
     background: url("../images/icon-active.png");
     background-position: 0px -200px ;
 }
@@ -516,7 +516,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -220px ;
 }
-.new-menu li.active i.fa-credit-card{
+.new-menu ul:not(.submenu) li.active i.fa-credit-card,.new-menu ul.submenu li.active i.fa-credit-card{
     background: url("../images/icon-active.png");
     background-position: 0px -220px ;
 }
@@ -524,7 +524,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -100px ;
 }
-.new-menu li.active i.fa-bar-chart-o{
+.new-menu ul:not(.submenu) li.active i.fa-bar-chart-o,.new-menu ul.submenu li.active i.fa-bar-chart-o{
     background: url("../images/icon-active.png");
     background-position: 0px -100px ;
 }

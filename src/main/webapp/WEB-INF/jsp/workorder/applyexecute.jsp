@@ -304,6 +304,22 @@
 							</select>
 						</td>
 					</tr>
+					<tr>
+						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;网络:</td>
+						<td id="tip_network">
+							<select name="network" id="network" title="请选择网络" style="width:40%;margin-left: 100px;" onchange="onNetworkSelected(this.value)">
+								<option value="#" selected="selected">请选择网络</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;IP:</td>
+						<td id="tip_network">
+							<select name="ip" id="ip" title="请选择IP" style="width:40%;margin-left: 100px;">
+								<option value="#" selected="selected">请选择IP</option>
+							</select>
+						</td>
+					</tr>
 				</table>
 			</div>
 				<div class="modal-footer">
@@ -483,7 +499,7 @@
 			}  
 		});  
 	} 
-	
+	var networkMap = {};
 	function onDataCenterSelected(dataCenterId){
 		jQuery.ajax({  
 			url : "<%=basePath%>onDataCenterSelected.do",  
@@ -496,7 +512,7 @@
 			    select_root.options.length=0;
 			 	var _option=new Option("请选择集群","#"); 
 			    select_root.add(_option);
-			    for(var i=0;i<data.length;i++){  
+			    for(var i=0;i<data.length;i++){ 
 			    	var xValue=data[i].id;  
 		             var xText=data[i].name;
 		             var option=new Option(xText,xValue);  
@@ -504,9 +520,55 @@
 			    }
 			}  
 		});  
+		
+		jQuery.ajax({  
+			url : "<%=basePath%>toNetworkQuery.do",  
+			data : {'dataCenterId' : dataCenterId},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				var select_root=document.getElementById('network');  
+			    select_root.options.length=0;
+			 	var _option=new Option("请选择网络","#"); 
+			    select_root.add(_option);
+			    for(var i=0;i<data.length;i++){  
+			    	if (data[i].ippool != null){
+			    		networkMap[data[i].id] = data[i].ippool;
+			    	}
+			    	var xValue=data[i].id;  
+		             var xText=data[i].name;
+		             var option=new Option(xText,xValue);  
+		             select_root.add(option);  
+			    }
+			}  
+		});  
+		
 	} 
 	
-	
+	function onNetworkSelected(networkid){
+		var ippool = networkMap[networkid];
+		var select_root=document.getElementById('ip');  
+	    select_root.options.length=0;
+	 	var _option=new Option("请选择IP","#"); 
+	    select_root.add(_option);
+		if (ippool != null && ippool.indexOf('.')!= -1&& ippool.indexOf('-')!= -1){
+			var ip_arr = ippool.substring(ippool.lastIndexOf('.')+1, ippool.length).split('-');
+			var ip_first = ippool.substring(0, ippool.lastIndexOf('.'));
+		    for(var i=ip_arr[0];i<ip_arr[1];i++){ 
+		    	var xValue=ip_first +'.'+ i;  
+	             var xText=ip_first +'.'+ i;
+	             var option=new Option(xText,xValue);  
+	             select_root.add(option);  
+		    }
+		}else if (ippool != null && ippool.indexOf('.')!= -1){
+			var xValue=ippool;  
+            var xText=ippool;
+            var option=new Option(xText,xValue);  
+            select_root.add(option);  
+		}
+		
+	}
 	
 	
 	</script>
