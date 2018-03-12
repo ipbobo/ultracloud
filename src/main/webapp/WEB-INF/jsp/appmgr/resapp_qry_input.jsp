@@ -563,6 +563,25 @@ function uploadFileFunc() {
 		}
 	});
 }
+
+//模板列表查询
+function getImgList(platTypeId){
+	$.ajax({
+	    type: 'post',  
+	    url: 'getImgList.do?platTypeId='+platTypeId,
+	    dataType: 'json',
+	    success: function(data){
+	    	$("#imgCode").empty();//清空模板列表
+		    if(data.retCode=="0"){//删除成功
+		    	$("#imgCode").append("<option value=''>请选择</option>");
+		    	$.each(data.imgList, function (i, item) {
+				    $("#imgCode").append("<option value='"+item.dictCode+"'>"+item.dictValue+"</option>");
+			    });
+		    }
+	    },
+	    error: function(data) {}
+	});
+}
 	
 //必须加<!DOCTYPE html>
 //$(document).height();//整个网页的高度
@@ -624,7 +643,7 @@ $(window).scroll(function() {
 				<ul id="platTypeId" class="ullitab list-inline">
 					<c:if test="${not empty platTypeList}">
 					<c:forEach items="${platTypeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'platType', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li onclick="setFieldValue(this, 'platType', '${var.dictCode}');getImgList('${var.dictCode}');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>

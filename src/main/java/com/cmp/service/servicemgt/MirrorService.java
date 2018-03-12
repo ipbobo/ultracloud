@@ -127,5 +127,5 @@ public interface MirrorService {
 	public void deleteByMirrorId(BigInteger id) throws Exception;
 
 	//模板列表查询
-	public List<CmpDict> getImgList() throws Exception;
+	public List<CmpDict> getImgList(PageData pd) throws Exception;
 }
