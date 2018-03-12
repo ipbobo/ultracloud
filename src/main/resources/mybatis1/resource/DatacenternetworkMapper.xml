@@ -112,6 +112,16 @@
 			id = #{id}
 	</select>
 	
+		<!-- 通过ID获取数据 -->
+	<select id="findByDatacenterId" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			datacenter_id = #{datacenter_id}
+	</select>
+	
 	<!-- 脚本列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,

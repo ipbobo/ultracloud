@@ -108,6 +108,10 @@ public class DatacenternetworkServiceImpl implements DatacenternetworkService {
 			return (PageData) dao.findForObject("DatacenternetworkMapper.findById", pd);
 		}
 	}
+	
+	public List<PageData>  findByDatacenterId(PageData pd) throws Exception{
+		return (List<PageData>) dao.findForList("DatacenternetworkMapper.findByDatacenterId", pd);
+	}
 
 	/**
 	 * 批量删除

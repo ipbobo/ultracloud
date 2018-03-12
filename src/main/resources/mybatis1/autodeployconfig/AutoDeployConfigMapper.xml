@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AutoDeployConfigMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		t_autodeploy_config
+	</sql>
+	<sql id="confignodetableName">
+		t_autodeploy_config_node
+	</sql>
+	<sql id="nodetableName">
+		t_autodeploy_node
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into <include refid="tableName"></include> (name,detail)
+		values (#{name},#{detail})
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		id,name,detail,gmt_create,gmt_modified
+		from 
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			name = #{name},
+			detail = #{detail}
+		where 
+		id = #{id}
+	</update>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd" >
+		select  s.id,
+		        s.name,
+				s.detail,
+				s.gmt_create,
+				s.gmt_modified
+		from <include refid="tableName"></include> s    
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					s.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
+			and id in ${pd.item}
+		</if>
+		order by s.gmt_modified desc
+	</select>
+	
+	<!-- 列出已加入的所有节点 -->
+	<select id="listAllInNodeById"  parameterType="pd" resultType="pd" >
+		select  u.id,
+				u.name,
+				u.detail,
+				pu.ordernum
+		from <include refid="nodetableName"></include> u, <include refid="confignodetableName"></include> pu
+		where u.id = pu.node_id 
+		and pu.config_id= #{id}
+		order by pu.ordernum asc
+	</select>
+	
+	<!-- 列出未加入的所有节点  -->
+	<select id="listAllOutNodeById"  parameterType="pd" resultType="pd" >
+		select id,
+			   name,
+			   detail
+		from 
+			<include refid="nodetableName"></include>
+		where 1=1
+		and id NOT IN (select u.id from <include refid="nodetableName"></include> u,<include refid="confignodetableName"></include> pu
+						where u.id=pu.node_id
+						and pu.config_id= #{id})
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAllConfigNode" parameterType="pd" resultType="pd">
+		select
+		id,config_id,node_id,ordernum,gmt_create,gmt_modified
+		from 
+		<include refid="confignodetableName"></include>
+		where config_id= #{config_id}
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAllConfigNode" parameterType="String">
+		delete from
+		<include refid="confignodetableName"></include>
+		where 
+			config_id=#{config_id}
+	</delete>
+	
+	<!-- 新增-->
+	<insert id="saveConfigNode" parameterType="pd">
+		insert into <include refid="confignodetableName"></include> (config_id,node_id,ordernum)
+		values (#{config_id},#{node_id},#{ordernum})
+	</insert>
+	
+</mapper>
