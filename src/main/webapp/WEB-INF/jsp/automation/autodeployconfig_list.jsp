@@ -250,7 +250,7 @@
 			 diag.Title ="配置自动部署流程";
 			 diag.URL = '<%=basePath%>autodeployconfig/goNodebind.do?id='+id;
 			 diag.Width = width;
-			 diag.Height = 600;
+			 diag.Height = 400;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
@@ -293,6 +293,10 @@
 					 nextPage(${page.currentPage});
 				}
 				diag.close();
+			 };
+			 diag.OKEvent=function(){//OK事件
+				 alert("1111");
+					diag.close();
 			 };
 			 diag.show();
 		}

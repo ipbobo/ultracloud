@@ -218,7 +218,7 @@ public class AutoDeployConfigController extends BaseController {
 		return mv;
 	}
 	
-	 /**去配置节点
+	 /**配置节点
 	 * @param
 	 * @throws Exception
 	 */
