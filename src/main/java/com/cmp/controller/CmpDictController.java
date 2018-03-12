@@ -11,13 +11,13 @@ import com.cmp.service.CmpDictService;
 import com.cmp.util.StringUtil;
 import com.fh.controller.base.BaseController;
 
-//申请管理
+//重新加载缓存
 @Controller
 public class CmpDictController extends BaseController {
 	@Resource
 	private CmpDictService cmpDictService;
 	
-	//资源申请预查询
+	//重新加载缓存
 	@RequestMapping(value="/reloadCache", produces={"application/json;charset=UTF-8"})
     @ResponseBody
 	public String reloadCache() throws Exception{

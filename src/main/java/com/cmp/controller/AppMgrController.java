@@ -75,7 +75,7 @@ public class AppMgrController extends BaseController {
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
 	public ModelAndView resAppPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		//String orderNo=request.getParameter("orderNo");
+		String platTypeId=request.getParameter("platTypeId");//平台类型
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
 		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList();//平台类型列表
@@ -83,7 +83,10 @@ public class AppMgrController extends BaseController {
 			CmpDict cmpDict=platTypeList.get(0);//第一项
 			cmpDict.setDictDefault("1");//默认选择第一项
 			mv.addObject("defaultPlatType", cmpDict.getDictCode());//默认平台类型
-			mv.addObject("platTypeList", platTypeList);//环境列表
+			mv.addObject("platTypeList", platTypeList);//平台类型列表
+			if(StringUtils.isBlank(platTypeId)){
+				platTypeId=cmpDict.getDictCode();//平台类型
+			}
 		}
 		
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
@@ -103,7 +106,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
 		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
 		mv.addObject("osBitNumList", cmpDictService.getCmpDictList("os_bit_num"));//位数列表
-		mv.addObject("imgCodeList", mirrorService.getImgList());//模板列表
+		mv.addObject("imgCodeList", mirrorService.getImgList(new PageData("platTypeId", platTypeId)));//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		//mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
@@ -113,6 +116,14 @@ public class AppMgrController extends BaseController {
 		mv.addObject("cmpPrice", cmpOrderService.getCmpPrice());//计算价格
 		mv.setViewName("appmgr/resapp_qry_input");
 		return mv;
+	}
+	
+	//模板列表查询
+	@RequestMapping(value="/getImgList", produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+	public String getImgList(String platTypeId) throws Exception{
+		List<CmpDict> imgList=mirrorService.getImgList(new PageData("platTypeId", platTypeId));//模板列表
+		return StringUtil.getRetStr("0", "调用成功", "imgList", imgList);
 	}
 	
 	//套餐申请预查询
@@ -137,7 +148,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
 		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
 		mv.addObject("osBitNumList", cmpDictService.getCmpDictList("os_bit_num"));//位数列表
-		mv.addObject("imgCodeList", mirrorService.getImgList());//模板列表
+		mv.addObject("imgCodeList", mirrorService.getImgList(new PageData("platTypeId", null)));//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表

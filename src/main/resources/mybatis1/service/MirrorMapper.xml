@@ -203,7 +203,10 @@
 	</delete>
 	
 	<!-- 模板列表查询 -->
-	<select id="getImgList" parameterType="String" resultType="com.cmp.sid.CmpDict">
-		select id dictCode, name dictValue from t_mirrortemplate
+	<select id="getImgList" parameterType="pd" resultType="com.cmp.sid.CmpDict">
+		select a.id dictCode, a.name dictValue from t_mirrortemplate a
+		<if test="platTypeId!= null and platTypeId != ''">
+			where a.platform=(select b.type from t_cloudplatform b where b.id=#{platTypeId})
+		</if>
 	</select>
 </mapper>
