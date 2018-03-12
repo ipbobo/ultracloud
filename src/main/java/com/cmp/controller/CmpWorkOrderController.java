@@ -114,6 +114,13 @@ public class CmpWorkOrderController extends BaseController{
 		page.setPd(pd);
 		
 		
+		//默认排序参数传递
+		if (pd.get("sortCol") == null || "".equals(pd.get("sortCol"))) {
+			pd.put("sortCol", "appNo");
+		}
+		if (pd.get("sortType") == null || "".equals(pd.get("sortType"))) {
+			pd.put("sortType", "desc");
+		}
 		
 		//工单查询  根据传入的查询参数， 查询部分或者全部     queryType :  不传或者1 = 全部，  2=今日的工单    3 = 待执行工单
 		List<PageData> workOrderList = new ArrayList<PageData>();
