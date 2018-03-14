@@ -361,11 +361,18 @@
 						</td>
 					</tr>
 				</table>
-			</div>
+
+						<ul id="autoDeployTab" class="nav nav-tabs">
+							
+						</ul>
+						<div id="autoDeployTabContent" class="tab-content">
+							
+						</div>
+					</div>
 				<div class="modal-footer">
 					<button id="platform_modal_btn_cancel" type="button" class="btn btn-default"  data-dismiss="modal">取消
 					</button>
-					<button  id="platform_modal_btn_ok" type="button" class="btn btn-primary" onclick="execute();" id="platform_modal_ok_btn">
+					<button  id="platform_modal_btn_ok" type="button" class="btn btn-primary" data-dismiss="modal" id="platform_modal_ok_btn">
 						确定
 					</button>
 				</div>
@@ -633,8 +640,42 @@
 		$('#autodeploy_modal').modal('show');
 	}
 	
-	function onAutoDeploySelect(){
-		
+	function onAutoDeploySelect(autodeployid){
+		jQuery.ajax({  
+			url : "<%=basePath%>onAutoDeploySelect.do",  
+			data : {'autodeployid' : autodeployid},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				
+				 var autoDeployTab = $("#autoDeployTab");
+				 $("#autoDeployTab").empty();
+				 
+				 var autoDeployTabContent =  $("#autoDeployTabContent");
+				 $("#autoDeployTabContent").empty();
+				 
+				 for(var i=0;i<data.length;i++){ 
+						var autoDeployNode = data[i];
+						autoDeployTab.append("<li><a href='" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
+						autoDeployTabContent.append("<div class='tab-pane fade in active' id='" + autoDeployNode.id +"'>");
+						autoDeployTabContent.append("<table id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> ");
+						autoDeployTabContent.append("<thead>");
+						autoDeployTabContent.append("<tr>");
+						autoDeployTabContent.append("<th class='center'>参数名称</th>");
+						autoDeployTabContent.append("<th class='center'>参数名称</th>");
+						autoDeployTabContent.append("</tr>");
+						autoDeployTabContent.append("</thead>");
+						var scriptNodeList = autoDeployNode.scriptNodeList;
+						 for(var i=0;i<scriptNodeList.length;i++){ 
+							 var scriptNode = scriptNodeList[i];
+							 autoDeployTabContent.append("<tr><td class='center'>" + scriptNode.name + "</td><td class='center'><input name='"+ scriptNode.paramKey +"' id='"+ scriptNode.paramKey +"' value='"+ scriptNode.defaultVal +"' /></td></tr>");
+						 }
+						 autoDeployTabContent.append("</table>");
+						 autoDeployTabContent.append("</div>");
+				 }
+			}  
+		}); 
 	}
 	
 	
