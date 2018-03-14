@@ -33,6 +33,7 @@ import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.ProjectService;
+import com.cmp.service.autodeploy.AutoDeployConfigService;
 import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.service.resourcemgt.DatacenternetworkService;
@@ -91,6 +92,9 @@ public class CmpWorkOrderController extends BaseController{
 	
 	@Resource
 	private CmpLogService cmpLogService;
+	
+	@Resource
+	private AutoDeployConfigService autoDeployConfigService;
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
@@ -853,6 +857,23 @@ public class CmpWorkOrderController extends BaseController{
 		String fullName = FileUpload.fileUpEx(uploadFile, filePath, uploadfileName);			//执行上传
 		return fullName;
 	}
+	
+	/**
+	 * 部署方案查询
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/toAutoDeploySelect")
+	@ResponseBody
+	public List<PageData> toAutoDeploySelect() throws Exception{
+		
+		PageData pd = new PageData();
+		List<PageData> autoDeployCfgList =  autoDeployConfigService.findAll();
+		return autoDeployCfgList;
+	}
+	
+	
 	
 	
 	

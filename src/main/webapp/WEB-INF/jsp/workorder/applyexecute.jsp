@@ -52,6 +52,7 @@
 										<th class="center">存储</th>
 										<th class="center">访问地址</th>
 										<th class="center">端口</th>
+										<th class="center">设置</th>
 										<th class="center">操作</th>
 									</tr>
 								</thead>
@@ -67,6 +68,10 @@
 													<td class='center'>${cmpCloudInfo.dataDiskInfo}</td>
 													<td class='center'></td>
 													<td class='center'></td>
+													<td class='center'>
+														<button id="btn_deploy_select"  style="float:left;margin-left: 30px;" type="button" 
+															onclick="toAutoDeploySelect();">选择部署方案</button>
+													</td>
 													<td class='center'>
 														<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
 														<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
@@ -332,6 +337,41 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
+	
+	<!-- 自动部署设置 -->
+	<div class="modal fade" id="autodeploy_modal" tabindex="-1" role="dialog" aria-labelledby="autodeploy_modalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="middleware_modalLabel">
+						自动部署方案选择
+					</h4>
+				</div>
+				<div class="modal-body">
+				<table  style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+					<tr>
+						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;部署方案选择:</td>
+						<td id="tip_auto_deploy_config">
+							<select name="auto_deploy_config_id" id="auto_deploy_config_id" title="请选择部署方案" style="width:40%;margin-left: 100px;" onchange="onAutoDeploySelect(this.value)">
+								<option value="#" selected="selected">请选择部署方案</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
+				<div class="modal-footer">
+					<button id="platform_modal_btn_cancel" type="button" class="btn btn-default"  data-dismiss="modal">取消
+					</button>
+					<button  id="platform_modal_btn_ok" type="button" class="btn btn-primary" onclick="execute();" id="platform_modal_ok_btn">
+						确定
+					</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
 
 
 	<!-- basic scripts -->
@@ -567,6 +607,33 @@
             var option=new Option(xText,xValue);  
             select_root.add(option);  
 		}
+		
+	}
+	
+	
+	function toAutoDeploySelect(){
+		jQuery.ajax({  
+			url : "<%=basePath%>toAutoDeploySelect.do",  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				var select_root=document.getElementById('auto_deploy_config_id');  
+			    select_root.options.length=0;
+			 	var _option=new Option("请选择部署方案","#"); 
+			    select_root.add(_option);
+			    for(var i=0;i<data.length;i++){  
+			    	var xValue=data[i].id;  
+		             var xText=data[i].name;
+		             var option=new Option(xText,xValue);  
+		             select_root.add(option);  
+			    }
+			}  
+		}); 
+		$('#autodeploy_modal').modal('show');
+	}
+	
+	function onAutoDeploySelect(){
 		
 	}
 	

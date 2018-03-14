@@ -153,5 +153,10 @@ public class AutoDeployConfigServiceImpl implements AutoDeployConfigService {
 			this.saveConfigNode(pd);
 		}
 	}
+	
+	@Override
+	public List<PageData> findAll() throws Exception {
+		return (List<PageData>)dao.findForList("AutoDeployConfigMapper.findAll", null);
+	}
 
 }

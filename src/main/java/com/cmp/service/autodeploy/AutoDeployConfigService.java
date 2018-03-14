@@ -108,5 +108,13 @@ public interface AutoDeployConfigService {
 	 * @throws Exception
 	 */
 	public void bind(String id, String nodeIds[]) throws Exception;
+	
+	/**
+	 * 查询全部
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> findAll() throws Exception;
 
 }
