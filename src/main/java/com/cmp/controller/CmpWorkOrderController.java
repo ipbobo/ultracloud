@@ -897,6 +897,10 @@ public class CmpWorkOrderController extends BaseController{
 		LinkedList<AutoDeployNode> autoDeployNodeList = new LinkedList<AutoDeployNode>();
 		List<PageData> autoDeployList =  autoDeployConfigService.listAllInNodeById(pd);
 		for (PageData autoDeployItem : autoDeployList) {
+			String scriptId = autoDeployItem.getString("script_id");
+			if (scriptId == null || "".equals(scriptId)){
+				continue;
+			}
 			AutoDeployNode autoDeployNode = new AutoDeployNode();
 			autoDeployNode.setId(String.valueOf(autoDeployItem.get("id")));
 			autoDeployNode.setName(autoDeployItem.getString("name"));
@@ -904,7 +908,6 @@ public class CmpWorkOrderController extends BaseController{
 			autoDeployNode.setOrderNum(String.valueOf(autoDeployItem.get("ordernum")));
 			autoDeployNode.setConfigId(autodeployid);
 			LinkedList<AutoDeployScriptNode> scriptNodeList = new LinkedList<AutoDeployScriptNode>();
-			String scriptId = "1";//autoDeployItem.getString("scriptId");
 			PageData s_pd = new PageData();
 			s_pd.put("script_id", scriptId);
 			List<PageData> paramsList = scriptParamService.listAll(s_pd);

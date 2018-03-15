@@ -174,8 +174,7 @@
 			</td>
 		</tr>
 		</table>
-		<form class="form-horizontal" id="checkform" name="checkform"
-			role="form">
+		
 		<table style="margin-left: 30%">
 			<tr>
 					<td>
@@ -192,7 +191,6 @@
 				</td>
 				</tr>
 		</table>
-		</form>
 	</div>
 
 
@@ -361,13 +359,14 @@
 						</td>
 					</tr>
 				</table>
-
+						<form>
 						<ul id="autoDeployTab" class="nav nav-tabs">
 							
 						</ul>
 						<div id="autoDeployTabContent" class="tab-content">
 							
 						</div>
+						</form>
 					</div>
 				<div class="modal-footer">
 					<button id="platform_modal_btn_cancel" type="button" class="btn btn-default"  data-dismiss="modal">取消
@@ -407,7 +406,7 @@
 	//检索
 	function tosearch(){
 		top.jzts();
-		$("#Form").submit();
+		//$("#Form").submit();
 	}
 	$(function() {
 		//复选框全选控制
@@ -462,26 +461,48 @@
 		var cloudPlatform = $("#cloudplatform").val();
 		var datacenter = $("#datacenter").val();
 		var cluster = $("#cluster").val();
+		var network = $("#network").val();
+		var ip = $("#ip").val();
+		var auto_deploy_config_id = $("#auto_deploy_config_id").val();
 		if (cloudPlatform == null || cloudPlatform == '#' || cloudPlatform == ''){
+			$('#platform_modal').modal('hide');
 			showDialog("请选择云平台");
 			return false;
 		}
 		if (datacenter == null || datacenter == '#' || datacenter == ''){
+			$('#platform_modal').modal('hide');
 			showDialog("请选择数据中心");
 			return false;
 		}
 		if (cluster == null || cluster == '#' || cluster == ''){
+			$('#platform_modal').modal('hide');
 			showDialog("请选择集群");
 			return false;
 		}
-		
+		if (ip == null || ip == '#' || ip == ''){
+			$('#platform_modal').modal('hide');
+			showDialog("请选择IP");
+			return false;
+		}
+		if (auto_deploy_config_id == null || auto_deploy_config_id == '#' || auto_deploy_config_id == ''){
+			$('#platform_modal').modal('hide');
+			showDialog("请先选择并设置部署方案");
+			return false;
+		}
 		$('#platform_modal').modal('hide');
 		$("#executeStatus_0").css('display','none');
 		$("#executeStatus_1").css('display','block');
 		queryExecuteStatus(appNo);
+		
+		var submitScriptParam = "";
+		x=$("form").serializeArray();
+	    $.each(x, function(i, field){
+	    	submitScriptParam+=("&" + field.name + "=" + field.value );
+	    });
 		$.ajax({
 			type: "POST",
-			url: '<%=basePath%>executeWork.do?appNo='+appNo +'&CPU=' + cpu +'&memory=' + memory + '&diskSize=' + diskSize + '&cloudPlatformId=' + cloudPlatform + '&datacenterId=' + datacenter + '&clusterId=' + cluster ,
+			url: '<%=basePath%>executeWork.do?appNo='+appNo +'&CPU=' + cpu +'&memory=' + memory +'&network=' + network+'&ip=' + ip+'&auto_deploy_config_id=' + auto_deploy_config_id+ '&diskSize=' + 
+					diskSize + '&cloudPlatformId=' + cloudPlatform + '&datacenterId=' + datacenter + '&clusterId=' + cluster + submitScriptParam ,
 			dataType:'json',
 			//beforeSend: validateData,
 			cache: false,
@@ -657,22 +678,24 @@
 				 
 				 for(var i=0;i<data.length;i++){ 
 						var autoDeployNode = data[i];
-						autoDeployTab.append("<li><a href='" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
-						autoDeployTabContent.append("<div class='tab-pane fade in active' id='" + autoDeployNode.id +"'>");
-						autoDeployTabContent.append("<table id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> ");
-						autoDeployTabContent.append("<thead>");
-						autoDeployTabContent.append("<tr>");
-						autoDeployTabContent.append("<th class='center'>参数名称</th>");
-						autoDeployTabContent.append("<th class='center'>参数名称</th>");
-						autoDeployTabContent.append("</tr>");
-						autoDeployTabContent.append("</thead>");
+						alert(autoDeployNode.name);
+						autoDeployTab.append("<li><a href='#" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
+						var appendHTML = "";
+						if (i == 0){
+							appendHTML+=("<div class='tab-pane fade in active' id='" + autoDeployNode.id +"'>");
+						}else{
+							appendHTML+=("<div class='tab-pane fade' id='" + autoDeployNode.id +"'>");
+						}
+						appendHTML += "<table id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> "  + 
+						"<thead> <tr> <th class='center'>参数名称</th> <th class='center'>参数值</th> </tr> </thead>"
 						var scriptNodeList = autoDeployNode.scriptNodeList;
-						 for(var i=0;i<scriptNodeList.length;i++){ 
-							 var scriptNode = scriptNodeList[i];
-							 autoDeployTabContent.append("<tr><td class='center'>" + scriptNode.name + "</td><td class='center'><input name='"+ scriptNode.paramKey +"' id='"+ scriptNode.paramKey +"' value='"+ scriptNode.defaultVal +"' /></td></tr>");
-						 }
-						 autoDeployTabContent.append("</table>");
-						 autoDeployTabContent.append("</div>");
+						for(var z=0;z<scriptNodeList.length;z++){ 
+							 var scriptNode = scriptNodeList[z];
+							 appendHTML+=("<tr><td class='center'>" + scriptNode.name + "</td><td class='center'><input name='"+ scriptNode.paramKey +"' id='"+ scriptNode.paramKey +"' value='"+ scriptNode.defaultVal +"' /></td></tr>");
+						}
+						 appendHTML+="</table> </div>"
+							 autoDeployTabContent.append(appendHTML);
+						
 				 }
 			}  
 		}); 

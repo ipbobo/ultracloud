@@ -93,6 +93,7 @@
 		select  u.id,
 				u.name,
 				u.detail,
+				u.script_id,
 				pu.ordernum
 		from <include refid="nodetableName"></include> u, <include refid="confignodetableName"></include> pu
 		where u.id = pu.node_id 

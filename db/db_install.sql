@@ -538,7 +538,7 @@ DROP TABLE IF EXISTS `t_script_param`;
 CREATE TABLE `t_script_param` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '参数名称',
-  `param_key` varchar(10) DEFAULT NULL COMMENT '参数key',
+  `param_key` varchar(100) DEFAULT NULL COMMENT '参数key',
   `value` varchar(20) DEFAULT NULL COMMENT '默认值',
   `number` int unsigned DEFAULT NULL COMMENT '参数顺序',
   `script_id` bigint unsigned NOT NULL COMMENT '脚本id',
@@ -975,6 +975,7 @@ CREATE TABLE `t_autodeploy_node` (
   `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(50) DEFAULT NULL COMMENT '自动化部署节点名称',
   `detail` varchar(500) DEFAULT NULL COMMENT '描述',
+  `script_id` varchar(20) DEFAULT NULL COMMENT 'shell脚本ID',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
