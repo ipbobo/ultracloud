@@ -34,12 +34,36 @@ function getDashboard(){
 	var chkFlag=$("#chkId").is(":checked")?"1":"0";//复选框是否选中：0-否；1-是
 	window.location.href="<%=basePath%>login_default.do?cpuTimeType="+cpuTimeType+"&memTimeType="+memTimeType+"&storeTimeType="+storeTimeType+"&resType="+resType;
 }
+
+//资源使用量趋势
+function getResRate(resType){
+	$.ajax({
+	    type: 'post',
+	    data: JSON.stringify({
+	    	"resType": resType,//资源类型：cpu-CPU、mem-内存、store-磁盘
+	    	"cpuTimeType": $("#cpuTimeType").val(),//CPU时间类型
+	    	"memTimeType": $("#memTimeType").val(),//内存时间类型
+	    	"storeTimeType": $("#storeTimeType").val(),//磁盘时间类型
+	    	"hostIdStr": $("#hostIdStr").val()//主机ID列表
+	    }),
+	    url: "<%=basePath%>getResRate.do",
+	    dataType: 'json',  
+	    success: function(data){
+		    if(data.retCode=="0"){//成功
+		    	getLineChart(resType+'Chart', ['资源使用量趋势'], data.resRate.xaxis.split(","), data.resRate.yaxis.split(","));//获取图表
+		    }
+	    },
+	    error: function(data) {}
+	});
+}
+
 function closeHeadToggle(){
     $('.head-toggle').hide();
 }
 </script>
 </head>
 <body onload="checkFunc()" class="login_default">
+<input id="hostIdStr" name="hostIdStr" type="hidden" value="${hostIdStr}">
 <div id="tip" style="display:none">
     <table>
         <tr>
@@ -198,7 +222,7 @@ function closeHeadToggle(){
 						<div class="row-fluid">
 							<div class="col-xs-4">
 								<div class="select-box">
-									<select style="width: 100px;" class="chosen-select form-control" name="cpuTimeType" id="cpuTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
+									<select style="width: 100px;" class="chosen-select form-control" name="cpuTimeType" id="cpuTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getResRate('cpu')">
 									<c:forEach items="${timeTypeList}" var="var">
 										<option value="${var.dictCode}" <c:if test="${cpuTimeType==var.dictCode || (cpuTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 									</c:forEach>
@@ -209,7 +233,7 @@ function closeHeadToggle(){
 							</div>
 							<div class="col-xs-4">
 								<div class="select-box">
-									<select style="width: 100px;" class="chosen-select form-control" name="memTimeType" id="memTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
+									<select style="width: 100px;" class="chosen-select form-control" name="memTimeType" id="memTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getResRate('mem')">
 									<c:forEach items="${timeTypeList}" var="var">
 										<option value="${var.dictCode}" <c:if test="${memTimeType==var.dictCode || (memTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 									</c:forEach>
@@ -220,7 +244,7 @@ function closeHeadToggle(){
 							</div>
 							<div class="col-xs-4">
 								<div class="select-box">
-									<select style="width: 100px;" class="chosen-select form-control" name="storeTimeType" id="storeTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
+									<select style="width: 100px;" class="chosen-select form-control" name="storeTimeType" id="storeTimeType" data-placeholder="请选择时间类型" style="vertical-align:top;width: 100%;" onchange="getResRate('store')">
 									<c:forEach items="${timeTypeList}" var="var">
 										<option value="${var.dictCode}" <c:if test="${storeTimeType==var.dictCode || (storeTimeType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 									</c:forEach>
@@ -475,9 +499,12 @@ if(leftH>=rightH){
 } else {
 	$('#left-container').css("height",$('#right-container').height()+40);
 }
-getLineChart('cpuChart', ['资源使用量趋势'], '${cpuResRate.xaxis}'.split(","), '${cpuResRate.yaxis}'.split(","));//获取图表
-getLineChart('memChart', ['资源使用量趋势'], '${memResRate.xaxis}'.split(","), '${memResRate.yaxis}'.split(","));//获取图表
-getLineChart('storeChart', ['资源使用量趋势'], '${storeResRate.xaxis}'.split(","), '${storeResRate.yaxis}'.split(","));//获取图表
+//getLineChart('cpuChart', ['资源使用量趋势'], '${cpuResRate.xaxis}'.split(","), '${cpuResRate.yaxis}'.split(","));//获取图表
+//getLineChart('memChart', ['资源使用量趋势'], '${memResRate.xaxis}'.split(","), '${memResRate.yaxis}'.split(","));//获取图表
+//getLineChart('storeChart', ['资源使用量趋势'], '${storeResRate.xaxis}'.split(","), '${storeResRate.yaxis}'.split(","));//获取图表
+getResRate("cpu");//资源使用量趋势
+getResRate("mem");//资源使用量趋势
+getResRate("store");//资源使用量趋势
 </script>
 </body>
 </html>
