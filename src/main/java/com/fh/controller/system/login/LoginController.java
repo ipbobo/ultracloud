@@ -94,13 +94,6 @@ public class LoginController extends BaseController {
 			return mv;
 		}
 		
-		//若是admin角色，跳转到管理员对应的仪表盘页面
-		/*if("admin".equals(Jurisdiction.getUser().getRole().getTYPE())) {
-			ModelAndView mv = this.getModelAndView();
-			mv.setViewName("system/index/default_admin");
-			return mv;	
-		}*/
-		
 		String applyUserId=StringUtil.getUserName();
 		Map<String, String> auditMap=dashboardService.getAuditMap(applyUserId);//审核组查询
 		String roleType=StringUtil.getRoleType(auditMap);//获取用户的角色类型
