@@ -678,24 +678,26 @@
 				 
 				 for(var i=0;i<data.length;i++){ 
 						var autoDeployNode = data[i];
-						alert(autoDeployNode.name);
 						autoDeployTab.append("<li><a href='#" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
-						var appendHTML = "";
-						if (i == 0){
-							appendHTML+=("<div class='tab-pane fade in active' id='" + autoDeployNode.id +"'>");
-						}else{
-							appendHTML+=("<div class='tab-pane fade' id='" + autoDeployNode.id +"'>");
-						}
-						appendHTML += "<table id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> "  + 
-						"<thead> <tr> <th class='center'>参数名称</th> <th class='center'>参数值</th> </tr> </thead>"
 						var scriptNodeList = autoDeployNode.scriptNodeList;
-						for(var z=0;z<scriptNodeList.length;z++){ 
-							 var scriptNode = scriptNodeList[z];
-							 appendHTML+=("<tr><td class='center'>" + scriptNode.name + "</td><td class='center'><input name='"+ scriptNode.paramKey +"' id='"+ scriptNode.paramKey +"' value='"+ scriptNode.defaultVal +"' /></td></tr>");
+						if (scriptNodeList != null){
+							var appendHTML = "";
+							if (i == 0){
+								appendHTML+=("<div class='tab-pane fade in active' id='" + autoDeployNode.id +"'>");
+							}else{
+								appendHTML+=("<div class='tab-pane fade' id='" + autoDeployNode.id +"'>");
+							}
+							appendHTML += "<table id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> "  + 
+							"<thead> <tr> <th class='center'>参数名称</th> <th class='center'>参数值</th> </tr> </thead>"
+							
+							
+							for(var z=0;z<scriptNodeList.length;z++){ 
+								 var scriptNode = scriptNodeList[z];
+								 appendHTML+=("<tr><td class='center'>" + scriptNode.name + "</td><td class='center'><input name='"+ scriptNode.paramKey +"' id='"+ scriptNode.paramKey +"' value='"+ scriptNode.defaultVal +"' /></td></tr>");
+							}
+							 appendHTML+="</table> </div>"
+								 autoDeployTabContent.append(appendHTML);
 						}
-						 appendHTML+="</table> </div>"
-							 autoDeployTabContent.append(appendHTML);
-						
 				 }
 			}  
 		}); 

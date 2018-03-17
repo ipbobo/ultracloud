@@ -1,7 +1,9 @@
 package com.cmp.workorder;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,10 +25,15 @@ import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.DeployedSoftService;
 import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
+import com.cmp.service.ScriptParamService;
+import com.cmp.service.ScriptService;
 import com.cmp.service.VirtualMachineService;
+import com.cmp.service.autodeploy.AutoDeployConfigService;
 import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.service.resourcemgt.HostmachineService;
+import com.cmp.sid.AutoDeployNode;
+import com.cmp.sid.AutoDeployScriptNode;
 import com.cmp.sid.CloudInfoCollect;
 import com.cmp.sid.CmpCloudInfo;
 import com.cmp.sid.CmpOrder;
@@ -81,7 +88,15 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	@Resource
 	private DatacenterService datacenterService;
 	
+	@Resource
+	private AutoDeployConfigService autoDeployConfigService;
 	
+	
+	@Resource
+	private ScriptParamService scriptParamService;
+	
+	@Resource
+	private ScriptService scriptService;
 	@Override
 	public Map<String, Object> toWorkorderView(CmpWorkOrder cmpWorkorder) throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
@@ -252,11 +267,65 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		d_pd.put("disk_used", dDiskUsed);
 		departmentService.editUsedQuota(d_pd);
 		
+		String autodeployid = pd.getString("auto_deploy_config_id");
+		PageData a_pd = new PageData();
+		a_pd.put("id", autodeployid);
+		LinkedList<AutoDeployNode> autoDeployNodeList = new LinkedList<AutoDeployNode>();
+		List<PageData> autoDeployList =  autoDeployConfigService.listAllInNodeById(a_pd);
+		for (PageData autoDeployItem : autoDeployList) {
+			
+			AutoDeployNode autoDeployNode = new AutoDeployNode();
+			autoDeployNode.setId(String.valueOf(autoDeployItem.get("id")));
+			autoDeployNode.setName(autoDeployItem.getString("name"));
+			autoDeployNode.setDetail(autoDeployItem.getString("detail"));
+			autoDeployNode.setOrderNum(String.valueOf(autoDeployItem.get("ordernum")));
+			autoDeployNode.setScriptId(autoDeployItem.getString("script_id"));
+			autoDeployNode.setConfigId(autodeployid);
+			LinkedList<AutoDeployScriptNode> scriptNodeList = new LinkedList<AutoDeployScriptNode>();
+			PageData s_pd = new PageData();
+			
+			String scriptId = autoDeployItem.getString("script_id");
+			if (scriptId != null && !"".equals(scriptId)){
+				s_pd.put("script_id", scriptId);
+				PageData scriptPd = scriptService.findMediumById(s_pd);
+				autoDeployNode.setScriptUrl(scriptPd.getString("url"));
+				autoDeployNode.setMediumId(String.valueOf(scriptPd.get("id")));
+				List<PageData> paramsList = scriptParamService.listAll(s_pd);
+				for (PageData paramPd : paramsList) {
+					AutoDeployScriptNode scriptNode = new AutoDeployScriptNode();
+					scriptNode.setId(String.valueOf(paramPd.get("id")));
+					scriptNode.setScriptId(String.valueOf(paramPd.get("script_id")));
+					scriptNode.setDefaultVal(paramPd.getString("value"));
+					scriptNode.setParamKey(paramPd.getString("param_key"));
+					scriptNode.setName(paramPd.getString("name"));
+					scriptNode.setNumber(paramPd.getString("number"));
+					scriptNode.setValue(pd.getString(paramPd.getString("param_key")));  //获取页面写入的参数值。
+					scriptNodeList.add(scriptNode);
+				}
+				scriptNodeList.sort(new Comparator<AutoDeployScriptNode>() {
+					public int compare(AutoDeployScriptNode o1, AutoDeployScriptNode o2) {
+						Integer n1 = Integer.parseInt(o1.getNumber());
+						Integer n2 = Integer.parseInt(o2.getNumber());
+						return n1.compareTo(n2);
+					}
+				});
+			}
+			String executeParam = "";
+			for (AutoDeployScriptNode scriptNode : scriptNodeList) {
+				executeParam = executeParam + scriptNode.getValue() + " ";
+			}
+			autoDeployNode.setExecuteParams(executeParam);
+			autoDeployNode.setScriptNodeList(scriptNodeList);
+			autoDeployNodeList.add(autoDeployNode);
+		}
+		autoDeployNodeList.sort(new Comparator<AutoDeployNode>() {
+			public int compare(AutoDeployNode o1, AutoDeployNode o2) {
+				Integer n1 = Integer.parseInt(o1.getOrderNum());
+				Integer n2 = Integer.parseInt(o2.getOrderNum());
+				return n1.compareTo(n2);
+			}
+		});
 		
-		//添加虚拟机
-		
-		//rhel6_64Guest
-		//centos64Guest
 		CmpOrder orderInfo = null;
 		List<CmpOrder> orderList = null;
 		try {
@@ -268,131 +337,114 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			return null;
 		}
 		orderInfo = orderList.get(0);
-		int currentVMNum = virtualMachineService.countByProject(project.getId());
-		String vmName = project.getName() + "_" + (currentVMNum+1); //虚拟机的名字为当前项目名称+项目拥有的虚拟机INDEX
-		String osName = cmpDictService.getCmpDict("os_type", orderInfo.getOsType()).getDictValue();
-		String osBitNum = cmpDictService.getCmpDict("os_bit_num", orderInfo.getOsBitNum()).getDictValue();
-		String fullOS = osName +"_" +osBitNum;
-		String installOS = cmpDictService.getCmpDict("install_OS", fullOS).getDictValue();  //安装的系统软件
-		String diskSize = orderInfo.getDiskSize();
-		String diskType = orderInfo.getDiskType();
-		String[] diskTypeList = diskType.split(",");
-		String[] diskSizeList = diskSize.split(",");
-		List<DiskInfo> diskInfoList = new ArrayList<DiskInfo>();
-		for (int i = 0; i < diskSizeList.length; i++) {
-			DiskInfo di = new DiskInfo();
-			di.setDiskSize(diskSizeList[i]);
-			di.setDiskType(diskTypeList[i] != null? cmpDictService.getCmpDict("disk_type", diskTypeList[i]).getDictValue() : "");
-			diskInfoList.add(di);
-		}
-		
-		
-		//安装虚拟机
-		ShellUtil.addMsgLog(workOrder.getAppNo(), "准备安装虚拟机: " + vmName);
-		String cloudPlatformId = pd.getString("cloudPlatformId");
-		String datacenterId = pd.getString("datacenterId");
-		String clusterId = pd.getString("clusterId");
-		
-		//判断实施平台ID和申请平台ID是否一致
-		if (cloudPlatformId == null || !cloudPlatformId.equals(orderInfo.getPlatType())) {
-			resMap.put("result", "执行异常!平台类型和申请的不一致 ");
-			ShellUtil.addMsgLog(workOrder.getAppNo(), "执行异常!平台类型和申请的不一致");
-			return resMap;
-		}
-		
-		//查询cloudplatform
-		PageData c_pd = new PageData();
-		c_pd.put("id", cloudPlatformId);
-		PageData cloudplatformPd = cloudplatformService.findById(c_pd, false);
-		TccCloudPlatform platForm = new TccCloudPlatform();
-		platForm.setCloudplatformUser(cloudplatformPd.getString("username"));
-		platForm.setCloudplatformPassword(cloudplatformPd.getString("password"));
-		platForm.setCloudplatformIp(cloudplatformPd.getString("ip"));
-		String platFormType = cloudplatformPd.getString("type");
-		String platformManagerType = "";
-		if (platFormType != null && platFormType.equals("vmware")) {
-			platformManagerType="com.cmp.mgr.vmware.VMWareCloudArchManager";
-		}else if (platFormType != null && platFormType.equals("openstack")) {
-			platformManagerType="com.cmp.mgr.openstack.OpenstatckCloudArchManager";
-		}else if (platFormType != null && platFormType.equals("kvm")) {
-			platformManagerType="com.cmp.mgr.KvmCloudArchManager";
-		}else {
-			resMap.put("result", "执行异常!不支持的平台类型 ");
-			return resMap;
-		}
-		
-		PageData datacenterPd = new PageData();
-		datacenterPd.put("id", datacenterId);
-		datacenterPd = datacenterService.findById(datacenterPd);
-		
-		platForm.setPlatformManagerType(platformManagerType);
-		CloudArchManager cloudArchManager = cloudArchManagerAdapter.getCloudArchManagerAdaptee(platForm);
-		
-		CloneVmRequest cloneVmRequest = new CloneVmRequest();
-		cloneVmRequest.setCpuSize(Integer.parseInt(pd.getString("CPU")));
-		cloneVmRequest.setRamSize(Long.parseLong(pd.getString("memory"))*1024);
-		cloneVmRequest.setVmName(vmName);
-		cloneVmRequest.setDcName(datacenterPd.getString("name"));
-		cloneVmRequest.setTplName("rhel6.0_x64_template");
-		String hostMachineUUID = cloudArchManager.cloneVirtualMachine(cloneVmRequest);
-//		CreateVmRequest cvq = new CreateVmRequest();
-//		cvq.setCupCount(Integer.parseInt(pd.getString("CPU")));
-//		cvq.setMemSizeMB(Long.parseLong(pd.getString("memory")));
-//		int defaultDiskSize = Integer.parseInt(cmpDictService.getCmpDict("install_disk_size", "default").getDictValue());
-//		cvq.setDiskSizeKB(defaultDiskSize*1024*1024);
-//		cvq.setDiskMode("persistent");					
-//		cvq.setDcName(datacenterPd.getString("name"));
-//		cvq.setVmName(vmName);
-//		cvq.setNetName("VM Network");					//网络名称  ---   datacenter_network表中根据 数据中心 ID获取 				
-//		cvq.setRpName("Resources");						//资源池 --- 先写死
-//		cvq.setNicName("VMXNET 3");						//写死先
-//		cvq.setDsName("datastore2-raid5-2.5t");			//调接口获取
-//		cvq.setGuestOs(installOS);
-//		cloudArchManager.createVirtualMachine(cvq);
-		//所有安装完毕设置结束标志
-		ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机安装完毕!");
-		ShellUtil.addMsgLog(workOrder.getAppNo(), "准备安装相关软件!");
-		logger.info("远程虚拟机创建完毕");
-		
-		TccVirtualMachine  vmInst = cloudArchManager.getVirtualMachineByName(vmName);
-		String vmIp = vmInst.getIpAddress();
-		
-		//获取模板用户名密码
-		String tp_username = "root";
-		String tp_passwd = "pwdpwd";
-		
-		String softCode = orderInfo.getSoftCode();
-		String[] softs = softCode.split(",");
 		VirtualMachine vm = new VirtualMachine();
-		vm.setCpu(pd.getString("CPU"));
-		vm.setMemory(pd.getString("memory"));
-		vm.setDatadisk(diskInfoList.size() > 0 ? diskInfoList.get(0).getDiskSize() : "300");
-		vm.setProjectId(workOrder.getProjectCode());
-		vm.setOs(fullOS);
-		vm.setOsStatus("未安装");
-		vm.setMountDiskSize(diskSize);
-		vm.setMountDiskType(diskType);
-		vm.setSoft(softCode);
-		vm.setSoftStatus("未安装");
-		vm.setName(vmName);
-		vm.setIp(vmIp);
-		vm.setUsername(tp_username);
-		vm.setPassword(tp_passwd);
-		vm.setStatus("0");
-		vm.setType(platFormType);
-		vm.setPlatform(cloudPlatformId);
-		vm.setHostmachineId("");
-		vm.setAppNo(workOrder.getAppNo());
-		vm.setUser(workOrder.getApplyUserId());
-		vm.setDuedate(workOrder.getExpireDate());
-		virtualMachineService.add(vm);
-		
-		
-		//添加虚拟机中间件
-		if (workOrder.getStatus().equals(Const.STATUS_VM_INSTALL_SOFT)) {
-			for (String oneSoft : softs) {
+		for ( AutoDeployNode autoDeployNode : autoDeployNodeList){
+			if (autoDeployNode.getId().equals("1")) {
+				//部署虚拟机
+				//添加虚拟机
+				int currentVMNum = virtualMachineService.countByProject(project.getId());
+				String vmName = project.getName() + "_" + (currentVMNum+1); //虚拟机的名字为当前项目名称+项目拥有的虚拟机INDEX
+				String osName = cmpDictService.getCmpDict("os_type", orderInfo.getOsType()).getDictValue();
+				String osBitNum = cmpDictService.getCmpDict("os_bit_num", orderInfo.getOsBitNum()).getDictValue();
+				String fullOS = osName +"_" +osBitNum;
+				String installOS = cmpDictService.getCmpDict("install_OS", fullOS).getDictValue();  //安装的系统软件
+				String diskSize = orderInfo.getDiskSize();
+				String diskType = orderInfo.getDiskType();
+				String[] diskTypeList = diskType.split(",");
+				String[] diskSizeList = diskSize.split(",");
+				List<DiskInfo> diskInfoList = new ArrayList<DiskInfo>();
+				for (int i = 0; i < diskSizeList.length; i++) {
+					DiskInfo di = new DiskInfo();
+					di.setDiskSize(diskSizeList[i]);
+					di.setDiskType(diskTypeList[i] != null? cmpDictService.getCmpDict("disk_type", diskTypeList[i]).getDictValue() : "");
+					diskInfoList.add(di);
+				}
+				//安装虚拟机
+				ShellUtil.addMsgLog(workOrder.getAppNo(), "准备安装虚拟机: " + vmName);
+				String cloudPlatformId = pd.getString("cloudPlatformId");
+				String datacenterId = pd.getString("datacenterId");
+				String clusterId = pd.getString("clusterId");
+				//判断实施平台ID和申请平台ID是否一致
+				if (cloudPlatformId == null || !cloudPlatformId.equals(orderInfo.getPlatType())) {
+					resMap.put("result", "执行异常!平台类型和申请的不一致 ");
+					ShellUtil.addMsgLog(workOrder.getAppNo(), "执行异常!平台类型和申请的不一致");
+					return resMap;
+				}
+				//查询cloudplatform
+				PageData c_pd = new PageData();
+				c_pd.put("id", cloudPlatformId);
+				PageData cloudplatformPd = cloudplatformService.findById(c_pd, false);
+				TccCloudPlatform platForm = new TccCloudPlatform();
+				platForm.setCloudplatformUser(cloudplatformPd.getString("username"));
+				platForm.setCloudplatformPassword(cloudplatformPd.getString("password"));
+				platForm.setCloudplatformIp(cloudplatformPd.getString("ip"));
+				String platFormType = cloudplatformPd.getString("type");
+				String platformManagerType = "";
+				if (platFormType != null && platFormType.equals("vmware")) {
+					platformManagerType="com.cmp.mgr.vmware.VMWareCloudArchManager";
+				}else if (platFormType != null && platFormType.equals("openstack")) {
+					platformManagerType="com.cmp.mgr.openstack.OpenstatckCloudArchManager";
+				}else if (platFormType != null && platFormType.equals("kvm")) {
+					platformManagerType="com.cmp.mgr.KvmCloudArchManager";
+				}else {
+					resMap.put("result", "执行异常!不支持的平台类型 ");
+					return resMap;
+				}
+				
+				PageData datacenterPd = new PageData();
+				datacenterPd.put("id", datacenterId);
+				datacenterPd = datacenterService.findById(datacenterPd);
+				
+				platForm.setPlatformManagerType(platformManagerType);
+				CloudArchManager cloudArchManager = cloudArchManagerAdapter.getCloudArchManagerAdaptee(platForm);
+				
+				CloneVmRequest cloneVmRequest = new CloneVmRequest();
+				cloneVmRequest.setCpuSize(Integer.parseInt(pd.getString("CPU")));
+				cloneVmRequest.setRamSize(Long.parseLong(pd.getString("memory"))*1024);
+				cloneVmRequest.setVmName(vmName);
+				cloneVmRequest.setDcName(datacenterPd.getString("name"));
+				cloneVmRequest.setTplName("rhel6.0_x64_template");
+				String hostMachineUUID = cloudArchManager.cloneVirtualMachine(cloneVmRequest);
+				//所有安装完毕设置结束标志
+				ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机安装完毕!");
+				ShellUtil.addMsgLog(workOrder.getAppNo(), "准备安装相关软件!");
+				logger.info("远程虚拟机创建完毕");
+				TccVirtualMachine  vmInst = cloudArchManager.getVirtualMachineByName(vmName);
+				//String vmIp = vmInst.getIpAddress();
+				String vmIp = pd.getString("ip");   //页面用户选择部署的IP
+				//获取模板用户名密码
+				String tp_username = "root";
+				String tp_passwd = "pwdpwd";
+				
+				String softCode = orderInfo.getSoftCode();
+				String[] softs = softCode.split(",");
+				
+				vm.setCpu(pd.getString("CPU"));
+				vm.setMemory(pd.getString("memory"));
+				vm.setDatadisk(diskInfoList.size() > 0 ? diskInfoList.get(0).getDiskSize() : "300");
+				vm.setProjectId(workOrder.getProjectCode());
+				vm.setOs(fullOS);
+				vm.setOsStatus("未安装");
+				vm.setMountDiskSize(diskSize);
+				vm.setMountDiskType(diskType);
+				vm.setSoft(softCode);
+				vm.setSoftStatus("未安装");
+				vm.setName(vmName);
+				vm.setIp(vmIp);
+				vm.setUsername(tp_username);
+				vm.setPassword(tp_passwd);
+				vm.setStatus("0");
+				vm.setType(platFormType);
+				vm.setPlatform(cloudPlatformId);
+				vm.setHostmachineId("");
+				vm.setAppNo(workOrder.getAppNo());
+				vm.setUser(workOrder.getApplyUserId());
+				vm.setDuedate(workOrder.getExpireDate());
+				virtualMachineService.add(vm);
+			} else {
+				//添加虚拟机中间件
 				PageData s_pd = new PageData();
-				s_pd.put("id", oneSoft);
+				s_pd.put("id", autoDeployNode.getMediumId());
 				s_pd = mediumService.findById(s_pd);
 				Medium medium = (Medium) PageDataUtil.mapToObject(s_pd, Medium.class);
 				DeployedSoft deployedSoft = new DeployedSoft();
@@ -406,13 +458,13 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 				
 				//执行软件安装脚本
 				String scriptUrl = medium.getUrl();
-				ShellUtil shellUtil = new ShellUtil(vmIp, ShellUtil.DEF_PORT, tp_username,  
-						tp_passwd , ShellUtil.DEF_CHARSET);
+				ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),  
+						vm.getPassword() , ShellUtil.DEF_CHARSET);
 				shellUtil.exec("." + scriptUrl, workOrder.getAppNo());
 			}
+			ShellUtil.addMsgLog(workOrder.getAppNo(), "cmp:install finished");
+			resMap.put("result", "执行成功!");
 		}
-		ShellUtil.addMsgLog(workOrder.getAppNo(), "cmp:install finished");
-		resMap.put("result", "执行成功!");
 		//所有安装完毕设置结束标志
 		Map<String , String> exeParams = new HashMap<String , String>();
 		exeParams.put("executeStatus", "2");

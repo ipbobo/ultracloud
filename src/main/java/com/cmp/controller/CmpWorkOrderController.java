@@ -897,10 +897,7 @@ public class CmpWorkOrderController extends BaseController{
 		LinkedList<AutoDeployNode> autoDeployNodeList = new LinkedList<AutoDeployNode>();
 		List<PageData> autoDeployList =  autoDeployConfigService.listAllInNodeById(pd);
 		for (PageData autoDeployItem : autoDeployList) {
-			String scriptId = autoDeployItem.getString("script_id");
-			if (scriptId == null || "".equals(scriptId)){
-				continue;
-			}
+			
 			AutoDeployNode autoDeployNode = new AutoDeployNode();
 			autoDeployNode.setId(String.valueOf(autoDeployItem.get("id")));
 			autoDeployNode.setName(autoDeployItem.getString("name"));
@@ -909,16 +906,19 @@ public class CmpWorkOrderController extends BaseController{
 			autoDeployNode.setConfigId(autodeployid);
 			LinkedList<AutoDeployScriptNode> scriptNodeList = new LinkedList<AutoDeployScriptNode>();
 			PageData s_pd = new PageData();
-			s_pd.put("script_id", scriptId);
-			List<PageData> paramsList = scriptParamService.listAll(s_pd);
-			for (PageData paramPd : paramsList) {
-				AutoDeployScriptNode scriptNode = new AutoDeployScriptNode();
-				scriptNode.setId(String.valueOf(paramPd.get("id")));
-				scriptNode.setScriptId(String.valueOf(paramPd.get("script_id")));
-				scriptNode.setDefaultVal(paramPd.getString("value"));
-				scriptNode.setParamKey(paramPd.getString("param_key"));
-				scriptNode.setName(paramPd.getString("name"));
-				scriptNodeList.add(scriptNode);
+			String scriptId = autoDeployItem.getString("script_id");
+			if (scriptId != null && !"".equals(scriptId)){
+				s_pd.put("script_id", scriptId);
+				List<PageData> paramsList = scriptParamService.listAll(s_pd);
+				for (PageData paramPd : paramsList) {
+					AutoDeployScriptNode scriptNode = new AutoDeployScriptNode();
+					scriptNode.setId(String.valueOf(paramPd.get("id")));
+					scriptNode.setScriptId(String.valueOf(paramPd.get("script_id")));
+					scriptNode.setDefaultVal(paramPd.getString("value"));
+					scriptNode.setParamKey(paramPd.getString("param_key"));
+					scriptNode.setName(paramPd.getString("name"));
+					scriptNodeList.add(scriptNode);
+				}
 			}
 			autoDeployNode.setScriptNodeList(scriptNodeList);
 			autoDeployNodeList.add(autoDeployNode);

@@ -7,6 +7,7 @@ public class AutoDeployScriptNode {
 	private String defaultVal;
 	private String value;
 	private String scriptId;
+	private String number;
 	public String getId() {
 		return id;
 	}
@@ -43,6 +44,11 @@ public class AutoDeployScriptNode {
 	public void setParamKey(String paramKey) {
 		this.paramKey = paramKey;
 	}
-	
+	public String getNumber() {
+		return number;
+	}
+	public void setNumber(String number) {
+		this.number = number;
+	}
 	
 }
