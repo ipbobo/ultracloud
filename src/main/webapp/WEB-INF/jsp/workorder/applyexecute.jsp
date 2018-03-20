@@ -616,25 +616,25 @@
 	
 	function onNetworkSelected(networkid){
 		var ippool = networkMap[networkid];
-		var select_root=document.getElementById('ip');  
-	    select_root.options.length=0;
-	 	var _option=new Option("请选择IP","#"); 
-	    select_root.add(_option);
-		if (ippool != null && ippool.indexOf('.')!= -1&& ippool.indexOf('-')!= -1){
-			var ip_arr = ippool.substring(ippool.lastIndexOf('.')+1, ippool.length).split('-');
-			var ip_first = ippool.substring(0, ippool.lastIndexOf('.'));
-		    for(var i=ip_arr[0];i<ip_arr[1];i++){ 
-		    	var xValue=ip_first +'.'+ i;  
-	             var xText=ip_first +'.'+ i;
-	             var option=new Option(xText,xValue);  
-	             select_root.add(option);  
-		    }
-		}else if (ippool != null && ippool.indexOf('.')!= -1){
-			var xValue=ippool;  
-            var xText=ippool;
-            var option=new Option(xText,xValue);  
-            select_root.add(option);  
-		}
+		jQuery.ajax({  
+			url : "<%=basePath%>toCheckNetwork.do",  
+			data : {'ippool' : ippool},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				var select_root=document.getElementById('ip');  
+			    select_root.options.length=0;
+			 	var _option=new Option("请选择IP","#"); 
+			    select_root.add(_option);
+				for(var i=0;i<data.length;i++){ 
+				    	var xValue = data[i];  
+			             var xText = data[i];
+			             var option=new Option(xText,xValue);  
+			             select_root.add(option);  
+				}
+			}  
+		});  
 		
 	}
 	

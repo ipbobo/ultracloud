@@ -37,6 +37,7 @@ import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.ScriptParamService;
 import com.cmp.service.ScriptService;
+import com.cmp.service.VirtualMachineService;
 import com.cmp.service.autodeploy.AutoDeployConfigService;
 import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
@@ -46,6 +47,7 @@ import com.cmp.sid.AutoDeployScriptNode;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.RelateTask;
+import com.cmp.sid.VirtualMachine;
 import com.cmp.util.StringUtil;
 import com.cmp.workorder.IWorkorderHandler;
 import com.cmp.workorder.WorkorderHelper;
@@ -104,6 +106,9 @@ public class CmpWorkOrderController extends BaseController{
 	
 	@Resource
 	private AutoDeployConfigService autoDeployConfigService;
+	
+	@Resource
+	private VirtualMachineService virtualMachineService;
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
@@ -837,6 +842,53 @@ public class CmpWorkOrderController extends BaseController{
 		List<PageData> clusterList =  clusterService.findByDataCenterId(pd);
 		return clusterList;
 	}
+	
+	
+	/**
+	 * ip地址重复过滤
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	
+	@RequestMapping(value="/toCheckNetwork")
+	@ResponseBody
+	public List<String> toCheckNetwork(String ippool) throws Exception{
+		if (ippool == null || ippool.length() == 0) {
+			return new ArrayList<String>();
+		}
+		List<String> ipList = new ArrayList<String>();
+		if (ippool != null && ippool.indexOf(".")!= -1&& ippool.indexOf('-')!= -1){
+			String[] ip_arr = ippool.substring(ippool.lastIndexOf('.')+1, ippool.length()).split("-");
+			String ip_head = ippool.substring(0, ippool.lastIndexOf('.'));
+			int ip_index_start = Integer.parseInt(ip_arr[0]);
+			int ip_index_end = Integer.parseInt(ip_arr[1]);
+			String ip_start = ip_head + "." + ip_arr[0];
+			String ip_end = ip_head + "." + ip_arr[1];
+			PageData pd = new PageData();
+			pd.put("ipstart", ip_start);
+			pd.put("ipend", ip_end);
+			List<PageData> ipPages = virtualMachineService.searchIp(pd);
+			List<String> usedIpList = new ArrayList<String>();
+			for (PageData ipPd : ipPages) {
+				usedIpList.add(ipPd.getString("ip"));
+			}
+		    for(int i = ip_index_start; i < ip_index_end; i++){ 
+		    	String curr_ip = ip_head + "." + i;
+		    	if (!usedIpList.contains(curr_ip)) {
+		    		ipList.add(curr_ip);
+		    	}
+		    }
+		}else if (ippool != null && ippool.indexOf(".")!= -1){
+			String curr_ip = ippool;  
+			VirtualMachine selectVM = virtualMachineService.findByIp(curr_ip);
+	    	if (selectVM == null) {
+	    		ipList.add(curr_ip);
+	    	}
+		}
+		return ipList;
+	}
+	
 	
 	/**
 	 * 数据中心选择网络
