@@ -428,7 +428,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px 0px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-tachometer,.new-menu ul.submenu li.active i.fa-tachometer{
+.new-menu   li.active i.fa-tachometer,.new-menu ul.submenu li.active i.fa-tachometer{
     background: url("../images/icon-active.png");
     background-position: 0px 0px ;
 }
@@ -436,7 +436,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -20px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-laptop,.new-menu ul.submenu li.active i.fa-laptop{
+.new-menu   li.active i.fa-laptop,.new-menu ul.submenu li.active i.fa-laptop{
     background: url("../images/icon-active.png");
     background-position: 0px -20px ;
 }
@@ -444,7 +444,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -40px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-globe,.new-menu ul.submenu li.active i.fa-globe{
+.new-menu   li.active i.fa-globe,.new-menu ul.submenu li.active i.fa-globe{
     background: url("../images/icon-active.png");
     background-position: 0px -40px ;
 }
@@ -452,7 +452,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -60px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-leaf,.new-menu ul.submenu li.active i.fa-leaf{
+.new-menu   li.active i.fa-leaf,.new-menu ul.submenu li.active i.fa-leaf{
     background: url("../images/icon-active.png");
     background-position: 0px -60px ;
 }
@@ -460,7 +460,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -80px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-users,.new-menu ul.submenu li.active i.fa-users{
+.new-menu   li.active i.fa-users,.new-menu ul.submenu li.active i.fa-users{
     background: url("../images/icon-active.png");
     background-position: 0px -80px ;
 }
@@ -468,7 +468,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -100px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-exchange,.new-menu ul.submenu li.active i.fa-exchange{
+.new-menu   li.active i.fa-exchange,.new-menu ul.submenu li.active i.fa-exchange{
     background: url("../images/icon-active.png");
     background-position: 0px -100px ;
 }
@@ -476,7 +476,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -120px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-gift,.new-menu ul.submenu li.active i.fa-gift{
+.new-menu   li.active i.fa-gift,.new-menu ul.submenu li.active i.fa-gift{
     background: url("../images/icon-active.png");
     background-position: 0px -120px ;
 }
@@ -484,7 +484,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -140px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-bullhorn,.new-menu ul.submenu li.active i.fa-bullhorn{
+.new-menu   li.active i.fa-bullhorn,.new-menu ul.submenu li.active i.fa-bullhorn{
     background: url("../images/icon-active.png");
     background-position: 0px -140px ;
 }
@@ -492,7 +492,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -160px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-barcode,.new-menu ul.submenu li.active i.fa-barcode{
+.new-menu   li.active i.fa-barcode,.new-menu ul.submenu li.active i.fa-barcode{
     background: url("../images/icon-active.png");
     background-position: 0px -160px ;
 }
@@ -500,7 +500,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -180px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-pencil-square-o,.new-menu ul.submenu li.active i.fa-pencil-square-o{
+.new-menu   li.active i.fa-pencil-square-o,.new-menu ul.submenu li.active i.fa-pencil-square-o{
     background: url("../images/icon-active.png");
     background-position: 0px -180px ;
 }
@@ -508,7 +508,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -200px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-eye,.new-menu ul.submenu li.active i.fa-eye{
+.new-menu   li.active i.fa-eye,.new-menu ul.submenu li.active i.fa-eye{
     background: url("../images/icon-active.png");
     background-position: 0px -200px ;
 }
@@ -516,7 +516,7 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -220px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-credit-card,.new-menu ul.submenu li.active i.fa-credit-card{
+.new-menu   li.active i.fa-credit-card,.new-menu ul.submenu li.active i.fa-credit-card{
     background: url("../images/icon-active.png");
     background-position: 0px -220px ;
 }
@@ -524,9 +524,355 @@ body.resapp-qry-input .divbtn .btncls.active a {
     background: url("../images/icon-out.png");
     background-position: 0px -100px ;
 }
-.new-menu ul:not(.submenu) li.active i.fa-bar-chart-o,.new-menu ul.submenu li.active i.fa-bar-chart-o{
+.new-menu   li.active i.fa-bar-chart-o,.new-menu ul.submenu li.active i.fa-bar-chart-o{
     background: url("../images/icon-active.png");
     background-position: 0px -100px ;
+}
+.new-menu li i.fa-flask{
+    background: url("../images/icon-out.png");
+    background-position: 0px -240px ;
+}
+.new-menu   li.active i.fa-flask,.new-menu ul.submenu li.active i.fa-flask{
+    background: url("../images/icon-active.png");
+    background-position: 0px -240px ;
+}
+.new-menu li i.fa-cloud{
+    background: url("../images/icon-out.png");
+    background-position: 0px -260px ;
+}
+.new-menu   li.active i.fa-cloud,.new-menu ul.submenu li.active i.fa-cloud{
+    background: url("../images/icon-active.png");
+    background-position: 0px -260px ;
+}
+.new-menu li i.fa-key{
+    background: url("../images/icon-out.png");
+    background-position: 0px -280px ;
+}
+.new-menu   li.active i.fa-key,.new-menu ul.submenu li.active i.fa-key{
+    background: url("../images/icon-active.png");
+    background-position: 0px -280px ;
+}
+.new-menu li i.fa-cogs{
+    background: url("../images/icon-out.png");
+    background-position: 0px -300px ;
+}
+.new-menu   li.active i.fa-cogs,.new-menu ul.submenu li.active i.fa-cogs{
+    background: url("../images/icon-active.png");
+    background-position: 0px -300px ;
+}
+.new-menu li i.fa-calendar{
+     background: url("../images/icon-out.png");
+     background-position: 0px -320px ;
+ }
+.new-menu   li.active i.fa-calendar,.new-menu ul.submenu li.active i.fa-calendar{
+    background: url("../images/icon-active.png");
+    background-position: 0px -320px ;
+}
+/*用户组管理*/
+.new-menu li i.fa-yhzgl{
+    background: url("../images/icon-out.png");
+    background-position: 0px -460px ;
+}
+.new-menu ul.submenu li.active i.fa-yhzgl{
+    background: url("../images/icon-active.png");
+    background-position: 0px -460px ;
+}
+/*用户管理*/
+.new-menu li i.fa-yhgl{
+    background: url("../images/icon-out.png");
+    background-position: 0px -480px ;
+}
+.new-menu ul.submenu li.active i.fa-yhgl{
+    background: url("../images/icon-active.png");
+    background-position: 0px -480px ;
+}
+/*工作流定义*/
+.new-menu li i.fa-gzldy{
+    background: url("../images/icon-out.png");
+    background-position: 0px -500px ;
+}
+.new-menu ul.submenu li.active i.fa-gzldy{
+    background: url("../images/icon-active.png");
+    background-position: 0px -500px ;
+}
+/*已定义流程*/
+.new-menu li i.fa-ydylc{
+    background: url("../images/icon-out.png");
+    background-position: 0px -520px ;
+}
+.new-menu ul.submenu li.active i.fa-ydylc{
+    background: url("../images/icon-active.png");
+    background-position: 0px -520px ;
+}
+/*资源申请*/
+.new-menu li i.fa-zysq{
+    background: url("../images/icon-out.png");
+    background-position: 0px -540px ;
+}
+.new-menu ul.submenu li.active i.fa-zysq{
+    background: url("../images/icon-active.png");
+    background-position: 0px -540px ;
+}
+/*运维服务申请*/
+.new-menu li i.fa-ywfwsq{
+    background: url("../images/icon-out.png");
+    background-position: 0px -560px ;
+}
+.new-menu ul.submenu li.active i.fa-ywfwsq{
+    background: url("../images/icon-active.png");
+    background-position: 0px -560px ;
+}
+/*云主机*/
+.new-menu li i.fa-yzj{
+    background: url("../images/icon-out.png");
+    background-position: 0px -360px ;
+}
+.new-menu ul.submenu li.active i.fa-yzj{
+    background: url("../images/icon-active.png");
+    background-position: 0px -360px ;
+}
+/*云磁盘*/
+.new-menu li i.fa-ycp{
+    background: url("../images/icon-out.png");
+    background-position: 0px -600px ;
+}
+.new-menu ul.submenu li.active i.fa-ycp{
+    background: url("../images/icon-active.png");
+    background-position: 0px -600px ;
+}
+/*快照*/
+.new-menu li i.fa-kz{
+    background: url("../images/icon-out.png");
+    background-position: 0px -580px ;
+}
+.new-menu ul.submenu li.active i.fa-kz{
+    background: url("../images/icon-active.png");
+    background-position: 0px -580px ;
+}
+/*计费报表*/
+.new-menu li i.fa-jfbb{
+    background: url("../images/icon-out.png");
+    background-position: 0px -620px ;
+}
+.new-menu ul.submenu li.active i.fa-jfbb{
+    background: url("../images/icon-active.png");
+    background-position: 0px -620px ;
+}
+/*资源使用报表*/
+.new-menu li i.fa-zysybb{
+    background: url("../images/icon-out.png");
+    background-position: 0px -640px ;
+}
+.new-menu ul.submenu li.active i.fa-zysybb{
+    background: url("../images/icon-active.png");
+    background-position: 0px -640px ;
+}
+/*软件台账报表*/
+.new-menu li i.fa-rjtzbb{
+    background: url("../images/icon-out.png");
+    background-position: 0px -660px ;
+}
+.new-menu ul.submenu li.active i.fa-rjtzbb{
+    background: url("../images/icon-active.png");
+    background-position: 0px -660px ;
+}
+/*云主机资产台账报表*/
+.new-menu li i.fa-yzjzctzbb{
+    background: url("../images/icon-out.png");
+    background-position: 0px -680px ;
+}
+.new-menu ul.submenu li.active i.fa-yzjzctzbb{
+    background: url("../images/icon-active.png");
+    background-position: 0px -680px ;
+}
+/*业务视图总览*/
+.new-menu li i.fa-ywstzl{
+    background: url("../images/icon-out.png");
+    background-position: 0px -700px ;
+}
+.new-menu ul.submenu li.active i.fa-ywstzl{
+    background: url("../images/icon-active.png");
+    background-position: 0px -700px ;
+}
+/*资源视图总览*/
+.new-menu li i.fa-zystzl{
+    background: url("../images/icon-out.png");
+    background-position: 0px -720px ;
+}
+.new-menu ul.submenu li.active i.fa-zystzl{
+    background: url("../images/icon-active.png");
+    background-position: 0px -720px ;
+}
+/*资源申请趋势*/
+.new-menu li i.fa-zysqqs{
+    background: url("../images/icon-out.png");
+    background-position: 0px -740px ;
+}
+.new-menu ul.submenu li.active i.fa-zysqqs{
+    background: url("../images/icon-active.png");
+    background-position: 0px -740px ;
+}
+/*资源使用分析*/
+.new-menu li i.fa-zysyfx{
+    background: url("../images/icon-out.png");
+    background-position: 0px -760px ;
+}
+.new-menu ul.submenu li.active i.fa-zysyfx{
+    background: url("../images/icon-active.png");
+    background-position: 0px -760px ;
+}
+/*独立KVM主机*/
+.new-menu li i.fa-kvm{
+    background: url("../images/icon-out.png");
+    background-position: 0px -440px ;
+}
+.new-menu ul.submenu li.active i.fa-kvm{
+    background: url("../images/icon-active.png");
+    background-position: 0px -440px ;
+}
+/*计算*/
+.new-menu li i.fa-js{
+    background: url("../images/icon-out.png");
+    background-position: 0px -380px ;
+}
+.new-menu ul.submenu li.active i.fa-js{
+    background: url("../images/icon-active.png");
+    background-position: 0px -380px ;
+}
+/*存储*/
+.new-menu li i.fa-cc{
+    background: url("../images/icon-out.png");
+    background-position: 0px -400px ;
+}
+.new-menu ul.submenu li.active i.fa-cc{
+    background: url("../images/icon-active.png");
+    background-position: 0px -400px ;
+}
+/*网络*/
+.new-menu li i.fa-wl{
+    background: url("../images/icon-out.png");
+    background-position: 0px -420px ;
+}
+.new-menu ul.submenu li.active i.fa-wl{
+    background: url("../images/icon-active.png");
+    background-position: 0px -420px ;
+}
+/*存量资源绑定*/
+.new-menu li i.fa-clzybd{
+    background: url("../images/icon-out.png");
+    background-position: 0px -340px ;
+}
+.new-menu ul.submenu li.active i.fa-clzybd{
+    background: url("../images/icon-active.png");
+    background-position: 0px -340px ;
+}
+/*环境服务*/
+.new-menu li i.fa-hjfw{
+    background: url("../images/icon-out.png");
+    background-position: 0px -780px ;
+}
+.new-menu ul.submenu li.active i.fa-hjfw{
+    background: url("../images/icon-active.png");
+    background-position: 0px -780px ;
+}
+/*计算方案*/
+.new-menu li i.fa-jsfa{
+    background: url("../images/icon-out.png");
+    background-position: 0px -800px ;
+}
+.new-menu ul.submenu li.active i.fa-jsfa{
+    background: url("../images/icon-active.png");
+    background-position: 0px -800px ;
+}
+/*镜像管理*/
+.new-menu li i.fa-jxgl{
+    background: url("../images/icon-out.png");
+    background-position: 0px -820px ;
+}
+.new-menu ul.submenu li.active i.fa-jxgl{
+    background: url("../images/icon-active.png");
+    background-position: 0px -820px ;
+}
+/*配额管理*/
+.new-menu li i.fa-pegl{
+    background: url("../images/icon-out.png");
+    background-position: 0px -840px ;
+}
+.new-menu ul.submenu li.active i.fa-pegl{
+    background: url("../images/icon-active.png");
+    background-position: 0px -840px ;
+}
+/*到期时间*/
+.new-menu li i.fa-dqsj{
+    background: url("../images/icon-out.png");
+    background-position: 0px -860px ;
+}
+.new-menu ul.submenu li.active i.fa-dqsj{
+    background: url("../images/icon-active.png");
+    background-position: 0px -860px ;
+}
+/*虚拟名称规则*/
+.new-menu li i.fa-xnmcgz{
+    background: url("../images/icon-out.png");
+    background-position: 0px -880px ;
+}
+.new-menu ul.submenu li.active i.fa-xnmcgz{
+    background: url("../images/icon-active.png");
+    background-position: 0px -880px ;
+}
+/*自动安装规则*/
+.new-menu li i.fa-zdazgz{
+    background: url("../images/icon-out.png");
+    background-position: 0px -900px ;
+}
+.new-menu ul.submenu li.active i.fa-zdazgz{
+    background: url("../images/icon-active.png");
+    background-position: 0px -900px ;
+}
+/*监控周期设定*/
+.new-menu li i.fa-jkzqsd{
+    background: url("../images/icon-out.png");
+    background-position: 0px -920px ;
+}
+.new-menu ul.submenu li.active i.fa-jkzqsd{
+    background: url("../images/icon-active.png");
+    background-position: 0px -920px ;
+}
+/*配置管理*/
+.new-menu li i.fa-pzgl{
+    background: url("../images/icon-out.png");
+    background-position: 0px -940px ;
+}
+.new-menu ul.submenu li.active i.fa-pzgl{
+    background: url("../images/icon-active.png");
+    background-position: 0px -940px ;
+}
+/*脚本管理*/
+.new-menu li i.fa-jbgl{
+    background: url("../images/icon-out.png");
+    background-position: 0px -960px ;
+}
+.new-menu ul.submenu li.active i.fa-jbgl{
+    background: url("../images/icon-active.png");
+    background-position: 0px -960px ;
+}
+/*软件仓库*/
+.new-menu li i.fa-rjck{
+    background: url("../images/icon-out.png");
+    background-position: 0px -980px ;
+}
+.new-menu ul.submenu li.active i.fa-rjck{
+    background: url("../images/icon-active.png");
+    background-position: 0px -980px ;
+}
+/*安装文档*/
+.new-menu li i.fa-azwd{
+    background: url("../images/icon-out.png");
+    background-position: 0px -1000px ;
+}
+.new-menu ul.submenu li.active i.fa-azwd{
+    background: url("../images/icon-active.png");
+    background-position: 0px -1000px ;
 }
 .new-menu li i:before,.new-menu li.active i:before{
     content: "";

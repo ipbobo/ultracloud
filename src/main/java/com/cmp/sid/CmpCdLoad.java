@@ -2,7 +2,7 @@ package com.cmp.sid;
 
 //仪表盘-负载情况
 public class CmpCdLoad implements Comparable<CmpCdLoad> {
-	private String resType;//资源类型：CPU、内存、磁盘
+	private String resType;//资源类型：cpu-CPU、mem-内存、store-磁盘
 	private String hostId;//主机ID
 	private String hostName;//主机名	
 	private String hostIp;//IP

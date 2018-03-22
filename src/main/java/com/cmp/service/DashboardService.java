@@ -207,7 +207,7 @@ public class DashboardService {
 	
 	//资源使用列表
 	@SuppressWarnings("unchecked")
-	public List<CmpCdLoad> getResUseList(Map<String, CmpCdLoad> loadMap, String resType) throws Exception {
+	public List<CmpCdLoad> getResUseList(Map<String, CmpCdLoad> loadMap) throws Exception {
 		if(loadMap!=null && !loadMap.isEmpty()){
 			List<CmpCdLoad> list=new ArrayList<CmpCdLoad>(loadMap.values());
 			Collections.sort(list);//排序

@@ -220,4 +220,22 @@ public class StringUtil {
 			return null;
 		}
 	}
+	
+	// 获取请求参数：防止sql语句中'null'出现
+	public static String getJsonStr(JSONObject jsonObj, String key) {
+		if(jsonObj.containsKey(key)){
+			return jsonObj.getString(key);
+		}
+		
+		return null;
+	}
+	
+	//json字符串转换成对象
+	public static String getArrStr(String[] arr) {
+		if(arr!=null && arr.length!=0){
+			return StringUtils.join(arr, ",");
+		}
+
+		return null;
+	}
 }

@@ -2,11 +2,12 @@ package com.cmp.sid;
 
 //仪表盘请求参数
 public class DashboardRequest {
-	private String cpuTimeType;//y轴1
-	private String memTimeType;//y轴2
-	private String storeTimeType;//y轴3
-	private String resType;//y轴4
-	private String chkFlag;//y轴5
+	private String cpuTimeType;//CPU时间类型
+	private String memTimeType;//内存时间类型
+	private String storeTimeType;//磁盘时间类型
+	private String resType;//资源类型：cpu-CPU、mem-内存、store-磁盘
+	private String chkFlag;//复选框是否选中：0-否；1-是
+	private String hostIdStr;//主机ID列表
 
 	public String getCpuTimeType() {
 		return cpuTimeType;
@@ -46,5 +47,13 @@ public class DashboardRequest {
 
 	public void setChkFlag(String chkFlag) {
 		this.chkFlag = chkFlag;
+	}
+
+	public String getHostIdStr() {
+		return hostIdStr;
+	}
+
+	public void setHostIdStr(String hostIdStr) {
+		this.hostIdStr = hostIdStr;
 	}
 }

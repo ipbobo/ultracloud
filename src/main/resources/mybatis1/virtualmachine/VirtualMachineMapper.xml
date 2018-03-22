@@ -155,6 +155,19 @@
 		select * from  <include refid="tableName"/> where id = #{id}
 	</select>
 	
+	<!-- 通过IP 查询 -->
+	<select id="findByIp" resultMap="virtualMachine" parameterType="String">
+		select * from  <include refid="tableName"/> where ip = #{ip}
+	</select>
+	
+	<!-- 搜索IP -->
+	<select id="searchIp" parameterType="pd" resultType="pd">
+		select
+		 ip
+		from 
+		<include refid="tableName"></include>  where inet_aton(ip) between inet_aton(#{ipstart}) and inet_aton(#{ipend})
+	</select>
+	
 	<!-- 通过用户 查询 -->
 	<select id="findByUser" resultMap="virtualMachine" parameterType="String">
 		select * from  <include refid="tableName"/> where user = #{user}

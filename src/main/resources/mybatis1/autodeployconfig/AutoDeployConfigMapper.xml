@@ -59,6 +59,14 @@
 		id = #{id}
 	</update>
 	
+	<!-- 获取全部 -->
+	<select id="findAll" resultType="pd">
+		select 
+		 id,name,detail,gmt_create,gmt_modified  
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,
@@ -85,6 +93,7 @@
 		select  u.id,
 				u.name,
 				u.detail,
+				u.script_id,
 				pu.ordernum
 		from <include refid="nodetableName"></include> u, <include refid="confignodetableName"></include> pu
 		where u.id = pu.node_id 

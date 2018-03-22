@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.cmp.sid.VirtualMachine;
 import com.fh.dao.DaoSupport;
+import com.fh.util.PageData;
 
 @Service("virtualMachineService")
 public class VirtualMachineServiceImpl implements VirtualMachineService {
@@ -23,6 +24,15 @@ public class VirtualMachineServiceImpl implements VirtualMachineService {
 	@Override
 	public VirtualMachine findById(String id) throws Exception {
 		return (VirtualMachine)dao.findForObject("VirtualMachineMapper.findById", id);
+	}
+	
+	@Override
+	public VirtualMachine findByIp(String ip) throws Exception {
+		return (VirtualMachine)dao.findForObject("VirtualMachineMapper.findByIp", ip);
+	}
+	
+	public List<PageData> searchIp(PageData pd)  throws Exception {
+		return (List<PageData>)dao.findForList("VirtualMachineMapper.searchIp", pd);
 	}
 
 	@Override
