@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.entity.MirrorTemplateMap;
-import com.cmp.entity.UserGroupUserMap;
+import com.cmp.entity.tcc.TccVirtualMachine;
+import com.cmp.service.ResourceService;
+import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.service.servicemgt.MirrorService;
 import com.fh.controller.base.BaseController;
@@ -38,6 +40,12 @@ public class MirrorController extends BaseController {
 
 	@Resource(name = "datacenterService")
 	private DatacenterService datacenterService;
+
+	@Resource(name = "cloudplatformService")
+	private CloudplatformService cloudplatformService;
+
+	@Resource(name = "resourceService")
+	private ResourceService resourceService;
 
 	/**
 	 * 保存
@@ -119,9 +127,58 @@ public class MirrorController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData> varList = mirrorService.list(page); // 列出列表
 		mv.setViewName("service/mirror_list");
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+
+	/**
+	 * 列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listVmware")
+	public ModelAndView listVmware(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表mirror");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+		List<PageData> varList = mirrorService.list(page); // 列出列表
+		mv.setViewName("service/mirror_vmware_list");
 		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+
+	/**
+	 * 列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listOpenStack")
+	public ModelAndView listOpenStack(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表mirror");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+
+		// ToDO
+
+		mv.setViewName("service/mirror_openstack_list");
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
@@ -293,6 +350,91 @@ public class MirrorController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
+		return mv;
+	}
+
+	/**
+	 * 同步镜像模板
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/synctemplate")
+	public void synctemplate(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "确认初始化Cloudplatform");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+
+		out.write("success");
+		out.close();
+	}
+
+	/**
+	 * 同步镜像模板
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goSynctemplate")
+	public ModelAndView goSynctemplate() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "数据初始化mirror");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("type", "vmware");
+		// 取出所有的wmware云平台
+		List<PageData> cpList = cloudplatformService.listAll(pd, false);
+
+		// 取出所有的wmware镜像模板
+		List<PageData> dbVMTList = mirrorService.listTemplateByType(pd);
+		Map<String, PageData> dbVMTMap = new HashMap<String, PageData>();
+		List<PageData> existList = new ArrayList<PageData>();
+		List<PageData> newList = new ArrayList<PageData>();
+		if (null != dbVMTList) {
+			for (PageData dbVMTPD : dbVMTList) {
+				dbVMTPD.put("status", "exists");
+				dbVMTMap.put(dbVMTPD.getString("cloudplatform_id") + "#" + dbVMTPD.getString("uuid"), dbVMTPD);
+			}
+		}
+
+		if (null != cpList) {
+			for (PageData cloudPD : cpList) {
+				List<TccVirtualMachine> vmtList = resourceService.syncMirroTemplate(cloudPD);
+				if (null != vmtList) {
+					for (TccVirtualMachine tvm : vmtList) {
+						if (dbVMTMap.keySet().contains(cloudPD.getString("id") + "#" + tvm.getUUID())) {
+							existList.add(dbVMTMap.get(cloudPD.getString("id") + "#" + tvm.getUUID()));
+						} else {
+							PageData newPD = new PageData();
+							newPD.put("cloudplatform_id", cloudPD.getString("id"));
+							newPD.put("name", tvm.getName());
+							newPD.put("url", tvm.getXmlDesc());
+							newPD.put("ostype", tvm.getOSType());
+							newPD.put("uuid", tvm.getUUID());
+							newPD.put("type", "vmware");
+							newPD.put("status", "add");
+							newList.add(newPD);
+						}
+					}
+				}
+			}
+		}
+
+		for (PageData newPD : newList) {
+			mirrorService.save(newPD);
+		}
+
+		List<PageData> varList = new ArrayList<PageData>();
+		varList.addAll(existList);
+		varList.addAll(newList);
+
+		mv.setViewName("resource/mirror_vmware_syncinfo");
+		mv.addObject("pd", pd);
+		mv.addObject("varList", varList);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
 }

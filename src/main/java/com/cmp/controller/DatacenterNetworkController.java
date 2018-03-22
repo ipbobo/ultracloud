@@ -142,5 +142,52 @@ public class DatacenterNetworkController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
+	
+	/**
+	 * 去修改页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goEdit")
+	public ModelAndView goEdit() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		
+		List<PageData> varList = datacenterService.listAll(pd);
+		mv.addObject("varList", varList);
+		
+		List<PageData> clusterList = clusterService.listAll(pd);
+		mv.addObject("clusterList", clusterList);
+		
+		pd = datacenternetworkService.findById(pd, false);
+		
+		mv.setViewName("resource/datacenternetwork_edit");
+		mv.addObject("msg", "save");
+		mv.addObject("pd", pd);
+		return mv;
+	}
+	
+	/**修改
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/edit")
+	public ModelAndView edit() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername()+"修改DataCenterNetwork");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		datacenternetworkService.edit(pd, false);
+		mv.addObject("msg","success");
+		mv.setViewName("save_result");
+		return mv;
+	}
 
 }

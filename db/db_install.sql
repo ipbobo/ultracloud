@@ -212,6 +212,7 @@ CREATE TABLE `t_datacenter_network` (
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
+  `cluster_id` varchar(32) DEFAULT NULL COMMENT '资源池id',
   `ippool` varchar(40) DEFAULT NULL COMMENT 'ip池',
   `mask` varchar(20) DEFAULT NULL COMMENT '掩码',
   `gateway` varchar(20) DEFAULT NULL COMMENT '网关',

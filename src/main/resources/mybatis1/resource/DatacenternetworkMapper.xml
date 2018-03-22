@@ -9,6 +9,9 @@
 	<sql id="dctableName">
 		t_datacenter
 	</sql>
+	<sql id="clustertableName">
+		t_cluster
+	</sql>
 	
 	<!-- 字段 -->
 	<sql id="Field">
@@ -28,7 +31,8 @@
 		dns2,
 		totalip,
 		freeip,
-		uuid
+		uuid,
+		cluster_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -55,7 +59,8 @@
 		#{dns2},
 		#{totalip},
 		#{freeip},
-		#{uuid}
+		#{uuid},
+		#{cluster_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -97,7 +102,8 @@
 			dns2 = #{dns2},
 			totalip = #{totalip},
 			freeip = #{freeip},
-			uuid = #{uuid}
+			uuid = #{uuid},
+			cluster_id = #{cluster_id}
 		 where 
 		    id = #{id}
 	</update>
@@ -138,9 +144,11 @@
 				s.totalip,
 				s.freeip,
 				s.uuid,
-				c.name as datacenter_name
-		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c
+				c.name as datacenter_name,
+				d.name as cluster_name
+		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c,<include refid="clustertableName"></include> d  
 		where s.datacenter_id=c.id
+		and s.cluster_id=d.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(

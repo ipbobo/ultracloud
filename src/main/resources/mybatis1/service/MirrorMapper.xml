@@ -121,8 +121,8 @@
 		</if>
 	</select>
 	
-		<!-- 脚本列表 -->
-	<select id="listTemplateByType" parameterType="page" resultType="pd">
+	<!-- 列表 -->
+	<select id="listTemplateByType" parameterType="pd" resultType="pd">
 		select *
 		from 
 		<include refid="mttableName"></include>

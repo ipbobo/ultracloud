@@ -54,7 +54,7 @@ public interface MirrorService {
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> listTemplateByType(Page page) throws Exception;
+	public List<PageData> listTemplateByType(PageData pd) throws Exception;
 
 	/**
 	 * 列表(全部)

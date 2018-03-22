@@ -73,8 +73,8 @@ public class MirrorServiceImpl implements MirrorService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listTemplateByType(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("MirrorMapper.listTemplateByType", page);
+	public List<PageData> listTemplateByType(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("MirrorMapper.listTemplateByType", pd);
 	}
 
 	/**
