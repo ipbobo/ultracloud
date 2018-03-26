@@ -70,7 +70,19 @@ function setRecommendType(obj, fieldName, fieldValue){
 
 //设置软件参数
 function setSoftParam(indx){
-	$("#softParam"+(indx==0?"":indx)).val(indx);
+	var diag = new top.Dialog();
+	diag.Drag=true;
+	diag.Title ="设置参数";
+	diag.URL = '<%=basePath%>/getParamList.do';
+	diag.Width = 350;
+	diag.Height = 400;
+	diag.CancelEvent=function(){diag.close();};//关闭事件
+	diag.OKEvent=function(){//OK事件
+		//$("#pckgName").val(diag.innerFrame.contentWindow.document.getElementById('pckgName').value);
+		diag.innerFrame.contentWindow.getSoftParam();
+		diag.close();
+	};
+	diag.show();
 }
 
 //永久到期时间选择
@@ -649,7 +661,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<%-- <tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -662,7 +674,7 @@ $(window).scroll(function() {
 					</c:if>
 				</ul>
 			</td>
-		</tr>
+		</tr> --%>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
