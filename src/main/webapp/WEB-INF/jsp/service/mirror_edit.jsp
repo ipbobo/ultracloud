@@ -27,6 +27,7 @@
 					<form action="mirror/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" value="no" id="hasTp1" />
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
+						<input type="hidden" name="type" id="type" value="${pd.type}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr height="42px;">
@@ -60,7 +61,7 @@
 							</tr>
 							<tr>
 								<td style="width:130px;text-align: right;padding-top: 13px;">位数:</td>
-								<td><input type="text" name="bitrate" id="bitrate" value="${pd.bitrate}" maxlength="30" style="width:100%;"/></td>
+								<td><input type="number" name="bitrate" id="bitrate" value="${pd.bitrate}" maxlength="30" style="width:100%;"/></td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">

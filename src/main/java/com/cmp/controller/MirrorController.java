@@ -410,6 +410,7 @@ public class MirrorController extends BaseController {
 						} else {
 							PageData newPD = new PageData();
 							newPD.put("cloudplatform_id", cloudPD.getString("id"));
+							newPD.put("cloudplatform_name", cloudPD.getString("name"));
 							newPD.put("name", tvm.getName());
 							newPD.put("url", tvm.getXmlDesc());
 							newPD.put("ostype", tvm.getOSType());

@@ -149,10 +149,11 @@
 	
 	<!-- 列表 -->
 	<select id="listTemplateByType" parameterType="pd" resultType="pd">
-		select *
+		select a.*,b.name as cloudplatform_name
 		from 
-		<include refid="mttableName"></include>
-		where type=#{type}
+		<include refid="mttableName"></include>a, t_cloudplatform b
+		where a.cloudplatform_id=b.id
+		and a.type=#{type}
 	</select>
 	
 	<!-- 列表(全部) -->

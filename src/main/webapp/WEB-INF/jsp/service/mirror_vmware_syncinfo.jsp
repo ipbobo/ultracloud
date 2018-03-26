@@ -54,7 +54,7 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 												
 										<tr>
-											<td class="center">${var.cloud_name }</td>
+											<td class="center">${var.cloudplatform_name }</td>
 											<td class="center">${var.name}</td>
 											<td class="center">${var.uuid }</td>
 											<td class="center">
