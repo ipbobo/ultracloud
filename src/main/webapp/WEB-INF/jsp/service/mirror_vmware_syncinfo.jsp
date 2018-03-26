@@ -41,8 +41,6 @@
 									<th class="center">云平台名称</th>
 									<th class="center">模板名称</th>
 									<th class="center">uuid</th>
-									<th class="center">路径</th>
-									<th class="center">操作系统类型</th>
 									<th class="center">状态</th>
 								</tr>
 							</thead>
@@ -59,8 +57,6 @@
 											<td class="center">${var.cloud_name }</td>
 											<td class="center">${var.name}</td>
 											<td class="center">${var.uuid }</td>
-											<td class="center">${var.url }</td>
-											<td class="center">${var.ostype }</td>
 											<td class="center">
 												<c:if test="${var.status == 'exists' }">已存在</c:if> 
 												<c:if test="${var.status == 'add' }">新增</c:if>  

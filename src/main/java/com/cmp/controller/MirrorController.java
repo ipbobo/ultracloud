@@ -416,6 +416,7 @@ public class MirrorController extends BaseController {
 							newPD.put("uuid", tvm.getUUID());
 							newPD.put("type", "vmware");
 							newPD.put("status", "add");
+							newPD.put("USERNAME", Jurisdiction.getUsername());
 							newList.add(newPD);
 						}
 					}
@@ -424,14 +425,14 @@ public class MirrorController extends BaseController {
 		}
 
 		for (PageData newPD : newList) {
-			mirrorService.save(newPD);
+			mirrorService.saveTemplate(newPD);
 		}
 
 		List<PageData> varList = new ArrayList<PageData>();
 		varList.addAll(existList);
 		varList.addAll(newList);
 
-		mv.setViewName("resource/mirror_vmware_syncinfo");
+		mv.setViewName("service/mirror_vmware_syncinfo");
 		mv.addObject("pd", pd);
 		mv.addObject("varList", varList);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限

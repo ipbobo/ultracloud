@@ -25,6 +25,14 @@ public interface MirrorService {
 	public void save(PageData pd) throws Exception;
 
 	/**
+	 * 新增
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void saveTemplate(PageData pd) throws Exception;
+
+	/**
 	 * 删除
 	 * 
 	 * @param pd
@@ -47,7 +55,7 @@ public interface MirrorService {
 	 * @throws Exception
 	 */
 	public List<PageData> list(Page page) throws Exception;
-	
+
 	/**
 	 * 列表
 	 * 
@@ -113,19 +121,23 @@ public interface MirrorService {
 	 * @throws Exception
 	 */
 	public void deleteAllMirrorTemplateMap(List<BigInteger> list) throws Exception;
-	
-	/**批量插入镜像与模板关联
+
+	/**
+	 * 批量插入镜像与模板关联
+	 * 
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
 	public void insertAllMirrorTemplateMap(List<MirrorTemplateMap> list) throws Exception;
-	
-	/**批量删除镜像与模板关联,按镜像
+
+	/**
+	 * 批量删除镜像与模板关联,按镜像
+	 * 
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
 	public void deleteByMirrorId(BigInteger id) throws Exception;
 
-	//模板列表查询
+	// 模板列表查询
 	public List<CmpDict> getImgList(PageData pd) throws Exception;
 }

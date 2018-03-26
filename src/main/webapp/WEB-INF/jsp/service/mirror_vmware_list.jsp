@@ -341,8 +341,8 @@
 						 diag.Drag=true;
 						 diag.Title ="同步的镜像模板";
 						 diag.URL = '<%=basePath%>mirror/goSynctemplate.do?id=' + id;
-						 diag.Width = document.documentElement.clientWidth * 0.7+"px";
-						 diag.Height = 600;//document.documentElement.clientHeight * 0.85+"px";
+						 diag.Width = document.documentElement.clientWidth * 0.6+"px";
+						 diag.Height = 400;//document.documentElement.clientHeight * 0.85+"px";
 						 diag.CancelEvent = function(){ //关闭事件
 							 diag.close();
 						 };

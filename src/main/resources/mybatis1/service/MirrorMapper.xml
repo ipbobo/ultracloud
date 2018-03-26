@@ -71,6 +71,16 @@
 		)
 	</insert>
 	
+	<!-- 新增模板 -->
+	<insert id="saveTemplate" parameterType="pd">
+		insert into t_mirrortemplate
+		(
+	name,url,size,cloudplatform_id,datacenter_id,ostype,osname,bitrate,platform,type,detail,USERNAME,uuid
+		) values (
+	#{name},#{url},#{size},#{cloudplatform_id},#{datacenter_id},#{ostype},#{osname},#{bitrate},#{platform},#{type},#{detail},#{USERNAME},#{uuid}
+		)
+	</insert>
+	
 	<!-- 删除-->
 	<delete id="delete" parameterType="pd">
 		delete from
@@ -126,7 +136,7 @@
 		select *
 		from 
 		<include refid="mttableName"></include>
-		where type=#{pd.type}
+		where type=#{type}
 	</select>
 	
 	<!-- 列表(全部) -->
