@@ -349,7 +349,7 @@ function getCurrConf(jsonObj){
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">数据盘：</td>
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
 		<td style="padding:10px;" colspan="6">
 			<table id="tcdiskTableId">
 				<tr>
@@ -375,7 +375,7 @@ function getCurrConf(jsonObj){
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
-		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">安装软件：</td>
+		<td align="right" style="width: 120px;padding:10px;"></td>
 		<td style="padding:10px;" colspan="6">
 			<table id="tcsoftTableId">
 				<tr>
@@ -397,7 +397,7 @@ function getCurrConf(jsonObj){
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td align="right" style="width: 120px;padding:10px;">数量：</td>
+		<td align="right" style="width: 120px;padding:10px;"></td>
 		<td style="width: 120px;padding:10px;" colspan="6">
 			<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 			    <input type="text" id="tcvirNum" name="tcvirNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1" disabled> 
@@ -411,7 +411,7 @@ function getCurrConf(jsonObj){
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
-		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
+		<td align="right" style="width: 120px;padding:10px;"></td>
 		<td style="padding:10px;" colspan="6">
 			<input type="text" name="tcexpireDate" id="tcexpireDate" value="" class="span10 date-picker" data-date-format="yyyy-mm-dd" style="width:120px;" placeholder="到期时间" disabled/>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="" disabled/>永久

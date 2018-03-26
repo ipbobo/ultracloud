@@ -864,7 +864,7 @@ $(window).scroll(function() {
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="width: 120px;padding:10px;" colspan="6">
 				<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 				    <input type="text" id="virNum" name="virNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1" onchange="virNumFunc()"> 
@@ -878,7 +878,7 @@ $(window).scroll(function() {
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
-			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onchange="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
