@@ -155,7 +155,7 @@ public class KVMController extends BaseController {
 		}
 		page.setPd(pd);
 		// 分页查询kvm主机
-		List<PageData> varList = mirrorService.listTemplateByType(page);
+		List<PageData> varList = mirrorService.listTemplateByType(pd);
 		mv.setViewName("resource/kvm_template_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);

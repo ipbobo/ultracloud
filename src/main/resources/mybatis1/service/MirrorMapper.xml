@@ -32,7 +32,9 @@
 		ostype,
 		osname,
 		bitrate,
-		USERNAME
+		USERNAME,
+		type,
+		cloudplatform_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -52,7 +54,9 @@
 		#{ostype},
 		#{osname},
 		#{bitrate},
-		#{USERNAME}
+		#{USERNAME},
+		#{type},
+		#{cloudplatform_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -68,6 +72,16 @@
 	<include refid="Field_main"></include>
 		) values (
 	<include refid="FieldValue_main"></include>
+		)
+	</insert>
+	
+	<!-- 新增模板 -->
+	<insert id="saveTemplate" parameterType="pd">
+		insert into t_mirrortemplate
+		(
+	name,url,size,cloudplatform_id,datacenter_id,ostype,osname,bitrate,platform,type,detail,USERNAME,uuid
+		) values (
+	#{name},#{url},#{size},#{cloudplatform_id},#{datacenter_id},#{ostype},#{osname},#{bitrate},#{platform},#{type},#{detail},#{USERNAME},#{uuid}
 		)
 	</insert>
 	
@@ -88,7 +102,9 @@
 			ostype = #{ostype},
 			osname = #{osname},
 			bitrate = #{bitrate},
-			USERNAME = #{USERNAME}
+			USERNAME = #{USERNAME},
+			type = #{type},
+			cloudplatform_id = #{cloudplatform_id}
 		where 
 			id = #{id}
 	</update>
@@ -106,27 +122,38 @@
 	<!-- 脚本列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
-		<include refid="Field"></include>
+			a.id,
+			a.name,
+			a.ostype,
+			a.osname,
+			a.bitrate,
+			a.USERNAME,
+			a.type,
+			a.cloudplatform_id,
+			b.name as cloudplatform_name,
+			a.gmt_create,
+			a.gmt_modified
 		from 
-		<include refid="tableName"></include>
-		where 1=1
+		<include refid="tableName"></include> a, t_cloudplatform b
+		where a.cloudplatform_id=b.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
-					NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					a.NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 				)
 		</if>
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
-			and id in ${pd.item}
+			and a.id in ${pd.item}
 		</if>
 	</select>
 	
 	<!-- 列表 -->
 	<select id="listTemplateByType" parameterType="pd" resultType="pd">
-		select *
+		select a.*,b.name as cloudplatform_name
 		from 
-		<include refid="mttableName"></include>
-		where type=#{pd.type}
+		<include refid="mttableName"></include>a, t_cloudplatform b
+		where a.cloudplatform_id=b.id
+		and a.type=#{type}
 	</select>
 	
 	<!-- 列表(全部) -->

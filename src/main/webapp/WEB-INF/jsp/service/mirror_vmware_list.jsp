@@ -28,7 +28,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="mirror/list.do" method="post" name="Form" id="Form">
+						<form action="mirror/listVmware.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;width:100%">
 							<tr>
 								<td style="vertical-align:top;">
@@ -61,7 +61,8 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">名称</th>
+									<th class="center">云平台</th>
+									<th class="center">镜像名称</th>
 									<th class="center">操作系统类型</th>
 									<th class="center">操作系统名称</th>
 									<th class="center">位数</th>
@@ -83,6 +84,7 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
+											<td class='center'>${var.cloudplatform_name}</td>
 											<td class='center'>${var.name}</td>
 											<td class='center'>${var.ostype}</td>
 											<td class='center'>${var.osname}</td>
@@ -218,9 +220,9 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>mirror/goAdd.do';
+			 diag.URL = '<%=basePath%>mirror/goAdd.do?type=vmware';
 			 diag.Width = 600;
-			 diag.Height = 500;
+			 diag.Height = 350;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
@@ -254,9 +256,9 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>mirror/goEdit.do?id='+Id;
+			 diag.URL = '<%=basePath%>mirror/goEdit.do?type=vmware&id='+Id;
 			 diag.Width = 600;
-			 diag.Height = 500;
+			 diag.Height = 350;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 nextPage(${page.currentPage});
@@ -341,8 +343,8 @@
 						 diag.Drag=true;
 						 diag.Title ="同步的镜像模板";
 						 diag.URL = '<%=basePath%>mirror/goSynctemplate.do?id=' + id;
-						 diag.Width = document.documentElement.clientWidth * 0.7+"px";
-						 diag.Height = 600;//document.documentElement.clientHeight * 0.85+"px";
+						 diag.Width = document.documentElement.clientWidth * 0.6+"px";
+						 diag.Height = 400;//document.documentElement.clientHeight * 0.85+"px";
 						 diag.CancelEvent = function(){ //关闭事件
 							 diag.close();
 						 };

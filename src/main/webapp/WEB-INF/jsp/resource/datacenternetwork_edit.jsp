@@ -38,6 +38,7 @@
 								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;网络名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" title="名称" style="width:100%;"/></td>
 							</tr>
+							<!-- 
 							<tr>
 								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;资源池:</td>
 								<td id="js">
@@ -47,7 +48,7 @@
 										</c:forEach>
 									</select>
 								</td>
-							</tr>
+							</tr> -->
 							<tr>
 								<td style="width:79px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;数据中心:</td>
 								<td id="cluster_td">

@@ -200,8 +200,8 @@ public class MirrorController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 
-		List<PageData> dcList = datacenterService.listAll(pd);
-		mv.addObject("dcList", dcList);
+		List<PageData> cloudplatformList = cloudplatformService.listAll(pd, false);
+		mv.addObject("cloudplatformList", cloudplatformList);
 
 		mv.setViewName("service/mirror_edit");
 		mv.addObject("msg", "save");
@@ -225,8 +225,8 @@ public class MirrorController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 
-		List<PageData> dcList = datacenterService.listAll(pd);
-		mv.addObject("dcList", dcList);
+		List<PageData> cloudplatformList = cloudplatformService.listAll(pd, false);
+		mv.addObject("cloudplatformList", cloudplatformList);
 
 		pd = mirrorService.findById(pd); // 根据ID读取
 		mv.setViewName("service/mirror_edit");
@@ -410,12 +410,14 @@ public class MirrorController extends BaseController {
 						} else {
 							PageData newPD = new PageData();
 							newPD.put("cloudplatform_id", cloudPD.getString("id"));
+							newPD.put("cloudplatform_name", cloudPD.getString("name"));
 							newPD.put("name", tvm.getName());
 							newPD.put("url", tvm.getXmlDesc());
 							newPD.put("ostype", tvm.getOSType());
 							newPD.put("uuid", tvm.getUUID());
 							newPD.put("type", "vmware");
 							newPD.put("status", "add");
+							newPD.put("USERNAME", Jurisdiction.getUsername());
 							newList.add(newPD);
 						}
 					}
@@ -424,14 +426,14 @@ public class MirrorController extends BaseController {
 		}
 
 		for (PageData newPD : newList) {
-			mirrorService.save(newPD);
+			mirrorService.saveTemplate(newPD);
 		}
 
 		List<PageData> varList = new ArrayList<PageData>();
 		varList.addAll(existList);
 		varList.addAll(newList);
 
-		mv.setViewName("resource/mirror_vmware_syncinfo");
+		mv.setViewName("service/mirror_vmware_syncinfo");
 		mv.addObject("pd", pd);
 		mv.addObject("varList", varList);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
