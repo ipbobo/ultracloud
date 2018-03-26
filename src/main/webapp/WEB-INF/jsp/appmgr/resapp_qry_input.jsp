@@ -112,7 +112,7 @@ function addDiskRow(){
     var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" onchange=\"diskTypeFunc()\">"+$("#diskType").html()+"</select></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\" onchange=\"diskTypeFunc()\"/></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
-	    +"<td align=\"right\" style=\"padding-top:10px;\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+	    +"<td align=\"right\" style=\"padding-top:10px;display:none\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
     $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
@@ -826,7 +826,7 @@ $(window).scroll(function() {
 							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')" onchange="diskTypeFunc()"/>
 						</td>
 						<td align="left" style="width: 20px;">GB</td>
-						<td align="right" style="padding-right:13px;">
+						<td align="right" style="padding-right:13px;display:none">
 						  	<span id="iopsId">1120</span>&nbsp;IOPS&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密&nbsp;
 						</td>
 						<td align="left" valign="bottom" style="width: 200px;padding-bottom:8px;" rowspan="15">

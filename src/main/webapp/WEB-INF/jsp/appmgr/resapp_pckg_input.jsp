@@ -49,7 +49,7 @@ function addPckgDiskRow(diskType, diskSize, diskEncrypt){
 		    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"tcdiskType\" id=\"tcdiskType"+i+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcdiskType").html()+"</select></td>"
 			    +"<td align=\"left\" style=\"width: 120px;padding-top:10px;\"><input type=\"text\" name=\"tcdiskSize\" id=\"tcdiskSize"+i+"\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" disabled/></td>"
 			    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
-			    +"<td align=\"right\" style=\"padding-top:10px;\"><span id=\"tciopsId"+i+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"tcdiskEncrypt\" id=\"tcdiskEncrypt"+i+"\" type=\"checkbox\" value=\"\" disabled/>加密&nbsp;</td>";
+			    +"<td align=\"right\" style=\"padding-top:10px;display:none\"><span id=\"tciopsId"+i+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"tcdiskEncrypt\" id=\"tcdiskEncrypt"+i+"\" type=\"checkbox\" value=\"\" disabled/>加密&nbsp;</td>";
 		    $("#tcdiskTableId").append("<tr>"+tdStr+"</tr>");
 		    $("#tcdiskType"+i).val(item);
 		    $("#tcdiskSize"+i).val(diskSizes[i]);
@@ -365,7 +365,7 @@ function getCurrConf(jsonObj){
 						<input type="text" name="tcdiskSize" id="tcdiskSize" value="20" style="width: 120px;" maxlength="5" disabled/>
 					</td>
 					<td align="left" style="width: 20px;">GB</td>
-					<td align="right">
+					<td align="right" style="display:none">
 					  	<span id="tciopsId">1120</span>&nbsp;IOPS&nbsp;<input name="tcdiskEncrypt" id="tcdiskEncrypt" type="checkbox" value="" disabled/>加密&nbsp;
 					</td>
 				</tr>
