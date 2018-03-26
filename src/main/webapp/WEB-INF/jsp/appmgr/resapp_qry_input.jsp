@@ -70,6 +70,13 @@ function setRecommendType(obj, fieldName, fieldValue){
 
 //设置软件参数
 function setSoftParam(indx){
+	var softCode=$("#softCode"+(indx==0?"":indx)).val();
+	if($("#softCode").val()==""){
+		$("#softCode").tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
+		$("#softCode").focus();
+		return false;
+	}
+	
 	var diag = new top.Dialog();
 	diag.Drag=true;
 	diag.Title ="设置参数";
@@ -78,8 +85,11 @@ function setSoftParam(indx){
 	diag.Height = 400;
 	diag.CancelEvent=function(){diag.close();};//关闭事件
 	diag.OKEvent=function(){//OK事件
-		//$("#pckgName").val(diag.innerFrame.contentWindow.document.getElementById('pckgName').value);
-		diag.innerFrame.contentWindow.getSoftParam();
+		var softParamStr=diag.innerFrame.contentWindow.getSoftParam();//获取软件参数
+		if(softParamStr){
+			$("#softParam"+(indx==0?"":indx)).val(softParamStr);
+		}
+		
 		diag.close();
 	};
 	diag.show();
@@ -219,9 +229,11 @@ function checkData(btnId){
 		return false;
 	}
 	
-	if($("#softCode").val()==""){
-		$("#softCode").tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
-		$("#softCode").focus();
+	if(!mutiCheck('diskType', '请选择存储')){
+		return false;
+	}
+	
+	if(!mutiCheck('softCode', '请选择软件安装')){
 		return false;
 	}
 	
@@ -260,6 +272,21 @@ function checkData(btnId){
 	$("#softCodeStr").val(softCodeArr.join());
 	$("#softParamStr").val(softParamArr.join());
 	return true;
+}
+
+//多个校验
+function mutiCheck(name, msg){
+	var bool=true;
+	$("select[name='"+name+"']").each(function() {
+		if($(this).val()==""){
+			$(this).tips({side:3, msg:msg, bg:'#AE81FF', time:2});
+			$(this).focus();
+			bool=false;
+			return false;
+		}
+	});
+	
+	return bool;
 }
 
 //加入清单
@@ -361,6 +388,7 @@ function savePckg(){
 function diskSizeFunc(obj, diskTypeId, iopsId){
 	var diskSize=$(obj).val();
 	if($(obj).val()==""){
+		$(obj).val("20");
 		return;
 	}
 	
