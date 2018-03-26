@@ -70,17 +70,17 @@ function setRecommendType(obj, fieldName, fieldValue){
 
 //设置软件参数
 function setSoftParam(indx){
-	var softCode=$("#softCode"+(indx==0?"":indx)).val();
-	if($("#softCode").val()==""){
-		$("#softCode").tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
-		$("#softCode").focus();
+	var obj=$("#softCode"+(indx==0?"":indx));
+	if(obj.val()==""){
+		obj.tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
+		obj.focus();
 		return false;
 	}
 	
 	var diag = new top.Dialog();
 	diag.Drag=true;
 	diag.Title ="设置参数";
-	diag.URL = '<%=basePath%>/getParamList.do';
+	diag.URL = '<%=basePath%>/getParamList.do?softCode='+obj.val();
 	diag.Width = 350;
 	diag.Height = 400;
 	diag.CancelEvent=function(){diag.close();};//关闭事件
@@ -134,7 +134,7 @@ function addSoftRow(){
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
+    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" id=\"softCode"+(len+1)+"\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
 	    +"<td align=\"right\" style=\"padding-top:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
 	$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }

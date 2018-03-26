@@ -185,6 +185,16 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
+	//软件参数列表查询
+	@RequestMapping(value="/getParamList")
+	public ModelAndView getParamList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String softCode=request.getParameter("softCode");//软件代码
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("appmgr/resapp_softparam_input");
+		mv.addObject("paramList", mediumService.getSoftParamList(softCode));//软件参数列表查询
+		return mv;
+	}
+		
 	//加入清单
 	@RequestMapping(value="/addList", produces={"application/json;charset=UTF-8"})
     @ResponseBody

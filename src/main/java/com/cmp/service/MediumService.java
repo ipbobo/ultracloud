@@ -88,4 +88,7 @@ public interface MediumService {
 
 	//软件列表查询
 	public List<CmpDict> getSoftList() throws Exception;
+	
+	//软件参数列表查询
+	public List<CmpDict> getSoftParamList(String softCode) throws Exception;
 }
