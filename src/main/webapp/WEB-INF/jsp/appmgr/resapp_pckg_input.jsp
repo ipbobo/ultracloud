@@ -158,7 +158,7 @@ function getCurrConf(jsonObj){
 			</ul>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<%-- <tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
 		<td align="right" style="width: 120px;padding:10px;"></td>
@@ -171,7 +171,7 @@ function getCurrConf(jsonObj){
 				</c:if>
 			</ul>
 		</td>
-	</tr>
+	</tr> --%>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;套餐列表</td>
