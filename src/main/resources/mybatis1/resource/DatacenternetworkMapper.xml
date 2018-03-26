@@ -144,11 +144,9 @@
 				s.totalip,
 				s.freeip,
 				s.uuid,
-				c.name as datacenter_name,
-				d.name as cluster_name
-		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c,<include refid="clustertableName"></include> d  
+				c.name as datacenter_name
+		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c 
 		where s.datacenter_id=c.id
-		and s.cluster_id=d.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -156,7 +154,7 @@
 				)
 		</if>
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
-			and id in ${pd.item}
+			and s.id in ${pd.item}
 		</if>
 		<if test="pd.type != null and pd.type != ''"><!-- 按云平台类型检索 -->
 			and s.type = #{pd.type} 
