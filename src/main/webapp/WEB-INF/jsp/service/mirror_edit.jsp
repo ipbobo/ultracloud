@@ -29,6 +29,17 @@
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
+							<tr height="42px;">
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;云平台:</td>
+										<td id="cloudplatform_td">
+										<select class="chosen-select form-control" name="cloudplatform_id" id="cloudplatform_id" data-placeholder="请选择" style="vertical-align:top;" style="width:98%;" >
+										<option value="">请选择</option>
+										<c:forEach items="${cloudplatformList}" var="cloudplatform">
+											<option value="${cloudplatform.id }" <c:if test="${cloudplatform.id == pd.cloudplatform_id }">selected</c:if>>${cloudplatform.name }</option>
+										</c:forEach>
+										</select>
+										</td>
+							</tr>
 							<tr>
 								<td style="width:130px;text-align: right;padding-top: 13px;">镜像名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" placeholder="这里输入名称" title="名称" style="width:100%;"/></td>
@@ -45,7 +56,7 @@
 							</tr>
 							<tr>
 								<td style="width:130px;text-align: right;padding-top: 13px;">操作系统名称:</td>
-								<td><input type="text" name="osname" id="osname" value="${pd.name}" maxlength="30" style="width:100%;"/></td>
+								<td><input type="text" name="osname" id="osname" value="${pd.osname}" maxlength="30" style="width:100%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:130px;text-align: right;padding-top: 13px;">位数:</td>

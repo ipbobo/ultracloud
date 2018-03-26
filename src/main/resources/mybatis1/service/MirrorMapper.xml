@@ -32,7 +32,9 @@
 		ostype,
 		osname,
 		bitrate,
-		USERNAME
+		USERNAME,
+		type,
+		cloudplatform_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -52,7 +54,9 @@
 		#{ostype},
 		#{osname},
 		#{bitrate},
-		#{USERNAME}
+		#{USERNAME},
+		#{type},
+		#{cloudplatform_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -98,7 +102,9 @@
 			ostype = #{ostype},
 			osname = #{osname},
 			bitrate = #{bitrate},
-			USERNAME = #{USERNAME}
+			USERNAME = #{USERNAME},
+			type = #{type},
+			cloudplatform_id = #{cloudplatform_id}
 		where 
 			id = #{id}
 	</update>
@@ -116,18 +122,28 @@
 	<!-- 脚本列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
-		<include refid="Field"></include>
+			a.id,
+			a.name,
+			a.ostype,
+			a.osname,
+			a.bitrate,
+			a.USERNAME,
+			a.type,
+			a.cloudplatform_id,
+			b.name as cloudplatform_name,
+			a.gmt_create,
+			a.gmt_modified
 		from 
-		<include refid="tableName"></include>
-		where 1=1
+		<include refid="tableName"></include> a, t_cloudplatform b
+		where a.cloudplatform_id=b.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
-					NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					a.NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 				)
 		</if>
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
-			and id in ${pd.item}
+			and a.id in ${pd.item}
 		</if>
 	</select>
 	

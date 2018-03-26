@@ -200,8 +200,8 @@ public class MirrorController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 
-		List<PageData> dcList = datacenterService.listAll(pd);
-		mv.addObject("dcList", dcList);
+		List<PageData> cloudplatformList = cloudplatformService.listAll(pd, false);
+		mv.addObject("cloudplatformList", cloudplatformList);
 
 		mv.setViewName("service/mirror_edit");
 		mv.addObject("msg", "save");
@@ -225,8 +225,8 @@ public class MirrorController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 
-		List<PageData> dcList = datacenterService.listAll(pd);
-		mv.addObject("dcList", dcList);
+		List<PageData> cloudplatformList = cloudplatformService.listAll(pd, false);
+		mv.addObject("cloudplatformList", cloudplatformList);
 
 		pd = mirrorService.findById(pd); // 根据ID读取
 		mv.setViewName("service/mirror_edit");
