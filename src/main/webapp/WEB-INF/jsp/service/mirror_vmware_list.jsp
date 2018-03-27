@@ -320,9 +320,9 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="绑定模板";
-			 diag.URL = '<%=basePath%>mirror/goBindingtemplate.do?id='+id+'&ostype='+ostype+'&bitrate='+bitrate;
-			 diag.Width = 1000;
-			 diag.Height = 400;
+			 diag.URL = '<%=basePath%>mirror/goBindingtemplate.do?type=vmware&id='+id+'&ostype='+ostype+'&bitrate='+bitrate;
+			 diag.Width = document.documentElement.clientWidth * 0.6+"px";
+			 diag.Height = 500;
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 nextPage(${page.currentPage});

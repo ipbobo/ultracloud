@@ -178,17 +178,17 @@
 	<!-- 列出未加入镜像的模板 -->
 	<select id="listAllOutByMirrorId"  parameterType="pd" resultType="pd" >
 		select 
-			id,name,osname,bitrate
+			id,name,osname,bitrate,uuid,gmt_modified
 		from 
 			t_mirrortemplate
-		where ostype=#{ostype} and bitrate=#{bitrate} and id NOT IN (select mtm.mirrortemplate_id from t_mirrortemplate m, t_mirror_template_map mtm
+		where cloudplatform_id=#{cloudplatform_id} and type=#{type} and id NOT IN (select mtm.mirrortemplate_id from t_mirrortemplate m, t_mirror_template_map mtm
 						where m.id=mtm.mirrortemplate_id
 						and mtm.mirror_id= #{id})
 	</select>
 	
 	<!-- 列出已加入镜像的模板 -->
 	<select id="listAllInByMirrorId"  parameterType="pd" resultType="pd" >
-		select u.id,u.name,u.osname,u.bitrate
+		select u.id,u.name,u.osname,u.bitrate,u.uuid,u.gmt_modified
 		from t_mirrortemplate u, t_mirror_template_map ugu
 		where u.id = ugu.mirrortemplate_id 
 		and ugu.mirror_id= #{id}

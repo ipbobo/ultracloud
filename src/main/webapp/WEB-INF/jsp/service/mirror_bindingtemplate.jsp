@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -8,66 +7,104 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <base href="<%=basePath%>">
-	<script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
-	<!-- 左右双列 start -->
-	<link rel="stylesheet" href="css/bootstrap.min.css"/>
-	<link rel="stylesheet" type="text/css" href="/ultracloud/static/html_UI/assets/css/prettify.css">
-	<link rel="stylesheet" href="static/html_UI/assets/css/bootstrap-duallistbox.css" />
-	<!-- <script src="http://www.jq22.com/jquery/2.1.1/jquery.min.js"></script> -->
-	<script src="js/bootstrap.min.js"></script>
-	<script src="static/html_UI/assets/js/jquery.bootstrap-duallistbox.js"></script>
-	<!-- 左右双列 end -->
 
+<!-- jsp文件头和头部 -->
+<%@ include file="../system/index/top.jsp"%>
+<script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
 </head>
-
-<body>
-
-	<div class="col-md-12">
-		<form id="demoform" action="mirror/bindingtemplate.do" method="post">
-			<input type="hidden" name="DATA_IDS" id="DATA_IDS" /> <input
-				type="hidden" name="id" id="id" value="${pd.id}" /> <br> <select
-				multiple="multiple" size="5" name="duallistbox_demo1[]"
-				class="demo2">
-				<c:forEach items="${notBindingList}" var="mirrortemplate">
-					<option value="${mirrortemplate.id }">${mirrortemplate.name }/${mirrortemplate.osname }/${mirrortemplate.bitrate }位</option>
-				</c:forEach>
-				<c:forEach items="${bindedList}" var="mirrortemplate">
-					<option value="${mirrortemplate.id }" selected="selected">${mirrortemplate.name }/${mirrortemplate.osname }/${mirrortemplate.bitrate }位</option>
-				</c:forEach>
-			</select> <br>
-
-			<!-- <button type="submit" class="btn btn-default btn-block">Submit data</button> -->
-			<div class="col-md-8 col-sm-offset-2 text-center">
-				<button type="submit" class="btn btn-mini btn-primary">保存</button>
-				<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
+<body class="no-skin">
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+		<!-- /section:basics/sidebar -->
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="page-content">
+					<div class="row">
+						<div class="col-xs-12">
+							<div id="zhongxin" style="padding-top: 13px;">
+							<div class="span6" style="padding-top: 13px;">
+								<input type="hidden" name="id" id="id" value="${pd.id}"/>
+								<input type="hidden" name="type" id="type" value="${pd.type}"/>
+								<input type="hidden" name="cloudplatform_id" id="cloudplatform_id" value="${pd.cloudplatform_id}"/>
+								<div class="tabbable">
+									<ul class="nav nav-tabs" id="myTab">
+										<li id="notbind_li"><a id="notbind_a" data-toggle="tab" href="#notbind"><i class="green icon-cog bigger-110"></i>未绑定模板</a></li>
+										<li id="alreadybind_li"><a id="alreadybind_a" data-toggle="tab" href="#alreadybind"><i class="green icon-cog bigger-110"></i>已绑定模板</a></li>
+									</ul>
+									<div class="tab-content" style="height:100%;">
+										<div id="notbind" class="tab-pane in active" style="height:350px;">
+											<table id="table_notbind" class="table table-striped table-bordered table-hover">
+												<iframe name="notbindFrame" id="notbindFrame" frameborder="0" style="margin:0 auto;width:100%;height:100%;"></iframe>
+											</table>
+										</div>
+										<div id="alreadybind" class="tab-pane" style="height:350px;">
+											<table id="table_alreadybind" class="table table-striped table-bordered table-hover">
+												<iframe name="alreadybindFrame" id="alreadybindFrame" frameborder="0" src="<%=basePath%>/mirror/listAlreadyBind.do?cloudplatform_id=${pd.cloudplatform_id}&type=${pd.type}&id=${pd.id}" style="margin:0 auto;width:100%;height:100%;"></iframe>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--/span-->
+						</div>
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
 			</div>
-			<div id="zhongxin" style="padding-top: 13px;"></div>
-		</form>
+			<!-- /.page-content -->
+		</div>
 	</div>
-	<script>
-		$(top.hangge());
-		var demo1 = $('select[name="duallistbox_demo1[]"]')
-				.bootstrapDualListbox({
-					nonSelectedListLabel : '未加入模板',
-					selectedListLabel : '已加入模板',
-					preserveSelectionOnMove : 'moved',
-					moveOnSelect : true,
-					nonSelectedFilter : '',
-					infoText : '',
-					filterPlaceHolder : '可输入模板名称过滤',
-				});
+	<!-- /.main-content -->
 
-		$("#demoform").submit(function() {
-			$("#DATA_IDS").val($('[name="duallistbox_demo1[]"]').val());
-			//alert($('[name="duallistbox_demo1[]"]').val());
-			return true;
+
+	<!-- 返回顶部 -->
+	<a href="#" id="btn-scroll-up"
+		class="btn-scroll-up btn btn-sm btn-inverse"> <i
+		class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+	</a>
+
+	</div>
+	<!-- /.main-container -->
+
+	<!-- basic scripts -->
+	<!-- 页面底部js¨ -->
+	<%@ include file="../system/index/foot.jsp"%>
+	<!-- ace scripts -->
+	<script src="static/ace/js/ace/ace.js"></script>
+	<!-- inline scripts related to this page -->
+	<script type="text/javascript">
+		$(top.hangge());
+		
+		$(function() {
+			$("#notbindFrame").attr("src", "<%=basePath%>mirror/listNotbind.do?cloudplatform_id=${pd.cloudplatform_id}&type=${pd.type}&id=${pd.id}");
+			$("#notbind_li").attr("class", "active");
 		});
+		
+		//发送Ajax请求
+		function ajaxHttpPost(url, jsonObj, tabId){
+		    $.ajax({
+			    type: 'post',  
+			    url: url,
+			    data: jsonObj,
+			    dataType: 'json',  
+			    success: function(data){
+			    	$(top.hangge());
+			    	location.reload();
+			    },
+			    error: function(data) {
+			    	$(top.hangge());//关闭加载状态
+			    	location.reload();
+			    }
+			});
+		}
 	</script>
+
 
 </body>
 </html>

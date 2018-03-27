@@ -278,78 +278,10 @@ public class MirrorController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 
-		List<PageData> notBindingList = mirrorService.listAllOutByMirrorId(pd);
-		mv.addObject("notBindingList", notBindingList);
-		List<PageData> bindedList = mirrorService.listAllInByMirrorId(pd);
-		mv.addObject("bindedList", bindedList);
-
 		pd = mirrorService.findById(pd); // 根据ID读取
 		mv.setViewName("service/mirror_bindingtemplate");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
-		return mv;
-	}
-
-	/**
-	 * 绑定镜像模板
-	 * 
-	 * @param
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/bindingtemplate")
-	@ResponseBody
-	public Object bindingtemplate() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "绑定镜像模板");
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		BigInteger id = new BigInteger(pd.getString("id"));
-		String DATA_IDS = pd.getString("DATA_IDS");
-		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
-			List<MirrorTemplateMap> newList = new ArrayList<MirrorTemplateMap>();
-			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-
-			List<MirrorTemplateMap> existList = mirrorService.listMirrorTemplateMap(pd);
-			List<BigInteger> deleteIdList = new ArrayList<BigInteger>();
-			if (null != existList && existList.size() > 0) {
-				StringBuffer sb = new StringBuffer();
-
-				for (MirrorTemplateMap mirrorTemplateMap : existList) {
-					sb.append(mirrorTemplateMap.getMirrortemplate_id() + ",");
-					if (!DATA_IDS.contains(mirrorTemplateMap.getMirrortemplate_id() + "")) {
-						deleteIdList.add(mirrorTemplateMap.getId());
-					}
-				}
-
-				for (int i = 0; i < ArrayDATA_IDS.length; i++) {
-					if (!sb.toString().contains(ArrayDATA_IDS[i])) {
-						MirrorTemplateMap mtMap = new MirrorTemplateMap();
-						mtMap.setMirrortemplate_id(new BigInteger(ArrayDATA_IDS[i]));
-						mtMap.setMirror_id(id);
-						newList.add(mtMap);
-					}
-				}
-			} else {
-				for (int i = 0; i < ArrayDATA_IDS.length; i++) {
-					MirrorTemplateMap mtMap = new MirrorTemplateMap();
-					mtMap.setMirrortemplate_id(new BigInteger(ArrayDATA_IDS[i]));
-					mtMap.setMirror_id(id);
-					newList.add(mtMap);
-				}
-			}
-
-			if (deleteIdList.size() > 0) {
-				mirrorService.deleteAllMirrorTemplateMap(deleteIdList);
-			}
-			if (newList.size() > 0) {
-				mirrorService.insertAllMirrorTemplateMap(newList);
-			}
-		} else {
-			mirrorService.deleteByMirrorId(id);
-		}
-
-		ModelAndView mv = this.getModelAndView();
-		mv.addObject("msg", "success");
-		mv.setViewName("save_result");
 		return mv;
 	}
 
@@ -437,6 +369,96 @@ public class MirrorController extends BaseController {
 		mv.addObject("pd", pd);
 		mv.addObject("varList", varList);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+
+	/**
+	 * 未绑定模板
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listNotbind")
+	public ModelAndView listNotbind(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表mirrortempldate");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+
+		List<PageData> varList = mirrorService.listAllOutByMirrorId(pd); // 列出列表
+		mv.setViewName("service/mirror_bindingtemplate_notbind");
+
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+
+	/**
+	 * 已绑定模板
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/listAlreadyBind")
+	public ModelAndView listAlreadyBind(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表mirrortempldate");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+
+		List<PageData> varList = mirrorService.listAllInByMirrorId(pd); // 列出列表
+		mv.addObject("varList", varList);
+
+		mv.setViewName("service/mirror_bindingtempldate_alreadybind");
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+
+	/**
+	 * 绑定镜像模板
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/bind")
+	@ResponseBody
+	public Object bind() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "绑定镜像模板");
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		BigInteger id = new BigInteger(pd.getString("id"));
+		String DATA_IDS = pd.getString("DATA_IDS");
+		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
+			List<MirrorTemplateMap> newList = new ArrayList<MirrorTemplateMap>();
+			String ArrayDATA_IDS[] = DATA_IDS.split(",");
+
+			for (int i = 0; i < ArrayDATA_IDS.length; i++) {
+				MirrorTemplateMap mtMap = new MirrorTemplateMap();
+				mtMap.setMirrortemplate_id(new BigInteger(ArrayDATA_IDS[i]));
+				mtMap.setMirror_id(id);
+				newList.add(mtMap);
+			}
+
+			if (newList.size() > 0) {
+				mirrorService.insertAllMirrorTemplateMap(newList);
+			}
+		}
+
+		ModelAndView mv = this.getModelAndView();
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
 		return mv;
 	}
 }
