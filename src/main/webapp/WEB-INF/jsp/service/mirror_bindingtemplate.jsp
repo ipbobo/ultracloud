@@ -46,11 +46,10 @@
 							<tr>
 								<td style="vertical-align:top;">
 									<a class="btn btn-mini btn-primary" onclick="top.Dialog.close();">返回</a>
-									<a class="btn btn-mini btn-primary" onclick="bind();">绑定</a>
+									<a class="btn btn-mini btn-primary" onclick="bind('bind');">绑定</a>
 								</td>
 							</tr>
 						</table>
-						<!-- 检索  -->
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover"  style="margin-top:5px;">
 							<thead>
@@ -96,7 +95,58 @@
 										</div>
 										<div id="alreadybind" class="tab-pane" style="height:350px;">
 											<table id="table_alreadybind" class="table table-striped table-bordered table-hover">
-												<iframe name="alreadybindFrame" id="alreadybindFrame" frameborder="0" src="<%=basePath%>/mirror/listAlreadyBind.do?cloudplatform_id=${pd.cloudplatform_id}&type=${pd.type}&id=${pd.id}" style="margin:0 auto;width:100%;height:100%;"></iframe>
+												
+						<form action="" method="post" name="Form2" id="Form2">
+						<table style="margin-top:5px;width:100%;">
+							<tr>
+								<td style="vertical-align:top;">
+									<a class="btn btn-mini btn-primary" onclick="top.Dialog.close();">返回</a>
+									<a class="btn btn-mini btn-danger" onclick="bind('unbind');">解除绑定</a>
+								</td>
+							</tr>
+						</table>
+					
+						<table id="simple-table2" class="table table-striped table-bordered table-hover"  style="margin-top:5px;">
+							<thead>
+								<tr>
+									<th class="center" style="width:35px;">
+									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
+									</th>
+									<th class="center">模板名称</th>
+									<th class="center">uuid</th>
+									<th class="center">更新时间</th>
+								</tr>
+							</thead>
+													
+							<tbody>
+								
+							<!-- 开始循环 -->	
+							<c:choose>
+								<c:when test="${not empty alreadyBindList}">
+									<c:forEach items="${alreadyBindList}" var="var" varStatus="vs">
+												
+										<tr>
+											<td class='center'>
+												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
+											</td>
+											<td class="center">${var.name }</td>
+											<td class="center">${var.uuid }</td>
+											<td class="center">${var.gmt_modified }</td>
+										</tr>
+									
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<tr class="main_info">
+										<td colspan="10" class="center">没有相关数据</td>
+									</tr>
+								</c:otherwise>
+							</c:choose>
+							</tbody>
+						</table>
+					</form>				
+												
+												
 											</table>
 										</div>
 									</div>
@@ -171,8 +221,15 @@
 		}
 		
 		//绑定确认
-		function bind() {
-			bootbox.confirm("确定要绑定吗?", function(result) {
+		function bind(type) {
+			var msg = '';
+			if('bind' == type) {
+				msg = "确定要绑定吗?";
+			} else {
+				msg = "确定要解除绑定吗?";
+			}
+			
+			bootbox.confirm(msg, function(result) {
 				if(result) {
 					var id = document.getElementById('id').value;
 					var str = '';
@@ -199,7 +256,7 @@
 						top.jzts();
 						$.ajax({
 							type: "POST",
-							url: '<%=basePath%>mirror/bind.do?id='+id,
+							url: '<%=basePath%>mirror/bind.do?id='+id+'&type='+type,
 					    	data: {DATA_IDS:str},
 							dataType:'json',
 							//beforeSend: validateData,

@@ -188,7 +188,7 @@
 	
 	<!-- 列出已加入镜像的模板 -->
 	<select id="listAllInByMirrorId"  parameterType="pd" resultType="pd" >
-		select u.id,u.name,u.osname,u.bitrate,u.uuid,u.gmt_modified
+		select ugu.id,u.name,u.uuid,u.gmt_modified
 		from t_mirrortemplate u, t_mirror_template_map ugu
 		where u.id = ugu.mirrortemplate_id 
 		and ugu.mirror_id= #{id}

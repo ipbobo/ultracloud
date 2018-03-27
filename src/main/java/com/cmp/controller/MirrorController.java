@@ -282,6 +282,9 @@ public class MirrorController extends BaseController {
 
 		List<PageData> notBindList = mirrorService.listAllOutByMirrorId(pd); // 列出列表
 		mv.addObject("notBindList", notBindList);
+		
+		List<PageData> alreadyBindList = mirrorService.listAllInByMirrorId(pd); // 列出列表
+		mv.addObject("alreadyBindList", alreadyBindList);
 
 		mv.setViewName("service/mirror_bindingtemplate");
 		mv.addObject("msg", "edit");
@@ -442,21 +445,29 @@ public class MirrorController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername() + "绑定镜像模板");
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String type = pd.getString("type");
 		BigInteger id = new BigInteger(pd.getString("id"));
 		String DATA_IDS = pd.getString("DATA_IDS");
 		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 			List<MirrorTemplateMap> newList = new ArrayList<MirrorTemplateMap>();
+			List<BigInteger> idList = new ArrayList<BigInteger>();
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 
 			for (int i = 0; i < ArrayDATA_IDS.length; i++) {
 				MirrorTemplateMap mtMap = new MirrorTemplateMap();
 				mtMap.setMirrortemplate_id(new BigInteger(ArrayDATA_IDS[i]));
 				mtMap.setMirror_id(id);
+				
+				idList.add(new BigInteger(ArrayDATA_IDS[i]));
 				newList.add(mtMap);
 			}
 
 			if (newList.size() > 0) {
-				mirrorService.insertAllMirrorTemplateMap(newList);
+				if("bind".equals(type)) {
+					mirrorService.insertAllMirrorTemplateMap(newList);
+				} else {
+					mirrorService.deleteAllMirrorTemplateMap(idList);
+				}
 			}
 		}
 
