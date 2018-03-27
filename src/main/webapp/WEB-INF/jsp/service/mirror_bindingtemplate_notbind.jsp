@@ -40,19 +40,6 @@
 									<a class="btn btn-mini btn-primary" onclick="top.Dialog.close();">返回</a>
 									<a class="btn btn-mini btn-primary" onclick="bind();">绑定</a>
 								</td>
-								<!-- 
-								<td>
-									<div class="nav-search" style="float: right;padding-top: 0px;margin-top: 0px;">
-									<span class="input-icon" >
-										<input class="nav-search-input" autocomplete="off" id="nav-search-input" type="text" name="keywords" value="${pd.keywords }" placeholder="关键词搜索" />
-										<i class="ace-icon fa fa-search nav-search-icon"></i>
-									</span>
-									</div>
-								</td>
-								<c:if test="${QX.cha == 1 }">
-								<td style="vertical-align:top;padding-left:2px;width: 32px;"><a class="btn btn-light btn-xs" onclick="searchs();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
-								-->
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -88,11 +75,6 @@
 									
 									</c:forEach>
 									</c:if>
-									<c:if test="${QX.cha == 0 }">
-										<tr>
-											<td colspan="10" class="center">您无权查看</td>
-										</tr>
-									</c:if>
 								</c:when>
 								<c:otherwise>
 									<tr class="main_info">
@@ -102,15 +84,6 @@
 							</c:choose>
 							</tbody>
 						</table>
-						
-					<div class="page-header position-relative">
-						<table style="width:100%;">
-							<tr>
-								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
-							</tr>
-						</table>
-					</div>
-					
 					</form>
 	
 						</div>

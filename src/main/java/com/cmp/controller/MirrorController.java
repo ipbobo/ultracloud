@@ -279,6 +279,10 @@ public class MirrorController extends BaseController {
 		pd = this.getPageData();
 
 		pd = mirrorService.findById(pd); // 根据ID读取
+
+		List<PageData> notBindList = mirrorService.listAllOutByMirrorId(pd); // 列出列表
+		mv.addObject("notBindList", notBindList);
+
 		mv.setViewName("service/mirror_bindingtemplate");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -456,9 +460,8 @@ public class MirrorController extends BaseController {
 			}
 		}
 
-		ModelAndView mv = this.getModelAndView();
-		mv.addObject("msg", "success");
-		mv.setViewName("save_result");
-		return mv;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("msg", "success");
+		return AppUtil.returnObject(pd, map);
 	}
 }

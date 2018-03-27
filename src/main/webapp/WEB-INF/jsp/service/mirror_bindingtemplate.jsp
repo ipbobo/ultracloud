@@ -39,7 +39,59 @@
 									<div class="tab-content" style="height:100%;">
 										<div id="notbind" class="tab-pane in active" style="height:350px;">
 											<table id="table_notbind" class="table table-striped table-bordered table-hover">
-												<iframe name="notbindFrame" id="notbindFrame" frameborder="0" style="margin:0 auto;width:100%;height:100%;"></iframe>
+
+						<form action="" method="post" name="Form" id="Form">
+						<input name="id" id="id" value="${pd.id}" type="hidden" />
+						<table style="margin-top:5px;width:100%;">
+							<tr>
+								<td style="vertical-align:top;">
+									<a class="btn btn-mini btn-primary" onclick="top.Dialog.close();">返回</a>
+									<a class="btn btn-mini btn-primary" onclick="bind();">绑定</a>
+								</td>
+							</tr>
+						</table>
+						<!-- 检索  -->
+					
+						<table id="simple-table" class="table table-striped table-bordered table-hover"  style="margin-top:5px;">
+							<thead>
+								<tr>
+									<th class="center" style="width:35px;">
+									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
+									</th>
+									<th class="center">模板名称</th>
+									<th class="center">uuid</th>
+									<th class="center">更新时间</th>
+								</tr>
+							</thead>
+													
+							<tbody>
+								
+							<!-- 开始循环 -->	
+							<c:choose>
+								<c:when test="${not empty notBindList}">
+									<c:forEach items="${notBindList}" var="var" varStatus="vs">
+												
+										<tr>
+											<td class='center'>
+												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
+											</td>
+											<td class="center">${var.name }</td>
+											<td class="center">${var.uuid }</td>
+											<td class="center">${var.gmt_modified }</td>
+										</tr>
+									
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<tr class="main_info">
+										<td colspan="10" class="center">没有相关数据</td>
+									</tr>
+								</c:otherwise>
+							</c:choose>
+							</tbody>
+						</table>
+					</form>
+
 											</table>
 										</div>
 										<div id="alreadybind" class="tab-pane" style="height:350px;">
@@ -77,13 +129,27 @@
 	<%@ include file="../system/index/foot.jsp"%>
 	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
+	<!-- 删除时确认窗口 -->
+	<script src="static/ace/js/bootbox.js"></script>
 	<!-- inline scripts related to this page -->
 	<script type="text/javascript">
 		$(top.hangge());
 		
 		$(function() {
-			$("#notbindFrame").attr("src", "<%=basePath%>mirror/listNotbind.do?cloudplatform_id=${pd.cloudplatform_id}&type=${pd.type}&id=${pd.id}");
 			$("#notbind_li").attr("class", "active");
+		});
+		
+		$(function() {
+			//复选框全选控制
+			var active_class = 'active';
+			$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
+				var th_checked = this.checked;//checkbox inside "TH" table header
+				$(this).closest('table').find('tbody > tr').each(function(){
+					var row = this;
+					if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+					else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+				});
+			});
 		});
 		
 		//发送Ajax请求
@@ -101,6 +167,50 @@
 			    	$(top.hangge());//关闭加载状态
 			    	location.reload();
 			    }
+			});
+		}
+		
+		//绑定确认
+		function bind() {
+			bootbox.confirm("确定要绑定吗?", function(result) {
+				if(result) {
+					var id = document.getElementById('id').value;
+					var str = '';
+					for(var i=0;i < document.getElementsByName('ids').length;i++){
+					  if(document.getElementsByName('ids')[i].checked){
+					  	if(str=='') str += document.getElementsByName('ids')[i].value;
+					  	else str += ',' + document.getElementsByName('ids')[i].value;
+					  }
+					}
+					if(str==''){
+						bootbox.dialog({
+							message: "<span class='bigger-110'>您没有选择任何内容!</span>",
+							buttons: 			
+							{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
+						});
+						$("#zcheckbox").tips({
+							side:1,
+				            msg:'点这里全选',
+				            bg:'#AE81FF',
+				            time:8
+				        });
+						return;
+					}else{
+						top.jzts();
+						$.ajax({
+							type: "POST",
+							url: '<%=basePath%>mirror/bind.do?id='+id,
+					    	data: {DATA_IDS:str},
+							dataType:'json',
+							//beforeSend: validateData,
+							cache: false,
+							success: function(data){
+								top.hangge();
+								location.reload();
+							}
+						});
+					}
+				}
 			});
 		}
 	</script>
