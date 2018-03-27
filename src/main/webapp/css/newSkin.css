@@ -978,3 +978,14 @@ body.queryUserApplyWorkOrderPre .table>thead>tr>th.sorting_desc:after {
     font-size: 18px;
     line-height: 40px;
 }
+
+.sidebar.menu-min .nav-list > li > a > .menu-icon {
+    width: 20px;
+    height: 20px;
+}
+.sidebar.menu-min .nav-list > li:hover > a > .menu-text, .sidebar.menu-min .nav-list > li.hover-show > a > .menu-text{
+    display: none;
+}
+.sidebar.menu-min .nav-list > li > .submenu {
+    margin-top: 0;
+}

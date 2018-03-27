@@ -113,7 +113,7 @@
 	</sql>
 	
 	<sql id="saveFieldValue">
-		func_nextval('cmp_order'),
+		#{orderNo},
 		#{status},
 		#{applyUserId},
 		#{deptId},
@@ -271,13 +271,22 @@
 		where status='1' and applyUserId=#{applyUserId}
 	</select>
 	
-	<!-- 新增清单或套餐 -->
-	<insert id="saveCmpOrder" parameterType="com.cmp.sid.CmpOrder" >
+	<!-- 新增清单或套餐：useGeneratedKeys="true" keyProperty="orderNo" keyColumn="orderNo" -->
+	<insert id="saveCmpOrder" parameterType="com.cmp.sid.CmpOrder">
+		<selectKey keyProperty="orderNo" order="BEFORE" resultType="String"> 
+			select func_nextval('cmp_order')
+		</selectKey>
 		insert into <include refid="tableName"/> (
 			<include refid="saveFieldName"/>
 		) values (
 			<include refid="saveFieldValue"/>
 		)
+	</insert>
+	
+	<!-- 新增软件参数 -->
+	<insert id="saveSoftParam" parameterType="pd">
+		insert into cmp_softparam (paramKey, paramValue, orderNo, softCode) 
+		values (#{paramKey}, #{paramValue}, #{orderNo}, #{softCode})
 	</insert>
 	
 	<!-- 新增套餐清单 -->

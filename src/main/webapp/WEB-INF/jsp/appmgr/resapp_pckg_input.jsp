@@ -49,7 +49,7 @@ function addPckgDiskRow(diskType, diskSize, diskEncrypt){
 		    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"tcdiskType\" id=\"tcdiskType"+i+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcdiskType").html()+"</select></td>"
 			    +"<td align=\"left\" style=\"width: 120px;padding-top:10px;\"><input type=\"text\" name=\"tcdiskSize\" id=\"tcdiskSize"+i+"\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" disabled/></td>"
 			    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
-			    +"<td align=\"right\" style=\"padding-top:10px;\"><span id=\"tciopsId"+i+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"tcdiskEncrypt\" id=\"tcdiskEncrypt"+i+"\" type=\"checkbox\" value=\"\" disabled/>加密&nbsp;</td>";
+			    +"<td align=\"right\" style=\"padding-top:10px;display:none\"><span id=\"tciopsId"+i+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"tcdiskEncrypt\" id=\"tcdiskEncrypt"+i+"\" type=\"checkbox\" value=\"\" disabled/>加密&nbsp;</td>";
 		    $("#tcdiskTableId").append("<tr>"+tdStr+"</tr>");
 		    $("#tcdiskType"+i).val(item);
 		    $("#tcdiskSize"+i).val(diskSizes[i]);
@@ -158,7 +158,7 @@ function getCurrConf(jsonObj){
 			</ul>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<%-- <tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
 		<td align="right" style="width: 120px;padding:10px;"></td>
@@ -171,7 +171,7 @@ function getCurrConf(jsonObj){
 				</c:if>
 			</ul>
 		</td>
-	</tr>
+	</tr> --%>
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;套餐列表</td>
@@ -349,7 +349,7 @@ function getCurrConf(jsonObj){
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">数据盘：</td>
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
 		<td style="padding:10px;" colspan="6">
 			<table id="tcdiskTableId">
 				<tr>
@@ -365,7 +365,7 @@ function getCurrConf(jsonObj){
 						<input type="text" name="tcdiskSize" id="tcdiskSize" value="20" style="width: 120px;" maxlength="5" disabled/>
 					</td>
 					<td align="left" style="width: 20px;">GB</td>
-					<td align="right">
+					<td align="right" style="display:none">
 					  	<span id="tciopsId">1120</span>&nbsp;IOPS&nbsp;<input name="tcdiskEncrypt" id="tcdiskEncrypt" type="checkbox" value="" disabled/>加密&nbsp;
 					</td>
 				</tr>
@@ -375,7 +375,7 @@ function getCurrConf(jsonObj){
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
-		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">安装软件：</td>
+		<td align="right" style="width: 120px;padding:10px;"></td>
 		<td style="padding:10px;" colspan="6">
 			<table id="tcsoftTableId">
 				<tr>
@@ -397,7 +397,7 @@ function getCurrConf(jsonObj){
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td align="right" style="width: 120px;padding:10px;">数量：</td>
+		<td align="right" style="width: 120px;padding:10px;"></td>
 		<td style="width: 120px;padding:10px;" colspan="6">
 			<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 			    <input type="text" id="tcvirNum" name="tcvirNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1" disabled> 
@@ -411,7 +411,7 @@ function getCurrConf(jsonObj){
 	<tr><td colspan="8" height="10px"></td>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
-		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
+		<td align="right" style="width: 120px;padding:10px;"></td>
 		<td style="padding:10px;" colspan="6">
 			<input type="text" name="tcexpireDate" id="tcexpireDate" value="" class="span10 date-picker" data-date-format="yyyy-mm-dd" style="width:120px;" placeholder="到期时间" disabled/>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="" disabled/>永久

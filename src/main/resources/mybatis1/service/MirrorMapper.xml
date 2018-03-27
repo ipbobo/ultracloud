@@ -233,7 +233,7 @@
 	<select id="getImgList" parameterType="pd" resultType="com.cmp.sid.CmpDict">
 		select a.id dictCode, a.name dictValue from t_mirrortemplate a
 		<if test="platTypeId!= null and platTypeId != ''">
-			where a.platform=(select b.type from t_cloudplatform b where b.id=#{platTypeId})
+			where a.type=(select b.type from t_cloudplatform b where b.id=#{platTypeId})
 		</if>
 	</select>
 </mapper>

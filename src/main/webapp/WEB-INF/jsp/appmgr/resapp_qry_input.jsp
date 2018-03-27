@@ -70,7 +70,26 @@ function setRecommendType(obj, fieldName, fieldValue){
 
 //设置软件参数
 function setSoftParam(indx){
-	$("#softParam"+(indx==0?"":indx)).val(indx);
+	var obj=$("#softCode"+(indx==0?"":indx));
+	if(obj.val()==""){
+		obj.tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
+		obj.focus();
+		return false;
+	}
+	
+	var diag = new top.Dialog();
+	diag.Drag=true;
+	diag.Title ="设置参数";
+	diag.URL = '<%=basePath%>/getParamList.do?softCode='+obj.val();
+	diag.Width = 350;
+	diag.Height = 400;
+	diag.CancelEvent=function(){diag.close();};//关闭事件
+	diag.OKEvent=function(){//OK事件
+		var softParamStr=diag.innerFrame.contentWindow.getSoftParam();//获取软件参数
+		$("#softParam"+(indx==0?"":indx)).val(softParamStr);
+		diag.close();
+	};
+	diag.show();
 }
 
 //永久到期时间选择
@@ -100,7 +119,7 @@ function addDiskRow(){
     var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" onchange=\"diskTypeFunc()\">"+$("#diskType").html()+"</select></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\" onchange=\"diskTypeFunc()\"/></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
-	    +"<td align=\"right\" style=\"padding-top:10px;\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+	    +"<td align=\"right\" style=\"padding-top:10px;display:none\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
     $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
@@ -112,7 +131,7 @@ function addSoftRow(){
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
+    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" id=\"softCode"+(len+1)+"\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
 	    +"<td align=\"right\" style=\"padding-top:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
 	$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
@@ -207,9 +226,11 @@ function checkData(btnId){
 		return false;
 	}
 	
-	if($("#softCode").val()==""){
-		$("#softCode").tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
-		$("#softCode").focus();
+	if(!mutiCheck('diskType', '请选择存储')){
+		return false;
+	}
+	
+	if(!mutiCheck('softCode', '请选择软件安装')){
 		return false;
 	}
 	
@@ -246,8 +267,23 @@ function checkData(btnId){
 		softParamArr.push($(this).val());
 	});
 	$("#softCodeStr").val(softCodeArr.join());
-	$("#softParamStr").val(softParamArr.join());
+	$("#softParamStr").val(softParamArr.join('|'));
 	return true;
+}
+
+//多个校验
+function mutiCheck(name, msg){
+	var bool=true;
+	$("select[name='"+name+"']").each(function() {
+		if($(this).val()==""){
+			$(this).tips({side:3, msg:msg, bg:'#AE81FF', time:2});
+			$(this).focus();
+			bool=false;
+			return false;
+		}
+	});
+	
+	return bool;
 }
 
 //加入清单
@@ -349,6 +385,7 @@ function savePckg(){
 function diskSizeFunc(obj, diskTypeId, iopsId){
 	var diskSize=$(obj).val();
 	if($(obj).val()==""){
+		$(obj).val("20");
 		return;
 	}
 	
@@ -649,7 +686,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<%-- <tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -662,7 +699,7 @@ $(window).scroll(function() {
 					</c:if>
 				</ul>
 			</td>
-		</tr>
+		</tr> --%>
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -814,7 +851,7 @@ $(window).scroll(function() {
 							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')" onchange="diskTypeFunc()"/>
 						</td>
 						<td align="left" style="width: 20px;">GB</td>
-						<td align="right" style="padding-right:13px;">
+						<td align="right" style="padding-right:13px;display:none">
 						  	<span id="iopsId">1120</span>&nbsp;IOPS&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密&nbsp;
 						</td>
 						<td align="left" valign="bottom" style="width: 200px;padding-bottom:8px;" rowspan="15">
@@ -852,7 +889,7 @@ $(window).scroll(function() {
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="width: 120px;padding:10px;" colspan="6">
 				<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 				    <input type="text" id="virNum" name="virNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1" onchange="virNumFunc()"> 
@@ -866,7 +903,7 @@ $(window).scroll(function() {
 		<tr><td colspan="8" height="10px"></td>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
-			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onchange="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
