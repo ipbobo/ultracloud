@@ -56,6 +56,16 @@ public class MirrorServiceImpl implements MirrorService {
 	}
 
 	/**
+	 * 删除模板
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	public void deleteTemplate(PageData pd) throws Exception {
+		dao.delete("MirrorMapper.deleteTemplate", pd);
+	}
+
+	/**
 	 * 修改
 	 * 
 	 * @param pd
@@ -63,6 +73,16 @@ public class MirrorServiceImpl implements MirrorService {
 	 */
 	public void edit(PageData pd) throws Exception {
 		dao.update("MirrorMapper.edit", pd);
+	}
+
+	/**
+	 * 修改
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editTemplate(PageData pd) throws Exception {
+		dao.update("MirrorMapper.editTemplate", pd);
 	}
 
 	/**
@@ -88,6 +108,17 @@ public class MirrorServiceImpl implements MirrorService {
 	}
 
 	/**
+	 * 列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listTemplate(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("MirrorMapper.listTemplate", page);
+	}
+
+	/**
 	 * 列表(全部)
 	 * 
 	 * @param pd
@@ -109,6 +140,16 @@ public class MirrorServiceImpl implements MirrorService {
 	}
 
 	/**
+	 * 通过id获取镜像模板
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findTemplateById(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("MirrorMapper.findTemplateById", pd);
+	}
+
+	/**
 	 * 批量删除
 	 * 
 	 * @param ArrayDATA_IDS
@@ -116,6 +157,16 @@ public class MirrorServiceImpl implements MirrorService {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("MirrorMapper.deleteAll", ArrayDATA_IDS);
+	}
+
+	/**
+	 * 批量删除模板
+	 * 
+	 * @param ArrayDATA_IDS
+	 * @throws Exception
+	 */
+	public void deleteAllTemplate(String[] ArrayDATA_IDS) throws Exception {
+		dao.delete("MirrorMapper.deleteAllTemplate", ArrayDATA_IDS);
 	}
 
 	/**

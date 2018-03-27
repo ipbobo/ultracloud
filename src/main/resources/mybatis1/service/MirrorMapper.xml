@@ -93,6 +93,14 @@
 			id = #{id}
 	</delete>
 	
+	<!-- 删除模板-->
+	<delete id="deleteTemplate" parameterType="pd">
+		delete from
+		<include refid="mttableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
@@ -109,12 +117,39 @@
 			id = #{id}
 	</update>
 	
+	<!-- 修改模板 -->
+	<update id="editTemplate" parameterType="pd">
+		update
+		<include refid="mttableName"></include>
+		set 
+			name = #{name},
+			url = #{url},
+			ostype = #{ostype},
+			osname = #{osname},
+			bitrate = #{bitrate},
+			USERNAME = #{USERNAME},
+			detail = #{detail}
+		where 
+			id = #{id}
+	</update>
+	
+	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select 
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 通过ID获取镜像模板 -->
+	<select id="findTemplateById" parameterType="pd" resultType="pd">
+		select 
+		id,name,url,cloudplatform_id,gmt_create,gmt_modified,type,detail,USERNAME,uuid
+		from 
+		<include refid="mttableName"></include>
 		where 
 			id = #{id}
 	</select>
@@ -156,6 +191,14 @@
 		and a.type=#{type}
 	</select>
 	
+	<!-- 列表 -->
+	<select id="listTemplate" parameterType="page" resultType="pd">
+		select id,name,url,cloudplatform_id,gmt_create,gmt_modified,type,detail,USERNAME,uuid
+		from 
+		<include refid="mttableName"></include>
+		where type=#{pd.type}
+	</select>
+	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select
@@ -168,6 +211,17 @@
 	<delete id="deleteAll" parameterType="String">
 		delete from
 		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量删除模板  -->
+	<delete id="deleteAllTemplate" parameterType="String">
+		delete from
+		<include refid="mttableName"></include>
 		where 
 			id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">

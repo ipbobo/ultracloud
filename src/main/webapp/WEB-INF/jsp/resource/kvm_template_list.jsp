@@ -17,8 +17,6 @@
 <link rel="stylesheet" href="static/ace/css/chosen.css" />
 <!-- jsp文件头和头部 -->
 <%@ include file="../system/index/top.jsp"%>
-<!-- 日期框 -->
-<link rel="stylesheet" href="static/ace/css/datepicker.css" />
 </head>
 <body class="no-skin">
 
@@ -32,15 +30,14 @@
 						<div class="col-xs-12">
 						
 						<!-- 检索  -->
-						<form action="kvm/goListVirtualmachine.do" method="post" name="userForm" id="userForm">
-						<input name="xzvalue" id="xzvalue" value="" type="hidden" />
+						<form action="kvm/listTemplate.do" method="post" name="userForm" id="userForm">
 						<input name="hostmachine_id" id="hostmachine_id" value="${pd.hostmachine_id} }" type="hidden" />
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<a class="btn btn-mini btn-primary" onclick="register();">模板注册</a>
-									<a class="btn btn-mini btn-primary" onclick="goEdit();">修改</a>
-									<a class="btn btn-mini btn-danger" onclick="delete();">删除</a>
+									<a class="btn btn-mini btn-primary" onclick="add();">模板注册</a>
+									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除"><i
+														class='ace-icon fa fa-trash-o bigger-120'></i></a>
 								</td>
 								<td>
 									<div class="nav-search" style="float: right;padding-top: 0px;margin-top: 0px;">
@@ -65,11 +62,10 @@
 									</th>
 									<th class="center">模板名称</th>
 									<th class="center">存放位置</th>
-									<th class="center">操作系统类型</th>
-									<th class="center">位数</th>
 									<th class="center">备注</th>
 									<th class="center">创建时间</th>
 									<th class="center">创建人</th>
+									<th class="center">操作</th>
 								</tr>
 							</thead>
 													
@@ -86,11 +82,23 @@
 											</td>
 											<td class="center">${var.name }</td>
 											<td class="center">${var.url}</td>
-											<td class="center">${var.ostype}</td>
-											<td class="center">${var.bitrate}</td>
 											<td class="center">${var.detail}</td>
 											<td class="center">${var.gmt_create }</td>
 											<td class="center">${var.USERNAME}</td>
+											<td class="center">
+													<div class="hidden-sm hidden-xs btn-group">
+														<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');"> <i
+																			class="ace-icon fa fa-pencil-square-o bigger-120"
+																			title="编辑"></i>
+														</a>
+														<a class="btn btn-xs btn-danger" onclick="del('${var.id}');"> <i
+																			class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
+														</a>
+													</div>
+													<div class="hidden-md hidden-lg">
+																	
+													</div>
+											</td>
 										</tr>
 									
 									</c:forEach>
@@ -111,13 +119,13 @@
 						</table>
 						
 					<div class="page-header position-relative">
-						<table style="width:100%;">
-							<tr>
-								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
-							</tr>
-						</table>
+									<table style="width: 100%;">
+										<tr>
+											<td style="vertical-align: top;"><div class="pagination"
+													style="float: right; padding-top: 0px; margin-top: 0px;">${page.pageStr}</div></td>
+										</tr>
+									</table>
 					</div>
-					
 					</form>
 	
 						</div>
@@ -145,10 +153,6 @@
 	<script src="static/ace/js/bootbox.js"></script>
 	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
-	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
-	<!-- 下拉框 -->
-	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	</body>
@@ -175,64 +179,111 @@ $(function() {
 	});
 });
 
-//选择确定
-function select(){
-	var str = '';
-	for(var i=0;i < document.getElementsByName('ids').length;i++){
-	  if(document.getElementsByName('ids')[i].checked){
-	  	if(str=='') str += document.getElementsByName('ids')[i].value;
-	  	else str += ',' + document.getElementsByName('ids')[i].value;
-	  }
-	}
-	if(str==''){
-		bootbox.dialog({
-			message: "<span class='bigger-110'>您没有选择任何内容!</span>",
-			buttons: 			
-			{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
-		});
-		$("#zcheckbox").tips({
-			side:1,
-            msg:'点这里全选',
-            bg:'#AE81FF',
-            time:8
-        });
-		return;
-	}else{
-		$("#xzvalue").val(str);
-		top.Dialog.close();
-	}
+//新增
+function add(){
+	 top.jzts();
+	 var diag = new top.Dialog();
+	 diag.Drag=true;
+	 diag.Title ="新增";
+	 diag.URL = '<%=basePath%>kvm/goAddTemplate.do';
+	 diag.Width = 600;
+	 diag.Height = 300;
+	 diag.CancelEvent = function(){ //关闭事件
+		 console.log('11111');
+		 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+			 if('${page.currentPage}' == '0'){
+				 top.jzts();
+				 setTimeout("self.location=self.location",100);
+			 }else{
+				 nextPage(${page.currentPage});
+			 }
+		}
+		diag.close();
+	 };
+	 diag.show();
 }
 
-//对虚拟机的操作
-function handle(type) {
-	var msg;
-	if(type == 'add') {
-		msg = '新建';
-	} else if(type == 'startup') {
-		msg = '开机';
-	} else if(type == 'shutdown') {
-		msg = '关机';
-	} else if(type == 'delete') {
-		msg = '删除';
-	} else if(type == 'restart') {
-		msg = '重启';
-	} else if(type == 'hangup') {
-		msg = '挂起';
-	} else if(type == 'recover') {
-		msg = '恢复';
-	}
-	
-	bootbox.confirm("确定要进行" + msg + "操作吗?", function(result) {
+//修改
+function edit(Id){
+	 top.jzts();
+	 var diag = new top.Dialog();
+	 diag.Drag=true;
+	 diag.Title ="编辑";
+	 diag.URL = '<%=basePath%>kvm/goEditTemplate.do?id='+Id;
+	 diag.Width = 600;
+	 diag.Height = 300;
+	 diag.CancelEvent = function(){ //关闭事件
+		 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+			 location.reload();
+			 //nextPage(${page.currentPage});
+		}
+		diag.close();
+	 };
+	 diag.show();
+}
+
+//删除
+function del(Id){
+	bootbox.confirm("确定要删除吗?", function(result) {
 		if(result) {
 			top.jzts();
-			var url = "<%=basePath%>virtualhandle/" + type + ".do";
+			var url = "<%=basePath%>kvm/deleteTemplate.do?id="+Id+"&tm="+new Date().getTime();
 			$.get(url,function(data){
-				console.log(data + '-------------->');
-				nextPage(${page.currentPage});
+				//top.hangge();
+				//nextPage(${page.currentPage});
+				location.reload();
 			});
 		}
 	});
 }
+
+//批量删除
+function makeAll(msg){
+	bootbox.confirm(msg, function(result) {
+		if(result) {
+			var str = '';
+			for(var i=0;i < document.getElementsByName('ids').length;i++){
+			  if(document.getElementsByName('ids')[i].checked){
+			  	if(str=='') str += document.getElementsByName('ids')[i].value;
+			  	else str += ',' + document.getElementsByName('ids')[i].value;
+			  }
+			}
+			if(str==''){
+				bootbox.dialog({
+					message: "<span class='bigger-110'>您没有选择任何内容!</span>",
+					buttons: 			
+					{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
+				});
+				$("#zcheckbox").tips({
+					side:1,
+		            msg:'点这里全选',
+		            bg:'#AE81FF',
+		            time:8
+		        });
+				return;
+			}else{
+				if(msg == '确定要删除选中的数据吗?'){
+					top.jzts();
+					$.ajax({
+						type: "POST",
+						url: '<%=basePath%>kvm/deleteAllTemplate.do?tm='+new Date().getTime(),
+				    	data: {DATA_IDS:str},
+						dataType:'json',
+						//beforeSend: validateData,
+						cache: false,
+						success: function(data){
+							 $.each(data.list, function(i, list){
+								 //top.hangge();
+								//nextPage(${page.currentPage});
+								 location.reload();
+							 });
+						}
+					});
+				}
+			}
+		}
+	});
+};
 	
 </script>
 </html>

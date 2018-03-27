@@ -47,6 +47,14 @@ public interface MirrorService {
 	 * @throws Exception
 	 */
 	public void edit(PageData pd) throws Exception;
+	
+	/**
+	 * 修改
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editTemplate(PageData pd) throws Exception;
 
 	/**
 	 * 列表
@@ -63,6 +71,14 @@ public interface MirrorService {
 	 * @throws Exception
 	 */
 	public List<PageData> listTemplateByType(PageData pd) throws Exception;
+	
+	/**
+	 * 列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	public List<PageData> listTemplate(Page page) throws Exception ;
 
 	/**
 	 * 列表(全部)
@@ -79,6 +95,14 @@ public interface MirrorService {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd) throws Exception;
+	
+	/**
+	 * 通过id获取镜像模板
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findTemplateById(PageData pd) throws Exception;
 
 	/**
 	 * 批量删除
@@ -87,6 +111,14 @@ public interface MirrorService {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
+	
+	/**
+	 * 批量删除模板
+	 * 
+	 * @param ArrayDATA_IDS
+	 * @throws Exception
+	 */
+	public void deleteAllTemplate(String[] ArrayDATA_IDS) throws Exception;
 
 	/**
 	 * 列出已加入镜像的模板
@@ -137,6 +169,14 @@ public interface MirrorService {
 	 * @throws Exception
 	 */
 	public void deleteByMirrorId(BigInteger id) throws Exception;
+	
+	/**
+	 * 删除模板
+	 * 
+	 * @param 
+	 * @throws Exception
+	 */
+	public void deleteTemplate(PageData pd) throws Exception;
 
 	// 模板列表查询
 	public List<CmpDict> getImgList(PageData pd) throws Exception;
