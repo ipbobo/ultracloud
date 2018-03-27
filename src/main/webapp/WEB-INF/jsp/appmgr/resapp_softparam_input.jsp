@@ -23,14 +23,19 @@ function getSoftParam(){
 <body>
 <div class="main-container">
 	<table style="width: 100%;margin-top: 10px;" class="table table-striped table-bordered table-hover">
-		<c:if test="${not empty paramList}">
+	<c:choose>
+		<c:when test="${not empty paramList}">
 		<c:forEach items="${paramList}" var="var" varStatus="st">
 		<tr>
 			<td style="width: 120px;vertical-align: middle;text-align: right;">${var.dictDesc}:</td>
 			<td><input type="text" name="${var.dictCode}" id="${var.dictCode}" value="${var.dictValue}" style="width: 100%;" maxlength="200" placeholder="这里输入参数[${var.dictCode}]的值" title="参数[${var.dictCode}]的值"/></td>
 		</tr>
 		</c:forEach>
-		</c:if>
+		</c:when>
+		<c:otherwise>
+		<tr class="main_info"><td colspan="2" class="center">没有相关参数</td></tr>
+		</c:otherwise>
+	</c:choose>
 	</table>
 </div>
 </body>

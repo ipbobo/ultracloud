@@ -86,10 +86,7 @@ function setSoftParam(indx){
 	diag.CancelEvent=function(){diag.close();};//关闭事件
 	diag.OKEvent=function(){//OK事件
 		var softParamStr=diag.innerFrame.contentWindow.getSoftParam();//获取软件参数
-		if(softParamStr){
-			$("#softParam"+(indx==0?"":indx)).val(softParamStr);
-		}
-		
+		$("#softParam"+(indx==0?"":indx)).val(softParamStr);
 		diag.close();
 	};
 	diag.show();
@@ -270,7 +267,7 @@ function checkData(btnId){
 		softParamArr.push($(this).val());
 	});
 	$("#softCodeStr").val(softCodeArr.join());
-	$("#softParamStr").val(softParamArr.join());
+	$("#softParamStr").val(softParamArr.join('|'));
 	return true;
 }
 
