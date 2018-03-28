@@ -47,6 +47,7 @@ public class CmpOrder {
 	private String totalAmt;//总价格
 	private String fileName;//文件名称
 	private String pckgName;//套餐名称
+	private String newOrderNo;//新清单编号
 	private Map<String, String> diskTypeMap=new LinkedHashMap<String, String>();//套餐名称
 
 	public String getOrderNo() {
@@ -391,6 +392,14 @@ public class CmpOrder {
 
 	public void setPckgName(String pckgName) {
 		this.pckgName = pckgName;
+	}
+	
+	public String getNewOrderNo() {
+		return newOrderNo;
+	}
+
+	public void setNewOrderNo(String newOrderNo) {
+		this.newOrderNo = newOrderNo;
 	}
 	
 	public void setDiskTypeMap(String key, String value) {
