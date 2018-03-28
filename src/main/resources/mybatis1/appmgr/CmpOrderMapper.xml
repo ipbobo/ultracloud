@@ -97,7 +97,6 @@
 		diskSize,
 		diskEncrypt,
 		softCode,
-		softParam,
 		projectCode,
 		osType,
 		osBitNum,
@@ -130,7 +129,6 @@
 		#{diskSize},
 		#{diskEncrypt},
 		#{softCode},
-		#{softParam},
 		#{projectCode},
 		#{osType},
 		#{osBitNum},
@@ -295,7 +293,7 @@
 			select func_nextval('cmp_order')
 		</selectKey>
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select #{newOrderNo}, #{status}, applyUserId, deptId, #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, ''
+		select #{newOrderNo}, #{status}, applyUserId, deptId, #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, ''
 		from 
 		<include refid="tableName"/>
 		where orderNo=#{orderNo};

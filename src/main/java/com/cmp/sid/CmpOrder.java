@@ -3,6 +3,8 @@ package com.cmp.sid;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.data.annotation.Transient;
+
 public class CmpOrder {
 	private String orderNo;//清单编号
 	private String createTime;//创建时间
@@ -30,7 +32,6 @@ public class CmpOrder {
 	private String diskEncrypt;//磁盘加密，多个用英文逗号分隔
 	private String softCode;//软件代码，多个用英文逗号分隔
 	private String softName;//软件名称，多个用英文逗号分隔
-	private String softParam;//软件参数，多个用英文逗号分隔
 	private String projectCode;//项目代码
 	private String projectCodeName;//项目代码名称
 	private String osType;//操作系统类型
@@ -47,7 +48,12 @@ public class CmpOrder {
 	private String totalAmt;//总价格
 	private String fileName;//文件名称
 	private String pckgName;//套餐名称
+	
+	@Transient
+	private String softParam;//软件参数，多个用英文逗号分隔
+	@Transient
 	private String newOrderNo;//新清单编号
+	@Transient
 	private Map<String, String> diskTypeMap=new LinkedHashMap<String, String>();//套餐名称
 
 	public String getOrderNo() {
@@ -258,14 +264,6 @@ public class CmpOrder {
 		this.softName = softName;
 	}
 
-	public String getSoftParam() {
-		return softParam;
-	}
-
-	public void setSoftParam(String softParam) {
-		this.softParam = softParam;
-	}
-
 	public String getProjectCode() {
 		return projectCode;
 	}
@@ -392,6 +390,14 @@ public class CmpOrder {
 
 	public void setPckgName(String pckgName) {
 		this.pckgName = pckgName;
+	}
+	
+	public String getSoftParam() {
+		return softParam;
+	}
+
+	public void setSoftParam(String softParam) {
+		this.softParam = softParam;
 	}
 	
 	public String getNewOrderNo() {
