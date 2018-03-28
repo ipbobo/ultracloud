@@ -2,6 +2,7 @@ package com.cmp.service.bi;
 
 import java.util.List;
 
+import com.cmp.entity.BiBillDay;
 import com.fh.util.PageData;
 
 /**
@@ -10,16 +11,16 @@ import com.fh.util.PageData;
  *
  */
 public interface BiBillDayService {
-	
 
 	/**
 	 * 查询v_bi_virtual_bill视图
+	 * 
 	 * @param pd
 	 * @return
 	 * @throws Exception
 	 */
 	public List<PageData> listVBiVirtualBill(PageData pd) throws Exception;
-	
+
 	/**
 	 * 新增
 	 * 
@@ -27,23 +28,44 @@ public interface BiBillDayService {
 	 * @throws Exception
 	 */
 	public void save(PageData pd) throws Exception;
-	
-	/**列表
+
+	/**
+	 * 批量新增
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listAll(PageData pd) throws Exception ;
-	
-	/**费用报表列表
+	public void saveBatch(List<BiBillDay> list) throws Exception;
+
+	/**
+	 * 列表
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listBillGroupByVirtualId(PageData pd) throws Exception ;
-	
-	/**资源使用列表
+	public List<PageData> listAll(PageData pd) throws Exception;
+
+	/**
+	 * 费用报表列表
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listResourceGroupByVirtualId(PageData pd) throws Exception ;
-	
+	public List<PageData> listBillGroupByVirtualId(PageData pd) throws Exception;
+
+	/**
+	 * 资源使用列表
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> listResourceGroupByVirtualId(PageData pd) throws Exception;
+
+	/**
+	 * 批量删除
+	 * 
+	 * @param pd
+	 */
+	public void deleteBatch(PageData pd) throws Exception;
+
 }

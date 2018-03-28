@@ -121,7 +121,7 @@
 									<th class="center">部门</th>
 									<th class="center">项目</th>
 									<th class="center">虚拟机名称</th>
-									<th class="center">虚拟机配置</th>
+									<th class="center">虚拟机配置(cpu/内存/磁盘)</th>
 									<th class="center">平台</th>
 									<th class="center">申请人</th>
 									<th class="center">计费</th>
@@ -138,10 +138,10 @@
 											<td class="center">${var.DEPARTMENT_NAME }</td>
 											<td class="center">${var.project_name }</td>
 											<td class="center">${var.vm_name}</td>
-											<td class="center">${var.cpu}C/${var.memory}G/${var.datadisk}G/</td>
+											<td class="center">${var.cpu}C/<fmt:formatNumber value="${var.memory/1024}" type="currency" pattern="#"/>G/${var.datadisk}G</td>
 											<td class="center">${var.type}</td>
-											<td class="center">${var.USERNAME}</td>
-											<td class="center">${var.account}元</td>
+											<td class="center">${var.user}</td>
+											<td class="center"><fmt:formatNumber value="${var.account}" type="currency" pattern="0.00" maxFractionDigits="2"/>元</td>
 										</tr>
 									</c:forEach>
 									</c:if>
@@ -198,7 +198,7 @@
 $(top.hangge());
 
 //检索
-function searchs(){
+function tosearch(){
 	top.jzts();
 	$("#Form").submit();
 }

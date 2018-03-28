@@ -2,6 +2,8 @@ package com.cmp.task;
 
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -9,6 +11,8 @@ import org.quartz.JobExecutionException;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.cmp.common.Constants;
+import com.cmp.service.CmpLogService;
 import com.cmp.service.bi.BIDatacenterService;
 import com.cmp.service.system.TimeTaskServiceImpl;
 import com.fh.controller.base.BaseController;
@@ -25,25 +29,31 @@ public class BIDataGenerateJob extends BaseController implements Job {
 
 	protected Logger logger = Logger.getLogger(this.getClass());
 
-	@SuppressWarnings("unchecked")
+	@Resource
+	private CmpLogService cmpLogService;
+
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-
-		logger.info("BIDataGenerateJob start...---------------->>");
-
-		// TODO Auto-generated method stub
-		JobDataMap dataMap = context.getJobDetail().getJobDataMap();
-		Map<String, Object> parameter = (Map<String, Object>) dataMap.get("parameterList"); // 获取参数
-
 		WebApplicationContext webctx = ContextLoader.getCurrentWebApplicationContext();
-		BIDatacenterService biDataGenerateService = (BIDatacenterService) webctx.getBean("biDataGenerateService");
 
 		try {
-			biDataGenerateService.biDataGenerateHandler();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			long start = System.currentTimeMillis();
+			logger.info("BIDataGenerateJob start...");
+			
+			cmpLogService = (CmpLogService) webctx.getBean("cmpLogService");
+			cmpLogService.addCmpLog(Constants.OPER_TYPE_11, "生成BI计费数据", "开始", Constants.OPER_STATUS_0, "");
 
-		logger.info("BIDataGenerateJob end.------------------->>|");
+			JobDataMap dataMap = context.getJobDetail().getJobDataMap();
+			dataMap.get("parameterList");
+			                    
+			BIDatacenterService biDatacenterService = (BIDatacenterService) webctx.getBean("biDatacenterService");
+			biDatacenterService.biDataGenerateHandler();
+
+			long time = System.currentTimeMillis() - start;
+			logger.info("BIDataGenerateJob end.");
+			cmpLogService.addCmpLog(Constants.OPER_TYPE_11, "生成BI计费数据", "结束. 耗时：" + time, Constants.OPER_STATUS_0, "");
+		} catch (Exception e1) {
+			logger.error(e1.getMessage());
+		}
 	}
 
 	/**
