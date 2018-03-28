@@ -283,8 +283,8 @@
 	
 	<!-- 新增软件参数 -->
 	<insert id="saveSoftParam" parameterType="pd">
-		insert into cmp_softparam (paramKey, paramValue, orderNo, softCode) 
-		values (#{paramKey}, #{paramValue}, #{orderNo}, #{softCode})
+		insert into cmp_softparam (orderNo, softCode, paramKey, paramValue) 
+		values (#{orderNo}, #{softCode}, #{paramKey}, #{paramValue})
 	</insert>
 	
 	<!-- 新增套餐清单 -->
@@ -297,8 +297,8 @@
 		from 
 		<include refid="tableName"/>
 		where orderNo=#{orderNo};
-		insert into cmp_softparam(paramKey, paramValue, orderNo, softCode)
-		select paramKey, paramValue, #{newOrderNo}, softCode from `cmp_softparam`
+		insert into cmp_softparam(orderNo, softCode, paramKey, paramValue)
+		select #{newOrderNo}, softCode, paramKey, paramValue from `cmp_softparam`
 		where orderNo=#{orderNo};
 	</insert>
 	
