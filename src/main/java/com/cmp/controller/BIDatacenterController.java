@@ -1,5 +1,6 @@
 package com.cmp.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,30 +35,31 @@ import com.fh.util.PageData;
 @Controller
 @RequestMapping(value = "/bidatacenter")
 public class BIDatacenterController extends BaseController {
-	
+
 	@Resource(name = "biDatacenterService")
 	private BIDatacenterService biDatacenterService;
 
-	@Resource(name="departmentService")
+	@Resource(name = "departmentService")
 	private DepartmentManager departmentService;
-	
+
 	@Resource(name = "projectService")
 	private ProjectService projectService;
-	
+
 	@Resource(name = "userService")
 	private UserService userService;
-	
+
 	@Resource(name = "mediumService")
 	private MediumService mediumService;
-	
+
 	@Resource(name = "biBillDayService")
 	private BiBillDayService biBillDayService;
-	
+
 	@Resource(name = "dictionariesService")
 	private DictionariesService dictionariesService;
-	
+
 	/**
 	 * 计费报表列表
+	 * 
 	 * @param page
 	 * @return
 	 * @throws Exception
@@ -73,30 +75,41 @@ public class BIDatacenterController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		
-		//查询项目列表
-		List<PageData>	projectList = projectService.listAll(pd);
+
+		// 查询项目列表
+		List<PageData> projectList = projectService.listAll(pd);
 		mv.addObject("projectList", projectList);
-		
-		//查询部门树
+
+		// 查询部门树
 		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
-		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect("0",zdepartmentPdList));
-		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
-		
-		//查询用户列表
+		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect("0", zdepartmentPdList));
+		mv.addObject("zTreeNodes", (null == arr ? "" : arr.toString()));
+
+		// 查询用户列表
 		List<PageData> userList = userService.listAllUser(pd);
 		mv.addObject("userList", userList);
-		
+
 		List<PageData> varList = biDatacenterService.listBillBIData(pd);
-		mv.setViewName("bi/bill_list");
 		mv.addObject("varList", varList);
+
+		// 计算总额
+		if (null != varList) {
+			BigDecimal totalSum = new BigDecimal(0);
+			for (PageData biPD : varList) {
+				totalSum = totalSum.add((BigDecimal) biPD.get("account"));
+			}
+			pd.put("totalSum", totalSum);
+		}
+
+		mv.setViewName("bi/bill_list");
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-	
+
 	/**
 	 * 资源报表列表
+	 * 
 	 * @param page
 	 * @return
 	 * @throws Exception
@@ -112,23 +125,22 @@ public class BIDatacenterController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		
-		//查询项目列表
-		List<PageData>	projectList = projectService.listAll(pd);
+
+		// 查询项目列表
+		List<PageData> projectList = projectService.listAll(pd);
 		mv.addObject("projectList", projectList);
-		
-		//查询部门树
+
+		// 查询部门树
 		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
-		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect("0",zdepartmentPdList));
-		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
-		
-		//查询用户列表
+		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect("0", zdepartmentPdList));
+		mv.addObject("zTreeNodes", (null == arr ? "" : arr.toString()));
+
+		// 查询用户列表
 		List<PageData> userList = userService.listAllUser(pd);
 		mv.addObject("userList", userList);
-		
-		
+
 		String date = pd.getString("date");
-		if(null == date) {
+		if (null == date) {
 			pd.put("date", DateUtil.getDay());
 		}
 		List<PageData> varList = biDatacenterService.listResourceBIData(pd);
@@ -138,9 +150,10 @@ public class BIDatacenterController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-	
+
 	/**
 	 * 软件台帐报表列表
+	 * 
 	 * @param page
 	 * @return
 	 * @throws Exception
@@ -156,26 +169,26 @@ public class BIDatacenterController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		
-		//查询项目列表
-		List<PageData>	projectList = projectService.listAll(pd);
+
+		// 查询项目列表
+		List<PageData> projectList = projectService.listAll(pd);
 		mv.addObject("projectList", projectList);
-		
-		//查询部门树
+
+		// 查询部门树
 		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
-		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect("0",zdepartmentPdList));
-		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
-		
-		//查询用户列表
+		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect("0", zdepartmentPdList));
+		mv.addObject("zTreeNodes", (null == arr ? "" : arr.toString()));
+
+		// 查询用户列表
 		List<PageData> userList = userService.listAllUser(pd);
 		mv.addObject("userList", userList);
-		
-		//查询软件类型列表
+
+		// 查询软件类型列表
 		List<PageData> softTypeList = mediumService.listAllSoftType(pd);
 		mv.addObject("softTypeList", softTypeList);
-		
+
 		String date = pd.getString("date");
-		if(null == date) {
+		if (null == date) {
 			pd.put("date", DateUtil.getDay());
 		}
 		List<PageData> varList = biDatacenterService.listSoftwareBIData(pd);
@@ -185,9 +198,10 @@ public class BIDatacenterController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-	
+
 	/**
 	 * 云主机资产台帐报表列表
+	 * 
 	 * @param page
 	 * @return
 	 * @throws Exception
@@ -203,24 +217,24 @@ public class BIDatacenterController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		
-		//查询项目列表
-		List<PageData>	projectList = projectService.listAll(pd);
+
+		// 查询项目列表
+		List<PageData> projectList = projectService.listAll(pd);
 		mv.addObject("projectList", projectList);
-		
-		//查询部门树
+
+		// 查询部门树
 		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
-		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect("0",zdepartmentPdList));
-		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
-		
-		//查询用户列表
+		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect("0", zdepartmentPdList));
+		mv.addObject("zTreeNodes", (null == arr ? "" : arr.toString()));
+
+		// 查询用户列表
 		List<PageData> userList = userService.listAllUser(pd);
 		mv.addObject("userList", userList);
-		
-		//查询虚拟机状态列表
+
+		// 查询虚拟机状态列表
 		List<Dictionaries> dictionariesList = dictionariesService.listSubDictByBianma("virtual_status");
 		mv.addObject("dictionariesList", dictionariesList);
-		
+
 		List<PageData> varList = biBillDayService.listVBiVirtualBill(pd);
 		mv.setViewName("bi/virtual_list");
 		mv.addObject("varList", varList);
