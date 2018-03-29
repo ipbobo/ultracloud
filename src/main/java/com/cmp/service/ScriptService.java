@@ -75,5 +75,16 @@ public interface ScriptService {
 	 * @throws Exception
 	 */
 	public PageData findMediumById(PageData pd) throws Exception;
+	
+	
+	/**
+	 * 通过mediumId获取脚本参数数据
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> findDefParamsByMediumId(PageData pd) throws Exception;
+	
+	
 
 }

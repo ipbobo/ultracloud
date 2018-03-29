@@ -105,6 +105,16 @@
 	</select>
 	
 	
+		<!-- 通过ID获取数据 -->
+	<select id="findDefParamsByMediumId" parameterType="pd" resultType="pd">
+		select 
+		p.*  
+		from 
+		<include refid="tableName"></include> s, t_script_param p, <include refid="mediumtableName"></include> m 
+		where 
+			s.medium_id = m.id and p.script_id = s.id and  m.id = #{medium_id}
+	</select>
+	
 	<!-- 通过ID获取数据 -->
 	<select id="findMediumById" parameterType="pd" resultType="pd">
 		select

@@ -70,7 +70,7 @@
 													<td class='center'></td>
 													<td class='center'>
 														<button id="btn_deploy_select"  style="float:left;margin-left: 30px;" type="button" 
-															onclick="toAutoDeploySelect();">选择部署方案</button>
+															onclick="toSetParam('${workorder.appNo}');">部署脚本设置</button>
 													</td>
 													<td class='center'>
 														<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
@@ -318,7 +318,7 @@
 					<tr>
 						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;IP:</td>
 						<td id="tip_network">
-							<select name="ip" id="ip" title="请选择IP" style="width:40%;margin-left: 100px;">
+							<select name="ip" id="ip" title="请选择IP" multiple="multiple" style="width:40%;margin-left: 100px;">
 								<option value="#" selected="selected">请选择IP</option>
 							</select>
 						</td>
@@ -336,7 +336,7 @@
 		</div><!-- /.modal -->
 	</div>
 	
-	<!-- 自动部署设置 -->
+	<!-- 部署设置 -->
 	<div class="modal fade" id="autodeploy_modal" tabindex="-1" role="dialog" aria-labelledby="autodeploy_modalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -345,10 +345,11 @@
 						&times;
 					</button>
 					<h4 class="modal-title" id="middleware_modalLabel">
-						自动部署方案选择
+						脚本参数设置
 					</h4>
 				</div>
 				<div class="modal-body">
+				<!-- 
 				<table  style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 					<tr>
 						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;部署方案选择:</td>
@@ -359,6 +360,7 @@
 						</td>
 					</tr>
 				</table>
+				 -->
 						<form>
 						<ul id="autoDeployTab" class="nav nav-tabs">
 							
@@ -703,6 +705,49 @@
 		}); 
 	}
 	
+	function toSetParam(appNo){
+		jQuery.ajax({  
+			url : "<%=basePath%>toSetParam.do",  
+			data : {'appNo' : appNo},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				
+				 var autoDeployTab = $("#autoDeployTab");
+				 $("#autoDeployTab").empty();
+				 
+				 var autoDeployTabContent =  $("#autoDeployTabContent");
+				 $("#autoDeployTabContent").empty();
+				 
+				 for(var i=0;i<data.length;i++){ 
+						var autoDeployNode = data[i];
+						autoDeployTab.append("<li><a href='#" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
+						var scriptNodeList = autoDeployNode.scriptNodeList;
+						if (scriptNodeList != null){
+							var appendHTML = "";
+							if (i == 0){
+								appendHTML+=("<div class='tab-pane fade in active' id='" + autoDeployNode.id +"'>");
+							}else{
+								appendHTML+=("<div class='tab-pane fade' id='" + autoDeployNode.id +"'>");
+							}
+							appendHTML += "<table id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> "  + 
+							"<thead> <tr> <th class='center'>参数名称</th> <th class='center'>参数值</th> </tr> </thead>"
+							
+							
+							for(var z=0;z<scriptNodeList.length;z++){ 
+								 var scriptNode = scriptNodeList[z];
+								 appendHTML+=("<tr><td class='center'>" + scriptNode.name + "</td><td class='center'><input name='"+ scriptNode.paramKey +"' id='"+ scriptNode.paramKey +"' value='"+ scriptNode.defaultVal +"' /></td></tr>");
+							}
+							 appendHTML+="</table> </div>"
+								 autoDeployTabContent.append(appendHTML);
+						}
+				 }
+			}  
+		});
+		
+		$('#autodeploy_modal').modal('show');
+	}
 	
 	</script>
 
