@@ -118,13 +118,14 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover"  style="margin-top:5px;">
 							<thead>
 								<tr>
-									<th class="center">部门</th>
-									<th class="center">项目</th>
-									<th class="center">虚拟机名称</th>
-									<th class="center">虚拟机配置</th>
-									<th class="center">平台</th>
-									<th class="center">申请人</th>
-									<th class="center">计费</th>
+									<th class="center" style="width: 5%;">序号</th>
+									<th class="center" style="width: 15%;">部门</th>
+									<th class="center" style="width: 15%;">项目</th>
+									<th class="center" style="width: 15%;">虚拟机名称</th>
+									<th class="center" style="width: 20%;">虚拟机配置(cpu/内存/磁盘)</th>
+									<th class="center" style="width: 10%;">平台</th>
+									<th class="center" style="width: 10%;">申请人</th>
+									<th class="center" style="width: 10%;">计费</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -135,13 +136,14 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
+											<td class='center'>${vs.index+1}</td>
 											<td class="center">${var.DEPARTMENT_NAME }</td>
 											<td class="center">${var.project_name }</td>
 											<td class="center">${var.vm_name}</td>
-											<td class="center">${var.cpu}C/${var.memory}G/${var.datadisk}G/</td>
+											<td class="center">${var.cpu}C/<fmt:formatNumber value="${var.memory/1024}" type="currency" pattern="#"/>G/${var.datadisk}G</td>
 											<td class="center">${var.type}</td>
-											<td class="center">${var.USERNAME}</td>
-											<td class="center">${var.account}元</td>
+											<td class="center">${var.user}</td>
+											<td class="center"><fmt:formatNumber value="${var.account}" type="currency" pattern="0.00" maxFractionDigits="2"/>元</td>
 										</tr>
 									</c:forEach>
 									</c:if>
@@ -158,6 +160,14 @@
 								</c:otherwise>
 							</c:choose>
 							</tbody>
+						</table>
+						<table id="simple-table" class="table table-striped table-bordered table-hover"  style="margin-top:5px;">
+							<tr>
+								<td style="width: 90%;"><div style="float:right;">总计：</div></td>
+								<td class="center" style="width: 10%;">
+									<fmt:formatNumber value="${pd.totalSum}" type="currency" pattern="0.00" maxFractionDigits="2"/>元
+								</td>
+							</tr>
 						</table>
 					</form>
 	
@@ -198,7 +208,7 @@
 $(top.hangge());
 
 //检索
-function searchs(){
+function tosearch(){
 	top.jzts();
 	$("#Form").submit();
 }

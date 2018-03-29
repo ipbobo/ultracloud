@@ -41,7 +41,7 @@
 							</tr>
 							<tr>
 								<td style="width:110px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;时间规则:</td>
-								<td><input readonly="readonly" type="text" name="FHTIME" id="FHTIME" value="${pd.FHTIME}" maxlength="30" placeholder="这里输入时间规则" title="时间规则" style="width:98%;"/></td>
+								<td><input type="text" name="FHTIME" id="FHTIME" value="${pd.FHTIME}" maxlength="30" placeholder="这里输入时间规则" title="时间规则" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:110px;text-align: right;padding-top: 13px;">备注:</td>

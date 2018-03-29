@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.entity.BiBillDay;
 import com.fh.dao.DaoSupport;
 import com.fh.util.PageData;
 
@@ -31,31 +32,57 @@ public class BiBillDayServiceImpl implements BiBillDayService {
 		dao.save("BiBillDayMapper.save", pd);
 	}
 
-	/**列表(全部)
+	/**
+	 * 批量新增
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void saveBatch(List<BiBillDay> list) throws Exception {
+		dao.save("BiBillDayMapper.saveBatch", list);
+	}
+
+	/**
+	 * 列表(全部)
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd)throws Exception{
-		return (List<PageData>)dao.findForList("BiBillDayMapper.listAll", pd);
+	public List<PageData> listAll(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("BiBillDayMapper.listAll", pd);
 	}
-	
-	/**列表
+
+	/**
+	 * 列表
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listBillGroupByVirtualId(PageData pd) throws Exception {
-		return (List<PageData>)dao.findForList("BiBillDayMapper.listBillGroupByVirtualId", pd);
+		return (List<PageData>) dao.findForList("BiBillDayMapper.listBillGroupByVirtualId", pd);
 	}
-	
-	/**资源使用列表
+
+	/**
+	 * 资源使用列表
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listResourceGroupByVirtualId(PageData pd) throws Exception {
-		return (List<PageData>)dao.findForList("BiBillDayMapper.listResourceGroupByVirtualId", pd);
+		return (List<PageData>) dao.findForList("BiBillDayMapper.listResourceGroupByVirtualId", pd);
+	}
+
+	/**
+	 * 批量删除
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void deleteBatch(PageData pd) throws Exception {
+		dao.delete("BiBillDayMapper.deleteBatch", pd);
 	}
 
 }
