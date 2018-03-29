@@ -108,7 +108,7 @@ public class BIDatacenterController extends BaseController {
 	}
 
 	/**
-	 * 资源报表列表
+	 * 资源使用报表列表
 	 * 
 	 * @param page
 	 * @return
@@ -144,8 +144,22 @@ public class BIDatacenterController extends BaseController {
 			pd.put("date", DateUtil.getDay());
 		}
 		List<PageData> varList = biDatacenterService.listResourceBIData(pd);
-		mv.setViewName("bi/resource_list");
 		mv.addObject("varList", varList);
+
+		// 计算资源总配置
+		if (null != varList) {
+			int cpu = 0;
+			long memory = 0;
+			long datadisk = 0;
+			for (PageData biPD : varList) {
+				cpu += (Integer) biPD.get("cpu");
+				memory += (Long) biPD.get("memory");
+				datadisk += (null == biPD.get("datadisk")) ? 0l : (Long) biPD.get("datadisk");
+			}
+			pd.put("totalConfig", cpu + "G/" + memory / 1024 + "G/" + datadisk + "G");
+		}
+
+		mv.setViewName("bi/resource_list");
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
