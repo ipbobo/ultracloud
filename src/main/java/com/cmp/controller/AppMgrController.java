@@ -189,9 +189,22 @@ public class AppMgrController extends BaseController {
 	@RequestMapping(value="/getParamList")
 	public ModelAndView getParamList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		String softCode=request.getParameter("softCode");//软件代码
+		List<CmpDict> paramList=mediumService.getSoftParamList(softCode);//软件参数列表查询
+		StringBuffer sb=new StringBuffer();
+		if(paramList!=null && !paramList.isEmpty()){
+			for(CmpDict cmpDict: paramList){
+				if(sb.length()!=0){
+					sb.append(",");
+				}
+				
+				sb.append(cmpDict.getDictCode()).append(":").append(cmpDict.getDictValue());
+			}
+		}
+		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("appmgr/resapp_softparam_input");
-		mv.addObject("paramList", mediumService.getSoftParamList(softCode));//软件参数列表查询
+		mv.addObject("softParamStr", sb.toString());//软件参数字符串
+		mv.addObject("paramList", paramList);//软件参数列表
 		return mv;
 	}
 		

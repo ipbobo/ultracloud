@@ -16,12 +16,19 @@ function getSoftParam(){
 		paramArr.push($(this).attr("name")+':'+$(this).val());
 	});
 	
-	return paramArr.join();
+	var newSoftParamStr=paramArr.join();
+	var oldSoftParamStr=$("#oldSoftParamStr").val();
+	if(newSoftParamStr!=oldSoftParamStr){
+		return newSoftParamStr;
+	}
+	
+	return "";
 }
 </script>
 </head>
 <body>
 <div class="main-container">
+	<input type="hidden" name="oldSoftParamStr" id="oldSoftParamStr" value="${softParamStr}"/>
 	<table style="width: 100%;margin-top: 10px;" class="table table-striped table-bordered table-hover">
 	<c:choose>
 		<c:when test="${not empty paramList}">
