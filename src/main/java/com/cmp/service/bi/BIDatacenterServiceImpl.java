@@ -94,14 +94,28 @@ public class BIDatacenterServiceImpl implements BIDatacenterService {
 	 */
 	@Override
 	public void biDataGenerateHandler() throws Exception {
-		// 生成前一天的计费数据
-		List<PageData> vVirtualList = this.generateBillDayData();
+		List<PageData> vVirtualList = null;
 
-		// 生成当月的计费数据
-		this.generateBillDayMonth();
+		try {
+			// 生成前一天的计费数据
+			vVirtualList = this.generateBillDayData();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			// 生成当月的计费数据
+			this.generateBillDayMonth();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// 生成软件台帐数据
-		this.generateSoftwareBillData(vVirtualList);
+		try {
+			this.generateSoftwareBillData(vVirtualList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -221,10 +235,19 @@ public class BIDatacenterServiceImpl implements BIDatacenterService {
 		PageData pd = new PageData();
 		List<PageData> vSoftwareBillList = biSoftwareBillService.listVSoftwareBill(pd);
 
-		// 2、软件台帐数据入库
+		// 2、删除当天统计数据，防止重复统计
+		PageData dateePD = new PageData();
+		dateePD.put("date", DateUtil.getDay());
+		biSoftwareBillService.delete(dateePD);
+
+		// 3、软件台帐数据入库
 		for (PageData softwareBillPD : vSoftwareBillList) {
 			softwareBillPD.put("date", DateUtil.getDay());
-			biSoftwareBillService.save(softwareBillPD);
+			try {
+				biSoftwareBillService.save(softwareBillPD);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

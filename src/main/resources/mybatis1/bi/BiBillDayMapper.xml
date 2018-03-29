@@ -107,6 +107,9 @@
 		<if test="USERNAME!= null and USERNAME != ''">
 			and user = #{USERNAME}
 		</if>
+		<if test="status!= null and status != ''">
+			and status = #{status}
+		</if>
 	</select>
 
 	<!-- 列表(全部) -->

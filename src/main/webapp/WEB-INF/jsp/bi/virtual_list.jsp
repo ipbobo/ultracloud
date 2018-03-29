@@ -92,9 +92,9 @@
 									<div style="float: right;padding-top: 0px;margin-top: 0px;">
 								 	<select class="chosen-select form-control" name="status" id="status" data-placeholder="请选择状态" title="状态" style="vertical-align:top;width: 110px;" >
 									<option value=""></option>
-									<c:forEach items="${dictionariesList}" var="dictionaries">
-										<option value="${dictionaries.BIANMA }" <c:if test="${dictionaries.BIANMA == pd.status }">selected</c:if>>${dictionaries.NAME }</option>
-									</c:forEach>
+									<option value="0">运行中</option>
+									<option value="1">挂起</option>
+									<option value="2">关机</option>
 									</select>
 								  	</div>
 								</td>
@@ -107,7 +107,7 @@
 										</span>
 									</div>
 								</td>
-								<td style="vertical-align:top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
+								<td style="vertical-align:top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="searchs();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -115,15 +115,16 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover"  style="margin-top:5px;">
 							<thead>
 								<tr>
-								    <th class="center">虚拟机名称</th>
-								    <th class="center">状态</th>
-								    <th class="center">虚拟机配置</th>
-								    <th class="center">平台</th>
-									<th class="center">部门</th>
-									<th class="center">项目</th>
-									<th class="center">申请人</th>
-									<th class="center">申请时间</th>
-									<th class="center">到期时间</th>
+									<th class="center" style="width: 5%;">序号</th>
+								    <th class="center" style="width: 10%;">虚拟机名称</th>
+								    <th class="center" style="width: 10%;">状态</th>
+								    <th class="center" style="width: 15%;">虚拟机配置</th>
+								    <th class="center" style="width: 10%;">平台</th>
+									<th class="center" style="width: 10%;">部门</th>
+									<th class="center" style="width: 10%;">项目</th>
+									<th class="center" style="width: 10%;">申请人</th>
+									<th class="center" style="width: 10%;">申请时间</th>
+									<th class="center" style="width: 10%;">到期时间</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -134,8 +135,16 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
+											<td class='center'>${vs.index+1}</td>
 											<td class="center">${var.vm_name}</td>
-											<td class="center">${var.status}</td>
+											<td class="center">
+												<c:choose>
+													<c:when test="${var.status == 0}">运行中</c:when>
+													<c:when test="${var.status == 1}">挂起</c:when>
+													<c:when test="${var.status == 2}">关机</c:when>
+													<c:otherwise>未知</c:otherwise>
+												</c:choose>
+											</td>
 											<td class="center">${var.cpu}C/${var.memory}G/${var.datadisk}G/</td>
 											<td class="center">${var.type}</td>
 											<td class="center">${var.DEPARTMENT_NAME }</td>
