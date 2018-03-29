@@ -5,7 +5,7 @@
 	<select id="getAuditList" parameterType="String" resultType="pd">
 		SELECT c.type, GROUP_CONCAT(DISTINCT a.usergroup_id) userGroupId FROM `t_usergroup_user_map` a
 		inner join t_usergroup b on b.id=a.usergroup_id
-		inner JOIN sys_role c on c.ROLE_ID=b.ROLE_ID and c.type='audit'
+		inner JOIN sys_role c on c.ROLE_ID=b.ROLE_ID
 		where a.USERNAME=#{applyUserId}
 		GROUP BY c.type
 	</select>
