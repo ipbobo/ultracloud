@@ -13,7 +13,7 @@
 	<!-- 虚机总量查询 -->
 	<select id="getVirNum" parameterType="pd" resultType="Long">
 		select count(1) from t_virtualmachine a
-		where a.type!='kvm'
+		where 1=1
 		<if test="roleType != null and roleType == 'applicant'">
 			and a.user=#{applyUserId}
 		</if>
@@ -21,32 +21,35 @@
 			and exists (
 				SELECT 1 FROM act_hi_procinst b
 				INNER JOIN act_hi_actinst c on c.PROC_INST_ID_=b.PROC_INST_ID_
-				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit}))
-					  and b.BUSINESS_KEY_=a.appNo
+				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit})) and b.BUSINESS_KEY_=a.appNo
 			)
 		</if>
 	</select>
 	
 	<!-- 宿主机总量 -->
 	<select id="getHostNum" parameterType="pd" resultType="Long">
-		select count(1) from t_hostmachine
+		select count(1) from t_hostmachine a
+		where 1=1
+		<if test="roleType != null and roleType == 'applicant'">
+			and exists (select 1 from t_virtualmachine b where b.hostmachine_id=a.id and b.user=#{applyUserId})
+		</if>
+		<if test="roleType != null and roleType == 'audit'">
+			and exists (
+				select 1 from t_virtualmachine b 
+				where b.hostmachine_id=a.id 
+					  and exists (
+						  SELECT 1 FROM act_hi_procinst c
+						  INNER JOIN act_hi_actinst d on d.PROC_INST_ID_=c.PROC_INST_ID_
+						  where exists (select 1 from t_usergroup_user_map e where e.USERNAME=d.ASSIGNEE_ and FIND_IN_SET(e.usergroup_id, #{audit})) and c.BUSINESS_KEY_=b.appNo
+					  )
+			)
+		</if>
 	</select>
 	
 	<!-- 物理机总量 -->
 	<select id="getPhysNum" parameterType="pd" resultType="Long">
-		select count(1) from t_virtualmachine a
-		where a.type='kvm'
-		<if test="roleType != null and roleType == 'applicant'">
-			and a.user=#{applyUserId}
-		</if>
-		<if test="roleType != null and roleType == 'audit'">
-			and exists (
-				SELECT 1 FROM act_hi_procinst b
-				INNER JOIN act_hi_actinst c on c.PROC_INST_ID_=b.PROC_INST_ID_
-				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit}))
-					  and b.BUSINESS_KEY_=a.appNo
-			)
-		</if>
+		select count(1) from t_hostmachine a
+		where not EXISTS (select 1 from t_virtualmachine b where b.hostmachine_id=a.id)
 	</select>
 	
 	<!-- 用户总数 -->
@@ -81,7 +84,7 @@
 	<!-- 主机ID列表查询：vir-虚拟机；host-宿主机；phys-物理机 -->
 	<select id="getHostIdList" parameterType="pd" resultType="pd">
 		select 'vir' operType, GROUP_CONCAT(a.id) idStr, GROUP_CONCAT(a.hostmachine_id) hostIdStr from t_virtualmachine a
-		where a.type!='kvm'
+		where 1=1
 		<if test="roleType != null and roleType == 'applicant'">
 			and a.user=#{applyUserId}
 		</if>
@@ -89,19 +92,14 @@
 			and exists (
 				SELECT 1 FROM act_hi_procinst b
 				INNER JOIN act_hi_actinst c on c.PROC_INST_ID_=b.PROC_INST_ID_
-				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit}))
-					  and b.BUSINESS_KEY_=a.appNo
+				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit})) and b.BUSINESS_KEY_=a.appNo
 			)
 		</if>
 		union all
 		select 'host' operType, GROUP_CONCAT(a.id) idStr, '' hostIdStr from t_hostmachine a
 		where 1=1
 		<if test="roleType != null and roleType == 'applicant'">
-			and exists (
-				select 1 from t_virtualmachine b 
-				where b.hostmachine_id=a.id 
-					  and b.user=#{applyUserId}
-			)
+			and exists (select 1 from t_virtualmachine b where b.hostmachine_id=a.id and b.user=#{applyUserId})
 		</if>
 		<if test="roleType != null and roleType == 'audit'">
 			and exists (
@@ -110,33 +108,27 @@
 					  and exists (
 						  SELECT 1 FROM act_hi_procinst c
 						  INNER JOIN act_hi_actinst d on d.PROC_INST_ID_=c.PROC_INST_ID_
-						  where exists (select 1 from t_usergroup_user_map e where e.USERNAME=d.ASSIGNEE_ and FIND_IN_SET(e.usergroup_id, #{audit}))
-							    and c.BUSINESS_KEY_=b.appNo
+						  where exists (select 1 from t_usergroup_user_map e where e.USERNAME=d.ASSIGNEE_ and FIND_IN_SET(e.usergroup_id, #{audit})) and c.BUSINESS_KEY_=b.appNo
 					  )
 			)
 		</if>
 		union all
-		select 'phys' operType, GROUP_CONCAT(a.id) idStr, GROUP_CONCAT(a.hostmachine_id) hostIdStr from t_virtualmachine a
-		where a.type='kvm'
-		<if test="roleType != null and roleType == 'applicant'">
-			and a.user=#{applyUserId}
-		</if>
-		<if test="roleType != null and roleType == 'audit'">
-			and exists (
-				SELECT 1 FROM act_hi_procinst b
-				INNER JOIN act_hi_actinst c on c.PROC_INST_ID_=b.PROC_INST_ID_
-				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit}))
-					  and b.BUSINESS_KEY_=a.appNo
-			)
-		</if>
+		select 'phys' operType, GROUP_CONCAT(a.id) idStr, '' hostIdStr from t_hostmachine a
 	</select>
 	
-	<!-- 资源详细信息查询 -->
-	<select id="getResDtl" parameterType="String" resultType="com.cmp.sid.CmpDashboard">
+	<!-- 虚拟资源详细信息查询 -->
+	<select id="getVirResDtl" parameterType="String" resultType="com.cmp.sid.CmpDashboard">
 		SELECT c.cpuUseNum, ifnull(sum(a.cpu), 0) cpuTotalNum, c.memUseNum, ifnull(sum(a.memory), 0) memTotalNum, c.storeUseNum, ifnull(sum(a.localdisk), 0) storeTotalNum 
 		FROM t_hostmachine a
 		inner join (SELECT ifnull(sum(b.cpu), 0) cpuUseNum, ifnull(sum(b.memory), 0) memUseNum, ifnull(sum(b.mount_disk_size), 0) storeUseNum FROM t_virtualmachine b where FIND_IN_SET(b.hostmachine_id, #{hostIdStr})) c
 		where FIND_IN_SET(a.id, #{hostIdStr})
+	</select>
+	
+	<!-- 物理资源详细信息查询 -->
+	<select id="getPhysResDtl" parameterType="String" resultType="com.cmp.sid.CmpDashboard">
+		SELECT c.cpuUseNum, ifnull(sum(a.cpu), 0) cpuTotalNum, c.memUseNum, ifnull(sum(a.memory), 0) memTotalNum, c.storeUseNum, ifnull(sum(a.localdisk), 0) storeTotalNum 
+		FROM t_hostmachine a
+		inner join (SELECT ifnull(sum(b.cpu), 0) cpuUseNum, ifnull(sum(b.memory), 0) memUseNum, ifnull(sum(b.mount_disk_size), 0) storeUseNum FROM t_virtualmachine b where FIND_IN_SET(b.hostmachine_id, #{hostIdStr})) c
 	</select>
 	
 	<!-- TOP5云主机列表查询 -->
