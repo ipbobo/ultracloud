@@ -97,6 +97,11 @@ public class CmpOrderService {
 		}
 	}
 	
+	
+	public List<PageData> findSoftParam(PageData pd) throws Exception{
+		return (List<PageData>)dao.findForList("CmpOrderMapper.findSoftParam", pd);
+	}
+	
 	//新增套餐清单
 	public void addPckgList(CmpOrder cmpOrder) throws Exception {
 		dao.save("CmpOrderMapper.addPckgList", cmpOrder);

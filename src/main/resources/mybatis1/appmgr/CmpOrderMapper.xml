@@ -302,6 +302,16 @@
 		where orderNo=#{orderNo};
 	</insert>
 	
+	<!-- 查询软件参数-->
+	<select id="findSoftParam" parameterType="pd" resultType="pd">
+		select 
+		* 
+		from 
+		  cmp_softparam
+		where 
+			orderNo = #{orderNo} and softCode = #{softCode}
+	</select>
+	
 	<!-- 更新清单状态 -->
 	<select id="updateCmpOrderStatus" parameterType="pd">
 		update <include refid="tableName"/> set status='1', totalAmt=#{totalAmt} where orderNo=#{orderNo}
