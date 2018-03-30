@@ -1,10 +1,21 @@
+-- ----------------------------
+-- 地域
+-- ----------------------------
+DROP TABLE IF EXISTS `t_area`;
+CREATE TABLE `t_area` (
+  `id` varchar(32) NOT NULL COMMENT 'id',
+  `name` varchar(50) NOT NULL COMMENT '地域名',
+  UNIQUE INDEX uk_name(`name`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='地域'; 
 
 -- ----------------------------
 -- 环境
 -- ----------------------------
 DROP TABLE IF EXISTS `t_environment`;
 CREATE TABLE `t_environment` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `id` varchar(32) NOT NULL COMMENT 'id',
   `name` varchar(20) NOT NULL COMMENT '名称',
   `disknum` int NOT NULL COMMENT '挂载云磁盘数量',
   `diskmaximum` int NOT NULL COMMENT '每块云磁盘最大值',
@@ -19,6 +30,19 @@ CREATE TABLE `t_environment` (
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='环境'; 
+
+-- ----------------------------
+-- 地域与环境关联
+-- ----------------------------
+DROP TABLE IF EXISTS `t_area_environment_map`;
+CREATE TABLE `t_area_environment_map` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `area_id` bigint unsigned NOT NULL COMMENT '地域id',
+  `environment_id` bigint unsigned NOT NULL COMMENT '环境id',
+  UNIQUE INDEX uk_area_environment(`area_id`,`environment_id`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='地域与环境关联'; 
 
 -- ----------------------------
 -- 云平台
