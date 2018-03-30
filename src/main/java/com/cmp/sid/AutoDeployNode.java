@@ -15,6 +15,7 @@ public class AutoDeployNode {
 	private String scriptUrl; //自动部署脚本地址
 	private String scriptId;  //软件安装脚本ID
 	private String executeParams;	//自动部署脚本执行参数  
+	private String modFlag;  //参数用户修改标志
 	List<AutoDeployScriptNode> scriptNodeList;  //自动部署脚本入参列表
 	
 	public String getId() {
@@ -77,6 +78,12 @@ public class AutoDeployNode {
 	}
 	public void setMediumId(String mediumId) {
 		this.mediumId = mediumId;
+	}
+	public String getModFlag() {
+		return modFlag;
+	}
+	public void setModFlag(String modFlag) {
+		this.modFlag = modFlag;
 	}
 
 	

@@ -34,6 +34,7 @@ import com.cmp.service.CmpLogService;
 import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
+import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.ScriptParamService;
 import com.cmp.service.ScriptService;
@@ -109,6 +110,12 @@ public class CmpWorkOrderController extends BaseController{
 	
 	@Resource
 	private VirtualMachineService virtualMachineService;
+	
+	@Resource
+	private MediumService mediumService;
+	
+	@Resource
+	private ScriptService scriptService;
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
@@ -982,6 +989,73 @@ public class CmpWorkOrderController extends BaseController{
 				return n1.compareTo(n2);
 			}
 		});
+		return autoDeployNodeList;
+	}
+	
+	/**
+	 * 自动部署软件参数设置
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/toSetParam")
+	@ResponseBody
+	public List<AutoDeployNode> toSetParam(String appNo) throws Exception{
+		LinkedList<AutoDeployNode> autoDeployNodeList = new LinkedList<AutoDeployNode>();
+		LinkedList<AutoDeployScriptNode> scriptNodeList = new LinkedList<AutoDeployScriptNode>();
+		CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo(appNo);
+		if (workorder == null) {
+			cmpLogService.addCmpLog("1", "自动部署软件参数设置", "工单查询失败,未查询到相应的工单", "-1", StringUtil.getClientIp(getRequest()));
+			return autoDeployNodeList;
+		}
+		String softCodeStr = workorder.getSoftCode();
+		if (softCodeStr == null || softCodeStr.length() == 0) {
+			cmpLogService.addCmpLog("1", "自动部署软件参数设置", "工单未设置部署软件", "-1", StringUtil.getClientIp(getRequest()));
+			return autoDeployNodeList;
+		}
+		
+		
+		
+		String[] softCodeArr =  softCodeStr.split(",");
+		for (String softCode : softCodeArr) {
+			PageData m_pd = new PageData();
+			m_pd.put("id", softCode);
+			
+			m_pd = mediumService.findById(m_pd);
+			AutoDeployNode autoDeployNode = new AutoDeployNode();
+			autoDeployNode.setName(m_pd.getString("name"));
+			
+			PageData p_pd = new PageData();
+			p_pd.put("medium_id", softCode);
+			List<PageData> pDataList = scriptService.findDefParamsByMediumId(p_pd);
+			
+			//查询用户修改的参数信息
+			PageData s_pd = new PageData();
+			s_pd.put("softCode", softCode);
+			s_pd.put("orderNo", workorder.getOrderNo());
+			List<PageData> userSetParamList = cmpOrderService.findSoftParam(s_pd);
+			Map<String, String> userSetParamMap = new HashMap<String, String>();
+			for (PageData userSetParamPd : userSetParamList) {
+				userSetParamMap.put(userSetParamPd.getString("softCode") + userSetParamPd.getString("paramKey"), userSetParamPd.getString("paramValue"));
+			}
+			
+			for (PageData paramPd : pDataList) {
+				AutoDeployScriptNode scriptNode = new AutoDeployScriptNode();
+				scriptNode.setId(String.valueOf(paramPd.get("id")));
+				scriptNode.setScriptId(String.valueOf(paramPd.get("script_id")));
+				scriptNode.setDefaultVal(paramPd.getString("value"));
+				scriptNode.setParamKey(paramPd.getString("param_key"));
+				scriptNode.setName(paramPd.getString("name"));
+				scriptNodeList.add(scriptNode);
+				
+				if (userSetParamMap.get(softCode+paramPd.getString("param_key")) != null) {
+					autoDeployNode.setModFlag("1");
+				}
+				
+			}
+			autoDeployNode.setScriptNodeList(scriptNodeList);
+			autoDeployNodeList.add(autoDeployNode);
+		}
 		return autoDeployNodeList;
 	}
 	
