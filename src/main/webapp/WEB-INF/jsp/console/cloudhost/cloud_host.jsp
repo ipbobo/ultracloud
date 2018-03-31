@@ -147,9 +147,83 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 			</div>
 		</div>
+
 		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
 			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 		</a>
+
+		<div class="modal fade" id="platform_modal" tabindex="-1" role="dialog" aria-labelledby="platform_modalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="middleware_modalLabel">
+							克隆虚拟机
+						</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden"   name="h_appNo" id="h_appNo">
+						<input type="hidden"   name="h_cpu" id="h_cpu">
+						<input type="hidden"   name="h_memory" id="h_memory">
+						<input type="hidden"   name="h_diskSize" id="h_diskSize">
+						<table  style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;宿主机</td>
+								<td>
+									<select name="host" style="width:60%;margin-left: 50px;">
+										<option value="#" selected="selected">请选择宿主机</option>
+										<c:forEach items="${hostList}" var="var">
+											<option value="${var.id}">${var.name}</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;名称:</td>
+								<td>
+									<input class="textbox" type="text" name="vname">
+								</td>
+							</tr>
+							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;CPU:</td>
+								<td>
+									<input class="textbox" type="number" name="vcpus">
+								</td>
+							</tr>
+							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;内存:</td>
+								<td>
+									<input class="textbox" type="number" name="vmemory">
+								</td>
+							</tr>
+							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;磁盘:</td>
+								<td>
+									<input class="textbox" type="number" name="vdisk">
+								</td>
+							</tr>
+							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;镜像:</td>
+								<td>
+									<select name="vimage" style="width:60%;margin-left: 50px;">
+										<option value="#" selected="selected">请选择镜像</option>
+										<option value="/root/CentOS-6-x86_64-GenericCloud-1710.qcow2">
+											CentOS-6-x86_64-GenericCloud-1710.qcow2
+										</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button id="platform_modal_btn_cancel" type="button" class="btn btn-default"  data-dismiss="modal">取消</button>
+						<button id="platform_modal_btn_ok" type="button" class="btn btn-primary" onclick="createVm()">确定</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<%@ include file="../../system/index/foot.jsp"%>
