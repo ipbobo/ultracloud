@@ -34,12 +34,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td style="padding-left:6px;"><a class="btn btn-danger2  btn-sm" onclick="reboot()">重启</a></td>
 										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="stop()">关机</a></td>
 										<td style="padding-left:6px;">
-											<div class="btn-group">
-												<a class="btn btn-primary btn-sm">更多操作</a>
+											<div class="btn-group" style="height: 33px">
+												<button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													更多操作<span class="caret"></span>
+												</button>
+												<%--<a class="btn btn-primary btn-sm">更多操作</a>
 												<a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 													<span class="caret"></span>
 													<!-- <span class="sr-only">Toggle Dropdown</span> -->
-												</a>
+												</a>--%>
 												<ul class="dropdown-menu">
 													<c:if test="${BQX == 1}">
 														<li><a onclick="expandCompute()">计算扩容</a></li>
