@@ -220,6 +220,27 @@
 								</table>
 							</div>
 							
+							<div id="op_9" style="display: none;">
+							<!-- 扩容申请 -->
+								<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;扩容类型:</td>
+										<td>
+											<select name="expansion_type" id="expansion_type" title="扩容类型" style="width:20%;margin-left: 100px;">
+												  <option value="cpu">CPU</option>
+												  <option value="memory">内存</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;扩容大小:</td>
+										<td>
+											<input type="text" class="form-control limited" name="expansion_size" id="expansion_size" style="width: 70%;margin-left: 100px;"></input>
+										</td>
+								</tr>
+								</table>
+							</div>
+							
 							<table class="table table-striped table-bordered table-hover" style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 								<tr>
 									<td style="width:120px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;文件上传:</td>
@@ -599,6 +620,8 @@
 		var exp_time_pwd =  $("#exp_time_pwd").val();
 		var remark1 = $("#remark1").val();
 		var file_name = $("#file_name").val();
+		var expansion_type = $("#expansion_type").val();
+		var expansion_size = $("#expansion_size").val();
 		if( service_type ==""){
 			$("#tip_service_type").tips({
 				side:3,
@@ -678,6 +701,13 @@
 			}
 			
 		}
+		if (service_type == 9){
+			if (expansion_size == null){
+				showDialog("请输入扩容大小");
+				return false;
+			}
+			
+		}
 		
 		
 		//递交
@@ -688,7 +718,8 @@
 						'oper_type':oper_type, 'install_soft':install_soft, 'soft_version':soft_version,
 						'breakdown_time':breakdown_time, 'breakdown_info':breakdown_info, 'except_solve_time':except_solve_time,
 						'except_result':except_result,'breakdown_level':breakdown_level, 'partition_info':partition_info, 'directory':directory,
-						 'directory2':directory2, 'exp_time':exp_time, 'rootpwd':rootpwd, 'exp_time_pwd':exp_time_pwd,'directory3':directory3, 'vip_num':vip_num, 'remark1':remark1, 'file_name':file_name
+						 'directory2':directory2, 'exp_time':exp_time, 'rootpwd':rootpwd, 'exp_time_pwd':exp_time_pwd,'directory3':directory3, 'vip_num':vip_num, 'remark1':remark1, 'file_name':file_name, 
+						 'expansion_type':expansion_type, 'expansion_size':expansion_size
 					},  
 			type : "post",  
 			cache : false,  

@@ -3,7 +3,9 @@ package com.cmp.controller;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,12 +34,21 @@ import com.cmp.service.CmpLogService;
 import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
+import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
+import com.cmp.service.ScriptParamService;
+import com.cmp.service.ScriptService;
+import com.cmp.service.VirtualMachineService;
+import com.cmp.service.autodeploy.AutoDeployConfigService;
 import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
+import com.cmp.service.resourcemgt.DatacenternetworkService;
+import com.cmp.sid.AutoDeployNode;
+import com.cmp.sid.AutoDeployScriptNode;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.RelateTask;
+import com.cmp.sid.VirtualMachine;
 import com.cmp.util.StringUtil;
 import com.cmp.workorder.IWorkorderHandler;
 import com.cmp.workorder.WorkorderHelper;
@@ -86,7 +97,25 @@ public class CmpWorkOrderController extends BaseController{
 	private ClusterService clusterService;
 	
 	@Resource
+	private DatacenternetworkService datacenternetworkService;
+	
+	@Resource
 	private CmpLogService cmpLogService;
+	
+	@Resource
+	private ScriptParamService scriptParamService;
+	
+	@Resource
+	private AutoDeployConfigService autoDeployConfigService;
+	
+	@Resource
+	private VirtualMachineService virtualMachineService;
+	
+	@Resource
+	private MediumService mediumService;
+	
+	@Resource
+	private ScriptService scriptService;
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
@@ -104,10 +133,19 @@ public class CmpWorkOrderController extends BaseController{
 		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		
 		pd.put("USERNAME", userr.getUSERNAME());
 		pd.put("userType", userr.getRole().getTYPE());
 		page.setPd(pd);
 		
+		
+		//默认排序参数传递
+		if (pd.get("sortCol") == null || "".equals(pd.get("sortCol"))) {
+			pd.put("sortCol", "appNo");
+		}
+		if (pd.get("sortType") == null || "".equals(pd.get("sortType"))) {
+			pd.put("sortType", "desc");
+		}
 		
 		//工单查询  根据传入的查询参数， 查询部分或者全部     queryType :  不传或者1 = 全部，  2=今日的工单    3 = 待执行工单
 		List<PageData> workOrderList = new ArrayList<PageData>();
@@ -377,7 +415,7 @@ public class CmpWorkOrderController extends BaseController{
 		//获取工作流程图,查询流程定义
 		HistoricProcessInstance hpi = activitiService.findProcessInst(toViewWorkorder.getProcInstId());
 		ActivityImpl workorderImag = null;
-		if (!toViewWorkorder.getStatus().equals("5")) {
+		if (!toViewWorkorder.getStatus().equals("90")) {
 			//流程执行未完毕
 			workorderImag = activitiService.getProcessMap(hpi.getProcessDefinitionId(), hpi.getId()); 
 		}
@@ -477,10 +515,10 @@ public class CmpWorkOrderController extends BaseController{
 					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					
 					//更新工单(流程实例ID 和 工单状态)
-					Map<String, String> updateParams = new HashMap<String, String>();
-					updateParams.put("status", "3");  //审批不通过,退回
-					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
-					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+//					Map<String, String> updateParams = new HashMap<String, String>();
+//					updateParams.put("status", "3");  //审批不通过,退回
+//					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
+//					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 					cmpLogService.addCmpLog("1", "工单审核完成", "工单审核完成", "0", StringUtil.getClientIp(getRequest()));
 					resultInfo = "审核完成";
 					map.put("result", resultInfo);	
@@ -490,10 +528,10 @@ public class CmpWorkOrderController extends BaseController{
 					variables.put("rejectFlag", 1);
 					activitiService.handleTask(appNo, toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					//更新工单(流程实例ID 和 工单状态)
-					Map<String, String> updateParams = new HashMap<String, String>();
-					updateParams.put("status", "2");  //进入运维执行状态
-					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
-					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+//					Map<String, String> updateParams = new HashMap<String, String>();
+//					updateParams.put("status", "2");  //进入运维执行状态
+//					updateParams.put("procInstId", toCheckWorkorder.getProcInstId());
+//					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 					cmpLogService.addCmpLog("1", "工单审核完成", "工单审核完成", "0", StringUtil.getClientIp(getRequest()));
 					resultInfo = "审核完成";
 					map.put("result", resultInfo);	
@@ -547,10 +585,10 @@ public class CmpWorkOrderController extends BaseController{
 				variables.put("USERNAME", toVerifyWorkorder.getApplyUserName());
 				activitiService.handleTask(appNo, toVerifyWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 				//更新工单(流程实例ID 和 工单状态)
-				Map<String, String> updateParams = new HashMap<String, String>();
-				updateParams.put("status", "5");  //工单完成
-				updateParams.put("procInstId", toVerifyWorkorder.getProcInstId());
-				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+//				Map<String, String> updateParams = new HashMap<String, String>();
+//				updateParams.put("status", "5");  //工单完成
+//				updateParams.put("procInstId", toVerifyWorkorder.getProcInstId());
+//				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 				cmpLogService.addCmpLog("1", "工单退回确认完成", "工单退回确认完成", "0", StringUtil.getClientIp(getRequest()));
 				resultInfo = "工单退回确认完成";
 				map.put("result", resultInfo);	
@@ -608,19 +646,19 @@ public class CmpWorkOrderController extends BaseController{
 					variables.put("rejectFlag", 0);
 					activitiService.handleTask(appNo, toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					//更新工单(流程实例ID 和 工单状态)
-					Map<String, String> updateParams = new HashMap<String, String>();
-					updateParams.put("status", "3");  //退回
-					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
-					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+//					Map<String, String> updateParams = new HashMap<String, String>();
+//					updateParams.put("status", "3");  //退回
+//					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
+//					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 				}else {
 					variables.put("USERNAME", userr.getUSERNAME());
 					variables.put("rejectFlag", 1);
 					activitiService.handleTask(appNo, toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), null, variables);
 					//更新工单(流程实例ID 和 工单状态)
-					Map<String, String> updateParams = new HashMap<String, String>();
-					updateParams.put("status", "5");  //进入运维执行状态
-					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
-					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+//					Map<String, String> updateParams = new HashMap<String, String>();
+//					updateParams.put("status", "5");  //进入运维执行状态
+//					updateParams.put("procInstId", toExecuteWorkorder.getProcInstId());
+//					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 				}
 				cmpLogService.addCmpLog("1", "工单执行确认完成", "工单执行确认完成", "0", StringUtil.getClientIp(getRequest()));
 				resultInfo = "执行成功";
@@ -813,6 +851,70 @@ public class CmpWorkOrderController extends BaseController{
 	}
 	
 	
+	/**
+	 * ip地址重复过滤
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	
+	@RequestMapping(value="/toCheckNetwork")
+	@ResponseBody
+	public List<String> toCheckNetwork(String ippool) throws Exception{
+		if (ippool == null || ippool.length() == 0) {
+			return new ArrayList<String>();
+		}
+		List<String> ipList = new ArrayList<String>();
+		if (ippool != null && ippool.indexOf(".")!= -1&& ippool.indexOf('-')!= -1){
+			String[] ip_arr = ippool.substring(ippool.lastIndexOf('.')+1, ippool.length()).split("-");
+			String ip_head = ippool.substring(0, ippool.lastIndexOf('.'));
+			int ip_index_start = Integer.parseInt(ip_arr[0]);
+			int ip_index_end = Integer.parseInt(ip_arr[1]);
+			String ip_start = ip_head + "." + ip_arr[0];
+			String ip_end = ip_head + "." + ip_arr[1];
+			PageData pd = new PageData();
+			pd.put("ipstart", ip_start);
+			pd.put("ipend", ip_end);
+			List<PageData> ipPages = virtualMachineService.searchIp(pd);
+			List<String> usedIpList = new ArrayList<String>();
+			for (PageData ipPd : ipPages) {
+				usedIpList.add(ipPd.getString("ip"));
+			}
+		    for(int i = ip_index_start; i < ip_index_end; i++){ 
+		    	String curr_ip = ip_head + "." + i;
+		    	if (!usedIpList.contains(curr_ip)) {
+		    		ipList.add(curr_ip);
+		    	}
+		    }
+		}else if (ippool != null && ippool.indexOf(".")!= -1){
+			String curr_ip = ippool;  
+			VirtualMachine selectVM = virtualMachineService.findByIp(curr_ip);
+	    	if (selectVM == null) {
+	    		ipList.add(curr_ip);
+	    	}
+		}
+		return ipList;
+	}
+	
+	
+	/**
+	 * 数据中心选择网络
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/toNetworkQuery")
+	@ResponseBody
+	public List<PageData> toNetworkQuery(String dataCenterId) throws Exception{
+		if (dataCenterId == null || dataCenterId.length() == 0) {
+			return null;
+		}
+		PageData pd = new PageData();
+		pd.put("datacenter_id", dataCenterId);
+		List<PageData> networkList =  datacenternetworkService.findByDatacenterId(pd);
+		return networkList;
+	}
+	
 	@RequestMapping(value = "/appFileUpload" ,produces={"text/html;charset=UTF-8;","application/json;"})
 	@ResponseBody
 	public String update(HttpServletRequest request,
@@ -824,6 +926,142 @@ public class CmpWorkOrderController extends BaseController{
 		return fullName;
 	}
 	
+	/**
+	 * 部署方案查询
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/toAutoDeploySelect")
+	@ResponseBody
+	public List<PageData> toAutoDeploySelect() throws Exception{
+		
+		PageData pd = new PageData();
+		List<PageData> autoDeployCfgList =  autoDeployConfigService.findAll();
+		return autoDeployCfgList;
+	}
+	
+	
+	/**
+	 * 部署方案选择后自动部署节点信息查询
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/onAutoDeploySelect")
+	@ResponseBody
+	public List<AutoDeployNode> onAutoDeploySelect(String autodeployid) throws Exception{
+		PageData pd = new PageData();
+		pd.put("id", autodeployid);
+		LinkedList<AutoDeployNode> autoDeployNodeList = new LinkedList<AutoDeployNode>();
+		List<PageData> autoDeployList =  autoDeployConfigService.listAllInNodeById(pd);
+		for (PageData autoDeployItem : autoDeployList) {
+			
+			AutoDeployNode autoDeployNode = new AutoDeployNode();
+			autoDeployNode.setId(String.valueOf(autoDeployItem.get("id")));
+			autoDeployNode.setName(autoDeployItem.getString("name"));
+			autoDeployNode.setDetail(autoDeployItem.getString("detail"));
+			autoDeployNode.setOrderNum(String.valueOf(autoDeployItem.get("ordernum")));
+			autoDeployNode.setConfigId(autodeployid);
+			LinkedList<AutoDeployScriptNode> scriptNodeList = new LinkedList<AutoDeployScriptNode>();
+			PageData s_pd = new PageData();
+			String scriptId = autoDeployItem.getString("script_id");
+			if (scriptId != null && !"".equals(scriptId)){
+				s_pd.put("script_id", scriptId);
+				List<PageData> paramsList = scriptParamService.listAll(s_pd);
+				for (PageData paramPd : paramsList) {
+					AutoDeployScriptNode scriptNode = new AutoDeployScriptNode();
+					scriptNode.setId(String.valueOf(paramPd.get("id")));
+					scriptNode.setScriptId(String.valueOf(paramPd.get("script_id")));
+					scriptNode.setDefaultVal(paramPd.getString("value"));
+					scriptNode.setParamKey(paramPd.getString("param_key"));
+					scriptNode.setName(paramPd.getString("name"));
+					scriptNodeList.add(scriptNode);
+				}
+			}
+			autoDeployNode.setScriptNodeList(scriptNodeList);
+			autoDeployNodeList.add(autoDeployNode);
+		}
+		autoDeployNodeList.sort(new Comparator<AutoDeployNode>() {
+			public int compare(AutoDeployNode o1, AutoDeployNode o2) {
+				Integer n1 = Integer.parseInt(o1.getOrderNum());
+				Integer n2 = Integer.parseInt(o2.getOrderNum());
+				return n1.compareTo(n2);
+			}
+		});
+		return autoDeployNodeList;
+	}
+	
+	/**
+	 * 自动部署软件参数设置
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/toSetParam")
+	@ResponseBody
+	public List<AutoDeployNode> toSetParam(String appNo) throws Exception{
+		LinkedList<AutoDeployNode> autoDeployNodeList = new LinkedList<AutoDeployNode>();
+		LinkedList<AutoDeployScriptNode> scriptNodeList = new LinkedList<AutoDeployScriptNode>();
+		CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo(appNo);
+		if (workorder == null) {
+			cmpLogService.addCmpLog("1", "自动部署软件参数设置", "工单查询失败,未查询到相应的工单", "-1", StringUtil.getClientIp(getRequest()));
+			return autoDeployNodeList;
+		}
+		String softCodeStr = workorder.getSoftCode();
+		if (softCodeStr == null || softCodeStr.length() == 0) {
+			cmpLogService.addCmpLog("1", "自动部署软件参数设置", "工单未设置部署软件", "-1", StringUtil.getClientIp(getRequest()));
+			return autoDeployNodeList;
+		}
+		
+		
+		
+		String[] softCodeArr =  softCodeStr.split(",");
+		for (String softCode : softCodeArr) {
+			PageData m_pd = new PageData();
+			m_pd.put("id", softCode);
+			
+			m_pd = mediumService.findById(m_pd);
+			AutoDeployNode autoDeployNode = new AutoDeployNode();
+			autoDeployNode.setName(m_pd.getString("name"));
+			
+			PageData p_pd = new PageData();
+			p_pd.put("medium_id", softCode);
+			List<PageData> pDataList = scriptService.findDefParamsByMediumId(p_pd);
+			
+			//查询用户修改的参数信息
+			PageData s_pd = new PageData();
+			s_pd.put("softCode", softCode);
+			s_pd.put("orderNo", workorder.getOrderNo());
+			List<PageData> userSetParamList = cmpOrderService.findSoftParam(s_pd);
+			Map<String, String> userSetParamMap = new HashMap<String, String>();
+			for (PageData userSetParamPd : userSetParamList) {
+				userSetParamMap.put(softCode + userSetParamPd.getString("paramKey"), userSetParamPd.getString("paramValue"));
+			}
+			
+			for (PageData paramPd : pDataList) {
+				AutoDeployScriptNode scriptNode = new AutoDeployScriptNode();
+				scriptNode.setId(String.valueOf(paramPd.get("id")));
+				scriptNode.setScriptId(String.valueOf(paramPd.get("script_id")));
+				scriptNode.setDefaultVal(paramPd.getString("value"));
+				scriptNode.setParamKey(paramPd.getString("param_key"));
+				String userSetVal = userSetParamMap.get(softCode + paramPd.getString("param_key"));
+				if (userSetVal != null) {
+					//用户输入值
+					scriptNode.setValue(userSetVal);
+					autoDeployNode.setModFlag("1");
+				}else {
+					//默认值
+					scriptNode.setValue(paramPd.getString("value"));
+				}
+				scriptNode.setName(paramPd.getString("name"));
+				scriptNodeList.add(scriptNode);
+			}
+			autoDeployNode.setScriptNodeList(scriptNodeList);
+			autoDeployNodeList.add(autoDeployNode);
+		}
+		return autoDeployNodeList;
+	}
 	
 	
 	public List<RelateTask> fetchRelateTaskList(String currentProcInstId){

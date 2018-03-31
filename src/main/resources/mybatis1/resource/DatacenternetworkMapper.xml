@@ -9,6 +9,9 @@
 	<sql id="dctableName">
 		t_datacenter
 	</sql>
+	<sql id="clustertableName">
+		t_cluster
+	</sql>
 	
 	<!-- 字段 -->
 	<sql id="Field">
@@ -28,7 +31,8 @@
 		dns2,
 		totalip,
 		freeip,
-		uuid
+		uuid,
+		cluster_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -55,7 +59,8 @@
 		#{dns2},
 		#{totalip},
 		#{freeip},
-		#{uuid}
+		#{uuid},
+		#{cluster_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -97,7 +102,8 @@
 			dns2 = #{dns2},
 			totalip = #{totalip},
 			freeip = #{freeip},
-			uuid = #{uuid}
+			uuid = #{uuid},
+			cluster_id = #{cluster_id}
 		 where 
 		    id = #{id}
 	</update>
@@ -110,6 +116,16 @@
 		<include refid="tableName"></include>
 		where 
 			id = #{id}
+	</select>
+	
+		<!-- 通过ID获取数据 -->
+	<select id="findByDatacenterId" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			datacenter_id = #{datacenter_id}
 	</select>
 	
 	<!-- 脚本列表 -->
@@ -129,7 +145,7 @@
 				s.freeip,
 				s.uuid,
 				c.name as datacenter_name
-		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c
+		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c 
 		where s.datacenter_id=c.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
@@ -138,7 +154,7 @@
 				)
 		</if>
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
-			and id in ${pd.item}
+			and s.id in ${pd.item}
 		</if>
 		<if test="pd.type != null and pd.type != ''"><!-- 按云平台类型检索 -->
 			and s.type = #{pd.type} 

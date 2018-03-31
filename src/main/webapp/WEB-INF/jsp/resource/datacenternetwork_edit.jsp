@@ -38,15 +38,17 @@
 								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;网络名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="30" title="名称" style="width:100%;"/></td>
 							</tr>
+							<!-- 
 							<tr>
 								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;资源池:</td>
 								<td id="js">
-									<select  class="chosen-select form-control" name="respool" id="respool" value="${pd.type}" data-placeholder="请选择资源池" style="vertical-align:top;" >
-									<option <c:if test="${pd.respool == 'cluster1' }">selected="selected"</c:if> value="cluster1">cluster1</option>
-									<option <c:if test="${pd.respool == 'cluster2' }">selected="selected"</c:if>  value="cluster2">cluster2</option>
+									<select class="chosen-select form-control" name="cluster_id" id="cluster_id" style="vertical-align:top;" style="width:98%;" >
+										<c:forEach items="${clusterList}" var="var">
+											<option value="${var.id }" <c:if test="${var.id  == pd.cluster_id }">selected</c:if>>${var.name }</option>
+										</c:forEach>
 									</select>
 								</td>
-							</tr>
+							</tr> -->
 							<tr>
 								<td style="width:79px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;数据中心:</td>
 								<td id="cluster_td">
@@ -57,6 +59,7 @@
 									</select>
 								</td>
 							</tr>
+							<!-- 
 							<tr>
 								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;网络区域:</td>
 								<td id="js">
@@ -66,6 +69,7 @@
 									</select>
 								</td>
 							</tr>
+							-->
 							<tr>
 								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;网络标签:</td>
 								<td id="js">
@@ -149,7 +153,11 @@
 			var str1 = '<c'+':if test="'+'$'+'{QX.'+$("#QX_NAME").val();
 			var str2 = ' == 1 }">这里放按钮<'+'/c:'+'if>';
 			$("#code").val(str1+str2);
+			
+			
 		});
+		
+		
 		//保存
 		function save(){
 			if($("#name").val()==""){

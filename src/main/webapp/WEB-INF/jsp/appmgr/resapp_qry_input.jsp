@@ -70,7 +70,26 @@ function setRecommendType(obj, fieldName, fieldValue){
 
 //设置软件参数
 function setSoftParam(indx){
-	$("#softParam"+(indx==0?"":indx)).val(indx);
+	var obj=$("#softCode"+(indx==0?"":indx));
+	if(obj.val()==""){
+		obj.tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
+		obj.focus();
+		return false;
+	}
+	
+	var diag = new top.Dialog();
+	diag.Drag=true;
+	diag.Title ="设置参数";
+	diag.URL = '<%=basePath%>/getParamList.do?softCode='+obj.val();
+	diag.Width = 350;
+	diag.Height = 400;
+	diag.CancelEvent=function(){diag.close();};//关闭事件
+	diag.OKEvent=function(){//OK事件
+		var softParamStr=diag.innerFrame.contentWindow.getSoftParam();//获取软件参数
+		$("#softParam"+(indx==0?"":indx)).val(softParamStr);
+		diag.close();
+	};
+	diag.show();
 }
 
 //永久到期时间选择
@@ -100,7 +119,7 @@ function addDiskRow(){
     var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" onchange=\"diskTypeFunc()\">"+$("#diskType").html()+"</select></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\" onchange=\"diskTypeFunc()\"/></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
-	    +"<td align=\"right\" style=\"padding-top:10px;\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+	    +"<td align=\"right\" style=\"padding-top:10px;display:none\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
     $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
@@ -112,7 +131,7 @@ function addSoftRow(){
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
+    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" id=\"softCode"+(len+1)+"\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
 	    +"<td align=\"right\" style=\"padding-top:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
 	$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
@@ -207,9 +226,11 @@ function checkData(btnId){
 		return false;
 	}
 	
-	if($("#softCode").val()==""){
-		$("#softCode").tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
-		$("#softCode").focus();
+	if(!mutiCheck('diskType', '请选择存储')){
+		return false;
+	}
+	
+	if(!mutiCheck('softCode', '请选择软件安装')){
 		return false;
 	}
 	
@@ -246,8 +267,23 @@ function checkData(btnId){
 		softParamArr.push($(this).val());
 	});
 	$("#softCodeStr").val(softCodeArr.join());
-	$("#softParamStr").val(softParamArr.join());
+	$("#softParamStr").val(softParamArr.join('|'));
 	return true;
+}
+
+//多个校验
+function mutiCheck(name, msg){
+	var bool=true;
+	$("select[name='"+name+"']").each(function() {
+		if($(this).val()==""){
+			$(this).tips({side:3, msg:msg, bg:'#AE81FF', time:2});
+			$(this).focus();
+			bool=false;
+			return false;
+		}
+	});
+	
+	return bool;
 }
 
 //加入清单
@@ -349,6 +385,7 @@ function savePckg(){
 function diskSizeFunc(obj, diskTypeId, iopsId){
 	var diskSize=$(obj).val();
 	if($(obj).val()==""){
+		$(obj).val("20");
 		return;
 	}
 	
@@ -447,15 +484,18 @@ function specFunc(cpuVal, memoryVal){
 //镜像改变时触发
 function imgFunc(){
 	var osTypeName="";
-	if($("#osType").val()!=''){
+	var osType=$("#osType").val();
+	if(osType!=''){
 		osTypeName=$("#osType").find("option:selected").text();
 	}
 	
 	var osBitNumName="";
-	if($("#osBitNum").val()!='' && $("#osBitNum").val()!=''){
+	var osBitNum=$("#osBitNum").val();
+	if(osBitNum!=''){
 		osBitNumName=$("#osBitNum").find("option:selected").text();
 	}
 	
+	getImgList('', osType, osBitNum);
 	$("#imgLabel").html(osTypeName+"&nbsp;"+osBitNumName);
 }
 
@@ -563,6 +603,37 @@ function uploadFileFunc() {
 		}
 	});
 }
+
+//模板列表查询
+function getImgList(platTypeId, osType, osBitNum){
+	if(platTypeId==''){
+		platTypeId=$("#platType").val();
+	}
+	
+	if(osType==''){
+		osType=$("#osType").val();
+	}
+	
+	if(osBitNum==''){
+		osBitNum=$("#osBitNum").val();
+	}
+	
+	$.ajax({
+	    type: 'post',  
+	    url: 'getImgList.do?platTypeId='+platTypeId+'&osType='+osType+'&osBitNum='+osBitNum,
+	    dataType: 'json',
+	    success: function(data){
+	    	$("#imgCode").empty();//清空模板列表
+		    if(data.retCode=="0"){//删除成功
+		    	$("#imgCode").append("<option value=''>请选择</option>");
+		    	$.each(data.imgList, function (i, item) {
+				    $("#imgCode").append("<option value='"+item.dictCode+"'>"+item.dictValue+"</option>");
+			    });
+		    }
+	    },
+	    error: function(data) {}
+	});
+}
 	
 //必须加<!DOCTYPE html>
 //$(document).height();//整个网页的高度
@@ -576,8 +647,10 @@ $(window).scroll(function() {
 	}
 })
 </script>
+	<link rel="stylesheet" href="css/newSkin.css">
 </head>
-<body>
+<body class="resapp-qry-input">
+<div class="head-nav">主页 > 资源申请</div>
 <ul class="nav nav-tabs">
 	<li class="active"><a href="#zdysq" onclick="tabFunc('zdysq')" data-toggle="tab">自定义申请</a></li>
 	<li><a href="#tcsq" onclick="tabFunc('tcsq')" data-toggle="tab">套餐申请</a></li>
@@ -585,7 +658,7 @@ $(window).scroll(function() {
 <div class="tab-content">
 <div id="zdysq" class="tab-pane fade in active">
 	<form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
-	<input type="hidden" name="areaCode" id="areaCode" value="1"/>
+	<input type="hidden" name="areaCode" id="areaCode" value="${defaultAreaCode}"/>
 	<input type="hidden" name="platType" id="platType" value="${defaultPlatType}"/>
 	<input type="hidden" name="deployType" id="deployType" value="1"/>
 	<input type="hidden" name="envCode" id="envCode" value="${defaultEnvCode}"/>
@@ -602,7 +675,7 @@ $(window).scroll(function() {
 	<input type="hidden" name="pckgName" id="pckgName" value=""/><!-- 套餐名称 -->
 	<table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 		<tr class="tablecls">
-			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;地域</td>
+			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;地域&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="areaCodeId" class="ullitab list-inline">
@@ -614,23 +687,23 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="platTypeId" class="ullitab list-inline">
 					<c:if test="${not empty platTypeList}">
 					<c:forEach items="${platTypeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'platType', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li onclick="setFieldValue(this, 'platType', '${var.dictCode}');getImgList('${var.dictCode}', '', '');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<%-- <tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="deployTypeId" class="ullitab list-inline">
@@ -641,10 +714,10 @@ $(window).scroll(function() {
 					</c:if>
 				</ul>
 			</td>
-		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		</tr> --%>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">环境：</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="envCodeId" class="ullitab list-inline">
@@ -668,9 +741,9 @@ $(window).scroll(function() {
 			</td>
 			<td align="left" style="padding-right:10px;padding-bottom:10px;" colspan="5">&nbsp;</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="5"><span class="glyphicon glyphicon-cog"></span>&nbsp;基本配置</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="5"><span class="glyphicon glyphicon-cog"></span>&nbsp;基本配置</td>
 			<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
 			<td align="left" style="padding:10px;" colspan="6">
 				<ul id="resTypeId" class="ullitab list-inline">
@@ -725,9 +798,9 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
 			<td align="left" style="width: 120px;padding-left:10px;padding-top:10px;padding-bottom:10px;">
 				<select class="chosen-select form-control" name="osType" id="osType" data-placeholder="请选择操作系统" style="vertical-align:top;width: 100%;" onchange="imgFunc()">
@@ -774,9 +847,9 @@ $(window).scroll(function() {
 				Linux系统必填
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<table id="diskTableId">
@@ -793,7 +866,7 @@ $(window).scroll(function() {
 							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')" onchange="diskTypeFunc()"/>
 						</td>
 						<td align="left" style="width: 20px;">GB</td>
-						<td align="right" style="padding-right:13px;">
+						<td align="right" style="padding-right:13px;display:none">
 						  	<span id="iopsId">1120</span>&nbsp;IOPS&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密&nbsp;
 						</td>
 						<td align="left" valign="bottom" style="width: 200px;padding-bottom:8px;" rowspan="15">
@@ -803,9 +876,9 @@ $(window).scroll(function() {
 				</table>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<table id="softTableId">
@@ -828,10 +901,10 @@ $(window).scroll(function() {
 				</table>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量</td>
-			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="width: 120px;padding:10px;" colspan="6">
 				<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 				    <input type="text" id="virNum" name="virNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1" onchange="virNumFunc()"> 
@@ -842,25 +915,25 @@ $(window).scroll(function() {
 				</div>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
-			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onchange="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;上传附件</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;上传附件</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="padding:10px;"><input style="background-color:#cccccc;" type="file" name="uploadFile" id="uploadFile" value="选择文件" accept=".txt,.doc,.docx,.xls,.xlsx,image/*"/></td>
 			<td colspan="5"><input type="button" value="上传" onclick="uploadFileFunc()">&nbsp;格式要求：txt,word,excel,image</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;当前配置</td>
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;当前配置</td>
 			<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>
 			<td id="resTypeLabel" align="left" valign="top" style="width: 180px;padding:10px;">云主机</td>
 			<td align="right" valign="top" style="width: 120px;padding:10px;">实例规格：</td>
@@ -887,7 +960,7 @@ $(window).scroll(function() {
 		<td align="left" style="padding:10px;">
 			<div class="divbtn">
 				配置费用(元)：<span id="totalAmt" style="font-size:26px;color: #f5620a;">￥0.00</span>
-			    <span id="addListBtnId" class="btncls" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>  
+			    <span id="addListBtnId" class="btncls active" style="background-color:#f5620a;"><a id="addList" href="javascript:void()" onclick="addList()">加入清单</a></span>
 			    <span style="width:30px;float:right;">&nbsp;</span>
 			    <span id="savePckgBtnId" class="btncls"><a href="javascript:void()" onclick="savePckgPre()">保存为套餐</a></span>
 			</div>

@@ -30,6 +30,7 @@ import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.resourcemgt.CloudplatformService;
+import com.cmp.service.servicemgt.AreaService;
 import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.service.servicemgt.MirrorService;
 import com.cmp.sid.CmpDict;
@@ -68,6 +69,8 @@ public class AppMgrController extends BaseController {
 	@Resource
 	private CloudplatformService cloudplatformService;
 	@Resource
+	private AreaService areaService;
+	@Resource
 	private CmpLogService cmpLogService;
 	@Value("${uploadFilePath}")
 	private String uploadFilePath;//上传文件路径
@@ -75,15 +78,29 @@ public class AppMgrController extends BaseController {
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
 	public ModelAndView resAppPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		//String orderNo=request.getParameter("orderNo");
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
+		String areaCodeId=null;//平台类型
+		List<CmpDict> areaCodeList=areaService.getAreaCodeList();//区域列表
+		if(areaCodeList!=null && !areaCodeList.isEmpty()){
+			CmpDict cmpDict=areaCodeList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultAreaCode", cmpDict.getDictCode());//默认平台类型
+			mv.addObject("areaCodeList", areaCodeList);//区域列表
+			if(StringUtils.isBlank(areaCodeId)){
+				areaCodeId=cmpDict.getDictCode();//区域
+			}
+		}
+		
+		String platTypeId=null;//平台类型
 		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList();//平台类型列表
 		if(platTypeList!=null && !platTypeList.isEmpty()){
 			CmpDict cmpDict=platTypeList.get(0);//第一项
 			cmpDict.setDictDefault("1");//默认选择第一项
 			mv.addObject("defaultPlatType", cmpDict.getDictCode());//默认平台类型
-			mv.addObject("platTypeList", platTypeList);//环境列表
+			mv.addObject("platTypeList", platTypeList);//平台类型列表
+			if(StringUtils.isBlank(platTypeId)){
+				platTypeId=cmpDict.getDictCode();//平台类型
+			}
 		}
 		
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
@@ -103,7 +120,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
 		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
 		mv.addObject("osBitNumList", cmpDictService.getCmpDictList("os_bit_num"));//位数列表
-		mv.addObject("imgCodeList", mirrorService.getImgList());//模板列表
+		mv.addObject("imgCodeList", mirrorService.getImgList(new PageData("platTypeId", platTypeId)));//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		//mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
@@ -113,6 +130,14 @@ public class AppMgrController extends BaseController {
 		mv.addObject("cmpPrice", cmpOrderService.getCmpPrice());//计算价格
 		mv.setViewName("appmgr/resapp_qry_input");
 		return mv;
+	}
+	
+	//模板列表查询
+	@RequestMapping(value="/getImgList", produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+	public String getImgList(String platTypeId, String osType, String osBitNum) throws Exception{
+		List<CmpDict> imgList=mirrorService.getImgList(new PageData("platTypeId", platTypeId, "osType", osType, "osBitNum", osBitNum));//模板列表
+		return StringUtil.getRetStr("0", "调用成功", "imgList", imgList);
 	}
 	
 	//套餐申请预查询
@@ -137,7 +162,7 @@ public class AppMgrController extends BaseController {
 		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
 		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
 		mv.addObject("osBitNumList", cmpDictService.getCmpDictList("os_bit_num"));//位数列表
-		mv.addObject("imgCodeList", mirrorService.getImgList());//模板列表
+		mv.addObject("imgCodeList", mirrorService.getImgList(new PageData("platTypeId", null)));//模板列表
 		mv.addObject("diskTypeList", cmpDictService.getCmpDictList("disk_type"));//磁盘类型列表
 		mv.addObject("diskSizeList", cmpDictService.getCmpDictList("disk_size"));//磁盘大小列表
 		mv.addObject("softCodeList", mediumService.getSoftList());//软件代码列表
@@ -174,6 +199,29 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
+	//软件参数列表查询
+	@RequestMapping(value="/getParamList")
+	public ModelAndView getParamList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String softCode=request.getParameter("softCode");//软件代码
+		List<CmpDict> paramList=mediumService.getSoftParamList(softCode);//软件参数列表查询
+		StringBuffer sb=new StringBuffer();
+		if(paramList!=null && !paramList.isEmpty()){
+			for(CmpDict cmpDict: paramList){
+				if(sb.length()!=0){
+					sb.append(",");
+				}
+				
+				sb.append(cmpDict.getDictCode()).append(":").append(cmpDict.getDictValue());
+			}
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("appmgr/resapp_softparam_input");
+		mv.addObject("softParamStr", sb.toString());//软件参数字符串
+		mv.addObject("paramList", paramList);//软件参数列表
+		return mv;
+	}
+		
 	//加入清单
 	@RequestMapping(value="/addList", produces={"application/json;charset=UTF-8"})
     @ResponseBody
@@ -190,6 +238,7 @@ public class AppMgrController extends BaseController {
 			cmpOrder.setDeptId(user.getDEPARTMENT_ID());//部门ID
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
+			cmpOrderService.saveSoftParams(cmpOrder.getOrderNo(), cmpOrder.getSoftCode(), cmpOrder.getSoftParam());//软件参数列表新增，软件参数：path:/tomcat,user:admin,passwd:admin|path:/tomcat,user:admin,passwd:admin
 			cmpLogService.addCmpLog("1", "加入清单", "加入清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "加入清单成功");
 		} catch (Exception e) {
@@ -250,12 +299,12 @@ public class AppMgrController extends BaseController {
 					}
 					//更新工单状态
 					Map<String, Object> variablesMap = new HashMap<String, Object>();
-					variablesMap.put("appNo", appNo);
+					
 					activitiService.handleTask(appNo, procInstId, applyUserId, null, variablesMap);
 					//更新工单(流程实例ID 和 工单状态)
 					Map<String, String> updateParams = new HashMap<String, String>();
 					updateParams.put("procInstId", procInstId);
-					updateParams.put("status", "1");
+					//updateParams.put("status", "1");
 					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
 					cmpOrderService.updateCmpOrderStatus(getPageData("orderNo", orderNos[i], "totalAmt", totalAmts[i]));//更新清单状态
 				}
@@ -293,6 +342,7 @@ public class AppMgrController extends BaseController {
 			cmpOrder.setApplyUserId(user.getNAME());//用户名
 			cmpOrder.setDeptId(user.getDEPARTMENT_ID());//部门ID
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
+			cmpOrderService.saveSoftParams(cmpOrder.getOrderNo(), cmpOrder.getSoftCode(), cmpOrder.getSoftParam());//软件参数列表新增，软件参数：path:/tomcat,user:admin,passwd:admin|path:/tomcat,user:admin,passwd:admin
 			cmpLogService.addCmpLog("1", "保存套餐", "保存套餐成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "保存套餐成功");
 		} catch (Exception e) {

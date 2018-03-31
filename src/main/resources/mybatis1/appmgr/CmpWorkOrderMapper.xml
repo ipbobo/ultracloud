@@ -335,7 +335,6 @@
 				select DISTINCT  r.PROC_INST_ID_ from <include refid="ru_task" />  r , <include refid="ru_identitylink" /> i where r.ID_ = i.TASK_ID_  and 
 						(i.TYPE_ = 'candidate' or i.TYPE_='participant') and i.USER_ID_=#{pd.USERNAME}
 		)
-		 order by appNo desc
 	</select>
 	
 	<select id="queryUserToDoWorkorderPage" parameterType="page" resultType="pd">
@@ -351,7 +350,7 @@
 				 and (i.TYPE_ = 'candidate' or i.TYPE_='participant')
 				 and i.USER_ID_=#{pd.USERNAME} 
 		)
-		 order by appNo desc
+		  
 	</select>
 	
 	<select id="queryUserCurrentdayWorkorderPage" parameterType="page" resultType="pd">
@@ -382,7 +381,6 @@
 							and date_sub(curdate(),interval 24 HOUR)<=date(r.CREATE_TIME_) 
 						]]>
 		)
-		 order by appNo desc
 	</select>
 	
 </mapper>

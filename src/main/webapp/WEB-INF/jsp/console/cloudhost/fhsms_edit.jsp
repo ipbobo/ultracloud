@@ -14,7 +14,7 @@
 <base href="<%=basePath%>">
 
 <!-- jsp文件头和头部 -->
-<%@ include file="../index/top.jsp"%>
+<%@ include file="../../system/index/top.jsp"%>
 		<style type="text/css">
 		#dialog-add,#dialog-message,#dialog-comment{width:100%; height:100%; position:fixed; top:0px; z-index:99999999; display:none;}
 		.commitopacity{position:absolute; width:100%; height:700px; background:#7f7f7f; filter:alpha(opacity=50); -moz-opacity:0.5; -khtml-opacity: 0.5; opacity: 0.5; top:0px; z-index:99999;}
@@ -85,7 +85,7 @@
 	<!-- /.main-container -->
 	<!-- basic scripts -->
 	<!-- 页面底部js¨ -->
-	<%@ include file="../index/foot.jsp"%>
+	<%@ include file="../../system/index/foot.jsp"%>
 	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
 	<!-- 编辑框-->

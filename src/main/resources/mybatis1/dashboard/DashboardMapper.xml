@@ -5,7 +5,7 @@
 	<select id="getAuditList" parameterType="String" resultType="pd">
 		SELECT c.type, GROUP_CONCAT(DISTINCT a.usergroup_id) userGroupId FROM `t_usergroup_user_map` a
 		inner join t_usergroup b on b.id=a.usergroup_id
-		inner JOIN sys_role c on c.ROLE_ID=b.ROLE_ID and c.type='audit'
+		inner JOIN sys_role c on c.ROLE_ID=b.ROLE_ID
 		where a.USERNAME=#{applyUserId}
 		GROUP BY c.type
 	</select>
@@ -15,24 +15,41 @@
 		select count(1) from t_virtualmachine a
 		where 1=1
 		<if test="roleType != null and roleType == 'applicant'">
-			and exists (select 1 from cmp_workorder b where a.appNo=b.appNo and b.applyUserId=#{applyUserId})
+			and a.user=#{applyUserId}
 		</if>
 		<if test="roleType != null and roleType == 'audit'">
-			and exists (select 1 from cmp_workorder b where a.appNo in (
-			SELECT c.BUSINESS_KEY_ FROM act_hi_procinst c
-			INNER JOIN act_hi_actinst d on c.PROC_INST_ID_=d.PROC_INST_ID_
-			where d.ASSIGNEE_ in (select e.USERNAME from t_usergroup_user_map e where FIND_IN_SET(e.usergroup_id, #{audit}))))
+			and exists (
+				SELECT 1 FROM act_hi_procinst b
+				INNER JOIN act_hi_actinst c on c.PROC_INST_ID_=b.PROC_INST_ID_
+				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit})) and b.BUSINESS_KEY_=a.appNo
+			)
 		</if>
 	</select>
 	
 	<!-- 宿主机总量 -->
 	<select id="getHostNum" parameterType="pd" resultType="Long">
-		select count(1) from t_hostmachine where type!='kvm'
+		select count(1) from t_hostmachine a
+		where 1=1
+		<if test="roleType != null and roleType == 'applicant'">
+			and exists (select 1 from t_virtualmachine b where b.hostmachine_id=a.id and b.user=#{applyUserId})
+		</if>
+		<if test="roleType != null and roleType == 'audit'">
+			and exists (
+				select 1 from t_virtualmachine b 
+				where b.hostmachine_id=a.id 
+					  and exists (
+						  SELECT 1 FROM act_hi_procinst c
+						  INNER JOIN act_hi_actinst d on d.PROC_INST_ID_=c.PROC_INST_ID_
+						  where exists (select 1 from t_usergroup_user_map e where e.USERNAME=d.ASSIGNEE_ and FIND_IN_SET(e.usergroup_id, #{audit})) and c.BUSINESS_KEY_=b.appNo
+					  )
+			)
+		</if>
 	</select>
 	
 	<!-- 物理机总量 -->
 	<select id="getPhysNum" parameterType="pd" resultType="Long">
-		select count(1) from t_hostmachine where type='kvm'
+		select count(1) from t_hostmachine a
+		where not EXISTS (select 1 from t_virtualmachine b where b.hostmachine_id=a.id)
 	</select>
 	
 	<!-- 用户总数 -->
@@ -42,24 +59,32 @@
 	
 	<!-- 项目总数 -->
 	<select id="getProjNum" parameterType="pd" resultType="Long">
-		select count(1) from t_project
-		<if test="roleType == 'applicant' or roleType == 'audit' or roleType == 'executor'">
-		where USERNAME=#{applyUserId}
+		select count(1) from t_project a
+		where 1=1
+		<if test="roleType != null and roleType == 'applicant'">
+			and a.USERNAME=#{applyUserId}
+		</if>
+		<if test="roleType != null and roleType == 'audit'">
+			and exists (select 1 from sys_user b where b.DEPARTMENT_ID=a.DEPARTMENT_ID and b.USERNAME=#{applyUserId})
 		</if>
 	</select>
 	
 	<!-- 工单总数 -->
 	<select id="getWorkOrderNum" parameterType="pd" resultType="Long">
-		select count(1) from cmp_workorder
-		<if test="roleType == 'applicant' or roleType == 'audit' or roleType == 'executor'">
-		where applyUserId=#{applyUserId}
+		select count(1) from cmp_workorder a
+		where 1=1
+		<if test="roleType != null and roleType == 'applicant'">
+			and a.applyUserId=#{applyUserId}
+		</if>
+		<if test="roleType != null and roleType == 'audit'">
+			and exists (select 1 from sys_user b where b.DEPARTMENT_ID=a.deptId and b.USERNAME=#{applyUserId})
 		</if>
 	</select>
 	
-	<!-- 虚机列表查询 -->
-	<select id="getVirList" parameterType="pd" resultType="pd">
-		select a.id, a.name, a.uuid from t_virtualmachine a
-		where a.type!='kvm'
+	<!-- 主机ID列表查询：vir-虚拟机；host-宿主机；phys-物理机 -->
+	<select id="getHostIdList" parameterType="pd" resultType="pd">
+		select 'vir' operType, GROUP_CONCAT(a.id) idStr, GROUP_CONCAT(a.hostmachine_id) hostIdStr from t_virtualmachine a
+		where 1=1
 		<if test="roleType != null and roleType == 'applicant'">
 			and a.user=#{applyUserId}
 		</if>
@@ -70,21 +95,46 @@
 				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit})) and b.BUSINESS_KEY_=a.appNo
 			)
 		</if>
-	</select>
-	
-	<!-- 物理机列表查询 -->
-	<select id="getPhysList" parameterType="pd" resultType="pd">
-		select a.id, a.name, a.uuid from t_virtualmachine a
-		where a.type=='kvm'
+		union all
+		select 'host' operType, GROUP_CONCAT(a.id) idStr, '' hostIdStr from t_hostmachine a
+		where 1=1
 		<if test="roleType != null and roleType == 'applicant'">
-			and a.user=#{applyUserId}
+			and exists (select 1 from t_virtualmachine b where b.hostmachine_id=a.id and b.user=#{applyUserId})
 		</if>
 		<if test="roleType != null and roleType == 'audit'">
 			and exists (
-				SELECT 1 FROM act_hi_procinst b
-				INNER JOIN act_hi_actinst c on c.PROC_INST_ID_=b.PROC_INST_ID_
-				where exists (select 1 from t_usergroup_user_map d where d.USERNAME=c.ASSIGNEE_ and FIND_IN_SET(d.usergroup_id, #{audit})) and b.BUSINESS_KEY_=a.appNo
+				select 1 from t_virtualmachine b 
+				where b.hostmachine_id=a.id 
+					  and exists (
+						  SELECT 1 FROM act_hi_procinst c
+						  INNER JOIN act_hi_actinst d on d.PROC_INST_ID_=c.PROC_INST_ID_
+						  where exists (select 1 from t_usergroup_user_map e where e.USERNAME=d.ASSIGNEE_ and FIND_IN_SET(e.usergroup_id, #{audit})) and c.BUSINESS_KEY_=b.appNo
+					  )
 			)
 		</if>
+		union all
+		select 'phys' operType, GROUP_CONCAT(a.id) idStr, '' hostIdStr from t_hostmachine a
+	</select>
+	
+	<!-- 虚拟资源详细信息查询 -->
+	<select id="getVirResDtl" parameterType="String" resultType="com.cmp.sid.CmpDashboard">
+		SELECT c.cpuUseNum, ifnull(sum(a.cpu), 0) cpuTotalNum, c.memUseNum, ifnull(sum(a.memory), 0) memTotalNum, c.storeUseNum, ifnull(sum(a.localdisk), 0) storeTotalNum 
+		FROM t_hostmachine a
+		inner join (SELECT ifnull(sum(b.cpu), 0) cpuUseNum, ifnull(sum(b.memory), 0) memUseNum, ifnull(sum(b.mount_disk_size), 0) storeUseNum FROM t_virtualmachine b where FIND_IN_SET(b.hostmachine_id, #{hostIdStr})) c
+		where FIND_IN_SET(a.id, #{hostIdStr})
+	</select>
+	
+	<!-- 物理资源详细信息查询 -->
+	<select id="getPhysResDtl" parameterType="String" resultType="com.cmp.sid.CmpDashboard">
+		SELECT c.cpuUseNum, ifnull(sum(a.cpu), 0) cpuTotalNum, c.memUseNum, ifnull(sum(a.memory), 0) memTotalNum, c.storeUseNum, ifnull(sum(a.localdisk), 0) storeTotalNum 
+		FROM t_hostmachine a
+		inner join (SELECT ifnull(sum(b.cpu), 0) cpuUseNum, ifnull(sum(b.memory), 0) memUseNum, ifnull(sum(b.mount_disk_size), 0) storeUseNum FROM t_virtualmachine b where FIND_IN_SET(b.hostmachine_id, #{hostIdStr})) c
+	</select>
+	
+	<!-- TOP5云主机列表查询 -->
+	<select id="getTop5CloudHostList" parameterType="String" resultType="com.cmp.sid.VirtualMachine">
+		select a.id, a.name, a.ip, a.cpu, a.memory, a.mount_disk_size mountDiskSize
+		from t_virtualmachine a
+		where FIND_IN_SET(a.id, #{hostIdStr})
 	</select>
 </mapper>

@@ -3,14 +3,15 @@ package com.cmp.controller;
 import static org.springframework.http.ResponseEntity.ok;
 
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
+import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.resourcemgt.HostmachineService;
 import com.cmp.service.resourcemgt.VirtualMService;
 import com.cmp.service.servicemgt.MirrorService;
@@ -26,6 +29,7 @@ import com.fh.entity.Page;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
+import com.fh.util.UuidUtil;
 
 /**
  * KVM主机 控制层
@@ -34,8 +38,8 @@ import com.fh.util.PageData;
 @RequestMapping(value = "/kvm")
 public class KVMController extends BaseController {
 
-	private static final String	SUCCESS	= "SUCCESS";
-	private static final String	FAILURE	= "FAILURE";
+	private static final String SUCCESS = "SUCCESS";
+	private static final String FAILURE = "FAILURE";
 
 	String menuUrl = "kvm/list.do"; // 菜单地址(权限用)
 
@@ -48,9 +52,12 @@ public class KVMController extends BaseController {
 	@Resource(name = "mirrorService")
 	private MirrorService mirrorService;
 
+	@Resource(name = "cloudplatformService")
+	private CloudplatformService cloudplatformService;
+
 	/**
 	 * 按类型查询列表
-	 * 
+	 *
 	 * @param page
 	 * @throws Exception
 	 */
@@ -121,8 +128,10 @@ public class KVMController extends BaseController {
 		page.setPd(pd);
 
 		List<PageData> varList = virtualMService.vmList(page);
+		List<PageData> hostList = hostmachineService.listAllHostId();
 		mv.setViewName("resource/kvm_virtual_list");
 		mv.addObject("varList", varList);
+		mv.addObject("hostList", hostList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC());
 
@@ -148,7 +157,7 @@ public class KVMController extends BaseController {
 		}
 		page.setPd(pd);
 		// 分页查询kvm主机
-		List<PageData> varList = mirrorService.listTemplateByType(page);
+		List<PageData> varList = mirrorService.listTemplate(page);
 		mv.setViewName("resource/kvm_template_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -172,7 +181,33 @@ public class KVMController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("type", "kvm");
+		pd.put("id", UuidUtil.get32UUID());
 		hostmachineService.save(pd, false);
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+
+	/**
+	 * 保存模板
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/saveTemplate")
+	public ModelAndView saveTemplate() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "新增kvm模板");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			return null;
+		} // 校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("type", "kvm");
+		pd.put("uuid", UuidUtil.get32UUID());
+		pd.put("USERNAME", Jurisdiction.getUsername());
+
+		mirrorService.saveTemplate(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -185,16 +220,47 @@ public class KVMController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/delete")
-	public void delete(PrintWriter out) throws Exception {
+	public void delete(PrintWriter out) {
 		logBefore(logger, Jurisdiction.getUsername() + "删除kvm");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
 			return;
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		hostmachineService.delete(pd, false);
-		out.write("success");
-		out.close();
+		try {
+			hostmachineService.delete(pd, false);
+			out.write("success");
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			out.write("failure");
+			out.close();
+		}
+	}
+
+	/**
+	 * 删除模板
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/deleteTemplate")
+	public void deleteTemplate(PrintWriter out) {
+		logBefore(logger, Jurisdiction.getUsername() + "删除kvm模板");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		try {
+			mirrorService.deleteTemplate(pd);
+			out.write("success");
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			out.write("failure");
+			out.close();
+		}
 	}
 
 	/**
@@ -214,6 +280,30 @@ public class KVMController extends BaseController {
 		pd = this.getPageData();
 		pd.put("type", "kvm");
 		hostmachineService.edit(pd, false);
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+
+	/**
+	 * 修改
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/editTemplate")
+	public ModelAndView editTemplate() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "修改kvm模板");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return null;
+		} // 校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("type", "kvm");
+		pd.put("USERNAME", Jurisdiction.getUsername());
+
+		mirrorService.editTemplate(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -242,6 +332,28 @@ public class KVMController extends BaseController {
 	}
 
 	/**
+	 * 去新增页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goAddTemplate")
+	public ModelAndView goAddTemplate() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+
+		mv.setViewName("resource/kvmtemplate_edit");
+		mv.addObject("msg", "saveTemplate");
+		mv.addObject("pd", pd);
+		return mv;
+	}
+
+	/**
 	 * 去修改页面
 	 * 
 	 * @param
@@ -260,6 +372,29 @@ public class KVMController extends BaseController {
 		pd = hostmachineService.findById(pd, false); // 根据ID读取
 		mv.setViewName("resource/kvm_edit");
 		mv.addObject("msg", "edit");
+		mv.addObject("pd", pd);
+		return mv;
+	}
+
+	/**
+	 * 去修改页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goEditTemplate")
+	public ModelAndView goEditTemplate() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+
+		pd = mirrorService.findTemplateById(pd); // 根据ID读取
+		mv.setViewName("resource/kvmtemplate_edit");
+		mv.addObject("msg", "editTemplate");
 		mv.addObject("pd", pd);
 		return mv;
 	}
@@ -295,7 +430,37 @@ public class KVMController extends BaseController {
 	}
 
 	/**
-	 * 弹窗显示未绑定虚拟机列表
+	 * 批量删除
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/deleteAllTemplate")
+	@ResponseBody
+	public Object deleteAllTemplate() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "批量删除kvm模板");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return null;
+		} // 校验权限
+		PageData pd = new PageData();
+		Map<String, Object> map = new HashMap<String, Object>();
+		pd = this.getPageData();
+		List<PageData> pdList = new ArrayList<PageData>();
+		String DATA_IDS = pd.getString("DATA_IDS");
+		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
+			String ArrayDATA_IDS[] = DATA_IDS.split(",");
+			mirrorService.deleteAllTemplate(ArrayDATA_IDS);
+			pd.put("msg", "ok");
+		} else {
+			pd.put("msg", "no");
+		}
+		pdList.add(pd);
+		map.put("list", pdList);
+		return AppUtil.returnObject(pd, map);
+	}
+
+	/**
+	 * 
 	 * 
 	 * @param page
 	 * @return
@@ -320,10 +485,39 @@ public class KVMController extends BaseController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/createVm")
-	public ResponseEntity<String> createVm(HttpServletRequest req) {
+	/**
+	 * kvm数据同步
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/syncKVMData")
+	public void syncKVMData(PrintWriter out) {
+		logBefore(logger, Jurisdiction.getUsername() + "确认初始化kvm");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+
+		// 同步kvm数据
 		try {
-			virtualMService.createVm(null);
+			pd = hostmachineService.findById(pd, false);
+			hostmachineService.syncKVMData(pd);
+			out.write("success");
+			out.close();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			out.write("failure");
+			out.close();
+		}
+	}
+
+	@RequestMapping(value = "/createVm")
+	public ResponseEntity<String> createVm(Reader reader) {
+		try {
+			Map map = JSON.parseObject(IOUtils.toString(reader));
+			virtualMService.createVm(new PageData(map));
 			return ok(SUCCESS);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -395,6 +589,14 @@ public class KVMController extends BaseController {
 			logger.error(e.getMessage(), e);
 			return ok(FAILURE);
 		}
+	}
+
+	@RequestMapping(value = "/console")
+	public ModelAndView console() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("console/cloudhost/console");
+
+		return mv;
 	}
 
 }

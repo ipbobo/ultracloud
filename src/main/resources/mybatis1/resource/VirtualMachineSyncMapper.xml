@@ -36,7 +36,8 @@
 		username,
 		password,
 		uuid,
-		cpf_id
+		cpf_id,
+		type
 	</sql>
 	
 	<sql id="Field_time">
@@ -53,7 +54,7 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
 		#{user},
-		#{projectId},
+		#{project_id},
 		#{name},
 		#{ip},
 		#{cpu},
@@ -71,7 +72,8 @@
 		#{username},
 		#{password},
 		#{uuid},
-		#{cpf_id}
+		#{cpf_id},
+		#{type}
 	</sql>
 	
 	<!-- 字段值 -->
@@ -96,7 +98,8 @@
 		#{item.username},
 		#{item.password},
 		#{item.uuid},
-		#{item.cpf_id}
+		#{item.cpf_id},
+		#{item.type}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -108,6 +111,17 @@
 	<insert id="save" parameterType="pd">
 		insert into 
 	<include refid="tableName"></include>
+		(
+	<include refid="Field_main"></include>
+		) values (
+	<include refid="FieldValue_main"></include>
+		)
+	</insert>
+	
+	<!-- 新增-->
+	<insert id="saveVM" parameterType="pd">
+		insert into 
+	<include refid="VMtableName"></include>
 		(
 	<include refid="Field_main"></include>
 		) values (

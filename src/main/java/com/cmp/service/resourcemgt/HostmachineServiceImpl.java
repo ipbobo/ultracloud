@@ -1,11 +1,17 @@
 package com.cmp.service.resourcemgt;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.entity.tcc.TccVirtualMachine;
+import com.cmp.mgr.CloudArchManager;
+import com.cmp.mgr.CloudArchManagerAdapter;
+import com.cmp.mgr.kvm.KvmCloudArchManager;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -21,6 +27,9 @@ public class HostmachineServiceImpl implements HostmachineService {
 
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
+	
+	@Resource(name = "virtualMachineSyncService")
+	private VirtualMachineSyncService virtualMachineSyncService;
 
 	/**
 	 * 新增
@@ -154,6 +163,57 @@ public class HostmachineServiceImpl implements HostmachineService {
 		} else {
 			return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageVirtual", page);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllHostId() throws Exception {
+		return (List<PageData>) dao.findForList("HostmachineMapper.listAllHostId", null);
+	}
+
+	@Override
+	public void syncKVMData(PageData kvmPD) throws Exception {
+		List<PageData> preVirtualMachineList = virtualMachineSyncService.listAll(kvmPD, false);
+		
+		String platformManagerType = KvmCloudArchManager.class.getName();
+		
+		TccCloudPlatform platform = new TccCloudPlatform();
+		platform.setCloudplatformUser(kvmPD.getString("username"));
+		platform.setCloudplatformPassword(kvmPD.getString("password"));
+		platform.setCloudplatformIp(kvmPD.getString("ip"));
+		platform.setCloudplatformPort((Long)kvmPD.get("port") + "");
+		platform.setPlatformManagerType(platformManagerType);
+
+		CloudArchManagerAdapter adapter = new CloudArchManagerAdapter();
+		CloudArchManager cloudArchManager = adapter.getCloudArchManagerAdaptee(platform);
+		
+		List<TccVirtualMachine> vmList = cloudArchManager.getVirtualMachines();
+		if((null != vmList) && vmList.size() > 0)
+		for(int j = 0; j< vmList.size(); j++) {
+			PageData vmPD = new PageData();
+			String vmUuid = vmList.get(j).getUUID();
+			String vmId = this.existUuid(vmUuid, preVirtualMachineList);
+			if(null == vmId) {
+				vmPD.put("name", vmList.get(j).getName());
+				vmPD.put("uuid", vmUuid);
+				vmPD.put("type", "kvm");
+				vmPD.put("hostmachine_id", kvmPD.getString("id"));
+				vmPD.put("ip", vmList.get(j).getIpAddress());
+				vmPD.put("cpu", vmList.get(j).getVcpus());
+				vmPD.put("memory", vmList.get(j).getMemory()*1024);
+				vmPD.put("status", (null == vmList.get(j).getState())?2:vmList.get(j).getState());
+				virtualMachineSyncService.save(vmPD, false);
+			}
+		}
+	}
+	
+	private String existUuid(String uuid, List<PageData> preList) {
+		for(PageData pd : preList) {
+			if(uuid.equals(pd.getString("uuid"))) {
+				return pd.getString("id");
+			}
+		}
+		
+		return null;
 	}
 
 }

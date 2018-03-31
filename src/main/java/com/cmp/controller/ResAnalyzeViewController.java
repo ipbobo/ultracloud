@@ -1,5 +1,6 @@
 package com.cmp.controller;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import com.cmp.mgr.CloudArchManager;
 import com.cmp.mgr.CloudArchManagerAdapter;
 import com.cmp.service.VirtualMachineService;
 import com.cmp.service.resourcemgt.CloudplatformService;
+import com.cmp.sid.PlatformAnalyze;
 import com.cmp.sid.ResChartItem;
 import com.cmp.sid.Serrie;
 import com.cmp.sid.VirtualMachine;
@@ -44,8 +46,8 @@ public class ResAnalyzeViewController extends BaseController {
 			ModelAndView mv = new ModelAndView();
 			Map <String , AnalyzeItem> analyzeItemMap = new HashMap<String , AnalyzeItem>();
 			List<PageData> cPdList = cloudplatformService.listAll(null, false);
-			List<String> plNameList = new ArrayList<String>();
-			List<String> plIdList = new ArrayList<String>();
+			List<String> plNameList = new ArrayList<String>();		//平台名称列表
+			List<String> plIdList = new ArrayList<String>();		//平台ID列表
 			for (PageData cloudplatformPd : cPdList) {
 				String platformManagerType;
 				String type = cloudplatformPd.getString("type");
@@ -75,9 +77,9 @@ public class ResAnalyzeViewController extends BaseController {
 				AnalyzeItem analyzeItem = new AnalyzeItem();
 				analyzeItem.setPlatform(type);
 				analyzeItem.setCpuTotal(tccCapability.getSupportedVcpus());
-				analyzeItem.setMemoryTotal((int)(tccCapability.getSupportedMemory()/1024/1024));
-				analyzeItem.setDiskTotal((int)(tccCapability.getSupportedStorage()/1024/1024));
-				analyzeItemMap.put(type, analyzeItem);
+				analyzeItem.setMemoryTotal((int)(tccCapability.getSupportedMemory()/1024/1024/1024));
+				analyzeItem.setDiskTotal((int)(tccCapability.getSupportedStorage()/1024/1024/1024));
+				analyzeItemMap.put(cloudplatformPd.getString("id"), analyzeItem);
 				
 				plNameList.add(cloudplatformPd.getString("name"));
 				plIdList.add(cloudplatformPd.getString("id"));
@@ -149,17 +151,26 @@ public class ResAnalyzeViewController extends BaseController {
 					platformAnalyze.setCpuSupportAppDays("0");
 				}else {
 					int z =  cpuNums[i] - Integer.parseInt(cpuUsedNumstr[i]);
-					platformAnalyze.setCpuSupportAppDays(String.valueOf(getDiv(z, Integer.parseInt(platformAnalyze.getCpuAppPerDays()))));
+					if (Integer.parseInt(platformAnalyze.getCpuAppPerDays()) == 0) {
+						platformAnalyze.setCpuSupportAppDays("∞");
+					}else {
+						platformAnalyze.setCpuSupportAppDays(String.valueOf(getDiv(z, Integer.parseInt(platformAnalyze.getCpuAppPerDays()))));
+					}
+					
 				}
 				
 				platformAnalyze.setMemorytotal(String.valueOf(memoryNums[i]));
-				platformAnalyze.setMemoryUsedPercent(getNumberPercent(Integer.parseInt(memoryUsedNumstr[i]), memoryNums[i]));
+				platformAnalyze.setMemoryUsedPercent(getNumberPercent(Integer.parseInt(memoryTotalArr[i]), memoryNums[i]));
 				platformAnalyze.setMemoryAppPerDays(String.valueOf(getDiv(currAppMemoryNum[i], currDate)));
 				if ((Integer.parseInt(memoryUsedNumstr[i])/memoryNums[i]) > 1) {
 					platformAnalyze.setMemorySupportAppDays("0");
 				}else {
 					int z =  memoryNums[i] - Integer.parseInt(memoryUsedNumstr[i]);
-					platformAnalyze.setMemorySupportAppDays(String.valueOf(getDiv(z, Integer.parseInt(platformAnalyze.getMemoryAppPerDays()))));
+					if (Integer.parseInt(platformAnalyze.getMemoryAppPerDays()) == 0) {
+						platformAnalyze.setMemorySupportAppDays("∞");
+					}else {
+						platformAnalyze.setMemorySupportAppDays(String.valueOf(getDiv(z, Integer.parseInt(platformAnalyze.getMemoryAppPerDays()))));
+					}
 				}
 				
 				platformAnalyze.setDisktotal(String.valueOf(diskNums[i]));
@@ -169,7 +180,11 @@ public class ResAnalyzeViewController extends BaseController {
 					platformAnalyze.setDiskSupportAppDays("0");
 				}else {
 					int z =  diskNums[i] - Integer.parseInt(diskUsedNumstr[i]);
-					platformAnalyze.setDiskSupportAppDays(String.valueOf(getDiv(z, Integer.parseInt(platformAnalyze.getDiskAppPerDays()))));
+					if (Integer.parseInt(platformAnalyze.getDiskAppPerDays()) == 0) {
+						platformAnalyze.setDiskSupportAppDays("∞");
+					}else {
+						platformAnalyze.setDiskSupportAppDays(String.valueOf(getDiv(z, Integer.parseInt(platformAnalyze.getDiskAppPerDays()))));
+					}
 				}
 				platformAnalyzeList.add(platformAnalyze);
 			}
@@ -214,9 +229,9 @@ public class ResAnalyzeViewController extends BaseController {
 				AnalyzeItem analyzeItem = new AnalyzeItem();
 				analyzeItem.setPlatform(type);
 				analyzeItem.setCpuTotal(tccCapability.getSupportedVcpus());
-				analyzeItem.setMemoryTotal((int)(tccCapability.getSupportedMemory()/1024/1024));
-				analyzeItem.setDiskTotal((int)(tccCapability.getSupportedStorage()/1024/1024));
-				analyzeItemMap.put(type, analyzeItem);
+				analyzeItem.setMemoryTotal((int)(tccCapability.getSupportedMemory()/1024/1024/1024));
+				analyzeItem.setDiskTotal((int)(tccCapability.getSupportedStorage()/1024/1024/1024));
+				analyzeItemMap.put(cloudplatformPd.getString("id"), analyzeItem);
 				plNameList.add(cloudplatformPd.getString("name"));
 				plIdList.add(cloudplatformPd.getString("id"));
 			}
@@ -336,103 +351,6 @@ public class ResAnalyzeViewController extends BaseController {
 			
 		}
 		
-		class PlatformAnalyze{
-			private String platformName;
-			private String cputotal;
-			private String cpuUsedPercent;
-			private String cpuAppPerDays;
-			private String cpuSupportAppDays;
-			private String memorytotal;
-			private String memoryUsedPercent;
-			private String memoryAppPerDays;
-			private String memorySupportAppDays;
-			private String disktotal;
-			private String diskUsedPercent;
-			private String diskAppPerDays;
-			private String diskSupportAppDays;
-			public String getCputotal() {
-				return cputotal;
-			}
-			public String getPlatformName() {
-				return platformName;
-			}
-
-			public void setPlatformName(String platformName) {
-				this.platformName = platformName;
-			}
-
-			public void setCputotal(String cputotal) {
-				this.cputotal = cputotal;
-			}
-			public String getCpuUsedPercent() {
-				return cpuUsedPercent;
-			}
-			public void setCpuUsedPercent(String cpuUsedPercent) {
-				this.cpuUsedPercent = cpuUsedPercent;
-			}
-			public String getCpuAppPerDays() {
-				return cpuAppPerDays;
-			}
-			public void setCpuAppPerDays(String cpuAppPerDays) {
-				this.cpuAppPerDays = cpuAppPerDays;
-			}
-			public String getCpuSupportAppDays() {
-				return cpuSupportAppDays;
-			}
-			public void setCpuSupportAppDays(String cpuSupportAppDays) {
-				this.cpuSupportAppDays = cpuSupportAppDays;
-			}
-			public String getMemorytotal() {
-				return memorytotal;
-			}
-			public void setMemorytotal(String memorytotal) {
-				this.memorytotal = memorytotal;
-			}
-			public String getMemoryUsedPercent() {
-				return memoryUsedPercent;
-			}
-			public void setMemoryUsedPercent(String memoryUsedPercent) {
-				this.memoryUsedPercent = memoryUsedPercent;
-			}
-			public String getMemoryAppPerDays() {
-				return memoryAppPerDays;
-			}
-			public void setMemoryAppPerDays(String memoryAppPerDays) {
-				this.memoryAppPerDays = memoryAppPerDays;
-			}
-			public String getMemorySupportAppDays() {
-				return memorySupportAppDays;
-			}
-			public void setMemorySupportAppDays(String memorySupportAppDays) {
-				this.memorySupportAppDays = memorySupportAppDays;
-			}
-			public String getDisktotal() {
-				return disktotal;
-			}
-			public void setDisktotal(String disktotal) {
-				this.disktotal = disktotal;
-			}
-			public String getDiskUsedPercent() {
-				return diskUsedPercent;
-			}
-			public void setDiskUsedPercent(String diskUsedPercent) {
-				this.diskUsedPercent = diskUsedPercent;
-			}
-			public String getDiskAppPerDays() {
-				return diskAppPerDays;
-			}
-			public void setDiskAppPerDays(String diskAppPerDays) {
-				this.diskAppPerDays = diskAppPerDays;
-			}
-			public String getDiskSupportAppDays() {
-				return diskSupportAppDays;
-			}
-			public void setDiskSupportAppDays(String diskSupportAppDays) {
-				this.diskSupportAppDays = diskSupportAppDays;
-			}
-			
-			
-		}
 		
 		public String getNumberPercent(int num1, int num2) {
 			if (num1 == 0) {
@@ -441,8 +359,10 @@ public class ResAnalyzeViewController extends BaseController {
 			if (num2 == 0) {
 				return "100%";
 			}
-			NumberFormat numberFormat = NumberFormat.getInstance();  
-			String result = numberFormat.format((float) num1 / (float) num2 * 100); 
+			
+			DecimalFormat df=new DecimalFormat("0.00");
+			String result = (df.format((float)num2/num1*100)); 
+			
 			return (result + "%");
 		} 
 	

@@ -69,8 +69,12 @@
 													<td class='center'></td>
 													<td class='center'>
 														<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
+														<input type="hidden" name="h_appNo" id="h_appNo" value="${workorder.appNo}">
+														<input type="hidden" name="h_cpu" id="h_cpu" value="${workorder.cpu}">
+														<input type="hidden" name="h_memory" id="h_memory" value="${workorder.memory}">
+														<input type="hidden" name="h_diskSize" id="h_diskSize" value="${workorder.diskSize}">
 														<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
-															onclick="toInstall('${workorder.appNo}','${cmpCloudInfo.cpu}','${cmpCloudInfo.memory}','${cloudInfoCollect.diskTotal}');">安装</button>
+															onclick="showSetParam('${workorder.appNo}');">安装</button>
 														<button id="executeStatus_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
 															>安装中...</button>
 														<button id="executeStatus_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
@@ -145,6 +149,16 @@
 								</tbody>
 						</table>
 			<div class="alert alert-info">后续任务处理</div>
+				<table>
+						<c:if test="${workorder.uploadFileName != ''}">
+								<tr>
+									<td align="right" style="width: 120px;padding:10px;">附件信息：</td>
+									<td align="left" style="padding:10px;" width="90%">
+										<a href="static/upload/${workorder.uploadFileName}" download="${workorder.uploadFileName}">${workorder.uploadFileName}</a>
+									</td>
+								</tr>
+							</c:if>
+			</table>
 		<table>
 			<tr>
 				<td align="right" style="width: 120px;padding:10px;">退回：</td>
@@ -159,8 +173,7 @@
 			</td>
 		</tr>
 		</table>
-		<form class="form-horizontal" id="checkform" name="checkform"
-			role="form">
+		
 		<table style="margin-left: 30%">
 			<tr>
 					<td>
@@ -177,7 +190,6 @@
 				</td>
 				</tr>
 		</table>
-		</form>
 	</div>
 
 
@@ -258,7 +270,7 @@
 						&times;
 					</button>
 					<h4 class="modal-title" id="middleware_modalLabel">
-						云平台、数据中心、集群选择
+						第二步 ---云平台、数据中心、集群选择
 					</h4>
 				</div>
 				<div class="modal-body">
@@ -266,7 +278,7 @@
 				<input type="hidden"   name="h_cpu" id="h_cpu">
 				<input type="hidden"   name="h_memory" id="h_memory">
 				<input type="hidden"   name="h_diskSize" id="h_diskSize">
-				<table  style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+				<table  border='1' cellspacing='0' cellpadding='0' style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 					<tr>
 						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;云平台</td>
 						<td id="tip_cloudplatform">
@@ -294,13 +306,74 @@
 							</select>
 						</td>
 					</tr>
+					<tr>
+						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;网络:</td>
+						<td id="tip_network">
+							<select name="network" id="network" title="请选择网络" style="width:40%;margin-left: 100px;" onchange="onNetworkSelected(this.value)">
+								<option value="#" selected="selected">请选择网络</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;IP:</td>
+						<td id="tip_network">
+							<select name="ip" id="ip" title="请选择IP" multiple="multiple" style="width:40%;margin-left: 100px;">
+								<option value="#" selected="selected">请选择IP</option>
+							</select>
+						</td>
+					</tr>
 				</table>
 			</div>
 				<div class="modal-footer">
 					<button id="platform_modal_btn_cancel" type="button" class="btn btn-default"  data-dismiss="modal">取消
 					</button>
 					<button  id="platform_modal_btn_ok" type="button" class="btn btn-primary" onclick="execute();" id="platform_modal_ok_btn">
-						确定
+						执行
+					</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+	
+	<!-- 部署设置 -->
+	<div class="modal fade" id="autodeploy_modal" tabindex="-1" role="dialog" aria-labelledby="autodeploy_modalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="middleware_modalLabel">
+						第一步 ---脚本参数设置
+					</h4>
+				</div>
+				<div class="modal-body">
+				<!-- 
+				<table  style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+					<tr>
+						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;部署方案选择:</td>
+						<td id="tip_auto_deploy_config">
+							<select name="auto_deploy_config_id" id="auto_deploy_config_id" title="请选择部署方案" style="width:40%;margin-left: 100px;" onchange="onAutoDeploySelect(this.value)">
+								<option value="#" selected="selected">请选择部署方案</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+				 -->
+						<form>
+						<ul id="autoDeployTab" class="nav nav-tabs">
+							
+						</ul>
+						<div id="autoDeployTabContent" class="tab-content">
+							
+						</div>
+						</form>
+					</div>
+				<div class="modal-footer">
+					<button id="platform_modal_btn_cancel" type="button" class="btn btn-default"  data-dismiss="modal">取消
+					</button>
+					<button  id="platform_modal_btn_ok" type="button" onclick="toInstall();" class="btn btn-primary" data-dismiss="modal" id="platform_modal_ok_btn">
+						下一步
 					</button>
 				</div>
 			</div><!-- /.modal-content -->
@@ -334,7 +407,7 @@
 	//检索
 	function tosearch(){
 		top.jzts();
-		$("#Form").submit();
+		//$("#Form").submit();
 	}
 	$(function() {
 		//复选框全选控制
@@ -374,10 +447,7 @@
 	}
 	
 	function toInstall(appNo, cpu, memory, diskSize){
-		$("#h_appNo").val(appNo);
-		$("#h_cpu").val(cpu);
-		$("#h_memory").val(memory);
-		$("#h_diskSize").val(diskSize);
+		$('#autodeploy_modal').modal('hide');
 		$('#platform_modal').modal('show');
 	}
 	
@@ -389,26 +459,43 @@
 		var cloudPlatform = $("#cloudplatform").val();
 		var datacenter = $("#datacenter").val();
 		var cluster = $("#cluster").val();
+		var network = $("#network").val();
+		var ip = $("#ip").val();
+		var auto_deploy_config_id = $("#auto_deploy_config_id").val();
 		if (cloudPlatform == null || cloudPlatform == '#' || cloudPlatform == ''){
+			$('#platform_modal').modal('hide');
 			showDialog("请选择云平台");
 			return false;
 		}
 		if (datacenter == null || datacenter == '#' || datacenter == ''){
+			$('#platform_modal').modal('hide');
 			showDialog("请选择数据中心");
 			return false;
 		}
 		if (cluster == null || cluster == '#' || cluster == ''){
+			$('#platform_modal').modal('hide');
 			showDialog("请选择集群");
 			return false;
 		}
-		
+		if (ip == null || ip == '#' || ip == ''){
+			$('#platform_modal').modal('hide');
+			showDialog("请选择IP");
+			return false;
+		}
 		$('#platform_modal').modal('hide');
 		$("#executeStatus_0").css('display','none');
 		$("#executeStatus_1").css('display','block');
 		queryExecuteStatus(appNo);
+		
+		var submitScriptParam = "";
+		x=$("form").serializeArray();
+	    $.each(x, function(i, field){
+	    	submitScriptParam+=("&" + field.name + "=" + field.value );
+	    });
 		$.ajax({
 			type: "POST",
-			url: '<%=basePath%>executeWork.do?appNo='+appNo +'&CPU=' + cpu +'&memory=' + memory + '&diskSize=' + diskSize + '&cloudPlatformId=' + cloudPlatform + '&datacenterId=' + datacenter + '&clusterId=' + cluster ,
+			url: '<%=basePath%>executeWork.do?appNo='+appNo +'&CPU=' + cpu +'&memory=' + memory +'&network=' + network+'&ip=' + ip+'&auto_deploy_config_id=' + auto_deploy_config_id+ '&diskSize=' + 
+					diskSize + '&cloudPlatformId=' + cloudPlatform + '&datacenterId=' + datacenter + '&clusterId=' + cluster + submitScriptParam ,
 			dataType:'json',
 			//beforeSend: validateData,
 			cache: false,
@@ -448,7 +535,7 @@
 					line = maplen;
 				}
 			});
-		}, 2500);
+		}, 1500);
 	}
 	
 	
@@ -473,7 +560,7 @@
 			}  
 		});  
 	} 
-	
+	var networkMap = {};
 	function onDataCenterSelected(dataCenterId){
 		jQuery.ajax({  
 			url : "<%=basePath%>onDataCenterSelected.do",  
@@ -486,7 +573,7 @@
 			    select_root.options.length=0;
 			 	var _option=new Option("请选择集群","#"); 
 			    select_root.add(_option);
-			    for(var i=0;i<data.length;i++){  
+			    for(var i=0;i<data.length;i++){ 
 			    	var xValue=data[i].id;  
 		             var xText=data[i].name;
 		             var option=new Option(xText,xValue);  
@@ -494,10 +581,171 @@
 			    }
 			}  
 		});  
+		
+		jQuery.ajax({  
+			url : "<%=basePath%>toNetworkQuery.do",  
+			data : {'dataCenterId' : dataCenterId},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				var select_root=document.getElementById('network');  
+			    select_root.options.length=0;
+			 	var _option=new Option("请选择网络","#"); 
+			    select_root.add(_option);
+			    for(var i=0;i<data.length;i++){  
+			    	if (data[i].ippool != null){
+			    		networkMap[data[i].id] = data[i].ippool;
+			    	}
+			    	var xValue=data[i].id;  
+		             var xText=data[i].name;
+		             var option=new Option(xText,xValue);  
+		             select_root.add(option);  
+			    }
+			}  
+		});  
+		
 	} 
 	
+	function onNetworkSelected(networkid){
+		var ippool = networkMap[networkid];
+		jQuery.ajax({  
+			url : "<%=basePath%>toCheckNetwork.do",  
+			data : {'ippool' : ippool},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				var select_root=document.getElementById('ip');  
+			    select_root.options.length=0;
+			 	var _option=new Option("请选择IP","#"); 
+			    select_root.add(_option);
+				for(var i=0;i<data.length;i++){ 
+				    	var xValue = data[i];  
+			             var xText = data[i];
+			             var option=new Option(xText,xValue);  
+			             select_root.add(option);  
+				}
+			}  
+		});  
+		
+	}
 	
 	
+	function toAutoDeploySelect(){
+		jQuery.ajax({  
+			url : "<%=basePath%>toAutoDeploySelect.do",  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				var select_root=document.getElementById('auto_deploy_config_id');  
+			    select_root.options.length=0;
+			 	var _option=new Option("请选择部署方案","#"); 
+			    select_root.add(_option);
+			    for(var i=0;i<data.length;i++){  
+			    	var xValue=data[i].id;  
+		             var xText=data[i].name;
+		             var option=new Option(xText,xValue);  
+		             select_root.add(option);  
+			    }
+			}  
+		}); 
+		$('#autodeploy_modal').modal('show');
+	}
+	
+	//目前不用。。。。。
+	function onAutoDeploySelect(autodeployid){
+		jQuery.ajax({  
+			url : "<%=basePath%>onAutoDeploySelect.do",  
+			data : {'autodeployid' : autodeployid},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				
+				 var autoDeployTab = $("#autoDeployTab");
+				 $("#autoDeployTab").empty();
+				 
+				 var autoDeployTabContent =  $("#autoDeployTabContent");
+				 $("#autoDeployTabContent").empty();
+				 
+				 for(var i=0;i<data.length;i++){ 
+						var autoDeployNode = data[i];
+						autoDeployTab.append("<li><a href='#" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
+						var scriptNodeList = autoDeployNode.scriptNodeList;
+						if (scriptNodeList != null){
+							var appendHTML = "";
+							if (i == 0){
+								appendHTML+=("<div class='tab-pane fade in active' id='" + autoDeployNode.id +"'>");
+							}else{
+								appendHTML+=("<div class='tab-pane fade' id='" + autoDeployNode.id +"'>");
+							}
+							appendHTML += "<table border='1' cellspacing='0' cellpadding='0' id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> "  + 
+							"<thead> <tr> <th class='center'>参数名称</th> <th class='center'>参数值</th> </tr> </thead>"
+							
+							
+							for(var z=0;z<scriptNodeList.length;z++){ 
+								 var scriptNode = scriptNodeList[z];
+								 appendHTML+=("<tr><td class='center'>" + scriptNode.name + "</td><td class='center'><input name='"+ scriptNode.paramKey +"' id='"+ scriptNode.paramKey +"' value='"+ scriptNode.defaultVal +"' /></td></tr>");
+							}
+							 appendHTML+="</table> </div>"
+								 autoDeployTabContent.append(appendHTML);
+						}
+				 }
+			}  
+		}); 
+	}
+	
+	function showSetParam(appNo){
+		jQuery.ajax({  
+			url : "<%=basePath%>toSetParam.do",  
+			data : {'appNo' : appNo},  
+			type : "post",  
+			cache : false,  
+			dataType : "json",  
+			success:function(data){
+				
+				 var autoDeployTab = $("#autoDeployTab");
+				 $("#autoDeployTab").empty();
+				 
+				 var autoDeployTabContent =  $("#autoDeployTabContent");
+				 $("#autoDeployTabContent").empty();
+				 
+				 for(var i=0;i<data.length;i++){ 
+						var autoDeployNode = data[i];
+						if (autoDeployNode.modFlag == '1'){
+							autoDeployTab.append("<li ><a style='color: red;' href='#" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
+						}else{
+							autoDeployTab.append("<li><a href='#" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
+						}
+						
+						
+						var scriptNodeList = autoDeployNode.scriptNodeList;
+						if (scriptNodeList != null){
+							var appendHTML = "";
+							if (i == 0){
+								appendHTML+=("<div class='tab-pane fade in active' id='" + autoDeployNode.id +"'>");
+							}else{
+								appendHTML+=("<div class='tab-pane fade' id='" + autoDeployNode.id +"'>");
+							}
+							appendHTML += "<table border='1' cellspacing='0' cellpadding='0' id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> "  + 
+							"<thead> <tr> <th class='center'>参数名称</th> <th class='center'>参数值</th> <th class='center'>默认值</th></tr></thead>"
+							
+							
+							for(var z=0;z<scriptNodeList.length;z++){ 
+								 var scriptNode = scriptNodeList[z];
+								 appendHTML+=("<tr><td class='center'>" + scriptNode.name + "</td><td class='center'><input name='"+ scriptNode.paramKey +"' id='"+ scriptNode.paramKey +"' value='"+ scriptNode.value +"' /></td><td class='center'>" + scriptNode.defaultVal + "</td></tr>");
+							}
+							 appendHTML+="</table> </div>"
+								 autoDeployTabContent.append(appendHTML);
+						}
+				 }
+			}  
+		});
+		
+		$('#autodeploy_modal').modal('show');
+	}
 	
 	</script>
 

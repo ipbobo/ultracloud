@@ -251,5 +251,5 @@ function updateUserPhoto(value){
 }
 
 function logout(){
-	top.location.href='logout';
+	window.parent.location.href=locat + '/logout.do';
 }

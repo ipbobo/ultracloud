@@ -69,7 +69,7 @@
 							<tr>
 								<td style="width:120px;height:130px;text-align: right;padding-top: 13px;">描述:</td>
 								<td >
-									<textarea rows="5" cols="10" id="detail" name="detail" style="width:98%;"></textarea>
+									<textarea rows="5" cols="10" id="detail" name="detail" style="width:98%;">${pd.detail}</textarea>
 								</td>
 							</tr>
 							<tr>

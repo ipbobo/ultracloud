@@ -1,5 +1,7 @@
 package com.fh.controller.system.login;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmp.service.CmpDictService;
 import com.cmp.service.DashboardService;
 import com.cmp.service.SysConfigService;
+import com.cmp.sid.CmpAxis;
+import com.cmp.sid.CmpCdLoad;
 import com.cmp.sid.DashboardRequest;
 import com.cmp.sid.SysConfigInfo;
 import com.cmp.util.StringUtil;
@@ -48,6 +52,8 @@ import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 import com.fh.util.RightsHelper;
 import com.fh.util.Tools;
+
+import net.sf.json.JSONObject;
 
 //用户登录
 @Controller
@@ -92,11 +98,16 @@ public class LoginController extends BaseController {
 		Map<String, String> auditMap=dashboardService.getAuditMap(applyUserId);//审核组查询
 		String roleType=StringUtil.getRoleType(auditMap);//获取用户的角色类型
 		PageData pd = getPageData("applyUserId", applyUserId, "roleType", roleType, "audit", auditMap.get("audit"));
+		Map<String, String[]> hostIdsMap=dashboardService.getHostIdsMap(pd);//主机ID列表查询
+		Map<String, CmpCdLoad> virLoadMap=new HashMap<String, CmpCdLoad>();//虚拟机负载
+		Map<String, CmpCdLoad> hostLoadMap=new HashMap<String, CmpCdLoad>();//宿主机负载
+		Map<String, CmpCdLoad> physLoadMap=new HashMap<String, CmpCdLoad>();//物理机负载
 		ModelAndView mv = this.getModelAndView();
+		mv.addObject("hostIdStr", StringUtil.getArrStr(hostIdsMap.get("virStr")));//主机ID列表
 		mv.addObject("cpuTimeType", dbReq.getCpuTimeType());//CPU时间类型
 		mv.addObject("memTimeType", dbReq.getMemTimeType());//内存时间类型
 		mv.addObject("storeTimeType", dbReq.getStoreTimeType());//磁盘时间类型
-		mv.addObject("resType", dbReq.getResType());//资源类型
+		mv.addObject("resType", dbReq.getResType());//资源类型：cpu-CPU、mem-内存、store-磁盘
 		mv.addObject("chkFlag", dbReq.getChkFlag());//复选框是否选中：0-否；1-是
 		mv.addObject("timeTypeList", cmpDictService.getCmpDictList("dashboard_time_type"));//仪表盘时间类型列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("dashboard_res_type"));//仪表盘资源类型列表
@@ -106,20 +117,72 @@ public class LoginController extends BaseController {
 		mv.addObject("userNum", dashboardService.getUserNum(pd));//用户总数
 		mv.addObject("projNum", dashboardService.getProjNum(pd));//项目总数
 		mv.addObject("workOrderNum", dashboardService.getWorkOrderNum(pd));//工单总数
-		mv.addObject("vir", dashboardService.getVirDtl());//虚机详细信息查询
-		mv.addObject("phys", dashboardService.getPhysDtl());//物理机详细信息查询
-		mv.addObject("virLoad", dashboardService.getVirLoad());//虚拟机负载
-		mv.addObject("hostLoad", dashboardService.getHostLoad());//宿主机负载
-		mv.addObject("physLoad", dashboardService.getPhysLoad());//物理机负载
-		mv.addObject("virRun", dashboardService.getVirRun());//虚拟机运行
-		mv.addObject("hostRun", dashboardService.getHostRun());//宿主机运行
-		mv.addObject("physRun", dashboardService.getPhysRun());//物理机运行
-		mv.addObject("cpuResRate", dashboardService.getCpuResRate(dbReq.getCpuTimeType()));//CPU资源使用量趋势
-		mv.addObject("memResRate", dashboardService.getMemResRate(dbReq.getMemTimeType()));//存储资源使用量趋势
-		mv.addObject("storeResRate", dashboardService.getStoreResRate(dbReq.getStoreTimeType()));//磁盘资源使用量趋势
-		mv.addObject("resUseList", dashboardService.getResUseList(dbReq.getChkFlag()));//资源使用列表
+		mv.addObject("vir", dashboardService.getResDtl("virRes", hostIdsMap.get("virStr")));//虚拟资源详细信息查询
+		mv.addObject("phys", dashboardService.getResDtl("physRes", hostIdsMap.get("virStr")));//物理资源详细信息查询
+		mv.addObject("virLoad", dashboardService.getLoadDtl(virLoadMap, hostIdsMap.get("vir"), dbReq.getResType()));//虚拟机负载
+		mv.addObject("hostLoad", dashboardService.getLoadDtl(hostLoadMap, hostIdsMap.get("host"), dbReq.getResType()));//宿主机负载
+		mv.addObject("physLoad", dashboardService.getLoadDtl(physLoadMap, hostIdsMap.get("phys"), dbReq.getResType()));//物理机负载
+		mv.addObject("virRun", dashboardService.getRunDtl(hostIdsMap.get("vir")));//虚拟机运行
+		mv.addObject("hostRun", dashboardService.getRunDtl(hostIdsMap.get("host")));//宿主机运行
+		mv.addObject("physRun", dashboardService.getRunDtl(hostIdsMap.get("phys")));//物理机运行
+		//mv.addObject("cpuResRate", dashboardService.getResRate("cpu", dbReq.getCpuTimeType(), hostIdsMap.get("vir")));//CPU资源使用量趋势
+		//mv.addObject("memResRate", dashboardService.getResRate("mem", dbReq.getMemTimeType(), hostIdsMap.get("vir")));//存储资源使用量趋势
+		//mv.addObject("storeResRate", dashboardService.getResRate("store", dbReq.getStoreTimeType(), hostIdsMap.get("vir")));//磁盘资源使用量趋势
+		mv.addObject("resUseList", dashboardService.getResUseList(virLoadMap));//资源使用列表
 		mv.setViewName("system/index/default");
 		return mv;
+	}
+	
+	//资源使用量趋势查询
+	@RequestMapping(value="/getResRate" ,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public String getResRate(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		BufferedReader br = null;
+        try {
+			br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+            
+			String reqStr = sb.toString();//请求参数字符串
+            logger.info("请求参数：" + reqStr);
+            JSONObject jsonObj=JSONObject.fromObject(reqStr);
+            DashboardRequest dbReq=getJsonReqParam(jsonObj);//获取请求参数
+    		String errMsg = checkJsonParam(dbReq);//校验必填参数
+    		if (errMsg != null) {
+    			return StringUtil.getRetStr("-1", "仪表盘查询时错误："+errMsg);
+    		}
+    		
+			CmpAxis resRate=new CmpAxis("hour");
+			String hostIdStr=dbReq.getHostIdStr();
+			if(!StringUtils.isBlank(hostIdStr)){//主机列表不为空
+				String[] hostIds=hostIdStr.split(",");//拼接字符串转换成字符串数组
+				String timeType=dbReq.getCpuTimeType();//CPU
+				if("mem".equals(dbReq.getResType())){//内存
+					timeType=dbReq.getMemTimeType();
+				}else if("store".equals(dbReq.getResType())){//磁盘
+					timeType=dbReq.getStoreTimeType();
+				}
+				
+				resRate=dashboardService.getResRate(dbReq.getResType(), timeType, hostIds);//资源使用量趋势
+			}
+			
+			return StringUtil.getRetStr("0", "仪表盘查询成功", "resRate", resRate);
+		} catch (Exception e) {
+			logger.error("仪表盘查询时错误："+e);
+			return StringUtil.getRetStr("-1", "仪表盘查询时错误："+e);
+	    }finally {
+	        if(br!=null){
+	            try {
+	                br.close();
+	                br=null;
+	            } catch (Exception e) {
+	            	br=null;
+	            }
+	        }
+	    }
 	}
 	
 	/**访问登录页
@@ -178,6 +241,7 @@ public class LoginController extends BaseController {
 						user.setIP(pd.getString("IP"));
 						user.setSTATUS(pd.getString("STATUS"));
 						user.setDEPARTMENT_ID(pd.getString("DEPARTMENT_ID"));
+						user.setRole(roleService.getRoleById(pd.getString("ROLE_ID")));
 						session.setAttribute(Const.SESSION_USER, user);			//把用户信息放session中
 						session.removeAttribute(Const.SESSION_SECURITY_CODE);	//清除登录验证码的session
 						//shiro加入身份验证
@@ -527,8 +591,19 @@ public class LoginController extends BaseController {
 		dbReq.setCpuTimeType(request.getParameter("cpuTimeType"));//CPU时间类型
 		dbReq.setMemTimeType(request.getParameter("memTimeType"));//内存时间类型
 		dbReq.setStoreTimeType(request.getParameter("storeTimeType"));//磁盘时间类型
-		dbReq.setResType(request.getParameter("resType"));//资源类型
+		dbReq.setResType(request.getParameter("resType"));//资源类型：cpu-CPU、mem-内存、store-磁盘
 		dbReq.setChkFlag(request.getParameter("chkFlag"));//复选框是否选中：0-否；1-是
+		return dbReq;
+	}
+	
+	//获取JSON请求参数
+	private DashboardRequest getJsonReqParam(JSONObject jsonObj){
+		DashboardRequest dbReq=new DashboardRequest();
+		dbReq.setResType(StringUtil.getJsonStr(jsonObj, "resType"));//资源类型：cpu-CPU、mem-内存、store-磁盘
+		dbReq.setCpuTimeType(StringUtil.getJsonStr(jsonObj, "cpuTimeType"));//CPU时间类型
+		dbReq.setMemTimeType(StringUtil.getJsonStr(jsonObj, "memTimeType"));//内存时间类型
+		dbReq.setStoreTimeType(StringUtil.getJsonStr(jsonObj, "storeTimeType"));//磁盘时间类型
+		dbReq.setHostIdStr(StringUtil.getJsonStr(jsonObj, "hostIdStr"));//主机ID列表
 		return dbReq;
 	}
 	
@@ -546,8 +621,33 @@ public class LoginController extends BaseController {
 			dbReq.setStoreTimeType("hour");
 		}
 		
+		if(StringUtils.isBlank(dbReq.getResType())){//资源类型：cpu-CPU、mem-内存、store-磁盘
+			dbReq.setResType("cpu");
+		}
+		
 		if(StringUtils.isBlank(dbReq.getChkFlag())){//复选框是否选中：0-否；1-是
 			dbReq.setChkFlag("1");
+		}
+		
+		return null;
+	}
+	
+	//校验JSON必填参数
+	private String checkJsonParam(DashboardRequest dbReq){
+		if(StringUtils.isBlank(dbReq.getCpuTimeType())){//CPU时间类型
+			dbReq.setCpuTimeType("hour");
+		}
+		
+		if(StringUtils.isBlank(dbReq.getMemTimeType())){//内存时间类型
+			dbReq.setMemTimeType("hour");
+		}
+		
+		if(StringUtils.isBlank(dbReq.getStoreTimeType())){//磁盘时间类型
+			dbReq.setStoreTimeType("hour");
+		}
+		
+		if(StringUtils.isBlank(dbReq.getResType())){//资源类型：cpu-CPU、mem-内存、store-磁盘
+			dbReq.setResType("cpu");
 		}
 		
 		return null;

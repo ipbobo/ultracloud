@@ -23,7 +23,7 @@ function init(){
 			dataType : "json",  
 			success:function(data){
 				loadBarChart(data.cpu.chartTitle, "bar1", data.cpu.titleArr, data.cpu.xDataArr, data.cpu.yDataArr);
-				loadBarChart(data.vm.chartTitle, "bar2", data.vm.titleArr, data.vm.xDataArr, data.vm.yDataArr);
+				loadBarChart(data.memory.chartTitle, "bar2", data.memory.titleArr, data.memory.xDataArr, data.memory.yDataArr);
 				loadBarChart(data.disk.chartTitle, "bar3", data.disk.titleArr, data.disk.xDataArr, data.disk.yDataArr);
 			}
 		});  
@@ -38,7 +38,12 @@ function loadBarChart(chartTitle, chartId, titleArr, xdataArr, ydataArr){
 			            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
 			        }	
 		    },//item或axis
-		    legend: {data: titleArr},
+		    grid:{
+		      	left:'17%',//组件距离容器左边的距离
+		      	right:'4%',
+		      	bottom:'15%',
+		    },
+		    legend: {data: titleArr, left:'right'},
 		    calculable: true,
 		    xAxis: [
 		        {
@@ -77,20 +82,21 @@ function barSerrie(data){
 	<div class="page-content">
 		<div style="height:5px;"></div>
 		<div style="padding: 0px;margin: 0px" class="alert alert-block">
-			<table style="width:80%;">
+			<div class="alert alert-info">资源使用情况</div>		
+				<table style="width:80%;">
 				<tr style="height: 200px;">
 					<td id="bar1" align="center" style="width: 300px;"></td>
 					<td id="bar2" align="center" style="width: 300px;" ></td>
 					<td id="bar3" align="center" style="width: 300px;" ></td>
 				</tr>
 				</table>
+				<div class="alert alert-info">资源分析</div>				
 				<table>
-				
 				<c:choose>
 					<c:when test="${not empty platformAnalyzeList}">
 						<c:forEach items="${platformAnalyzeList}" var="var" varStatus="vs">
 								<tr style="padding-top: 20px;">
-									<td style="width:120px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;${var.platformName}:</td>
+									<td style="width:120px;text-align: right;padding-top: 13px;">&nbsp;&nbsp;<b>${var.platformName}:</b></td>
 									<td>
 										<table border="1" style="border: 2px; border-color: black;">
 											<thead>
@@ -101,9 +107,9 @@ function barSerrie(data){
 												</tr>
 											</thead>
 												<tr>
-													<td>${var.cputotal}/${var.cpuUsedPercent} </td>
-													<td>${var.cpuAppPerDays}</td>
-													<td>${var.cpuSupportAppDays}</td>
+													<td class="center">${var.cputotal}/${var.cpuUsedPercent} </td>
+													<td class="center">${var.cpuAppPerDays}</td>
+													<td class="center">${var.cpuSupportAppDays}</td>
 												</tr>
 											<thead>
 												<tr>
@@ -113,9 +119,9 @@ function barSerrie(data){
 												</tr>
 											</thead>
 												<tr>
-													<td>${var.memorytotal}/${var.memoryUsedPercent} </td>
-													<td>${var.memoryAppPerDays}</td>
-													<td>${var.memorySupportAppDays}</td>
+													<td class="center">${var.memorytotal}/${var.memoryUsedPercent} </td>
+													<td class="center">${var.memoryAppPerDays}</td>
+													<td class="center">${var.memorySupportAppDays}</td>
 												</tr>
 											<thead>
 												<tr>
@@ -125,9 +131,9 @@ function barSerrie(data){
 												</tr>
 											</thead>
 												<tr>
-													<td>${var.disktotal}/${var.diskUsedPercent} </td>
-													<td>${var.diskAppPerDays}</td>
-													<td>${var.diskSupportAppDays}</td>
+													<td class="center">${var.disktotal}/${var.diskUsedPercent} </td>
+													<td class="center">${var.diskAppPerDays}</td>
+													<td class="center">${var.diskSupportAppDays}</td>
 												</tr>
 										</table>
 									</td>

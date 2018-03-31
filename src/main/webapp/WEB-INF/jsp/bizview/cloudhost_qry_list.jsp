@@ -54,7 +54,7 @@
 				<td class='center'>${var.memory}&nbsp;GB</td>
 			</c:if>
 			<c:if test="${pd.operType=='store'}">
-				<td class='center'>${var.datadisk}&nbsp;核</td>
+				<td class='center'>${var.mount_disk_size}&nbsp;核</td>
 				<td class='center'>${var.snapshoot}&nbsp;GB</td>
 			</c:if>
 			<td class='center'>${var.gmt_create}</td>

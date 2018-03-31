@@ -62,15 +62,17 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">所属数据中心</th>
-									<th class="center">名称</th>
-									<th class="center">掩码</th>
+									<th class="center">网络名称</th>
+									<th class="center">数据中心</th>
+									<th class="center">资源池</th>
+									<th class="center">网络标签</th>
+									<th class="center">IP地址段</th>
 									<th class="center">网关</th>
-									<th class="center">DNS1</th>
-									<th class="center">DNS2</th>
+									<th class="center">掩码</th>
+									<th class="center">DNS</th>
 									<th class="center">IP总数</th>
 									<th class="center">IP剩余量</th>
-									<th class="center">IP使用详情</th>
+									<th class="center">操作</th>
 								</tr>
 							</thead>
 													
@@ -85,16 +87,25 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.datacenter_name}</td>
-											<td class='center'>${var.name}</td>
-											<td class='center'>${var.mask}</td>
+											<td class='center' style="width: 100px;">${var.name}</td>
+											<td class='center' style="width: 70px;">${var.datacenter_name}</td>
+											<td class='center'></td>
+											<td class='center'></td>
+											<td class='center'>${var.ippool}</td>
 											<td class='center'>${var.gateway}</td>
-											<td class='center'>${var.dns1}</td>
-											<td class='center'>${var.dns2}</td>
+											<td class='center'>${var.mask}</td>
+											<td class='center'>${var.dns}</td>
 											<td class='center'>${var.totalip}</td>
 											<td class='center'>${var.freeip}</td>
 											<td class="center">
-												<!-- Todo -->
+												<div class="hidden-sm hidden-xs btn-group">
+													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');"> 
+														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
+													</a>
+													<a class="btn btn-xs btn-success" title="IP使用详情" onclick="ipUsedDetail('${var.id}');">
+														<i class="ace-icon fa fa-wrench bigger-120 icon-only" title="IP使用详情"></i>
+													</a>
+												</div>
 											</td>
 										</tr>
 									
@@ -174,7 +185,7 @@
 		
 		//新增
 		function add(){
-			 var type = $("#type").val()
+			 var type = $("#type").val();
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
@@ -190,6 +201,25 @@
 					 }else{
 						 nextPage(${page.currentPage});
 					 }
+				}
+				diag.close();
+			 };
+			 diag.show();
+		}
+		
+		//修改
+		function edit(Id){
+			 var type = $("#type").val();
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="编辑";
+			 diag.URL = '<%=basePath%>datacenternetwork/goEdit.do?type='+type+'&id='+Id;
+			 diag.Width = 600;
+			 diag.Height = 520;
+			 diag.CancelEvent = function(){ //关闭事件
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 nextPage(${page.currentPage});
 				}
 				diag.close();
 			 };

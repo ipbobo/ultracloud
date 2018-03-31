@@ -32,7 +32,7 @@ public class VirtualMachineSyncServiceImpl implements VirtualMachineSyncService 
 		if(isSyncTable) {
 			dao.save("VirtualMachineSyncMapper.save", pd);
 		} else {
-			dao.save("VirtualMachineMapper.save", pd);
+			dao.save("VirtualMachineSyncMapper.saveVM", pd);
 		}
 		
 	}
@@ -160,6 +160,10 @@ public class VirtualMachineSyncServiceImpl implements VirtualMachineSyncService 
 	public List<PageData> listBIVirtualBillByDay() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void saveVM(PageData pd) throws Exception {
+		dao.save("VirtualMachineSyncMapper.saveVM", pd);
 	}
 
 }

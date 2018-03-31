@@ -821,7 +821,12 @@
 		    <groupId>org.jvnet.hudson</groupId>  
 		    <artifactId>ganymed-ssh2</artifactId>  
 		    <version>build210-hudson-1</version>  
-		</dependency> 
+		</dependency>
+		<dependency>
+		    <groupId>io.github.hengyunabc</groupId>
+		    <artifactId>zabbix-api</artifactId>
+		    <version>0.0.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>cmp</finalName>

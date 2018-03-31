@@ -2,6 +2,7 @@ package com.cmp.service;
 
 import static java.util.stream.Collectors.toList;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.mgr.CloudArchManager;
 import com.cmp.mgr.CloudArchManagerAdapter;
 import com.cmp.mgr.openstack.OpenstatckCloudArchManager;
@@ -21,6 +23,7 @@ import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.service.resourcemgt.DatacenternetworkService;
 import com.cmp.service.resourcemgt.HostmachineService;
+import com.cmp.service.resourcemgt.VirtualBindingService;
 import com.cmp.service.resourcemgt.VirtualMachineSyncService;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
@@ -47,15 +50,18 @@ public class ResourceServiceImpl implements ResourceService {
 
 	@Resource(name = "datacenterService")
 	private DatacenterService datacenterService;
-	
+
 	@Resource(name = "clusterService")
 	private ClusterService clusterService;
 
 	@Resource(name = "hostmachineService")
 	private HostmachineService hostmachineService;
-	
+
 	@Resource(name = "virtualMachineSyncService")
 	private VirtualMachineSyncService virtualMachineSyncService;
+
+	@Resource(name = "virtualBindingService")
+	private VirtualBindingService virtualBindingService;
 
 	@Resource(name = "storageService")
 	private StorageService storageService;
@@ -74,16 +80,16 @@ public class ResourceServiceImpl implements ResourceService {
 	 */
 	public void syncCloudData(PageData cloudPD) throws Exception {
 		String platformManagerType = null;
-		if("vmware".equals(cloudPD.getString("type"))) {
+		if ("vmware".equals(cloudPD.getString("type"))) {
 			List<PageData> preDatacenterList = datacenterService.listAll(cloudPD);
 			List<PageData> preClusterList = clusterService.listAll(cloudPD);
 			List<PageData> preHostmachineList = hostmachineService.listAll(cloudPD, false);
 			List<PageData> preVirtualMachineList = virtualMachineSyncService.listAll(cloudPD, false);
 			List<PageData> preStorageList = storageService.listAll(cloudPD, false);
 			List<PageData> preDatacenterNetworkList = datacenternetworkService.listAll(cloudPD, false);
-			
+
 			platformManagerType = VMWareCloudArchManager.class.getName();
-			
+
 			TccCloudPlatform platform = new TccCloudPlatform();
 			platform.setCloudplatformUser(cloudPD.getString("username"));
 			platform.setCloudplatformPassword(cloudPD.getString("password"));
@@ -92,7 +98,7 @@ public class ResourceServiceImpl implements ResourceService {
 
 			CloudArchManagerAdapter adapter = new CloudArchManagerAdapter();
 			CloudArchManager cloudArchManager = adapter.getCloudArchManagerAdaptee(platform);
-			
+
 			List<Datacenter> datacenterList = cloudArchManager.getDatacenters();
 			List<PageData> dcList = new ArrayList<PageData>();
 			List<PageData> cluList = new ArrayList<PageData>();
@@ -101,10 +107,11 @@ public class ResourceServiceImpl implements ResourceService {
 			List<PageData> storeList = new ArrayList<PageData>();
 			List<PageData> networkList = new ArrayList<PageData>();
 			Map<String, String> dcIdMap = new HashMap<String, String>();
-			
-			for(Datacenter dc : datacenterList) {
+
+			// 同步数据中心
+			for (Datacenter dc : datacenterList) {
 				String datacenterId = this.existUuid(dc.getMOR().get_value(), preDatacenterList);
-				if(null == datacenterId) {
+				if (null == datacenterId) {
 					PageData dcPD = new PageData();
 					datacenterId = UuidUtil.get32UUID();
 					dcPD.put("id", datacenterId);
@@ -114,15 +121,16 @@ public class ResourceServiceImpl implements ResourceService {
 					dcPD.put("cpf_id", cloudPD.getString("id"));
 					dcPD.put("version", cloudPD.getString("version"));
 					dcList.add(dcPD);
-				} 
+				}
 				dcIdMap.put(dc.getName(), datacenterId);
-				
+
+				// 同步集群
 				ManagedEntity[] childEntitys = dc.getHostFolder().getChildEntity();
 				List<ClusterComputeResource> clusterList = Arrays.stream(childEntitys).map(ClusterComputeResource.class::cast).collect(toList());
-				for(ClusterComputeResource cluster : clusterList) {
+				for (ClusterComputeResource cluster : clusterList) {
 					String clusterUuid = cluster.getMOR().get_value();
 					String clusterId = this.existUuid(clusterUuid, preClusterList);
-					if(null == clusterId) {
+					if (null == clusterId) {
 						PageData clusterPD = new PageData();
 						clusterId = UuidUtil.get32UUID();
 						clusterPD.put("id", clusterId);
@@ -134,20 +142,21 @@ public class ResourceServiceImpl implements ResourceService {
 						clusterPD.put("version", cloudPD.getString("version"));
 						cluList.add(clusterPD);
 					}
-					
-					//同步宿主机
+
+					// 同步宿主机
 					HostSystem[] host = cluster.getHosts();
-					for(int i = 0; i< host.length; i++) {
+					for (int i = 0; i < host.length; i++) {
 						PageData hostmachinePD = new PageData();
 						String hostmachineUuid = host[i].getMOR().get_value();
 						String hostmachineId = this.existUuid(hostmachineUuid, preHostmachineList);
-						//总cpu数
-						double cpuTotal = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores()) * (host[i].getHardware().getCpuInfo().getHz() / 1000 / 1000 / 1000);
-						//剩余cpu数
+						// 总cpu数
+						double cpuTotal = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores())
+								* (host[i].getHardware().getCpuInfo().getHz() / 1000 / 1000 / 1000);
+						// 剩余cpu数
 						double cpuCoreRemainCount = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores());
-						//内存
+						// 内存
 						double memorySize = new Double(host[i].getHardware().getMemorySize() / 1024 / 1024);
-						if(null == hostmachineId) {
+						if (null == hostmachineId) {
 							hostmachineId = UuidUtil.get32UUID();
 							hostmachinePD.put("id", hostmachineId);
 							hostmachinePD.put("name", host[i].getName());
@@ -162,17 +171,15 @@ public class ResourceServiceImpl implements ResourceService {
 							hostmachinePD.put("memory", memorySize);
 							hostmachineList.add(hostmachinePD);
 						}
-						
-						//同步虚拟机
+
+						// 同步虚拟机
 						VirtualMachine[] virtualMachine = host[i].getVms();
-						for(int j = 0; j< virtualMachine.length; j++) {
+						for (int j = 0; j < virtualMachine.length; j++) {
 							PageData vmPD = new PageData();
-							String vmUuid = virtualMachine[i].getMOR().get_value();
-							String vmId = this.existUuid(vmUuid, preVirtualMachineList);
-							if(null == vmId) {
-								vmId = UuidUtil.get32UUID();
-								vmPD.put("id", vmId);
-								vmPD.put("name", virtualMachine[i].getName());
+							String vmUuid = virtualMachine[j].getMOR().get_value();
+							BigInteger vmId = this.existUuid2(vmUuid, preVirtualMachineList);
+							if (null == vmId) {
+								vmPD.put("name", virtualMachine[j].getName());
 								vmPD.put("uuid", vmUuid);
 								vmPD.put("type", "vmware");
 								vmPD.put("cpf_id", cloudPD.getString("id"));
@@ -183,20 +190,32 @@ public class ResourceServiceImpl implements ResourceService {
 								vmPD.put("ip", virtualMachine[j].getGuest().getIpAddress());
 								vmPD.put("cpu", virtualMachine[j].getConfig().getHardware().getNumCPU());
 								vmPD.put("memory", virtualMachine[j].getConfig().getHardware().getMemoryMB());
+								vmPD.put("platform", cloudPD.get("id"));
+								String statusStr = virtualMachine[j].getGuest().getGuestState();
+								Integer status = null;
+								if ("running".equals(statusStr)) {
+									status = 0;
+								} else if ("notRunning".equals(statusStr)) {
+									status = 2;
+								} else {
+									status = 1;
+								}
+								vmPD.put("status", status);
 								vmList.add(vmPD);
 							}
 						}
-						
+
 					}
-					
+
 				}
-				
+
+				// 同步存储
 				Datastore[] store = dc.getDatastores();
-				for(int i = 0; i< store.length; i++) {
+				for (int i = 0; i < store.length; i++) {
 					PageData storePD = new PageData();
 					String storeUuid = store[i].getMOR().get_value();
 					String storeId = this.existUuid(storeUuid, preStorageList);
-					if(null == storeId) {
+					if (null == storeId) {
 						storeId = UuidUtil.get32UUID();
 						storePD.put("id", storeId);
 						storePD.put("name", store[i].getName());
@@ -205,19 +224,20 @@ public class ResourceServiceImpl implements ResourceService {
 						storePD.put("cpf_id", cloudPD.getString("id"));
 						storePD.put("datacenter_id", datacenterId);
 						storePD.put("version", cloudPD.getString("version"));
-						storePD.put("allspace", store[i].getInfo().getMaxFileSize());
-						storePD.put("freespace", store[i].getInfo().getFreeSpace());
+						storePD.put("allspace", store[i].getSummary().getCapacity());
+						storePD.put("freespace", store[i].getSummary().getFreeSpace());
 						storeList.add(storePD);
 					}
 				}
-				
+
+				// 同步网络
 				Network[] network = dc.getNetworks();
-				for(int i = 0; i< network.length; i++) {
+				for (int i = 0; i < network.length; i++) {
 					PageData networkPD = new PageData();
 					String networkUuid = network[i].getMOR().get_value();
 					String networkId = this.existUuid(networkUuid, preDatacenterNetworkList);
-					
-					if(null == networkId) {
+
+					if (null == networkId) {
 						networkId = UuidUtil.get32UUID();
 						networkPD.put("id", networkId);
 						networkPD.put("name", network[i].getName());
@@ -228,19 +248,50 @@ public class ResourceServiceImpl implements ResourceService {
 						networkPD.put("version", cloudPD.getString("version"));
 						networkList.add(networkPD);
 					}
-					
+
 				}
 			}
-			
-			this.initCloud(dcList, cluList, hostmachineList, storeList, networkList, vmList);
-		} else if("OpenStack".equals(cloudPD.getString("type"))) {
+
+			this.initCloud(dcList, cluList, hostmachineList, storeList, networkList, vmList, cloudPD);
+		} else if ("OpenStack".equals(cloudPD.getString("type"))) {
 			platformManagerType = OpenstatckCloudArchManager.class.getName();
-			//ToDo
+			// ToDo
 		}
 	}
-	
+
+	/**
+	 * 同步镜像模板
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<TccVirtualMachine> syncMirroTemplate(PageData cloudPD) throws Exception {
+		String platformManagerType = null;
+		List<TccVirtualMachine> vmtList = null;
+		if ("vmware".equals(cloudPD.getString("type"))) {
+
+			platformManagerType = VMWareCloudArchManager.class.getName();
+
+			TccCloudPlatform platform = new TccCloudPlatform();
+			platform.setCloudplatformUser(cloudPD.getString("username"));
+			platform.setCloudplatformPassword(cloudPD.getString("password"));
+			platform.setCloudplatformIp(cloudPD.getString("ip"));
+			platform.setPlatformManagerType(platformManagerType);
+
+			CloudArchManagerAdapter adapter = new CloudArchManagerAdapter();
+			CloudArchManager cloudArchManager = adapter.getCloudArchManagerAdaptee(platform);
+			vmtList = cloudArchManager.getVmTemplates();
+			
+		} else if ("OpenStack".equals(cloudPD.getString("type"))) {
+			// ToDo
+		}
+		
+		return vmtList;
+	}
+
 	/**
 	 * 更新同步数据为选中并复制到正式表中
+	 * 
 	 * @param hostmachineIds
 	 * @param storageIds
 	 * @param dcnIds
@@ -252,56 +303,74 @@ public class ResourceServiceImpl implements ResourceService {
 			String hostmachineIds_array[] = hostmachineIds.split(",");
 			dao.update("HostmachineSyncMapper.updateSelectedAll", hostmachineIds_array);
 			List<PageData> hostmachineList = (List<PageData>) dao.findForList("HostmachineSyncMapper.listAllByArray", hostmachineIds_array);
-			for(PageData pd : hostmachineList) {
+			for (PageData pd : hostmachineList) {
 				dao.save("HostmachineMapper.save", pd);
 			}
 		}
-		
+
 		if (null != storageIds && !"".equals(storageIds)) {
 			String storageIds_array[] = storageIds.split(",");
 			dao.update("StorageSyncMapper.updateSelectedAll", storageIds_array);
 			List<PageData> storageList = (List<PageData>) dao.findForList("StorageSyncMapper.listAllByArray", storageIds_array);
-			for(PageData pd : storageList) {
+			for (PageData pd : storageList) {
 				dao.save("StorageMapper.save", pd);
 			}
 		}
-		
+
 		if (null != dcnIds && !"".equals(dcnIds)) {
 			String dcnIds_array[] = dcnIds.split(",");
 			dao.update("DatacenternetworkSyncMapper.updateSelectedAll", dcnIds_array);
 			List<PageData> storageList = (List<PageData>) dao.findForList("DatacenternetworkSyncMapper.listAllByArray", dcnIds_array);
-			for(PageData pd : storageList) {
+			for (PageData pd : storageList) {
 				dao.save("DatacenternetworkMapper.save", pd);
 			}
 		}
 	}
-	
+
 	/**
 	 * 云平台同步数据保存
+	 * 
 	 * @param dcList
 	 * @param cluList
 	 * @param hostmachineList
 	 * @param storeList
 	 * @param networkList
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	private void initCloud(List<PageData> dcList, List<PageData> cluList, List<PageData> hostmachineList, List<PageData> storeList, List<PageData> networkList, List<PageData> vmList) throws Exception {
-		for(PageData pd : dcList) {
+	private void initCloud(List<PageData> dcList, List<PageData> cluList, List<PageData> hostmachineList, List<PageData> storeList,
+			List<PageData> networkList, List<PageData> vmList, PageData cloudPD) throws Exception {
+		for (PageData pd : dcList) {
 			datacenterService.save(pd);
 		}
-		for(PageData pd : cluList) {
+		for (PageData pd : cluList) {
 			clusterService.save(pd);
 		}
-		for(PageData pd : hostmachineList) {
+		for (PageData pd : hostmachineList) {
 			hostmachineService.save(pd, true);
 		}
-		for(PageData pd : storeList) {
+		for (PageData pd : storeList) {
 			storageService.save(pd, true);
 		}
-		for(PageData pd : networkList) {
+		for (PageData pd : networkList) {
 			datacenternetworkService.save(pd, true);
 		}
-		for(PageData pd : vmList) {
+		for (PageData pd : vmList) {
+			List<PageData> alreadyBindedVM = virtualBindingService.datalistAlreadyBinded(cloudPD);
+			Map<String, PageData> abVMMap = new HashMap<String, PageData>();
+			if (null != alreadyBindedVM) {
+				for (PageData abVM : alreadyBindedVM) {
+					abVMMap.put(abVM.getString("uuid"), abVM);
+				}
+			}
+
+			String uuid = pd.getString("uuid");
+			PageData tempPD = abVMMap.get(uuid);
+			if (null != tempPD) {
+				pd.put("appNo", tempPD.getString("appNo"));
+				pd.put("user", tempPD.getString("user"));
+				pd.put("project_id", tempPD.getString("project_id"));
+			}
+
 			virtualMachineSyncService.save(pd, true);
 		}
 	}
@@ -377,14 +446,24 @@ public class ResourceServiceImpl implements ResourceService {
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("DocumentMapper.deleteAll", ArrayDATA_IDS);
 	}
-	
+
 	private String existUuid(String uuid, List<PageData> preList) {
-		for(PageData pd : preList) {
-			if(uuid.equals(pd.getString("uuid"))) {
+		for (PageData pd : preList) {
+			if (uuid.equals(pd.getString("uuid"))) {
 				return pd.getString("id");
 			}
 		}
-		
+
+		return null;
+	}
+
+	private BigInteger existUuid2(String uuid, List<PageData> preList) {
+		for (PageData pd : preList) {
+			if (uuid.equals(pd.getString("uuid"))) {
+				return (BigInteger) pd.get("id");
+			}
+		}
+
 		return null;
 	}
 }

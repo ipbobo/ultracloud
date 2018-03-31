@@ -1,10 +1,21 @@
+-- ----------------------------
+-- 地域
+-- ----------------------------
+DROP TABLE IF EXISTS `t_area`;
+CREATE TABLE `t_area` (
+  `id` varchar(32) NOT NULL COMMENT 'id',
+  `name` varchar(50) NOT NULL COMMENT '地域名',
+  UNIQUE INDEX uk_name(`name`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='地域'; 
 
 -- ----------------------------
 -- 环境
 -- ----------------------------
 DROP TABLE IF EXISTS `t_environment`;
 CREATE TABLE `t_environment` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `id` varchar(32) NOT NULL COMMENT 'id',
   `name` varchar(20) NOT NULL COMMENT '名称',
   `disknum` int NOT NULL COMMENT '挂载云磁盘数量',
   `diskmaximum` int NOT NULL COMMENT '每块云磁盘最大值',
@@ -19,6 +30,19 @@ CREATE TABLE `t_environment` (
   PRIMARY KEY (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='环境'; 
+
+-- ----------------------------
+-- 地域与环境关联
+-- ----------------------------
+DROP TABLE IF EXISTS `t_area_environment_map`;
+CREATE TABLE `t_area_environment_map` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `area_id` bigint unsigned NOT NULL COMMENT '地域id',
+  `environment_id` bigint unsigned NOT NULL COMMENT '环境id',
+  UNIQUE INDEX uk_area_environment(`area_id`,`environment_id`),
+  PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='地域与环境关联'; 
 
 -- ----------------------------
 -- 云平台
@@ -212,6 +236,7 @@ CREATE TABLE `t_datacenter_network` (
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
+  `cluster_id` varchar(32) DEFAULT NULL COMMENT '资源池id',
   `ippool` varchar(40) DEFAULT NULL COMMENT 'ip池',
   `mask` varchar(20) DEFAULT NULL COMMENT '掩码',
   `gateway` varchar(20) DEFAULT NULL COMMENT '网关',
@@ -538,7 +563,7 @@ DROP TABLE IF EXISTS `t_script_param`;
 CREATE TABLE `t_script_param` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '参数名称',
-  `param_key` varchar(10) DEFAULT NULL COMMENT '参数key',
+  `param_key` varchar(100) DEFAULT NULL COMMENT '参数key',
   `value` varchar(20) DEFAULT NULL COMMENT '默认值',
   `number` int unsigned DEFAULT NULL COMMENT '参数顺序',
   `script_id` bigint unsigned NOT NULL COMMENT '脚本id',
@@ -938,6 +963,48 @@ CREATE TABLE `t_monitor_policy` (
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='监控策略'; 
+
+-- ----------------------------
+-- 自动化部署流程表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_autodeploy_config`;
+CREATE TABLE `t_autodeploy_config` (
+  `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(50) DEFAULT NULL COMMENT '自动化部署流程名称',
+  `detail` varchar(500) DEFAULT NULL COMMENT '描述',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='自动化部署配置表';
+
+
+-- ----------------------------
+-- 自动化部署流程节点映射表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_autodeploy_config_node`;
+CREATE TABLE `t_autodeploy_config_node` (
+  `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `config_id` bigint unsigned  NOT NULL COMMENT '自动化部署流程id',
+  `node_id` bigint unsigned  NOT NULL COMMENT '自动化部署节点id',
+  `ordernum` int(11) NOT NULL COMMENT '排序值',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='自动化部署流程节点映射表';
+
+-- ----------------------------
+-- 自动化部署节点表
+-- ----------------------------
+DROP TABLE IF EXISTS `t_autodeploy_node`;
+CREATE TABLE `t_autodeploy_node` (
+  `id` bigint unsigned  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(50) DEFAULT NULL COMMENT '自动化部署节点名称',
+  `detail` varchar(500) DEFAULT NULL COMMENT '描述',
+  `script_id` varchar(20) DEFAULT NULL COMMENT 'shell脚本ID',
+  `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='自动化部署节点表';
 
 -- ---------------------------------------------------------------------------------------
 -- 创建虚拟机费用查询视图 start...

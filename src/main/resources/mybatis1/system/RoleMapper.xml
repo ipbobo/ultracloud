@@ -71,6 +71,26 @@
 		from 
 		<include refid="tableName"></include> r, <include refid="dictionariestableName"></include> d  
 		where  r.type=d.BIANMA
+		and r.PARENT_ID=1
+		ORDER BY r.ROLE_ID
+	</select>
+	
+	<!-- 列表所有的角色 -->
+	<select id="listAllRolesByAdministrator" parameterType="page" resultType="pd">
+		select 
+		r.ROLE_ID,
+		r.ROLE_NAME,
+		r.RIGHTS,
+		r.PARENT_ID,
+		r.ADD_QX,
+		r.DEL_QX,
+		r.EDIT_QX,
+		r.CHA_QX,
+		r.type,
+		d.NAME as typename
+		from 
+		<include refid="tableName"></include> r, <include refid="dictionariestableName"></include> d
+		where  r.type=d.BIANMA
 		and (r.ROLE_ID=1 or r.PARENT_ID=1)
 		ORDER BY r.ROLE_ID
 	</select>

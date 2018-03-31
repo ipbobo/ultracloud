@@ -344,6 +344,7 @@ public class ActivitiService {
 	
 	//任务处理
 	public String handleTask(String appNo, String processInstanceId, String currUser, String apprDesc, Map<String, Object> variables){
+		variables.put("appNo", appNo);
 		Task task=taskService.createTaskQuery().processInstanceId(processInstanceId).taskAssignee(currUser).singleResult();
 		if(task==null){
 			return "任务不存在或已被处理";

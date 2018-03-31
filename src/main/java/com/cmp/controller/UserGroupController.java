@@ -192,7 +192,7 @@ public class UserGroupController extends BaseController {
 	 */
 	@RequestMapping(value="/goUserbind")
 	@ResponseBody
-	public Object goUserbind() throws Exception{
+	public Object goUserbind() throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();

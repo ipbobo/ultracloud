@@ -28,7 +28,7 @@ public class HttpUtil {
 	
     //发送post请求(JSON)
     public static String sendHttpPost(String url, String jsonStr, boolean isZip){
-    	logger.debug("请求地址："+url+"、请求参数: "+jsonStr);
+    	logger.info("请求地址："+url+"、请求参数: "+jsonStr);
         CloseableHttpResponse httpResponse=null;
         HttpEntity httpEntity=null;
         try{
@@ -56,7 +56,7 @@ public class HttpUtil {
             }
             
             String retJsonStr=isZip?getZipStr(httpEntity.getContent(), CHARSETNAME):EntityUtils.toString(httpEntity, "UTF-8");//响应内容
-            logger.debug("返回JSON字符串: "+retJsonStr);
+            logger.info("返回JSON字符串: "+retJsonStr);
             return retJsonStr;
         }catch(Exception e){
         	logger.error("Http request error: "+e.getMessage());

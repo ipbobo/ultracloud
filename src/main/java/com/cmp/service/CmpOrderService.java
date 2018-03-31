@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +72,34 @@ public class CmpOrderService {
 	//新增清单或套餐
 	public void saveCmpOrder(CmpOrder cmpOrder) throws Exception {
 		dao.save("CmpOrderMapper.saveCmpOrder", cmpOrder);
+	}
+	
+	//软件参数列表新增
+	public void saveSoftParams(String orderNo, String softCodeStr, String softParamStr) throws Exception {
+		if(!StringUtils.isBlank(softParamStr)){
+			String[] softCodes=softCodeStr.split(",", -1);//软件代码：5,6
+			String[] softParams=softParamStr.split("\\|", -1);//软件参数：path:/tomcat,user:admin,passwd:admin|path:/tomcat,user:admin,passwd:admin
+			for(int i=0;i<softCodes.length;i++){
+				if(!StringUtils.isBlank(softParams[i])){
+					saveSoftParam(orderNo, softCodes[i], softParams[i]);//软件参数新增
+				}
+			}
+		}
+	}
+	
+	//软件参数新增
+	private void saveSoftParam(String orderNo, String softCode, String softParamStr) throws Exception {
+		String[] softParams=softParamStr.split(",", -1);//软件参数：path:/tomcat,user:admin,passwd:admin
+		for(int i=0;i<softParams.length;i++){
+			String[] params=softParams[i].split("\\:", -1);//user:admin
+			PageData pd=new PageData("orderNo", orderNo, "softCode", softCode, "paramKey", params[0], "paramValue", params[1]);
+			dao.save("CmpOrderMapper.saveSoftParam", pd);
+		}
+	}
+	
+	
+	public List<PageData> findSoftParam(PageData pd) throws Exception{
+		return (List<PageData>)dao.findForList("CmpOrderMapper.findSoftParam", pd);
 	}
 	
 	//新增套餐清单

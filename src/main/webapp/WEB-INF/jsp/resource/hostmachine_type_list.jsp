@@ -57,9 +57,9 @@
 									<th class="center">宿主机名称</th>
 									<th class="center">IP地址</th>
 									<th class="center">所属集群</th>
-									<th class="center">CPU</th>
-									<th class="center">内存</th>
-									<th class="center">磁盘</th>
+									<th class="center">CPU(核)</th>
+									<th class="center">内存(G)</th>
+									<th class="center">磁盘(G)</th>
 									<th class="center">虚拟机数量</th>
 									<th class="center">创建时间</th>
 									<th class="center">修改时间</th>
@@ -83,8 +83,8 @@
 											</td>
 											<td class='center'>${var.ip}</td>
 											<td class='center'>${var.cluster_name}</td>
-											<td class='center'>${var.cpu}</td>
-											<td class='center'>${var.memory}</td>
+											<td class='center'><fmt:formatNumber value="${var.cpu}" type="currency" pattern="#"/></td>
+											<td class='center'><fmt:formatNumber value="${var.memory/1024}" type="currency" pattern="#"/></td>
 											<td class='center'>${var.localdisk}</td>
 											<td class='center'>${var.devicenum}</td>
 											<td class='center' style="width: 170px;">${var.gmt_create}</td>

@@ -25,6 +25,13 @@ public interface RoleManager {
 	 */
 	public List<Role> listAllRoles(PageData pd) throws Exception;
 	
+	/**列出所有的角色(超级管理员)
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Role> listAllRolesByAdministrator(PageData pd) throws Exception;
+	
 	/**通过id查找
 	 * @param pd
 	 * @return

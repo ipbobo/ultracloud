@@ -89,12 +89,20 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:140px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;是否需要初始快照:</td>
+								<td style="width:140px;text-align: right;padding-top: 13px;">地域:</td>
 								<td id="is_initsnapshoot_td">
-									<select class="chosen-select form-control" name="is_initsnapshoot" id="is_initsnapshoot"  style="vertical-align:top;"   >
-									<option value="0" <c:if test="${pd.is_initsnapshoot == 0 }">selected</c:if>>否</option>
-									<option value="1" <c:if test="${pd.is_initsnapshoot == 1 }">selected</c:if>>是</option>
-									</select>
+									<div class="col-sm-9">
+										<input type="hidden" id="DATA_IDS" name="DATA_IDS"/>
+										<c:choose>
+											<c:when test="${not empty areaList}">
+												<c:forEach items="${areaList}" var="var" varStatus="vs">
+													<label style="padding-left: 8px;padding-top:7px;">
+										        	<input name="ids" type="checkbox" class="ace" value="${var.id}" <c:if test="${var.isSelect == 'select' }">checked="checked"</c:if> /><span class="lbl">${var.name}</span>
+												</c:forEach>
+											</c:when>
+										</c:choose>
+									    </label>
+									</div>
 								</td>
 							</tr>
 							<tr>
@@ -197,16 +205,15 @@
 				$("#duetopolicy").focus();
 			return false;
 			}
-			if($("#is_initsnapshoot").val()==""){
-				$("#is_initsnapshoot_td").tips({
-					side:3,
-		            msg:'请选择是否需要初始快照',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#is_initsnapshoot").focus();
-			return false;
+			
+			var str = '';
+			for(var i=0;i < document.getElementsByName('ids').length;i++){
+			  if(document.getElementsByName('ids')[i].checked){
+			  	if(str=='') str += document.getElementsByName('ids')[i].value;
+			  	else str += ',' + document.getElementsByName('ids')[i].value;
+			  }
 			}
+			$("#DATA_IDS").val(str);
 			
 			$("#Form").submit();
 			$("#zhongxin").hide();

@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -13,8 +14,9 @@
 <base href="<%=basePath%>">
 <!-- jsp文件头和头部 -->
 <%@ include file="../system/index/top.jsp"%>
+	<link rel="stylesheet" href="css/newSkin.css">
 </head>
-<body class="no-skin">
+<body class="no-skin queryUserApplyWorkOrderPre">
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<!-- /section:basics/sidebar -->
@@ -23,6 +25,8 @@
 			<form action="queryUserApplyWorkOrderPre.do" method="post"
 									name="queryForm" id="queryForm">
 				<input type="hidden" id="queryType" name="queryType" value="${pd.queryType}">
+				<input type="hidden" name="sortCol" id="sortCol" value="${pd.sortCol}"/>
+				<input type="hidden" name="sortType" id="sortType" value="${pd.sortType}"/>
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
@@ -98,17 +102,16 @@
 							<table id="simple-table"
 								class="table table-striped table-bordered table-hover"
 								style="margin-top: 5px;">
+								
 								<thead>
 									<tr>
-										<th class="center" style="width: 35px;"><label
-											class="pos-rel"><input type="checkbox" class="ace"
-												id="zcheckbox" /><span class="lbl"></span></label></th>
+										<th class="center" style="width: 35px;"></th>
 										<th class="center" style="width: 50px;">序号</th>
-										<th class="center">工单号</th>
-										<th class="center">工单类型</th>
-										<th class="center">工单状态</th>
-										<th class="center">项目名称</th>
-										<th class="center">工单时间</th>
+										<th class="center sorting" onclick="sortTable(this, 'appNo');"><span id="appNo">工单号</span></th>
+										<th class="center sorting" onclick="sortTable(this, 'appType');"><span id="appType">工单类型</span></th>
+										<th class="center sorting" onclick="sortTable(this, 'status');"><span id="status">工单状态</span></th>
+										<th class="center sorting" onclick="sortTable(this, 'projectCode');"><span id="projectCode">项目名称</span></th>
+										<th class="center sorting" onclick="sortTable(this, 'createTime');"><span id="createTime">工单时间</span></th>
 										<th class="center">操作</th>
 									</tr>
 								</thead>
@@ -140,41 +143,41 @@
 																class="ace-icon fa fa-lock" title="无权限"></i></span>
 														</c:if>
 														<div class="hidden-sm hidden-xs btn-group">
-															<c:if test="${QX.check == 1  and var.status != '1'}">
+															<c:if test="${QX.check == 1  and var.status != '10'}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
 																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="查看"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.check == 1  and var.status == '1'}">
+															<c:if test="${QX.check == 1  and var.status == '10'}">
 																<a class="btn btn-xs btn-danger"
 																	onclick="check('${var.appNo}');"> <i
 																	class="ace-icon fa fa-pencil-square-o bigger-120" title="审核"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.query == 1 and var.status != '3'}">
+															<c:if test="${QX.query == 1 and !fn:startsWith(var.status,'3')}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
 																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="查看"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.query == 1 and var.status == '3' }">
+															<c:if test="${QX.query == 1 and fn:startsWith(var.status,'3')}">
 																<a class="btn btn-xs btn-danger" title="确认"
 																	onclick="verify('${var.appNo}');"> <i
 																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="确认"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.execute == 1  and var.status != '2'}">
+															<c:if test="${QX.execute == 1 and !fn:startsWith(var.status,'4')}">
 																<a class="btn btn-xs btn-success" title="查看"
 																	onclick="query('${var.appNo}');"> <i
 																	class="ace-icon fa fa-print  align-top bigger-125"
 																	title="查看"></i>
 																</a>
 															</c:if>
-															<c:if test="${QX.execute == 1  and var.status == '2'}">
+															<c:if test="${QX.execute == 1 and fn:startsWith(var.status,'4')}">
 																<a class="btn btn-xs btn-danger"
 																	onclick="execute('${var.appNo}');"> <i
 																	class="ace-icon fa fa-wrench  bigger-120 icon-only" title="实施"></i>
@@ -270,6 +273,27 @@
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
+	$(document).ready(function(){
+/*		var sortColVal = $('#sortCol').val();
+		var sortTypeVal = $('#sortType').val();
+		if (sortTypeVal != null && sortTypeVal == 'asc'){
+			$("#" + sortColVal).text($("#" + sortColVal).text() + '↑');
+		}
+		if (sortTypeVal != null && sortTypeVal == 'desc'){
+			$("#" + sortColVal).text($("#" + sortColVal).text() + '↓');
+		}*/
+        /*新的排序显示样式控制 @zjb 2018-3-1 begin*/
+        var sortColVal = $('#sortCol').val();
+        var sortTypeVal = $('#sortType').val();
+        if (sortTypeVal != null && sortTypeVal == 'asc'){
+            $("#" + sortColVal).parent().addClass('sorting_asc');
+        }
+        if (sortTypeVal != null && sortTypeVal == 'desc'){
+            $("#" + sortColVal).parent().addClass('sorting_desc');
+        }
+        /*新的排序显示样式控制 @zjb 2018-3-1 end*/
+		
+	});
 	$(top.hangge());//关闭加载状态
 	//检索
 	function tosearch(){
@@ -358,6 +382,22 @@
 		'&workorder_appNo='+$('#workorder_appNo').val()+'&workorder_time='+$('#workorder_time').val()+ '&showCount='+$('#showCount').val();
 	}
 	
+	function sortTable(th, sortCol){
+		var old_sortCol = $('#sortCol').val();
+		var old_sortType = $('#sortType').val();
+		if (old_sortType == null || old_sortType == ''){
+			$('#sortType').val('desc');
+		}
+		if (old_sortType != null && old_sortType != ''){
+			if (old_sortType == 'asc'){
+				$('#sortType').val('desc');
+			}else if (old_sortType == 'desc'){
+				$('#sortType').val('asc');
+			}
+		}
+		$('#sortCol').val(sortCol);
+		$("#queryForm").submit();
+	}
 
 	</script>
 
