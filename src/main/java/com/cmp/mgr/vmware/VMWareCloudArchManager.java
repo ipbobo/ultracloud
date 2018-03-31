@@ -1,91 +1,26 @@
 package com.cmp.mgr.vmware;
 
-import static java.util.stream.Collectors.toList;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-
-import org.apache.commons.lang3.ArrayUtils;
-
-import com.cmp.entity.tcc.TccCapability;
-import com.cmp.entity.tcc.TccCloudPlatform;
-import com.cmp.entity.tcc.TccCluster;
-import com.cmp.entity.tcc.TccDatacenter;
-import com.cmp.entity.tcc.TccDatastore;
-import com.cmp.entity.tcc.TccHostMachine;
-import com.cmp.entity.tcc.TccNetwork;
-import com.cmp.entity.tcc.TccResourcePool;
-import com.cmp.entity.tcc.TccVirtualMachine;
-import com.cmp.entity.tcc.TccVmSnapshot;
+import com.cmp.entity.tcc.*;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.bean.CreateVolumeRequest;
-import com.vmware.vim25.AboutInfo;
-import com.vmware.vim25.CustomizationAdapterMapping;
-import com.vmware.vim25.CustomizationDhcpIpGenerator;
-import com.vmware.vim25.CustomizationGlobalIPSettings;
-import com.vmware.vim25.CustomizationIPSettings;
-import com.vmware.vim25.CustomizationLinuxPrep;
-import com.vmware.vim25.CustomizationPrefixName;
-import com.vmware.vim25.CustomizationSpec;
-import com.vmware.vim25.Description;
-import com.vmware.vim25.DynamicProperty;
-import com.vmware.vim25.ManagedObjectReference;
-import com.vmware.vim25.ObjectContent;
-import com.vmware.vim25.ObjectSpec;
-import com.vmware.vim25.PropertyFilterSpec;
-import com.vmware.vim25.PropertySpec;
-import com.vmware.vim25.SelectionSpec;
-import com.vmware.vim25.VirtualDevice;
-import com.vmware.vim25.VirtualDeviceConfigSpec;
-import com.vmware.vim25.VirtualDeviceConfigSpecFileOperation;
-import com.vmware.vim25.VirtualDeviceConfigSpecOperation;
-import com.vmware.vim25.VirtualDisk;
-import com.vmware.vim25.VirtualDiskFlatVer2BackingInfo;
-import com.vmware.vim25.VirtualDiskMode;
-import com.vmware.vim25.VirtualEthernetCard;
-import com.vmware.vim25.VirtualEthernetCardNetworkBackingInfo;
-import com.vmware.vim25.VirtualLsiLogicController;
-import com.vmware.vim25.VirtualMachineCloneSpec;
-import com.vmware.vim25.VirtualMachineConfigSpec;
-import com.vmware.vim25.VirtualMachineFileInfo;
-import com.vmware.vim25.VirtualMachineRelocateSpec;
-import com.vmware.vim25.VirtualPCNet32;
-import com.vmware.vim25.VirtualSCSIController;
-import com.vmware.vim25.VirtualSCSISharing;
-import com.vmware.vim25.mo.ClusterComputeResource;
-import com.vmware.vim25.mo.Datacenter;
-import com.vmware.vim25.mo.Datastore;
-import com.vmware.vim25.mo.Folder;
-import com.vmware.vim25.mo.HostDatastoreBrowser;
-import com.vmware.vim25.mo.HostSystem;
-import com.vmware.vim25.mo.InventoryNavigator;
-import com.vmware.vim25.mo.ManagedEntity;
-import com.vmware.vim25.mo.Network;
-import com.vmware.vim25.mo.PropertyCollector;
-import com.vmware.vim25.mo.ResourcePool;
-import com.vmware.vim25.mo.ServerConnection;
-import com.vmware.vim25.mo.ServiceInstance;
-import com.vmware.vim25.mo.Task;
-import com.vmware.vim25.mo.VirtualMachine;
-import com.vmware.vim25.mo.VirtualMachineSnapshot;
+import com.vmware.vim25.*;
+import com.vmware.vim25.mo.*;
 import com.vmware.vim25.mo.util.MorUtil;
 import com.vmware.vim25.mo.util.PropertyCollectorUtil;
 import com.vmware.vim25.mox.VirtualMachineDeviceManager;
+import org.apache.commons.lang3.ArrayUtils;
 
-@SuppressWarnings({ "unused" })
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.*;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toList;
+
+@SuppressWarnings({"unused"})
 public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 	private VMWareConvertors converters = new VMWareConvertors();
@@ -151,7 +86,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	public List<VirtualMachine> getVirtualMachinesNoVerify() {
 		try {
 			String type = VirtualMachine.class.getSimpleName();
-			String[][] typeinfo = new String[][] { new String[] { type, "name", }, };
+			String[][] typeinfo = new String[][]{new String[]{type, "name",},};
 
 			Folder rootEntity = getServiceInstance().getRootFolder();
 			ServiceInstance serviceInstance = rootEntity.getServerConnection().getServiceInstance();
@@ -174,11 +109,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			os.setSelectSet(selectionSpecs);
 
 			PropertyFilterSpec spec = new PropertyFilterSpec();
-			spec.setObjectSet(new ObjectSpec[] { os });
+			spec.setObjectSet(new ObjectSpec[]{os});
 			spec.setPropSet(propspecary);
 
 			ObjectContent[] objectContents = pc
-					.retrieveProperties(new PropertyFilterSpec[] { spec });
+					.retrieveProperties(new PropertyFilterSpec[]{spec});
 			if (ArrayUtils.isEmpty(objectContents)) {
 				return Collections.emptyList();
 			}
@@ -250,8 +185,8 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 					diskSizeKB, diskMode);
 			VirtualDeviceConfigSpec nicSpec = createNicSpec(netName, nicName);
 
-			vmSpec.setDeviceChange(new VirtualDeviceConfigSpec[] { scsiSpec,
-					diskSpec, nicSpec });
+			vmSpec.setDeviceChange(new VirtualDeviceConfigSpec[]{scsiSpec,
+					diskSpec, nicSpec});
 
 			// create vm file info for the vmx file
 			VirtualMachineFileInfo vmfi = new VirtualMachineFileInfo();
@@ -353,7 +288,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			ServiceInstance serviceInstance = getServiceInstance();
 			ManagedEntity managedEntity = new InventoryNavigator(
 					serviceInstance.getRootFolder()).searchManagedEntity(
-							clazz.getSimpleName(), name);
+					clazz.getSimpleName(), name);
 
 			return Optional.ofNullable(managedEntity).map(clazz::cast);
 		} catch (Exception e) {
@@ -557,9 +492,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		String dcName = req.getDcName();
 
 		try {
+			String ip = Optional.ofNullable(req.getIp()).orElseThrow(error("No IP address specified"));
+
 			ClusterComputeResource cluster = searchManagedEntities(
 					ClusterComputeResource.class).stream().findFirst()
-							.orElseThrow(error("No cluster found"));
+					.orElseThrow(error("No cluster found"));
 
 			Datacenter dc = searchManagedEntity(Datacenter.class, dcName)
 					.orElseThrow(error("Datacenter not found: " + dcName));
@@ -583,34 +520,45 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			relocateSpec.setHost(hostSystemT.getMOR());
 
 			CustomizationSpec customSpec = new CustomizationSpec();
+			CustomizationLinuxOptions linuxOptions = new CustomizationLinuxOptions();
+			customSpec.setOptions(linuxOptions);
+
 			customSpec.setGlobalIPSettings(new CustomizationGlobalIPSettings());
-			CustomizationLinuxPrep clp = new CustomizationLinuxPrep();
-			clp.setDomain("localdomain");
-			// clp.setDomain(domainName);
-			// To set the host name of the clone
-			CustomizationPrefixName cn = new CustomizationPrefixName();
-			cn.setBase("localhost");
-			// cn.setBase(baseName);
-			clp.setHostName(cn);
-			customSpec.setIdentity(clp);
-			// To set nicSettingMap
-			CustomizationAdapterMapping cam = new CustomizationAdapterMapping();
-			CustomizationIPSettings cip = new CustomizationIPSettings();
-			cip.setIp(new CustomizationDhcpIpGenerator());
-			cam.setAdapter(cip);
-			customSpec.setNicSettingMap(new CustomizationAdapterMapping[] { cam });
+			CustomizationLinuxPrep linuxPrep = new CustomizationLinuxPrep();
+			linuxPrep.setDomain("localdomain");
+			linuxPrep.setHwClockUTC(true);
+			linuxPrep.setTimeZone("Asia/Shanghai");
+
+			CustomizationFixedName fixedName = new CustomizationFixedName();
+			fixedName.setName("localhost");
+			linuxPrep.setHostName(fixedName);
+			customSpec.setIdentity(linuxPrep);
+
+			CustomizationGlobalIPSettings globalIPSettings = new CustomizationGlobalIPSettings();
+			globalIPSettings.setDnsServerList(new String[]{"8.8.8.8", "8.8.4.4"});
+			globalIPSettings.setDnsSuffixList(new String[]{"search.com", "my.search.com"});
+			customSpec.setGlobalIPSettings(globalIPSettings);
+
+			CustomizationFixedIp fixedIp = new CustomizationFixedIp();
+			fixedIp.setIpAddress(req.getIp());
+
+			CustomizationIPSettings ipSettings = new CustomizationIPSettings();
+			ipSettings.setIp(fixedIp);
+			ipSettings.setSubnetMask("255.255.255.0");
+			ipSettings.setGateway(new String[]{req.getIp().replaceAll("[.]\\d+$", ".1")});
+
+			CustomizationAdapterMapping adapterMapping = new CustomizationAdapterMapping();
+			adapterMapping.setAdapter(ipSettings);
+
+			CustomizationAdapterMapping[] adapterMappings = new CustomizationAdapterMapping[]{adapterMapping};
+			customSpec.setNicSettingMap(adapterMappings);
 
 			VirtualMachineCloneSpec cloneSpec = new VirtualMachineCloneSpec();
-			cloneSpec.setConfig(configSpec);
-			cloneSpec.setLocation(relocateSpec);
-			cloneSpec.setPowerOn(true);
-			cloneSpec.setTemplate(false);
 			cloneSpec.setCustomization(customSpec);
-
-			// GuestNicInfo nic = new GuestNicInfo();
-			// nic.setIpAddress(new String[] { req.getIp() });
-			// nic.setMacAddress("00:51:56:A4:6D:CE");
-			// vm.getGuest().setNet(new GuestNicInfo[] { nic });
+			cloneSpec.setLocation(relocateSpec);
+			cloneSpec.setConfig(configSpec);
+			cloneSpec.setTemplate(false);
+			cloneSpec.setPowerOn(true);
 
 			vm.cloneVM_Task(dc.getVmFolder(), req.getVmName(), cloneSpec).waitForMe();
 		} catch (Exception e) {
@@ -627,8 +575,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 					continue;
 				}
 
-				if (dt.getSummary().accessible == true
-						&& "VMFS".equalsIgnoreCase(dt.getSummary().getType())
+				if (dt.getSummary().accessible && "VMFS".equalsIgnoreCase(dt.getSummary().getType())
 						&& dt.getInfo().getFreeSpace() > datastore.getInfo().getFreeSpace()) {
 					datastore = dt;
 				}
@@ -799,7 +746,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			diskSpec.setFileOperation(VirtualDeviceConfigSpecFileOperation.create);
 			diskSpec.setDevice(disk);
 			VirtualDeviceConfigSpec vdiskSpec = diskSpec;
-			VirtualDeviceConfigSpec[] vdiskSpecArray = { vdiskSpec };
+			VirtualDeviceConfigSpec[] vdiskSpecArray = {vdiskSpec};
 
 			// vm spec
 			VirtualMachineConfigSpec vmConfigSpec = new VirtualMachineConfigSpec();
@@ -851,9 +798,9 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				.map(HostDatastoreBrowser::getDatastores)
 				.filter(ArrayUtils::isNotEmpty)
 				.flatMap(Arrays::stream).forEach(datastore -> {
-					capability.setSupportedStorage(capability.getSupportedStorage()
-							+ datastore.getInfo().getFreeSpace());
-				});
+			capability.setSupportedStorage(capability.getSupportedStorage()
+					+ datastore.getInfo().getFreeSpace());
+		});
 
 		return capability;
 	}
