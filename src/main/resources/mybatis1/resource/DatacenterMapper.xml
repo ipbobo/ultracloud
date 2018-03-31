@@ -106,17 +106,23 @@
 				s.name,
 				s.cpf_id,
 				s.type,
-				s.uuid
-		from <include refid="tableName"></include> s    
-		where 1 = 1
+				s.uuid,
+				s.gmt_create,
+				s.gmt_modified,
+				b.name AS cpf_name
+		from <include refid="tableName"></include> s, t_cloudplatform b 
+		where s.cpf_id=b.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
 					s.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 				)
 		</if>
+		<if test="pd.type!=null and pd.type!=''"><!-- 根据type过滤 -->
+			and s.type=#{pd.type}
+		</if>
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
-			and id in ${pd.item}
+			and s.id in ${pd.item}
 		</if>
 		order by s.gmt_modified desc
 	</select>
