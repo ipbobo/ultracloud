@@ -484,15 +484,18 @@ function specFunc(cpuVal, memoryVal){
 //镜像改变时触发
 function imgFunc(){
 	var osTypeName="";
-	if($("#osType").val()!=''){
+	var osType=$("#osType").val();
+	if(osType!=''){
 		osTypeName=$("#osType").find("option:selected").text();
 	}
 	
 	var osBitNumName="";
-	if($("#osBitNum").val()!='' && $("#osBitNum").val()!=''){
+	var osBitNum=$("#osBitNum").val();
+	if(osBitNum!=''){
 		osBitNumName=$("#osBitNum").find("option:selected").text();
 	}
 	
+	getImgList('', osType, osBitNum);
 	$("#imgLabel").html(osTypeName+"&nbsp;"+osBitNumName);
 }
 
@@ -602,10 +605,22 @@ function uploadFileFunc() {
 }
 
 //模板列表查询
-function getImgList(platTypeId){
+function getImgList(platTypeId, osType, osBitNum){
+	if(platTypeId==''){
+		platTypeId=$("#platType").val();
+	}
+	
+	if(osType==''){
+		osType=$("#osType").val();
+	}
+	
+	if(osBitNum==''){
+		osBitNum=$("#osBitNum").val();
+	}
+	
 	$.ajax({
 	    type: 'post',  
-	    url: 'getImgList.do?platTypeId='+platTypeId,
+	    url: 'getImgList.do?platTypeId='+platTypeId+'&osType='+osType+'&osBitNum='+osBitNum,
 	    dataType: 'json',
 	    success: function(data){
 	    	$("#imgCode").empty();//清空模板列表
@@ -680,7 +695,7 @@ $(window).scroll(function() {
 				<ul id="platTypeId" class="ullitab list-inline">
 					<c:if test="${not empty platTypeList}">
 					<c:forEach items="${platTypeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'platType', '${var.dictCode}');getImgList('${var.dictCode}');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li onclick="setFieldValue(this, 'platType', '${var.dictCode}');getImgList('${var.dictCode}', '', '');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>

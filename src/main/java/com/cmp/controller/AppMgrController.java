@@ -121,8 +121,8 @@ public class AppMgrController extends BaseController {
 	//模板列表查询
 	@RequestMapping(value="/getImgList", produces={"application/json;charset=UTF-8"})
     @ResponseBody
-	public String getImgList(String platTypeId) throws Exception{
-		List<CmpDict> imgList=mirrorService.getImgList(new PageData("platTypeId", platTypeId));//模板列表
+	public String getImgList(String platTypeId, String osType, String osBitNum) throws Exception{
+		List<CmpDict> imgList=mirrorService.getImgList(new PageData("platTypeId", platTypeId, "osType", osType, "osBitNum", osBitNum));//模板列表
 		return StringUtil.getRetStr("0", "调用成功", "imgList", imgList);
 	}
 	
