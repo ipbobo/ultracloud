@@ -34,9 +34,15 @@
 				<!-- #section:basics/navbar.dropdown -->
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
 					<ul class="nav ace-nav"  >
-						<li class="grey" onmouseleave="ul_tasks_out();" onmouseenter="ul_tasks_out();">
+						<li title="系统公告" class="grey" onclick="goSystemNoticWindows();" id="fhsmstss"><!-- fhsms()在 WebRoot\static\js\myjs\head.js中 -->
+							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+								<i class="ace-icon icon-bell icon-animated-bell"></i>
+								<span class="badge badge-grey" id="systemnoticeCount"></span>
+							</a>
+						</li>
+						<li class="grey task" onmouseleave="ul_tasks_out();" onmouseenter="ul_tasks_out();">
 							<a data-toggle="dropdown" class="dropdown-toggle"  href="#">
-								<i class="ace-icon fa fa-tasks"></i>
+								<i class="ace-icon fa-task"></i>
 								<span id="span_task_no" class="badge badge-grey"></span>
 							</a>
 
@@ -48,12 +54,7 @@
 							</ul>
 						</li>
 						
-						<li title="系统公告" class="grey" onclick="goSystemNoticWindows();" id="fhsmstss"><!-- fhsms()在 WebRoot\static\js\myjs\head.js中 -->
-							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-								<i class="ace-icon fa fa-bell icon-animated-bell"></i>
-								<span class="badge badge-grey" id="systemnoticeCount"></span>
-							</a>
-						</li>
+
 
 						<!-- #section:basics/navbar.user_menu -->
 						<li class="light-blue" onmouseleave="ul_userset_out();" onmouseenter="ul_userset_out();">

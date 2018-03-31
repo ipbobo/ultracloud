@@ -14,12 +14,12 @@ public class CmpAxis {
 	private Date xaxis4;//x轴4
 	private Date xaxis5;//x轴5
 	private Date xaxis6;//x轴6
-	private String yaxis1;//y轴1
-	private String yaxis2;//y轴2
-	private String yaxis3;//y轴3
-	private String yaxis4;//y轴4
-	private String yaxis5;//y轴5
-	private String yaxis6;//y轴6
+	private String yaxis1="0.0";//y轴1
+	private String yaxis2="0.0";//y轴2
+	private String yaxis3="0.0";//y轴3
+	private String yaxis4="0.0";//y轴4
+	private String yaxis5="0.0";//y轴5
+	private String yaxis6="0.0";//y轴6
 	private String timeType;//时间类型：hour-小时；day-天；week-周；month-月；halfyear-半年；year-年
 	
 	public CmpAxis(String timeType){
