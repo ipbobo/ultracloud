@@ -484,15 +484,18 @@ function specFunc(cpuVal, memoryVal){
 //镜像改变时触发
 function imgFunc(){
 	var osTypeName="";
-	if($("#osType").val()!=''){
+	var osType=$("#osType").val();
+	if(osType!=''){
 		osTypeName=$("#osType").find("option:selected").text();
 	}
 	
 	var osBitNumName="";
-	if($("#osBitNum").val()!='' && $("#osBitNum").val()!=''){
+	var osBitNum=$("#osBitNum").val();
+	if(osBitNum!=''){
 		osBitNumName=$("#osBitNum").find("option:selected").text();
 	}
 	
+	getImgList('', osType, osBitNum);
 	$("#imgLabel").html(osTypeName+"&nbsp;"+osBitNumName);
 }
 
@@ -602,10 +605,22 @@ function uploadFileFunc() {
 }
 
 //模板列表查询
-function getImgList(platTypeId){
+function getImgList(platTypeId, osType, osBitNum){
+	if(platTypeId==''){
+		platTypeId=$("#platType").val();
+	}
+	
+	if(osType==''){
+		osType=$("#osType").val();
+	}
+	
+	if(osBitNum==''){
+		osBitNum=$("#osBitNum").val();
+	}
+	
 	$.ajax({
 	    type: 'post',  
-	    url: 'getImgList.do?platTypeId='+platTypeId,
+	    url: 'getImgList.do?platTypeId='+platTypeId+'&osType='+osType+'&osBitNum='+osBitNum,
 	    dataType: 'json',
 	    success: function(data){
 	    	$("#imgCode").empty();//清空模板列表
@@ -643,7 +658,7 @@ $(window).scroll(function() {
 <div class="tab-content">
 <div id="zdysq" class="tab-pane fade in active">
 	<form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
-	<input type="hidden" name="areaCode" id="areaCode" value="1"/>
+	<input type="hidden" name="areaCode" id="areaCode" value="${defaultAreaCode}"/>
 	<input type="hidden" name="platType" id="platType" value="${defaultPlatType}"/>
 	<input type="hidden" name="deployType" id="deployType" value="1"/>
 	<input type="hidden" name="envCode" id="envCode" value="${defaultEnvCode}"/>
@@ -672,7 +687,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -680,13 +695,13 @@ $(window).scroll(function() {
 				<ul id="platTypeId" class="ullitab list-inline">
 					<c:if test="${not empty platTypeList}">
 					<c:forEach items="${platTypeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'platType', '${var.dictCode}');getImgList('${var.dictCode}');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li onclick="setFieldValue(this, 'platType', '${var.dictCode}');getImgList('${var.dictCode}', '', '');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>
 			</td>
 		</tr>
-		<%-- <tr><td colspan="8" height="10px"></td>
+		<%-- <tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -700,7 +715,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr> --%>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">环境：</td>
@@ -726,7 +741,7 @@ $(window).scroll(function() {
 			</td>
 			<td align="left" style="padding-right:10px;padding-bottom:10px;" colspan="5">&nbsp;</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="5"><span class="glyphicon glyphicon-cog"></span>&nbsp;基本配置</td>
 			<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
@@ -783,7 +798,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
@@ -832,7 +847,7 @@ $(window).scroll(function() {
 				Linux系统必填
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
@@ -861,7 +876,7 @@ $(window).scroll(function() {
 				</table>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -886,7 +901,7 @@ $(window).scroll(function() {
 				</table>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -900,7 +915,7 @@ $(window).scroll(function() {
 				</div>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -909,14 +924,14 @@ $(window).scroll(function() {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;上传附件</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="padding:10px;"><input style="background-color:#cccccc;" type="file" name="uploadFile" id="uploadFile" value="选择文件" accept=".txt,.doc,.docx,.xls,.xlsx,image/*"/></td>
 			<td colspan="5"><input type="button" value="上传" onclick="uploadFileFunc()">&nbsp;格式要求：txt,word,excel,image</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;当前配置</td>
 			<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>

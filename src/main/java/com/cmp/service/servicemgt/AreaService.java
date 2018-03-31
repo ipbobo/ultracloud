@@ -2,6 +2,7 @@ package com.cmp.service.servicemgt;
 
 import java.util.List;
 
+import com.cmp.sid.CmpDict;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -87,4 +88,6 @@ public interface AreaService {
 	 */
 	public List<PageData> listAllInByAreaId(PageData pd) throws Exception;
 
+	//区域列表查询
+	public List<CmpDict> getAreaCodeList() throws Exception;
 }

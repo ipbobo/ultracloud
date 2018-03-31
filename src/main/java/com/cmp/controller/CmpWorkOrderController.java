@@ -1036,7 +1036,7 @@ public class CmpWorkOrderController extends BaseController{
 			List<PageData> userSetParamList = cmpOrderService.findSoftParam(s_pd);
 			Map<String, String> userSetParamMap = new HashMap<String, String>();
 			for (PageData userSetParamPd : userSetParamList) {
-				userSetParamMap.put(userSetParamPd.getString("softCode") + userSetParamPd.getString("paramKey"), userSetParamPd.getString("paramValue"));
+				userSetParamMap.put(softCode + userSetParamPd.getString("paramKey"), userSetParamPd.getString("paramValue"));
 			}
 			
 			for (PageData paramPd : pDataList) {
@@ -1045,13 +1045,17 @@ public class CmpWorkOrderController extends BaseController{
 				scriptNode.setScriptId(String.valueOf(paramPd.get("script_id")));
 				scriptNode.setDefaultVal(paramPd.getString("value"));
 				scriptNode.setParamKey(paramPd.getString("param_key"));
+				String userSetVal = userSetParamMap.get(softCode + paramPd.getString("param_key"));
+				if (userSetVal != null) {
+					//用户输入值
+					scriptNode.setValue(userSetVal);
+					autoDeployNode.setModFlag("1");
+				}else {
+					//默认值
+					scriptNode.setValue(paramPd.getString("value"));
+				}
 				scriptNode.setName(paramPd.getString("name"));
 				scriptNodeList.add(scriptNode);
-				
-				if (userSetParamMap.get(softCode+paramPd.getString("param_key")) != null) {
-					autoDeployNode.setModFlag("1");
-				}
-				
 			}
 			autoDeployNode.setScriptNodeList(scriptNodeList);
 			autoDeployNodeList.add(autoDeployNode);

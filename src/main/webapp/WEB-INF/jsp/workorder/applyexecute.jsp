@@ -52,7 +52,6 @@
 										<th class="center">存储</th>
 										<th class="center">访问地址</th>
 										<th class="center">端口</th>
-										<th class="center">设置</th>
 										<th class="center">操作</th>
 									</tr>
 								</thead>
@@ -69,13 +68,13 @@
 													<td class='center'></td>
 													<td class='center'></td>
 													<td class='center'>
-														<button id="btn_deploy_select"  style="float:left;margin-left: 30px;" type="button" 
-															onclick="toSetParam('${workorder.appNo}');">部署脚本设置</button>
-													</td>
-													<td class='center'>
 														<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
+														<input type="hidden" name="h_appNo" id="h_appNo" value="${workorder.appNo}">
+														<input type="hidden" name="h_cpu" id="h_cpu" value="${workorder.cpu}">
+														<input type="hidden" name="h_memory" id="h_memory" value="${workorder.memory}">
+														<input type="hidden" name="h_diskSize" id="h_diskSize" value="${workorder.diskSize}">
 														<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
-															onclick="toInstall('${workorder.appNo}','${cmpCloudInfo.cpu}','${cmpCloudInfo.memory}','${cloudInfoCollect.diskTotal}');">安装</button>
+															onclick="showSetParam('${workorder.appNo}');">安装</button>
 														<button id="executeStatus_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
 															>安装中...</button>
 														<button id="executeStatus_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
@@ -271,7 +270,7 @@
 						&times;
 					</button>
 					<h4 class="modal-title" id="middleware_modalLabel">
-						云平台、数据中心、集群选择
+						第二步 ---云平台、数据中心、集群选择
 					</h4>
 				</div>
 				<div class="modal-body">
@@ -279,7 +278,7 @@
 				<input type="hidden"   name="h_cpu" id="h_cpu">
 				<input type="hidden"   name="h_memory" id="h_memory">
 				<input type="hidden"   name="h_diskSize" id="h_diskSize">
-				<table  style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
+				<table  border='1' cellspacing='0' cellpadding='0' style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 					<tr>
 						<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk"></i>&nbsp;&nbsp;云平台</td>
 						<td id="tip_cloudplatform">
@@ -329,7 +328,7 @@
 					<button id="platform_modal_btn_cancel" type="button" class="btn btn-default"  data-dismiss="modal">取消
 					</button>
 					<button  id="platform_modal_btn_ok" type="button" class="btn btn-primary" onclick="execute();" id="platform_modal_ok_btn">
-						确定
+						执行
 					</button>
 				</div>
 			</div><!-- /.modal-content -->
@@ -345,7 +344,7 @@
 						&times;
 					</button>
 					<h4 class="modal-title" id="middleware_modalLabel">
-						脚本参数设置
+						第一步 ---脚本参数设置
 					</h4>
 				</div>
 				<div class="modal-body">
@@ -373,8 +372,8 @@
 				<div class="modal-footer">
 					<button id="platform_modal_btn_cancel" type="button" class="btn btn-default"  data-dismiss="modal">取消
 					</button>
-					<button  id="platform_modal_btn_ok" type="button" class="btn btn-primary" data-dismiss="modal" id="platform_modal_ok_btn">
-						确定
+					<button  id="platform_modal_btn_ok" type="button" onclick="toInstall();" class="btn btn-primary" data-dismiss="modal" id="platform_modal_ok_btn">
+						下一步
 					</button>
 				</div>
 			</div><!-- /.modal-content -->
@@ -448,10 +447,7 @@
 	}
 	
 	function toInstall(appNo, cpu, memory, diskSize){
-		$("#h_appNo").val(appNo);
-		$("#h_cpu").val(cpu);
-		$("#h_memory").val(memory);
-		$("#h_diskSize").val(diskSize);
+		$('#autodeploy_modal').modal('hide');
 		$('#platform_modal').modal('show');
 	}
 	
@@ -484,11 +480,6 @@
 		if (ip == null || ip == '#' || ip == ''){
 			$('#platform_modal').modal('hide');
 			showDialog("请选择IP");
-			return false;
-		}
-		if (auto_deploy_config_id == null || auto_deploy_config_id == '#' || auto_deploy_config_id == ''){
-			$('#platform_modal').modal('hide');
-			showDialog("请先选择并设置部署方案");
 			return false;
 		}
 		$('#platform_modal').modal('hide');
@@ -663,6 +654,7 @@
 		$('#autodeploy_modal').modal('show');
 	}
 	
+	//目前不用。。。。。
 	function onAutoDeploySelect(autodeployid){
 		jQuery.ajax({  
 			url : "<%=basePath%>onAutoDeploySelect.do",  
@@ -689,7 +681,7 @@
 							}else{
 								appendHTML+=("<div class='tab-pane fade' id='" + autoDeployNode.id +"'>");
 							}
-							appendHTML += "<table id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> "  + 
+							appendHTML += "<table border='1' cellspacing='0' cellpadding='0' id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> "  + 
 							"<thead> <tr> <th class='center'>参数名称</th> <th class='center'>参数值</th> </tr> </thead>"
 							
 							
@@ -705,7 +697,7 @@
 		}); 
 	}
 	
-	function toSetParam(appNo){
+	function showSetParam(appNo){
 		jQuery.ajax({  
 			url : "<%=basePath%>toSetParam.do",  
 			data : {'appNo' : appNo},  
@@ -722,7 +714,13 @@
 				 
 				 for(var i=0;i<data.length;i++){ 
 						var autoDeployNode = data[i];
-						autoDeployTab.append("<li><a href='#" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
+						if (autoDeployNode.modFlag == '1'){
+							autoDeployTab.append("<li ><a style='color: red;' href='#" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
+						}else{
+							autoDeployTab.append("<li><a href='#" + autoDeployNode.id +"' data-toggle='tab'>" + autoDeployNode.name +"</a></li>");
+						}
+						
+						
 						var scriptNodeList = autoDeployNode.scriptNodeList;
 						if (scriptNodeList != null){
 							var appendHTML = "";
@@ -731,13 +729,13 @@
 							}else{
 								appendHTML+=("<div class='tab-pane fade' id='" + autoDeployNode.id +"'>");
 							}
-							appendHTML += "<table id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> "  + 
-							"<thead> <tr> <th class='center'>参数名称</th> <th class='center'>参数值</th> </tr> </thead>"
+							appendHTML += "<table border='1' cellspacing='0' cellpadding='0' id='paramsTable' style='width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;'> "  + 
+							"<thead> <tr> <th class='center'>参数名称</th> <th class='center'>参数值</th> <th class='center'>默认值</th></tr></thead>"
 							
 							
 							for(var z=0;z<scriptNodeList.length;z++){ 
 								 var scriptNode = scriptNodeList[z];
-								 appendHTML+=("<tr><td class='center'>" + scriptNode.name + "</td><td class='center'><input name='"+ scriptNode.paramKey +"' id='"+ scriptNode.paramKey +"' value='"+ scriptNode.defaultVal +"' /></td></tr>");
+								 appendHTML+=("<tr><td class='center'>" + scriptNode.name + "</td><td class='center'><input name='"+ scriptNode.paramKey +"' id='"+ scriptNode.paramKey +"' value='"+ scriptNode.value +"' /></td><td class='center'>" + scriptNode.defaultVal + "</td></tr>");
 							}
 							 appendHTML+="</table> </div>"
 								 autoDeployTabContent.append(appendHTML);
