@@ -713,10 +713,10 @@ $(window).scroll(function() {
 <div class="tab-content">
 <div id="zdysq" class="tab-pane fade in active">
 	<form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
-	<input type="text" name="areaCode" id="areaCode" value="${defaultAreaCode}"/>
-	<input type="text" name="envCode" id="envCode" value="${defaultEnvCode}"/>
-	<input type="text" name="platType" id="platType" value="${defaultPlatType}"/>
-	<input type="text" name="deployType" id="deployType" value="1"/>
+	<input type="hidden" name="areaCode" id="areaCode" value="${defaultAreaCode}"/>
+	<input type="hidden" name="envCode" id="envCode" value="${defaultEnvCode}"/>
+	<input type="hidden" name="platType" id="platType" value="${defaultPlatType}"/>
+	<input type="hidden" name="deployType" id="deployType" value="1"/>
 	<input type="hidden" name="resType" id="resType" value="1"/>
 	<input type="hidden" name="cpu" id="cpu" value="1"/>
 	<input type="hidden" name="memory" id="memory" value="1"/>

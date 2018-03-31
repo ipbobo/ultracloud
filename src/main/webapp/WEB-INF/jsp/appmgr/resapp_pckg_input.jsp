@@ -179,10 +179,10 @@ function getCurrConf(jsonObj){
 </head>
 <body class="resapp-qry-input">
 <form id="tcmainForm" name="tcmainForm" action="" enctype="multipart/form-data" method="post">
-<input type="text" name="tcareaCode" id="tcareaCode" value="${defaultAreaCode}"/>
-<input type="text" name="tcenvCode" id="tcenvCode" value="${defaultEnvCode}"/>
-<input type="text" name="tcplatType" id="tcplatType" value="${defaultTcplatType}"/>
-<input type="text" name="tcdeployType" id="tcdeployType" value="1"/>
+<input type="hidden" name="tcareaCode" id="tcareaCode" value="${defaultAreaCode}"/>
+<input type="hidden" name="tcenvCode" id="tcenvCode" value="${defaultEnvCode}"/>
+<input type="hidden" name="tcplatType" id="tcplatType" value="${defaultTcplatType}"/>
+<input type="hidden" name="tcdeployType" id="tcdeployType" value="1"/>
 <input type="hidden" name="pckgId" id="pckgId" value=""/>
 <table style="width:100%;margin-top: 0px;margin-left: 0px;background-color: #e4e6e9;">
 	<tr class="tablecls">
