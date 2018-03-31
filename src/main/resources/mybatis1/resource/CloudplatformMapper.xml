@@ -105,7 +105,7 @@
 				s.gmt_modified,
 				e.name as environment_name
 		from <include refid="tableName"></include> s,t_environment e
-		where s.environment_id=e.name
+		where s.environment_id=e.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
