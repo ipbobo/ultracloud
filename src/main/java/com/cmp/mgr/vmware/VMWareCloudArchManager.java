@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 	private VMWareConvertors converters = new VMWareConvertors();
@@ -86,7 +86,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	private List<VirtualMachine> getVirtualMachinesNoVerify() {
 		try {
 			String type = VirtualMachine.class.getSimpleName();
-			String[][] typeinfo = new String[][] { new String[] { type, "name", }, };
+			String[][] typeinfo = new String[][]{new String[]{type, "name",},};
 
 			Folder rootEntity = getServiceInstance().getRootFolder();
 			ServiceInstance serviceInstance = rootEntity.getServerConnection().getServiceInstance();
@@ -109,11 +109,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			os.setSelectSet(selectionSpecs);
 
 			PropertyFilterSpec spec = new PropertyFilterSpec();
-			spec.setObjectSet(new ObjectSpec[] { os });
+			spec.setObjectSet(new ObjectSpec[]{os});
 			spec.setPropSet(propspecary);
 
 			ObjectContent[] objectContents = pc
-					.retrieveProperties(new PropertyFilterSpec[] { spec });
+					.retrieveProperties(new PropertyFilterSpec[]{spec});
 			if (ArrayUtils.isEmpty(objectContents)) {
 				return Collections.emptyList();
 			}
@@ -163,8 +163,17 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 					.orElseThrow(error("Datacenter not found: " + dcName));
 			List<ResourcePool> mes = searchManagedEntities(ResourcePool.class);
 
-			ResourcePool resourcePool = mes.stream().filter(x -> rpName.equalsIgnoreCase(x.getName())).
-					findAny().orElseThrow(error("Resource pool not found: " + rpName));
+			ResourcePool rp = null;
+			for (ResourcePool tmp : mes) {
+				if (tmp.getName().equalsIgnoreCase(rpName)) {
+					rp = tmp;
+					break;
+				}
+			}
+
+			if (rp == null) {
+				throw error("No resource pool found").get();
+			}
 
 			Folder vmFolder = dc.getVmFolder();
 
@@ -181,8 +190,8 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 					diskSizeKB, diskMode);
 			VirtualDeviceConfigSpec nicSpec = createNicSpec(netName, nicName);
 
-			vmSpec.setDeviceChange(new VirtualDeviceConfigSpec[] { scsiSpec,
-					diskSpec, nicSpec });
+			vmSpec.setDeviceChange(new VirtualDeviceConfigSpec[]{scsiSpec,
+					diskSpec, nicSpec});
 
 			// create vm file info for the vmx file
 			VirtualMachineFileInfo vmfi = new VirtualMachineFileInfo();
@@ -190,7 +199,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			vmSpec.setFiles(vmfi);
 
 			// call the createVM_Task method on the vm folder
-			Task task = vmFolder.createVM_Task(vmSpec, resourcePool, null);
+			Task task = vmFolder.createVM_Task(vmSpec, rp, null);
 			task.waitForMe();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -282,7 +291,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			ServiceInstance serviceInstance = getServiceInstance();
 			ManagedEntity managedEntity = new InventoryNavigator(
 					serviceInstance.getRootFolder()).searchManagedEntity(
-							clazz.getSimpleName(), name);
+					clazz.getSimpleName(), name);
 
 			return Optional.ofNullable(managedEntity).map(clazz::cast);
 		} catch (Exception e) {
@@ -311,7 +320,6 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		}
 	}
 
-	@SuppressWarnings("ConstantConditions")
 	private void getClustersAndHosts(ManagedEntity[] managedEntities,
 			Set<ClusterComputeResource> clusterSet, Set<HostSystem> hostSet) throws Exception {
 
@@ -327,10 +335,12 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			}
 
 			if ("ClusterComputeResource".equals(managedEntity.getMOR().type)) {
+				//noinspection ConstantConditions
 				clusterSet.add((ClusterComputeResource) managedEntity);
 			}
 
 			if ("ComputeResource".equals(managedEntity.getMOR().type)) {
+				//noinspection ConstantConditions
 				hostSet.add((HostSystem) managedEntity);
 			}
 		}
@@ -487,9 +497,12 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		String dcName = req.getDcName();
 
 		try {
+			String ip = Optional.ofNullable(req.getIp()).orElseThrow(
+					error("No IP address specified"));
+
 			ClusterComputeResource cluster = searchManagedEntities(
 					ClusterComputeResource.class).stream().findFirst()
-							.orElseThrow(error("No cluster found"));
+					.orElseThrow(error("No cluster found"));
 
 			Datacenter dc = searchManagedEntity(Datacenter.class, dcName)
 					.orElseThrow(error("Datacenter not found: " + dcName));
@@ -513,34 +526,45 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			relocateSpec.setHost(hostSystem.getMOR());
 
 			CustomizationSpec customSpec = new CustomizationSpec();
+			CustomizationLinuxOptions linuxOptions = new CustomizationLinuxOptions();
+			customSpec.setOptions(linuxOptions);
+
 			customSpec.setGlobalIPSettings(new CustomizationGlobalIPSettings());
-			CustomizationLinuxPrep clp = new CustomizationLinuxPrep();
-			clp.setDomain("localdomain");
-			// clp.setDomain(domainName);
-			// To set the host name of the clone
-			CustomizationPrefixName cn = new CustomizationPrefixName();
-			cn.setBase("localhost");
-			// cn.setBase(baseName);
-			clp.setHostName(cn);
-			customSpec.setIdentity(clp);
-			// To set nicSettingMap
-			CustomizationAdapterMapping cam = new CustomizationAdapterMapping();
-			CustomizationIPSettings cip = new CustomizationIPSettings();
-			cip.setIp(new CustomizationDhcpIpGenerator());
-			cam.setAdapter(cip);
-			customSpec.setNicSettingMap(new CustomizationAdapterMapping[] { cam });
+			CustomizationLinuxPrep linuxPrep = new CustomizationLinuxPrep();
+			linuxPrep.setDomain("localdomain");
+			linuxPrep.setHwClockUTC(true);
+			linuxPrep.setTimeZone("Asia/Shanghai");
+
+			CustomizationFixedName fixedName = new CustomizationFixedName();
+			fixedName.setName("localhost");
+			linuxPrep.setHostName(fixedName);
+			customSpec.setIdentity(linuxPrep);
+
+			CustomizationGlobalIPSettings globalIPSettings = new CustomizationGlobalIPSettings();
+			globalIPSettings.setDnsServerList(new String[]{"8.8.8.8", "8.8.4.4"});
+			globalIPSettings.setDnsSuffixList(new String[]{"search.com", "my.search.com"});
+			customSpec.setGlobalIPSettings(globalIPSettings);
+
+			CustomizationFixedIp fixedIp = new CustomizationFixedIp();
+			fixedIp.setIpAddress(ip);
+
+			CustomizationIPSettings ipSettings = new CustomizationIPSettings();
+			ipSettings.setIp(fixedIp);
+			ipSettings.setSubnetMask("255.255.255.0");
+			ipSettings.setGateway(new String[]{ip.replaceAll("[.]\\d+$", ".1")});
+
+			CustomizationAdapterMapping adapterMapping = new CustomizationAdapterMapping();
+			adapterMapping.setAdapter(ipSettings);
+
+			CustomizationAdapterMapping[] adapterMappings = new CustomizationAdapterMapping[]{adapterMapping};
+			customSpec.setNicSettingMap(adapterMappings);
 
 			VirtualMachineCloneSpec cloneSpec = new VirtualMachineCloneSpec();
-			cloneSpec.setConfig(configSpec);
-			cloneSpec.setLocation(relocateSpec);
-			cloneSpec.setPowerOn(true);
-			cloneSpec.setTemplate(false);
 			cloneSpec.setCustomization(customSpec);
-
-			// GuestNicInfo nic = new GuestNicInfo();
-			// nic.setIpAddress(new String[] { req.getIp() });
-			// nic.setMacAddress("00:51:56:A4:6D:CE");
-			// vm.getGuest().setNet(new GuestNicInfo[] { nic });
+			cloneSpec.setLocation(relocateSpec);
+			cloneSpec.setConfig(configSpec);
+			cloneSpec.setTemplate(false);
+			cloneSpec.setPowerOn(true);
 
 			vm.cloneVM_Task(dc.getVmFolder(), req.getVmName(), cloneSpec).waitForMe();
 
@@ -559,8 +583,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 					continue;
 				}
 
-				if (dt.getSummary().accessible
-						&& "VMFS".equalsIgnoreCase(dt.getSummary().getType())
+				if (dt.getSummary().accessible && "VMFS".equalsIgnoreCase(dt.getSummary().getType())
 						&& dt.getInfo().getFreeSpace() > datastore.getInfo().getFreeSpace()) {
 					datastore = dt;
 				}
@@ -659,12 +682,15 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				mor.setType(VirtualMachine.class.getSimpleName());
 				mor.setVal(request.getVmUUID());
 				vm = new VirtualMachine(si.getServerConnection(), mor);
-			} else if (request.getVmName() != null) {
+			}
+
+			if (request.getVmName() != null) {
 				vm = searchManagedEntity(VirtualMachine.class, request.getVmName())
 						.orElseThrow(error("VM not found"));
 			}
 
-			//noinspection ConstantConditions
+			vm = Objects.requireNonNull(vm, "VM not found");
+
 			String vmName = vm.getName();
 			VirtualMachineDeviceManager vmDeviceMgr = new VirtualMachineDeviceManager(vm);
 
@@ -676,7 +702,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			int scsiCountUnit = 16;
 
 			// disk device
-			// noinspection MismatchedQueryAndUpdateOfCollection
+			//noinspection MismatchedQueryAndUpdateOfCollection
 			Map<String, VirtualDisk> diskMap = new HashMap<>();
 			// disk unit number list
 			Set<Integer> diskUnitSet = new HashSet<>();
@@ -732,7 +758,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			diskSpec.setOperation(VirtualDeviceConfigSpecOperation.add);
 			diskSpec.setFileOperation(VirtualDeviceConfigSpecFileOperation.create);
 			diskSpec.setDevice(disk);
-			VirtualDeviceConfigSpec[] vdiskSpecArray = new VirtualDeviceConfigSpec[] { diskSpec };
+			VirtualDeviceConfigSpec[] vdiskSpecArray = {diskSpec};
 
 			// vm spec
 			VirtualMachineConfigSpec vmConfigSpec = new VirtualMachineConfigSpec();
@@ -783,9 +809,10 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				.map(getDatastoreBrowser)
 				.map(HostDatastoreBrowser::getDatastores)
 				.filter(ArrayUtils::isNotEmpty)
-				.flatMap(Arrays::stream).forEach(datastore ->
-					capability.setSupportedStorage(capability.getSupportedStorage()
-						+ datastore.getInfo().getFreeSpace()));
+				.flatMap(Arrays::stream).forEach(datastore -> {
+			capability.setSupportedStorage(capability.getSupportedStorage()
+					+ datastore.getInfo().getFreeSpace());
+		});
 
 		return capability;
 	}

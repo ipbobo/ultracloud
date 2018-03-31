@@ -501,9 +501,8 @@ public class CmpWorkOrderController extends BaseController{
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
 		
-		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 100);
+		List<Task> userTaskList = activitiService.findByProcessInstId(toCheckWorkorder.getProcInstId());
 		for (Task task : userTaskList) {
-			if (task.getProcessInstanceId().equals(toCheckWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
 				//写入流程注释
 				activitiService.addComment(task.getId(), toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
@@ -537,7 +536,6 @@ public class CmpWorkOrderController extends BaseController{
 					map.put("result", resultInfo);	
 					return map;
 				}
-			}
 		}
 		map.put("result", resultInfo);				//返回结果
 		return map;
@@ -575,9 +573,8 @@ public class CmpWorkOrderController extends BaseController{
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
 		
-		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 500);
+		List<Task> userTaskList = activitiService.findByProcessInstId(toVerifyWorkorder.getProcInstId());
 		for (Task task : userTaskList) {
-			if (task.getProcessInstanceId().equals(toVerifyWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
 				//写入流程注释
 				activitiService.addComment(task.getId(), toVerifyWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
@@ -593,7 +590,6 @@ public class CmpWorkOrderController extends BaseController{
 				resultInfo = "工单退回确认完成";
 				map.put("result", resultInfo);	
 				return map;
-			}
 		}
 		map.put("result", resultInfo);				//返回结果
 		return map;
@@ -633,9 +629,8 @@ public class CmpWorkOrderController extends BaseController{
 			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
-		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 500);
+		List<Task> userTaskList = activitiService.findByProcessInstId(toExecuteWorkorder.getProcInstId());
 		for (Task task : userTaskList) {
-			if (task.getProcessInstanceId().equals(toExecuteWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
 				//写入流程注释
 				activitiService.addComment(task.getId(), toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
@@ -664,7 +659,6 @@ public class CmpWorkOrderController extends BaseController{
 				resultInfo = "执行成功";
 				map.put("result", resultInfo);	
 				return map;
-			}
 		}
 		map.put("result", resultInfo);				//返回结果
 		return map;

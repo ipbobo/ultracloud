@@ -141,6 +141,30 @@ public class CloudHostController extends BaseController {
 		return ok(SUCCESS);
 	}
 
+	@RequestMapping(value = "/clone")
+	public ResponseEntity<String> clone(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			cloudHostService.destroy(ls);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
+		}
+
+		return ok(SUCCESS);
+	}
+
+	@RequestMapping(value = "/snapshot")
+	public ResponseEntity<String> snapshot(@RequestParam("ls[]") List<Integer> ls) {
+		try {
+			cloudHostService.destroy(ls);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return ok(FAILURE);
+		}
+
+		return ok(SUCCESS);
+	}
+
 	@RequestMapping(value = "/console")
 	public ModelAndView console() throws Exception {
 		ModelAndView mv = this.getModelAndView();

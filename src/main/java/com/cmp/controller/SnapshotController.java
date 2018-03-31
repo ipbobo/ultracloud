@@ -44,8 +44,7 @@ public class SnapshotController extends BaseController {
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
 		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
+		PageData pd = this.getPageData();
 		String keywords = pd.getString("keywords");
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
