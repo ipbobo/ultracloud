@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.resourcemgt.DatacenterService;
+import com.cmp.service.servicemgt.AreaEnvironmentService;
+import com.cmp.service.servicemgt.AreaService;
 import com.cmp.service.servicemgt.EnvironmentService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
@@ -36,6 +38,12 @@ public class EnvironmentController extends BaseController {
 	@Resource(name = "datacenterService")
 	private DatacenterService datacenterService;
 
+	@Resource(name = "areaService")
+	private AreaService areaService;
+
+	@Resource(name = "areaEnvironmentService")
+	private AreaEnvironmentService areaEnvironmentService;
+
 	/**
 	 * 保存
 	 * 
@@ -51,8 +59,22 @@ public class EnvironmentController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("id", this.get32UUID());
 		pd.put("USERNAME", Jurisdiction.getUsername());
+
 		environmentService.save(pd);
+
+		String DATA_IDS = pd.getString("DATA_IDS");
+		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
+			String ArrayDATA_IDS[] = DATA_IDS.split(",");
+			for (int i = 0; i < ArrayDATA_IDS.length; i++) {
+				PageData aePD = new PageData();
+				aePD.put("environment_id", pd.getString("id"));
+				aePD.put("area_id", ArrayDATA_IDS[i]);
+				areaEnvironmentService.save(aePD);
+			}
+		}
+
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -93,7 +115,24 @@ public class EnvironmentController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("USERNAME", Jurisdiction.getUsername());
+
 		environmentService.edit(pd);
+
+		String DATA_IDS = pd.getString("DATA_IDS");
+		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
+			PageData delPD = new PageData();
+			delPD.put("environment_id", pd.getString("id"));
+			areaEnvironmentService.delete(delPD);
+
+			String ArrayDATA_IDS[] = DATA_IDS.split(",");
+			for (int i = 0; i < ArrayDATA_IDS.length; i++) {
+				PageData aePD = new PageData();
+				aePD.put("environment_id", pd.getString("id"));
+				aePD.put("area_id", ArrayDATA_IDS[i]);
+				areaEnvironmentService.save(aePD);
+			}
+		}
+
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -143,6 +182,9 @@ public class EnvironmentController extends BaseController {
 		List<PageData> dcList = datacenterService.listAll(pd);
 		mv.addObject("dcList", dcList);
 
+		List<PageData> areaList = areaService.listAll(pd);
+		mv.addObject("areaList", areaList);
+
 		mv.setViewName("service/environment_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
@@ -164,10 +206,23 @@ public class EnvironmentController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
-		
+
 		List<PageData> dcList = datacenterService.listAll(pd);
 		mv.addObject("dcList", dcList);
-		
+
+		// isSelect select
+		List<PageData> selectList = environmentService.listAllInById(pd);
+		List<PageData> areaList = areaService.listAll(pd);
+		for (PageData allPD : areaList) {
+			for (PageData selectPD : selectList) {
+				if (allPD.getString("id").equals(selectPD.getString("id"))) {
+					allPD.put("isSelect", "select");
+				}
+			}
+		}
+
+		mv.addObject("areaList", areaList);
+
 		pd = environmentService.findById(pd); // 根据ID读取
 		mv.setViewName("service/environment_edit");
 		mv.addObject("msg", "edit");

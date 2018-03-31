@@ -22,6 +22,9 @@ public class AreaServiceImpl implements AreaService {
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
 
+	@Resource(name = "areaEnvironmentService")
+	private AreaEnvironmentService areaEnvironmentService;
+
 	/**
 	 * 新增
 	 * 
@@ -40,6 +43,10 @@ public class AreaServiceImpl implements AreaService {
 	 */
 	public void delete(PageData pd) throws Exception {
 		dao.delete("AreaMapper.delete", pd);
+
+		PageData delPD = new PageData();
+		delPD.put("area_id", pd.getString("id"));
+		areaEnvironmentService.delete(delPD);
 	}
 
 	/**
@@ -92,6 +99,12 @@ public class AreaServiceImpl implements AreaService {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("AreaMapper.deleteAll", ArrayDATA_IDS);
+
+		for (String id : ArrayDATA_IDS) {
+			PageData delPD = new PageData();
+			delPD.put("area_id", id);
+			this.areaEnvironmentService.delete(delPD);
+		}
 	}
 
 	/**

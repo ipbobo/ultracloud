@@ -282,7 +282,7 @@ public class MirrorController extends BaseController {
 
 		List<PageData> notBindList = mirrorService.listAllOutByMirrorId(pd); // 列出列表
 		mv.addObject("notBindList", notBindList);
-		
+
 		List<PageData> alreadyBindList = mirrorService.listAllInByMirrorId(pd); // 列出列表
 		mv.addObject("alreadyBindList", alreadyBindList);
 
@@ -447,24 +447,39 @@ public class MirrorController extends BaseController {
 		pd = this.getPageData();
 		String type = pd.getString("type");
 		BigInteger id = new BigInteger(pd.getString("id"));
+
+		PageData mirrorPD = mirrorService.findById(pd);
+
 		String DATA_IDS = pd.getString("DATA_IDS");
 		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 			List<MirrorTemplateMap> newList = new ArrayList<MirrorTemplateMap>();
 			List<BigInteger> idList = new ArrayList<BigInteger>();
+			List<PageData> templateList = new ArrayList<PageData>();
+
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 
 			for (int i = 0; i < ArrayDATA_IDS.length; i++) {
 				MirrorTemplateMap mtMap = new MirrorTemplateMap();
 				mtMap.setMirrortemplate_id(new BigInteger(ArrayDATA_IDS[i]));
 				mtMap.setMirror_id(id);
-				
+
+				PageData templateIdPD = new PageData();
+				templateIdPD.put("id", new BigInteger(ArrayDATA_IDS[i]));
+				PageData templatePD = mirrorService.findTemplateById(templateIdPD);
+				templatePD.put("ostype", mirrorPD.getString("ostype"));
+				templatePD.put("bitrate", (Long) mirrorPD.get("bitrate"));
+
 				idList.add(new BigInteger(ArrayDATA_IDS[i]));
 				newList.add(mtMap);
+				templateList.add(templatePD);
 			}
 
 			if (newList.size() > 0) {
-				if("bind".equals(type)) {
+				if ("bind".equals(type)) {
 					mirrorService.insertAllMirrorTemplateMap(newList);
+					for (PageData templdatePD : templateList) {
+						mirrorService.editTemplate(templdatePD);
+					}
 				} else {
 					mirrorService.deleteAllMirrorTemplateMap(idList);
 				}

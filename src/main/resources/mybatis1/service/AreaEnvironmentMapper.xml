@@ -43,7 +43,7 @@
 		<if test="area_id!=null and area_id!=''">
 			area_id = #{area_id}
 		</if>
-		<if test="id!=null and id!=''">
+		<if test="environment_id!=null and environment_id!=''">
 			environment_id = #{environment_id}
 		</if>
 	</delete>
