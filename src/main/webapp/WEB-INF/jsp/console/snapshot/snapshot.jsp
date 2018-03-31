@@ -12,25 +12,17 @@
 <html lang="en">
 <head>
     <base href="<%=basePath%>">
-    <!-- 下拉框 -->
     <link rel="stylesheet" href="static/ace/css/chosen.css"/>
-    <!-- jsp文件头和头部 -->
     <%@ include file="../../system/index/top.jsp" %>
-    <!-- 日期框 -->
     <link rel="stylesheet" href="static/ace/css/datepicker.css"/>
 </head>
 <body class="no-skin">
-
-<!-- /section:basics/navbar.layout -->
 <div class="main-container" id="main-container">
-    <!-- /section:basics/sidebar -->
     <div class="main-content">
         <div class="main-content-inner">
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12">
-
-                        <!-- 检索  -->
                         <form action="snapshot/list.do" method="post" name="Form" id="Form">
                             <input type="hidden" name="TYPE" value="${pd.TYPE}"/>
                             <c:if test="${QX == 1}">
@@ -52,8 +44,6 @@
                                     </tr>
                                 </table>
                             </c:if>
-                            <!-- 检索  -->
-
                             <table id="simple-table" class="table table-striped table-bordered table-hover"
                                    style="margin-top:5px;">
                                 <thead>
@@ -71,7 +61,6 @@
                                     <th class="center">创建人</th>
                                 </tr>
                                 </thead>
-
                                 <tbody>
                                 <c:forEach items="${varList}" var="var" varStatus="vs">
                                     <tr>
