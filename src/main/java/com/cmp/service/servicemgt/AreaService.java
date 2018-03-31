@@ -6,12 +6,12 @@ import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /**
- * 监控策略 业务层接口
+ * 区域 业务层接口
  * 
  * @author liuweixing
  *
  */
-public interface MonitorPolicyService {
+public interface AreaService {
 
 	/**
 	 * 新增
@@ -68,5 +68,23 @@ public interface MonitorPolicyService {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
-	
+
+	/**
+	 * 可选环境
+	 * 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAllOutAreaByPdId(PageData pd) throws Exception;
+
+	/**
+	 * 已选环境
+	 * 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAllInByAreaId(PageData pd) throws Exception;
+
 }

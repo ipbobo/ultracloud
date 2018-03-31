@@ -65,6 +65,7 @@
 									<th class="center">云平台名称</th>
 									<th class="center">类型</th>
 									<th class="center">地址</th>
+									<th class="center">所属环境</th>
 									<th class="center">创建时间</th>
 									<th class="center">修改时间</th>
 									<th class="center">操作</th>
@@ -85,6 +86,7 @@
 											<td class='center'>${var.name}</td>
 											<td class='center'>${var.type}</td>
 											<td class='center'>${var.ip}</td>
+											<td class='center'>${var.environment_name}</td>
 											<td class='center' style="width: 170px;">${var.gmt_create}</td>
 											<td class='center' style="width: 170px;">${var.gmt_modified}</td>
 											<td class="center">

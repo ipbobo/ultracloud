@@ -49,6 +49,7 @@
 							</tr>
 						</table>
 						<table id="table_report" class="table table-striped table-bordered table-hover">
+						<!-- 
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;" id="setFHTIME">设定:</td>
 								<td style="text-align: right;">
@@ -153,6 +154,7 @@
 							<tr>
 								<td colspan="10"><input type="text" class="center" name="TIMEEXPLAIN" id="TIMEEXPLAIN" value="${pd.TIMEEXPLAIN}" maxlength="100" placeholder="这里是规则说明" title="规则说明" style="width:100%;" readonly="readonly"/></td>
 							</tr>
+							-->
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AreaMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		t_area
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,	
+		name
+	</sql>
+		
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},	
+		#{name}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			name = #{name}
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd" >
+		SELECT a.id,a.name,c.name AS environment_name 
+		FROM t_area a, t_area_environment_map b,t_environment c 
+		WHERE a.id=b.area_id 
+		AND b.environment_id=c.id
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select  *
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 已选环境 -->
+	<select id="listAllInByAreaId"  parameterType="pd" resultType="pd" >
+		SELECT c.id,c.name 
+		FROM t_area_environment_map b,t_environment c 
+		WHERE b.environment_id=c.id 
+		AND b.area_id=#{id}
+	</select>
+	
+	<!-- 可选环境 -->
+	<select id="listAllOutAreaByPdId"  parameterType="pd" resultType="pd" >
+		select 
+			id, name
+		from 
+			t_environment
+		where id NOT IN (select b.environment_id from t_area a ,t_area_environment_map b 
+						where a.id=b.area_id
+						and a.id= #{id})
+	</select>
+	
+	<!-- 列表查询 -->
+	<select id="getEnvList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from <include refid="tableName"></include>
+	</select>
+</mapper>
