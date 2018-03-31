@@ -36,8 +36,8 @@
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="vertical-align: top;">
-									<c:if test="${QX.add == 1 }"><a class="btn btn-sm btn-success" onclick="add();">新增</a></c:if> 
-									<c:if test="${QX.del == 1 }"><a class="btn btn-sm btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除"><i class='ace-icon fa fa-trash-o bigger-120'></i></a></c:if>
+									<c:if test="${QX.add == 1 }"><a class="btn btn-mini btn-success" onclick="add();">新增</a></c:if> 
+									<c:if test="${QX.del == 1 }"><a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除"><i class='ace-icon fa fa-trash-o bigger-120'></i></a></c:if>
 								</td>
 								
 								<td style="vertical-align:top;padding-left:5px;width:88px;">
@@ -100,7 +100,7 @@
 											<td class='center'>${var.TO_USERNAME}</td>
 											<td class='center' id="STATUS${vs.index+1}"><c:if test="${var.STATUS == '0' }"><span class="label label-important arrowed-in">未读</span></c:if><c:if test="${var.STATUS == '1' }"><span class="label label-success arrowed">已读</span></c:if></td>
 											<td class="center">
-												<div>
+												<div class="hidden-sm hidden-xs btn-group">
 													<a class="btn btn-xs btn-success" title="查看" onclick="viewx('${var.FHSMS_ID}','${var.STATUS}','${var.TO_USERNAME}');"> 
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看"></i>
 													</a>

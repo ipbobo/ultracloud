@@ -34,7 +34,7 @@
 									<tr>
 										<td style="vertical-align:top;">
 											<c:if test="${QX.add == 1 }">
-											<a class="btn btn-sm btn-success" onclick="addRole('${pd.ROLE_ID }');">新增角色</a>
+											<a class="btn btn-mini btn-success" onclick="addRole('${pd.ROLE_ID }');">新增角色</a>
 											</c:if>
 										</td>
 									</tr>

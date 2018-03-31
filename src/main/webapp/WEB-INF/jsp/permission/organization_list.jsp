@@ -33,10 +33,10 @@
 							<tr>
 								<td style="vertical-align:top;">
 									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-sm btn-success" onclick="add('${DEPARTMENT_ID}');">新增</a>
+									<a class="btn btn-mini btn-success" onclick="add('${DEPARTMENT_ID}');">新增</a>
 									</c:if>
 									<c:if test="${null != pd.DEPARTMENT_ID && pd.DEPARTMENT_ID != ''}">
-									<a class="btn btn-sm btn-success" onclick="goSondict('${pd.PARENT_ID}');">返回</a>
+									<a class="btn btn-mini btn-success" onclick="goSondict('${pd.PARENT_ID}');">返回</a>
 									</c:if>
 								</td>
 								
