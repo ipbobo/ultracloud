@@ -83,7 +83,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@SuppressWarnings("deprecation")
-	public List<VirtualMachine> getVirtualMachinesNoVerify() {
+	private List<VirtualMachine> getVirtualMachinesNoVerify() {
 		try {
 			String type = VirtualMachine.class.getSimpleName();
 			String[][] typeinfo = new String[][]{new String[]{type, "name",},};
@@ -94,7 +94,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			PropertyCollector pc = serviceInstance.getPropertyCollector();
 			AboutInfo ai = serviceInstance.getAboutInfo();
 
-			SelectionSpec[] selectionSpecs = null;
+			SelectionSpec[] selectionSpecs;
 			if (ai.apiVersion.startsWith("4") || ai.apiVersion.startsWith("5")) {
 				selectionSpecs = PropertyCollectorUtil.buildFullTraversalV4();
 			} else {
@@ -118,7 +118,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				return Collections.emptyList();
 			}
 
-			List<VirtualMachine> vmList = new ArrayList<VirtualMachine>();
+			List<VirtualMachine> vmList = new ArrayList<>();
 			for (ObjectContent ocs : objectContents) {
 				DynamicProperty[] propSet = ocs.getPropSet();
 				if (ArrayUtils.isEmpty(propSet)) {
@@ -159,7 +159,8 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			String nicName = request.getNicName();
 			String rpName = request.getRpName();
 
-			Datacenter dc = searchManagedEntity(Datacenter.class, dcName).get();
+			Datacenter dc = searchManagedEntity(Datacenter.class, dcName)
+					.orElseThrow(error("Datacenter not found: " + dcName));
 			List<ResourcePool> mes = searchManagedEntities(ResourcePool.class);
 
 			ResourcePool rp = null;
@@ -168,6 +169,10 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 					rp = tmp;
 					break;
 				}
+			}
+
+			if (rp == null) {
+				throw error("No resource pool found").get();
 			}
 
 			Folder vmFolder = dc.getVmFolder();
@@ -238,9 +243,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		return diskSpec;
 	}
 
-	private VirtualDeviceConfigSpec createNicSpec(String netName, String nicName)
-			throws Exception {
-
+	private VirtualDeviceConfigSpec createNicSpec(String netName, String nicName) {
 		VirtualDeviceConfigSpec nicSpec = new VirtualDeviceConfigSpec();
 		nicSpec.setOperation(VirtualDeviceConfigSpecOperation.add);
 
@@ -267,7 +270,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		return searchManagedEntities(VirtualDevice.class);
 	}
 
-	public <T> List<T> searchManagedEntities(Class<T> clazz) {
+	private <T> List<T> searchManagedEntities(Class<T> clazz) {
 		try {
 			ServiceInstance serviceInstance = getServiceInstance();
 			ManagedEntity[] managedEntities = new InventoryNavigator(
@@ -283,7 +286,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		}
 	}
 
-	public <T> Optional<T> searchManagedEntity(Class<T> clazz, String name) {
+	private <T> Optional<T> searchManagedEntity(Class<T> clazz, String name) {
 		try {
 			ServiceInstance serviceInstance = getServiceInstance();
 			ManagedEntity managedEntity = new InventoryNavigator(
@@ -332,10 +335,12 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			}
 
 			if ("ClusterComputeResource".equals(managedEntity.getMOR().type)) {
+				//noinspection ConstantConditions
 				clusterSet.add((ClusterComputeResource) managedEntity);
 			}
 
 			if ("ComputeResource".equals(managedEntity.getMOR().type)) {
+				//noinspection ConstantConditions
 				hostSet.add((HostSystem) managedEntity);
 			}
 		}
@@ -675,10 +680,14 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				mor.setType(VirtualMachine.class.getSimpleName());
 				mor.setVal(request.getVmUUID());
 				vm = new VirtualMachine(si.getServerConnection(), mor);
-			} else if (request.getVmName() != null) {
+			}
+
+			if (request.getVmName() != null) {
 				vm = searchManagedEntity(VirtualMachine.class, request.getVmName())
 						.orElseThrow(error("VM not found"));
 			}
+
+			vm = Objects.requireNonNull(vm, "VM not found");
 
 			String vmName = vm.getName();
 			VirtualMachineDeviceManager vmDeviceMgr = new VirtualMachineDeviceManager(vm);
@@ -691,6 +700,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			int scsiCountUnit = 16;
 
 			// disk device
+			//noinspection MismatchedQueryAndUpdateOfCollection
 			Map<String, VirtualDisk> diskMap = new HashMap<>();
 			// disk unit number list
 			Set<Integer> diskUnitSet = new HashSet<>();
@@ -710,7 +720,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			Class<VirtualDisk> diskClass = VirtualDisk.class;
 			for (VirtualDevice device : devices) {
 				if (device != null && device.controllerKey != null
-						&& scsiCtrl.key == (int) device.controllerKey
+						&& scsiCtrl.key == device.controllerKey
 						&& diskClass.isInstance(device)) {
 					VirtualDisk disk = (VirtualDisk) device;
 					diskMap.put(getDeviceKey(disk), disk);
@@ -746,8 +756,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			diskSpec.setOperation(VirtualDeviceConfigSpecOperation.add);
 			diskSpec.setFileOperation(VirtualDeviceConfigSpecFileOperation.create);
 			diskSpec.setDevice(disk);
-			VirtualDeviceConfigSpec vdiskSpec = diskSpec;
-			VirtualDeviceConfigSpec[] vdiskSpecArray = {vdiskSpec};
+			VirtualDeviceConfigSpec[] vdiskSpecArray = {diskSpec};
 
 			// vm spec
 			VirtualMachineConfigSpec vmConfigSpec = new VirtualMachineConfigSpec();
@@ -758,7 +767,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				VirtualDisk addedDisk = null;
 				for (VirtualDevice device : devices) {
 					if (device.controllerKey != null
-							&& scsiCtrl.key == (int) device.controllerKey
+							&& scsiCtrl.key == device.controllerKey
 							&& device.unitNumber == firstFreeUnit) {
 						addedDisk = (VirtualDisk) device;
 					}
