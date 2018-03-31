@@ -30,6 +30,7 @@ import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.resourcemgt.CloudplatformService;
+import com.cmp.service.servicemgt.AreaService;
 import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.service.servicemgt.MirrorService;
 import com.cmp.sid.CmpDict;
@@ -68,6 +69,8 @@ public class AppMgrController extends BaseController {
 	@Resource
 	private CloudplatformService cloudplatformService;
 	@Resource
+	private AreaService areaService;
+	@Resource
 	private CmpLogService cmpLogService;
 	@Value("${uploadFilePath}")
 	private String uploadFilePath;//上传文件路径
@@ -75,9 +78,20 @@ public class AppMgrController extends BaseController {
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
 	public ModelAndView resAppPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String platTypeId=request.getParameter("platTypeId");//平台类型
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
+		String areaCodeId=null;//平台类型
+		List<CmpDict> areaCodeList=areaService.getAreaCodeList();//区域列表
+		if(areaCodeList!=null && !areaCodeList.isEmpty()){
+			CmpDict cmpDict=areaCodeList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultAreaCode", cmpDict.getDictCode());//默认平台类型
+			mv.addObject("areaCodeList", areaCodeList);//区域列表
+			if(StringUtils.isBlank(areaCodeId)){
+				areaCodeId=cmpDict.getDictCode();//区域
+			}
+		}
+		
+		String platTypeId=null;//平台类型
 		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList();//平台类型列表
 		if(platTypeList!=null && !platTypeList.isEmpty()){
 			CmpDict cmpDict=platTypeList.get(0);//第一项

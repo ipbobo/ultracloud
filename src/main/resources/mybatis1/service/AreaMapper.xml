@@ -107,4 +107,9 @@
 	<select id="getEnvList" parameterType="String" resultType="com.cmp.sid.CmpDict">
 		select id dictCode, name dictValue from <include refid="tableName"></include>
 	</select>
+	
+	<!-- 区域列表查询 -->
+	<select id="getAreaCodeList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select id dictCode, name dictValue from t_area order by name asc
+	</select>
 </mapper>

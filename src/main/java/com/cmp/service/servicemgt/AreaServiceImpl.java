@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.cmp.sid.CmpDict;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -131,4 +132,9 @@ public class AreaServiceImpl implements AreaService {
 		return (List<PageData>) dao.findForList("AreaMapper.listAllInByAreaId", pd);
 	}
 
+	//区域列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpDict> getAreaCodeList() throws Exception {
+		return (List<CmpDict>) dao.findForList("AreaMapper.getAreaCodeList", null);
+	}
 }
