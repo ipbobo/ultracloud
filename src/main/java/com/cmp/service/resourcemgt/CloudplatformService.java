@@ -71,5 +71,5 @@ public interface CloudplatformService {
 	public void deleteAll(String[] ArrayDATA_IDS, boolean isSyncTable) throws Exception;
 
 	//平台类型列表查询
-	public List<CmpDict> getPlatTypeList() throws Exception;
+	public List<CmpDict> getPlatTypeList(String areaCodeId, String envCodeId) throws Exception;
 }

@@ -55,7 +55,7 @@ public class BizviewController extends BaseController {
 		
 		List<CmpDict> subBizviewTypeList=new ArrayList<CmpDict>();
 		if("env".equals(bizviewType)){//环境
-			subBizviewTypeList=environmentService.getEnvList();//环境列表
+			subBizviewTypeList=environmentService.getEnvList(null);//环境列表
 		}else if("dept".equals(bizviewType)){//部门
 			subBizviewTypeList=departmentService.getDeptList();//部门列表
 		}else if("proj".equals(bizviewType)){//项目
@@ -83,7 +83,7 @@ public class BizviewController extends BaseController {
 		
 		List<CmpDict> subBizviewTypeList=new ArrayList<CmpDict>();
 		if("env".equals(bizviewType)){//环境
-			subBizviewTypeList=environmentService.getEnvList();//环境列表
+			subBizviewTypeList=environmentService.getEnvList(null);//环境列表
 		}else if("dept".equals(bizviewType)){//部门
 			subBizviewTypeList=departmentService.getDeptList();//部门列表
 		}else if("proj".equals(bizviewType)){//项目

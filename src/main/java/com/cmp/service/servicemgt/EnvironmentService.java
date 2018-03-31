@@ -80,5 +80,5 @@ public interface EnvironmentService {
 	public List<PageData> listAllInById(PageData pd) throws Exception ;
 	
 	//环境列表查询
-	public List<CmpDict> getEnvList() throws Exception;
+	public List<CmpDict> getEnvList(String areaCodeId) throws Exception;
 }

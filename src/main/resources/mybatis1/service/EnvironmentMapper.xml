@@ -158,8 +158,15 @@
 		AND a.environment_id=#{id}
 	</select>
 	
-	<!-- 项目列表查询 -->
-	<select id="getEnvList" parameterType="String" resultType="com.cmp.sid.CmpDict">
-		select id dictCode, name dictValue from t_environment
+	<!-- 环境代码列表查询 -->
+	<select id="getEnvList" parameterType="pd" resultType="com.cmp.sid.CmpDict">
+		select a.id dictCode, a.name dictValue from t_environment a
+		<if test="areaCodeId!=null and areaCodeId!=''">
+			where exists (
+				select 1 from t_area_environment_map b 
+				where b.environment_id=a.id and b.area_id=#{areaCodeId}
+			)
+		</if>
+		order by a.name desc
 	</select>
 </mapper>
