@@ -120,7 +120,8 @@ public class EnvironmentServiceImpl implements EnvironmentService {
 
 	// 环境列表查询
 	@SuppressWarnings("unchecked")
-	public List<CmpDict> getEnvList() throws Exception {
-		return (List<CmpDict>) dao.findForList("EnvironmentMapper.getEnvList", null);
+	public List<CmpDict> getEnvList(String areaCodeId) throws Exception {
+		PageData pd=new PageData("areaCodeId", areaCodeId);
+		return (List<CmpDict>) dao.findForList("EnvironmentMapper.getEnvList", pd);
 	}
 }

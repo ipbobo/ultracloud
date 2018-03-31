@@ -4,8 +4,6 @@ INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 15:10:19', '2017-11-15 12:20:24
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 15:10:19', '2017-11-15 12:20:24', 'os_type', 'windows', 'Windows', 'OS类型', '0', '3');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 16:51:45', '2017-11-15 13:16:15', 'disk_type', '1', '高效云盘', '磁盘类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 16:52:25', '2017-11-15 13:16:18', 'disk_type', '2', 'SSD云盘', '磁盘类型', '0', '2');
-INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 21:47:39', '2017-11-14 21:47:39', 'area_code', '1', '华东', '区域', '1', '1');
-INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 21:47:53', '2017-11-14 21:47:53', 'area_code', '2', '华北', '区域', '0', '2');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 22:37:24', '2017-11-14 23:19:43', 'deploy_type', '1', '常规部署', '部署类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:27:09', '2017-11-14 23:27:09', 'res_type', '1', '云主机', '资源类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:27:26', '2017-11-14 23:27:26', 'res_type', '2', 'X86物理机', '资源类型', '0', '2');

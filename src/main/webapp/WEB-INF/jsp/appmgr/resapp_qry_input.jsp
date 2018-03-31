@@ -291,7 +291,8 @@ function addList(){
 	var jsonObj={};//JSON请求数据
 	if($("#tcsq").is(".active")){//套餐数据校验
 		if(checkPckgData()){
-			jsonObj.tcareaCode=$("#tcareaCode").val();//地域代码                       
+			jsonObj.tcareaCode=$("#tcareaCode").val();//地域代码
+			jsonObj.envCode=$("#tcenvCode").val();//环境代码                       
 			jsonObj.tcplatType=$("#tcplatType").val();//平台类型                       
 			jsonObj.tcdeployType=$("#tcdeployType").val();//部署类型                     
 			jsonObj.tcvirName=$("#tcvirName").val();//虚拟机名称
@@ -300,9 +301,9 @@ function addList(){
 		}
 	}else if(checkData("addListBtnId")){//数据校验
 		jsonObj.areaCode=$("#areaCode").val();//地域代码                       
+		jsonObj.envCode=$("#envCode").val();//环境代码                        
 		jsonObj.platType=$("#platType").val();//平台类型                       
 		jsonObj.deployType=$("#deployType").val();//部署类型                     
-		jsonObj.envCode=$("#envCode").val();//环境代码                        
 		jsonObj.resType=$("#resType").val();//资源类型                        
 		jsonObj.virName=$("#virName").val();//虚拟机名称                      
 		jsonObj.cpu=$("#cpu").val();//CPU                                 
@@ -354,9 +355,9 @@ function savePckgPre(){
 function savePckg(){
 	var jsonObj={};//JSON请求数据
 	//jsonObj.areaCode=$("#areaCode").val();//地域代码
+	//jsonObj.envCode=$("#envCode").val();//环境代码                        
 	//jsonObj.platType=$("#platType").val();//平台类型
 	//jsonObj.deployType=$("#deployType").val();//部署类型
-	jsonObj.envCode=$("#envCode").val();//环境代码                        
 	jsonObj.resType=$("#resType").val();//资源类型                        
 	jsonObj.virName=$("#virName").val();//虚拟机名称                      
 	jsonObj.cpu=$("#cpu").val();//CPU                                 
@@ -604,6 +605,60 @@ function uploadFileFunc() {
 	});
 }
 
+//环境代码列表查询
+function getEnvCodeList(areaCodeId){
+	if(areaCodeId==''){
+		areaCodeId=$("#areaCode").val();
+	}
+	
+	$.ajax({
+	    type: 'post',  
+	    url: 'getEnvCodeList.do?areaCodeId='+areaCodeId,
+	    dataType: 'json',
+	    success: function(data){
+	    	$("#envCodeId").empty();//清空环境代码列表
+		    if(data.retCode=="0"){//删除成功
+		    	$.each(data.dataList, function (i, item) {
+				    $("#envCodeId").append("<li onclick=\"setFieldValue(this, 'envCode', '"+item.dictCode+"');getPlatTypeList('', '"+item.dictCode+"');\" class='"+(item.dictDefault=='1'?"active":"")+"'>"+item.dictValue+"</li>");
+			    });
+			    
+			    $("#envCode").val(data.defaultPlatType);//设置默认值
+			    getPlatTypeList('', data.defaultPlatType);
+		    }
+	    },
+	    error: function(data) {}
+	});
+}
+
+//平台类型列表查询
+function getPlatTypeList(areaCodeId, envCodeId){
+	if(areaCodeId==''){
+		areaCodeId=$("#areaCode").val();
+	}
+	
+	if(envCodeId==''){
+		envCodeId=$("#envCode").val();
+	}
+	
+	$.ajax({
+	    type: 'post',  
+	    url: 'getPlatTypeList.do?areaCodeId='+areaCodeId+'&envCodeId='+envCodeId,
+	    dataType: 'json',
+	    success: function(data){
+	    	$("#platTypeId").empty();//清空平台类型列表
+		    if(data.retCode=="0"){//删除成功
+		    	$.each(data.dataList, function (i, item) {
+				    $("#platTypeId").append("<li onclick=\"setFieldValue(this, 'platType', '"+item.dictCode+"');getImgList('"+item.dictCode+"', '', '');\" class='"+(item.dictDefault=='1'?"active":"")+"'>"+item.dictValue+"</li>");
+			    });
+			    
+			    $("#platType").val(data.defaultPlatType);//设置默认值
+			    getImgList(data.defaultPlatType, '', '');
+		    }
+	    },
+	    error: function(data) {}
+	});
+}
+
 //模板列表查询
 function getImgList(platTypeId, osType, osBitNum){
 	if(platTypeId==''){
@@ -626,7 +681,7 @@ function getImgList(platTypeId, osType, osBitNum){
 	    	$("#imgCode").empty();//清空模板列表
 		    if(data.retCode=="0"){//删除成功
 		    	$("#imgCode").append("<option value=''>请选择</option>");
-		    	$.each(data.imgList, function (i, item) {
+		    	$.each(data.dataList, function (i, item) {
 				    $("#imgCode").append("<option value='"+item.dictCode+"'>"+item.dictValue+"</option>");
 			    });
 		    }
@@ -659,9 +714,9 @@ $(window).scroll(function() {
 <div id="zdysq" class="tab-pane fade in active">
 	<form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="areaCode" id="areaCode" value="${defaultAreaCode}"/>
+	<input type="hidden" name="envCode" id="envCode" value="${defaultEnvCode}"/>
 	<input type="hidden" name="platType" id="platType" value="${defaultPlatType}"/>
 	<input type="hidden" name="deployType" id="deployType" value="1"/>
-	<input type="hidden" name="envCode" id="envCode" value="${defaultEnvCode}"/>
 	<input type="hidden" name="resType" id="resType" value="1"/>
 	<input type="hidden" name="cpu" id="cpu" value="1"/>
 	<input type="hidden" name="memory" id="memory" value="1"/>
@@ -677,11 +732,11 @@ $(window).scroll(function() {
 		<tr class="tablecls">
 			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;地域&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
-			<td align="left" style="padding:10px;" colspan="6">
+			<td align="left" style="padding:10px;height:56px;" colspan="6">
 				<ul id="areaCodeId" class="ullitab list-inline">
 					<c:if test="${not empty areaCodeList}">
 					<c:forEach items="${areaCodeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'areaCode', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li onclick="setFieldValue(this, 'areaCode', '${var.dictCode}');getEnvCodeList('${var.dictCode}');getPlatTypeList('${var.dictCode}', '');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>
@@ -689,9 +744,35 @@ $(window).scroll(function() {
 		</tr>
 		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td align="right" style="width: 120px;padding:10px;">环境：</td>
+			<td align="left" style="padding:10px;height:56px;" colspan="6">
+				<ul id="envCodeId" class="ullitab list-inline">
+					<c:if test="${not empty envCodeList}">
+					<c:forEach items="${envCodeList}" var="var" varStatus="st">
+					<li onclick="setFieldValue(this, 'envCode', '${var.dictCode}');getPlatTypeList('', '${var.dictCode}');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					</c:forEach>
+					</c:if>
+				</ul>
+			</td>
+		</tr>
+		<tr class="tablecls">
+			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">项目：</td>
+			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
+				<select class="chosen-select form-control" name="projectCode" id="projectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 100%;">
+				<option value="">请选择</option>
+				<c:forEach items="${projectList}" var="var">
+					<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
+				</c:forEach>
+			  	</select>
+			</td>
+			<td align="left" style="padding-right:10px;padding-bottom:10px;" colspan="5">&nbsp;</td>
+		</tr>
+		<tr><td colspan="8" height="10px"></td></tr>
+		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
-			<td align="left" style="padding:10px;" colspan="6">
+			<td align="left" style="padding:10px;height:56px;" colspan="6">
 				<ul id="platTypeId" class="ullitab list-inline">
 					<c:if test="${not empty platTypeList}">
 					<c:forEach items="${platTypeList}" var="var" varStatus="st">
@@ -715,32 +796,6 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr> --%>
-		<tr><td colspan="8" height="10px"></td></tr>
-		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td align="right" style="width: 120px;padding:10px;">环境：</td>
-			<td align="left" style="padding:10px;" colspan="6">
-				<ul id="envCodeId" class="ullitab list-inline">
-					<c:if test="${not empty envCodeList}">
-					<c:forEach items="${envCodeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'envCode', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
-					</c:forEach>
-					</c:if>
-				</ul>
-			</td>
-		</tr>
-		<tr class="tablecls">
-			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">项目：</td>
-			<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
-				<select class="chosen-select form-control" name="projectCode" id="projectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 100%;">
-				<option value="">请选择</option>
-				<c:forEach items="${projectList}" var="var">
-					<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
-				</c:forEach>
-			  	</select>
-			</td>
-			<td align="left" style="padding-right:10px;padding-bottom:10px;" colspan="5">&nbsp;</td>
-		</tr>
 		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="5"><span class="glyphicon glyphicon-cog"></span>&nbsp;基本配置</td>

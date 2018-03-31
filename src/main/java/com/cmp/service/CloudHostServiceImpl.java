@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.cmp.mgr.bean.CloneVmRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -153,6 +154,40 @@ public class CloudHostServiceImpl implements CloudHostService {
 
 			dao.delete("CloudHostMapper.deleteById", id);
 		}
+	}
+
+	public void clone(List<Integer> ls) throws Exception {
+		// TODO
+		for (Integer id : ls) {
+			PageData pd = findById(id);
+
+			String platformId = pd.getString("platform");
+			if (StringUtils.isBlank(platformId)) {
+				continue;
+			}
+
+			String vmName = pd.getString("name");
+			if (StringUtils.isBlank(vmName)) {
+				continue;
+			}
+
+			CloneVmRequest request = new CloneVmRequest();
+			request.setVmName("TestVM4");
+			request.setTplName(vmName);
+			request.setDcName("DC1");
+			request.setCpuSize(1);
+			request.setRamSize(1024);
+			request.setIp("192.168.0.152");
+
+			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
+			cloudArchManager.cloneVirtualMachine(null);
+
+			dao.delete("CloudHostMapper.deleteById", id);
+		}
+	}
+
+	public void snapshot(List<Integer> ls) throws Exception {
+		// TODO
 	}
 
 	private CloudArchManager getCloudArchManager(String platformId) throws Exception {

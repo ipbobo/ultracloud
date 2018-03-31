@@ -148,7 +148,19 @@
 	</delete>
 	
 	<!-- 平台类型列表查询 -->
-	<select id="getPlatTypeList" parameterType="String" resultType="com.cmp.sid.CmpDict">
-		select id dictCode, name dictValue from t_cloudplatform where type in ('vmware', 'openstack', 'kvm') order by type desc
+	<select id="getPlatTypeList" parameterType="pd" resultType="com.cmp.sid.CmpDict">
+		select a.id dictCode, a.name dictValue from t_cloudplatform a
+		where a.type in ('vmware', 'openstack', 'kvm') 
+		and exists (
+			select 1 from t_area_environment_map b 
+			where b.environment_id=a.environment_id 
+			<if test="areaCodeId!=null and areaCodeId!=''">
+				and b.area_id=#{areaCodeId}
+			</if>
+			<if test="envCodeId!=null and envCodeId!=''">
+				and b.environment_id=#{envCodeId}
+			</if>
+		)
+		order by a.type desc
 	</select>
 </mapper>
