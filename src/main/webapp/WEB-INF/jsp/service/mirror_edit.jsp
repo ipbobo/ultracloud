@@ -49,9 +49,9 @@
 								<td style="width:130px;text-align: right;padding-top: 13px;">操作系统类型:</td>
 								<td id="js">
 									<select class="chosen-select form-control" name="ostype" id="ostype"  style="vertical-align:top;"   >
-									<option value="Readhat" <c:if test="${pd.ostype == 'Readhat' }">selected</c:if>>Readhat</option>
-									<option value="Windows Server" <c:if test="${pd.disknum == 'Windows Server' }">selected</c:if>>Windows Server</option>
-									<option value="CentOS" <c:if test="${pd.ostype == 'CentOS' }">selected</c:if>>CentOS</option>
+									<option value="redhat" <c:if test="${pd.ostype == 'redhat' }">selected</c:if>>redhat</option>
+									<option value="windows" <c:if test="${pd.ostype == 'windows' }">selected</c:if>>windows</option>
+									<option value="centos" <c:if test="${pd.ostype == 'centos' }">selected</c:if>>centos</option>
 									</select>
 								</td>
 							</tr>
