@@ -52,7 +52,11 @@
 												${var.cpu_quota}核/${var.memory_quota}G/${var.disk_quota}G
 											</c:if>
 											</td>
-											<td class='center'></td>
+											<td class='center'>
+												<c:if test="${var.cpu_used != null}">
+													${var.cpu_used}核/${var.memory_used}G/${var.disk_used}G
+												</c:if>
+											</td>
 											<td class="center">
 													<a class="btn btn-xs btn-success" title="设定配额" onclick="editQuota('${var.DEPARTMENT_ID}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="设定配额"></i>
