@@ -989,3 +989,73 @@ body.queryUserApplyWorkOrderPre .table>thead>tr>th.sorting_desc:after {
 .sidebar.menu-min .nav-list > li > .submenu {
     margin-top: 0;
 }
+
+.ace-nav > li > a > .ace-icon {
+    display: inline-block;
+    font-size: 20px;
+    color: #FFF;
+    text-align: center;
+    width: 25px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+.ace-nav > li > a > .badge {
+    position: relative;
+    top: -16px;
+    left: -12px;
+    padding-right: 10px;
+    padding-left: 10px;
+    background-color: #f86b4f;
+    font-size: 12px;
+}
+.ace-nav > li > a{
+    padding: 0px 0px 0 10px;
+}
+.ace-nav > li > a:hover{
+    background-color: #579ec8 !important;
+}
+
+.ace-nav > li.grey > a {
+    background-color: #0d508b;
+}
+.ace-nav > li.grey > a:focus {
+    background-color: #0d508b;
+}
+
+.ace-nav  .icon-bell {
+    width: 25px;
+    height: 25px;
+    background: url("../images/icon-notice.png");
+}
+.fa-task {
+    width: 25px;
+    height: 25px;
+    background: url("../images/icon-task.png")
+}
+.ace-nav > li {
+    border: 0;
+}
+.ace-nav > li.task > a {
+    background-color: #2773b7;
+}
+.ace-nav > li.task > a:focus {
+    background-color: #2773b7;
+}
+.ace-nav > li.open.task > a{
+    background-color: #2773b7;
+}
+.ace-nav > li.light-blue > a {
+    background-color: #0d508b;
+}
+.ace-nav > li > a > .fa-caret-down {
+    color: #90afca;
+    margin-left: 0;
+}
+.user-info {
+    top:13px;
+    margin-left: 10px;
+    font-size: 14px;
+}
+.user-info small {
+    display: none;
+}

@@ -155,7 +155,7 @@ public class LoginController extends BaseController {
     			return StringUtil.getRetStr("-1", "仪表盘查询时错误："+errMsg);
     		}
     		
-			CmpAxis resRate=null;
+			CmpAxis resRate=new CmpAxis("hour");
 			String hostIdStr=dbReq.getHostIdStr();
 			if(!StringUtils.isBlank(hostIdStr)){//主机列表不为空
 				String[] hostIds=hostIdStr.split(",");//拼接字符串转换成字符串数组
