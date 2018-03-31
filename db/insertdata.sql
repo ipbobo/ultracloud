@@ -1,6 +1,7 @@
 truncate table cmp_dict;
-INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 15:09:55', '2017-11-15 12:20:27', 'os_type', 'redhat65', 'ReadHat 6.5', 'OS类型', '1', '1');
-INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 15:10:19', '2017-11-15 12:20:24', 'os_type', 'centos65', 'CentOS 6.5', 'OS类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 15:09:55', '2017-11-15 12:20:27', 'os_type', 'redhat', 'ReadHat', 'OS类型', '1', '1');
+INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 15:10:19', '2017-11-15 12:20:24', 'os_type', 'centos', 'CentOS', 'OS类型', '0', '2');
+INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 15:10:19', '2017-11-15 12:20:24', 'os_type', 'windows', 'Windows', 'OS类型', '0', '3');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 16:51:45', '2017-11-15 13:16:15', 'disk_type', '1', '高效云盘', '磁盘类型', '1', '1');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-13 16:52:25', '2017-11-15 13:16:18', 'disk_type', '2', 'SSD云盘', '磁盘类型', '0', '2');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 21:47:39', '2017-11-14 21:47:39', 'area_code', '1', '华东', '区域', '1', '1');
