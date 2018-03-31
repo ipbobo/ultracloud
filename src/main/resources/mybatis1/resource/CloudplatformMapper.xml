@@ -19,7 +19,8 @@
 		ip,
 		username,
 		password,
-		version
+		version,
+		environment_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -40,7 +41,8 @@
 		#{ip},
 		#{username},
 		#{password},
-		#{version}
+		#{version},
+		#{environment_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -77,7 +79,8 @@
 			ip = #{ip},
 		    username = #{username},
 		    password = #{password},
-		    version = #{version}
+		    version = #{version},
+		    environment_id = #{environment_id}
 		 where 
 		    id = #{id}
 	</update>

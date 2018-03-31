@@ -46,7 +46,16 @@
 								<td style="vertical-align: top;"></td>
 								<td style="vertical-align:top;padding-left:5px;width:150px;">
 								<div class="nav-search" style="float: right;padding-top: 0px;margin-top: 0px;">
-									<td style="width:100px;text-align: right;vertical-align:center;">项目：</td>
+									
+									<td style="width:70px;text-align: right;vertical-align:center;">部门：</td>
+									<td style="vertical-align:center;padding-left:2px;width:150px;">
+										<div style="padding-top: 3px;margin-top: 0px;">
+											<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
+											<div class="selectTree" id="selectTree"></div>
+										</div>
+									</td>
+									
+									<td style="width:60px;text-align: right;vertical-align:center;">项目：</td>
 									<td style="vertical-align:top;padding-left:2px;width:88px;">
 										<div style="padding-top: 0px;margin-top: 0px;">
 										 	<select class="chosen-select form-control" name="project_id" id="project_id" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;">
@@ -57,14 +66,6 @@
 												</c:forEach>
 										  	</select>
 									  	</div>
-									</td>
-									
-									<td style="width:70px;text-align: right;vertical-align:center;">部门：</td>
-									<td style="vertical-align:center;padding-left:2px;width:150px;">
-										<div style="padding-top: 3px;margin-top: 0px;">
-											<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
-											<div class="selectTree" id="selectTree"></div>
-										</div>
 									</td>
 									
 									<td style="width:80px;text-align: right;vertical-align:center;">申请人：</td>
