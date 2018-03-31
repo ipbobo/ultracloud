@@ -492,7 +492,8 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		String dcName = req.getDcName();
 
 		try {
-			String ip = Optional.ofNullable(req.getIp()).orElseThrow(error("No IP address specified"));
+			String ip = Optional.ofNullable(req.getIp()).orElseThrow(
+					error("No IP address specified"));
 
 			ClusterComputeResource cluster = searchManagedEntities(
 					ClusterComputeResource.class).stream().findFirst()
@@ -540,12 +541,12 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			customSpec.setGlobalIPSettings(globalIPSettings);
 
 			CustomizationFixedIp fixedIp = new CustomizationFixedIp();
-			fixedIp.setIpAddress(req.getIp());
+			fixedIp.setIpAddress(ip);
 
 			CustomizationIPSettings ipSettings = new CustomizationIPSettings();
 			ipSettings.setIp(fixedIp);
 			ipSettings.setSubnetMask("255.255.255.0");
-			ipSettings.setGateway(new String[]{req.getIp().replaceAll("[.]\\d+$", ".1")});
+			ipSettings.setGateway(new String[]{ip.replaceAll("[.]\\d+$", ".1")});
 
 			CustomizationAdapterMapping adapterMapping = new CustomizationAdapterMapping();
 			adapterMapping.setAdapter(ipSettings);
