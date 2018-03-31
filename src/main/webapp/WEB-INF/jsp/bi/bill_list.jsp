@@ -100,12 +100,10 @@
 												<i class="ace-icon fa fa-search nav-search-icon"></i>
 											</span>
 									</td>
-									<td style="vertical-align:top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
+									<td style="vertical-align:top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="searchs();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								
 									<td style="vertical-align: top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td>
 								</div>
-								
-								
 								
 							</tr>
 						</table>
@@ -204,7 +202,7 @@
 $(top.hangge());
 
 //检索
-function tosearch(){
+function searchs(){
 	top.jzts();
 	$("#Form").submit();
 }
