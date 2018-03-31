@@ -241,6 +241,10 @@ public class ActivitiService {
 		                .listPage((currPage-1)*qryNum, currPage*qryNum);
 		return tasklist;
   	}
+  	
+  	public List<Task>  findByProcessInstId(String processInstId) {
+  		return taskService.createTaskQuery().processInstanceId(processInstId).list();
+  	}
 
   	
   	//拾取任务
