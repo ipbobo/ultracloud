@@ -61,7 +61,7 @@ public interface CloudArchManager {
 
 	public void destroyVirtualMachine(String name);
 
-	public void cloneVirtualMachine(CloneVmRequest request);
+	public String cloneVirtualMachine(CloneVmRequest request);
 
 	public void createVmSnapshot(String name, String vmName, String desc, boolean memoryFlag);
 

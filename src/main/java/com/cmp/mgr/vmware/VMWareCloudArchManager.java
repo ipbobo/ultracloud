@@ -492,7 +492,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void cloneVirtualMachine(CloneVmRequest req) {
+	public String cloneVirtualMachine(CloneVmRequest req) {
 		String tplName = req.getTplName();
 		String dcName = req.getDcName();
 
@@ -513,7 +513,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			Datastore datastore = getDatastoreWithMaxFreeSpaceByVM(vm)
 					.orElseThrow(error("No datastore available"));
 
-			HostSystem hostSystemT = getHostWithLeastVMByClusterAndDataStore(cluster, datastore)
+			HostSystem hostSystem = getHostWithLeastVMByClusterAndDataStore(cluster, datastore)
 					.orElseThrow(error("No host machine available"));
 
 			VirtualMachineConfigSpec configSpec = new VirtualMachineConfigSpec();
@@ -523,7 +523,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			VirtualMachineRelocateSpec relocateSpec = new VirtualMachineRelocateSpec();
 			relocateSpec.setPool(cluster.getResourcePool().getMOR());
 			relocateSpec.setDatastore(datastore.getMOR());
-			relocateSpec.setHost(hostSystemT.getMOR());
+			relocateSpec.setHost(hostSystem.getMOR());
 
 			CustomizationSpec customSpec = new CustomizationSpec();
 			CustomizationLinuxOptions linuxOptions = new CustomizationLinuxOptions();
@@ -567,6 +567,8 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			cloneSpec.setPowerOn(true);
 
 			vm.cloneVM_Task(dc.getVmFolder(), req.getVmName(), cloneSpec).waitForMe();
+
+			return hostSystem.getMOR().getVal();
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}

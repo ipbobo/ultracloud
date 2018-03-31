@@ -38,7 +38,7 @@ public class KvmCloudArchManagerTest implements CloudArchTest {
 			request.setVmName("centos62");
 			request.setCupCount(1);
 			request.setMemSizeMB(1024);
-			request.setImagePath("/root/CentOS-6-x86_64-GenericCloud-1710.qcow2");
+			request.setImagePath("/opt/template/CentOS7.qcow2");
 
 			cloudArchManager.createVirtualMachine(request);
 		});
