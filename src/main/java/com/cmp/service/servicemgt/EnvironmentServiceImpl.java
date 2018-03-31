@@ -23,6 +23,9 @@ public class EnvironmentServiceImpl implements EnvironmentService {
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
 
+	@Resource(name = "areaEnvironmentService")
+	private AreaEnvironmentService areaEnvironmentService;
+
 	/**
 	 * 新增
 	 * 
@@ -41,6 +44,9 @@ public class EnvironmentServiceImpl implements EnvironmentService {
 	 */
 	public void delete(PageData pd) throws Exception {
 		dao.delete("EnvironmentMapper.delete", pd);
+		PageData delPD = new PageData();
+		delPD.put("environment_id", pd.getString("id"));
+		areaEnvironmentService.delete(delPD);
 	}
 
 	/**
@@ -93,9 +99,26 @@ public class EnvironmentServiceImpl implements EnvironmentService {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("EnvironmentMapper.deleteAll", ArrayDATA_IDS);
+		for (String id : ArrayDATA_IDS) {
+			PageData delPD = new PageData();
+			delPD.put("environment_id", id);
+			this.areaEnvironmentService.delete(delPD);
+		}
 	}
-	
-	//环境列表查询
+
+	/**
+	 * 已选环境
+	 * 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllInById(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("EnvironmentMapper.listAllInById", pd);
+	}
+
+	// 环境列表查询
 	@SuppressWarnings("unchecked")
 	public List<CmpDict> getEnvList() throws Exception {
 		return (List<CmpDict>) dao.findForList("EnvironmentMapper.getEnvList", null);

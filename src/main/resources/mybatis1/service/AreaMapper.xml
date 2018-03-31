@@ -60,10 +60,10 @@
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
-		SELECT a.id,a.name,c.name AS environment_name 
-		FROM t_area a, t_area_environment_map b,t_environment c 
-		WHERE a.id=b.area_id 
-		AND b.environment_id=c.id
+		SELECT c.id,c.name,d.name AS environment_name FROM  (SELECT a.id,a.name,b.environment_id
+		FROM t_area a LEFT  JOIN t_area_environment_map b
+		ON a.id=b.area_id) c LEFT JOIN t_environment d
+		ON c.environment_id=d.id
 	</select>
 	
 	<!-- 列表(全部) -->

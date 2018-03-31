@@ -138,11 +138,15 @@ public class AreaController extends BaseController {
 					area = new Area();
 					area.setId(areaPD.getString("id"));
 					area.setName(areaPD.getString("name"));
-					area.setNum(1);
-					area.setEnvironment_name(areaPD.getString("environment_name"));
+					if(null != areaPD.getString("environment_name")) {
+						area.setNum(1);
+						area.setEnvironment_name(areaPD.getString("environment_name"));
+					}
 				} else {
-					area.setNum(area.getNum() + 1);
-					area.setEnvironment_name(area.getEnvironment_name() + ", " + areaPD.getString("environment_name"));
+					if(null != areaPD.getString("environment_name")) {
+						area.setNum(area.getNum() + 1);
+						area.setEnvironment_name(area.getEnvironment_name() + ", " + areaPD.getString("environment_name"));
+					}
 				}
 
 				map.put(areaPD.getString("name"), area);
