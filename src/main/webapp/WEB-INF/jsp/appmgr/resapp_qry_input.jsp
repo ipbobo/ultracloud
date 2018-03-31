@@ -687,7 +687,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -701,7 +701,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<%-- <tr><td colspan="8" height="10px"></td>
+		<%-- <tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -715,7 +715,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr> --%>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">环境：</td>
@@ -741,7 +741,7 @@ $(window).scroll(function() {
 			</td>
 			<td align="left" style="padding-right:10px;padding-bottom:10px;" colspan="5">&nbsp;</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="5"><span class="glyphicon glyphicon-cog"></span>&nbsp;基本配置</td>
 			<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
@@ -798,7 +798,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
@@ -847,7 +847,7 @@ $(window).scroll(function() {
 				Linux系统必填
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
@@ -876,7 +876,7 @@ $(window).scroll(function() {
 				</table>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -901,7 +901,7 @@ $(window).scroll(function() {
 				</table>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -915,7 +915,7 @@ $(window).scroll(function() {
 				</div>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -924,14 +924,14 @@ $(window).scroll(function() {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;上传附件</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="padding:10px;"><input style="background-color:#cccccc;" type="file" name="uploadFile" id="uploadFile" value="选择文件" accept=".txt,.doc,.docx,.xls,.xlsx,image/*"/></td>
 			<td colspan="5"><input type="button" value="上传" onclick="uploadFileFunc()">&nbsp;格式要求：txt,word,excel,image</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;当前配置</td>
 			<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>

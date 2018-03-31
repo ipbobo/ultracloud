@@ -144,7 +144,7 @@ function getCurrConf(jsonObj){
 			</ul>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
 		<td align="right" style="width: 120px;padding:10px;"></td>
@@ -158,7 +158,7 @@ function getCurrConf(jsonObj){
 			</ul>
 		</td>
 	</tr>
-	<%-- <tr><td colspan="8" height="10px"></td>
+	<%-- <tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
 		<td align="right" style="width: 120px;padding:10px;"></td>
@@ -172,7 +172,7 @@ function getCurrConf(jsonObj){
 			</ul>
 		</td>
 	</tr> --%>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;套餐列表</td>
 		<td align="left" style="padding:10px;" colspan="7">
@@ -214,7 +214,7 @@ function getCurrConf(jsonObj){
 			</table>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td align="right" style="width: 120px;padding:10px;">环境：</td>
@@ -240,7 +240,7 @@ function getCurrConf(jsonObj){
 		</td>
 		<td align="left" style="padding:10px;" colspan="5">&nbsp;</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="5"><span class="glyphicon glyphicon-cog"></span>&nbsp;基本配置</td>
 		<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
@@ -297,7 +297,7 @@ function getCurrConf(jsonObj){
 			</ul>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
@@ -346,7 +346,7 @@ function getCurrConf(jsonObj){
 			Linux系统必填
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
@@ -372,7 +372,7 @@ function getCurrConf(jsonObj){
 			</table>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
 		<td align="right" style="width: 120px;padding:10px;"></td>
@@ -394,7 +394,7 @@ function getCurrConf(jsonObj){
 			</table>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td align="right" style="width: 120px;padding:10px;"></td>
@@ -408,7 +408,7 @@ function getCurrConf(jsonObj){
 			</div>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
 		<td align="right" style="width: 120px;padding:10px;"></td>
@@ -417,7 +417,7 @@ function getCurrConf(jsonObj){
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="" disabled/>永久
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;当前配置</td>
 		<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>
