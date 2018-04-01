@@ -111,23 +111,25 @@ function checkExpireDate(isChk){
 //新增磁盘行
 function addDiskRow(){
     var len = $("#diskTableId tr").length;
-    if(len>=15){
-    	$("#diskTableId").tips({side:3, msg:'只能选配15块磁盘', bg:'#AE81FF', time:2});
+    var diskNum=$("#diskNum").val();
+    if(len>=diskNum*1){
+    	$("#diskTableId").tips({side:3, msg:'只能选配'+diskNum+'块磁盘', bg:'#AE81FF', time:2});
     	return;
     }
     
     var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" onchange=\"diskTypeFunc()\">"+$("#diskType").html()+"</select></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\" onchange=\"diskTypeFunc()\"/></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
-	    +"<td align=\"right\" style=\"padding-top:10px;display:none\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+	    +"<td align=\"right\" style=\"padding-top:10px;\"><span style=\"display:none\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密</span>&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
     $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
 //新增软件安装行
 function addSoftRow(){
     var len = $("#softTableId tr").length;
-    if(len>=15){
-    	$("#softTableId").tips({side:3, msg:'只能选择15个安装软件', bg:'#AE81FF', time:2});
+    var softNum=$("#softNum").val();
+    if(len>=softNum*1){
+    	$("#softTableId").tips({side:3, msg:'只能选择'+softNum+'个安装软件', bg:'#AE81FF', time:2});
     	return;
     }
     
@@ -395,9 +397,14 @@ function diskSizeFunc(obj, diskTypeId, iopsId){
 		diskSize=20;
 	}
 	
-	if(diskSize>32768){
-		$(obj).val("32768");
-		diskSize=32768;
+	var diskMaxNum=$("#diskMaxNum").val();
+	if(diskMaxNum==''){
+		diskMaxNum='32768';
+	}
+	
+	if(diskSize>diskMaxNum*1){
+		$(obj).val(diskMaxNum);
+		diskSize=diskMaxNum*1;
 	}
 	
 	if($("#"+diskTypeId).val()=="1"){//高效云盘1120+6
@@ -619,11 +626,12 @@ function getEnvCodeList(areaCodeId){
 	    	$("#envCodeId").empty();//清空环境代码列表
 		    if(data.retCode=="0"){//删除成功
 		    	$.each(data.dataList, function (i, item) {
-				    $("#envCodeId").append("<li onclick=\"setFieldValue(this, 'envCode', '"+item.dictCode+"');getPlatTypeList('', '"+item.dictCode+"');\" class='"+(item.dictDefault=='1'?"active":"")+"'>"+item.dictValue+"</li>");
+				    $("#envCodeId").append("<li onclick=\"setFieldValue(this, 'envCode', '"+item.dictCode+"');getPlatTypeList('', '"+item.dictCode+"');checkNum('"+item.diskNum+"', '"+item.diskMaxNum+"', '"+item.softNum+"');\" class='"+(item.dictDefault=='1'?"active":"")+"'>"+item.dictValue+"</li>");
 			    });
 			    
-			    $("#envCode").val(data.defaultPlatType);//设置默认值
-			    getPlatTypeList('', data.defaultPlatType);
+			    $("#envCode").val(data.defaultEnvCode);//设置默认值
+			    getPlatTypeList('', data.defaultEnvCode);
+			    checkNum(data.defaultDiskNum, data.defaultDiskMaxNum, data.defaultSoftNum);//数量校验
 		    }
 	    },
 	    error: function(data) {}
@@ -689,7 +697,18 @@ function getImgList(platTypeId, osType, osBitNum){
 	    error: function(data) {}
 	});
 }
-	
+
+//数量校验
+function checkNum(diskNum, diskMaxNum, softNum){
+	$("#diskNum").val(diskNum);
+	$("#diskMaxNum").val(diskMaxNum);
+	$("#softNum").val(softNum);
+	$("#diskNumId").html(diskNum);
+	$("#softNumId").html(softNum);
+	$.each($("#diskTableId tr"), function (i, item) {if(i!=0){delRow($(this).attr("id"));}});
+	$.each($("#softTableId tr"), function (i, item) {if(i!=0){delRow($(this).attr("id"));}});
+}
+
 //必须加<!DOCTYPE html>
 //$(document).height();//整个网页的高度
 //$(window).height();//浏览器可视窗口的高度
@@ -715,6 +734,9 @@ $(window).scroll(function() {
 	<form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="areaCode" id="areaCode" value="${defaultAreaCode}"/>
 	<input type="hidden" name="envCode" id="envCode" value="${defaultEnvCode}"/>
+	<input type="hidden" name="diskNum" id="diskNum" value="${defaultDiskNum}"/>
+	<input type="hidden" name="diskMaxNum" id="diskMaxNum" value="${defaultDiskMaxNum}"/>
+	<input type="hidden" name="softNum" id="softNum" value="${defaultSoftNum}"/>
 	<input type="hidden" name="platType" id="platType" value="${defaultPlatType}"/>
 	<input type="hidden" name="deployType" id="deployType" value="1"/>
 	<input type="hidden" name="resType" id="resType" value="1"/>
@@ -750,7 +772,7 @@ $(window).scroll(function() {
 				<ul id="envCodeId" class="ullitab list-inline">
 					<c:if test="${not empty envCodeList}">
 					<c:forEach items="${envCodeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'envCode', '${var.dictCode}');getPlatTypeList('', '${var.dictCode}');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li onclick="setFieldValue(this, 'envCode', '${var.dictCode}');getPlatTypeList('', '${var.dictCode}');checkNum('${var.diskNum}', '${var.diskMaxNum}', '${var.softNum}');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>
@@ -921,11 +943,11 @@ $(window).scroll(function() {
 							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')" onchange="diskTypeFunc()"/>
 						</td>
 						<td align="left" style="width: 20px;">GB</td>
-						<td align="right" style="padding-right:13px;display:none">
-						  	<span id="iopsId">1120</span>&nbsp;IOPS&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密&nbsp;
+						<td align="right" style="padding-right:13px;">
+						  	<span style="display:none"><span id="iopsId">1120</span>&nbsp;IOPS&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密</span>&nbsp;
 						</td>
 						<td align="left" valign="bottom" style="width: 200px;padding-bottom:8px;" rowspan="15">
-							&nbsp;<a href="javascript:void()" onclick="addDiskRow()"><span class="glyphicon glyphicon-plus"></span></a>增加磁盘，您可选配15块
+							&nbsp;<a href="javascript:void()" onclick="addDiskRow()"><span class="glyphicon glyphicon-plus"></span></a>增加磁盘，您可选配<span id="diskNumId">${defaultDiskNum}</span>块
 						</td>
 					</tr>
 				</table>
@@ -950,7 +972,7 @@ $(window).scroll(function() {
 							<input type="hidden" name="softParam" id="softParam" value=""/><a href="javascript:void()" onclick="setSoftParam(0)">设置参数</a>&nbsp;
 						</td>
 						<td align="left" valign="bottom" style="width: 200px;padding-bottom:9px;" rowspan="15">
-							&nbsp;<a href="javascript:void()" onclick="addSoftRow()"><span class="glyphicon glyphicon-plus"></span></a>增加安装软件，您可选择15个
+							&nbsp;<a href="javascript:void()" onclick="addSoftRow()"><span class="glyphicon glyphicon-plus"></span></a>增加安装软件，您可选择<span id="softNumId">${defaultSoftNum}</span>个
 						</td>
 					</tr>
 				</table>

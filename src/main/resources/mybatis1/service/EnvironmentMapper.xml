@@ -160,7 +160,7 @@
 	
 	<!-- 环境代码列表查询 -->
 	<select id="getEnvList" parameterType="pd" resultType="com.cmp.sid.CmpDict">
-		select a.id dictCode, a.name dictValue from t_environment a
+		select a.id dictCode, a.name dictValue, a.disknum diskNum, a.diskmaximum diskMaxNum, a.softnum softNum from t_environment a
 		<if test="areaCodeId!=null and areaCodeId!=''">
 			where exists (
 				select 1 from t_area_environment_map b 

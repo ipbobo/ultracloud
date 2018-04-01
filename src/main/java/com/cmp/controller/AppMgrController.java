@@ -91,12 +91,14 @@ public class AppMgrController extends BaseController {
 		
 		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
 		String envCodeId=null;//环境代码
-		String applyUserId=StringUtil.getUserName();//申请者
 		List<CmpDict> envList=environmentService.getEnvList(areaCodeId);
 		if(envList!=null && !envList.isEmpty()){
 			CmpDict cmpDict=envList.get(0);//第一项
 			cmpDict.setDictDefault("1");//默认选择第一项
 			mv.addObject("defaultEnvCode", cmpDict.getDictCode());//默认环境
+			mv.addObject("defaultDiskNum", cmpDict.getDiskNum());//挂载云磁盘数量
+			mv.addObject("defaultDiskMaxNum", cmpDict.getDiskMaxNum());//每块云磁盘最大值
+			mv.addObject("defaultSoftNum", cmpDict.getSoftNum());//安装软件数量
 			mv.addObject("envCodeList", envList);//环境列表
 			envCodeId=cmpDict.getDictCode();//平台类型
 		}
@@ -111,6 +113,7 @@ public class AppMgrController extends BaseController {
 			platTypeId=cmpDict.getDictCode();//平台类型
 		}
 		
+		String applyUserId=StringUtil.getUserName();//申请者
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
 		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
@@ -135,14 +138,20 @@ public class AppMgrController extends BaseController {
     @ResponseBody
 	public String getEnvCodeList(String areaCodeId) throws Exception{
 		String envCodeId=null;//环境代码
+		int diskNumId=15;//挂载云磁盘数量
+		int diskMaxNumId=32768;//每块云磁盘最大值
+		int softNumId=15;//安装软件数量
 		List<CmpDict> envList=environmentService.getEnvList(areaCodeId);
 		if(envList!=null && !envList.isEmpty()){
 			CmpDict cmpDict=envList.get(0);//第一项
 			cmpDict.setDictDefault("1");//默认选择第一项
 			envCodeId=cmpDict.getDictCode();//平台类型
+			diskNumId=cmpDict.getDiskNum();//挂载云磁盘数量
+			diskMaxNumId=cmpDict.getDiskMaxNum();//每块云磁盘最大值
+			softNumId=cmpDict.getSoftNum();//安装软件数量
 		}
 		
-		return StringUtil.getRetStr("0", "调用成功", "dataList", envList, "defaultPlatType", envCodeId);
+		return StringUtil.getRetStr("0", "调用成功", "dataList", envList, "defaultEnvCode", envCodeId, "defaultDiskNum", diskNumId, "defaultDiskMaxNum", diskMaxNumId, "defaultSoftNum", softNumId);
 	}
 	
 	//平台类型列表查询
