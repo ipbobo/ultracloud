@@ -192,7 +192,8 @@ function checkData(btnId){
 		return false;
 	}
 	
-	if($("#osType").val()==""){
+	var osType=$("#osType").val();
+	if(osType==""){
 		$("#osType").tips({side:3, msg:'请选择操作系统', bg:'#AE81FF', time:2});
 		$("#osType").focus();
 		return false;
@@ -222,7 +223,7 @@ function checkData(btnId){
 		return false;
 	}
 	
-	if($("#osType").val()=="redhat" && $("#imgPath").val()==""){
+	if((osType=="redhat" || osType=="centos") && $("#imgPath").val()==""){
 		$("#imgPath").tips({side:3, msg:'路径不能为空', bg:'#AE81FF', time:2});
 		$("#imgPath").focus();
 		return false;
@@ -923,7 +924,7 @@ $(window).scroll(function() {
 				<input type="text" name="imgPath" id="imgPath" style="width: 100%;" value="/opt"/>
 			</td>
 			<td align="left" style="padding-left:10px;padding-bottom:10px;">
-				Linux系统必填
+				Linux必填
 			</td>
 		</tr>
 		<tr><td colspan="8" height="10px"></td></tr>
