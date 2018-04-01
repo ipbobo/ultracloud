@@ -118,7 +118,7 @@ function addDiskRow(){
     }
     
     var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" onchange=\"diskTypeFunc()\">"+$("#diskType").html()+"</select></td>"
-	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\" onchange=\"diskTypeFunc()\"/></td>"
+	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\"/></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
 	    +"<td align=\"right\" style=\"padding-top:10px;\"><span style=\"display:none\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密</span>&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
     $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
@@ -412,6 +412,8 @@ function diskSizeFunc(obj, diskTypeId, iopsId){
 	}else if($("#"+diskTypeId).val()=="2"){//SSD云盘1800+30
 		$("#"+iopsId).html(1800+(diskSize-20)*30);
 	}
+	
+	diskTypeFunc();//数据盘改变时触发
 }
 
 //点击tab页
@@ -705,7 +707,7 @@ function checkNum(diskNum, diskMaxNum, softNum){
 	$("#softNum").val(softNum);
 	$("#diskNumId").html(diskNum);
 	$("#softNumId").html(softNum);
-	$.each($("#diskTableId tr"), function (i, item) {if(i!=0){delRow($(this).attr("id"));}});
+	$.each($("#diskTableId tr"), function (i, item) {if(i!=0){delRow($(this).attr("id"));}else{diskSizeFunc(document.getElementById("diskSize"), 'diskType', 'iopsId');}});
 	$.each($("#softTableId tr"), function (i, item) {if(i!=0){delRow($(this).attr("id"));}});
 }
 
@@ -940,7 +942,7 @@ $(window).scroll(function() {
 						  	</select>
 						</td>
 						<td align="left" style="width: 120px;">
-							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')" onchange="diskTypeFunc()"/>
+							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')"/>
 						</td>
 						<td align="left" style="width: 20px;">GB</td>
 						<td align="right" style="padding-right:13px;">
