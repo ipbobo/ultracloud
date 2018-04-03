@@ -2,6 +2,8 @@ package com.cmp.sid;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Transient;
+
 //数据字典
 public class CmpDict implements Comparable<CmpDict> {
 	private Long id;//ID
@@ -13,6 +15,12 @@ public class CmpDict implements Comparable<CmpDict> {
 	private String dictDesc;//字典描述
 	private String dictDefault;//是否默认：0-否；1是
 	private int dictOrder;//字典顺序
+	@Transient
+	private int diskNum;//挂载云磁盘数量
+	@Transient
+	private int diskMaxNum;//每块云磁盘最大值
+	@Transient
+	private int softNum;//安装软件数量
 
 	@Override
 	public int compareTo(CmpDict obj) {
@@ -95,5 +103,29 @@ public class CmpDict implements Comparable<CmpDict> {
 
 	public void setDictOrder(int dictOrder) {
 		this.dictOrder = dictOrder;
+	}
+
+	public int getDiskNum() {
+		return diskNum;
+	}
+
+	public void setDiskNum(int diskNum) {
+		this.diskNum = diskNum;
+	}
+
+	public int getDiskMaxNum() {
+		return diskMaxNum;
+	}
+
+	public void setDiskMaxNum(int diskMaxNum) {
+		this.diskMaxNum = diskMaxNum;
+	}
+
+	public int getSoftNum() {
+		return softNum;
+	}
+
+	public void setSoftNum(int softNum) {
+		this.softNum = softNum;
 	}
 }

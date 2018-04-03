@@ -97,7 +97,6 @@
 		diskSize,
 		diskEncrypt,
 		softCode,
-		softParam,
 		projectCode,
 		osType,
 		osBitNum,
@@ -113,7 +112,7 @@
 	</sql>
 	
 	<sql id="saveFieldValue">
-		func_nextval('cmp_order'),
+		#{orderNo},
 		#{status},
 		#{applyUserId},
 		#{deptId},
@@ -130,7 +129,6 @@
 		#{diskSize},
 		#{diskEncrypt},
 		#{softCode},
-		#{softParam},
 		#{projectCode},
 		#{osType},
 		#{osBitNum},
@@ -191,7 +189,7 @@
 	<!-- 购物车列表查询 -->
 	<select id="getShoppingCartList" parameterType="String" resultType="com.cmp.sid.CmpOrder">
 		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.deptId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.totalAmt, a.fileName, a.pckgName
-		, b.dictValue areaCodeName
+		, b.name areaCodeName
 		, c.name platTypeName
 		, d.dictValue deployTypeName
 		, e.name envCodeName
@@ -204,7 +202,7 @@
 		, (SELECT GROUP_CONCAT(x.name) FROM mysql.help_topic LEFT JOIN t_medium x on 1=1 where (length(a.softCode)-length(REPLACE(a.softCode, ',', ''))+1)>help_topic_id and substring_index(substring_index(a.softCode, ',', help_topic_id + 1), ',' , -1)=x.id) softName
 		from 
 		<include refid="tableName"/> a
-		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
+		left join t_area b on b.id=a.areaCode
 		left join t_cloudplatform c on c.id=a.platType
 		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
 		left join t_environment e on e.id=a.envCode
@@ -228,7 +226,7 @@
 	<!-- 已购历史列表查询 -->
 	<select id="getBuyHisList" parameterType="pd" resultType="com.cmp.sid.CmpOrder">
 		select a.orderNo, DATE_FORMAT(a.createTime, '%Y-%m-%d %H:%i:%s') createTime, a.lastUpdateTime, a.status, a.applyUserId, a.deptId, a.areaCode, a.platType, a.deployType, a.envCode, a.resType, a.virName, a.virIp, a.cpu, a.memory, a.diskType, a.diskSize, a.diskEncrypt, a.softCode, a.softParam, a.projectCode, a.osType, a.osBitNum, a.imgCode, a.imgUserName, a.imgUserPass, a.imgPath, a.expireDate, a.virNum, a.totalAmt, a.fileName, a.pckgName
-		, b.dictValue areaCodeName
+		, b.name areaCodeName
 		, c.name platTypeName
 		, d.dictValue deployTypeName
 		, e.name envCodeName
@@ -241,7 +239,7 @@
 		, (SELECT GROUP_CONCAT(x.name) FROM mysql.help_topic LEFT JOIN t_medium x on 1=1 where (length(a.softCode)-length(REPLACE(a.softCode, ',', ''))+1)>help_topic_id and substring_index(substring_index(a.softCode, ',', help_topic_id + 1), ',' , -1)=x.id) softName
 		from 
 		<include refid="tableName"/> a
-		left join cmp_dict b on b.dictType='area_code' and b.dictCode=a.areaCode
+		left join t_area b on b.id=a.areaCode
 		left join t_cloudplatform c on c.id=a.platType
 		left join cmp_dict d on d.dictType='deploy_type' and d.dictCode=a.deployType
 		left join t_environment e on e.id=a.envCode
@@ -271,8 +269,11 @@
 		where status='1' and applyUserId=#{applyUserId}
 	</select>
 	
-	<!-- 新增清单或套餐 -->
-	<insert id="saveCmpOrder" parameterType="com.cmp.sid.CmpOrder" >
+	<!-- 新增清单或套餐：useGeneratedKeys="true" keyProperty="orderNo" keyColumn="orderNo" -->
+	<insert id="saveCmpOrder" parameterType="com.cmp.sid.CmpOrder">
+		<selectKey keyProperty="orderNo" order="BEFORE" resultType="String"> 
+			select func_nextval('cmp_order')
+		</selectKey>
 		insert into <include refid="tableName"/> (
 			<include refid="saveFieldName"/>
 		) values (
@@ -280,14 +281,36 @@
 		)
 	</insert>
 	
+	<!-- 新增软件参数 -->
+	<insert id="saveSoftParam" parameterType="pd">
+		insert into cmp_softparam (orderNo, softCode, paramKey, paramValue) 
+		values (#{orderNo}, #{softCode}, #{paramKey}, #{paramValue})
+	</insert>
+	
 	<!-- 新增套餐清单 -->
 	<insert id="addPckgList" parameterType="com.cmp.sid.CmpOrder" >
+		<selectKey keyProperty="newOrderNo" order="BEFORE" resultType="String"> 
+			select func_nextval('cmp_order')
+		</selectKey>
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select func_nextval('cmp_order'), #{status}, applyUserId, deptId, #{areaCode}, #{platType}, #{deployType}, envCode, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, ''
+		select #{newOrderNo}, #{status}, applyUserId, deptId, #{areaCode}, #{platType}, #{deployType}, #{envCode}, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, ''
 		from 
 		<include refid="tableName"/>
-		where orderNo=#{orderNo}
+		where orderNo=#{orderNo};
+		insert into cmp_softparam(orderNo, softCode, paramKey, paramValue)
+		select #{newOrderNo}, softCode, paramKey, paramValue from `cmp_softparam`
+		where orderNo=#{orderNo};
 	</insert>
+	
+	<!-- 查询软件参数-->
+	<select id="findSoftParam" parameterType="pd" resultType="pd">
+		select 
+		* 
+		from 
+		  cmp_softparam
+		where 
+			orderNo = #{orderNo} and softCode = #{softCode}
+	</select>
 	
 	<!-- 更新清单状态 -->
 	<select id="updateCmpOrderStatus" parameterType="pd">

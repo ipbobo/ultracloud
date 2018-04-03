@@ -19,7 +19,8 @@
 		ip,
 		username,
 		password,
-		version
+		version,
+		environment_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -40,7 +41,8 @@
 		#{ip},
 		#{username},
 		#{password},
-		#{version}
+		#{version},
+		#{environment_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -77,7 +79,8 @@
 			ip = #{ip},
 		    username = #{username},
 		    password = #{password},
-		    version = #{version}
+		    version = #{version},
+		    environment_id = #{environment_id}
 		 where 
 		    id = #{id}
 	</update>
@@ -102,9 +105,10 @@
 				s.password,
 				s.version,
 				s.gmt_create,
-				s.gmt_modified
-		from <include refid="tableName"></include> s    
-		where 1 = 1
+				s.gmt_modified,
+				e.name as environment_name
+		from <include refid="tableName"></include> s,t_environment e
+		where s.environment_id=e.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -126,6 +130,10 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
+		where 1=1
+		<if test="type!=null and type!=''"><!-- 根据type过滤 -->
+			and type=#{type}
+		</if>
 	</select>
 	
 	<!-- 批量删除 -->
@@ -140,7 +148,19 @@
 	</delete>
 	
 	<!-- 平台类型列表查询 -->
-	<select id="getPlatTypeList" parameterType="String" resultType="com.cmp.sid.CmpDict">
-		select id dictCode, name dictValue from t_cloudplatform where type in ('vmware', 'openstack', 'kvm') order by type desc
+	<select id="getPlatTypeList" parameterType="pd" resultType="com.cmp.sid.CmpDict">
+		select a.id dictCode, a.name dictValue from t_cloudplatform a
+		where a.type in ('vmware', 'openstack', 'kvm') 
+		and exists (
+			select 1 from t_area_environment_map b 
+			where b.environment_id=a.environment_id 
+			<if test="areaCodeId!=null and areaCodeId!=''">
+				and b.area_id=#{areaCodeId}
+			</if>
+			<if test="envCodeId!=null and envCodeId!=''">
+				and b.environment_id=#{envCodeId}
+			</if>
+		)
+		order by a.type desc
 	</select>
 </mapper>

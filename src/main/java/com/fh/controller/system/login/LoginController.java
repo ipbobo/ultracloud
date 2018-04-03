@@ -117,8 +117,8 @@ public class LoginController extends BaseController {
 		mv.addObject("userNum", dashboardService.getUserNum(pd));//用户总数
 		mv.addObject("projNum", dashboardService.getProjNum(pd));//项目总数
 		mv.addObject("workOrderNum", dashboardService.getWorkOrderNum(pd));//工单总数
-		mv.addObject("vir", dashboardService.getResDtl(hostIdsMap.get("virStr")));//虚机详细信息查询
-		mv.addObject("phys", dashboardService.getResDtl(hostIdsMap.get("physStr")));//物理机详细信息查询
+		mv.addObject("vir", dashboardService.getResDtl("virRes", hostIdsMap.get("virStr")));//虚拟资源详细信息查询
+		mv.addObject("phys", dashboardService.getResDtl("physRes", hostIdsMap.get("virStr")));//物理资源详细信息查询
 		mv.addObject("virLoad", dashboardService.getLoadDtl(virLoadMap, hostIdsMap.get("vir"), dbReq.getResType()));//虚拟机负载
 		mv.addObject("hostLoad", dashboardService.getLoadDtl(hostLoadMap, hostIdsMap.get("host"), dbReq.getResType()));//宿主机负载
 		mv.addObject("physLoad", dashboardService.getLoadDtl(physLoadMap, hostIdsMap.get("phys"), dbReq.getResType()));//物理机负载
@@ -155,7 +155,7 @@ public class LoginController extends BaseController {
     			return StringUtil.getRetStr("-1", "仪表盘查询时错误："+errMsg);
     		}
     		
-			CmpAxis resRate=null;
+			CmpAxis resRate=new CmpAxis("hour");
 			String hostIdStr=dbReq.getHostIdStr();
 			if(!StringUtils.isBlank(hostIdStr)){//主机列表不为空
 				String[] hostIds=hostIdStr.split(",");//拼接字符串转换成字符串数组

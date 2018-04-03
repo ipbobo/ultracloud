@@ -28,4 +28,13 @@ public class Constants {
 
 	// 工单状态 - 工单完成
 	public static final String WORKORDER_STATUS_90 = "90";
+
+	// 操作类型:定时任务
+	public static final String OPER_TYPE_11 = "11";
+
+	// 操作状态：0 - 成功
+	public static final String OPER_STATUS_0 = "0";
+
+	// 操作状态：-1 - 失败
+	public static final String OPER_STATUS_1 = "-1";
 }

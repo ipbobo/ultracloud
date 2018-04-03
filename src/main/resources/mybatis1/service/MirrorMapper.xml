@@ -32,7 +32,9 @@
 		ostype,
 		osname,
 		bitrate,
-		USERNAME
+		USERNAME,
+		type,
+		cloudplatform_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -52,7 +54,9 @@
 		#{ostype},
 		#{osname},
 		#{bitrate},
-		#{USERNAME}
+		#{USERNAME},
+		#{type},
+		#{cloudplatform_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -71,10 +75,28 @@
 		)
 	</insert>
 	
+	<!-- 新增模板 -->
+	<insert id="saveTemplate" parameterType="pd">
+		insert into t_mirrortemplate
+		(
+	name,url,size,cloudplatform_id,datacenter_id,ostype,osname,bitrate,platform,type,detail,USERNAME,uuid
+		) values (
+	#{name},#{url},#{size},#{cloudplatform_id},#{datacenter_id},#{ostype},#{osname},#{bitrate},#{platform},#{type},#{detail},#{USERNAME},#{uuid}
+		)
+	</insert>
+	
 	<!-- 删除-->
 	<delete id="delete" parameterType="pd">
 		delete from
 		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 删除模板-->
+	<delete id="deleteTemplate" parameterType="pd">
+		delete from
+		<include refid="mttableName"></include>
 		where 
 			id = #{id}
 	</delete>
@@ -88,10 +110,29 @@
 			ostype = #{ostype},
 			osname = #{osname},
 			bitrate = #{bitrate},
-			USERNAME = #{USERNAME}
+			USERNAME = #{USERNAME},
+			type = #{type},
+			cloudplatform_id = #{cloudplatform_id}
 		where 
 			id = #{id}
 	</update>
+	
+	<!-- 修改模板 -->
+	<update id="editTemplate" parameterType="pd">
+		update
+		<include refid="mttableName"></include>
+		set 
+			name = #{name},
+			url = #{url},
+			ostype = #{ostype},
+			osname = #{osname},
+			bitrate = #{bitrate},
+			USERNAME = #{USERNAME},
+			detail = #{detail}
+		where 
+			id = #{id}
+	</update>
+	
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
@@ -103,27 +144,56 @@
 			id = #{id}
 	</select>
 	
+	<!-- 通过ID获取镜像模板 -->
+	<select id="findTemplateById" parameterType="pd" resultType="pd">
+		select 
+		id,name,url,cloudplatform_id,gmt_create,gmt_modified,type,detail,USERNAME,uuid
+		from 
+		<include refid="mttableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
 	<!-- 脚本列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
-		<include refid="Field"></include>
+			a.id,
+			a.name,
+			a.ostype,
+			a.osname,
+			a.bitrate,
+			a.USERNAME,
+			a.type,
+			a.cloudplatform_id,
+			b.name as cloudplatform_name,
+			a.gmt_create,
+			a.gmt_modified
 		from 
-		<include refid="tableName"></include>
-		where 1=1
+		<include refid="tableName"></include> a, t_cloudplatform b
+		where a.cloudplatform_id=b.id
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
-					NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					a.NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 				)
 		</if>
 		<if test="pd.item!=null and pd.item!=''"><!-- 根据ID过滤 -->
-			and id in ${pd.item}
+			and a.id in ${pd.item}
 		</if>
 	</select>
 	
-		<!-- 脚本列表 -->
-	<select id="listTemplateByType" parameterType="page" resultType="pd">
-		select *
+	<!-- 列表 -->
+	<select id="listTemplateByType" parameterType="pd" resultType="pd">
+		select a.*,b.name as cloudplatform_name
+		from 
+		<include refid="mttableName"></include>a, t_cloudplatform b
+		where a.cloudplatform_id=b.id
+		and a.type=#{type}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="listTemplate" parameterType="page" resultType="pd">
+		select id,name,url,cloudplatform_id,gmt_create,gmt_modified,type,detail,USERNAME,uuid
 		from 
 		<include refid="mttableName"></include>
 		where type=#{pd.type}
@@ -148,20 +218,31 @@
 		</foreach>
 	</delete>
 	
+	<!-- 批量删除模板  -->
+	<delete id="deleteAllTemplate" parameterType="String">
+		delete from
+		<include refid="mttableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
 	<!-- 列出未加入镜像的模板 -->
 	<select id="listAllOutByMirrorId"  parameterType="pd" resultType="pd" >
 		select 
-			id,name,osname,bitrate
+			id,name,osname,bitrate,uuid,gmt_modified
 		from 
 			t_mirrortemplate
-		where ostype=#{ostype} and bitrate=#{bitrate} and id NOT IN (select mtm.mirrortemplate_id from t_mirrortemplate m, t_mirror_template_map mtm
+		where cloudplatform_id=#{cloudplatform_id} and type=#{type} and id NOT IN (select mtm.mirrortemplate_id from t_mirrortemplate m, t_mirror_template_map mtm
 						where m.id=mtm.mirrortemplate_id
 						and mtm.mirror_id= #{id})
 	</select>
 	
 	<!-- 列出已加入镜像的模板 -->
 	<select id="listAllInByMirrorId"  parameterType="pd" resultType="pd" >
-		select u.id,u.name,u.osname,u.bitrate
+		select ugu.id,u.name,u.uuid,u.gmt_modified
 		from t_mirrortemplate u, t_mirror_template_map ugu
 		where u.id = ugu.mirrortemplate_id 
 		and ugu.mirror_id= #{id}
@@ -205,8 +286,15 @@
 	<!-- 模板列表查询 -->
 	<select id="getImgList" parameterType="pd" resultType="com.cmp.sid.CmpDict">
 		select a.id dictCode, a.name dictValue from t_mirrortemplate a
-		<if test="platTypeId!= null and platTypeId != ''">
-			where a.platform=(select b.type from t_cloudplatform b where b.id=#{platTypeId})
+		where 1=1
+		<if test="platTypeId != null and platTypeId != ''">
+			and a.type=(select b.type from t_cloudplatform b where b.id=#{platTypeId})
+		</if>
+		<if test="osType != null and osType != ''">
+			and a.ostype=#{osType}
+		</if>
+		<if test="osBitNum != null and osBitNum != ''">
+			and a.bitrate=#{osBitNum}
 		</if>
 	</select>
 </mapper>

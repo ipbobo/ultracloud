@@ -1,97 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="BiBillDayMapper">
-	
+
 	<!--表名 -->
 	<sql id="viewName">
 		v_bi_virtual_bill
 	</sql>
-		<sql id="tableName">
+	<sql id="tableName">
 		bi_bill_day
 	</sql>
-	
+
 	<sql id="Field_main">
-	    DEPARTMENT_ID,
-        DEPARTMENT_NAME,
-        project_id,
-        project_name,
-        vm_id,
-        vm_name,
-        cpu,
-        memory,
-        datadisk,
-        type,
-        user,
-        date,
+		DEPARTMENT_ID,
+		DEPARTMENT_NAME,
+		project_id,
+		project_name,
+		vm_id,
+		vm_name,
+		cpu,
+		memory,
+		datadisk,
+		type,
+		user,
+		date,
 		account
 	</sql>
-	
+
 	<sql id="Field_time">
 		gmt_create
 	</sql>
-	
+
 	<!-- 字段值 -->
 	<sql id="Field">
-	    id,
-		<include refid="Field_main"></include>,<include refid="Field_time"></include>
+		id,
+		<include refid="Field_main"></include>
+		,
+		<include refid="Field_time"></include>
 	</sql>
-		
+
 	<!-- 字段值 -->
-	<sql id="FieldValue_main">	
+	<sql id="FieldValue_main">
 		#{DEPARTMENT_ID},
-        #{DEPARTMENT_NAME},
-        #{project_id},
-        #{project_name},
-        #{vm_id},
-        #{vm_name},
-        #{cpu},
-        #{memory},
-        #{datadisk},
-        #{type},
-        #{user},
-        #{date},
+		#{DEPARTMENT_NAME},
+		#{project_id},
+		#{project_name},
+		#{vm_id},
+		#{vm_name},
+		#{cpu},
+		#{memory},
+		#{datadisk},
+		#{type},
+		#{user},
+		#{date},
 		#{account}
 	</sql>
-	
-	<sql id="FieldValue_time">	
+
+	<sql id="FieldValue_time">
 		#{gmt_create}
 	</sql>
-	
+
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-	    id,
-		<include refid="FieldValue_main"></include>,<include refid="FieldValue_time"></include>
+		id,
+		<include refid="FieldValue_main"></include>
+		,
+		<include refid="FieldValue_time"></include>
 	</sql>
-	
-	<!-- 新增-->
+
+	<!-- 新增 -->
 	<insert id="save" parameterType="pd">
-		insert into 
-	<include refid="tableName"></include>
+		insert into
+		<include refid="tableName"></include>
 		(
-	<include refid="Field_main"></include>
+		<include refid="Field_main"></include>
 		) values (
-	<include refid="FieldValue_main"></include>
+		<include refid="FieldValue_main"></include>
 		)
 	</insert>
-	
+
 	<!-- 查询视图v_bi_virtual_bill的数据 -->
 	<select id="listVBiVirtualBill" parameterType="pd" resultType="pd">
 		select DEPARTMENT_ID,
-        	DEPARTMENT_NAME,
-        	project_id,
-        	project_name,
-        	vm_id,
-        	vm_name,
-        	cpu,
-        	memory,
-        	datadisk,
-        	type,
-        	user,
-        	soft,
-        	status,
-        	gmt_create,
-        	duedate
-		from 
+		DEPARTMENT_NAME,
+		project_id,
+		project_name,
+		vm_id,
+		vm_name,
+		cpu,
+		memory,
+		datadisk,
+		type,
+		user,
+		soft,
+		status,
+		gmt_create,
+		duedate
+		from
 		<include refid="viewName"></include>
 		where 1 = 1
 		<if test="DEPARTMENT_ID!= null and DEPARTMENT_ID != ''">
@@ -103,43 +107,47 @@
 		<if test="USERNAME!= null and USERNAME != ''">
 			and user = #{USERNAME}
 		</if>
+		<if test="status!= null and status != ''">
+			and status = #{status}
+		</if>
 	</select>
-	
+
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select
 		<include refid="Field"></include>
-		from 
+		from
 		<include refid="tableName"></include>
 		where 1=1
-		<if test="date!= null and date != ''"><!-- 按时间检索-->
+		<if test="date!= null and date != ''"><!-- 按时间检索 -->
 			and
-				(
-					date LIKE CONCAT(#{month},'%')
-				)
+			(
+			date LIKE CONCAT(#{month},'%')
+			)
 		</if>
 		order by gmt_create desc
 	</select>
-	
+
 	<!-- 列表 -->
-	<select id="listBillGroupByVirtualId" parameterType="pd" resultType="pd">
+	<select id="listBillGroupByVirtualId" parameterType="pd"
+		resultType="pd">
 		select
-			id,
-			DEPARTMENT_ID,
-        	DEPARTMENT_NAME,
-	        project_id,
-	        project_name,
-	        vm_id,
-	        vm_name,
-	        cpu,
-	        memory,
-	        datadisk,
-	        type,
-	        user,
-	        date,
-			count(account) as account,
-			gmt_create
-		from 
+		id,
+		DEPARTMENT_ID,
+		DEPARTMENT_NAME,
+		project_id,
+		project_name,
+		vm_id,
+		vm_name,
+		cpu,
+		memory,
+		datadisk,
+		type,
+		user,
+		date,
+		SUM(account)/100 AS account,
+		gmt_create
+		from
 		<include refid="tableName"></include>
 		where 1=1
 		<if test="DEPARTMENT_ID!= null and DEPARTMENT_ID != ''">
@@ -152,34 +160,37 @@
 			and user = #{USERNAME}
 		</if>
 		<if test="startTime!= null and startTime != ''">
-			and date <![CDATA[>=]]> #{startTime}   
+			and date <![CDATA[>=]]>
+			#{startTime}
 		</if>
 		<if test="endTime!= null and endTime != ''">
-			and date <![CDATA[<=]]> #{endTime}
+			and date <![CDATA[<=]]>
+			#{endTime}
 		</if>
 		GROUP BY vm_id
 		order by gmt_create desc
 	</select>
-	
-	
+
+
 	<!-- 列表 -->
-	<select id="listResourceGroupByVirtualId" parameterType="pd" resultType="pd">
+	<select id="listResourceGroupByVirtualId" parameterType="pd"
+		resultType="pd">
 		select
-			id,
-			DEPARTMENT_ID,
-        	DEPARTMENT_NAME,
-	        project_id,
-	        project_name,
-	        vm_id,
-	        vm_name,
-	        cpu,
-	        memory,
-	        datadisk,
-	        type,
-	        user,
-	        date,
-			gmt_create
-		from 
+		id,
+		DEPARTMENT_ID,
+		DEPARTMENT_NAME,
+		project_id,
+		project_name,
+		vm_id,
+		vm_name,
+		cpu,
+		memory,
+		datadisk,
+		type,
+		user,
+		date,
+		gmt_create
+		from
 		<include refid="tableName"></include>
 		where date=#{date}
 		<if test="DEPARTMENT_ID!= null and DEPARTMENT_ID != ''">
@@ -192,5 +203,39 @@
 			and user = #{USERNAME}
 		</if>
 	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteBatch" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		date = #{date}
+	</delete>
 	
+	<!-- 批量插入镜像与模板的关联 -->
+	<insert id="saveBatch" parameterType="java.util.List">   
+    	insert into 
+    	<include refid="tableName"></include> 
+    	(
+		<include refid="Field_main"></include>
+		) 
+    	values  
+    	<foreach collection="list" item="item" index="index" separator="," >  
+        	(
+        	#{item.DEPARTMENT_ID},
+			#{item.DEPARTMENT_NAME},
+			#{item.project_id},
+			#{item.project_name},
+			#{item.vm_id},
+			#{item.vm_name},
+			#{item.cpu},
+			#{item.memory},
+			#{item.datadisk},
+			#{item.type},
+			#{item.user},
+			#{item.date},
+			#{item.account})  
+    	</foreach>  
+	</insert> 
+
 </mapper>

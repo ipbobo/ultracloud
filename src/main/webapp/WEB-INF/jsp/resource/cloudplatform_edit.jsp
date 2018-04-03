@@ -59,6 +59,17 @@
 								<td><input type="password" name="confirmpassword" id="confirmpassword" value="${pd.confirmpassword}" maxlength="30" style="width:100%;"/></td>
 							</tr>
 							<tr>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;所属环境:</td>
+								<td id="level_td">
+									<select class="chosen-select form-control" name="environment_id" id=environment_id data-placeholder="请选择环境" style="vertical-align:top;"  title="环境" style="width:98%;" >
+									<option value=""></option>
+									<c:forEach items="${environmentList}" var="environment">
+										<option value="${environment.id}" <c:if test="${environment.id == pd.environment_id }">selected</c:if>>${environment.name }</option>
+									</c:forEach>
+									</select>
+								</td>
+							</tr>
+							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
 									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
@@ -166,6 +177,16 @@
 		            time:2
 		        });
 				$("#password").focus();
+			return false;
+			}
+			if($("#environment_id").val()==""){
+				$("#environment_id").tips({
+					side:3,
+		            msg:'请选择环境',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#environment_id").focus();
 			return false;
 			}
 

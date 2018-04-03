@@ -5,7 +5,6 @@ import static org.springframework.http.ResponseEntity.ok;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,10 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.resourcemgt.HostmachineService;
 import com.cmp.service.resourcemgt.VirtualMService;
 import com.cmp.service.servicemgt.MirrorService;
-import com.cmp.util.DateUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
@@ -49,6 +48,12 @@ public class KVMController extends BaseController {
 
 	@Resource(name = "virtualMService")
 	private VirtualMService virtualMService;
+
+	@Resource(name = "mirrorService")
+	private MirrorService mirrorService;
+
+	@Resource(name = "cloudplatformService")
+	private CloudplatformService cloudplatformService;
 
 	/**
 	 * 按类型查询列表
@@ -75,9 +80,6 @@ public class KVMController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-
-	@Resource(name = "mirrorService")
-	private MirrorService mirrorService;
 
 	/**
 	 * 查询宿主机列表
@@ -155,7 +157,7 @@ public class KVMController extends BaseController {
 		}
 		page.setPd(pd);
 		// 分页查询kvm主机
-		List<PageData> varList = mirrorService.listTemplateByType(page);
+		List<PageData> varList = mirrorService.listTemplate(page);
 		mv.setViewName("resource/kvm_template_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -187,6 +189,31 @@ public class KVMController extends BaseController {
 	}
 
 	/**
+	 * 保存模板
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/saveTemplate")
+	public ModelAndView saveTemplate() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "新增kvm模板");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			return null;
+		} // 校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("type", "kvm");
+		pd.put("uuid", UuidUtil.get32UUID());
+		pd.put("USERNAME", Jurisdiction.getUsername());
+
+		mirrorService.saveTemplate(pd);
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+
+	/**
 	 * 删除
 	 * 
 	 * @param out
@@ -202,6 +229,31 @@ public class KVMController extends BaseController {
 		pd = this.getPageData();
 		try {
 			hostmachineService.delete(pd, false);
+			out.write("success");
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			out.write("failure");
+			out.close();
+		}
+	}
+
+	/**
+	 * 删除模板
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/deleteTemplate")
+	public void deleteTemplate(PrintWriter out) {
+		logBefore(logger, Jurisdiction.getUsername() + "删除kvm模板");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		try {
+			mirrorService.deleteTemplate(pd);
 			out.write("success");
 			out.close();
 		} catch (Exception e) {
@@ -234,6 +286,30 @@ public class KVMController extends BaseController {
 	}
 
 	/**
+	 * 修改
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/editTemplate")
+	public ModelAndView editTemplate() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "修改kvm模板");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return null;
+		} // 校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("type", "kvm");
+		pd.put("USERNAME", Jurisdiction.getUsername());
+
+		mirrorService.editTemplate(pd);
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+
+	/**
 	 * 去新增页面
 	 * 
 	 * @param
@@ -251,6 +327,28 @@ public class KVMController extends BaseController {
 
 		mv.setViewName("resource/kvm_edit");
 		mv.addObject("msg", "save");
+		mv.addObject("pd", pd);
+		return mv;
+	}
+
+	/**
+	 * 去新增页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goAddTemplate")
+	public ModelAndView goAddTemplate() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+
+		mv.setViewName("resource/kvmtemplate_edit");
+		mv.addObject("msg", "saveTemplate");
 		mv.addObject("pd", pd);
 		return mv;
 	}
@@ -279,6 +377,29 @@ public class KVMController extends BaseController {
 	}
 
 	/**
+	 * 去修改页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goEditTemplate")
+	public ModelAndView goEditTemplate() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
+			pd.put("keywords", keywords.trim());
+		}
+
+		pd = mirrorService.findTemplateById(pd); // 根据ID读取
+		mv.setViewName("resource/kvmtemplate_edit");
+		mv.addObject("msg", "editTemplate");
+		mv.addObject("pd", pd);
+		return mv;
+	}
+
+	/**
 	 * 批量删除
 	 * 
 	 * @param
@@ -299,6 +420,36 @@ public class KVMController extends BaseController {
 		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 			hostmachineService.deleteAll(ArrayDATA_IDS, false);
+			pd.put("msg", "ok");
+		} else {
+			pd.put("msg", "no");
+		}
+		pdList.add(pd);
+		map.put("list", pdList);
+		return AppUtil.returnObject(pd, map);
+	}
+
+	/**
+	 * 批量删除
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/deleteAllTemplate")
+	@ResponseBody
+	public Object deleteAllTemplate() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "批量删除kvm模板");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return null;
+		} // 校验权限
+		PageData pd = new PageData();
+		Map<String, Object> map = new HashMap<String, Object>();
+		pd = this.getPageData();
+		List<PageData> pdList = new ArrayList<PageData>();
+		String DATA_IDS = pd.getString("DATA_IDS");
+		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
+			String ArrayDATA_IDS[] = DATA_IDS.split(",");
+			mirrorService.deleteAllTemplate(ArrayDATA_IDS);
 			pd.put("msg", "ok");
 		} else {
 			pd.put("msg", "no");

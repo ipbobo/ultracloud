@@ -70,6 +70,15 @@ public interface EnvironmentService {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
 	
+	/**
+	 * 已选环境
+	 * 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAllInById(PageData pd) throws Exception ;
+	
 	//环境列表查询
-	public List<CmpDict> getEnvList() throws Exception;
+	public List<CmpDict> getEnvList(String areaCodeId) throws Exception;
 }

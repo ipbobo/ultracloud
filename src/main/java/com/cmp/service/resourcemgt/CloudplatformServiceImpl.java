@@ -125,7 +125,8 @@ public class CloudplatformServiceImpl implements CloudplatformService {
 
 	//平台类型列表查询
 	@SuppressWarnings("unchecked")
-	public List<CmpDict> getPlatTypeList() throws Exception {
-		return (List<CmpDict>) dao.findForList("CloudplatformMapper.getPlatTypeList", null);
+	public List<CmpDict> getPlatTypeList(String areaCodeId, String envCodeId) throws Exception {
+		PageData pd=new PageData("areaCodeId", areaCodeId, "envCodeId", envCodeId);
+		return (List<CmpDict>) dao.findForList("CloudplatformMapper.getPlatTypeList", pd);
 	}
 }

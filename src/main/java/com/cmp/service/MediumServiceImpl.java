@@ -116,4 +116,10 @@ public class MediumServiceImpl implements MediumService {
 	public List<CmpDict> getSoftList() throws Exception {
 		return (List<CmpDict>) dao.findForList("MediumMapper.getSoftList", null);
 	}
+	
+	//软件参数列表查询
+	@SuppressWarnings("unchecked")
+	public List<CmpDict> getSoftParamList(String softCode) throws Exception{
+		return (List<CmpDict>) dao.findForList("MediumMapper.getSoftParamList", softCode);
+	}
 }

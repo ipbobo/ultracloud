@@ -36,6 +36,16 @@ public class MirrorServiceImpl implements MirrorService {
 	}
 
 	/**
+	 * 新增模板
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void saveTemplate(PageData pd) throws Exception {
+		dao.save("MirrorMapper.saveTemplate", pd);
+	}
+
+	/**
 	 * 删除
 	 * 
 	 * @param pd
@@ -43,6 +53,16 @@ public class MirrorServiceImpl implements MirrorService {
 	 */
 	public void delete(PageData pd) throws Exception {
 		dao.delete("MirrorMapper.delete", pd);
+	}
+
+	/**
+	 * 删除模板
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	public void deleteTemplate(PageData pd) throws Exception {
+		dao.delete("MirrorMapper.deleteTemplate", pd);
 	}
 
 	/**
@@ -56,6 +76,16 @@ public class MirrorServiceImpl implements MirrorService {
 	}
 
 	/**
+	 * 修改
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void editTemplate(PageData pd) throws Exception {
+		dao.update("MirrorMapper.editTemplate", pd);
+	}
+
+	/**
 	 * 列表
 	 * 
 	 * @param page
@@ -65,7 +95,7 @@ public class MirrorServiceImpl implements MirrorService {
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("MirrorMapper.datalistPage", page);
 	}
-	
+
 	/**
 	 * 列表
 	 * 
@@ -73,8 +103,19 @@ public class MirrorServiceImpl implements MirrorService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PageData> listTemplateByType(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("MirrorMapper.listTemplateByType", page);
+	public List<PageData> listTemplateByType(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("MirrorMapper.listTemplateByType", pd);
+	}
+
+	/**
+	 * 列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listTemplate(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("MirrorMapper.listTemplate", page);
 	}
 
 	/**
@@ -99,6 +140,16 @@ public class MirrorServiceImpl implements MirrorService {
 	}
 
 	/**
+	 * 通过id获取镜像模板
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findTemplateById(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("MirrorMapper.findTemplateById", pd);
+	}
+
+	/**
 	 * 批量删除
 	 * 
 	 * @param ArrayDATA_IDS
@@ -106,6 +157,16 @@ public class MirrorServiceImpl implements MirrorService {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("MirrorMapper.deleteAll", ArrayDATA_IDS);
+	}
+
+	/**
+	 * 批量删除模板
+	 * 
+	 * @param ArrayDATA_IDS
+	 * @throws Exception
+	 */
+	public void deleteAllTemplate(String[] ArrayDATA_IDS) throws Exception {
+		dao.delete("MirrorMapper.deleteAllTemplate", ArrayDATA_IDS);
 	}
 
 	/**
@@ -152,16 +213,20 @@ public class MirrorServiceImpl implements MirrorService {
 	public void deleteAllMirrorTemplateMap(List<BigInteger> list) throws Exception {
 		dao.delete("MirrorMapper.deleteAllMirrorTemplateMap", list);
 	}
-	
-	/**批量插入镜像与模板关联
+
+	/**
+	 * 批量插入镜像与模板关联
+	 * 
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
 	public void insertAllMirrorTemplateMap(List<MirrorTemplateMap> list) throws Exception {
 		dao.batchSave("MirrorMapper.insertAllMirrorTemplateMap", list);
 	}
-	
-	/**批量删除镜像与模板关联,按镜像
+
+	/**
+	 * 批量删除镜像与模板关联,按镜像
+	 * 
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
@@ -169,7 +234,7 @@ public class MirrorServiceImpl implements MirrorService {
 		dao.delete("MirrorMapper.deleteByMirrorId", id);
 	}
 
-	//模板列表查询
+	// 模板列表查询
 	@SuppressWarnings("unchecked")
 	public List<CmpDict> getImgList(PageData pd) throws Exception {
 		return (List<CmpDict>) dao.findForList("MirrorMapper.getImgList", pd);

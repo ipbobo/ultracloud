@@ -21,6 +21,7 @@ import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
 import com.cmp.service.resourcemgt.DatacenternetworkService;
 import com.cmp.service.resourcemgt.HostmachineService;
+import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.util.DateUtil;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
@@ -45,7 +46,7 @@ public class CloudplatformController extends BaseController {
 
 	@Resource(name = "datacenterService")
 	private DatacenterService datacenterService;
-	
+
 	@Resource(name = "clusterService")
 	private ClusterService clusterService;
 
@@ -57,6 +58,9 @@ public class CloudplatformController extends BaseController {
 
 	@Resource(name = "datacenternetworkService")
 	private DatacenternetworkService datacenternetworkService;
+
+	@Resource(name = "environmentService")
+	private EnvironmentService environmentService;
 
 	/**
 	 * 保存
@@ -98,7 +102,7 @@ public class CloudplatformController extends BaseController {
 		out.write("success");
 		out.close();
 	}
-	
+
 	/**
 	 * 确认初始化
 	 * 
@@ -113,17 +117,15 @@ public class CloudplatformController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		
+
 		pd = cloudplatformService.findById(pd, false);
 		cloudplatformService.delete(pd, true);
 		pd.put("version", DateUtil.dateToString(new Date(), DateUtil.TIMESTAMP_FORMAT));
 		cloudplatformService.save(pd, true);
-		
+
 		out.write("success");
 		out.close();
 	}
-	
-	
 
 	/**
 	 * 跳云平台数据初始化页面
@@ -139,8 +141,8 @@ public class CloudplatformController extends BaseController {
 		pd = this.getPageData();
 		String cpf_id = pd.getString("id");
 		pd = cloudplatformService.findById(pd, true);
-		
-		// 同步云平台数据 
+
+		// 同步云平台数据
 		resourceService.syncCloudData(pd);
 
 		// 查询所有宿主机记录
@@ -158,8 +160,7 @@ public class CloudplatformController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-	
-	
+
 	/**
 	 * 更新同步数据为选中并复制到正式表中
 	 * 
@@ -175,13 +176,13 @@ public class CloudplatformController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		
+
 		String hostmachineIds = pd.getString("hostmachineIds");
 		String storageIds = pd.getString("storageIds");
 		String dcnIds = pd.getString("dcnIds");
-		
+
 		resourceService.updateSelectData(hostmachineIds, storageIds, dcnIds);
-		
+
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -226,7 +227,7 @@ public class CloudplatformController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-	
+
 	/**
 	 * 按类型查询列表
 	 * 
@@ -245,7 +246,7 @@ public class CloudplatformController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData> varList = cloudplatformService.list(page, false); // 列出列表
-		if("vmware".equals(pd.getString("type"))) {
+		if ("vmware".equals(pd.getString("type"))) {
 			mv.setViewName("resource/cloudplatform_vmware_list");
 		} else {
 			mv.setViewName("resource/cloudplatform_openstack_list");
@@ -271,6 +272,10 @@ public class CloudplatformController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
+
+		List<PageData> environmentList = environmentService.listAll(pd);
+		mv.addObject("environmentList", environmentList);
+
 		mv.setViewName("resource/cloudplatform_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
@@ -292,6 +297,10 @@ public class CloudplatformController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
+
+		List<PageData> environmentList = environmentService.listAll(pd);
+		mv.addObject("environmentList", environmentList);
+
 		pd = cloudplatformService.findById(pd, false); // 根据ID读取
 		mv.setViewName("resource/cloudplatform_edit");
 		mv.addObject("msg", "edit");
@@ -328,28 +337,30 @@ public class CloudplatformController extends BaseController {
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-	
-	/**虚拟机列表
+
+	/**
+	 * 虚拟机列表
+	 * 
 	 * @param page
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/goListVirtualmachine")
+	@RequestMapping(value = "/goListVirtualmachine")
 	public ModelAndView goListVirtualmachine(Page page) throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
-		if(null != keywords && !"".equals(keywords)){
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		
-		List<PageData> varList = hostmachineService.listVirtual(page, false); 
+
+		List<PageData> varList = hostmachineService.listVirtual(page, false);
 		mv.addObject("varList", varList);
 		mv.setViewName("resource/virtual_list_windows");
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
 }

@@ -70,7 +70,26 @@ function setRecommendType(obj, fieldName, fieldValue){
 
 //设置软件参数
 function setSoftParam(indx){
-	$("#softParam"+(indx==0?"":indx)).val(indx);
+	var obj=$("#softCode"+(indx==0?"":indx));
+	if(obj.val()==""){
+		obj.tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
+		obj.focus();
+		return false;
+	}
+	
+	var diag = new top.Dialog();
+	diag.Drag=true;
+	diag.Title ="设置参数";
+	diag.URL = '<%=basePath%>/getParamList.do?softCode='+obj.val();
+	diag.Width = 350;
+	diag.Height = 400;
+	diag.CancelEvent=function(){diag.close();};//关闭事件
+	diag.OKEvent=function(){//OK事件
+		var softParamStr=diag.innerFrame.contentWindow.getSoftParam();//获取软件参数
+		$("#softParam"+(indx==0?"":indx)).val(softParamStr);
+		diag.close();
+	};
+	diag.show();
 }
 
 //永久到期时间选择
@@ -92,27 +111,29 @@ function checkExpireDate(isChk){
 //新增磁盘行
 function addDiskRow(){
     var len = $("#diskTableId tr").length;
-    if(len>=15){
-    	$("#diskTableId").tips({side:3, msg:'只能选配15块磁盘', bg:'#AE81FF', time:2});
+    var diskNum=$("#diskNum").val();
+    if(len>=diskNum*1){
+    	$("#diskTableId").tips({side:3, msg:'只能选配'+diskNum+'块磁盘', bg:'#AE81FF', time:2});
     	return;
     }
     
     var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"diskType\" id=\"diskType"+(len+1)+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" onchange=\"diskTypeFunc()\">"+$("#diskType").html()+"</select></td>"
-	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\" onchange=\"diskTypeFunc()\"/></td>"
+	    +"<td align=\"left\" style=\"padding-top:10px;\"><input type=\"text\" name=\"diskSize\" id=\"diskSize\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" onblur=\"diskSizeFunc(this, 'diskType', 'iopsId"+(len+1)+"')\"/></td>"
 	    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
-	    +"<td align=\"right\" style=\"padding-top:10px;\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+	    +"<td align=\"right\" style=\"padding-top:10px;\"><span style=\"display:none\"><span id=\"iopsId"+(len+1)+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"diskEncrypt\" type=\"checkbox\" value=\"\"/>加密</span>&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('diskTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
     $("#diskTableId").append("<tr id=\"diskTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
 
 //新增软件安装行
 function addSoftRow(){
     var len = $("#softTableId tr").length;
-    if(len>=15){
-    	$("#softTableId").tips({side:3, msg:'只能选择15个安装软件', bg:'#AE81FF', time:2});
+    var softNum=$("#softNum").val();
+    if(len>=softNum*1){
+    	$("#softTableId").tips({side:3, msg:'只能选择'+softNum+'个安装软件', bg:'#AE81FF', time:2});
     	return;
     }
     
-    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
+    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"softCode\" id=\"softCode"+(len+1)+"\" data-placeholder=\"请选择软件名称\" style=\"vertical-align:top;width: 120px;\">"+$("#softCode").html()+"</select></td>"
 	    +"<td align=\"right\" style=\"padding-top:10px;\"><input type=\"hidden\" name=\"softParam\" id=\"softParam"+(len+1)+"\" value=\"\"/><a href=\"javascript:void()\" onclick=\"setSoftParam("+(len+1)+")\">设置参数</a>&nbsp;<a href=\"javascript:void()\" onclick=\"delRow('softTrId"+(len+1)+"')\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
 	$("#softTableId").append("<tr id=\"softTrId"+(len+1)+"\">"+tdStr+"</tr>");
 }
@@ -171,7 +192,8 @@ function checkData(btnId){
 		return false;
 	}
 	
-	if($("#osType").val()==""){
+	var osType=$("#osType").val();
+	if(osType==""){
 		$("#osType").tips({side:3, msg:'请选择操作系统', bg:'#AE81FF', time:2});
 		$("#osType").focus();
 		return false;
@@ -201,15 +223,17 @@ function checkData(btnId){
 		return false;
 	}
 	
-	if($("#osType").val()=="redhat" && $("#imgPath").val()==""){
+	if((osType=="redhat" || osType=="centos") && $("#imgPath").val()==""){
 		$("#imgPath").tips({side:3, msg:'路径不能为空', bg:'#AE81FF', time:2});
 		$("#imgPath").focus();
 		return false;
 	}
 	
-	if($("#softCode").val()==""){
-		$("#softCode").tips({side:3, msg:'请选择软件安装', bg:'#AE81FF', time:2});
-		$("#softCode").focus();
+	if(!mutiCheck('diskType', '请选择存储')){
+		return false;
+	}
+	
+	if(!mutiCheck('softCode', '请选择软件安装')){
 		return false;
 	}
 	
@@ -246,8 +270,23 @@ function checkData(btnId){
 		softParamArr.push($(this).val());
 	});
 	$("#softCodeStr").val(softCodeArr.join());
-	$("#softParamStr").val(softParamArr.join());
+	$("#softParamStr").val(softParamArr.join('|'));
 	return true;
+}
+
+//多个校验
+function mutiCheck(name, msg){
+	var bool=true;
+	$("select[name='"+name+"']").each(function() {
+		if($(this).val()==""){
+			$(this).tips({side:3, msg:msg, bg:'#AE81FF', time:2});
+			$(this).focus();
+			bool=false;
+			return false;
+		}
+	});
+	
+	return bool;
 }
 
 //加入清单
@@ -255,7 +294,8 @@ function addList(){
 	var jsonObj={};//JSON请求数据
 	if($("#tcsq").is(".active")){//套餐数据校验
 		if(checkPckgData()){
-			jsonObj.tcareaCode=$("#tcareaCode").val();//地域代码                       
+			jsonObj.tcareaCode=$("#tcareaCode").val();//地域代码
+			jsonObj.envCode=$("#tcenvCode").val();//环境代码                       
 			jsonObj.tcplatType=$("#tcplatType").val();//平台类型                       
 			jsonObj.tcdeployType=$("#tcdeployType").val();//部署类型                     
 			jsonObj.tcvirName=$("#tcvirName").val();//虚拟机名称
@@ -264,9 +304,9 @@ function addList(){
 		}
 	}else if(checkData("addListBtnId")){//数据校验
 		jsonObj.areaCode=$("#areaCode").val();//地域代码                       
+		jsonObj.envCode=$("#envCode").val();//环境代码                        
 		jsonObj.platType=$("#platType").val();//平台类型                       
 		jsonObj.deployType=$("#deployType").val();//部署类型                     
-		jsonObj.envCode=$("#envCode").val();//环境代码                        
 		jsonObj.resType=$("#resType").val();//资源类型                        
 		jsonObj.virName=$("#virName").val();//虚拟机名称                      
 		jsonObj.cpu=$("#cpu").val();//CPU                                 
@@ -318,9 +358,9 @@ function savePckgPre(){
 function savePckg(){
 	var jsonObj={};//JSON请求数据
 	//jsonObj.areaCode=$("#areaCode").val();//地域代码
+	//jsonObj.envCode=$("#envCode").val();//环境代码                        
 	//jsonObj.platType=$("#platType").val();//平台类型
 	//jsonObj.deployType=$("#deployType").val();//部署类型
-	jsonObj.envCode=$("#envCode").val();//环境代码                        
 	jsonObj.resType=$("#resType").val();//资源类型                        
 	jsonObj.virName=$("#virName").val();//虚拟机名称                      
 	jsonObj.cpu=$("#cpu").val();//CPU                                 
@@ -349,6 +389,7 @@ function savePckg(){
 function diskSizeFunc(obj, diskTypeId, iopsId){
 	var diskSize=$(obj).val();
 	if($(obj).val()==""){
+		$(obj).val("20");
 		return;
 	}
 	
@@ -357,9 +398,14 @@ function diskSizeFunc(obj, diskTypeId, iopsId){
 		diskSize=20;
 	}
 	
-	if(diskSize>32768){
-		$(obj).val("32768");
-		diskSize=32768;
+	var diskMaxNum=$("#diskMaxNum").val();
+	if(diskMaxNum==''){
+		diskMaxNum='32768';
+	}
+	
+	if(diskSize>diskMaxNum*1){
+		$(obj).val(diskMaxNum);
+		diskSize=diskMaxNum*1;
 	}
 	
 	if($("#"+diskTypeId).val()=="1"){//高效云盘1120+6
@@ -367,6 +413,8 @@ function diskSizeFunc(obj, diskTypeId, iopsId){
 	}else if($("#"+diskTypeId).val()=="2"){//SSD云盘1800+30
 		$("#"+iopsId).html(1800+(diskSize-20)*30);
 	}
+	
+	diskTypeFunc();//数据盘改变时触发
 }
 
 //点击tab页
@@ -447,15 +495,18 @@ function specFunc(cpuVal, memoryVal){
 //镜像改变时触发
 function imgFunc(){
 	var osTypeName="";
-	if($("#osType").val()!=''){
+	var osType=$("#osType").val();
+	if(osType!=''){
 		osTypeName=$("#osType").find("option:selected").text();
 	}
 	
 	var osBitNumName="";
-	if($("#osBitNum").val()!='' && $("#osBitNum").val()!=''){
+	var osBitNum=$("#osBitNum").val();
+	if(osBitNum!=''){
 		osBitNumName=$("#osBitNum").find("option:selected").text();
 	}
 	
+	getImgList('', osType, osBitNum);
 	$("#imgLabel").html(osTypeName+"&nbsp;"+osBitNumName);
 }
 
@@ -564,17 +615,84 @@ function uploadFileFunc() {
 	});
 }
 
-//模板列表查询
-function getImgList(platTypeId){
+//环境代码列表查询
+function getEnvCodeList(areaCodeId){
+	if(areaCodeId==''){
+		areaCodeId=$("#areaCode").val();
+	}
+	
 	$.ajax({
 	    type: 'post',  
-	    url: 'getImgList.do?platTypeId='+platTypeId,
+	    url: 'getEnvCodeList.do?areaCodeId='+areaCodeId,
+	    dataType: 'json',
+	    success: function(data){
+	    	$("#envCodeId").empty();//清空环境代码列表
+		    if(data.retCode=="0"){//删除成功
+		    	$.each(data.dataList, function (i, item) {
+				    $("#envCodeId").append("<li onclick=\"setFieldValue(this, 'envCode', '"+item.dictCode+"');getPlatTypeList('', '"+item.dictCode+"');checkNum('"+item.diskNum+"', '"+item.diskMaxNum+"', '"+item.softNum+"');\" class='"+(item.dictDefault=='1'?"active":"")+"'>"+item.dictValue+"</li>");
+			    });
+			    
+			    $("#envCode").val(data.defaultEnvCode);//设置默认值
+			    getPlatTypeList('', data.defaultEnvCode);
+			    checkNum(data.defaultDiskNum, data.defaultDiskMaxNum, data.defaultSoftNum);//数量校验
+		    }
+	    },
+	    error: function(data) {}
+	});
+}
+
+//平台类型列表查询
+function getPlatTypeList(areaCodeId, envCodeId){
+	if(areaCodeId==''){
+		areaCodeId=$("#areaCode").val();
+	}
+	
+	if(envCodeId==''){
+		envCodeId=$("#envCode").val();
+	}
+	
+	$.ajax({
+	    type: 'post',  
+	    url: 'getPlatTypeList.do?areaCodeId='+areaCodeId+'&envCodeId='+envCodeId,
+	    dataType: 'json',
+	    success: function(data){
+	    	$("#platTypeId").empty();//清空平台类型列表
+		    if(data.retCode=="0"){//删除成功
+		    	$.each(data.dataList, function (i, item) {
+				    $("#platTypeId").append("<li onclick=\"setFieldValue(this, 'platType', '"+item.dictCode+"');getImgList('"+item.dictCode+"', '', '');\" class='"+(item.dictDefault=='1'?"active":"")+"'>"+item.dictValue+"</li>");
+			    });
+			    
+			    $("#platType").val(data.defaultPlatType);//设置默认值
+			    getImgList(data.defaultPlatType, '', '');
+		    }
+	    },
+	    error: function(data) {}
+	});
+}
+
+//模板列表查询
+function getImgList(platTypeId, osType, osBitNum){
+	if(platTypeId==''){
+		platTypeId=$("#platType").val();
+	}
+	
+	if(osType==''){
+		osType=$("#osType").val();
+	}
+	
+	if(osBitNum==''){
+		osBitNum=$("#osBitNum").val();
+	}
+	
+	$.ajax({
+	    type: 'post',  
+	    url: 'getImgList.do?platTypeId='+platTypeId+'&osType='+osType+'&osBitNum='+osBitNum,
 	    dataType: 'json',
 	    success: function(data){
 	    	$("#imgCode").empty();//清空模板列表
 		    if(data.retCode=="0"){//删除成功
 		    	$("#imgCode").append("<option value=''>请选择</option>");
-		    	$.each(data.imgList, function (i, item) {
+		    	$.each(data.dataList, function (i, item) {
 				    $("#imgCode").append("<option value='"+item.dictCode+"'>"+item.dictValue+"</option>");
 			    });
 		    }
@@ -582,7 +700,18 @@ function getImgList(platTypeId){
 	    error: function(data) {}
 	});
 }
-	
+
+//数量校验
+function checkNum(diskNum, diskMaxNum, softNum){
+	$("#diskNum").val(diskNum);
+	$("#diskMaxNum").val(diskMaxNum);
+	$("#softNum").val(softNum);
+	$("#diskNumId").html(diskNum);
+	$("#softNumId").html(softNum);
+	$.each($("#diskTableId tr"), function (i, item) {if(i!=0){delRow($(this).attr("id"));}else{diskSizeFunc(document.getElementById("diskSize"), 'diskType', 'iopsId');}});
+	$.each($("#softTableId tr"), function (i, item) {if(i!=0){delRow($(this).attr("id"));}});
+}
+
 //必须加<!DOCTYPE html>
 //$(document).height();//整个网页的高度
 //$(window).height();//浏览器可视窗口的高度
@@ -606,10 +735,13 @@ $(window).scroll(function() {
 <div class="tab-content">
 <div id="zdysq" class="tab-pane fade in active">
 	<form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
-	<input type="hidden" name="areaCode" id="areaCode" value="1"/>
+	<input type="hidden" name="areaCode" id="areaCode" value="${defaultAreaCode}"/>
+	<input type="hidden" name="envCode" id="envCode" value="${defaultEnvCode}"/>
+	<input type="hidden" name="diskNum" id="diskNum" value="${defaultDiskNum}"/>
+	<input type="hidden" name="diskMaxNum" id="diskMaxNum" value="${defaultDiskMaxNum}"/>
+	<input type="hidden" name="softNum" id="softNum" value="${defaultSoftNum}"/>
 	<input type="hidden" name="platType" id="platType" value="${defaultPlatType}"/>
 	<input type="hidden" name="deployType" id="deployType" value="1"/>
-	<input type="hidden" name="envCode" id="envCode" value="${defaultEnvCode}"/>
 	<input type="hidden" name="resType" id="resType" value="1"/>
 	<input type="hidden" name="cpu" id="cpu" value="1"/>
 	<input type="hidden" name="memory" id="memory" value="1"/>
@@ -625,53 +757,25 @@ $(window).scroll(function() {
 		<tr class="tablecls">
 			<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;地域&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
-			<td align="left" style="padding:10px;" colspan="6">
+			<td align="left" style="padding:10px;height:56px;" colspan="6">
 				<ul id="areaCodeId" class="ullitab list-inline">
 					<c:if test="${not empty areaCodeList}">
 					<c:forEach items="${areaCodeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'areaCode', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li onclick="setFieldValue(this, 'areaCode', '${var.dictCode}');getEnvCodeList('${var.dictCode}');getPlatTypeList('${var.dictCode}', '');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
-		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
-			<td align="right" style="width: 120px;padding:10px;"></td>
-			<td align="left" style="padding:10px;" colspan="6">
-				<ul id="platTypeId" class="ullitab list-inline">
-					<c:if test="${not empty platTypeList}">
-					<c:forEach items="${platTypeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'platType', '${var.dictCode}');getImgList('${var.dictCode}');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
-					</c:forEach>
-					</c:if>
-				</ul>
-			</td>
-		</tr>
-		<tr><td colspan="8" height="10px"></td>
-		<tr class="tablecls">
-			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
-			<td align="right" style="width: 120px;padding:10px;"></td>
-			<td align="left" style="padding:10px;" colspan="6">
-				<ul id="deployTypeId" class="ullitab list-inline">
-					<c:if test="${not empty deployTypeList}">
-					<c:forEach items="${deployTypeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'deployType', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
-					</c:forEach>
-					</c:if>
-				</ul>
-			</td>
-		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">环境：</td>
-			<td align="left" style="padding:10px;" colspan="6">
+			<td align="left" style="padding:10px;height:56px;" colspan="6">
 				<ul id="envCodeId" class="ullitab list-inline">
 					<c:if test="${not empty envCodeList}">
 					<c:forEach items="${envCodeList}" var="var" varStatus="st">
-					<li onclick="setFieldValue(this, 'envCode', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					<li onclick="setFieldValue(this, 'envCode', '${var.dictCode}');getPlatTypeList('', '${var.dictCode}');checkNum('${var.diskNum}', '${var.diskMaxNum}', '${var.softNum}');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 					</c:forEach>
 					</c:if>
 				</ul>
@@ -689,7 +793,35 @@ $(window).scroll(function() {
 			</td>
 			<td align="left" style="padding-right:10px;padding-bottom:10px;" colspan="5">&nbsp;</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
+		<tr class="tablecls">
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
+			<td align="left" style="padding:10px;height:56px;" colspan="6">
+				<ul id="platTypeId" class="ullitab list-inline">
+					<c:if test="${not empty platTypeList}">
+					<c:forEach items="${platTypeList}" var="var" varStatus="st">
+					<li onclick="setFieldValue(this, 'platType', '${var.dictCode}');getImgList('${var.dictCode}', '', '');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					</c:forEach>
+					</c:if>
+				</ul>
+			</td>
+		</tr>
+		<%-- <tr><td colspan="8" height="10px"></td></tr>
+		<tr class="tablecls">
+			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
+			<td align="left" style="padding:10px;" colspan="6">
+				<ul id="deployTypeId" class="ullitab list-inline">
+					<c:if test="${not empty deployTypeList}">
+					<c:forEach items="${deployTypeList}" var="var" varStatus="st">
+					<li onclick="setFieldValue(this, 'deployType', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+					</c:forEach>
+					</c:if>
+				</ul>
+			</td>
+		</tr> --%>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="5"><span class="glyphicon glyphicon-cog"></span>&nbsp;基本配置</td>
 			<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
@@ -746,7 +878,7 @@ $(window).scroll(function() {
 				</ul>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
@@ -792,10 +924,10 @@ $(window).scroll(function() {
 				<input type="text" name="imgPath" id="imgPath" style="width: 100%;" value="/opt"/>
 			</td>
 			<td align="left" style="padding-left:10px;padding-bottom:10px;">
-				Linux系统必填
+				Linux必填
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
@@ -811,20 +943,20 @@ $(window).scroll(function() {
 						  	</select>
 						</td>
 						<td align="left" style="width: 120px;">
-							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')" onchange="diskTypeFunc()"/>
+							<input type="text" name="diskSize" id="diskSize" value="20" style="width: 120px;" maxlength="5" onblur="diskSizeFunc(this, 'diskType', 'iopsId')"/>
 						</td>
 						<td align="left" style="width: 20px;">GB</td>
 						<td align="right" style="padding-right:13px;">
-						  	<span id="iopsId">1120</span>&nbsp;IOPS&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密&nbsp;
+						  	<span style="display:none"><span id="iopsId">1120</span>&nbsp;IOPS&nbsp;<input name="diskEncrypt" type="checkbox" value=""/>加密</span>&nbsp;
 						</td>
 						<td align="left" valign="bottom" style="width: 200px;padding-bottom:8px;" rowspan="15">
-							&nbsp;<a href="javascript:void()" onclick="addDiskRow()"><span class="glyphicon glyphicon-plus"></span></a>增加磁盘，您可选配15块
+							&nbsp;<a href="javascript:void()" onclick="addDiskRow()"><span class="glyphicon glyphicon-plus"></span></a>增加磁盘，您可选配<span id="diskNumId">${defaultDiskNum}</span>块
 						</td>
 					</tr>
 				</table>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
 			<td align="right" style="width: 120px;padding:10px;"></td>
@@ -843,16 +975,16 @@ $(window).scroll(function() {
 							<input type="hidden" name="softParam" id="softParam" value=""/><a href="javascript:void()" onclick="setSoftParam(0)">设置参数</a>&nbsp;
 						</td>
 						<td align="left" valign="bottom" style="width: 200px;padding-bottom:9px;" rowspan="15">
-							&nbsp;<a href="javascript:void()" onclick="addSoftRow()"><span class="glyphicon glyphicon-plus"></span></a>增加安装软件，您可选择15个
+							&nbsp;<a href="javascript:void()" onclick="addSoftRow()"><span class="glyphicon glyphicon-plus"></span></a>增加安装软件，您可选择<span id="softNumId">${defaultSoftNum}</span>个
 						</td>
 					</tr>
 				</table>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="width: 120px;padding:10px;" colspan="6">
 				<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 				    <input type="text" id="virNum" name="virNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1" onchange="virNumFunc()"> 
@@ -863,23 +995,23 @@ $(window).scroll(function() {
 				</div>
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
-			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
+			<td align="right" style="width: 120px;padding:10px;"></td>
 			<td style="padding:10px;" colspan="6">
 				<input type="text" name="expireDate" id="expireDate" value="" class="span10 date-picker" onchange="checkExpireDate(false)" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:120px;" placeholder="到期时间"/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="expireDateChk" value="" onclick="checkExpireDate(true)"/>永久
 			</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;上传附件</td>
 			<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
 			<td style="padding:10px;"><input style="background-color:#cccccc;" type="file" name="uploadFile" id="uploadFile" value="选择文件" accept=".txt,.doc,.docx,.xls,.xlsx,image/*"/></td>
 			<td colspan="5"><input type="button" value="上传" onclick="uploadFileFunc()">&nbsp;格式要求：txt,word,excel,image</td>
 		</tr>
-		<tr><td colspan="8" height="10px"></td>
+		<tr><td colspan="8" height="10px"></td></tr>
 		<tr class="tablecls">
 			<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;当前配置</td>
 			<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>
@@ -924,7 +1056,7 @@ $(window).scroll(function() {
 			<div id="getShoppingCartList" style="height:0px;overflow-y: auto;"></div>
 			<div id="batchBuy" class="divbtn" style="display:none;width:100%;height:50px;padding:10px;border-top:1px solid #f5f5f5;">
 				共计(元)：<span id="allTotalAmt" style="font-size:26px;color: #f5620a;">￥0.00</span>
-				<span class="btncls" style="width:80px;background-color:#f5620a;"><a href="javascript:void()" onclick="batchBuy()">批量购买</a></span>
+				<span class="btncls active" style="width:80px;background-color:#f5620a;"><a href="javascript:void()" onclick="batchBuy()">批量购买</a></span>
 				<span style="width:10px;float:right;">&nbsp;</span>
 			    <span class="btncls" style="width:80px;"><a href="javascript:void()" onclick="clearShoppingCart()">清空购物车</a></span>
 			</div>

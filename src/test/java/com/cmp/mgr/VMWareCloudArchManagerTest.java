@@ -1,25 +1,17 @@
 package com.cmp.mgr;
 
-import java.util.Optional;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.cmp.entity.tcc.TccCloudPlatform;
-import com.cmp.entity.tcc.TccCluster;
-import com.cmp.entity.tcc.TccDatastore;
-import com.cmp.entity.tcc.TccHostMachine;
-import com.cmp.entity.tcc.TccNetwork;
-import com.cmp.entity.tcc.TccResourcePool;
-import com.cmp.entity.tcc.TccVirtualMachine;
-import com.cmp.entity.tcc.TccVmSnapshot;
+import com.cmp.entity.tcc.*;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.vmware.VMWareCloudArchManager;
 import com.vmware.vim25.Description;
 import com.vmware.vim25.VirtualDevice;
 import com.vmware.vim25.mo.Datacenter;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Optional;
 
 public class VMWareCloudArchManagerTest implements CloudArchTest {
 
@@ -123,7 +115,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 		});
 	}
 
-	// @Test
+	@Test
 	public void testCreateVM() {
 		execute("CreateVirtualMachine", () -> {
 			CreateVmRequest request = new CreateVmRequest();
@@ -147,13 +139,12 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 	public void testCloneVM() {
 		execute("CloneVirtualMachine", () -> {
 			CloneVmRequest request = new CloneVmRequest();
-			request.setVmName("TestVM");
-			request.setTplName("rhel6.0_x64_template");
+			request.setVmName("TestVM4");
+			request.setTplName("redhat");
 			request.setDcName("DC1");
-			request.setRpName("Resources");
 			request.setCpuSize(1);
 			request.setRamSize(1024);
-			request.setIp("192.168.0.131");
+			request.setIp("192.168.0.152");
 
 			cloudArchManager.cloneVirtualMachine(request);
 		});

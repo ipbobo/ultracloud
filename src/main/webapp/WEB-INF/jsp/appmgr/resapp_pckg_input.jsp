@@ -49,7 +49,7 @@ function addPckgDiskRow(diskType, diskSize, diskEncrypt){
 		    var tdStr="<td align=\"left\" style=\"width: 120px;padding-right:10px;padding-top:10px;\"><select class=\"chosen-select form-control\" name=\"tcdiskType\" id=\"tcdiskType"+i+"\" data-placeholder=\"请选择磁盘类型\" style=\"vertical-align:top;width: 120px;\" disabled>"+$("#tcdiskType").html()+"</select></td>"
 			    +"<td align=\"left\" style=\"width: 120px;padding-top:10px;\"><input type=\"text\" name=\"tcdiskSize\" id=\"tcdiskSize"+i+"\" value=\"20\" style=\"width: 120px;\" maxlength=\"5\" disabled/></td>"
 			    +"<td align=\"left\" style=\"padding-top:10px;\">GB</td>"
-			    +"<td align=\"right\" style=\"padding-top:10px;\"><span id=\"tciopsId"+i+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"tcdiskEncrypt\" id=\"tcdiskEncrypt"+i+"\" type=\"checkbox\" value=\"\" disabled/>加密&nbsp;</td>";
+			    +"<td align=\"right\" style=\"padding-top:10px;display:none\"><span id=\"tciopsId"+i+"\">1120</span>&nbsp;IOPS&nbsp;<input name=\"tcdiskEncrypt\" id=\"tcdiskEncrypt"+i+"\" type=\"checkbox\" value=\"\" disabled/>加密&nbsp;</td>";
 		    $("#tcdiskTableId").append("<tr>"+tdStr+"</tr>");
 		    $("#tcdiskType"+i).val(item);
 		    $("#tcdiskSize"+i).val(diskSizes[i]);
@@ -80,11 +80,64 @@ function addPckgSoftRow(softCode, softParam){
     });
 }
 
+//环境代码列表查询
+function getTcEnvCodeList(areaCodeId){
+	if(areaCodeId==''){
+		areaCodeId=$("#tcareaCode").val();
+	}
+	
+	$.ajax({
+	    type: 'post',  
+	    url: 'getEnvCodeList.do?areaCodeId='+areaCodeId,
+	    dataType: 'json',
+	    success: function(data){
+	    	$("#tcenvCodeId").empty();//清空环境代码列表
+		    if(data.retCode=="0"){//删除成功
+		    	$.each(data.dataList, function (i, item) {
+				    $("#tcenvCodeId").append("<li onclick=\"setFieldValue(this, 'tcenvCode', '"+item.dictCode+"');getTcPlatTypeList('', '"+item.dictCode+"');\" class='"+(item.dictDefault=='1'?"active":"")+"'>"+item.dictValue+"</li>");
+			    });
+			    
+			    $("#tcenvCode").val(data.defaultPlatType);//设置默认值
+			    getTcPlatTypeList('', data.defaultPlatType);
+		    }
+	    },
+	    error: function(data) {}
+	});
+}
+
+//平台类型列表查询
+function getTcPlatTypeList(areaCodeId, envCodeId){
+	if(areaCodeId==''){
+		areaCodeId=$("#tcareaCode").val();
+	}
+	
+	if(envCodeId==''){
+		envCodeId=$("#tcenvCode").val();
+	}
+	
+	$.ajax({
+	    type: 'post',  
+	    url: 'getPlatTypeList.do?areaCodeId='+areaCodeId+'&envCodeId='+envCodeId,
+	    dataType: 'json',
+	    success: function(data){
+	    	$("#tcplatTypeId").empty();//清空平台类型列表
+		    if(data.retCode=="0"){//删除成功
+		    	$.each(data.dataList, function (i, item) {
+				    $("#tcplatTypeId").append("<li onclick=\"setFieldValue(this, 'tcplatType', '"+item.dictCode+"');\" class='"+(item.dictDefault=='1'?"active":"")+"'>"+item.dictValue+"</li>");
+			    });
+			    
+			    $("#tcplatType").val(data.defaultPlatType);//设置默认值
+		    }
+	    },
+	    error: function(data) {}
+	});
+}
+
 //选择套餐
 function choosePckg(jsonStr){
 	var jsonObj=$.parseJSON(jsonStr);//套餐JSON对象
 	$("#pckgId").val(jsonObj.id);
-	setFieldValue(document.getElementById("tcenvCodeId"+jsonObj.envCode), 'tcenvCode', jsonObj.envCode);
+	//setFieldValue(document.getElementById("tcenvCodeId"+jsonObj.envCode), 'tcenvCode', jsonObj.envCode);
 	$("#tcprojectCode").val(jsonObj.projectCode);
 	setFieldValue(document.getElementById("tcresTypeId"+jsonObj.resType), 'tcresType', jsonObj.resType);
 	//$("#tcvirName").val(jsonObj.virName);
@@ -126,7 +179,8 @@ function getCurrConf(jsonObj){
 </head>
 <body class="resapp-qry-input">
 <form id="tcmainForm" name="tcmainForm" action="" enctype="multipart/form-data" method="post">
-<input type="hidden" name="tcareaCode" id="tcareaCode" value="1"/>
+<input type="hidden" name="tcareaCode" id="tcareaCode" value="${defaultAreaCode}"/>
+<input type="hidden" name="tcenvCode" id="tcenvCode" value="${defaultEnvCode}"/>
 <input type="hidden" name="tcplatType" id="tcplatType" value="${defaultTcplatType}"/>
 <input type="hidden" name="tcdeployType" id="tcdeployType" value="1"/>
 <input type="hidden" name="pckgId" id="pckgId" value=""/>
@@ -134,21 +188,47 @@ function getCurrConf(jsonObj){
 	<tr class="tablecls">
 		<td align="left" style="width: 90px;padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;地域&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td align="right" style="width: 120px;padding:10px;">&nbsp;</td>
-		<td align="left" style="padding:10px;" colspan="6">
+		<td align="left" style="padding:10px;height:56px;" colspan="6">
 			<ul id="tcareaCodeId" class="ullitab list-inline">
 				<c:if test="${not empty areaCodeList}">
 				<c:forEach items="${areaCodeList}" var="var" varStatus="st">
-				<li onclick="setFieldValue(this, 'tcareaCode', '${var.dictCode}')" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+				<li onclick="setFieldValue(this, 'tcareaCode', '${var.dictCode}');getTcEnvCodeList('${var.dictCode}');getTcPlatTypeList('${var.dictCode}', '');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
 				</c:forEach>
 				</c:if>
 			</ul>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
+	<tr class="tablecls">
+		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+		<td align="right" style="width: 120px;padding:10px;">环境：</td>
+		<td align="left" style="padding:10px;height:56px;" colspan="6">
+			<ul id="tcenvCodeId" class="ullitab list-inline">
+				<c:if test="${not empty envCodeList}">
+				<c:forEach items="${envCodeList}" var="var" varStatus="st">
+				<li id="tcenvCodeId${var.dictCode}" onclick="setFieldValue(this, 'tcenvCode', '${var.dictCode}');getTcPlatTypeList('', '${var.dictCode}');" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
+				</c:forEach>
+				</c:if>
+			</ul>
+		</td>
+	</tr>
+	<tr class="tablecls">
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">项目：</td>
+		<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
+			<select class="chosen-select form-control" name="tcprojectCode" id="tcprojectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 100%;" disabled>
+			<option value="">请选择</option>
+			<c:forEach items="${projectList}" var="var">
+				<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
+			</c:forEach>
+		  	</select>
+		</td>
+		<td align="left" style="padding:10px;" colspan="5">&nbsp;</td>
+	</tr>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;平台类型</td>
 		<td align="right" style="width: 120px;padding:10px;"></td>
-		<td align="left" style="padding:10px;" colspan="6">
+		<td align="left" style="padding:10px;;height:56px;" colspan="6">
 			<ul id="tcplatTypeId" class="ullitab list-inline">
 				<c:if test="${not empty platTypeList}">
 				<c:forEach items="${platTypeList}" var="var" varStatus="st">
@@ -158,7 +238,7 @@ function getCurrConf(jsonObj){
 			</ul>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<%-- <tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;部署类型</td>
 		<td align="right" style="width: 120px;padding:10px;"></td>
@@ -171,8 +251,8 @@ function getCurrConf(jsonObj){
 				</c:if>
 			</ul>
 		</td>
-	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	</tr> --%>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;套餐列表</td>
 		<td align="left" style="padding:10px;" colspan="7">
@@ -214,33 +294,7 @@ function getCurrConf(jsonObj){
 			</table>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
-	<tr class="tablecls">
-		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;项目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td align="right" style="width: 120px;padding:10px;">环境：</td>
-		<td align="left" style="padding:10px;" colspan="6">
-			<ul id="tcenvCodeId" class="ullitab list-inline">
-				<c:if test="${not empty envCodeList}">
-				<c:forEach items="${envCodeList}" var="var" varStatus="st">
-				<li id="tcenvCodeId${var.dictCode}" class=${var.dictDefault=='1'?"active":""}>${var.dictValue}</li>
-				</c:forEach>
-				</c:if>
-			</ul>
-		</td>
-	</tr>
-	<tr class="tablecls">
-		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">项目：</td>
-		<td align="left" style="width: 120px;padding-left:10px;padding-bottom:10px;">
-			<select class="chosen-select form-control" name="tcprojectCode" id="tcprojectCode" data-placeholder="请选择项目" style="vertical-align:top;width: 100%;" disabled>
-			<option value="">请选择</option>
-			<c:forEach items="${projectList}" var="var">
-				<option value="${var.dictCode}" <c:if test="${var.dictDefault=='1'}">selected</c:if>>${var.dictValue}</option>
-			</c:forEach>
-		  	</select>
-		</td>
-		<td align="left" style="padding:10px;" colspan="5">&nbsp;</td>
-	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="5"><span class="glyphicon glyphicon-cog"></span>&nbsp;基本配置</td>
 		<td align="right" style="width: 120px;padding:10px;">资源类型：</td>
@@ -297,7 +351,7 @@ function getCurrConf(jsonObj){
 			</ul>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;镜像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td align="right" style="width: 120px;padding:10px;">操作系统：</td>
@@ -346,10 +400,10 @@ function getCurrConf(jsonObj){
 			Linux系统必填
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;存储&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">数据盘：</td>
+		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;"></td>
 		<td style="padding:10px;" colspan="6">
 			<table id="tcdiskTableId">
 				<tr>
@@ -365,17 +419,17 @@ function getCurrConf(jsonObj){
 						<input type="text" name="tcdiskSize" id="tcdiskSize" value="20" style="width: 120px;" maxlength="5" disabled/>
 					</td>
 					<td align="left" style="width: 20px;">GB</td>
-					<td align="right">
+					<td align="right" style="display:none">
 					  	<span id="tciopsId">1120</span>&nbsp;IOPS&nbsp;<input name="tcdiskEncrypt" id="tcdiskEncrypt" type="checkbox" value="" disabled/>加密&nbsp;
 					</td>
 				</tr>
 			</table>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;软件安装</td>
-		<td align="right" style="width: 120px;padding-right:10px;padding-bottom:10px;">安装软件：</td>
+		<td align="right" style="width: 120px;padding:10px;"></td>
 		<td style="padding:10px;" colspan="6">
 			<table id="tcsoftTableId">
 				<tr>
@@ -394,10 +448,10 @@ function getCurrConf(jsonObj){
 			</table>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;数量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td align="right" style="width: 120px;padding:10px;">数量：</td>
+		<td align="right" style="width: 120px;padding:10px;"></td>
 		<td style="width: 120px;padding:10px;" colspan="6">
 			<div class="input-group spinner" data-trigger="spinner" id="spinner" style="width: 120px;"> 
 			    <input type="text" id="tcvirNum" name="tcvirNum" class="form-control" value="1" data-max="1000" data-min="1" data-step="1" disabled> 
@@ -408,16 +462,16 @@ function getCurrConf(jsonObj){
 			</div>
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle"><span class="glyphicon glyphicon-cog"></span>&nbsp;到期时间</td>
-		<td align="right" style="width: 120px;padding:10px;">到期时间：</td>
+		<td align="right" style="width: 120px;padding:10px;"></td>
 		<td style="padding:10px;" colspan="6">
 			<input type="text" name="tcexpireDate" id="tcexpireDate" value="" class="span10 date-picker" data-date-format="yyyy-mm-dd" style="width:120px;" placeholder="到期时间" disabled/>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="" disabled/>永久
 		</td>
 	</tr>
-	<tr><td colspan="8" height="10px"></td>
+	<tr><td colspan="8" height="10px"></td></tr>
 	<tr class="tablecls">
 		<td align="left" style="padding-left:10px;background-color:#cccccc;" class="first-td" valign="middle" rowspan="2"><span class="glyphicon glyphicon-cog"></span>&nbsp;当前配置</td>
 		<td align="right" valign="top" style="width: 120px;padding:10px;">资源类型：</td>

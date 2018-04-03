@@ -30,6 +30,7 @@ import com.cmp.service.CmpWorkOrderService;
 import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.resourcemgt.CloudplatformService;
+import com.cmp.service.servicemgt.AreaService;
 import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.service.servicemgt.MirrorService;
 import com.cmp.sid.CmpDict;
@@ -68,6 +69,8 @@ public class AppMgrController extends BaseController {
 	@Resource
 	private CloudplatformService cloudplatformService;
 	@Resource
+	private AreaService areaService;
+	@Resource
 	private CmpLogService cmpLogService;
 	@Value("${uploadFilePath}")
 	private String uploadFilePath;//上传文件路径
@@ -75,30 +78,42 @@ public class AppMgrController extends BaseController {
 	//资源申请预查询
 	@RequestMapping(value="/resAppPre")
 	public ModelAndView resAppPre(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String platTypeId=request.getParameter("platTypeId");//平台类型
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
-		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList();//平台类型列表
+		String areaCodeId=null;//平台类型
+		List<CmpDict> areaCodeList=areaService.getAreaCodeList();//区域列表
+		if(areaCodeList!=null && !areaCodeList.isEmpty()){
+			CmpDict cmpDict=areaCodeList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultAreaCode", cmpDict.getDictCode());//默认平台类型
+			mv.addObject("areaCodeList", areaCodeList);//区域列表
+			areaCodeId=cmpDict.getDictCode();//区域
+		}
+		
+		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
+		String envCodeId=null;//环境代码
+		List<CmpDict> envList=environmentService.getEnvList(areaCodeId);
+		if(envList!=null && !envList.isEmpty()){
+			CmpDict cmpDict=envList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultEnvCode", cmpDict.getDictCode());//默认环境
+			mv.addObject("defaultDiskNum", cmpDict.getDiskNum());//挂载云磁盘数量
+			mv.addObject("defaultDiskMaxNum", cmpDict.getDiskMaxNum());//每块云磁盘最大值
+			mv.addObject("defaultSoftNum", cmpDict.getSoftNum());//安装软件数量
+			mv.addObject("envCodeList", envList);//环境列表
+			envCodeId=cmpDict.getDictCode();//平台类型
+		}
+		
+		String platTypeId=null;//平台类型
+		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList(areaCodeId, envCodeId);//平台类型列表
 		if(platTypeList!=null && !platTypeList.isEmpty()){
 			CmpDict cmpDict=platTypeList.get(0);//第一项
 			cmpDict.setDictDefault("1");//默认选择第一项
 			mv.addObject("defaultPlatType", cmpDict.getDictCode());//默认平台类型
 			mv.addObject("platTypeList", platTypeList);//平台类型列表
-			if(StringUtils.isBlank(platTypeId)){
-				platTypeId=cmpDict.getDictCode();//平台类型
-			}
+			platTypeId=cmpDict.getDictCode();//平台类型
 		}
 		
-		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
 		String applyUserId=StringUtil.getUserName();//申请者
-		List<CmpDict> envList=environmentService.getEnvList();
-		if(envList!=null && !envList.isEmpty()){
-			CmpDict cmpDict=envList.get(0);//第一项
-			cmpDict.setDictDefault("1");//默认选择第一项
-			mv.addObject("defaultEnvCode", cmpDict.getDictCode());//默认环境
-			mv.addObject("envCodeList", envList);//环境列表
-		}
-		
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
 		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
@@ -118,20 +133,76 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
+	//环境代码列表查询
+	@RequestMapping(value="/getEnvCodeList", produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+	public String getEnvCodeList(String areaCodeId) throws Exception{
+		String envCodeId=null;//环境代码
+		int diskNumId=15;//挂载云磁盘数量
+		int diskMaxNumId=32768;//每块云磁盘最大值
+		int softNumId=15;//安装软件数量
+		List<CmpDict> envList=environmentService.getEnvList(areaCodeId);
+		if(envList!=null && !envList.isEmpty()){
+			CmpDict cmpDict=envList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			envCodeId=cmpDict.getDictCode();//平台类型
+			diskNumId=cmpDict.getDiskNum();//挂载云磁盘数量
+			diskMaxNumId=cmpDict.getDiskMaxNum();//每块云磁盘最大值
+			softNumId=cmpDict.getSoftNum();//安装软件数量
+		}
+		
+		return StringUtil.getRetStr("0", "调用成功", "dataList", envList, "defaultEnvCode", envCodeId, "defaultDiskNum", diskNumId, "defaultDiskMaxNum", diskMaxNumId, "defaultSoftNum", softNumId);
+	}
+	
+	//平台类型列表查询
+	@RequestMapping(value="/getPlatTypeList", produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+	public String getPlatTypeList(String areaCodeId, String envCodeId) throws Exception{
+		String platTypeId=null;//平台类型
+		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList(areaCodeId, envCodeId);//平台类型列表
+		if(platTypeList!=null && !platTypeList.isEmpty()){
+			CmpDict cmpDict=platTypeList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			platTypeId=cmpDict.getDictCode();//默认平台类型
+		}
+		
+		return StringUtil.getRetStr("0", "调用成功", "dataList", platTypeList, "defaultPlatType", platTypeId);
+	}
+	
 	//模板列表查询
 	@RequestMapping(value="/getImgList", produces={"application/json;charset=UTF-8"})
     @ResponseBody
-	public String getImgList(String platTypeId) throws Exception{
-		List<CmpDict> imgList=mirrorService.getImgList(new PageData("platTypeId", platTypeId));//模板列表
-		return StringUtil.getRetStr("0", "调用成功", "imgList", imgList);
+	public String getImgList(String platTypeId, String osType, String osBitNum) throws Exception{
+		List<CmpDict> imgList=mirrorService.getImgList(new PageData("platTypeId", platTypeId, "osType", osType, "osBitNum", osBitNum));//模板列表
+		return StringUtil.getRetStr("0", "调用成功", "dataList", imgList);
 	}
 	
 	//套餐申请预查询
 	@RequestMapping(value="/pckgAppPre")
 	public ModelAndView pckgAppPre() throws Exception{
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("areaCodeList", cmpDictService.getCmpDictList("area_code"));//区域列表
-		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList();//平台类型列表
+		String areaCodeId=null;//平台类型
+		List<CmpDict> areaCodeList=areaService.getAreaCodeList();//区域列表
+		if(areaCodeList!=null && !areaCodeList.isEmpty()){
+			CmpDict cmpDict=areaCodeList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultAreaCode", cmpDict.getDictCode());//默认平台类型
+			mv.addObject("areaCodeList", areaCodeList);//区域列表
+			areaCodeId=cmpDict.getDictCode();//区域
+		}
+		
+		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
+		String envCodeId=null;//环境代码
+		List<CmpDict> envList=environmentService.getEnvList(areaCodeId);
+		if(envList!=null && !envList.isEmpty()){
+			CmpDict cmpDict=envList.get(0);//第一项
+			cmpDict.setDictDefault("1");//默认选择第一项
+			mv.addObject("defaultEnvCode", cmpDict.getDictCode());//默认环境
+			mv.addObject("envCodeList", envList);//环境列表
+			envCodeId=cmpDict.getDictCode();//平台类型
+		}
+		
+		List<CmpDict> platTypeList=cloudplatformService.getPlatTypeList(areaCodeId, envCodeId);//平台类型列表
 		if(platTypeList!=null && !platTypeList.isEmpty()){
 			CmpDict cmpDict=platTypeList.get(0);//第一项
 			cmpDict.setDictDefault("1");//默认选择第一项
@@ -139,8 +210,6 @@ public class AppMgrController extends BaseController {
 			mv.addObject("platTypeList", platTypeList);//环境列表
 		}
 		
-		mv.addObject("deployTypeList", cmpDictService.getCmpDictList("deploy_type"));//部署类型列表
-		mv.addObject("envCodeList", environmentService.getEnvList());//环境列表
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
 		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
@@ -185,6 +254,29 @@ public class AppMgrController extends BaseController {
 		return mv;
 	}
 	
+	//软件参数列表查询
+	@RequestMapping(value="/getParamList")
+	public ModelAndView getParamList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String softCode=request.getParameter("softCode");//软件代码
+		List<CmpDict> paramList=mediumService.getSoftParamList(softCode);//软件参数列表查询
+		StringBuffer sb=new StringBuffer();
+		if(paramList!=null && !paramList.isEmpty()){
+			for(CmpDict cmpDict: paramList){
+				if(sb.length()!=0){
+					sb.append(",");
+				}
+				
+				sb.append(cmpDict.getDictCode()).append(":").append(cmpDict.getDictValue());
+			}
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("appmgr/resapp_softparam_input");
+		mv.addObject("softParamStr", sb.toString());//软件参数字符串
+		mv.addObject("paramList", paramList);//软件参数列表
+		return mv;
+	}
+		
 	//加入清单
 	@RequestMapping(value="/addList", produces={"application/json;charset=UTF-8"})
     @ResponseBody
@@ -201,6 +293,7 @@ public class AppMgrController extends BaseController {
 			cmpOrder.setDeptId(user.getDEPARTMENT_ID());//部门ID
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
+			cmpOrderService.saveSoftParams(cmpOrder.getOrderNo(), cmpOrder.getSoftCode(), cmpOrder.getSoftParam());//软件参数列表新增，软件参数：path:/tomcat,user:admin,passwd:admin|path:/tomcat,user:admin,passwd:admin
 			cmpLogService.addCmpLog("1", "加入清单", "加入清单成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "加入清单成功");
 		} catch (Exception e) {
@@ -304,6 +397,7 @@ public class AppMgrController extends BaseController {
 			cmpOrder.setApplyUserId(user.getNAME());//用户名
 			cmpOrder.setDeptId(user.getDEPARTMENT_ID());//部门ID
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
+			cmpOrderService.saveSoftParams(cmpOrder.getOrderNo(), cmpOrder.getSoftCode(), cmpOrder.getSoftParam());//软件参数列表新增，软件参数：path:/tomcat,user:admin,passwd:admin|path:/tomcat,user:admin,passwd:admin
 			cmpLogService.addCmpLog("1", "保存套餐", "保存套餐成功", "0", StringUtil.getClientIp(request));//新增日志
 			return StringUtil.getRetStr("0", "保存套餐成功");
 		} catch (Exception e) {
@@ -370,9 +464,9 @@ public class AppMgrController extends BaseController {
 	private CmpOrder getParam(HttpServletRequest request){
 		CmpOrder cmpOrder=new CmpOrder();
 		cmpOrder.setAreaCode(request.getParameter("areaCode"));//地域
+		cmpOrder.setEnvCode(request.getParameter("envCode"));//环境
 		cmpOrder.setPlatType(request.getParameter("platType"));//平台类型
 		cmpOrder.setDeployType(request.getParameter("deployType"));//部署类型
-		cmpOrder.setEnvCode(request.getParameter("envCode"));//环境
 		cmpOrder.setResType(request.getParameter("resType"));//资源类型
 		cmpOrder.setVirName(request.getParameter("virName"));//虚拟机名称
 		cmpOrder.setVirIp(request.getParameter("virIp"));//虚拟机IP
@@ -402,6 +496,7 @@ public class AppMgrController extends BaseController {
 	private CmpOrder getPckgParam(HttpServletRequest request){
 		CmpOrder cmpOrder=new CmpOrder();
 		cmpOrder.setAreaCode(request.getParameter("tcareaCode"));//地域
+		cmpOrder.setEnvCode(request.getParameter("tcenvCode"));//环境
 		cmpOrder.setPlatType(request.getParameter("tcplatType"));//平台类型
 		cmpOrder.setDeployType(request.getParameter("tcdeployType"));//部署类型
 		cmpOrder.setVirName(request.getParameter("tcvirName"));//虚拟机名称

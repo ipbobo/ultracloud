@@ -43,74 +43,68 @@
 						<form action="bidatacenter/listBillDay.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;width:100%;">
 							<tr>
-								<td style="vertical-align: top;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td>
+								<td style="vertical-align: top;"></td>
+								<td style="vertical-align:top;padding-left:5px;width:150px;">
+								<div class="nav-search" style="float: right;padding-top: 0px;margin-top: 0px;">
+									
+									<td style="width:70px;text-align: right;vertical-align:center;">部门：</td>
+									<td style="vertical-align:center;padding-left:2px;width:150px;">
+										<div style="padding-top: 3px;margin-top: 0px;">
+											<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
+											<div class="selectTree" id="selectTree"></div>
+										</div>
+									</td>
+									
+									<td style="width:60px;text-align: right;vertical-align:center;">项目：</td>
+									<td style="vertical-align:top;padding-left:2px;width:88px;">
+										<div style="padding-top: 0px;margin-top: 0px;">
+										 	<select class="chosen-select form-control" name="project_id" id="project_id" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;">
+												<option value=""></option>
+												<option value="全部"></option>
+												<c:forEach items="${projectList}" var="project">
+													<option value="${project.id }" <c:if test="${pd.project_id==project.id}">selected</c:if>>${project.name }</option>
+												</c:forEach>
+										  	</select>
+									  	</div>
+									</td>
+									
+									<td style="width:80px;text-align: right;vertical-align:center;">申请人：</td>
+									<td style="vertical-align:top;padding-left:2px;width:100px;">
+										<div style="padding-top: 0px;margin-top: 0px;">
+										 	<select class="chosen-select form-control" name="USERNAME" id="USERNAME" data-placeholder="请选择申请人" style="vertical-align:top;width: 120px;">
+												<option value=""></option>
+												<option value="全部"></option>
+												<c:forEach items="${userList}" var="user">
+													<option value="${user.USERNAME}" <c:if test="${pd.USERNAME==user.USERNAME}">selected</c:if>>${user.USERNAME}</option>
+												</c:forEach>
+										  	</select>
+									  	</div>
+									</td>
+									
+									<td style="width:100px;text-align: right;vertical-align:center;">时间范围：</td>
+									<td style="vertical-align:top;padding-left:2px;width:88px;">
+										<div style="padding-top: 0px;margin-top: 0px;">
+										<input class="span10 date-picker" name="startTime" id="startTime"  value="${pd.startTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/>
+										</div>
+									</td>
+									<td style="width:10px;text-align: right;vertical-align:center;">-</td>
+									<td style="vertical-align:top;padding-left:5px;width:88px;">
+										<div style="padding-top: 0px;margin-top: 0px;">
+										<input class="span10 date-picker" name="endTime" name="endTime"  value="${pd.endTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/>
+										</div>
+									</td>
+									
+									<td style="vertical-align:top;padding-left:10px;width:150px;">
+											<span class="input-icon">
+												<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+												<i class="ace-icon fa fa-search nav-search-icon"></i>
+											</span>
+									</td>
+									<td style="vertical-align:top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="searchs();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								
-								<td style="vertical-align:center;padding-left:5px;width:60px;">
-									<div style="float: right;padding-top: 0px;margin-top: 0px;">项目：</div>
-								</td>
-								<td style="vertical-align:top;padding-left:2px;width:88px;">
-									<div style="float: right;padding-top: 0px;margin-top: 0px;">
-								 	<select class="chosen-select form-control" name="project_id" id="project_id" data-placeholder="请选择项目" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="全部"></option>
-									<c:forEach items="${projectList}" var="project">
-										<option value="${project.id }" <c:if test="${pd.project_id==project.id}">selected</c:if>>${project.name }</option>
-									</c:forEach>
-								  	</select>
-								  	</div>
-								</td>
+									<td style="vertical-align: top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td>
+								</div>
 								
-								<td style="vertical-align:center;padding-left:5px;width:60px;">
-									<div style="float: right;padding-top: 0px;margin-top: 0px;">部门：</div>
-								</td>
-								<td style="vertical-align:center;padding-left:2px;width:150px;">
-									<div style="float: right;padding-top: 3px;margin-top: 0px;">
-									<input type="hidden" name="DEPARTMENT_ID" id="DEPARTMENT_ID" value="${pd.DEPARTMENT_ID}"/>
-									<div class="selectTree" id="selectTree"></div>
-									</div>
-								</td>
-								
-								<td style="vertical-align:center;padding-left:10px;width:70px;">
-									<div style="float: right;padding-top: 0px;margin-top: 0px;">申请人：</div>
-								</td>
-								<td style="vertical-align:top;padding-left:2px;width:100px;">
-									<div style="float: right;padding-top: 0px;margin-top: 0px;">
-								 	<select class="chosen-select form-control" name="USERNAME" id="USERNAME" data-placeholder="请选择申请人" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="全部"></option>
-									<c:forEach items="${userList}" var="user">
-										<option value="${user.USERNAME}" <c:if test="${pd.USERNAME==user.USERNAME}">selected</c:if>>${user.USERNAME}</option>
-									</c:forEach>
-								  	</select>
-								  	</div>
-								</td>
-								
-								<td style="vertical-align:center;padding-left:10px;width:80px;">
-									<div style="float: right;padding-top: 0px;margin-top: 0px;">时间范围：</div>
-								</td>
-								<td style="vertical-align:top;padding-left:2px;width:88px;">
-									<div style="float: right;padding-top: 0px;margin-top: 0px;">
-									<input class="span10 date-picker" name="startTime" id="startTime"  value="${pd.startTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/>
-									</div>
-								</td>
-								<td style="vertical-align:center;padding-left:0px;width:10px;">
-									<div style="float: right;padding-top: 0px;margin-top: 0px;">-</div>
-								</td>
-								<td style="vertical-align:top;padding-left:5px;width:88px;">
-									<div style="float: right;padding-top: 0px;margin-top: 0px;">
-									<input class="span10 date-picker" name="endTime" name="endTime"  value="${pd.endTime}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/>
-									</div>
-								</td>
-								
-								<td style="vertical-align:top;padding-left:10px;width:150px;">
-									<div class="nav-search" style="float: right;padding-top: 0px;margin-top: 0px;">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-								<td style="vertical-align:top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -118,13 +112,14 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover"  style="margin-top:5px;">
 							<thead>
 								<tr>
-									<th class="center">部门</th>
-									<th class="center">项目</th>
-									<th class="center">虚拟机名称</th>
-									<th class="center">虚拟机配置</th>
-									<th class="center">平台</th>
-									<th class="center">申请人</th>
-									<th class="center">计费</th>
+									<th class="center" style="width: 5%;">序号</th>
+									<th class="center" style="width: 15%;">部门</th>
+									<th class="center" style="width: 15%;">项目</th>
+									<th class="center" style="width: 15%;">虚拟机名称</th>
+									<th class="center" style="width: 20%;">虚拟机配置(cpu/内存/磁盘)</th>
+									<th class="center" style="width: 10%;">平台</th>
+									<th class="center" style="width: 10%;">申请人</th>
+									<th class="center" style="width: 10%;">计费</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -135,13 +130,14 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
+											<td class='center'>${vs.index+1}</td>
 											<td class="center">${var.DEPARTMENT_NAME }</td>
 											<td class="center">${var.project_name }</td>
 											<td class="center">${var.vm_name}</td>
-											<td class="center">${var.cpu}C/${var.memory}G/${var.datadisk}G/</td>
+											<td class="center">${var.cpu}C/<fmt:formatNumber value="${var.memory/1024}" type="currency" pattern="#"/>G/${var.datadisk}G</td>
 											<td class="center">${var.type}</td>
-											<td class="center">${var.USERNAME}</td>
-											<td class="center">${var.account}元</td>
+											<td class="center">${var.user}</td>
+											<td class="center"><fmt:formatNumber value="${var.account}" type="currency" pattern="0.00" maxFractionDigits="2"/>元</td>
 										</tr>
 									</c:forEach>
 									</c:if>
@@ -158,6 +154,14 @@
 								</c:otherwise>
 							</c:choose>
 							</tbody>
+						</table>
+						<table id="simple-table" class="table table-striped table-bordered table-hover"  style="margin-top:5px;">
+							<tr>
+								<td style="width: 90%;"><div style="float:right;">总计：</div></td>
+								<td class="center" style="width: 10%;">
+									<fmt:formatNumber value="${pd.totalSum}" type="currency" pattern="0.00" maxFractionDigits="2"/>元
+								</td>
+							</tr>
 						</table>
 					</form>
 	

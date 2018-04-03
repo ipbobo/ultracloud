@@ -34,6 +34,7 @@ import com.cmp.service.CmpLogService;
 import com.cmp.service.CmpOpServeService;
 import com.cmp.service.CmpOrderService;
 import com.cmp.service.CmpWorkOrderService;
+import com.cmp.service.MediumService;
 import com.cmp.service.ProjectService;
 import com.cmp.service.ScriptParamService;
 import com.cmp.service.ScriptService;
@@ -109,6 +110,12 @@ public class CmpWorkOrderController extends BaseController{
 	
 	@Resource
 	private VirtualMachineService virtualMachineService;
+	
+	@Resource
+	private MediumService mediumService;
+	
+	@Resource
+	private ScriptService scriptService;
 	
 	@RequestMapping(value="/queryUserApplyWorkOrderPre")
 	public ModelAndView querUserApplyWorkOrderPre(Page page) throws Exception{
@@ -494,9 +501,8 @@ public class CmpWorkOrderController extends BaseController{
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
 		
-		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 100);
+		List<Task> userTaskList = activitiService.findByProcessInstId(toCheckWorkorder.getProcInstId());
 		for (Task task : userTaskList) {
-			if (task.getProcessInstanceId().equals(toCheckWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
 				//写入流程注释
 				activitiService.addComment(task.getId(), toCheckWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
@@ -530,7 +536,6 @@ public class CmpWorkOrderController extends BaseController{
 					map.put("result", resultInfo);	
 					return map;
 				}
-			}
 		}
 		map.put("result", resultInfo);				//返回结果
 		return map;
@@ -568,9 +573,8 @@ public class CmpWorkOrderController extends BaseController{
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
 		
-		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 500);
+		List<Task> userTaskList = activitiService.findByProcessInstId(toVerifyWorkorder.getProcInstId());
 		for (Task task : userTaskList) {
-			if (task.getProcessInstanceId().equals(toVerifyWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
 				//写入流程注释
 				activitiService.addComment(task.getId(), toVerifyWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
@@ -586,7 +590,6 @@ public class CmpWorkOrderController extends BaseController{
 				resultInfo = "工单退回确认完成";
 				map.put("result", resultInfo);	
 				return map;
-			}
 		}
 		map.put("result", resultInfo);				//返回结果
 		return map;
@@ -626,9 +629,8 @@ public class CmpWorkOrderController extends BaseController{
 			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
 			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session	
 		}
-		List<Task> userTaskList = activitiService.findGroupList(userr.getUSERNAME(), 1, 500);
+		List<Task> userTaskList = activitiService.findByProcessInstId(toExecuteWorkorder.getProcInstId());
 		for (Task task : userTaskList) {
-			if (task.getProcessInstanceId().equals(toExecuteWorkorder.getProcInstId())) {
 				activitiService.claimTask(task.getId(), userr.getUSERNAME());
 				//写入流程注释
 				activitiService.addComment(task.getId(), toExecuteWorkorder.getProcInstId(), userr.getUSERNAME(), comment);
@@ -657,7 +659,6 @@ public class CmpWorkOrderController extends BaseController{
 				resultInfo = "执行成功";
 				map.put("result", resultInfo);	
 				return map;
-			}
 		}
 		map.put("result", resultInfo);				//返回结果
 		return map;
@@ -982,6 +983,77 @@ public class CmpWorkOrderController extends BaseController{
 				return n1.compareTo(n2);
 			}
 		});
+		return autoDeployNodeList;
+	}
+	
+	/**
+	 * 自动部署软件参数设置
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/toSetParam")
+	@ResponseBody
+	public List<AutoDeployNode> toSetParam(String appNo) throws Exception{
+		LinkedList<AutoDeployNode> autoDeployNodeList = new LinkedList<AutoDeployNode>();
+		LinkedList<AutoDeployScriptNode> scriptNodeList = new LinkedList<AutoDeployScriptNode>();
+		CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo(appNo);
+		if (workorder == null) {
+			cmpLogService.addCmpLog("1", "自动部署软件参数设置", "工单查询失败,未查询到相应的工单", "-1", StringUtil.getClientIp(getRequest()));
+			return autoDeployNodeList;
+		}
+		String softCodeStr = workorder.getSoftCode();
+		if (softCodeStr == null || softCodeStr.length() == 0) {
+			cmpLogService.addCmpLog("1", "自动部署软件参数设置", "工单未设置部署软件", "-1", StringUtil.getClientIp(getRequest()));
+			return autoDeployNodeList;
+		}
+		
+		
+		
+		String[] softCodeArr =  softCodeStr.split(",");
+		for (String softCode : softCodeArr) {
+			PageData m_pd = new PageData();
+			m_pd.put("id", softCode);
+			
+			m_pd = mediumService.findById(m_pd);
+			AutoDeployNode autoDeployNode = new AutoDeployNode();
+			autoDeployNode.setName(m_pd.getString("name"));
+			
+			PageData p_pd = new PageData();
+			p_pd.put("medium_id", softCode);
+			List<PageData> pDataList = scriptService.findDefParamsByMediumId(p_pd);
+			
+			//查询用户修改的参数信息
+			PageData s_pd = new PageData();
+			s_pd.put("softCode", softCode);
+			s_pd.put("orderNo", workorder.getOrderNo());
+			List<PageData> userSetParamList = cmpOrderService.findSoftParam(s_pd);
+			Map<String, String> userSetParamMap = new HashMap<String, String>();
+			for (PageData userSetParamPd : userSetParamList) {
+				userSetParamMap.put(softCode + userSetParamPd.getString("paramKey"), userSetParamPd.getString("paramValue"));
+			}
+			
+			for (PageData paramPd : pDataList) {
+				AutoDeployScriptNode scriptNode = new AutoDeployScriptNode();
+				scriptNode.setId(String.valueOf(paramPd.get("id")));
+				scriptNode.setScriptId(String.valueOf(paramPd.get("script_id")));
+				scriptNode.setDefaultVal(paramPd.getString("value"));
+				scriptNode.setParamKey(paramPd.getString("param_key"));
+				String userSetVal = userSetParamMap.get(softCode + paramPd.getString("param_key"));
+				if (userSetVal != null) {
+					//用户输入值
+					scriptNode.setValue(userSetVal);
+					autoDeployNode.setModFlag("1");
+				}else {
+					//默认值
+					scriptNode.setValue(paramPd.getString("value"));
+				}
+				scriptNode.setName(paramPd.getString("name"));
+				scriptNodeList.add(scriptNode);
+			}
+			autoDeployNode.setScriptNodeList(scriptNodeList);
+			autoDeployNodeList.add(autoDeployNode);
+		}
 		return autoDeployNodeList;
 	}
 	

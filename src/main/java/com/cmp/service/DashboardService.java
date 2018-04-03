@@ -116,10 +116,15 @@ public class DashboardService {
 	}
 	
 	//资源详细信息查询
-	public CmpDashboard getResDtl(String[] hostIds) throws Exception {
+	public CmpDashboard getResDtl(String resType, String[] hostIds) throws Exception {
 		if(hostIds!=null && hostIds.length>0){//主机ID列表不为空
+			String sql="DashboardMapper.getVirResDtl";
+			if("physRes".equals(resType)){//物理资源
+				sql="DashboardMapper.getPhysResDtl";
+			}
+			
 			String hostIdStr=StringUtils.join(hostIds, ",");
-			return (CmpDashboard)dao.findForObject("DashboardMapper.getResDtl", hostIdStr);//主机ID列表查询
+			return (CmpDashboard)dao.findForObject(sql, hostIdStr);//主机ID列表查询
 		}
 		
 		return new CmpDashboard();

@@ -54,7 +54,7 @@
 									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">项目名称</th>
-									<th class="center">配额设定(CPU/内存/磁盘)</th>
+									<th class="center">配额总量(CPU/内存/磁盘)</th>
 									<th class="center">配额剩余(CPU/内存/磁盘)</th>
 									<th class="center">操作</th>
 								</tr>
@@ -73,11 +73,15 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
 											<td class='center'>
-											<c:if test="${var.cpu_quota != null}">
-												${var.cpu_quota}核/${var.memory_quota}G/${var.disk_quota}G
-											</c:if>
+												<c:if test="${var.cpu_quota != null}">
+													${var.cpu_quota}核/${var.memory_quota}G/${var.disk_quota}G
+												</c:if>
 											</td>
-											<td class='center'></td>
+											<td class='center'>
+												<c:if test="${var.cpu_used != null}">
+													${var.cpu_used}核/${var.memory_used}G/${var.disk_used}G
+												</c:if>
+											</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>

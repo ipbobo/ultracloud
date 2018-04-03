@@ -2,6 +2,7 @@ package com.cmp.service;
 
 import java.util.List;
 
+import com.cmp.entity.tcc.TccVirtualMachine;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -23,6 +24,13 @@ public interface ResourceService {
 	 * @throws Exception
 	 */
 	public void syncCloudData(PageData pd) throws Exception;
+	
+	/**
+	 * 同步镜像模板
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<TccVirtualMachine> syncMirroTemplate(PageData pd) throws Exception;
 	
 	/**
 	 * 更新同步数据为选中并复制到正式表中
