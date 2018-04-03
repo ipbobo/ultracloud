@@ -4,8 +4,6 @@ import com.cmp.entity.tcc.*;
 import com.cmp.mgr.bean.CloneVmRequest;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.vmware.VMWareCloudArchManager;
-import com.vmware.vim25.Description;
-import com.vmware.vim25.VirtualDevice;
 import com.vmware.vim25.mo.Datacenter;
 import org.junit.After;
 import org.junit.Before;
@@ -86,16 +84,6 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 		execute("GetResourcePools", () -> {
 			cloudArchManager.getResourcePools().stream()
 					.map(TccResourcePool::getName).forEach(System.out::println);
-		});
-	}
-
-	// @Test
-	public void testGetVirtualDevices() {
-		execute("GetVirtualDevices", () -> {
-			cloudArchManager.getVirtualDevices().stream()
-					.map(VirtualDevice::getDeviceInfo)
-					.map(Description::getLabel)
-					.forEach(System.out::println);
 		});
 	}
 
