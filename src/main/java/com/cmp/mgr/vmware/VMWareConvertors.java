@@ -1,27 +1,12 @@
 package com.cmp.mgr.vmware;
 
-import java.util.function.Function;
-
-import com.cmp.entity.tcc.TccCluster;
-import com.cmp.entity.tcc.TccDatacenter;
-import com.cmp.entity.tcc.TccDatastore;
-import com.cmp.entity.tcc.TccHostMachine;
-import com.cmp.entity.tcc.TccNetwork;
-import com.cmp.entity.tcc.TccResourcePool;
-import com.cmp.entity.tcc.TccVirtualMachine;
-import com.cmp.entity.tcc.TccVmSnapshot;
-import com.vmware.vim25.DatastoreInfo;
+import com.cmp.entity.tcc.*;
 import com.vmware.vim25.DatastoreSummary;
 import com.vmware.vim25.GuestInfo;
 import com.vmware.vim25.VirtualMachineConfigInfo;
-import com.vmware.vim25.mo.ClusterComputeResource;
-import com.vmware.vim25.mo.Datacenter;
-import com.vmware.vim25.mo.Datastore;
-import com.vmware.vim25.mo.HostSystem;
-import com.vmware.vim25.mo.Network;
-import com.vmware.vim25.mo.ResourcePool;
-import com.vmware.vim25.mo.VirtualMachine;
-import com.vmware.vim25.mo.VirtualMachineSnapshot;
+import com.vmware.vim25.mo.*;
+
+import java.util.function.Function;
 
 public class VMWareConvertors {
 
@@ -100,6 +85,7 @@ public class VMWareConvertors {
 		return nw -> {
 			TccNetwork tnw = new TccNetwork();
 			tnw.setNetworkName(nw.getName());
+			tnw.setNetworkTag(nw.getMOR().getVal());
 
 			return tnw;
 		};

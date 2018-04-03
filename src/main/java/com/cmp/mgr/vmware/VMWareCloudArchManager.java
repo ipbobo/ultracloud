@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 	private VMWareConvertors converters = new VMWareConvertors();
@@ -86,7 +86,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 	private List<VirtualMachine> getVirtualMachinesNoVerify() {
 		try {
 			String type = VirtualMachine.class.getSimpleName();
-			String[][] typeinfo = new String[][] { new String[] { type, "name", }, };
+			String[][] typeinfo = new String[][]{new String[]{type, "name",},};
 
 			Folder rootEntity = getServiceInstance().getRootFolder();
 			ServiceInstance serviceInstance = rootEntity.getServerConnection().getServiceInstance();
@@ -109,11 +109,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			os.setSelectSet(selectionSpecs);
 
 			PropertyFilterSpec spec = new PropertyFilterSpec();
-			spec.setObjectSet(new ObjectSpec[] { os });
+			spec.setObjectSet(new ObjectSpec[]{os});
 			spec.setPropSet(propspecary);
 
 			ObjectContent[] objectContents = pc
-					.retrieveProperties(new PropertyFilterSpec[] { spec });
+					.retrieveProperties(new PropertyFilterSpec[]{spec});
 			if (ArrayUtils.isEmpty(objectContents)) {
 				return Collections.emptyList();
 			}
@@ -181,8 +181,8 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 					diskSizeKB, diskMode);
 			VirtualDeviceConfigSpec nicSpec = createNicSpec(netName, nicName);
 
-			vmSpec.setDeviceChange(new VirtualDeviceConfigSpec[] { scsiSpec,
-					diskSpec, nicSpec });
+			vmSpec.setDeviceChange(new VirtualDeviceConfigSpec[]{scsiSpec,
+					diskSpec, nicSpec});
 
 			// create vm file info for the vmx file
 			VirtualMachineFileInfo vmfi = new VirtualMachineFileInfo();
@@ -282,7 +282,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			ServiceInstance serviceInstance = getServiceInstance();
 			ManagedEntity managedEntity = new InventoryNavigator(
 					serviceInstance.getRootFolder()).searchManagedEntity(
-							clazz.getSimpleName(), name);
+					clazz.getSimpleName(), name);
 
 			return Optional.ofNullable(managedEntity).map(clazz::cast);
 		} catch (Exception e) {
@@ -381,8 +381,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	public List<TccNetwork> getNetworks() {
-		return searchManagedEntities(Network.class).stream()
-				.map(converters.toNetwork()).collect(toList());
+		return searchManagedEntities(ComputeResource.class).stream()
+				.map(ComputeResource::getNetworks)
+				.flatMap(Arrays::stream)
+				.map(converters.toNetwork())
+				.collect(toList());
 	}
 
 	@Override
@@ -489,7 +492,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		try {
 			ClusterComputeResource cluster = searchManagedEntities(
 					ClusterComputeResource.class).stream().findFirst()
-							.orElseThrow(error("No cluster found"));
+					.orElseThrow(error("No cluster found"));
 
 			Datacenter dc = searchManagedEntity(Datacenter.class, dcName)
 					.orElseThrow(error("Datacenter not found: " + dcName));
@@ -528,7 +531,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			CustomizationIPSettings cip = new CustomizationIPSettings();
 			cip.setIp(new CustomizationDhcpIpGenerator());
 			cam.setAdapter(cip);
-			customSpec.setNicSettingMap(new CustomizationAdapterMapping[] { cam });
+			customSpec.setNicSettingMap(new CustomizationAdapterMapping[]{cam});
 
 			VirtualMachineCloneSpec cloneSpec = new VirtualMachineCloneSpec();
 			cloneSpec.setConfig(configSpec);
@@ -732,7 +735,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 			diskSpec.setOperation(VirtualDeviceConfigSpecOperation.add);
 			diskSpec.setFileOperation(VirtualDeviceConfigSpecFileOperation.create);
 			diskSpec.setDevice(disk);
-			VirtualDeviceConfigSpec[] vdiskSpecArray = new VirtualDeviceConfigSpec[] { diskSpec };
+			VirtualDeviceConfigSpec[] vdiskSpecArray = new VirtualDeviceConfigSpec[]{diskSpec};
 
 			// vm spec
 			VirtualMachineConfigSpec vmConfigSpec = new VirtualMachineConfigSpec();
@@ -784,7 +787,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 				.map(HostDatastoreBrowser::getDatastores)
 				.filter(ArrayUtils::isNotEmpty)
 				.flatMap(Arrays::stream).forEach(datastore ->
-					capability.setSupportedStorage(capability.getSupportedStorage()
+				capability.setSupportedStorage(capability.getSupportedStorage()
 						+ datastore.getInfo().getFreeSpace()));
 
 		return capability;

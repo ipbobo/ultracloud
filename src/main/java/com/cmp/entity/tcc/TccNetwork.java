@@ -93,13 +93,11 @@ public class TccNetwork implements Serializable {
 	/**
 	 * 开始IP
 	 */
-
 	private String startIp;
 
 	/**
 	 * 结束IP
 	 */
-
 	private String endIp;
 
 	private String ipRange; // IP段
