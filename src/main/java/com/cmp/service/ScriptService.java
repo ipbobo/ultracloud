@@ -59,6 +59,14 @@ public interface ScriptService {
 	 */
 	public PageData findById(PageData pd) throws Exception;
 
+	
+	/**
+	 * 通过mediumId获取脚本
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findByMediumId(PageData pd) throws Exception;
 	/**
 	 * 批量删除
 	 * 

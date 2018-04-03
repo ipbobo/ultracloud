@@ -104,6 +104,16 @@ public class ScriptServiceImpl implements ScriptService {
 	}
 	
 	/**
+	 * 通过mediumId获取脚本
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findByMediumId(PageData pd) throws Exception{
+		return (PageData) dao.findForObject("ScriptMapper.findByMediumId", pd);
+	}
+	
+	/**
 	 * 批量删除
 	 * 
 	 * @param ArrayDATA_IDS

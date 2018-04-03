@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import com.cmp.ehcache.AbstractDao;
@@ -22,7 +23,8 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
     private String charset = Charset.defaultCharset().toString();  
     private String userName;  
     private String password;  
-    private static Map<String, Map<Integer, String>> shellMsgMap = new HashMap<String, Map<Integer, String>>();
+   // private static Map<String, Map<Integer, String>> shellMsgMap = new HashMap<String, Map<Integer, String>>();
+    private static Map<String, LinkedList<String>> shellMsgMap = new HashMap<String, LinkedList<String>>();
     int port;
     
   
@@ -86,18 +88,19 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
     public String processStdoutBuffLine(InputStream in, String charset, String queryKey) throws IOException {  
     	try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in)); 
-			while (true) { 
+			while (true) {
 			   String line = br.readLine();
-			   Map currentMsgMap = shellMsgMap.get(queryKey);
-			   if (line == null) {
-			    break;
+				   if (line == null) {
+				   break;
 			   }
-			   if (currentMsgMap == null) {
-				   Map<Integer, String> message = new HashMap<Integer, String>();
-				   message.put(1, line);
-				   shellMsgMap.put(queryKey, message);
+			   LinkedList currentMsgList = shellMsgMap.get(queryKey);
+			   
+			   if (currentMsgList == null) {
+				   LinkedList<String> newMsgList = new LinkedList<String>();
+				   newMsgList.add(line);
+				   shellMsgMap.put(queryKey, newMsgList);
 			   }else {
-				   currentMsgMap.put(currentMsgMap.size() + 1, line);
+				   currentMsgList.add(line);
 			   }
 			}
 			return "OK";
@@ -110,17 +113,17 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
     }
     
     public static void addMsgLog(String queryKey, String msg) {
-    	 if (queryKey == null || msg == null) {
-    		 return;
-    	 }
-    	 Map currentMsgMap = shellMsgMap.get(queryKey);
-    	 if (currentMsgMap == null) {
-			   Map<Integer, String> messageMap = new HashMap<Integer, String>();
-			   messageMap.put(1, msg);
-			   shellMsgMap.put(queryKey, messageMap);
-		 }else {
-			   currentMsgMap.put(currentMsgMap.size() + 1, msg);
-		 }
+    	   if (queryKey == null || msg == null) {
+    	 	  return;
+    	   }
+    	   LinkedList currentMsgList = shellMsgMap.get(queryKey);
+		   if (currentMsgList == null) {
+			   LinkedList<String> newMsgList = new LinkedList<String>();
+			   newMsgList.add(msg);
+			   shellMsgMap.put(queryKey, newMsgList);
+		   }else {
+			   currentMsgList.add(msg);
+		   }
     }
     
 	@Override

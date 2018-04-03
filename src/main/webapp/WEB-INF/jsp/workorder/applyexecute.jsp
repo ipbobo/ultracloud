@@ -507,32 +507,27 @@
 	
 	function queryExecuteStatus(appNo){
 		//查询，并同步更新控制台
-		
-		var line = 0;
 		var res = setInterval(function(){
 			$.ajax({
 				type: "POST",
-				url: '<%=basePath%>queryShell.do?shellId='+appNo +'&currentLine=' + line,
+				url: '<%=basePath%>queryShell.do?shellId='+appNo ,
 				dataType:'json',
 				//beforeSend: validateData,
 				cache: false,
 				success: function(data){
 					var maplen = data.length;
-					var shellMsgMap = data.currentShellMsg;
-					if (shellMsgMap == null)
+					var shellMsgList = data.currentShellMsg;
+					if (shellMsgList == null)
 						return;
-					if (shellMsgMap[maplen] != null && shellMsgMap[maplen] == "cmp:install finished"){
+					if (shellMsgList[maplen] != null && shellMsgList[maplen] == "cmp:install finished"){
 						$("#executeStatus_1").css('display','none');
 						$("#executeStatus_2").css('display','block');
 						clearInterval(res);
 					}
-					for (var i = line; i <maplen; i++ ){
-							if (shellMsgMap[i] != null && shellMsgMap[i] != "-1" && shellMsgMap[i] != "undefined"){
-								$('#shell_msg_div').append(shellMsgMap[i]+'<br\>'); 
-								document.getElementById('shell_msg_div').scrollTop = document.getElementById('shell_msg_div').scrollHeight
-							}
+					for (var msgIndex = 0; msgIndex < shellMsgList.length; msgIndex++){
+						$('#shell_msg_div').append(shellMsgList[msgIndex]+'<br\>'); 
 					}
-					line = maplen;
+					document.getElementById('shell_msg_div').scrollTop = document.getElementById('shell_msg_div').scrollHeight
 				}
 			});
 		}, 1500);

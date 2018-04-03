@@ -104,6 +104,15 @@
 			id = #{id}
 	</select>
 	
+	<!-- 通过ID获取数据 -->
+	<select id="findByMediumId" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			medium_id = #{medium_id}
+	</select>
 	
 		<!-- 通过ID获取数据 -->
 	<select id="findDefParamsByMediumId" parameterType="pd" resultType="pd">

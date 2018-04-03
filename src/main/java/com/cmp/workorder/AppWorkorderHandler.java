@@ -344,8 +344,8 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		orderInfo = orderList.get(0);
 		
 		//部署虚拟机
-		String DEF_USERNAME = "admin";
-		String DEF_PWD = "pwdpwd";
+		String DEF_USERNAME = "root";
+		String DEF_PWD = "r00t0neio";
 		int vmCount = Integer.parseInt(orderInfo.getVirNum());
 		if (vmCount < 1) {
 			resMap.put("ERROR", "部署的虚拟机数不正确");
@@ -357,8 +357,8 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			return resMap;
 		}
 		String[] ipArr = ips.split(",");
-		for (int vmIndex = 0; vmIndex > vmCount; vmIndex++) {
-			Map<String, Object> deployOut = deployVM(ipArr[vmIndex],DEF_USERNAME, DEF_PWD, String.valueOf(project.getParent_id()), project.getName(), workOrder, orderInfo, pd);
+		for (int vmIndex = 0; vmIndex < vmCount; vmIndex++) {
+			Map<String, Object> deployOut = deployVM(ipArr[vmIndex],DEF_USERNAME, DEF_PWD, project.getId(), project.getName(), workOrder, orderInfo, pd);
 			if (deployOut.get("resultCode").equals("0")) {
 				//部署虚拟机成功，部署软件
 				String softCodeStr = orderInfo.getSoftCode();
@@ -374,7 +374,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 					List<PageData> defScriptParamList = scriptService.findDefParamsByMediumId(script_pd);
 					defScriptParamList.sort(new Comparator<PageData>() {
 								public int compare(PageData pdParam1, PageData pdParam2) {
-									return ((int)pdParam1.get("number") - (int)pdParam2.get("number"));
+									return new Long((long)pdParam1.get("number")).intValue() - new Long((long)pdParam2.get("number")).intValue();
 								}
 					});
 					for (PageData defParam : defScriptParamList) {
@@ -385,8 +385,9 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 							shellParamBuf.append(" " + defParam.getString("value"));
 						}
 					}
-					
-					installSoft((VirtualMachine)deployOut.get("vm"), workOrder, orderInfo, softName, shellParamBuf.toString().trim());
+					String shellUrl = scriptService.findByMediumId(script_pd).getString("url");//脚本路径
+					String shellcmd = shellUrl + " " +shellParamBuf.toString().trim();  //执行脚本命令
+					installSoft((VirtualMachine)deployOut.get("vm"), workOrder, orderInfo, softName, shellcmd);
 				}
 			}
 		}
@@ -476,9 +477,9 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		cloneVmRequest.setDcName(datacenterPd.getString("name"));
 		cloneVmRequest.setTplName(imagePd.getString("name"));
 		cloneVmRequest.setIp(ip);
-		String hostMachineUUID = cloudArchManager.cloneVirtualMachine(cloneVmRequest);
+		String hostMachineUUID = "jisdfjj182";//cloudArchManager.cloneVirtualMachine(cloneVmRequest);
 		
-		TccVirtualMachine  vmInst = cloudArchManager.getVirtualMachineByName(vmName);
+		//TccVirtualMachine  vmInst = cloudArchManager.getVirtualMachineByName(vmName);
 		//String vmIp = vmInst.getIpAddress();
 		String softCode = orderInfo.getSoftCode();
 		vm.setCpu(pd.getString("CPU"));
@@ -513,12 +514,12 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		return resMap;
 	}
 
-	public Map installSoft(VirtualMachine vm, CmpWorkOrder workOrder, CmpOrder orderInfo, String softName, String shellStr) throws Exception{
+	public Map installSoft(VirtualMachine vm, CmpWorkOrder workOrder, CmpOrder orderInfo, String softName, String shellcmd) throws Exception{
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		//执行软件安装脚本
 		ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),  
 				vm.getPassword() , ShellUtil.DEF_CHARSET);
-		shellUtil.exec("." + shellStr, workOrder.getAppNo());
+		shellUtil.exec("." + shellcmd, workOrder.getAppNo());
 		
 		//添加虚拟机中间件
 		PageData s_pd = new PageData();
