@@ -516,16 +516,15 @@
 				cache: false,
 				success: function(data){
 					var maplen = data.length;
-					var shellMsgList = data.currentShellMsg;
-					if (shellMsgList == null)
-						return;
-					if (shellMsgList[maplen] != null && shellMsgList[maplen] == "cmp:install finished"){
-						$("#executeStatus_1").css('display','none');
-						$("#executeStatus_2").css('display','block');
-						clearInterval(res);
-					}
-					for (var msgIndex = 0; msgIndex < shellMsgList.length; msgIndex++){
-						$('#shell_msg_div').append(shellMsgList[msgIndex]+'<br\>'); 
+					$('#shell_msg_div').empty();
+					for (var msgIndex = 0; msgIndex < data.length; msgIndex++){
+						if (data[msgIndex] == "cmp:success"){
+							$("#executeStatus_1").css('display','none');
+							$("#executeStatus_2").css('display','block');
+							clearInterval(res);
+							break;
+						}
+						$('#shell_msg_div').append(data[msgIndex]+'<br\>'); 
 					}
 					document.getElementById('shell_msg_div').scrollTop = document.getElementById('shell_msg_div').scrollHeight
 				}

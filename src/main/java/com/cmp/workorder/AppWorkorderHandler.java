@@ -387,7 +387,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 					}
 					String shellUrl = scriptService.findByMediumId(script_pd).getString("url");//脚本路径
 					String shellcmd = shellUrl + " " +shellParamBuf.toString().trim();  //执行脚本命令
-					installSoft((VirtualMachine)deployOut.get("vm"), workOrder, orderInfo, softName, shellcmd);
+					installSoft((VirtualMachine)deployOut.get("vm"), workOrder, softCode, softName, shellcmd);
 				}
 			}
 		}
@@ -397,7 +397,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		Map<String , String> exeParams = new HashMap<String , String>();
 		exeParams.put("executeStatus", "2");
 		cmpWorkOrderService.updateExecuteStatus(workOrder.getAppNo(), exeParams);
-		
+		ShellUtil.addMsgLog(workOrder.getAppNo(), "cmp:success");
 		return resMap;
 	}
 
@@ -407,7 +407,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		VirtualMachine vm = new VirtualMachine();
 		//添加虚拟机
 		int currentVMNum = virtualMachineService.countByProject(projectId);
-		String vmName = projectName + "_" + (currentVMNum + 1); //虚拟机的名字为当前项目名称+项目拥有的虚拟机总数+1
+		String vmName = projectName + "_" + (currentVMNum + 1);//虚拟机的名字为当前项目名称+项目拥有的虚拟机总数+1
 		String osName = cmpDictService.getCmpDict("os_type", orderInfo.getOsType()).getDictValue();
 		String osBitNum = cmpDictService.getCmpDict("os_bit_num", orderInfo.getOsBitNum()).getDictValue();
 		String fullOS = osName +"_" +osBitNum;
@@ -477,7 +477,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		cloneVmRequest.setDcName(datacenterPd.getString("name"));
 		cloneVmRequest.setTplName(imagePd.getString("name"));
 		cloneVmRequest.setIp(ip);
-		String hostMachineUUID = "jisdfjj182";//cloudArchManager.cloneVirtualMachine(cloneVmRequest);
+		String hostMachineUUID = cloudArchManager.cloneVirtualMachine(cloneVmRequest);
 		
 		//TccVirtualMachine  vmInst = cloudArchManager.getVirtualMachineByName(vmName);
 		//String vmIp = vmInst.getIpAddress();
@@ -514,22 +514,22 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		return resMap;
 	}
 
-	public Map installSoft(VirtualMachine vm, CmpWorkOrder workOrder, CmpOrder orderInfo, String softName, String shellcmd) throws Exception{
+	public Map installSoft(VirtualMachine vm, CmpWorkOrder workOrder, String mediumId, String softName, String shellcmd) throws Exception{
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		//执行软件安装脚本
 		ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),  
 				vm.getPassword() , ShellUtil.DEF_CHARSET);
-		shellUtil.exec("." + shellcmd, workOrder.getAppNo());
+		shellUtil.exec("./" + shellcmd, workOrder.getAppNo());
 		
 		//添加虚拟机中间件
-		PageData s_pd = new PageData();
-		s_pd.put("id", orderInfo.getImgCode());
-		s_pd = mediumService.findById(s_pd);
-		Medium medium = (Medium) PageDataUtil.mapToObject(s_pd, Medium.class);
+		PageData m_pd = new PageData();
+		m_pd.put("id", mediumId);
+		m_pd = mediumService.findById(m_pd);
+		Medium medium = (Medium) PageDataUtil.mapToObject(m_pd, Medium.class);
 		DeployedSoft deployedSoft = new DeployedSoft();
 		deployedSoft.setVirtualmachineId(String.valueOf(vm.getId()));
 		deployedSoft.setSoftName(medium.getName());
-		deployedSoft.setStatus("0");
+		deployedSoft.setStatus("未部署");
 		deployedSoft.setSoftType(medium.getType());
 		deployedSoft.setSoftVersion(medium.getVersion());
 		deployedSoft.setVirtualmachineName(String.valueOf(vm.getName()));

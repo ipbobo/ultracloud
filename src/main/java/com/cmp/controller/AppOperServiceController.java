@@ -493,15 +493,15 @@ public class AppOperServiceController  extends BaseController {
 			if (deployedSoft == null || deployedSoft.getVirtualmachineId() == null) {
 				logger.error("doRebootSoft : 工单中的部署软件不存在");
 				resultInfo.setResultMsg("工单中的部署软件不存在");
-				return resultInfo;
+				ShellUtil.addMsgLog(appNo, "部署软件不存在:" + deployedSoft.getSoftName());
+				continue;
 			}
 			String vmId = deployedSoft.getVirtualmachineId();
 			PageData scriptPd = new PageData();
 			scriptPd.put("id", scriptId);
 			scriptPd = scriptService.findById(scriptPd);
 			String scriptUrl = scriptPd.getString("url");
-			String scriptName = scriptPd.getString("name");
-			String cmds = "." + scriptUrl + scriptName + " " + params;
+			String cmds = "./" + scriptUrl + " " + params;
 			
 			int executeRet = 0;
 			if ((executeRet = executeShell(vmId, cmds, appNo)) != 0) {
@@ -513,7 +513,9 @@ public class AppOperServiceController  extends BaseController {
 		endExecuteShell(appNo);
 		cmpLogService.addCmpLog("1", "执行中间件启停", "执行中间件启停成功", "0", StringUtil.getClientIp(getRequest()));
 		resultInfo.setResultMsg("执行成功");
+		ShellUtil.addMsgLog(appNo, "执行中间件启停成功");
 		resultInfo.setResultCode(CmpResultInfo.SUCCESS);
+		ShellUtil.addMsgLog(appNo, "cmp:success");
 		return resultInfo;
 	}
 	
@@ -589,6 +591,7 @@ public class AppOperServiceController  extends BaseController {
 			if (deployedSoft == null || deployedSoft.getVirtualmachineId() == null) {
 				logger.error("doRebootSoft : 工单中的部署软件不存在");
 				resultInfo.setResultMsg("工单中的部署软件不存在");
+				ShellUtil.addMsgLog(appNo, "部署软件不存在:" + deployedSoft.getSoftName());
 				return resultInfo;
 			}
 			String vmId = deployedSoft.getVirtualmachineId();
@@ -598,9 +601,7 @@ public class AppOperServiceController  extends BaseController {
 			scriptPd.put("id", scriptId);
 			scriptPd = scriptService.findById(scriptPd);
 			String scriptUrl = scriptPd.getString("url");
-			String scriptName = scriptPd.getString("name");
-			String cmds = "." + scriptUrl + scriptName + " " + params;
-			initExecuteShell(appNo);
+			String cmds = "./" + scriptUrl +  " " + params;
 			int executeRet = 0;
 			if ((executeRet = executeShell(vmId, cmds, appNo)) != 0) {
 				logger.error("doInstallSoft : 软件安装失败--" + executeRet);
@@ -611,6 +612,7 @@ public class AppOperServiceController  extends BaseController {
 		endExecuteShell(appNo);
 		cmpLogService.addCmpLog("1", "执行软件安装", "执行软件安装成功", "0", StringUtil.getClientIp(getRequest()));
 		resultInfo.setResultMsg("执行成功");
+		ShellUtil.addMsgLog(appNo, "执行软件安装成功");
 		resultInfo.setResultCode(CmpResultInfo.SUCCESS);
 		return resultInfo;
 	}

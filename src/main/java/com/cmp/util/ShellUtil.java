@@ -148,7 +148,7 @@ public class ShellUtil extends  AbstractDao<ShellMessage, Long>{
     
     public static void main(String[] args) {  
   
-    	ShellUtil tool = new ShellUtil("118.242.40.216", 7001, "root",  
+    	ShellUtil tool = new ShellUtil("180.169.225.158", 7001, "root",  
                 "r00t0neio", "utf-8");  
   
         String result = tool.exec("./test.sh", "231321321");  

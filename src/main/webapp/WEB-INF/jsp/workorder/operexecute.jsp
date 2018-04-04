@@ -459,34 +459,29 @@
 	
 	function queryExecuteStatus(appNo){
 		//查询，并同步更新控制台
-		var line = 0;
 		var res = setInterval(function(){
 			$.ajax({
 				type: "POST",
-				url: '<%=basePath%>queryShell.do?shellId='+appNo +'&currentLine=' + line,
+				url: '<%=basePath%>queryShell.do?shellId='+appNo ,
 				dataType:'json',
 				//beforeSend: validateData,
 				cache: false,
 				success: function(data){
 					var maplen = data.length;
-					var shellMsgMap = data.currentShellMsg;
-					if (shellMsgMap == null)
-						return;
-					if (shellMsgMap[maplen] != null && shellMsgMap[maplen] == "cmp:install finished"){
-						$("#executeStatus_1").css('display','none');
-						$("#executeStatus_2").css('display','block');
-						clearInterval(res);
+					$('#shell_msg_div').empty();
+					for (var msgIndex = 0; msgIndex < data.length; msgIndex++){
+						if (data[msgIndex] == "cmp:success"){
+							$("#executeStatus_1").css('display','none');
+							$("#executeStatus_2").css('display','block');
+							clearInterval(res);
+							break;
+						}
+						$('#shell_msg_div').append(data[msgIndex]+'<br\>'); 
 					}
-					for (var i = line; i <maplen; i++ ){
-							if (shellMsgMap[i] != null && shellMsgMap[i] != "-1" && shellMsgMap[i] != "undefined"){
-								$('#shell_msg_div').append(shellMsgMap[i]+'<br\>'); 
-								document.getElementById('shell_msg_div').scrollTop = document.getElementById('shell_msg_div').scrollHeight
-							}
-					}
-					line = maplen;
+					document.getElementById('shell_msg_div').scrollTop = document.getElementById('shell_msg_div').scrollHeight
 				}
 			});
-		}, 2500);
+		}, 1500);
 	}
 	
 	$(top.hangge());//关闭加载状态
