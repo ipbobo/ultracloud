@@ -25,7 +25,7 @@ function checkFunc(){
 	//}
 }
 
-//获取仪表盘
+//查询加载仪表盘(暂时没有使用)
 function getDashboard(){
 	var cpuTimeType=$("#cpuTimeType").val();//CPU时间类型
 	var memTimeType=$("#memTimeType").val();//内存时间类型
@@ -51,6 +51,45 @@ function getResRate(resType){
 	    success: function(data){
 		    if(data.retCode=="0"){//成功
 		    	getLineChart(resType+'Chart', ['资源使用量趋势'], data.resRate.xaxis.split(","), data.resRate.yaxis.split(","));//获取图表
+		    }
+	    },
+	    error: function(data) {}
+	});
+}
+
+//资源使用列表
+function getResUseList(){
+	$.each($("#simple-table tr"), function (i, item) {
+    	if(i!=0)item.remove();
+	});
+
+	$.ajax({
+	    type: 'post',
+	    data: JSON.stringify({
+	    	"resType": $("#resType").val(),//资源类型：cpu-CPU、mem-内存、store-磁盘
+	    	"hostIdStr": $("#hostIdStr").val()//主机ID列表
+	    }),
+	    url: "<%=basePath%>getResUseList.do",
+	    dataType: 'json',  
+	    success: function(data){
+		    if(data.retCode=="0"){//成功
+		    	var resUseList=data.resUseList;
+		    	if(!resUseList){
+		    		$("#simple-table").append("<tr class=\"main_info\"><td colspan=\"6\" class=\"center\">没有相关数据</td></tr>");
+		    		return;
+		    	}
+		    	
+				$.each(resUseList, function (i, item) {
+					var trStr="<tr>"
+						+"<td style=\"padding: 0px;width: 30px;\" class='center'>"+(i+1)+"</td>"
+						+"<td style=\"padding: 0px;\" class='center'>"+item.hostName+"</td>"
+						+"<td style=\"padding: 0px;\" class='center'>"+item.hostIp+"</td>"
+						+"<td style=\"padding: 0px;\" class='center'>"+item.useRate+"</td>"
+						+"<td style=\"padding: 0px;\" class='center'>"+item.useNum+"</td>"
+						+"<td style=\"padding: 0px;\" class='center'>"+item.allotNum+"</td>"
+						+"</tr>";
+				    $("#simple-table").append(trStr);
+			    });
 		    }
 	    },
 	    error: function(data) {}
@@ -267,7 +306,7 @@ function closeHeadToggle(){
 			<div class="inner-box">
 				<div class="head-box">
 					<span>TOP5资源使用排行</span>
-					<select style="width: 100px;" class="chosen-select form-control" name="resType" id="resType" data-placeholder="请选择资源类型" style="vertical-align:top;width: 100%;" onchange="getDashboard()">
+					<select style="width: 100px;" class="chosen-select form-control" name="resType" id="resType" data-placeholder="请选择资源类型" style="vertical-align:top;width: 100%;" onchange="getResUseList()">
 					<c:forEach items="${resTypeList}" var="var">
 						<option value="${var.dictCode}" <c:if test="${resType==var.dictCode || (resType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 					</c:forEach>
@@ -278,7 +317,7 @@ function closeHeadToggle(){
 						<table id="simple-table" class="simple-table">
 							<thead>
 							<tr>
-								<th style="padding: 0px;width:80px" class="center">序号</th>
+								<th style="padding: 0px;width:30px" class="center">序号</th>
 								<th style="padding: 0px;" class="center">虚机名</th>
 								<th style="padding: 0px;" class="center">IP</th>
 								<th style="padding: 0px;" class="center">使用率</th>
@@ -300,9 +339,7 @@ function closeHeadToggle(){
 									</c:forEach>
 								</c:when>
 								<c:otherwise>
-									<tr class="main_info">
-									<td colspan="6" class="center">没有相关数据</td>
-									</tr>
+									<tr class="main_info"><td colspan="6" class="center">没有相关数据</td></tr>
 								</c:otherwise>
 							</c:choose>
 							</table>

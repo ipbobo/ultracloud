@@ -100,8 +100,6 @@ public class LoginController extends BaseController {
 		PageData pd = getPageData("applyUserId", applyUserId, "roleType", roleType, "audit", auditMap.get("audit"));
 		Map<String, String[]> hostIdsMap=dashboardService.getHostIdsMap(pd);//主机ID列表查询
 		Map<String, CmpCdLoad> virLoadMap=new HashMap<String, CmpCdLoad>();//虚拟机负载
-		Map<String, CmpCdLoad> hostLoadMap=new HashMap<String, CmpCdLoad>();//宿主机负载
-		Map<String, CmpCdLoad> physLoadMap=new HashMap<String, CmpCdLoad>();//物理机负载
 		ModelAndView mv = this.getModelAndView();
 		mv.addObject("hostIdStr", StringUtil.getArrStr(hostIdsMap.get("virStr")));//主机ID列表
 		mv.addObject("cpuTimeType", dbReq.getCpuTimeType());//CPU时间类型
@@ -120,8 +118,8 @@ public class LoginController extends BaseController {
 		mv.addObject("vir", dashboardService.getResDtl("virRes", hostIdsMap.get("virStr")));//虚拟资源详细信息查询
 		mv.addObject("phys", dashboardService.getResDtl("physRes", hostIdsMap.get("virStr")));//物理资源详细信息查询
 		mv.addObject("virLoad", dashboardService.getLoadDtl(virLoadMap, hostIdsMap.get("vir"), dbReq.getResType()));//虚拟机负载
-		mv.addObject("hostLoad", dashboardService.getLoadDtl(hostLoadMap, hostIdsMap.get("host"), dbReq.getResType()));//宿主机负载
-		mv.addObject("physLoad", dashboardService.getLoadDtl(physLoadMap, hostIdsMap.get("phys"), dbReq.getResType()));//物理机负载
+		mv.addObject("hostLoad", dashboardService.getLoadDtl(new HashMap<String, CmpCdLoad>(), hostIdsMap.get("host"), dbReq.getResType()));//宿主机负载
+		mv.addObject("physLoad", dashboardService.getLoadDtl(new HashMap<String, CmpCdLoad>(), hostIdsMap.get("phys"), dbReq.getResType()));//物理机负载
 		mv.addObject("virRun", dashboardService.getRunDtl(hostIdsMap.get("vir")));//虚拟机运行
 		mv.addObject("hostRun", dashboardService.getRunDtl(hostIdsMap.get("host")));//宿主机运行
 		mv.addObject("physRun", dashboardService.getRunDtl(hostIdsMap.get("phys")));//物理机运行
@@ -183,6 +181,51 @@ public class LoginController extends BaseController {
 	            }
 	        }
 	    }
+	}
+	
+	//资源使用列表查询
+	@RequestMapping(value="/getResUseList" ,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public String getResUseList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+			
+			String reqStr = sb.toString();//请求参数字符串
+			logger.info("请求参数：" + reqStr);
+			JSONObject jsonObj=JSONObject.fromObject(reqStr);
+			String resType=StringUtil.getJsonStr(jsonObj, "resType");//资源类型：cpu-CPU、mem-内存、store-磁盘
+			if(StringUtils.isBlank(resType)){//资源类型：cpu-CPU、mem-内存、store-磁盘
+				return StringUtil.getRetStr("-1", "仪表盘查询时错误：资源类型不能为空");
+			}
+			
+			List<CmpCdLoad> resUseList=null;
+			String hostIdStr=StringUtil.getJsonStr(jsonObj, "hostIdStr");//主机ID列表
+			if(!StringUtils.isBlank(hostIdStr)){//主机列表不为空
+				Map<String, CmpCdLoad> virLoadMap=new HashMap<String, CmpCdLoad>();//虚拟机负载
+				dashboardService.getLoadDtl(virLoadMap, hostIdStr.split(","), resType);//虚拟机负载
+				resUseList=dashboardService.getResUseList(virLoadMap);//资源使用列表
+			}
+			
+			return StringUtil.getRetStr("0", "仪表盘查询成功", "resUseList", resUseList);
+		} catch (Exception e) {
+			logger.error("仪表盘查询时错误："+e);
+			return StringUtil.getRetStr("-1", "仪表盘查询时错误："+e);
+		}finally {
+			if(br!=null){
+				try {
+					br.close();
+					br=null;
+				} catch (Exception e) {
+					br=null;
+				}
+			}
+		}
 	}
 	
 	/**访问登录页
