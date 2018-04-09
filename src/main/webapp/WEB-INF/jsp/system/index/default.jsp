@@ -211,7 +211,7 @@ function closeHeadToggle(){
 </div>
 
 <div class="row">
-	<div class="col-xs-6 col-md-6 col-sm-12" style="margin-top: 20px">
+	<div class="col-xs-6 col-md-12 col-sm-12" style="margin-top: 20px">
 		<div class="mem-panel">
 			<div class="inner-box">
 				<div class="head-box">
@@ -259,7 +259,10 @@ function closeHeadToggle(){
 			</div>
 		</div>
 	</div>
-	<div class="col-xs-6 col-md-6 col-sm-12" style="margin-top: 20px">
+</div>
+
+<div class="row">
+	<div class="col-xs-6 col-md-12 col-sm-12" style="margin-top: 20px">
 		<div class="mem-panel">
 			<div class="inner-box">
 				<div class="head-box">
@@ -309,8 +312,8 @@ function closeHeadToggle(){
 		</div>
 	</div>
 </div>
-	<!--新的界面优化代码 end @zjb 2018-2-7 -->
-	</div>
+<!--新的界面优化代码 end @zjb 2018-2-7 -->
+</div>
 </div>
 <%@ include file="foot.jsp"%>
 <script type="text/javascript">
@@ -342,7 +345,7 @@ getTuoyunPercentChart('physRunChart','物理机','${physRun.runRunnigNum}','${ph
 //getAnnularChart('virRunChart', ['${virRun.runTotalNum}台','虚拟机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${virRun.runRunnigNum}台(运)','${virRun.runHangupNum}台(挂)','${virRun.runCloseNum}台(关)'], ['${virRun.runRunnigNum}','${virRun.runHangupNum}','${virRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
 //getAnnularChart('hostRunChart', ['${hostRun.runTotalNum}台','宿主机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${hostRun.runRunnigNum}台(运)','${hostRun.runHangupNum}台(挂)','${hostRun.runCloseNum}台(关)'], ['${hostRun.runRunnigNum}','${hostRun.runHangupNum}','${hostRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
 //getAnnularChart('physRunChart', ['${physRun.runTotalNum}台','物理机'], ['vertical', 'left', 'top'], ['30%', '50%'], ['50%', '75%'], ['${physRun.runRunnigNum}台(运)','${physRun.runHangupNum}台(挂)','${physRun.runCloseNum}台(关)'], ['${physRun.runRunnigNum}','${physRun.runHangupNum}','${physRun.runCloseNum}'], ['#00ff00', '#ffff00', '#ff0000'], "%");//获取图表
-$('#cpuChart,#memChart,#storeChart').css("height",$('#cpuChart').width());
+$('#cpuChart,#memChart,#storeChart').css("height",$('#cpuChart').width()/2);
 var leftH=$('#left-container').height();
 var rightH=$('#right-container').height();
 if(leftH>=rightH){
