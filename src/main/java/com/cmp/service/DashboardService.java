@@ -42,8 +42,6 @@ public class DashboardService {
 	private String ZABBIX_USER="Admin";//Zabbix用户名
 	@Value("${zabbix.password}")
 	private String ZABBIX_PASSWORD="zabbix";//Zabbix密码
-	@Value("${zabbix.loadLittle}")
-	private Float ZABBIX_LOADLITTLE;//轻度负载(%)
 	@Value("${zabbix.loadMiddle}")
 	private Float ZABBIX_LOADMIDDLE;//中度负载(%)
 	@Value("${zabbix.loadHeight}")
@@ -315,11 +313,11 @@ public class DashboardService {
 			cmpCdLoad=loadMap.get(hostId);
 		}else{
 			cmpCdLoad=new CmpCdLoad();
+			cmpCdLoad.setResType(resType);//资源类型
+			cmpCdLoad.setHostId(hostId);//主机ID
 			loadMap.put(hostId, cmpCdLoad);
 		}
 		
-		cmpCdLoad.setResType(resType);//资源类型
-		cmpCdLoad.setHostId(hostId);//主机ID
 		if("cpu".equals(operType)){//CPU
 			cmpCdLoad.setCpuLoad(StringUtil.getFloat(rate));
 		}else if("mem".equals(operType)){//内存
@@ -332,13 +330,13 @@ public class DashboardService {
 	//增加负载数
 	private void addLoadNum(CmpDashboard cd, CmpCdLoad cmpCdLoad) {
 		float maxLoad=cmpCdLoad.getMaxLoad();
-		if(maxLoad<ZABBIX_LOADLITTLE){//轻度负载(%)
+		if(maxLoad<ZABBIX_LOADMIDDLE){//轻度负载(%)
 			cd.addLoadLittleNum(1);
-		}else if(ZABBIX_LOADLITTLE<=maxLoad && maxLoad<ZABBIX_LOADMIDDLE){//中度负载(%)
+		}else if(ZABBIX_LOADMIDDLE<=maxLoad && maxLoad<ZABBIX_LOADHEIGHT){//中度负载(%)
 			cd.addLoadMiddleNum(1);
-		}else if(ZABBIX_LOADMIDDLE<=maxLoad && maxLoad<ZABBIX_LOADHEIGHT){//高度负载(%)
+		}else if(ZABBIX_LOADHEIGHT<=maxLoad && maxLoad<ZABBIX_LOADSTOP){//高度负载(%)
 			cd.addLoadHeightNum(1);
-		}else if(ZABBIX_LOADMIDDLE<=maxLoad && maxLoad<ZABBIX_LOADSTOP){//停机负载(%)
+		}else if(ZABBIX_LOADSTOP<=maxLoad){//停机负载(%)
 			cd.addLoadStopNum(1);
 		}
 	}
