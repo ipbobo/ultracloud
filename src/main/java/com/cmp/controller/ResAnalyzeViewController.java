@@ -144,7 +144,7 @@ public class ResAnalyzeViewController extends BaseController {
 					continue;
 				}
 				platformAnalyze.setPlatformName(plNameList.get(i));
-				platformAnalyze.setCputotal(String.valueOf(cpuNums[i]));
+				platformAnalyze.setCputotal(String.valueOf(cpuTotalArr[i]));
 				platformAnalyze.setCpuUsedPercent(getNumberPercent(Integer.parseInt(cpuTotalArr[i]), cpuNums[i]));
 				platformAnalyze.setCpuAppPerDays(String.valueOf(getDiv(currAppCpuNum[i], currDate)));
 				if ((Integer.parseInt(cpuUsedNumstr[i])/cpuNums[i]) > 1) {
@@ -159,7 +159,7 @@ public class ResAnalyzeViewController extends BaseController {
 					
 				}
 				
-				platformAnalyze.setMemorytotal(String.valueOf(memoryNums[i]));
+				platformAnalyze.setMemorytotal(String.valueOf(memoryTotalArr[i]));
 				platformAnalyze.setMemoryUsedPercent(getNumberPercent(Integer.parseInt(memoryTotalArr[i]), memoryNums[i]));
 				platformAnalyze.setMemoryAppPerDays(String.valueOf(getDiv(currAppMemoryNum[i], currDate)));
 				if ((Integer.parseInt(memoryUsedNumstr[i])/memoryNums[i]) > 1) {
@@ -173,7 +173,7 @@ public class ResAnalyzeViewController extends BaseController {
 					}
 				}
 				
-				platformAnalyze.setDisktotal(String.valueOf(diskNums[i]));
+				platformAnalyze.setDisktotal(String.valueOf(diskTotalArr[i]));
 				platformAnalyze.setDiskUsedPercent(getNumberPercent(Integer.parseInt(diskTotalArr[i]), diskNums[i]));
 				platformAnalyze.setDiskAppPerDays(String.valueOf(getDiv(currAppDiskNum[i], currDate)));
 				if ((Integer.parseInt(diskUsedNumstr[i])/diskNums[i]) > 1) {
@@ -253,7 +253,7 @@ public class ResAnalyzeViewController extends BaseController {
 				}
 				cpuNums[index] = cpuNums[index] + Integer.parseInt(vm.getCpu() == null ? "0" : vm.getCpu());
 				diskNums[index] = diskNums[index] + Integer.parseInt(vm.getDatadisk() == null ? "0" : vm.getDatadisk());
-				memoryNums[index] = memoryNums[index] + Integer.parseInt(vm.getMemory() == null ? "0" : vm.getMemory());
+				memoryNums[index] = memoryNums[index] + (Integer.parseInt(vm.getMemory() == null ? "0" : vm.getMemory())/1024);
 			}
 			
 			String[] cpuUsedNumstr = new String[cpuNums.length];
