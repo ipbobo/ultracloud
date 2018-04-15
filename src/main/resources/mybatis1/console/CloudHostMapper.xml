@@ -13,9 +13,11 @@
 			vm.os AS os,
 			vm.status AS status,
 			cp.name AS platform,
+			hm.ip AS hostip,
 			date(vm.duedate) AS duedate
 		FROM
 			t_virtualmachine vm JOIN t_cloudplatform cp ON vm.platform = cp.id
+								JOIN t_hostmachime hm ON vm.hostmachine_id = hm.id
 		WHERE
 			1 = 1
 		ORDER BY

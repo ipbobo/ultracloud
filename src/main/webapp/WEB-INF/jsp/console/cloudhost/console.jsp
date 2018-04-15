@@ -20,7 +20,7 @@
                 console.log("connection state change : connected");
             }
         });
-    wmks.connect("wss://192.168.0.251/ticket/${Ticket}");
+    wmks.connect("wss://${Host}/ticket/${Ticket}");
 </script>
 </body>
 </html>

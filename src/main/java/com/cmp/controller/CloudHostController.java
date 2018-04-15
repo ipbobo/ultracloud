@@ -165,7 +165,7 @@ public class CloudHostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/console")
-	public ModelAndView console(Integer id) throws Exception {
+	public ModelAndView console(String host, Integer id) throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("console/cloudhost/console");
 
@@ -177,6 +177,7 @@ public class CloudHostController extends BaseController {
 			mv.addObject("QX", 0);
 		}
 		mv.addObject("Ticket", cloudHostService.acquireTicket(id));
+		mv.addObject("Host", host);
 
 		return mv;
 	}
