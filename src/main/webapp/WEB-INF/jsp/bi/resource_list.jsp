@@ -40,7 +40,7 @@
 						<div class="col-xs-12">
 						
 						<!-- 检索  -->
-						<form action="bidatacenter/listBillDay.do" method="post" name="Form" id="Form">
+						<form action="bidatacenter/listResource.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;width:100%;">
 							<tr>
 								<td style="vertical-align: top;"></td>

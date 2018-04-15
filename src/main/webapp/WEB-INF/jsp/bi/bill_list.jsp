@@ -269,11 +269,12 @@ $(function() {
 
 //导出excel
 function toExcel(){
-	var keywords = $("#nav-search-input").val();
-	var lastLoginStart = $("#lastLoginStart").val();
-	var lastLoginEnd = $("#lastLoginEnd").val();
-	var ROLE_ID = $("#role_id").val();
-	window.location.href='<%=basePath%>user/excel.do?keywords='+keywords+'&lastLoginStart='+lastLoginStart+'&lastLoginEnd='+lastLoginEnd+'&ROLE_ID='+ROLE_ID;
+	var DEPARTMENT_ID = $("#DEPARTMENT_ID").val();
+	var project_id = $("#project_id").val();
+	var USERNAME = $("#USERNAME").val();
+	var startTime = $("#startTime").val();
+	var endTime = $("#endTime").val();
+	window.location.href='<%=basePath%>bidatacenter/exportBillExcel.do?DEPARTMENT_ID='+DEPARTMENT_ID+'&project_id='+project_id+'&USERNAME='+USERNAME+'&startTime='+startTime+'&endTime='+endTime;
 }
 	
 </script>

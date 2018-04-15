@@ -1,11 +1,15 @@
 package com.cmp.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.ResourceService;
@@ -17,6 +21,7 @@ import com.cmp.service.resourcemgt.DatacenternetworkService;
 import com.cmp.service.resourcemgt.HostmachineService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 
@@ -137,7 +142,16 @@ public class DatacenterNetworkController extends BaseController {
 		pd = this.getPageData();
 		pd.put("id", this.get32UUID());
 		pd.put("uuid", pd.getString("id"));
+		
+		//设置云平台id
+		String datacenterId = pd.getString("datacenter_id");
+		PageData dcPD = new PageData();
+		dcPD.put("id", datacenterId);
+		dcPD = datacenterService.findById(dcPD);
+		pd.put("cpf_id", dcPD.getString("cpf_id"));
+		
 		datacenternetworkService.save(pd, false);
+		
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -159,16 +173,23 @@ public class DatacenterNetworkController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		
-		List<PageData> varList = datacenterService.listAll(pd);
-		mv.addObject("varList", varList);
-		
-		List<PageData> clusterList = clusterService.listAll(pd);
-		mv.addObject("clusterList", clusterList);
-		
 		pd = datacenternetworkService.findById(pd, false);
 		
+		PageData cloudPD = new PageData();
+		cloudPD.put("id", pd.getString("cpf_id"));
+		List<PageData> varList = datacenterService.listAll(cloudPD);
+		mv.addObject("varList", varList);
+		
+		//List<PageData> clusterList = clusterService.listAll(pd);
+		//mv.addObject("clusterList", clusterList);
+		
+		PageData dcPD = new PageData();
+		dcPD.put("datacenter_id", pd.getString("datacenter_id"));
+		List<PageData> networkList =  datacenternetworkService.findLabelByDatacenterId(dcPD);
+		mv.addObject("networkList", networkList);
+		
 		mv.setViewName("resource/datacenternetwork_edit");
-		mv.addObject("msg", "save");
+		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
 	}
@@ -188,6 +209,54 @@ public class DatacenterNetworkController extends BaseController {
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
+	}
+	
+	/**
+	 * 数据中心选择网络
+	 * @param serviceType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/toNetworkQuery")
+	@ResponseBody
+	public List<PageData> toNetworkQuery(String dataCenterId) throws Exception{
+		if (dataCenterId == null || dataCenterId.length() == 0) {
+			return null;
+		}
+		PageData pd = new PageData();
+		pd.put("datacenter_id", dataCenterId);
+		List<PageData> networkList =  datacenternetworkService.findLabelByDatacenterId(pd);
+		return networkList;
+	}
+	
+	/**
+	 * 批量删除
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/deleteAll")
+	@ResponseBody
+	public Object deleteAll() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "批量删除datacenternetwork");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return null;
+		} // 校验权限
+		PageData pd = new PageData();
+		Map<String, Object> map = new HashMap<String, Object>();
+		pd = this.getPageData();
+		List<PageData> pdList = new ArrayList<PageData>();
+		String DATA_IDS = pd.getString("DATA_IDS");
+		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
+			String ArrayDATA_IDS[] = DATA_IDS.split(",");
+			datacenternetworkService.deleteAll(ArrayDATA_IDS, false);
+			pd.put("msg", "ok");
+		} else {
+			pd.put("msg", "no");
+		}
+		pdList.add(pd);
+		map.put("list", pdList);
+		return AppUtil.returnObject(pd, map);
 	}
 
 }

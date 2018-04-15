@@ -29,6 +29,8 @@ import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 import com.fh.util.UuidUtil;
+import com.vmware.vim25.GuestDiskInfo;
+import com.vmware.vim25.VirtualDevice;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
@@ -86,7 +88,7 @@ public class ResourceServiceImpl implements ResourceService {
 			List<PageData> preHostmachineList = hostmachineService.listAll(cloudPD, false);
 			List<PageData> preVirtualMachineList = virtualMachineSyncService.listAll(cloudPD, false);
 			List<PageData> preStorageList = storageService.listAll(cloudPD, false);
-			List<PageData> preDatacenterNetworkList = datacenternetworkService.listAll(cloudPD, false);
+			List<PageData> preDatacenterNetworkList = datacenternetworkService.listAll(cloudPD, true);
 
 			platformManagerType = VMWareCloudArchManager.class.getName();
 
@@ -190,6 +192,29 @@ public class ResourceServiceImpl implements ResourceService {
 								vmPD.put("ip", virtualMachine[j].getGuest().getIpAddress());
 								vmPD.put("cpu", virtualMachine[j].getConfig().getHardware().getNumCPU());
 								vmPD.put("memory", virtualMachine[j].getConfig().getHardware().getMemoryMB());
+								
+								//虚拟机磁盘部空间
+								VirtualDevice[] vd = virtualMachine[j].getConfig().getHardware().getDevice();
+								long totalDisk = 0;
+								for (int a = 0; a < vd.length; a++) {
+									if (vd[a] instanceof com.vmware.vim25.VirtualDisk) {
+										long total = ((com.vmware.vim25.VirtualDisk) vd[a]).getCapacityInKB();
+										totalDisk += total;
+									}
+								}
+								vmPD.put("datadisk", totalDisk/1024/1024);
+								
+								//虚拟机磁盘可用空间
+								GuestDiskInfo[] guestDiskInfo = virtualMachine[j].getGuest().getDisk();
+								long free_datadisk = 0;
+								if(null != guestDiskInfo) {
+									for (int a = 0; a < guestDiskInfo.length; a++) {
+										long freeSpace = guestDiskInfo[a].getFreeSpace();
+										free_datadisk += freeSpace;
+									}
+									vmPD.put("free_datadisk", free_datadisk/1024/1024);
+								}
+								
 								vmPD.put("platform", cloudPD.get("id"));
 								String statusStr = virtualMachine[j].getGuest().getGuestState();
 								Integer status = null;
@@ -230,7 +255,7 @@ public class ResourceServiceImpl implements ResourceService {
 					}
 				}
 
-				// 同步网络
+				// 同步网络标签
 				Network[] network = dc.getNetworks();
 				for (int i = 0; i < network.length; i++) {
 					PageData networkPD = new PageData();
@@ -240,12 +265,13 @@ public class ResourceServiceImpl implements ResourceService {
 					if (null == networkId) {
 						networkId = UuidUtil.get32UUID();
 						networkPD.put("id", networkId);
-						networkPD.put("name", network[i].getName());
+						networkPD.put("label", network[i].getName());
 						networkPD.put("uuid", networkUuid);
 						networkPD.put("type", "vmware");
 						networkPD.put("cpf_id", cloudPD.getString("id"));
 						networkPD.put("datacenter_id", datacenterId);
-						networkPD.put("version", cloudPD.getString("version"));
+						//networkPD.put("label", network[i].getMOR().getVal());
+						
 						networkList.add(networkPD);
 					}
 
@@ -317,14 +343,14 @@ public class ResourceServiceImpl implements ResourceService {
 			}
 		}
 
-		if (null != dcnIds && !"".equals(dcnIds)) {
-			String dcnIds_array[] = dcnIds.split(",");
-			dao.update("DatacenternetworkSyncMapper.updateSelectedAll", dcnIds_array);
-			List<PageData> storageList = (List<PageData>) dao.findForList("DatacenternetworkSyncMapper.listAllByArray", dcnIds_array);
-			for (PageData pd : storageList) {
-				dao.save("DatacenternetworkMapper.save", pd);
-			}
-		}
+//		if (null != dcnIds && !"".equals(dcnIds)) {
+//			String dcnIds_array[] = dcnIds.split(",");
+//			dao.update("DatacenternetworkLabelMapper.updateSelectedAll", dcnIds_array);
+//			List<PageData> storageList = (List<PageData>) dao.findForList("DatacenternetworkLabelMapper.listAllByArray", dcnIds_array);
+//			for (PageData pd : storageList) {
+//				dao.save("DatacenternetworkMapper.save", pd);
+//			}
+//		}
 	}
 
 	/**

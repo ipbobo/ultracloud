@@ -52,6 +52,14 @@ public interface DatacenternetworkService {
 	 * @throws Exception
 	 */
 	public List<PageData> listAll(PageData pd, boolean isSyncTable) throws Exception;
+
+	/**
+	 * 通过DATACENTERID查询
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> findByDatacenterId(PageData pd) throws Exception;
 	
 	/**
 	 * 通过DATACENTERID查询
@@ -59,7 +67,7 @@ public interface DatacenternetworkService {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData>  findByDatacenterId(PageData pd) throws Exception;
+	public List<PageData> findLabelByDatacenterId(PageData pd) throws Exception;
 
 	/**
 	 * 通过id获取数据

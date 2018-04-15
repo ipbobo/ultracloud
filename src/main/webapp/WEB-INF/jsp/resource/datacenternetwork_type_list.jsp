@@ -64,7 +64,7 @@
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">网络名称</th>
 									<th class="center">数据中心</th>
-									<th class="center">资源池</th>
+									<!-- <th class="center">资源池</th> -->
 									<th class="center">网络标签</th>
 									<th class="center">IP地址段</th>
 									<th class="center">网关</th>
@@ -89,12 +89,11 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center' style="width: 100px;">${var.name}</td>
 											<td class='center' style="width: 70px;">${var.datacenter_name}</td>
-											<td class='center'></td>
-											<td class='center'></td>
+											<td class='center'>${var.label}</td>
 											<td class='center'>${var.ippool}</td>
 											<td class='center'>${var.gateway}</td>
 											<td class='center'>${var.mask}</td>
-											<td class='center'>${var.dns}</td>
+											<td class='center'>${var.dns1}</td>
 											<td class='center'>${var.totalip}</td>
 											<td class='center'>${var.freeip}</td>
 											<td class="center">
@@ -225,6 +224,52 @@
 			 };
 			 diag.show();
 		}
+		
+		//批量操作
+		function makeAll(msg){
+			bootbox.confirm(msg, function(result) {
+				if(result) {
+					var str = '';
+					for(var i=0;i < document.getElementsByName('ids').length;i++){
+					  if(document.getElementsByName('ids')[i].checked){
+					  	if(str=='') str += document.getElementsByName('ids')[i].value;
+					  	else str += ',' + document.getElementsByName('ids')[i].value;
+					  }
+					}
+					if(str==''){
+						bootbox.dialog({
+							message: "<span class='bigger-110'>您没有选择任何内容!</span>",
+							buttons: 			
+							{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
+						});
+						$("#zcheckbox").tips({
+							side:1,
+				            msg:'点这里全选',
+				            bg:'#AE81FF',
+				            time:8
+				        });
+						return;
+					}else{
+						if(msg == '确定要删除选中的数据吗?'){
+							top.jzts();
+							$.ajax({
+								type: "POST",
+								url: '<%=basePath%>datacenternetwork/deleteAll.do?tm='+new Date().getTime(),
+						    	data: {DATA_IDS:str},
+								dataType:'json',
+								//beforeSend: validateData,
+								cache: false,
+								success: function(data){
+									 $.each(data.list, function(i, list){
+											nextPage(${page.currentPage});
+									 });
+								}
+							});
+						}
+					}
+				}
+			});
+		};
 	</script>
 
 

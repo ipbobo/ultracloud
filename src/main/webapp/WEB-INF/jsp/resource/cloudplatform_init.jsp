@@ -1168,7 +1168,7 @@
 			<ol>
 				<li>宿主机</li>
 				<li>存储</li>
-				<li>网络</li>
+				<!-- <li>网络</li> -->
 			</ol>
 
 			<div>
@@ -1294,6 +1294,7 @@
 						</table>
 					</form>
 			</div>
+			<!-- 
 			<div>
 				<form method="post">
 						<table id="dcn-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
@@ -1311,7 +1312,6 @@
 							</thead>
 													
 							<tbody>
-							<!-- 开始循环 -->	
 							<c:choose>
 								<c:when test="${not empty dcnList}">
 									<c:if test="${QX.cha == 1 }">
@@ -1325,7 +1325,6 @@
 											<td class='center'>${var.dc_name}</td>
 											<td class='center'>${var.ippool}</td>
 											<td class="center">
-												<!-- Todo -->
 											</td>
 										</tr>
 									
@@ -1346,7 +1345,7 @@
 							</tbody>
 						</table>
 					</form>
-				</div>
+				</div> -->
 			</form>
 		</div>
 	</div>
@@ -1383,7 +1382,7 @@
 				});
 			});
 			
-			$('#dcn-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function() {
+			/* $('#dcn-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function() {
 				console.log('dcn-table---------->>-------');
 				var th_checked = this.checked;//checkbox inside "TH" table header
 				$(this).closest('table').find('tbody > tr').each(function(){
@@ -1391,7 +1390,7 @@
 					if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
 					else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
 				});
-			});
+			}); */
 		});
 		
 	   	//点击“下一步”或“完成”

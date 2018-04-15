@@ -252,31 +252,22 @@ CREATE TABLE `t_datacenter_network` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心网络'; 
 
 -- ----------------------------
--- 数据中心网络同步表
+-- 数据中心网络标签
 -- ----------------------------
-DROP TABLE IF EXISTS `t_datacenter_network_sync`;
-CREATE TABLE `t_datacenter_network_sync` (
+DROP TABLE IF EXISTS `t_datacenter_network_label`;
+CREATE TABLE `t_datacenter_network_label` (
   `id` varchar(32) NOT NULL,
-  `name` varchar(50) NOT NULL COMMENT '名称',
+  `label` varchar(50) NOT NULL COMMENT '网络标签',
   `uuid` varchar(40) NOT NULL COMMENT 'uuid',
   `type` varchar(20) NOT NULL COMMENT '类型',
   `cpf_id` varchar(32) DEFAULT NULL COMMENT '云平台id',
   `datacenter_id` varchar(32) DEFAULT NULL COMMENT '数据中心id',
-  `ippool` varchar(40) DEFAULT NULL COMMENT 'ip池',
-  `mask` varchar(20) DEFAULT NULL COMMENT '掩码',
-  `gateway` varchar(20) DEFAULT NULL COMMENT '网关',
-  `dns1` varchar(20) DEFAULT NULL COMMENT 'DNS1',
-  `dns2` varchar(20) DEFAULT NULL COMMENT 'DNS2',
-  `totalip` int unsigned DEFAULT NULL COMMENT 'ip总数',
-  `freeip` int unsigned DEFAULT NULL COMMENT 'ip剩余量',
   `gmt_create` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  `version` varchar(20) NOT NULL COMMENT '同步版本号',
-  `isSelected` varchar(20) DEFAULT NULL COMMENT '选中并激活',
   INDEX idx_datacenter_id(`datacenter_id`),
   PRIMARY KEY (`id`)
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心网络同步表'; 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心网络标签表'; 
 
 -- ----------------------------
 -- 虚拟机

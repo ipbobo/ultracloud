@@ -37,7 +37,8 @@
 		password,
 		uuid,
 		cpf_id,
-		type
+		type,
+		free_datadisk
 	</sql>
 	
 	<sql id="Field_time">
@@ -73,7 +74,8 @@
 		#{password},
 		#{uuid},
 		#{cpf_id},
-		#{type}
+		#{type},
+		#{free_datadisk}
 	</sql>
 	
 	<!-- 字段值 -->
@@ -99,7 +101,8 @@
 		#{item.password},
 		#{item.uuid},
 		#{item.cpf_id},
-		#{item.type}
+		#{item.type},
+		#{item.free_datadisk}
 	</sql>
 	
 	<sql id="FieldValue_time">	

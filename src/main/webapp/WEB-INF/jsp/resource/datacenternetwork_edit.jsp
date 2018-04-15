@@ -28,6 +28,7 @@
 						<input type="hidden" value="no" id="hasTp1" />
 						<input type="hidden" name="type" id="type" value="${pd.type}" />
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
+						<input type="hidden" name="uuid" id="uuid" value="${pd.uuid}"/>
 						<input type="hidden" name="ippool" id="ippool" value="${pd.ippool}"/>
 						<input type="hidden" name="gateway" id="gateway" value="${pd.gateway}"/>
 						<input type="hidden" name="mask" id="mask" value="${pd.mask}"/>
@@ -52,7 +53,8 @@
 							<tr>
 								<td style="width:79px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;数据中心:</td>
 								<td id="cluster_td">
-									<select class="chosen-select form-control" name="datacenter_id" id="datacenter_id" style="vertical-align:top;" style="width:98%;" >
+									<select class="chosen-select form-control" name="datacenter_id" id="datacenter_id" style="vertical-align:top;" style="width:98%;" onchange="onDataCenterSelected(this.value)">
+										<option value="#" selected="selected">请选择</option>
 										<c:forEach items="${varList}" var="var">
 											<option value="${var.id }" <c:if test="${var.id  == pd.datacenter_id }">selected</c:if>>${var.name }</option>
 										</c:forEach>
@@ -73,9 +75,11 @@
 							<tr>
 								<td style="width:160px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;网络标签:</td>
 								<td id="js">
-									<select  class="chosen-select form-control" name="vlan" id="vlan" value="${pd.type}" data-placeholder="请选择网络标签" style="vertical-align:top;" >
-									<option <c:if test="${pd.vlan == 'vlan001' }">selected="selected"</c:if> value="cluster1">vlan001</option>
-									<option <c:if test="${pd.vlan == 'vlan002' }">selected="selected"</c:if>  value="cluster2">vlan002</option>
+									<select  class="chosen-select form-control" name="label" id="label" value="${pd.label}" data-placeholder="请选择" style="vertical-align:top;" >
+										<option value="#" selected="selected">请选择</option>
+										<c:forEach items="${networkList}" var="var">
+											<option value="${var.label }" <c:if test="${var.label  == pd.label }">selected</c:if>>${var.label }</option>
+										</c:forEach>
 									</select>
 								</td>
 							</tr>
@@ -154,7 +158,36 @@
 			var str2 = ' == 1 }">这里放按钮<'+'/c:'+'if>';
 			$("#code").val(str1+str2);
 			
+			var ippool = $('#ippool').val();  
+			var gateway = $('#gateway').val();  
+			var mask = $('#mask').val();  
+			var dns1 = $('#dns1').val();  
+			debugger;
+			var ippoolArray = ippool.split("-");
+			var ippoolStart = ippoolArray[0].split(".");
+			$("#ippool_1").val(ippoolStart[0]);
+			$("#ippool_2").val(ippoolStart[1]);
+			$("#ippool_3").val(ippoolStart[2]);
+			$("#ippool_4").val(ippoolStart[3]);
+			$("#ippool_5").val(ippoolArray[1]);
 			
+			var gatewayArray = gateway.split(".");
+			$("#gateway_1").val(gatewayArray[0]);
+			$("#gateway_2").val(gatewayArray[1]);
+			$("#gateway_3").val(gatewayArray[2]);
+			$("#gateway_4").val(gatewayArray[3]);
+			
+			var maskArray = mask.split(".");
+			$("#mask_1").val(maskArray[0]);
+			$("#mask_2").val(maskArray[1]);
+			$("#mask_3").val(maskArray[2]);
+			$("#mask_4").val(maskArray[3]);
+			
+			var dns1Array = dns1.split(".");
+			$("#dns_1").val(dns1Array[0]);
+			$("#dns_2").val(dns1Array[1]);
+			$("#dns_3").val(dns1Array[2]);
+			$("#dns_4").val(dns1Array[3]);
 		});
 		
 		
@@ -350,6 +383,34 @@
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
 		}
+		
+		var networkMap = {};
+		function onDataCenterSelected(dataCenterId){
+			jQuery.ajax({  
+				url : "<%=basePath%>datacenternetwork/toNetworkQuery.do",  
+				data : {'dataCenterId' : dataCenterId},  
+				type : "post",  
+				cache : false,  
+				dataType : "json",  
+				success:function(data){
+					var select_root=document.getElementById('label');  
+				    select_root.options.length=0;
+				 	var _option=new Option("请选择","#"); 
+				    select_root.add(_option);
+				    for(var i=0;i<data.length;i++){  
+				    	if (data[i].ippool != null){
+				    		networkMap[data[i].id] = data[i].ippool;
+				    	}
+				    	//var xValue=data[i].id;  
+				    	var xValue=data[i].label; 
+			            var xText=data[i].label;
+			            var option=new Option(xText,xValue);  
+			            select_root.add(option);  
+				    }
+				}  
+			});  
+			
+		} 
 
 		</script>
 </body>

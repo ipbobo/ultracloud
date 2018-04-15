@@ -32,7 +32,8 @@
 		totalip,
 		freeip,
 		uuid,
-		cluster_id
+		cluster_id,
+		label
 	</sql>
 	
 	<sql id="Field_time">
@@ -60,7 +61,8 @@
 		#{totalip},
 		#{freeip},
 		#{uuid},
-		#{cluster_id}
+		#{cluster_id},
+		#{label}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -103,7 +105,8 @@
 			totalip = #{totalip},
 			freeip = #{freeip},
 			uuid = #{uuid},
-			cluster_id = #{cluster_id}
+			cluster_id = #{cluster_id},
+			label = #{label}
 		 where 
 		    id = #{id}
 	</update>
@@ -144,6 +147,7 @@
 				s.totalip,
 				s.freeip,
 				s.uuid,
+				s.label,
 				c.name as datacenter_name
 		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c 
 		where s.datacenter_id=c.id

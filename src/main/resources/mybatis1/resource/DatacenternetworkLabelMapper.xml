@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="DatacenternetworkSyncMapper">
+<mapper namespace="DatacenternetworkLabelMapper">
 	
 	<!--表名 -->
 	<sql id="tableName">
-		t_datacenter_network_sync
+		t_datacenter_network_label
 	</sql>
 	<sql id="dctableName">
 		t_datacenter
@@ -17,20 +17,11 @@
 	
 	<sql id="Field_main">
 	    id,	
-	    name,
+	    label,
+	    uuid,
+	    type,
 	    cpf_id,
-		datacenter_id,
-		ippool,
-		type,
-		mask,
-		gateway,
-		dns1,
-		dns2,
-		totalip,
-		freeip,
-		version,
-		isSelected,
-		uuid
+		datacenter_id
 	</sql>
 	
 	<sql id="Field_time">
@@ -46,20 +37,11 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue_main">	
 	    #{id},	
-	    #{name},
+	    #{label},
+	    #{uuid},
+	    #{type},
 	    #{cpf_id},
-		#{datacenter_id},
-		#{ippool},
-		#{type},
-		#{mask},
-		#{gateway},
-		#{dns1},
-		#{dns2},
-		#{totalip},
-		#{freeip},
-		#{version},
-		#{isSelected},
-		#{uuid}
+		#{datacenter_id}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -91,20 +73,11 @@
 		update
 		<include refid="tableName"></include>
 		set 
-		    name = #{name},
-		    cpf_id = #{cpf_id},
-			datacenter_id = #{datacenter_id},
-			ippool = #{ippool},
-			type = #{type},
-			mask = #{mask},
-			gateway = #{gateway},
-			dns1 = #{dns1},
-			dns2 = #{dns2},
-			totalip = #{totalip},
-			freeip = #{freeip},
-			version= #{version},
-			isSelected = #{isSelected},
-			uuid = #{uuid}
+		    label = #{label},
+	    	uuid = #{uuid},
+	    	type = #{type},
+	    	cpf_id = #{cpf_id},
+			datacenter_id = #{datacenter_id}
 		 where 
 		    id = #{id}
 	</update>
@@ -119,25 +92,14 @@
 			id = #{id}
 	</select>
 	
-	<!-- 脚本列表 -->
+	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,
-		        s.name,
-		        s.cpf_id,
+	    		s.label,
+	    		s.uuid,
+	    		s.type,
+	    		s.cpf_id,
 				s.datacenter_id,
-				s.ippool,
-				s.gmt_modified,
-				s.gmt_create,
-				s.type,
-				s.mask,
-				s.gateway,
-				s.dns1,
-				s.dns2,
-				s.totalip,
-				s.freeip,
-				s.version,
-				s.isSelected,
-				s.uuid,
 				c.name as datacenter_name
 		from <include refid="tableName"></include> s, <include refid="dctableName"></include> c
 		where s.datacenter_id=c.id
@@ -159,36 +121,32 @@
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select dcn.id,
-		       dcn.name,
-		       dcn.datacenter_id,
-		       dcn.ippool,
+		       dcn.id,
+	    	   dcn.label,
+	    	   dcn.uuid,
+	    	   dcn.type,
+	    	   dcn.cpf_id,
+			   dcn.datacenter_id,
 		       dcn.gmt_create,
 		       dcn.gmt_modified,
-		       dcn.version,
-		       dcn.cpf_id,
-		       dcn.isSelected,
-		       dcn.uuid,
 		       dc.name as dc_name
 		from 
 		<include refid="tableName"></include> dcn LEFT JOIN <include refid="dctableName"></include> dc
 		on dcn.datacenter_id=dc.id
 		where dcn.cpf_id=#{id}
-		and dcn.version=#{version}
 	</select>
 	
 	<!-- 列表(全部) -->
 	<select id="listAllByArray" parameterType="String" resultType="pd">
 		select dcn.id,
-		       dcn.name,
-		       dcn.ippool,
+		       dcn.id,
+	    	   dcn.label,
+	    	   dcn.uuid,
+	    	   dcn.type,
+	    	   dcn.cpf_id,
+			   dcn.datacenter_id,
 		       dcn.gmt_create,
 		       dcn.gmt_modified,
-		       dcn.version,
-		       dcn.isSelected,
-		       dcn.type,
-		       dcn.cpf_id,
-		       dcn.datacenter_id,
-		       dcn.uuid,
 		       dc.name as dc_name
 		from 
 		<include refid="tableName"></include> dcn LEFT JOIN <include refid="dctableName"></include> dc
@@ -224,5 +182,15 @@
                  #{item}
 		</foreach>
 	</delete>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findLabelByDatacenterId" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			datacenter_id = #{datacenter_id}
+	</select>
 	
 </mapper>
