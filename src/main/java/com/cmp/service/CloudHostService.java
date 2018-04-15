@@ -21,4 +21,6 @@ public interface CloudHostService {
 
 	public void destroy(List<Integer> ls) throws Exception;
 
+	public String acquireTicket(Integer id) throws Exception;
+
 }

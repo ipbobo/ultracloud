@@ -825,6 +825,17 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override public String acquireTicket(String vmName) {
+		return searchManagedEntity(VirtualMachine.class, vmName).map(vm -> {
+			try {
+				return vm.acquireTicket("webmks").getTicket();
+			} catch (Exception e) {
+				logger.error(e.getMessage(), e);
+			}
+			return null;
+		}).orElse("");
+	}
+
 	private static String getDeviceKey(VirtualDevice device) {
 		return device.controllerKey + " -- " + device.getUnitNumber();
 	}

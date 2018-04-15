@@ -301,4 +301,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 		return null;
 	}
 
+	@Override public String acquireTicket(String vmName) {
+		throw new UnsupportedOperationException();
+	}
 }

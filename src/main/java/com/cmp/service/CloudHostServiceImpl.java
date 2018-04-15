@@ -1,19 +1,17 @@
 package com.cmp.service;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import com.cmp.mgr.bean.CloneVmRequest;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-
 import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.mgr.CloudArchManager;
 import com.cmp.mgr.CloudArchManagerAdapter;
+import com.cmp.mgr.bean.CloneVmRequest;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service("cloudHostService")
 public class CloudHostServiceImpl implements CloudHostService {
@@ -184,6 +182,16 @@ public class CloudHostServiceImpl implements CloudHostService {
 
 			dao.delete("CloudHostMapper.deleteById", id);
 		}
+	}
+
+	@Override
+	public String acquireTicket(Integer id) throws Exception {
+		PageData pd = findById(id);
+
+		String platformId = pd.getString("platform");
+		CloudArchManager cloudArchManager = getCloudArchManager(platformId);
+
+		return cloudArchManager.acquireTicket(pd.getString("name"));
 	}
 
 	public void snapshot(List<Integer> ls) throws Exception {

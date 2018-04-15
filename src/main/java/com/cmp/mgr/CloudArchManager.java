@@ -75,4 +75,6 @@ public interface CloudArchManager {
 
 	public TccCapability getCapability();
 
+	public String acquireTicket(String vmName);
+
 }

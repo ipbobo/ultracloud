@@ -1,11 +1,11 @@
 package com.cmp.mgr.openstack;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
+import com.cmp.entity.tcc.*;
+import com.cmp.mgr.PlatformBindedCloudArchManager;
+import com.cmp.mgr.bean.CloneVmRequest;
+import com.cmp.mgr.bean.CreateVmRequest;
+import com.cmp.mgr.bean.CreateVolumeRequest;
+import com.vmware.vim25.mo.Datacenter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.openstack4j.api.Builders;
 import org.openstack4j.api.OSClient.OSClientV2;
@@ -13,20 +13,11 @@ import org.openstack4j.model.compute.RebootType;
 import org.openstack4j.model.storage.block.VolumeSnapshot;
 import org.openstack4j.openstack.OSFactory;
 
-import com.cmp.entity.tcc.TccCapability;
-import com.cmp.entity.tcc.TccCluster;
-import com.cmp.entity.tcc.TccDatacenter;
-import com.cmp.entity.tcc.TccDatastore;
-import com.cmp.entity.tcc.TccHostMachine;
-import com.cmp.entity.tcc.TccNetwork;
-import com.cmp.entity.tcc.TccResourcePool;
-import com.cmp.entity.tcc.TccVirtualMachine;
-import com.cmp.entity.tcc.TccVmSnapshot;
-import com.cmp.mgr.PlatformBindedCloudArchManager;
-import com.cmp.mgr.bean.CloneVmRequest;
-import com.cmp.mgr.bean.CreateVmRequest;
-import com.cmp.mgr.bean.CreateVolumeRequest;
-import com.vmware.vim25.mo.Datacenter;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 
@@ -212,4 +203,7 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 		return null;
 	}
 
+	@Override public String acquireTicket(String vmName) {
+		throw new UnsupportedOperationException();
+	}
 }

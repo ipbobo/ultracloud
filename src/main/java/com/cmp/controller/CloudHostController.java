@@ -1,14 +1,12 @@
 package com.cmp.controller;
 
-import static org.springframework.http.ResponseEntity.ok;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import com.cmp.service.CloudHostService;
+import com.fh.controller.base.BaseController;
+import com.fh.entity.Page;
+import com.fh.entity.system.User;
+import com.fh.service.system.user.impl.UserService;
+import com.fh.util.Jurisdiction;
+import com.fh.util.PageData;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,20 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cmp.service.CloudHostService;
-import com.fh.controller.base.BaseController;
-import com.fh.entity.Page;
-import com.fh.entity.system.User;
-import com.fh.service.system.user.impl.UserService;
-import com.fh.util.Jurisdiction;
-import com.fh.util.PageData;
+import javax.annotation.Resource;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @Controller
 @RequestMapping(value = "/cloudhost")
 public class CloudHostController extends BaseController {
 
-	private static final String	SUCCESS	= "SUCCESS";
-	private static final String	FAILURE	= "FAILURE";
+	private static final String SUCCESS = "SUCCESS";
+
+	private static final String FAILURE = "FAILURE";
 
 	String menuUrl = "cloudhost/list.do";
 
@@ -166,7 +165,7 @@ public class CloudHostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/console")
-	public ModelAndView console() throws Exception {
+	public ModelAndView console(Integer id) throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("console/cloudhost/console");
 
@@ -177,6 +176,7 @@ public class CloudHostController extends BaseController {
 		} else {
 			mv.addObject("QX", 0);
 		}
+		mv.addObject("Ticket", cloudHostService.acquireTicket(id));
 
 		return mv;
 	}
