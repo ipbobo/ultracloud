@@ -360,6 +360,12 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		for (int vmIndex = 0; vmIndex < vmCount; vmIndex++) {
 			Map<String, Object> deployOut = deployVM(ipArr[vmIndex],DEF_USERNAME, DEF_PWD, project.getId(), project.getName(), workOrder, orderInfo, pd);
 			if (deployOut.get("resultCode").equals("0")) {
+				//查询系统连接情况
+				VirtualMachine vm = (VirtualMachine)deployOut.get("vm");
+				if (!ShellUtil.ping(vm.getIp(), ShellUtil.CONN_TIME_OUT)) {
+					ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机:[" + vm.getIp() + "] 异常! 无法执行shell脚本安装软件。");
+					continue;
+				}
 				//部署虚拟机成功，部署软件
 				String softCodeStr = orderInfo.getSoftCode();
 				String[] softCodeArr =  softCodeStr.split(",");
@@ -385,9 +391,15 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 							shellParamBuf.append(" " + defParam.getString("value"));
 						}
 					}
-					String shellUrl = scriptService.findByMediumId(script_pd).getString("url");//脚本路径
-					String shellcmd = shellUrl + " " +shellParamBuf.toString().trim();  //执行脚本命令
-					installSoft((VirtualMachine)deployOut.get("vm"), workOrder, softCode, softName, shellcmd);
+					script_pd = scriptService.findByMediumId(script_pd);
+					String remoteScriptUrl = script_pd.getString("url");//脚本路径
+					String scriptId = script_pd.getString("id");
+					//下载脚本
+					String localScriptUrl = ShellUtil.LOCAL_SCRIPT_DIR + "/" + scriptId + ".sh";
+					downloadScript(vm, remoteScriptUrl, localScriptUrl);
+					String shellcmd = "." + localScriptUrl + " " +shellParamBuf.toString().trim();  
+					//执行软件安装脚本命令
+					installSoft(vm, workOrder, softCode, softName, shellcmd);
 				}
 			}
 		}
@@ -540,4 +552,11 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		resMap.put("resultMsg", "虚拟机软件 [" + softName +" ]安装执行成功! ");
 		return resMap;
 	}
+	
+	public void downloadScript(VirtualMachine vm, String remoteUrl, String localUrl) {
+		ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),  
+				vm.getPassword() , ShellUtil.DEF_CHARSET);
+		shellUtil.exec("curl -o " + localUrl + " " + remoteUrl);
+	}
+	
 }

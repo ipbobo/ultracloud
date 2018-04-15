@@ -17,7 +17,7 @@
 			date(vm.duedate) AS duedate
 		FROM
 			t_virtualmachine vm JOIN t_cloudplatform cp ON vm.platform = cp.id
-								JOIN t_hostmachime hm ON vm.hostmachine_id = hm.id
+								JOIN t_hostmachine hm ON vm.hostmachine_id = hm.id
 		WHERE
 			1 = 1
 		ORDER BY
