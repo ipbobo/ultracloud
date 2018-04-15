@@ -37,7 +37,7 @@ public class DashboardService {
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
 	@Value("${zabbix.url}")
-	private String ZABBIX_URL="http://180.169.225.158:86/zabbix/api_jsonrpc.php";//Zabbix请求地址
+	private String ZABBIX_URL="http://192.168.0.150/zabbix/api_jsonrpc.php";//Zabbix请求地址
 	@Value("${zabbix.user}")
 	private String ZABBIX_USER="Admin";//Zabbix用户名
 	@Value("${zabbix.password}")
@@ -353,14 +353,20 @@ public class DashboardService {
 	
 	public static void main(String[] args){
 		DashboardService aa=new DashboardService();
-		//JSONObject jsonObj=aa.getZabbixJson("item.get", StringUtil.getParams("hostids", new String[]{"10084", "10257"}));
-		//JSONObject jsonObj=aa.getZabbixJson("host.get", StringUtil.getParams("filter", StringUtil.getParams("hostid", new String[]{"10084", "10257"})));
-		//ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("output",  new String[]{"status"}, "filter", StringUtil.getParams("hostid", "10084,10257".split(","))));
-		//ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("search", StringUtil.getParams("key_", "system.cpu.num")));//system.cpu.num[max]、system.cpu.util[,user]
-		//ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("output",  new String[]{"hostid"}, "filter", StringUtil.getParams()));
-		//aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"key_", "lastvalue"}, "search", StringUtil.getParams("key_", "system.cpu")));//查询system.cpu.num和system.cpu.util[,user]；"sortfield", "key_"
-		//aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"key_", "lastvalue"}, "search", StringUtil.getParams("key_", "vfs.fs.size")));//查询system.cpu.num和system.cpu.util[,user]；"sortfield", "key_"
-		//aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"key_", "lastvalue"}, "search", StringUtil.getParams("key_", "vm.memory.size")));//查询system.cpu.num和system.cpu.util[,user]；"sortfield", "key_"
+//		JSONObject jsonObj=aa.getZabbixJson("item.get", StringUtil.getParams("hostids", new String[]{"10084", "10257"}));
+//		JSONObject jsonObj=aa.getZabbixJson("host.get", StringUtil.getParams("filter", StringUtil.getParams("hostid", new String[]{"10084", "10257"})));
+//		ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("output",  new String[]{"status"}, "filter", StringUtil.getParams("hostid", "10084,10257".split(","))));
+//		ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("search", StringUtil.getParams("key_", "system.cpu.num")));//system.cpu.num[max]、system.cpu.util[,user]
+//		ResBody resBody=aa.getZabbixJson("host.get", StringUtil.getParams("output",  new String[]{"hostid"}, "filter", StringUtil.getParams()));
+//		aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"key_", "lastvalue"}, "search", StringUtil.getParams("key_", "system.cpu")));//查询system.cpu.num和system.cpu.util[,user]；"sortfield", "key_"
+//		aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"key_", "lastvalue"}, "search", StringUtil.getParams("key_", "vfs.fs.size")));//查询system.cpu.num和system.cpu.util[,user]；"sortfield", "key_"
+//		aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"key_", "lastvalue"}, "search", StringUtil.getParams("key_", "vm.memory.size")));//查询system.cpu.num和system.cpu.util[,user]；"sortfield", "key_"
+//		aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "key_", "lastvalue"}, "search", StringUtil.getParams("key_", "system.cpu.load[percpu,avg5]")));//查询system.cpu.num和system.cpu.util[,user]和"sortfield", "key_"
+		//TODO 注：API地址应该是http://192.168.0.150/zabbix/api_jsonrpc.php
+		//这个方式是能取到值的，因为现在是按照监控项来查询所有机器host的监控数据，所以查出来前面5个host都是zabbix的监控模板，而不是真实的被监控机器
+		//最后一条数据是 zabbix server这台Linux机器的cpu usage
 		aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "key_", "lastvalue"}, "search", StringUtil.getParams("key_", "system.cpu.load[percpu,avg5]")));//查询system.cpu.num和system.cpu.util[,user]和"sortfield", "key_"
+		//192.168.0.251  使用的监控模板不是通用Linux模板，所以用system.cpu.load[percpu,avg5]取不到值，具体用什么key，需要到zabbix上面看一下
+		aa.getZabbixJson("item.get", StringUtil.getParams("output", new String[]{"hostid", "key_", "lastvalue"}, "search", StringUtil.getParams("key_", "vmware.hv.cpu.usage[{$URL},{HOST.HOST}]")));//查询system.cpu.num和system.cpu.util[,user]和"sortfield", "key_"
 	}
 }
