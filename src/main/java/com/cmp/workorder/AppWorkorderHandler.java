@@ -1,9 +1,10 @@
 package com.cmp.workorder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,6 @@ import com.cmp.entity.DeployedSoft;
 import com.cmp.entity.Medium;
 import com.cmp.entity.Project;
 import com.cmp.entity.tcc.TccCloudPlatform;
-import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.mgr.CloudArchManager;
 import com.cmp.mgr.CloudArchManagerAdapter;
 import com.cmp.mgr.bean.CloneVmRequest;
@@ -31,10 +31,7 @@ import com.cmp.service.VirtualMachineService;
 import com.cmp.service.autodeploy.AutoDeployConfigService;
 import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.resourcemgt.DatacenterService;
-import com.cmp.service.resourcemgt.HostmachineService;
 import com.cmp.service.servicemgt.MirrorService;
-import com.cmp.sid.AutoDeployNode;
-import com.cmp.sid.AutoDeployScriptNode;
 import com.cmp.sid.CloudInfoCollect;
 import com.cmp.sid.CmpCloudInfo;
 import com.cmp.sid.CmpOrder;
@@ -47,7 +44,6 @@ import com.cmp.util.StringUtil;
 import com.fh.entity.Page;
 import com.fh.entity.system.Department;
 import com.fh.service.fhoa.department.impl.DepartmentService;
-import com.fh.util.Const;
 import com.fh.util.Logger;
 import com.fh.util.PageData;
 
@@ -419,7 +415,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		VirtualMachine vm = new VirtualMachine();
 		//添加虚拟机
 		int currentVMNum = virtualMachineService.countByProject(projectId);
-		String vmName = projectName + "_" + (currentVMNum + 1);//虚拟机的名字为当前项目名称+项目拥有的虚拟机总数+1
+		String vmName = generateVMName(projectName);//projectName + "_" + (currentVMNum + 1);//虚拟机的名字为当前项目名称+项目拥有的虚拟机总数+1
 		String osName = cmpDictService.getCmpDict("os_type", orderInfo.getOsType()).getDictValue();
 		String osBitNum = cmpDictService.getCmpDict("os_bit_num", orderInfo.getOsBitNum()).getDictValue();
 		String fullOS = osName +"_" +osBitNum;
@@ -489,7 +485,19 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		cloneVmRequest.setDcName(datacenterPd.getString("name"));
 		cloneVmRequest.setTplName(imagePd.getString("name"));
 		cloneVmRequest.setIp(ip);
-		String hostMachineUUID = cloudArchManager.cloneVirtualMachine(cloneVmRequest);
+		
+		String hostMachineUUID = null; 
+		
+		try {
+			hostMachineUUID = cloudArchManager.cloneVirtualMachine(cloneVmRequest);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resMap.put("resultCode", "-1");
+			resMap.put("resultMsg", "虚拟机[" + vmName + "]模板安装异常。");
+			ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机[" + vmName + "]模板安装异常。");
+			return resMap;
+			
+		}
 		
 		//TccVirtualMachine  vmInst = cloudArchManager.getVirtualMachineByName(vmName);
 		//String vmIp = vmInst.getIpAddress();
@@ -519,7 +527,6 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		//所有安装完毕设置结束标志
 		logger.info("远程虚拟机创建完毕");
 		ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机:[" + ip + "]虚拟机安装完毕!");
-		ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机:[" + ip + "]准备安装相关软件!");
 		resMap.put("resultCode", "0");
 		resMap.put("vm", vm);
 		resMap.put("resultMsg", "虚拟机安装执行成功! ");
@@ -528,6 +535,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 
 	public Map installSoft(VirtualMachine vm, CmpWorkOrder workOrder, String mediumId, String softName, String shellcmd) throws Exception{
 		Map<String, Object> resMap = new HashMap<String, Object>();
+		ShellUtil.addMsgLog(workOrder.getAppNo(), "准备部署软件[" + softName + "]");
 		//执行软件安装脚本
 		ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),  
 				vm.getPassword() , ShellUtil.DEF_CHARSET);
@@ -541,7 +549,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		DeployedSoft deployedSoft = new DeployedSoft();
 		deployedSoft.setVirtualmachineId(String.valueOf(vm.getId()));
 		deployedSoft.setSoftName(medium.getName());
-		deployedSoft.setStatus("未部署");
+		deployedSoft.setStatus("已部署");
 		deployedSoft.setSoftType(medium.getType());
 		deployedSoft.setSoftVersion(medium.getVersion());
 		deployedSoft.setVirtualmachineName(String.valueOf(vm.getName()));
@@ -557,6 +565,14 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),  
 				vm.getPassword() , ShellUtil.DEF_CHARSET);
 		shellUtil.exec("curl -o " + localUrl + " " + remoteUrl);
+	}
+	
+	
+	public String generateVMName(String projectName) {
+		Date date = new Date();
+		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMdd");
+		String vmName = projectName + "_" +dateFormat.format(date) + date.getTime(); 
+		return vmName;
 	}
 	
 }
