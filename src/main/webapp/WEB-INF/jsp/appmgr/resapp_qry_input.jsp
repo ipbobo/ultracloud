@@ -180,13 +180,13 @@ function checkData(btnId){
 	}
 	
 	var virName=$("#virName").val();
-	if(virName==""){
+	/*if(virName==""){
 		$("#virName").tips({side:3, msg:'虚拟机名称不能为空', bg:'#AE81FF', time:2});
 		$("#virName").focus();
 		return false;
-	}
+	}*/
 	
-	if(virName.match(/^['"]*$/)){
+	if(virName!="" && virName.match(/^['"]*$/)){
 		$("#virName").tips({side:3, msg:'虚拟机名称不能包含“\'"”', bg:'#AE81FF', time:2});
 		$("#virName").focus();
 		return false;
@@ -211,7 +211,7 @@ function checkData(btnId){
 		return false;
 	}
 	
-	if($("#imgUserName").val()==""){
+	/*if($("#imgUserName").val()==""){
 		$("#imgUserName").tips({side:3, msg:'用户名不能为空', bg:'#AE81FF', time:2});
 		$("#imgUserName").focus();
 		return false;
@@ -227,15 +227,15 @@ function checkData(btnId){
 		$("#imgPath").tips({side:3, msg:'路径不能为空', bg:'#AE81FF', time:2});
 		$("#imgPath").focus();
 		return false;
-	}
+	}*/
 	
-	if(!mutiCheck('diskType', '请选择存储')){
+	/* if(!mutiCheck('diskType', '请选择存储')){
 		return false;
-	}
+	} */
 	
-	if(!mutiCheck('softCode', '请选择软件安装')){
+	/* if(!mutiCheck('softCode', '请选择软件安装')){
 		return false;
-	}
+	} */
 	
 	if($("#expireDate").val()==""){
 		$("#expireDate").tips({side:3, msg:'到期时间不能为空', bg:'#AE81FF', time:2});
@@ -393,7 +393,7 @@ function diskSizeFunc(obj, diskTypeId, iopsId){
 		return;
 	}
 	
-	if(!diskSize.match(/^\d*$/) || diskSize<20){
+	if(!diskSize.match(/^\d*$/) || diskSize<1){
 		$(obj).val("20");
 		diskSize=20;
 	}
@@ -409,9 +409,9 @@ function diskSizeFunc(obj, diskTypeId, iopsId){
 	}
 	
 	if($("#"+diskTypeId).val()=="1"){//高效云盘1120+6
-		$("#"+iopsId).html(1120+(diskSize-20)*6);
+		$("#"+iopsId).html(1120+(diskSize-1)*6);
 	}else if($("#"+diskTypeId).val()=="2"){//SSD云盘1800+30
-		$("#"+iopsId).html(1800+(diskSize-20)*30);
+		$("#"+iopsId).html(1800+(diskSize-1)*30);
 	}
 	
 	diskTypeFunc();//数据盘改变时触发
