@@ -289,7 +289,7 @@ public class AppMgrController extends BaseController {
 			}
 			
 			User user=StringUtil.getUserInfo();//获取登录用户
-			cmpOrder.setApplyUserId(user.getNAME());//用户名
+			cmpOrder.setApplyUserId(user.getUSERNAME());//用户名
 			cmpOrder.setDeptId(user.getDEPARTMENT_ID());//部门ID
 			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
@@ -394,7 +394,7 @@ public class AppMgrController extends BaseController {
 			}
 			
 			User user=StringUtil.getUserInfo();//获取登录用户
-			cmpOrder.setApplyUserId(user.getNAME());//用户名
+			cmpOrder.setApplyUserId(user.getUSERNAME());//用户名
 			cmpOrder.setDeptId(user.getDEPARTMENT_ID());//部门ID
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpOrderService.saveSoftParams(cmpOrder.getOrderNo(), cmpOrder.getSoftCode(), cmpOrder.getSoftParam());//软件参数列表新增，软件参数：path:/tomcat,user:admin,passwd:admin|path:/tomcat,user:admin,passwd:admin
