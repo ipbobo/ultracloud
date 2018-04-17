@@ -141,9 +141,9 @@ public class CloudHostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/clone")
-	public ResponseEntity<String> clone(@RequestParam("ls[]") List<Integer> ls) {
+	public ResponseEntity<String> clone(Integer id) {
 		try {
-			cloudHostService.destroy(ls);
+			cloudHostService.clone(id);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return ok(FAILURE);
@@ -153,9 +153,9 @@ public class CloudHostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/snapshot")
-	public ResponseEntity<String> snapshot(@RequestParam("ls[]") List<Integer> ls) {
+	public ResponseEntity<String> snapshot(Integer id) {
 		try {
-			cloudHostService.destroy(ls);
+			cloudHostService.snapshot(id);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return ok(FAILURE);

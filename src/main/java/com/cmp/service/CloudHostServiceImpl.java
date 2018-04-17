@@ -154,34 +154,36 @@ public class CloudHostServiceImpl implements CloudHostService {
 		}
 	}
 
-	public void clone(List<Integer> ls) throws Exception {
+	@Override
+	public void clone(Integer id) throws Exception {
 		// TODO
-		for (Integer id : ls) {
-			PageData pd = findById(id);
+		PageData pd = findById(id);
 
-			String platformId = pd.getString("platform");
-			if (StringUtils.isBlank(platformId)) {
-				continue;
-			}
-
-			String vmName = pd.getString("name");
-			if (StringUtils.isBlank(vmName)) {
-				continue;
-			}
-
-			CloneVmRequest request = new CloneVmRequest();
-			request.setVmName("TestVM4");
-			request.setTplName(vmName);
-			request.setDcName("DC1");
-			request.setCpuSize(1);
-			request.setRamSize(1024);
-			request.setIp("192.168.0.152");
-
-			CloudArchManager cloudArchManager = getCloudArchManager(platformId);
-			cloudArchManager.cloneVirtualMachine(null);
-
-			dao.delete("CloudHostMapper.deleteById", id);
+		String platformId = pd.getString("platform");
+		if (StringUtils.isBlank(platformId)) {
+			return;
 		}
+
+		String vmName = pd.getString("name");
+		if (StringUtils.isBlank(vmName)) {
+			return;
+		}
+
+		CloneVmRequest request = new CloneVmRequest();
+//		request.setVmName("TestVM4");
+//		request.setTplName(vmName);
+//		request.setDcName("DC1");
+//		request.setCpuSize(1);
+//		request.setRamSize(1024);
+//		request.setIp("192.168.0.152");
+
+		CloudArchManager cloudArchManager = getCloudArchManager(platformId);
+		cloudArchManager.cloneVirtualMachine(request);
+	}
+
+	@Override
+	public void snapshot(Integer ls) throws Exception {
+		// TODO
 	}
 
 	@Override
@@ -192,10 +194,6 @@ public class CloudHostServiceImpl implements CloudHostService {
 		CloudArchManager cloudArchManager = getCloudArchManager(platformId);
 
 		return cloudArchManager.acquireTicket(pd.getString("name"));
-	}
-
-	public void snapshot(List<Integer> ls) throws Exception {
-		// TODO
 	}
 
 	private CloudArchManager getCloudArchManager(String platformId) throws Exception {

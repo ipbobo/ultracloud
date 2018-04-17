@@ -3,10 +3,15 @@ package com.cmp.mgr.vmware;
 import com.cmp.entity.tcc.*;
 import com.vmware.vim25.DatastoreSummary;
 import com.vmware.vim25.GuestInfo;
+import com.vmware.vim25.VirtualDisk;
 import com.vmware.vim25.VirtualMachineConfigInfo;
 import com.vmware.vim25.mo.*;
 
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 public class VMWareConvertors {
 
@@ -62,6 +67,21 @@ public class VMWareConvertors {
 			GuestInfo guestInfo = vm.getGuest();
 			tccVm.setIpAddress(guestInfo.getIpAddress());
 			tccVm.setState(guestInfo.getGuestState());
+
+			// @formatter:off
+			List<VirtualDisk> disks =
+					Stream.of(vm.getConfig().getHardware().getDevice())
+						  .filter(VirtualDisk.class::isInstance)
+						  .map(VirtualDisk.class::cast)
+						  .collect(toList());
+			// @formatter:on
+			disks.forEach(disk -> {
+				System.out.println(disk.getCapacityInKB());
+			});
+
+			Stream.of(vm.getGuest().getDisk()).forEach(disk -> {
+				System.out.println(disk.getFreeSpace());
+			});
 
 			return tccVm;
 		};
