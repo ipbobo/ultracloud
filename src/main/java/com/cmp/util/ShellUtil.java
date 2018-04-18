@@ -1,24 +1,18 @@
 package com.cmp.util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-import com.cmp.ehcache.AbstractDao;
-import com.cmp.entity.ShellMessage;
-
 import ch.ethz.ssh2.Connection;
-import ch.ethz.ssh2.Session;
 
 public class ShellUtil{
-	public static final int DEF_PORT = 7001;
+	public static final int DEF_PORT = 22;
 	public static final String DEF_CHARSET = "utf-8";
 	public static final int CONN_TIME_OUT = 5000;
 	public static final String LOCAL_SCRIPT_DIR = "/data/script";
@@ -43,35 +37,43 @@ public class ShellUtil{
             this.charset = charset;  
         }  
     }  
-  
-    public boolean login() throws IOException {  
-        conn = new Connection(ipAddr, port);  
-        return conn.authenticateWithPassword(userName, password); // 认证  
+    
+    public boolean login() {  
+        if (conn != null) {
+        	return true;
+        }else {
+        	try {
+				conn = new RemoteFtpUtils().getConn(ipAddr, DEF_PORT, userName, password);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+        	if (conn != null) {
+        		return true;
+        	}else {
+        		return false;
+        	}
+        }
+        
     }  
   
+    public boolean checkFileExist(String path) {
+    	return new RemoteFtpUtils().checkFileExist(conn, path);
+    }
     
     /*
      * params:
      * cmds :命令
      * 日志queryKey :从0开始的日志记录，用于前台显示
      */
-    public String exec(String cmds, String queryKey) {  
-        InputStream in = null;  
-        String result = "";  
+    public void exec(String cmds, String queryKey) {  
         try {  
             if (this.login()) {  
-                Session session = conn.openSession(); // 打开一个会话  
-                session.execCommand(cmds);  
-                  
-                in = session.getStdout();  
-                result = this.processStdoutBuffLine(in, this.charset, queryKey);  
-                session.close();  
-                conn.close();  
+            	LinkedList<String> outList = (LinkedList)new RemoteFtpUtils().execCommand(conn, cmds, DEF_CHARSET);
+                this.processStdoutBuffLine(outList, queryKey);  
             }  
         } catch (IOException e1) {  
             e1.printStackTrace();  
         }  
-        return result;  
     }  
     
     
@@ -79,23 +81,16 @@ public class ShellUtil{
      * params:
      * cmds :命令
      */
-    public String exec(String cmds) {  
-        InputStream in = null;  
-        String result = "";  
-        try {  
-            if (this.login()) {  
-                Session session = conn.openSession(); // 打开一个会话  
-                session.execCommand(cmds);  
-                  
-                in = session.getStdout();  
-                result = this.processStdout(in, this.charset);  
-                session.close();  
-                conn.close();  
-            }  
-        } catch (IOException e1) {  
-            e1.printStackTrace();  
-        }  
-        return result;  
+    public List<String> exec(String cmds) {  
+         try {  
+             if (this.login()) {  
+             	LinkedList<String> outList = (LinkedList)new RemoteFtpUtils().execCommand(conn, cmds, DEF_CHARSET);
+             	return outList;
+             }  
+         } catch (IOException e1) {  
+             e1.printStackTrace();  
+         }  
+         return null;
     }
   
     public String processStdout(InputStream in, String charset) {  
@@ -113,31 +108,19 @@ public class ShellUtil{
     }  
     
     
-    public String processStdoutBuffLine(InputStream in, String charset, String queryKey) throws IOException {  
+    public void processStdoutBuffLine(LinkedList outList, String queryKey) throws IOException {  
     	try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(in)); 
-			while (true) {
-			   String line = br.readLine();
-				   if (line == null) {
-				   break;
-			   }
-			   LinkedList currentMsgList = shellMsgMap.get(queryKey);
-			   
-			   if (currentMsgList == null) {
-				   LinkedList<String> newMsgList = new LinkedList<String>();
-				   newMsgList.add(line);
-				   shellMsgMap.put(queryKey, newMsgList);
-			   }else {
-				   currentMsgList.add(line);
-			   }
-			}
-			return "OK";
+		   LinkedList currentMsgList = shellMsgMap.get(queryKey);
+		   if (currentMsgList == null) {
+			   LinkedList<String> newMsgList = new LinkedList<String>();
+			   newMsgList.addAll(outList);
+			   shellMsgMap.put(queryKey, newMsgList);
+		   }else {
+			   currentMsgList.addAll(outList);
+		   }
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return  "OK"; 
-    	
     }
     
     public static void addMsgLog(String queryKey, String msg) {
@@ -194,10 +177,15 @@ public class ShellUtil{
 //    	boolean pingRes = ShellUtil.ping("192.168.1.130",  3000);
 //        System.out.print(pingRes);  
     	//ftp 命令下载测试
-    	ShellUtil tool = new ShellUtil("192.168.0.130", 22, "root",  
-      "r00t0neio", "utf-8");  
-    	String result = tool.exec("ls"); 
-    	System.out.println(result);
+    	try {
+			ShellUtil tool = new ShellUtil("192.168.0.130", 22, "root",  
+     "r00t0neio", "utf-8");  
+			List result = tool.exec("ls"); 
+			System.out.println(result.size());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
  

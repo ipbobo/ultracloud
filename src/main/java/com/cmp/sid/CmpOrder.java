@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Transient;
 
 public class CmpOrder {
 	private String orderNo;//清单编号
+	private String appNo;//工单编号
 	private String createTime;//创建时间
 	private String lastUpdateTime;//最后修改时间
 	private String status;//状态：0-待提交；1-已提交；T-套餐
@@ -48,6 +49,7 @@ public class CmpOrder {
 	private String totalAmt;//总价格
 	private String fileName;//文件名称
 	private String pckgName;//套餐名称
+	private String executeStatus; //账单部署状态 
 	
 	@Transient
 	private String softParam;//软件参数，多个用英文逗号分隔
@@ -411,4 +413,23 @@ public class CmpOrder {
 	public void setDiskTypeMap(String key, String value) {
 		this.diskTypeMap.put(key, value);
 	}
+
+	public String getAppNo() {
+		return appNo;
+	}
+
+	public void setAppNo(String appNo) {
+		this.appNo = appNo;
+	}
+	public String getExecuteStatus() {
+		return executeStatus;
+	}
+
+	public void setExecuteStatus(String executeStatus) {
+		this.executeStatus = executeStatus;
+	}
+	
+	
+	
+	
 }

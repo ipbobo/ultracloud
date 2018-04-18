@@ -9,6 +9,7 @@
 	<!-- 字段 -->
 	<sql id="fieldName">
 		orderNo,
+		appNo,
 		createTime,
 		lastUpdateTime,
 		status,
@@ -38,13 +39,15 @@
 		expireDate,
 		virNum,
 		totalAmt,
-		fileName
-		pckgName
+		fileName,
+		pckgName,
+		executeStatus
 	</sql>
 	
 	<!-- 字段值 -->
 	<sql id="fieldValue">
 		#{orderNo},
+		#{appNo},
 		#{createTime},
 		#{lastUpdateTime},
 		#{status},
@@ -75,12 +78,14 @@
 		#{virNum},
 		#{totalAmt},
 		#{fileName},
-		#{pckgName}
+		#{pckgName},
+		#{executeStatus}
 	</sql>
 	
 	<!-- 字段 -->
 	<sql id="saveFieldName">
 		orderNo,
+		appNo,
 		status,
 		applyUserId,
 		deptId,
@@ -108,11 +113,13 @@
 		virNum,
 		totalAmt,
 		fileName,
-		pckgName
+		pckgName,
+		executeStatus
 	</sql>
 	
 	<sql id="saveFieldValue">
 		#{orderNo},
+		#{appNo},
 		#{status},
 		#{applyUserId},
 		#{deptId},
@@ -140,7 +147,8 @@
 		#{virNum},
 		#{totalAmt},
 		#{fileName},
-		#{pckgName}
+		#{pckgName},
+		#{executeStatus}
 	</sql>
 	
 	<!-- 清单列表查询resultType及resultMap互斥： -->
@@ -156,6 +164,15 @@
 		from 
 		<include refid="tableName"/>
 		where orderNo=#{orderNo}
+	</select>
+	
+	
+	<!-- 清单详细信息查询 -->
+	<select id="getOrderDtlByAppNo" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where appNo=#{appNo}
 	</select>
 	
 	<!-- 套餐列表查询 -->
@@ -314,7 +331,7 @@
 	
 	<!-- 更新清单状态 -->
 	<select id="updateCmpOrderStatus" parameterType="pd">
-		update <include refid="tableName"/> set status='1', totalAmt=#{totalAmt} where orderNo=#{orderNo}
+		update <include refid="tableName"/> set status='1', totalAmt=#{totalAmt}, appNo=#{appNo} where orderNo=#{orderNo}
 	</select>
 	
 	<!-- 清空购物车 -->
