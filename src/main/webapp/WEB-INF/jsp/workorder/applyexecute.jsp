@@ -38,7 +38,7 @@
 		</c:if>
 	</div>
 
-	<div class="alert alert-info">申请工单详情</div>
+	<div class="alert alert-info">服务目录</div>
 	<div>
 					<table id="simple-table"
 								class="table table-striped table-bordered table-hover"
@@ -73,7 +73,7 @@
 														<input type="hidden" name="${cmpCloudInfo.orderNo}_executeStatus" id="${cmpCloudInfo.orderNo}_executeStatus" value="${cmpCloudInfo.executeStatus}">
 													
 														<button id="${cmpCloudInfo.orderNo}_op_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
-															onclick="showSetParam('${cmpCloudInfo.orderNo}');">安装</button>
+															onclick="showSetParam('${cmpCloudInfo.orderNo}', '${cmpCloudInfo.appNo}', '${cmpCloudInfo.cpu}', '${cmpCloudInfo.memory}', '${cmpCloudInfo.sysDiskSize}');">安装</button>
 														<button id="${cmpCloudInfo.orderNo}_op_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
 															>安装中...</button>
 														<button id="${cmpCloudInfo.orderNo}_op_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
@@ -87,32 +87,10 @@
 												</c:choose>
 								</tbody>
 						</table>
-							<div class="alert alert-info">部署执行详情</div>
-							<div id="shell_msg_div" style="height: 150px; width: 100%; overflow-y: scroll; background: #333; color: #aaa; padding: 10px;"></div>
+							
 						
-						<div class="alert alert-info">服务目录</div>
 						<div>
-						<table id="simple-table"
-								class="table table-striped table-bordered table-hover"
-								style="margin-top: 5px;">
-								<tbody>
-									<thead>
-										<tr>
-											<th class='center'>云资源申请总览</th>
-										</tr>
-									</thead>
-									
-									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">申请云主机数量</td>
-										<td class='center'>${cloudInfoCollect.vmCount}台</td>
-										<td class='center' style="background-color: rgb(244,244,244);">cpu/内存总量</td>
-										<td class='center'>${cloudInfoCollect.cpuTotal}核/${cloudInfoCollect.memoryTotal}G</td>
-										<td class='center' style="background-color: rgb(244,244,244);">数据盘总量</td>
-										<td class='center'>${cloudInfoCollect.diskTotal}G</td>
-									</tr>
-								</tbody>
-						</table>
-						<h2></h2>
+						
 							<c:choose>
 					<c:when test="${not empty cmpCloudInfoList}">
 						<c:forEach items="${cmpCloudInfoList}" var="cmpCloudInfo" varStatus="vs">
@@ -158,6 +136,9 @@
 						</c:forEach>
 				</c:when>
 				</c:choose>
+				<div class="alert alert-info">部署执行详情</div>
+			<div id="shell_msg_div" style="height: 150px; width: 100%; overflow-y: scroll; background: #333; color: #aaa; padding: 10px;"></div>
+						
 			<div class="alert alert-info">后续任务处理</div>
 				<table>
 						<c:if test="${workorder.uploadFileName != ''}">
@@ -285,6 +266,7 @@
 				</div>
 				<div class="modal-body">
 				<input type="hidden"   name="h_appNo" id="h_appNo">
+				<input type="hidden"   name="h_orderNo" id="h_orderNo">
 				<input type="hidden"   name="h_cpu" id="h_cpu">
 				<input type="hidden"   name="h_memory" id="h_memory">
 				<input type="hidden"   name="h_diskSize" id="h_diskSize">
@@ -470,6 +452,7 @@
 	
 	function execute(){
 		var appNo = $("#h_appNo").val();
+		var orderNo = $("#h_orderNo").val();
 		var cpu =$("#h_cpu").val();
 		var memory = $("#h_memory").val();
 		var diskSize = $("#h_diskSize").val();
@@ -500,9 +483,9 @@
 			return false;
 		}
 		$('#platform_modal').modal('hide');
-		$("#executeStatus_0").css('display','none');
-		$("#executeStatus_1").css('display','block');
-		queryExecuteStatus(appNo);
+		$("#"+orderNo+"_op_0").css('display','none');
+		$("#"+orderNo+"_op_1").css('display','block');
+		queryExecuteStatus(orderNo);
 		
 		var submitScriptParam = "";
 		x=$("form").serializeArray();
@@ -511,7 +494,7 @@
 	    });
 		$.ajax({
 			type: "POST",
-			url: '<%=basePath%>executeWork.do?appNo='+appNo +'&CPU=' + cpu +'&memory=' + memory +'&network=' + network+'&ip=' + ip+'&auto_deploy_config_id=' + auto_deploy_config_id+ '&diskSize=' + 
+			url: '<%=basePath%>executeWork.do?appNo='+appNo + '&orderNo='+orderNo +'&CPU=' + cpu +'&memory=' + memory +'&network=' + network+'&ip=' + ip+'&auto_deploy_config_id=' + auto_deploy_config_id+ '&diskSize=' + 
 					diskSize + '&cloudPlatformId=' + cloudPlatform + '&datacenterId=' + datacenter + '&clusterId=' + cluster + submitScriptParam ,
 			dataType:'json',
 			//beforeSend: validateData,
@@ -522,12 +505,12 @@
 		});
 	}
 	
-	function queryExecuteStatus(appNo){
+	function queryExecuteStatus(orderNo){
 		//查询，并同步更新控制台
 		var res = setInterval(function(){
 			$.ajax({
 				type: "POST",
-				url: '<%=basePath%>queryShell.do?shellId='+appNo ,
+				url: '<%=basePath%>queryShell.do?shellId='+orderNo ,
 				dataType:'json',
 				//beforeSend: validateData,
 				cache: false,
@@ -536,13 +519,13 @@
 					$('#shell_msg_div').empty();
 					for (var msgIndex = 0; msgIndex < data.length; msgIndex++){
 						if (data[msgIndex] == "cmp:success"){
-							$("#executeStatus_1").css('display','none');
-							$("#executeStatus_2").css('display','block');
+							$("#"+orderNo+"_op_1").css('display','none');
+							$("#"+orderNo+"_op_2").css('display','block');
 							clearInterval(res);
 							break;
 						}else if (data[msgIndex] == "cmp:error"){
-							$("#executeStatus_1").css('display','none');
-							$("#executeStatus_3").css('display','block');
+							$("#"+orderNo+"_op_1").css('display','none');
+							$("#"+orderNo+"_op_3").css('display','block');
 							clearInterval(res);
 							break;
 						}
@@ -713,10 +696,15 @@
 		}); 
 	}
 	
-	function showSetParam(appNo){
+	function showSetParam(orderNo, appNo, cpu, memory, diskSize){
+		$("#h_appNo").val(appNo);
+		$("#h_orderNo").val(orderNo);
+		$("#h_cpu").val(cpu);
+		$("#h_memory").val(memory);
+		$("#h_diskSize").val(diskSize);
 		jQuery.ajax({  
 			url : "<%=basePath%>toSetParam.do",  
-			data : {'appNo' : appNo},  
+			data : {'orderNo' : orderNo},  
 			type : "post",  
 			cache : false,  
 			dataType : "json",  

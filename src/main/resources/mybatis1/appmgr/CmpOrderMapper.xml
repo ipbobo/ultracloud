@@ -359,4 +359,15 @@
 		select  date_format(createTime, '%Y-%m-%d') as ordertime, t.* from cmp_order t where date_sub(CURDATE(),interval 7 day) <= date(createTime);
 		]]>
 	</select>
+	
+	<!-- 更新账单执行状态 -->
+	<update id="updateExecuteStatus" parameterType="Map">
+			update
+			<include refid="tableName"></include>
+				<if test="executeStatus != null and executeStatus != ''">
+			    set	executeStatus = #{executeStatus}
+				</if> 
+		where 
+		orderNo = #{orderNo}
+	</update>
 </mapper>

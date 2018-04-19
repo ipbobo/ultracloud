@@ -154,4 +154,9 @@ public class CmpOrderService {
 	public List<PageData> selectByCurrentDate() throws Exception {
 		return (List<PageData>)dao.findForList("CmpOrderMapper.selectByCurrentDate", null);
 	}
+	
+	public void updateExecuteStatus(String orderNo, Map<String, String> params) throws Exception {
+		params.put("orderNo", orderNo);
+		dao.update("CmpOrderMapper.updateExecuteStatus", params);
+	}
 }

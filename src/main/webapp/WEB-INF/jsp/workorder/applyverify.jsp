@@ -52,6 +52,7 @@
 										<th class="center">项目已用资源(cpu/内存/存储)</th>
 										<th class="center">项目剩余资源(cpu/内存/存储)</th>
 										<th class="center">负责人</th>
+										<th class="center">操作</th>
 									</tr>
 								</thead>
 
@@ -66,6 +67,9 @@
 													<td class='center'>${project.cpu_used}/${project.memory_used}/${project.disk_used}</td>
 													<td class='center'>${project.cpu_quota-project.cpu_used}/${project.memory_quota-project.memory_used}/${project.disk_quota-project.disk_used}</td>
 													<td class='center'>${project.USERNAME}</td>
+													<td class='center'>
+													<button id="btn_add_vm"  style="float:left;margin-left: 100px;" type="button" data-toggle="modal" data-target="#reportdiv">分析报告</button>
+													</td>
 													</tr>
 								</tbody>
 						</table>
@@ -79,8 +83,8 @@
 									<tr>
 										<th class="center">部门名称</th>
 										<th class="center">资源申请标准</th>
-										<th class="center">项目已用资源(cpu/内存/存储)</th>
-										<th class="center">项目剩余资源(cpu/内存/存储)</th>
+										<th class="center">部门已用资源(cpu/内存/存储)</th>
+										<th class="center">部门剩余资源(cpu/内存/存储)</th>
 										<th class="center">申请人</th>
 									</tr>
 								</thead>
@@ -105,27 +109,43 @@
 						<table id="simple-table"
 								class="table table-striped table-bordered table-hover"
 								style="margin-top: 5px;">
-								<tbody>
-									<thead>
-										<tr>
-											<th class='center'>云资源申请总览</th>
-										</tr>
-									</thead>
-									
+								<thead>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">申请云主机数量</td>
-										<td class='center'>${cloudInfoCollect.vmCount}台</td>
-										<td class='center' style="background-color: rgb(244,244,244);">cpu/内存总量</td>
-										<td class='center'>${cloudInfoCollect.cpuTotal}核/${cloudInfoCollect.memoryTotal}G</td>
-										<td class='center' style="background-color: rgb(244,244,244);">数据盘总量</td>
-										<td class='center'>${cloudInfoCollect.diskTotal}G</td>
+										<th class="center">类型</th>
+										<th class="center">环境</th>
+										<th class="center">CPU/内存</th>
+										<th class="center">存储</th>
+										<th class="center">镜像</th>
+										<th class="center">数量</th>
 									</tr>
+								</thead>
+
+								<tbody>
+											<c:choose>
+													<c:when test="${not empty cmpCloudInfoList}">
+														<c:forEach items="${cmpCloudInfoList}" var="cmpCloudInfo" varStatus="vs">
+												<tr onclick="showDitail('${cmpCloudInfo.orderNo}');">
+													<td class='center'>${cmpCloudInfo.resTypeName}</td>
+													<td class='center'>${cmpCloudInfo.environment}</td>
+													<td class='center'>
+														${cmpCloudInfo.cpu}核/${cmpCloudInfo.memory}G
+													</td>
+													<td class='center'>${cmpCloudInfo.dataDiskInfo}</td>
+													<td class='center'>${cmpCloudInfo.imgCodeName}</td>
+													<td class='center'>${cmpCloudInfo.vmNum}</td>
+													</tr>
+											</c:forEach>
+												</c:when>
+												</c:choose>
 								</tbody>
 						</table>
 						<h2></h2>
-						<table id="simple-table"
+							<c:choose>
+					<c:when test="${not empty cmpCloudInfoList}">
+						<c:forEach items="${cmpCloudInfoList}" var="cmpCloudInfo" varStatus="vs">
+						<table id="${cmpCloudInfo.orderNo}_detail" 
 								class="table table-striped table-bordered table-hover"
-								style="margin-top: 5px;">
+								style="margin-top: 5px; display: none;">
 								<tbody>
 									<thead>
 										<tr>
@@ -133,33 +153,38 @@
 										</tr>
 									</thead>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">操作系统</td>
-										<td class='center'>${cmpCloudInfo.osTypeName}</td>
-										<td class='center' style="background-color: rgb(244,244,244);">系统盘/数据盘</td>
-										<td class='center'>系统盘${cmpCloudInfo.sysDiskSize}; 数据盘${cloudInfoCollect.diskTotal}G</td>
+										<td class='center' style="background-color: rgb(244,244,244);">地域:</td>
+										<td class='center'>${cmpCloudInfo.areaName}</td>
+										<td class='center' style="background-color: rgb(244,244,244);">环境:</td>
+										<td class='center'>${cmpCloudInfo.environment}</td>
+										<td class='center' style="background-color: rgb(244,244,244);">项目:</td>
+										<td class='center'>${cmpCloudInfo.projectName}</td>
 									</tr>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">CPU/内存</td>
-										<td class='center'>${cmpCloudInfo.cpu}核/${cmpCloudInfo.memory}G</td>
-										<td class='center' style="background-color: rgb(244,244,244);">安装状态</td>
-										<td class='center'>${cmpCloudInfo.osStatus}</td>
-									</tr>
-									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">软件安装</td>
-										<td class='center'>${cmpCloudInfo.softStatus}</td>
-									</tr>
-									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">数据盘信息</td>
+										<td class='center' style="background-color: rgb(244,244,244);">CPU:</td>
+										<td class='center'>${cmpCloudInfo.cpu}核</td>
+										<td class='center' style="background-color: rgb(244,244,244);">内存:</td>
+										<td class='center'>${cmpCloudInfo.memory}G</td>
+										<td class='center' style="background-color: rgb(244,244,244);">存储:</td>
 										<td class='center'>${cmpCloudInfo.dataDiskInfo}</td>
-										<td class='center' style="background-color: rgb(244,244,244);">使用期限</td>
-										<td class='center'>${cmpCloudInfo.expireDate}</td>
 									</tr>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">电子钥匙</td>
-										<td class='center'></td>
+										<td class='center' style="background-color: rgb(244,244,244);">镜像:</td>
+										<td class='center'>${cmpCloudInfo.imgCodeName}</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">软件:</td>
+										<td class='center'>${cmpCloudInfo.soft}</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">申请人:</td>
+										<td class='center'>${cmpCloudInfo.applicant}</td>
 									</tr>
 								</tbody>
 						</table>
+						</c:forEach>
+				</c:when>
+				</c:choose>
 			<div class="alert alert-info">后续任务处理</div>
 				<table>
 						<c:if test="${workorder.uploadFileName != ''}">
@@ -389,6 +414,13 @@
 				}
 			});
 		}
+	
+	function showDitail(orderNo){
+		$("table[id$='_detail']").each(function(){  
+			$(this).hide();
+		}); 
+		$('#'+orderNo+'_detail').toggle();
+	}
 	</script>
 
 </body>

@@ -224,7 +224,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			}
 			cloudInfo.setDataDiskInfo(deskInfo.toString());
 		}
-		cloudInfo.setSysDiskSize(CmpCloudInfo.SYS_DISK_SIZE);
+		cloudInfo.setSysDiskSize(orderInfo.getDiskSize());
 		cloudInfo.setCpu(orderInfo.getCpu());
 		cloudInfo.setMemory(orderInfo.getMemory());
 		
@@ -283,11 +283,26 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	}
 
 	//创建虚拟机
-	@Transactional
-	public Map<String, Object> executeWork(PageData pd, CmpWorkOrder workOrder) throws Exception {
+	public Map<String, Object> executeWork(PageData pd, CmpWorkOrder cmpWorkorder) throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
+		String orderNo = pd.getString("orderNo");
+		if (orderNo == null) {
+			return null;
+		}
+		CmpOrder orderInfo = null;
+		List<CmpOrder> orderList = null;
+		try {
+			orderList = cmpOrderService.getOrderDtl(orderNo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (orderList == null || orderList.size() == 0) {
+			return null;
+		}
+		orderInfo = orderList.get(0);
+		ShellUtil.addMsgLog(orderInfo.getOrderNo(), "准备安装虚拟机。");
 		PageData i_pd = new PageData();
-		i_pd.put("id", workOrder.getProjectCode());
+		i_pd.put("id", orderInfo.getProjectCode());
 		i_pd = ProjectService.findById(i_pd);
 		Project pj = (Project) PageDataUtil.mapToObject(i_pd, Project.class);
 //		String autodeployid = pd.getString("auto_deploy_config_id");
@@ -349,17 +364,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 //			}
 //		});
 		
-		CmpOrder orderInfo = null;
-		List<CmpOrder> orderList = null;
-		try {
-			orderList = cmpOrderService.getOrderDtl(workOrder.getOrderNo());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (orderList == null || orderList.size() == 0) {
-			return null;
-		}
-		orderInfo = orderList.get(0);
+		
 		
 		//部署虚拟机
 		String DEF_USERNAME = "root";
@@ -376,12 +381,13 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		}
 		String[] ipArr = ips.split(",");
 		for (int vmIndex = 0; vmIndex < vmCount; vmIndex++) {
-			Map<String, Object> deployOut = deployVM(ipArr[vmIndex],DEF_USERNAME, DEF_PWD, pj.getId(), pj.getName(), workOrder, orderInfo, pd);
+			Map<String, Object> deployOut = deployVM(ipArr[vmIndex],DEF_USERNAME, DEF_PWD, pj.getId(), pj.getName(),  orderInfo, pd);
 			if (deployOut.get("resultCode").equals("0")) {
 				//查询系统连接情况
+				/*
 				VirtualMachine vm = (VirtualMachine)deployOut.get("vm");
 				if (!ShellUtil.ping(vm.getIp(), ShellUtil.CONN_TIME_OUT)) {
-					ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机:[" + vm.getIp() + "] 连接异常, IP地址无法连接! 无法执行shell脚本安装软件。");
+					ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机:[" + vm.getIp() + "] 连接异常, IP地址无法连接! 无法执行shell脚本安装软件。");
 					continue;
 				}
 				//部署虚拟机成功，部署软件
@@ -416,28 +422,29 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 					String localScriptUrl = ShellUtil.LOCAL_SCRIPT_DIR + "/" + scriptId + ".sh";
 					int downRes = downloadScript(vm, remoteScriptUrl, localScriptUrl);
 					if (downRes == -1) {
-						ShellUtil.addMsgLog(workOrder.getAppNo(), "下载软件安装脚本异常，无法连接脚本服务器");
+						ShellUtil.addMsgLog(orderInfo.getOrderNo(), "下载软件安装脚本异常，无法连接脚本服务器");
 						continue;
 					}else if(downRes == -2){
-						ShellUtil.addMsgLog(workOrder.getAppNo(), "下下载软件安装脚本异常，脚本保存出错(查看路径["+ localScriptUrl +"]是否存在)");
+						ShellUtil.addMsgLog(orderInfo.getOrderNo(), "下下载软件安装脚本异常，脚本保存出错(查看路径["+ localScriptUrl +"]是否存在)");
 						continue;
 					}
 					String shellcmd = "." + localScriptUrl + " " +shellParamBuf.toString().trim();  
 					//执行软件安装脚本命令
-					installSoft(vm, workOrder, softCode, softName, shellcmd);
+					installSoft(vm, orderInfo, softCode, softName, shellcmd);
 				}
+				*/
 			}else if (deployOut.get("resultCode").equals("-1")) {
 				Map<String , String> exeParams = new HashMap<String , String>();
 				exeParams.put("executeStatus", "3");
-				ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机执行部署脚本出错，部署异常。");
-				ShellUtil.addMsgLog(workOrder.getAppNo(), "cmp:error");
+				ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机执行部署脚本出错，部署异常。");
+				ShellUtil.addMsgLog(orderInfo.getOrderNo(), "cmp:error");
 				return resMap;
 			}
 		}
 		
 		//获取项目信息，修改项目中的资源使用额度
 		PageData p_pd = new PageData();
-		p_pd.put("id", workOrder.getProjectCode());
+		p_pd.put("id", orderInfo.getProjectCode());
 		p_pd = ProjectService.findById(p_pd);
 		int pCpuUsed = (p_pd.get("cpu_used") == null? 0 : (Integer)p_pd.get("cpu_used")) + Integer.parseInt(pd.getString("CPU")) * vmCount;
 		int pMemoryUsed = (p_pd.get("memory_used") == null? 0 : (Integer)p_pd.get("memory_used")) + Integer.parseInt(pd.getString("memory")) * vmCount;
@@ -452,7 +459,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		String deptId = project.getDEPARTMENT_ID();
 		if (deptId == null) {
 			resMap.put("result", "执行异常! 工单对应的部门信息异常");
-			ShellUtil.addMsgLog(workOrder.getAppNo(), " 工单对应的部门信息异常, 更新部门虚拟机使用额度信息异常");
+			ShellUtil.addMsgLog(orderInfo.getOrderNo(), " 工单对应的部门信息异常, 更新部门虚拟机使用额度信息异常");
 		}else {
 			PageData d_pd = new PageData();
 			d_pd.put("DEPARTMENT_ID", deptId);
@@ -469,13 +476,13 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		//所有安装完毕设置结束标志
 		Map<String , String> exeParams = new HashMap<String , String>();
 		exeParams.put("executeStatus", "2");
-		cmpWorkOrderService.updateExecuteStatus(workOrder.getAppNo(), exeParams);
-		ShellUtil.addMsgLog(workOrder.getAppNo(), "cmp:success");
+		cmpOrderService.updateExecuteStatus(orderInfo.getOrderNo(), exeParams);
+		ShellUtil.addMsgLog(orderInfo.getOrderNo(), "cmp:success");
 		return resMap;
 	}
 
 	//部署虚拟机
-	public Map<String, Object> deployVM(String ip, String loginName, String loginPwd,  String projectId, String projectName, CmpWorkOrder workOrder, CmpOrder orderInfo, PageData pd) throws Exception {
+	public Map<String, Object> deployVM(String ip, String loginName, String loginPwd,  String projectId, String projectName, CmpOrder orderInfo, PageData pd) throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		VirtualMachine vm = new VirtualMachine();
 		//添加虚拟机
@@ -497,7 +504,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			diskInfoList.add(di);
 		}
 		//安装虚拟机
-		ShellUtil.addMsgLog(workOrder.getAppNo(), "准备安装虚拟机: " + vmName);
+		ShellUtil.addMsgLog(orderInfo.getOrderNo(), "开始安装虚拟机: " + vmName + " IP:" + ip);
 		String cloudPlatformId = pd.getString("cloudPlatformId");
 		String datacenterId = pd.getString("datacenterId");
 		String clusterId = pd.getString("clusterId");
@@ -505,7 +512,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		if (cloudPlatformId == null || !cloudPlatformId.equals(orderInfo.getPlatType())) {
 			resMap.put("resultCode", "-1");
 			resMap.put("resultMsg", "执行异常!平台类型和申请的不一致 ");
-			ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机:[" + ip + "] 执行异常!平台类型和申请的不一致");
+			ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机:[" + ip + "] 执行异常!平台类型和申请的不一致");
 			return resMap;
 		}
 		
@@ -528,7 +535,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		}else {
 			resMap.put("resultCode", "-1");
 			resMap.put("resultMsg", "执行异常!不支持的平台类型 ");
-			ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机:[" + ip + "] 执行异常!不支持的平台类型");
+			ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机:[" + ip + "] 执行异常!不支持的平台类型");
 			return resMap;
 		}
 		
@@ -559,7 +566,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			e.printStackTrace();
 			resMap.put("resultCode", "-1");
 			resMap.put("resultMsg", "虚拟机[" + vmName + "]模板安装异常。");
-			ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机[" + vmName + "]模板安装异常。");
+			ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机[" + vmName + "]模板安装异常。");
 			return resMap;
 			
 		}
@@ -585,26 +592,26 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		vm.setType(platFormType);
 		vm.setPlatform(cloudPlatformId);
 		vm.setHostmachineId(hostMachineUUID);
-		vm.setAppNo(workOrder.getAppNo());
-		vm.setUser(workOrder.getApplyUserId());
-		vm.setDuedate(workOrder.getExpireDate());
+		vm.setAppNo(orderInfo.getAppNo());
+		vm.setUser(orderInfo.getApplyUserId());
+		vm.setDuedate(orderInfo.getExpireDate());
 		virtualMachineService.add(vm);
 		//所有安装完毕设置结束标志
 		logger.info("远程虚拟机创建完毕");
-		ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机:[" + ip + "]虚拟机安装完毕!");
+		ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机:[" + ip + "]虚拟机安装完毕!");
 		resMap.put("resultCode", "0");
 		resMap.put("vm", vm);
 		resMap.put("resultMsg", "虚拟机安装执行成功! ");
 		return resMap;
 	}
 
-	public Map installSoft(VirtualMachine vm, CmpWorkOrder workOrder, String mediumId, String softName, String shellcmd) throws Exception{
+	public Map installSoft(VirtualMachine vm, CmpOrder orderInfo, String mediumId, String softName, String shellcmd) throws Exception{
 		Map<String, Object> resMap = new HashMap<String, Object>();
-		ShellUtil.addMsgLog(workOrder.getAppNo(), "准备部署软件[" + softName + "]");
+		ShellUtil.addMsgLog(orderInfo.getOrderNo(), "准备部署软件[" + softName + "]");
 		//执行软件安装脚本
 		ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),  
 				vm.getPassword() , ShellUtil.DEF_CHARSET);
-		shellUtil.exec(shellcmd, workOrder.getAppNo());
+		shellUtil.exec(shellcmd, orderInfo.getAppNo());
 		
 		//添加虚拟机中间件
 		PageData m_pd = new PageData();
@@ -620,7 +627,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		deployedSoft.setVirtualmachineName(String.valueOf(vm.getName()));
 		deployedSoftService.add(deployedSoft);
 			
-		ShellUtil.addMsgLog(workOrder.getAppNo(), "虚拟机[" + vm.getName() + "] 软件 [" + softName + "] 部署完毕!");
+		ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机[" + vm.getName() + "] 软件 [" + softName + "] 部署完毕!");
 		resMap.put("resultCode", "0");
 		resMap.put("resultMsg", "虚拟机软件 [" + softName +" ]安装执行成功! ");
 		return resMap;
