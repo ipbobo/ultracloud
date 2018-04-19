@@ -40,8 +40,8 @@
 		virNum,
 		totalAmt,
 		fileName,
-		pckgName,
-		executeStatus
+		executeStatus,
+		pckgName
 	</sql>
 	
 	<!-- 字段值 -->
@@ -78,8 +78,8 @@
 		#{virNum},
 		#{totalAmt},
 		#{fileName},
-		#{pckgName},
-		#{executeStatus}
+		#{executeStatus},
+		#{pckgName}
 	</sql>
 	
 	<!-- 字段 -->
@@ -113,8 +113,8 @@
 		virNum,
 		totalAmt,
 		fileName,
-		pckgName,
-		executeStatus
+		executeStatus,
+		pckgName
 	</sql>
 	
 	<sql id="saveFieldValue">
@@ -147,8 +147,8 @@
 		#{virNum},
 		#{totalAmt},
 		#{fileName},
-		#{pckgName},
-		#{executeStatus}
+		#{executeStatus},
+		#{pckgName}
 	</sql>
 	
 	<!-- 清单列表查询resultType及resultMap互斥： -->
@@ -310,7 +310,7 @@
 			select func_nextval('cmp_order')
 		</selectKey>
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select #{newOrderNo}, #{status}, null, applyUserId, deptId, #{areaCode}, #{platType}, #{deployType}, #{envCode}, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, ''
+		select #{newOrderNo}, #{status}, null, applyUserId, deptId, #{areaCode}, #{platType}, #{deployType}, #{envCode}, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, null, null
 		from 
 		<include refid="tableName"/>
 		where orderNo=#{orderNo};
