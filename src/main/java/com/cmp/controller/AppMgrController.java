@@ -289,11 +289,12 @@ public class AppMgrController extends BaseController {
 			}
 			
 			User user=StringUtil.getUserInfo();//获取登录用户
+			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
+			cmpOrder.setAppNo(null);
 			cmpOrder.setApplyUserId(user.getUSERNAME());//用户名
 			cmpOrder.setDeptId(user.getDEPARTMENT_ID());//部门ID
-			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
-			cmpOrder.setAppNo("");
 			cmpOrder.setExecuteStatus("0");
+			cmpOrder.setPckgName(null);
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpOrderService.saveSoftParams(cmpOrder.getOrderNo(), cmpOrder.getSoftCode(), cmpOrder.getSoftParam());//软件参数列表新增，软件参数：path:/tomcat,user:admin,passwd:admin|path:/tomcat,user:admin,passwd:admin
 			cmpLogService.addCmpLog("1", "加入清单", "加入清单成功", "0", StringUtil.getClientIp(request));//新增日志
@@ -396,10 +397,10 @@ public class AppMgrController extends BaseController {
 			}
 			
 			User user=StringUtil.getUserInfo();//获取登录用户
+			cmpOrder.setAppNo(null);
 			cmpOrder.setApplyUserId(user.getUSERNAME());//用户名
 			cmpOrder.setDeptId(user.getDEPARTMENT_ID());//部门ID
 			cmpOrder.setExecuteStatus("0");
-			cmpOrder.setAppNo("");
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpOrderService.saveSoftParams(cmpOrder.getOrderNo(), cmpOrder.getSoftCode(), cmpOrder.getSoftParam());//软件参数列表新增，软件参数：path:/tomcat,user:admin,passwd:admin|path:/tomcat,user:admin,passwd:admin
 			cmpLogService.addCmpLog("1", "保存套餐", "保存套餐成功", "0", StringUtil.getClientIp(request));//新增日志
