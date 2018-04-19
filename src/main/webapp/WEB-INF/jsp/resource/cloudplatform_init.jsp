@@ -1266,8 +1266,8 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.name}</td>
 											<td class='center'>${var.type}</td>
-											<td class='center'><fmt:formatNumber value="${var.allspace/1024/1024/1024}" type="currency" pattern="#"/></td>
-											<td class='center'><fmt:formatNumber value="${var.freespace/1024/1024/1024}" type="currency" pattern="#"/></td>
+											<td class='center'><fmt:formatNumber value="${var.allspace}" type="currency" pattern="#"/></td>
+											<td class='center'><fmt:formatNumber value="${var.freespace}" type="currency" pattern="#"/></td>
 											<td class='center'>
 											<fmt:formatNumber value="${var.freespace/var.allspace}" type="percent" maxIntegerDigits="2"/>
 											</td>

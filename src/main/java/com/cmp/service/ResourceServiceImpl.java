@@ -153,7 +153,7 @@ public class ResourceServiceImpl implements ResourceService {
 						double cpuTotal = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores())
 								* (host[i].getHardware().getCpuInfo().getHz() / 1000 / 1000 / 1000);
 						// 剩余cpu数
-						double cpuCoreRemainCount = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores());
+						//double cpuCoreRemainCount = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores());
 						// 内存
 						double memorySize = new Double(host[i].getHardware().getMemorySize() / 1024 / 1024 / 1024);
 						if (null == hostmachineId) {
@@ -232,8 +232,8 @@ public class ResourceServiceImpl implements ResourceService {
 						storePD.put("cpf_id", cloudPD.getString("id"));
 						storePD.put("datacenter_id", datacenterId);
 						storePD.put("version", cloudPD.getString("version"));
-						storePD.put("allspace", store[i].getSummary().getCapacity());
-						storePD.put("freespace", store[i].getSummary().getFreeSpace());
+						storePD.put("allspace", store[i].getSummary().getCapacity() / 1024 / 1024 / 1024);
+						storePD.put("freespace", store[i].getSummary().getFreeSpace() / 1024 / 1024 / 1024);
 						storeList.add(storePD);
 					}
 				}
