@@ -415,7 +415,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		VirtualMachine vm = new VirtualMachine();
 		//添加虚拟机
 		int currentVMNum = virtualMachineService.countByProject(projectId);
-		String vmName = generateVMName(projectName);//projectName + "_" + (currentVMNum + 1);//虚拟机的名字为当前项目名称+项目拥有的虚拟机总数+1
+		String vmName = generateVMName(projectName,ip,orderInfo.getVirName());//projectName + "_" + (currentVMNum + 1);//虚拟机的名字为当前项目名称+项目拥有的虚拟机总数+1
 		String osName = cmpDictService.getCmpDict("os_type", orderInfo.getOsType()).getDictValue();
 		String osBitNum = cmpDictService.getCmpDict("os_bit_num", orderInfo.getOsBitNum()).getDictValue();
 		String fullOS = osName +"_" +osBitNum;
@@ -568,10 +568,11 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	}
 	
 	
-	public String generateVMName(String projectName) {
+	public String generateVMName(String projectName, String ip, String virName) {
 		Date date = new Date();
 		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMdd");
-		String vmName = projectName + "_" +dateFormat.format(date) + date.getTime(); 
+		//String vmName = projectName + "_" +dateFormat.format(date) + date.getTime();
+		String vmName = projectName + "_" +virName + "_" + ip ;
 		return vmName;
 	}
 	
