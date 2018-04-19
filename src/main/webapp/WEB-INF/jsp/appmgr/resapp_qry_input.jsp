@@ -156,11 +156,11 @@ function checkPckgData(){
 		return false;
 	}
 	
-	if($("#tcvirName").val()==""){
+	/* if($("#tcvirName").val()==""){
 		$("#tcvirName").tips({side:3, msg:'虚拟机名称不能为空', bg:'#AE81FF', time:2});
 		$("#tcvirName").focus();
 		return false;
-	}
+	} */
 	
 	return true;
 }
