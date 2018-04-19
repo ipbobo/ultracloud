@@ -165,7 +165,7 @@ function closeHeadToggle(){
 		<div class="mem-panel">
 			<div class="inner-box">
 				<div class="head-box">
-					物理资源
+					宿主机
 				</div>
 				<div class="body-box">
 					<div class="container-fluid">
