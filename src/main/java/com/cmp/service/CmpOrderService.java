@@ -103,7 +103,7 @@ public class CmpOrderService {
 		}
 	}
 	
-	
+	@SuppressWarnings("unchecked")
 	public List<PageData> findSoftParam(PageData pd) throws Exception{
 		return (List<PageData>)dao.findForList("CmpOrderMapper.findSoftParam", pd);
 	}

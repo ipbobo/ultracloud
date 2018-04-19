@@ -296,7 +296,7 @@ function addList(){
 	if($("#tcsq").is(".active")){//套餐数据校验
 		if(checkPckgData()){
 			jsonObj.tcareaCode=$("#tcareaCode").val();//地域代码
-			jsonObj.envCode=$("#tcenvCode").val();//环境代码                       
+			jsonObj.tcenvCode=$("#tcenvCode").val();//环境代码                       
 			jsonObj.tcplatType=$("#tcplatType").val();//平台类型                       
 			jsonObj.tcdeployType=$("#tcdeployType").val();//部署类型                     
 			jsonObj.tcvirName=$("#tcvirName").val();//虚拟机名称
