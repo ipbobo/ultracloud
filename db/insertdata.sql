@@ -13,10 +13,9 @@ INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:31:53', '2017-11-14 23:31:53
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:31:53', '2017-11-14 23:31:53', 'cpu', '8', '8核', 'CPU', '0', '4');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:32:57', '2017-11-14 23:32:57', 'memory', '1', '1024M', '内存', '1', '1');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:33:19', '2017-11-14 23:33:19', 'memory', '2', '2048M', '内存', '0', '2');
-INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:33:32', '2017-11-15 14:24:54', 'memory', '3', '3072M', '内存', '0', '3');
-INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:33:32', '2017-11-15 15:13:45', 'memory', '4', '4096M', '内存', '0', '4');
-INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:33:32', '2017-11-15 15:13:45', 'memory', '8', '8192M', '内存', '0', '5');
-INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:33:32', '2017-11-15 15:13:45', 'memory', '16', '16384M', '内存', '0', '6');
+INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:33:32', '2017-11-15 15:13:45', 'memory', '4', '4096M', '内存', '0', '3');
+INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:33:32', '2017-11-15 15:13:45', 'memory', '8', '8192M', '内存', '0', '4');
+INSERT INTO `cmp_dict` VALUES (null, '2017-11-14 23:33:32', '2017-11-15 15:13:45', 'memory', '16', '16384M', '内存', '0', '5');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-15 17:59:21', '2017-11-15 17:59:38', 'os_bit_num', '32', '32位', '位数', '0', '1');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-15 17:59:36', '2017-11-15 18:34:44', 'os_bit_num', '64', '64位', '位数', '1', '2');
 INSERT INTO `cmp_dict` VALUES (null, '2017-11-20 17:59:36', '2017-11-20 18:34:44', 'service_type', '1', '中间件启停', '服务类型', '1', '1');
