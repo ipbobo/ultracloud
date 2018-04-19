@@ -9,10 +9,10 @@
 	<!-- 字段 -->
 	<sql id="fieldName">
 		orderNo,
-		appNo,
 		createTime,
 		lastUpdateTime,
 		status,
+		appNo,
 		applyUserId,
 		deptId,
 		areaCode,
@@ -47,10 +47,10 @@
 	<!-- 字段值 -->
 	<sql id="fieldValue">
 		#{orderNo},
-		#{appNo},
 		#{createTime},
 		#{lastUpdateTime},
 		#{status},
+		#{appNo},
 		#{applyUserId},
 		#{deptId},
 		#{areaCode},
@@ -85,8 +85,8 @@
 	<!-- 字段 -->
 	<sql id="saveFieldName">
 		orderNo,
-		appNo,
 		status,
+		appNo,
 		applyUserId,
 		deptId,
 		areaCode,
@@ -119,8 +119,8 @@
 	
 	<sql id="saveFieldValue">
 		#{orderNo},
-		#{appNo},
 		#{status},
+		#{appNo},
 		#{applyUserId},
 		#{deptId},
 		#{areaCode},
@@ -310,7 +310,7 @@
 			select func_nextval('cmp_order')
 		</selectKey>
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select #{newOrderNo}, #{status}, applyUserId, deptId, #{areaCode}, #{platType}, #{deployType}, #{envCode}, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, ''
+		select #{newOrderNo}, #{status}, null, applyUserId, deptId, #{areaCode}, #{platType}, #{deployType}, #{envCode}, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, ''
 		from 
 		<include refid="tableName"/>
 		where orderNo=#{orderNo};

@@ -1,10 +1,10 @@
 DROP table if EXISTS cmp_order;
 CREATE TABLE `cmp_order` (
   `orderNo` varchar(20) NOT NULL COMMENT '清单编号：O+YYYYMMDD+00001',
-  `appNo` varchar(20) NOT NULL COMMENT '工单编号',
   `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `lastUpdateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `status` varchar(10) DEFAULT NULL COMMENT '状态：0-待提交；1-已提交；T-套餐',
+  `appNo` varchar(20) NOT NULL COMMENT '工单编号',
   `applyUserId` varchar(20) NOT NULL COMMENT '申请者',
   `deptId` varchar(32) NOT NULL COMMENT '部门ID',
   `areaCode` varchar(32) DEFAULT NULL COMMENT '地域代码',
