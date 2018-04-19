@@ -33,6 +33,7 @@ import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.servicemgt.AreaService;
 import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.service.servicemgt.MirrorService;
+import com.cmp.service.servicemgt.NumprocedureService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOrder;
 import com.cmp.util.StringUtil;
@@ -70,6 +71,8 @@ public class AppMgrController extends BaseController {
 	private CloudplatformService cloudplatformService;
 	@Resource
 	private AreaService areaService;
+	@Resource
+	private NumprocedureService numprocedureService;
 	@Resource
 	private CmpLogService cmpLogService;
 	@Value("${uploadFilePath}")
@@ -116,7 +119,7 @@ public class AppMgrController extends BaseController {
 		String applyUserId=StringUtil.getUserName();//申请者
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
-		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
+		mv.addObject("recommendTypeList", numprocedureService.getRecommendTypeList());//推荐配置列表
 		mv.addObject("cpuList", cmpDictService.getCmpDictList("cpu"));//CPU列表
 		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
 		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
@@ -212,7 +215,7 @@ public class AppMgrController extends BaseController {
 		
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
-		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
+		mv.addObject("recommendTypeList", numprocedureService.getRecommendTypeList());//推荐配置列表
 		mv.addObject("cpuList", cmpDictService.getCmpDictList("cpu"));//CPU列表
 		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
 		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表

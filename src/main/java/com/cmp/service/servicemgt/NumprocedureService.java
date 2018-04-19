@@ -70,6 +70,6 @@ public interface NumprocedureService {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
 
-	// 列表查询
-	public List<CmpDict> getEnvList() throws Exception;
+	//推荐配置列表
+	public List<CmpDict> getRecommendTypeList() throws Exception;
 }

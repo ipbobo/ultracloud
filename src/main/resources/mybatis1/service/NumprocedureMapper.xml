@@ -122,8 +122,9 @@
 		</foreach>
 	</delete>
 	
-	<!-- 列表查询 -->
-	<select id="getEnvList" parameterType="String" resultType="com.cmp.sid.CmpDict">
-		select id dictCode, name dictValue from <include refid="tableName"></include>
+	<!-- 推荐配置列表 -->
+	<select id="getRecommendTypeList" parameterType="String" resultType="com.cmp.sid.CmpDict">
+		select CONCAT(cpu, ',', memory) dictCode, name dictValue from <include refid="tableName"></include>
+		order by ordernum
 	</select>
 </mapper>
