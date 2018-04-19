@@ -20,7 +20,7 @@
 								JOIN t_hostmachine hm ON vm.hostmachine_id = hm.id
 		WHERE
 			1 = 1
-		<if test="pd.FROM_USERNAME != null and pd.FROM_USERNAME != ''">
+		<if test="pd.FROM_USERNAME != null and pd.FROM_USERNAME != '' and pd.userType!='executor'">
 			and vm.user=#{pd.FROM_USERNAME}
 		</if>
 		ORDER BY

@@ -5,8 +5,10 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
 import com.fh.service.system.user.impl.UserService;
+import com.fh.util.Const;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -44,12 +46,24 @@ public class CloudHostController extends BaseController {
 	public ModelAndView list(Page page) throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();
-
+		Session session = Jurisdiction.getSession();
 		String keywords = pd.getString("keywords");
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
+		User userr = userService.getCurrrentUserAndRole();
+		//读取session中的用户信息(含角色信息)
+		if (userr == null) {
+			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
+			if (user == null) {
+				mv.setViewName("system/index/login");
+				return mv;
+			}
+			userr = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
+			session.setAttribute(Const.SESSION_USERROL, userr);						//存入session
+		}
 
+		pd.put("userType", userr.getRole().getTYPE());
 		pd.put("FROM_USERNAME", Jurisdiction.getUsername());
 		page.setPd(pd);
 		List<PageData> varList = cloudHostService.list(page);
@@ -57,7 +71,6 @@ public class CloudHostController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 
-		User userr = userService.getCurrrentUserAndRole();
 		if (userr != null) {
 			mv.addObject("QX", "audit".equalsIgnoreCase(userr.getRole().getTYPE()) ? 0 : 1);
 			mv.addObject("BQX", "executor".equalsIgnoreCase(userr.getRole().getTYPE()) ? 0 : 1);
