@@ -61,8 +61,9 @@ function ajaxHttpPost(url, jsonObj, tipId, numId){
 //点击推荐配置
 function setRecommendType(obj, fieldName, fieldValue){
 	setFieldCls(obj, fieldName);
-	var cpuCode=fieldValue.substring(0, 1);
-	var memoryCode=fieldValue.substring(1);
+	var fieldValues=fieldValue.split(",");
+	var cpuCode=fieldValues[0];
+	var memoryCode=fieldValues[1];
 	setFieldValue(document.getElementById("cpuId"+cpuCode), 'cpu', cpuCode);
 	setFieldValue(document.getElementById("memoryId"+memoryCode), 'memory', memoryCode);
 	specFunc(cpuCode, memoryCode);//实例规格改变时触发
@@ -156,11 +157,11 @@ function checkPckgData(){
 		return false;
 	}
 	
-	if($("#tcvirName").val()==""){
+	/* if($("#tcvirName").val()==""){
 		$("#tcvirName").tips({side:3, msg:'虚拟机名称不能为空', bg:'#AE81FF', time:2});
 		$("#tcvirName").focus();
 		return false;
-	}
+	} */
 	
 	return true;
 }
@@ -295,7 +296,7 @@ function addList(){
 	if($("#tcsq").is(".active")){//套餐数据校验
 		if(checkPckgData()){
 			jsonObj.tcareaCode=$("#tcareaCode").val();//地域代码
-			jsonObj.envCode=$("#tcenvCode").val();//环境代码                       
+			jsonObj.tcenvCode=$("#tcenvCode").val();//环境代码                       
 			jsonObj.tcplatType=$("#tcplatType").val();//平台类型                       
 			jsonObj.tcdeployType=$("#tcdeployType").val();//部署类型                     
 			jsonObj.tcvirName=$("#tcvirName").val();//虚拟机名称

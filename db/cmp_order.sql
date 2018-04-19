@@ -4,6 +4,7 @@ CREATE TABLE `cmp_order` (
   `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `lastUpdateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `status` varchar(10) DEFAULT NULL COMMENT '状态：0-待提交；1-已提交；T-套餐',
+  `appNo` varchar(20) NOT NULL COMMENT '工单编号',
   `applyUserId` varchar(20) NOT NULL COMMENT '申请者',
   `deptId` varchar(32) NOT NULL COMMENT '部门ID',
   `areaCode` varchar(32) DEFAULT NULL COMMENT '地域代码',
@@ -32,6 +33,7 @@ CREATE TABLE `cmp_order` (
   `totalAmt` varchar(20) DEFAULT NULL COMMENT '总价格',
   `fileName` varchar(200) DEFAULT NULL COMMENT '文件名',
   `pckgName` varchar(60) DEFAULT NULL COMMENT '套餐名称',
+  `executeStatus` varchar(10) DEFAULT NULL COMMENT '订单执行状态',
   PRIMARY KEY (`orderNo`),
   KEY `indx_cmp_order_status` (`status`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='清单表';

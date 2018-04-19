@@ -95,9 +95,9 @@ public class NumprocedureServiceImpl implements NumprocedureService {
 		dao.delete("NumprocedureMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
-	//环境列表查询
+	//推荐配置列表
 	@SuppressWarnings("unchecked")
-	public List<CmpDict> getEnvList() throws Exception {
-		return (List<CmpDict>) dao.findForList("NumprocedureMapper.getEnvList", null);
+	public List<CmpDict> getRecommendTypeList() throws Exception {
+		return (List<CmpDict>) dao.findForList("NumprocedureMapper.getRecommendTypeList", null);
 	}
 }

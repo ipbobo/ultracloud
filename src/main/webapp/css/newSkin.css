@@ -14,10 +14,6 @@ body.login_default .page-content .row .col-md-6 {
     padding-left: 6px;
     padding-right: 6px;
 }
-body.login_default .page-content .row .col-md-12 {
-    padding-left: 6px;
-    padding-right: 6px;
-}
 body.login_default .head-title {
     height: 40px;
     background:#fafafa;
@@ -1062,4 +1058,11 @@ body.queryUserApplyWorkOrderPre .table>thead>tr>th.sorting_desc:after {
 }
 .user-info small {
     display: none;
+}
+ul.new-menu li.active {
+    border-top: 3px solid #4d96c6;
+    border-bottom: 3px solid #4d96c6;
+}
+.x-body {
+    font-family:"Microsoft YaHei";
 }

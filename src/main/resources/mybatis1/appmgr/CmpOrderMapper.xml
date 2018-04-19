@@ -12,6 +12,7 @@
 		createTime,
 		lastUpdateTime,
 		status,
+		appNo,
 		applyUserId,
 		deptId,
 		areaCode,
@@ -38,7 +39,8 @@
 		expireDate,
 		virNum,
 		totalAmt,
-		fileName
+		fileName,
+		executeStatus,
 		pckgName
 	</sql>
 	
@@ -48,6 +50,7 @@
 		#{createTime},
 		#{lastUpdateTime},
 		#{status},
+		#{appNo},
 		#{applyUserId},
 		#{deptId},
 		#{areaCode},
@@ -75,6 +78,7 @@
 		#{virNum},
 		#{totalAmt},
 		#{fileName},
+		#{executeStatus},
 		#{pckgName}
 	</sql>
 	
@@ -82,6 +86,7 @@
 	<sql id="saveFieldName">
 		orderNo,
 		status,
+		appNo,
 		applyUserId,
 		deptId,
 		areaCode,
@@ -108,12 +113,14 @@
 		virNum,
 		totalAmt,
 		fileName,
+		executeStatus,
 		pckgName
 	</sql>
 	
 	<sql id="saveFieldValue">
 		#{orderNo},
 		#{status},
+		#{appNo},
 		#{applyUserId},
 		#{deptId},
 		#{areaCode},
@@ -140,6 +147,7 @@
 		#{virNum},
 		#{totalAmt},
 		#{fileName},
+		#{executeStatus},
 		#{pckgName}
 	</sql>
 	
@@ -156,6 +164,15 @@
 		from 
 		<include refid="tableName"/>
 		where orderNo=#{orderNo}
+	</select>
+	
+	
+	<!-- 清单详细信息查询 -->
+	<select id="getOrderDtlByAppNo" parameterType="String" resultType="com.cmp.sid.CmpOrder">
+		select <include refid="fieldName"/>
+		from 
+		<include refid="tableName"/>
+		where appNo=#{appNo}
 	</select>
 	
 	<!-- 套餐列表查询 -->
@@ -293,7 +310,7 @@
 			select func_nextval('cmp_order')
 		</selectKey>
 		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
-		select #{newOrderNo}, #{status}, applyUserId, deptId, #{areaCode}, #{platType}, #{deployType}, #{envCode}, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, ''
+		select #{newOrderNo}, #{status}, null, applyUserId, deptId, #{areaCode}, #{platType}, #{deployType}, #{envCode}, resType, #{virName}, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, totalAmt, fileName, null, null
 		from 
 		<include refid="tableName"/>
 		where orderNo=#{orderNo};
@@ -314,7 +331,7 @@
 	
 	<!-- 更新清单状态 -->
 	<select id="updateCmpOrderStatus" parameterType="pd">
-		update <include refid="tableName"/> set status='1', totalAmt=#{totalAmt} where orderNo=#{orderNo}
+		update <include refid="tableName"/> set status='1', totalAmt=#{totalAmt}, appNo=#{appNo} where orderNo=#{orderNo}
 	</select>
 	
 	<!-- 清空购物车 -->

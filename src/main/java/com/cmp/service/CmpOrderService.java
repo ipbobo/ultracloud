@@ -28,6 +28,12 @@ public class CmpOrderService {
 		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getOrderDtl", orderNo);
 	}
 	
+	//清单详细信息查询
+	@SuppressWarnings("unchecked")
+	public List<CmpOrder> getOrderDtlByAppNo(String appNo) throws Exception {
+		return (List<CmpOrder>)dao.findForList("CmpOrderMapper.getOrderDtlByAppNo", appNo);
+	}
+	
 	//套餐列表查询
 	@SuppressWarnings("unchecked")
 	public List<CmpOrder> getPckgList(String applyUserId) throws Exception {
@@ -97,7 +103,7 @@ public class CmpOrderService {
 		}
 	}
 	
-	
+	@SuppressWarnings("unchecked")
 	public List<PageData> findSoftParam(PageData pd) throws Exception{
 		return (List<PageData>)dao.findForList("CmpOrderMapper.findSoftParam", pd);
 	}

@@ -33,6 +33,7 @@ import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.servicemgt.AreaService;
 import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.service.servicemgt.MirrorService;
+import com.cmp.service.servicemgt.NumprocedureService;
 import com.cmp.sid.CmpDict;
 import com.cmp.sid.CmpOrder;
 import com.cmp.util.StringUtil;
@@ -70,6 +71,8 @@ public class AppMgrController extends BaseController {
 	private CloudplatformService cloudplatformService;
 	@Resource
 	private AreaService areaService;
+	@Resource
+	private NumprocedureService numprocedureService;
 	@Resource
 	private CmpLogService cmpLogService;
 	@Value("${uploadFilePath}")
@@ -116,7 +119,7 @@ public class AppMgrController extends BaseController {
 		String applyUserId=StringUtil.getUserName();//申请者
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
-		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
+		mv.addObject("recommendTypeList", numprocedureService.getRecommendTypeList());//推荐配置列表
 		mv.addObject("cpuList", cmpDictService.getCmpDictList("cpu"));//CPU列表
 		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
 		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
@@ -212,7 +215,7 @@ public class AppMgrController extends BaseController {
 		
 		mv.addObject("projectList", projectService.getProjectList());//项目列表
 		mv.addObject("resTypeList", cmpDictService.getCmpDictList("res_type"));//资源类型列表
-		mv.addObject("recommendTypeList", cmpDictService.getCmpDictList("recommend_type"));//推荐配置列表
+		mv.addObject("recommendTypeList", numprocedureService.getRecommendTypeList());//推荐配置列表
 		mv.addObject("cpuList", cmpDictService.getCmpDictList("cpu"));//CPU列表
 		mv.addObject("memoryList", cmpDictService.getCmpDictList("memory"));//内存列表
 		mv.addObject("osTypeList", cmpDictService.getCmpDictList("os_type"));//OS类型列表
@@ -289,9 +292,12 @@ public class AppMgrController extends BaseController {
 			}
 			
 			User user=StringUtil.getUserInfo();//获取登录用户
+			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
+			cmpOrder.setAppNo(null);
 			cmpOrder.setApplyUserId(user.getUSERNAME());//用户名
 			cmpOrder.setDeptId(user.getDEPARTMENT_ID());//部门ID
-			cmpOrder.setStatus("0");//状态：0-未提交；1-已提交
+			cmpOrder.setExecuteStatus("0");
+			cmpOrder.setPckgName(null);
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpOrderService.saveSoftParams(cmpOrder.getOrderNo(), cmpOrder.getSoftCode(), cmpOrder.getSoftParam());//软件参数列表新增，软件参数：path:/tomcat,user:admin,passwd:admin|path:/tomcat,user:admin,passwd:admin
 			cmpLogService.addCmpLog("1", "加入清单", "加入清单成功", "0", StringUtil.getClientIp(request));//新增日志
@@ -361,7 +367,7 @@ public class AppMgrController extends BaseController {
 					updateParams.put("procInstId", procInstId);
 					//updateParams.put("status", "1");
 					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
-					cmpOrderService.updateCmpOrderStatus(getPageData("orderNo", orderNos[i], "totalAmt", totalAmts[i]));//更新清单状态
+					cmpOrderService.updateCmpOrderStatus(getPageData("orderNo", orderNos[i], "totalAmt", totalAmts[i], "appNo", appNo));//更新清单状态
 				}
 			}
 			
@@ -394,8 +400,10 @@ public class AppMgrController extends BaseController {
 			}
 			
 			User user=StringUtil.getUserInfo();//获取登录用户
+			cmpOrder.setAppNo(null);
 			cmpOrder.setApplyUserId(user.getUSERNAME());//用户名
 			cmpOrder.setDeptId(user.getDEPARTMENT_ID());//部门ID
+			cmpOrder.setExecuteStatus("0");
 			cmpOrderService.saveCmpOrder(cmpOrder);//新增清单或套餐
 			cmpOrderService.saveSoftParams(cmpOrder.getOrderNo(), cmpOrder.getSoftCode(), cmpOrder.getSoftParam());//软件参数列表新增，软件参数：path:/tomcat,user:admin,passwd:admin|path:/tomcat,user:admin,passwd:admin
 			cmpLogService.addCmpLog("1", "保存套餐", "保存套餐成功", "0", StringUtil.getClientIp(request));//新增日志

@@ -15,7 +15,24 @@ public class CmpCloudInfo {
 	private String soft; 		//软件安装
 	private String softStatus;	//软件安装状态
 	private String expireDate;  //使用期限
+	private String appNo;		//申请编号
+	private String environment;  //环境
+	private String imgCodeName;  //安装镜像名称
+	private String resTypeName;  //类型名称 
+	private String vmNum;	//数量
+	private String orderNo;  //订单编号
+	private String areaName;  //区域
+	private String projectName; //项目
+	private String applicant;	//申请人
+	private String executeStatus; //订单执行状态
 	
+	
+	public String getExecuteStatus() {
+		return executeStatus;
+	}
+	public void setExecuteStatus(String executeStatus) {
+		this.executeStatus = executeStatus;
+	}
 	public String getOsTypeName() {
 		return osTypeName;
 	}
@@ -76,6 +93,59 @@ public class CmpCloudInfo {
 	public void setExpireDate(String expireDate) {
 		this.expireDate = expireDate;
 	}
-	
+	public String getAppNo() {
+		return appNo;
+	}
+	public void setAppNo(String appNo) {
+		this.appNo = appNo;
+	}
+	public String getEnvironment() {
+		return environment;
+	}
+	public void setEnvironment(String environment) {
+		this.environment = environment;
+	}
+	public String getImgCodeName() {
+		return imgCodeName;
+	}
+	public void setImgCodeName(String imgCodeName) {
+		this.imgCodeName = imgCodeName;
+	}
+	public String getResTypeName() {
+		return resTypeName;
+	}
+	public void setResTypeName(String resTypeName) {
+		this.resTypeName = resTypeName;
+	}
+	public String getVmNum() {
+		return vmNum;
+	}
+	public void setVmNum(String vmNum) {
+		this.vmNum = vmNum;
+	}
+	public String getOrderNo() {
+		return orderNo;
+	}
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+	public String getAreaName() {
+		return areaName;
+	}
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public String getApplicant() {
+		return applicant;
+	}
+	public void setApplicant(String applicant) {
+		this.applicant = applicant;
+	}
 	
 }

@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.math.BigInteger;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class VmwareCloudInitTest {
 		pd.put("id", "bbb3512e75034c69ada0093265940852");
 		pd.put("username", "administrator@vsphere.local");
 		pd.put("password", "123.comM");
-		//pd.put("ip", "180.169.225.158");
+		// pd.put("ip", "180.169.225.158");
 		pd.put("ip", "192.168.0.250");
 
 		try {
@@ -96,7 +97,7 @@ public class VmwareCloudInitTest {
 						// 剩余cpu数
 						double cpuCoreRemainCount = Double.valueOf(host[k].getHardware().getCpuInfo().getNumCpuCores());
 						// 内存
-						double memorySize = new Double(host[k].getHardware().getMemorySize() / 1024 / 1024);
+						double memorySize = new Double(host[k].getHardware().getMemorySize() / 1024 / 1024 / 1024);
 						if (null == hostmachineId) {
 							hostmachineId = UuidUtil.get32UUID();
 							hostmachinePD.put("id", hostmachineId);
@@ -127,7 +128,12 @@ public class VmwareCloudInitTest {
 								vmPD.put("version", cloudPD.getString("version"));
 								vmPD.put("ip", virtualMachine[j].getGuest().getIpAddress());
 								vmPD.put("cpu", virtualMachine[j].getConfig().getHardware().getNumCPU());
-								vmPD.put("memory", virtualMachine[j].getConfig().getHardware().getMemoryMB());
+								vmPD.put("memory", virtualMachine[j].getConfig().getHardware().getMemoryMB() / 1024);
+
+								long committed = virtualMachine[j].getSummary().storage.committed;
+								System.out.println("----------------- committed = " + committed / 1024 / 1024 / 1024);
+								long uncommitted = virtualMachine[j].getSummary().storage.uncommitted;
+								System.out.println("----------------- uncommitted = " + uncommitted / 1024 / 1024 / 1024);
 
 								VirtualDevice[] vd = virtualMachine[j].getConfig().getHardware().getDevice();
 								long totalDisk = 0;
@@ -135,22 +141,21 @@ public class VmwareCloudInitTest {
 									if (vd[a] instanceof com.vmware.vim25.VirtualDisk) {
 										long total = ((com.vmware.vim25.VirtualDisk) vd[a]).getCapacityInKB();
 										totalDisk += total;
-										// (com.vmware.vim25.VirtualDisk)vd[a].getDeviceInfo();
 									}
 								}
-								System.out.println("totalDisk=" + totalDisk/1024/1024);
+								System.out.println("totalDisk=" + totalDisk / 1024 / 1024);
 
 								GuestDiskInfo[] guestDiskInfo = virtualMachine[j].getGuest().getDisk();
 								long freeDisk = 0;
-								if(null != guestDiskInfo) {
+								if (null != guestDiskInfo) {
 									for (int a = 0; a < guestDiskInfo.length; a++) {
 										long freeSpace = guestDiskInfo[a].getFreeSpace();
 										freeDisk += freeSpace;
-										
+
 									}
 								}
-								
-								System.out.println("freeDisk=" + freeDisk/1025/1024 + "\n");
+
+								System.out.println("freeDisk=" + freeDisk / 1025 / 1024 + "\n");
 
 								// Datastore[] ds =
 								// virtualMachine[j].getDatastores();
@@ -187,5 +192,10 @@ public class VmwareCloudInitTest {
 
 	private void p(String str) {
 		System.out.println("-------->>" + str);
+	}
+	
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<String>();
+		list.forEach(e->System.out.print(e));
 	}
 }

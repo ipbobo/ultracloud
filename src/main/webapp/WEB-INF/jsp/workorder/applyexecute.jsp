@@ -45,44 +45,46 @@
 								style="margin-top: 5px;">
 								<thead>
 									<tr>
-										<th class="center">实例</th>
 										<th class="center">类型</th>
-										<th class="center">版本</th>
+										<th class="center">环境</th>
 										<th class="center">CPU/内存</th>
 										<th class="center">存储</th>
-										<th class="center">访问地址</th>
-										<th class="center">端口</th>
+										<th class="center">镜像</th>
+										<th class="center">数量</th>
 										<th class="center">操作</th>
 									</tr>
 								</thead>
 
 								<tbody>
-												<tr>
-													<td class='center'></td>
-													<td class='center'>虚拟机</td>
-													<td class='center'></td>
+											<c:choose>
+													<c:when test="${not empty cmpCloudInfoList}">
+														<c:forEach items="${cmpCloudInfoList}" var="cmpCloudInfo" varStatus="vs">
+												<tr onclick="showDitail('${cmpCloudInfo.orderNo}');">
+													<td class='center'>${cmpCloudInfo.resTypeName}</td>
+													<td class='center'>${cmpCloudInfo.environment}</td>
 													<td class='center'>
 														${cmpCloudInfo.cpu}核/${cmpCloudInfo.memory}G
 													</td>
 													<td class='center'>${cmpCloudInfo.dataDiskInfo}</td>
-													<td class='center'></td>
-													<td class='center'></td>
+													<td class='center'>${cmpCloudInfo.imgCodeName}</td>
+													<td class='center'>${cmpCloudInfo.vmNum}</td>
 													<td class='center'>
-														<input type="hidden" name="executeStatus" id="executeStatus" value="${workorder.executeStatus}">
-														<input type="hidden" name="h_appNo" id="h_appNo" value="${workorder.appNo}">
-														<input type="hidden" name="h_cpu" id="h_cpu" value="${workorder.cpu}">
-														<input type="hidden" name="h_memory" id="h_memory" value="${workorder.memory}">
-														<input type="hidden" name="h_diskSize" id="h_diskSize" value="${workorder.diskSize}">
-														<button id="executeStatus_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
-															onclick="showSetParam('${workorder.appNo}');">安装</button>
-														<button id="executeStatus_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+														<input type="hidden" name="hid_orderNo" value="${cmpCloudInfo.orderNo}">
+														<input type="hidden" name="${cmpCloudInfo.orderNo}_executeStatus" id="${cmpCloudInfo.orderNo}_executeStatus" value="${cmpCloudInfo.executeStatus}">
+													
+														<button id="${cmpCloudInfo.orderNo}_op_0"  style="float:left;margin-left: 100px; display: none;" type="button" 
+															onclick="showSetParam('${cmpCloudInfo.orderNo}');">安装</button>
+														<button id="${cmpCloudInfo.orderNo}_op_1"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
 															>安装中...</button>
-														<button id="executeStatus_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+														<button id="${cmpCloudInfo.orderNo}_op_2"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
 															>安装完毕</button>
-														<button id="executeStatus_3"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
+														<button id="${cmpCloudInfo.orderNo}_op_3"  disabled="disabled" style="float:left;margin-left: 100px; display: none;" type="button" 
 															>安装异常</button>
 													</td>
 													</tr>
+											</c:forEach>
+												</c:when>
+												</c:choose>
 								</tbody>
 						</table>
 							<div class="alert alert-info">部署执行详情</div>
@@ -111,9 +113,12 @@
 								</tbody>
 						</table>
 						<h2></h2>
-						<table id="simple-table"
+							<c:choose>
+					<c:when test="${not empty cmpCloudInfoList}">
+						<c:forEach items="${cmpCloudInfoList}" var="cmpCloudInfo" varStatus="vs">
+						<table id="${cmpCloudInfo.orderNo}_detail" 
 								class="table table-striped table-bordered table-hover"
-								style="margin-top: 5px;">
+								style="margin-top: 5px; display: none;">
 								<tbody>
 									<thead>
 										<tr>
@@ -121,33 +126,38 @@
 										</tr>
 									</thead>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">操作系统</td>
-										<td class='center'>${cmpCloudInfo.osTypeName}</td>
-										<td class='center' style="background-color: rgb(244,244,244);">系统盘/数据盘</td>
-										<td class='center'>系统盘${cmpCloudInfo.sysDiskSize}G; 数据盘${cloudInfoCollect.diskTotal}G</td>
+										<td class='center' style="background-color: rgb(244,244,244);">地域:</td>
+										<td class='center'>${cmpCloudInfo.areaName}</td>
+										<td class='center' style="background-color: rgb(244,244,244);">环境:</td>
+										<td class='center'>${cmpCloudInfo.environment}</td>
+										<td class='center' style="background-color: rgb(244,244,244);">项目:</td>
+										<td class='center'>${cmpCloudInfo.projectName}</td>
 									</tr>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">CPU/内存</td>
-										<td class='center'>${cmpCloudInfo.cpu}核/${cmpCloudInfo.memory}G</td>
-										<td class='center' style="background-color: rgb(244,244,244);">安装状态</td>
-										<td class='center'>${cmpCloudInfo.osStatus}</td>
-									</tr>
-									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">软件安装</td>
-										<td class='center'>${cmpCloudInfo.softStatus}</td>
-									</tr>
-									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">数据盘信息</td>
+										<td class='center' style="background-color: rgb(244,244,244);">CPU:</td>
+										<td class='center'>${cmpCloudInfo.cpu}核</td>
+										<td class='center' style="background-color: rgb(244,244,244);">内存:</td>
+										<td class='center'>${cmpCloudInfo.memory}G</td>
+										<td class='center' style="background-color: rgb(244,244,244);">存储:</td>
 										<td class='center'>${cmpCloudInfo.dataDiskInfo}</td>
-										<td class='center' style="background-color: rgb(244,244,244);">使用期限</td>
-										<td class='center'>${cmpCloudInfo.expireDate}</td>
 									</tr>
 									<tr>
-										<td class='center' style="background-color: rgb(244,244,244);">电子钥匙</td>
-										<td class='center'></td>
+										<td class='center' style="background-color: rgb(244,244,244);">镜像:</td>
+										<td class='center'>${cmpCloudInfo.imgCodeName}</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">软件:</td>
+										<td class='center'>${cmpCloudInfo.soft}</td>
+									</tr>
+									<tr>
+										<td class='center' style="background-color: rgb(244,244,244);">申请人:</td>
+										<td class='center'>${cmpCloudInfo.applicant}</td>
 									</tr>
 								</tbody>
 						</table>
+						</c:forEach>
+				</c:when>
+				</c:choose>
 			<div class="alert alert-info">后续任务处理</div>
 				<table>
 						<c:if test="${workorder.uploadFileName != ''}">
@@ -392,6 +402,13 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
 	$( document ).ready(function() {
+		
+		$("input[name='hid_orderNo']").each(function(){  
+			var orderNo = $(this).val();
+			var executeStatus = $("#" + orderNo + "_executeStatus").val();
+			 $("#" + orderNo + "_op_" + executeStatus).show();
+		}); 
+		
 		var executeStatus = $("#executeStatus").val();
 		var appNo = $("#h_appNo").val();
 	    if (executeStatus == null || executeStatus == '' || executeStatus == '0'){
@@ -521,6 +538,11 @@
 						if (data[msgIndex] == "cmp:success"){
 							$("#executeStatus_1").css('display','none');
 							$("#executeStatus_2").css('display','block');
+							clearInterval(res);
+							break;
+						}else if (data[msgIndex] == "cmp:error"){
+							$("#executeStatus_1").css('display','none');
+							$("#executeStatus_3").css('display','block');
 							clearInterval(res);
 							break;
 						}
@@ -741,6 +763,13 @@
 		$('#autodeploy_modal').modal('show');
 	}
 	
+	
+	function showDitail(orderNo){
+		$("table[id$='_detail']").each(function(){  
+			$(this).hide();
+		}); 
+		$('#'+orderNo+'_detail').show();
+	}
 	</script>
 
 </body>
