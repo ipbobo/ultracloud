@@ -29,8 +29,6 @@ import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 import com.fh.util.UuidUtil;
-import com.vmware.vim25.GuestDiskInfo;
-import com.vmware.vim25.VirtualDevice;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.Datastore;
@@ -86,7 +84,7 @@ public class ResourceServiceImpl implements ResourceService {
 			List<PageData> preDatacenterList = datacenterService.listAll(cloudPD);
 			List<PageData> preClusterList = clusterService.listAll(cloudPD);
 			List<PageData> preHostmachineList = hostmachineService.listAll(cloudPD, false);
-			List<PageData> preVirtualMachineList = virtualMachineSyncService.listAll(cloudPD, false);
+			List<PageData> preVirtualMachineList = virtualMachineSyncService.listAll(cloudPD, true);
 			List<PageData> preStorageList = storageService.listAll(cloudPD, false);
 			List<PageData> preDatacenterNetworkList = datacenternetworkService.listAll(cloudPD, true);
 
@@ -155,9 +153,9 @@ public class ResourceServiceImpl implements ResourceService {
 						double cpuTotal = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores())
 								* (host[i].getHardware().getCpuInfo().getHz() / 1000 / 1000 / 1000);
 						// 剩余cpu数
-						double cpuCoreRemainCount = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores());
+						//double cpuCoreRemainCount = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores());
 						// 内存
-						double memorySize = new Double(host[i].getHardware().getMemorySize() / 1024 / 1024);
+						double memorySize = new Double(host[i].getHardware().getMemorySize() / 1024 / 1024 / 1024);
 						if (null == hostmachineId) {
 							hostmachineId = UuidUtil.get32UUID();
 							hostmachinePD.put("id", hostmachineId);
@@ -191,30 +189,15 @@ public class ResourceServiceImpl implements ResourceService {
 								vmPD.put("version", cloudPD.getString("version"));
 								vmPD.put("ip", virtualMachine[j].getGuest().getIpAddress());
 								vmPD.put("cpu", virtualMachine[j].getConfig().getHardware().getNumCPU());
-								vmPD.put("memory", virtualMachine[j].getConfig().getHardware().getMemoryMB());
-								
-								//虚拟机磁盘部空间
-								VirtualDevice[] vd = virtualMachine[j].getConfig().getHardware().getDevice();
-								long totalDisk = 0;
-								for (int a = 0; a < vd.length; a++) {
-									if (vd[a] instanceof com.vmware.vim25.VirtualDisk) {
-										long total = ((com.vmware.vim25.VirtualDisk) vd[a]).getCapacityInKB();
-										totalDisk += total;
-									}
-								}
-								vmPD.put("datadisk", totalDisk/1024/1024);
-								
-								//虚拟机磁盘可用空间
-								GuestDiskInfo[] guestDiskInfo = virtualMachine[j].getGuest().getDisk();
-								long free_datadisk = 0;
-								if(null != guestDiskInfo) {
-									for (int a = 0; a < guestDiskInfo.length; a++) {
-										long freeSpace = guestDiskInfo[a].getFreeSpace();
-										free_datadisk += freeSpace;
-									}
-									vmPD.put("free_datadisk", free_datadisk/1024/1024);
-								}
-								
+								vmPD.put("memory", virtualMachine[j].getConfig().getHardware().getMemoryMB() / 1024);
+
+								// 虚拟机磁盘已用空间
+								long committed = virtualMachine[j].getSummary().storage.committed;
+								vmPD.put("use_datadisk", committed / 1024 / 1024 / 1024);
+								// 虚拟机磁盘部空间
+								long uncommitted = virtualMachine[j].getSummary().storage.uncommitted;
+								vmPD.put("datadisk", (committed + uncommitted) / 1024 / 1024 / 1024);
+
 								vmPD.put("platform", cloudPD.get("id"));
 								String statusStr = virtualMachine[j].getGuest().getGuestState();
 								Integer status = null;
@@ -249,8 +232,8 @@ public class ResourceServiceImpl implements ResourceService {
 						storePD.put("cpf_id", cloudPD.getString("id"));
 						storePD.put("datacenter_id", datacenterId);
 						storePD.put("version", cloudPD.getString("version"));
-						storePD.put("allspace", store[i].getSummary().getCapacity());
-						storePD.put("freespace", store[i].getSummary().getFreeSpace());
+						storePD.put("allspace", store[i].getSummary().getCapacity() / 1024 / 1024 / 1024);
+						storePD.put("freespace", store[i].getSummary().getFreeSpace() / 1024 / 1024 / 1024);
 						storeList.add(storePD);
 					}
 				}
@@ -270,8 +253,8 @@ public class ResourceServiceImpl implements ResourceService {
 						networkPD.put("type", "vmware");
 						networkPD.put("cpf_id", cloudPD.getString("id"));
 						networkPD.put("datacenter_id", datacenterId);
-						//networkPD.put("label", network[i].getMOR().getVal());
-						
+						// networkPD.put("label", network[i].getMOR().getVal());
+
 						networkList.add(networkPD);
 					}
 
@@ -307,11 +290,11 @@ public class ResourceServiceImpl implements ResourceService {
 			CloudArchManagerAdapter adapter = new CloudArchManagerAdapter();
 			CloudArchManager cloudArchManager = adapter.getCloudArchManagerAdaptee(platform);
 			vmtList = cloudArchManager.getVmTemplates();
-			
+
 		} else if ("OpenStack".equals(cloudPD.getString("type"))) {
 			// ToDo
 		}
-		
+
 		return vmtList;
 	}
 
@@ -329,28 +312,39 @@ public class ResourceServiceImpl implements ResourceService {
 			String hostmachineIds_array[] = hostmachineIds.split(",");
 			dao.update("HostmachineSyncMapper.updateSelectedAll", hostmachineIds_array);
 			List<PageData> hostmachineList = (List<PageData>) dao.findForList("HostmachineSyncMapper.listAllByArray", hostmachineIds_array);
-			for (PageData pd : hostmachineList) {
-				dao.save("HostmachineMapper.save", pd);
-			}
+			hostmachineList.forEach(e -> {
+				try {
+					dao.save("HostmachineMapper.save", e);
+				} catch (Exception e2) {
+					throw new RuntimeException(e2);
+				}
+			});
 		}
 
 		if (null != storageIds && !"".equals(storageIds)) {
 			String storageIds_array[] = storageIds.split(",");
 			dao.update("StorageSyncMapper.updateSelectedAll", storageIds_array);
 			List<PageData> storageList = (List<PageData>) dao.findForList("StorageSyncMapper.listAllByArray", storageIds_array);
-			for (PageData pd : storageList) {
-				dao.save("StorageMapper.save", pd);
-			}
+			storageList.forEach(e -> {
+				try {
+					dao.save("StorageMapper.save", e);
+				} catch (Exception e3) {
+					throw new RuntimeException(e3);
+				}
+			});
 		}
 
-//		if (null != dcnIds && !"".equals(dcnIds)) {
-//			String dcnIds_array[] = dcnIds.split(",");
-//			dao.update("DatacenternetworkLabelMapper.updateSelectedAll", dcnIds_array);
-//			List<PageData> storageList = (List<PageData>) dao.findForList("DatacenternetworkLabelMapper.listAllByArray", dcnIds_array);
-//			for (PageData pd : storageList) {
-//				dao.save("DatacenternetworkMapper.save", pd);
-//			}
-//		}
+		// if (null != dcnIds && !"".equals(dcnIds)) {
+		// String dcnIds_array[] = dcnIds.split(",");
+		// dao.update("DatacenternetworkLabelMapper.updateSelectedAll",
+		// dcnIds_array);
+		// List<PageData> storageList = (List<PageData>)
+		// dao.findForList("DatacenternetworkLabelMapper.listAllByArray",
+		// dcnIds_array);
+		// for (PageData pd : storageList) {
+		// dao.save("DatacenternetworkMapper.save", pd);
+		// }
+		// }
 	}
 
 	/**

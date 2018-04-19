@@ -27,7 +27,7 @@ public class HostmachineServiceImpl implements HostmachineService {
 
 	@Resource(name = "daoSupport")
 	private DaoSupport dao;
-	
+
 	@Resource(name = "virtualMachineSyncService")
 	private VirtualMachineSyncService virtualMachineSyncService;
 
@@ -38,12 +38,12 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @throws Exception
 	 */
 	public void save(PageData pd, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
+		if (isSyncTable) {
 			dao.save("HostmachineSyncMapper.save", pd);
 		} else {
 			dao.save("HostmachineMapper.save", pd);
 		}
-		
+
 	}
 
 	/**
@@ -53,12 +53,12 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @throws Exception
 	 */
 	public void delete(PageData pd, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
+		if (isSyncTable) {
 			dao.delete("HostmachineSyncMapper.delete", pd);
 		} else {
 			dao.delete("HostmachineMapper.delete", pd);
 		}
-		
+
 	}
 
 	/**
@@ -68,12 +68,12 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @throws Exception
 	 */
 	public void edit(PageData pd, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
+		if (isSyncTable) {
 			dao.update("HostmachineSyncMapper.edit", pd);
 		} else {
 			dao.update("HostmachineMapper.edit", pd);
 		}
-		
+
 	}
 
 	/**
@@ -84,13 +84,13 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
+		if (isSyncTable) {
 			return (List<PageData>) dao.findForList("HostmachineSyncMapper.datalistPage", page);
 		} else {
 			return (List<PageData>) dao.findForList("HostmachineMapper.datalistPage", page);
 		}
 	}
-	
+
 	/**
 	 * KVM列表
 	 * 
@@ -99,12 +99,12 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listKVM(Page page, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
+		if (isSyncTable) {
 			return (List<PageData>) dao.findForList("HostmachineSyncMapper.datalistPageKVM", page);
 		} else {
 			return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageKVM", page);
 		}
-		
+
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
+		if (isSyncTable) {
 			return (List<PageData>) dao.findForList("HostmachineSyncMapper.listAll", pd);
 		} else {
 			return (List<PageData>) dao.findForList("HostmachineMapper.listAll", pd);
@@ -129,7 +129,7 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
+		if (isSyncTable) {
 			return (PageData) dao.findForObject("HostmachineSyncMapper.findById", pd);
 		} else {
 			return (PageData) dao.findForObject("HostmachineMapper.findById", pd);
@@ -143,13 +143,13 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
+		if (isSyncTable) {
 			dao.delete("HostmachineSyncMapper.deleteAll", ArrayDATA_IDS);
 		} else {
 			dao.delete("HostmachineMapper.deleteAll", ArrayDATA_IDS);
 		}
 	}
-	
+
 	/**
 	 * 查询虚拟机列表
 	 * 
@@ -158,7 +158,7 @@ public class HostmachineServiceImpl implements HostmachineService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listVirtual(Page page, boolean isSyncTable) throws Exception {
-		if(isSyncTable) {
+		if (isSyncTable) {
 			return (List<PageData>) dao.findForList("HostmachineSyncMapper.datalistPageVirtual", page);
 		} else {
 			return (List<PageData>) dao.findForList("HostmachineMapper.datalistPageVirtual", page);
@@ -172,47 +172,49 @@ public class HostmachineServiceImpl implements HostmachineService {
 
 	@Override
 	public void syncKVMData(PageData kvmPD) throws Exception {
-		List<PageData> preVirtualMachineList = virtualMachineSyncService.listAll(kvmPD, false);
-		
+		PageData kvmHostPD = new PageData();
+		kvmHostPD.put("hostmachine_id", kvmPD.getString("id"));
+		List<PageData> preVirtualMachineList = virtualMachineSyncService.listAll(kvmHostPD, false);
+
 		String platformManagerType = KvmCloudArchManager.class.getName();
-		
+
 		TccCloudPlatform platform = new TccCloudPlatform();
 		platform.setCloudplatformUser(kvmPD.getString("username"));
 		platform.setCloudplatformPassword(kvmPD.getString("password"));
 		platform.setCloudplatformIp(kvmPD.getString("ip"));
-		platform.setCloudplatformPort((Long)kvmPD.get("port") + "");
+		platform.setCloudplatformPort((Long) kvmPD.get("port") + "");
 		platform.setPlatformManagerType(platformManagerType);
 
 		CloudArchManagerAdapter adapter = new CloudArchManagerAdapter();
 		CloudArchManager cloudArchManager = adapter.getCloudArchManagerAdaptee(platform);
-		
+
 		List<TccVirtualMachine> vmList = cloudArchManager.getVirtualMachines();
-		if((null != vmList) && vmList.size() > 0)
-		for(int j = 0; j< vmList.size(); j++) {
-			PageData vmPD = new PageData();
-			String vmUuid = vmList.get(j).getUUID();
-			String vmId = this.existUuid(vmUuid, preVirtualMachineList);
-			if(null == vmId) {
-				vmPD.put("name", vmList.get(j).getName());
-				vmPD.put("uuid", vmUuid);
-				vmPD.put("type", "kvm");
-				vmPD.put("hostmachine_id", kvmPD.getString("id"));
-				vmPD.put("ip", vmList.get(j).getIpAddress());
-				vmPD.put("cpu", vmList.get(j).getVcpus());
-				vmPD.put("memory", vmList.get(j).getMemory()*1024);
-				vmPD.put("status", (null == vmList.get(j).getState())?2:vmList.get(j).getState());
-				virtualMachineSyncService.save(vmPD, false);
+		if ((null != vmList) && vmList.size() > 0)
+			for (int j = 0; j < vmList.size(); j++) {
+				PageData vmPD = new PageData();
+				String vmUuid = vmList.get(j).getUUID();
+				BigInteger vmId = this.existUuid(vmUuid, preVirtualMachineList);
+				if (null == vmId) {
+					vmPD.put("name", vmList.get(j).getName());
+					vmPD.put("uuid", vmUuid);
+					vmPD.put("type", "kvm");
+					vmPD.put("hostmachine_id", kvmPD.getString("id"));
+					vmPD.put("ip", vmList.get(j).getIpAddress());
+					vmPD.put("cpu", vmList.get(j).getVcpus());
+					vmPD.put("memory", vmList.get(j).getMemory() * 1024);
+					vmPD.put("status", (null == vmList.get(j).getState()) ? 2 : vmList.get(j).getState());
+					virtualMachineSyncService.save(vmPD, false);
+				}
 			}
-		}
 	}
-	
-	private String existUuid(String uuid, List<PageData> preList) {
-		for(PageData pd : preList) {
-			if(uuid.equals(pd.getString("uuid"))) {
-				return pd.getString("id");
+
+	private BigInteger existUuid(String uuid, List<PageData> preList) {
+		for (PageData pd : preList) {
+			if (uuid.equals(pd.getString("uuid"))) {
+				return (BigInteger) pd.get("id");
 			}
 		}
-		
+
 		return null;
 	}
 

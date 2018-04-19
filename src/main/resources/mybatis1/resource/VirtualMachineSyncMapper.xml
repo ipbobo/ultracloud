@@ -38,7 +38,7 @@
 		uuid,
 		cpf_id,
 		type,
-		free_datadisk
+		use_datadisk
 	</sql>
 	
 	<sql id="Field_time">
@@ -75,7 +75,7 @@
 		#{uuid},
 		#{cpf_id},
 		#{type},
-		#{free_datadisk}
+		#{use_datadisk}
 	</sql>
 	
 	<!-- 字段值 -->
@@ -102,7 +102,7 @@
 		#{item.uuid},
 		#{item.cpf_id},
 		#{item.type},
-		#{item.free_datadisk}
+		#{item.use_datadisk}
 	</sql>
 	
 	<sql id="FieldValue_time">	
@@ -189,6 +189,18 @@
 	</select>
 	
 	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select id,
+               uuid
+		from 
+		<include refid="tableName"></include>
+		where 1 = 1
+		<if test="id != null and id != ''">
+			and cpf_id=#{id}
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
 	<select id="listAllVM" parameterType="pd" resultType="pd">
 		select id,
 			user,
@@ -212,12 +224,16 @@
 			uuid,
 			cpf_id,
 			gmt_create,
-			gmt_modified
+			gmt_modified,
+			use_datadisk
 		from 
 		<include refid="VMtableName"></include>
 		where 1 = 1
 		<if test="id != null and id != ''">
 			and cpf_id=#{id}
+		</if>
+		<if test="id != null and id != ''">
+			and hostmachine_id=#{hostmachine_id}
 		</if>
 	</select>
 		

@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.math.BigInteger;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import com.vmware.vim25.RuntimeFault;
 import com.vmware.vim25.VirtualDevice;
 import com.vmware.vim25.mo.ClusterComputeResource;
 import com.vmware.vim25.mo.Datacenter;
+import com.vmware.vim25.mo.Datastore;
 import com.vmware.vim25.mo.Folder;
 import com.vmware.vim25.mo.HostSystem;
 import com.vmware.vim25.mo.ManagedEntity;
@@ -38,7 +40,7 @@ public class VmwareCloudInitTest {
 		pd.put("id", "bbb3512e75034c69ada0093265940852");
 		pd.put("username", "administrator@vsphere.local");
 		pd.put("password", "123.comM");
-		//pd.put("ip", "180.169.225.158");
+		// pd.put("ip", "180.169.225.158");
 		pd.put("ip", "192.168.0.250");
 
 		try {
@@ -67,118 +69,25 @@ public class VmwareCloudInitTest {
 			for (int i = 0; i < mes.length; i++) {
 				this.p(mes[i].getName());
 
-				// 同步集群
-				ManagedEntity[] childEntitys = dc.getHostFolder().getChildEntity();
-				List<ClusterComputeResource> clusterList = Arrays.stream(childEntitys).map(ClusterComputeResource.class::cast).collect(toList());
-				for (ClusterComputeResource cluster : clusterList) {
-					String clusterUuid = cluster.getMOR().get_value();
-					String clusterId = null;
-					if (null == clusterId) {
-						PageData clusterPD = new PageData();
-						clusterId = UuidUtil.get32UUID();
-						clusterPD.put("id", clusterId);
-						clusterPD.put("name", cluster.getName());
-						clusterPD.put("uuid", clusterUuid);
-						clusterPD.put("type", "vmware");
-						clusterPD.put("cpf_id", cloudPD.getString("id"));
-						clusterPD.put("version", cloudPD.getString("version"));
+				// 同步存储
+				Datastore[] store = dc.getDatastores();
+				for (int j = 0; j < store.length; j++) {
+					PageData storePD = new PageData();
+					String storeUuid = store[i].getMOR().get_value();
+					String storeId = null;
+					if (null == storeId) {
+						storeId = UuidUtil.get32UUID();
+						storePD.put("id", storeId);
+						storePD.put("name", store[j].getName());
+						storePD.put("uuid", storeUuid);
+						storePD.put("type", "vmware");
+						storePD.put("cpf_id", cloudPD.getString("id"));
+						storePD.put("version", cloudPD.getString("version"));
+						storePD.put("allspace", store[j].getSummary().getCapacity() / 1024 / 1024 / 1024);
+						storePD.put("freespace", store[j].getSummary().getFreeSpace() / 1024 / 1024 / 1024);
+						System.out.println(store[j].getSummary().getCapacity() / 1024 / 1024 / 1024);
+						System.out.println(store[j].getSummary().getFreeSpace() / 1024 / 1024 / 1024);
 					}
-
-					// 同步宿主机
-					HostSystem[] host = cluster.getHosts();
-					for (int k = 0; k < host.length; k++) {
-						PageData hostmachinePD = new PageData();
-						String hostmachineUuid = host[i].getMOR().get_value();
-						String hostmachineId = null;
-						// 总cpu数
-						double cpuTotal = Double.valueOf(host[k].getHardware().getCpuInfo().getNumCpuCores())
-								* (host[k].getHardware().getCpuInfo().getHz() / 1000 / 1000 / 1000);
-						// 剩余cpu数
-						double cpuCoreRemainCount = Double.valueOf(host[k].getHardware().getCpuInfo().getNumCpuCores());
-						// 内存
-						double memorySize = new Double(host[k].getHardware().getMemorySize() / 1024 / 1024);
-						if (null == hostmachineId) {
-							hostmachineId = UuidUtil.get32UUID();
-							hostmachinePD.put("id", hostmachineId);
-							hostmachinePD.put("name", host[k].getName());
-							hostmachinePD.put("uuid", hostmachineUuid);
-							hostmachinePD.put("type", "vmware");
-							hostmachinePD.put("cpf_id", cloudPD.getString("id"));
-							hostmachinePD.put("cluster_id", clusterId);
-							hostmachinePD.put("version", cloudPD.getString("version"));
-							hostmachinePD.put("ip", host[i].getName());
-							hostmachinePD.put("cpu", cpuTotal);
-							hostmachinePD.put("memory", memorySize);
-						}
-
-						// 同步虚拟机
-						VirtualMachine[] virtualMachine = host[i].getVms();
-						for (int j = 0; j < virtualMachine.length; j++) {
-							PageData vmPD = new PageData();
-							String vmUuid = virtualMachine[j].getMOR().get_value();
-							BigInteger vmId = null;
-							if (null == vmId) {
-								vmPD.put("name", virtualMachine[j].getName());
-								vmPD.put("uuid", vmUuid);
-								vmPD.put("type", "vmware");
-								vmPD.put("cpf_id", cloudPD.getString("id"));
-								vmPD.put("cluster_id", clusterId);
-								vmPD.put("hostmachine_id", hostmachineId);
-								vmPD.put("version", cloudPD.getString("version"));
-								vmPD.put("ip", virtualMachine[j].getGuest().getIpAddress());
-								vmPD.put("cpu", virtualMachine[j].getConfig().getHardware().getNumCPU());
-								vmPD.put("memory", virtualMachine[j].getConfig().getHardware().getMemoryMB());
-
-								VirtualDevice[] vd = virtualMachine[j].getConfig().getHardware().getDevice();
-								long totalDisk = 0;
-								for (int a = 0; a < vd.length; a++) {
-									if (vd[a] instanceof com.vmware.vim25.VirtualDisk) {
-										long total = ((com.vmware.vim25.VirtualDisk) vd[a]).getCapacityInKB();
-										totalDisk += total;
-										// (com.vmware.vim25.VirtualDisk)vd[a].getDeviceInfo();
-									}
-								}
-								System.out.println("totalDisk=" + totalDisk/1024/1024);
-
-								GuestDiskInfo[] guestDiskInfo = virtualMachine[j].getGuest().getDisk();
-								long freeDisk = 0;
-								if(null != guestDiskInfo) {
-									for (int a = 0; a < guestDiskInfo.length; a++) {
-										long freeSpace = guestDiskInfo[a].getFreeSpace();
-										freeDisk += freeSpace;
-										
-									}
-								}
-								
-								System.out.println("freeDisk=" + freeDisk/1025/1024 + "\n");
-
-								// Datastore[] ds =
-								// virtualMachine[j].getDatastores();
-								// VirtualMachineSummary vs =
-								// virtualMachine[j].getSummary();
-								// long maxFileSize =
-								// ds[0].getInfo().getMaxFileSize();
-								// long capacity =
-								// ds[0].getSummary().getCapacity();
-								// long freeSpace =
-								// ds[0].getSummary().getFreeSpace();
-
-								vmPD.put("platform", cloudPD.get("id"));
-								String statusStr = virtualMachine[j].getGuest().getGuestState();
-								Integer status = null;
-								if ("running".equals(statusStr)) {
-									status = 0;
-								} else if ("notRunning".equals(statusStr)) {
-									status = 2;
-								} else {
-									status = 1;
-								}
-								vmPD.put("status", status);
-							}
-						}
-
-					}
-
 				}
 			}
 		}
@@ -187,5 +96,10 @@ public class VmwareCloudInitTest {
 
 	private void p(String str) {
 		System.out.println("-------->>" + str);
+	}
+
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<String>();
+		list.forEach(e -> System.out.print(e));
 	}
 }
