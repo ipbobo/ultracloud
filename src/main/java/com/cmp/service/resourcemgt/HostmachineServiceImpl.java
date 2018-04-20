@@ -202,7 +202,7 @@ public class HostmachineServiceImpl implements HostmachineService {
 					vmPD.put("ip", vmList.get(j).getIpAddress());
 					vmPD.put("cpu", vmList.get(j).getVcpus());
 					vmPD.put("memory", vmList.get(j).getMemory() * 1024);
-					vmPD.put("status", (null == vmList.get(j).getState()) ? 2 : vmList.get(j).getState());
+					vmPD.put("status", ("VIR_DOMAIN_RUNNING".equals(vmList.get(j).getState())) ? 0 : 2);
 					virtualMachineSyncService.save(vmPD, false);
 				}
 			}
