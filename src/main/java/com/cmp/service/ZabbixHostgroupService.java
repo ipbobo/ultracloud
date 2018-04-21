@@ -1,27 +1,23 @@
-package com.cmp.entity;
+package com.cmp.service;
 
 import com.cmp.util.ZabbixUtil;
 import com.google.gson.Gson;
-import com.zabbix.api.domain.base.Template;
-import com.zabbix.api.domain.template.*;
+import com.zabbix.api.domain.base.HostGroup;
+import com.zabbix.api.domain.hostgroup.*;
 import com.zabbix.util.FormatData;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TemplateService {
+public class ZabbixHostgroupService {
 
-	private Logger log = LoggerFactory.getLogger("allmoniapi");
-
-	public Object create(TemplateCreateRequest create) {
+	public Object hostGroupCreate(HostGroupCreateRequest hostGroupCreate) {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
@@ -29,21 +25,20 @@ public class TemplateService {
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
-			String json = js.toJson(create);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
+			System.out.println(js.toJson(hostGroupCreate));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupCreate)));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			System.out.println(response);
 			rs = new JSONObject(response);
-
+			System.out.println(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return rs;
 	}
 
-	public Object delete(TemplateDeleteRequest delete) {
+	public Object hostGroupDelete(HostGroupDeleteRequest hostGroupDelete) {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
@@ -51,13 +46,34 @@ public class TemplateService {
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
-			String json = js.toJson(delete);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
+			System.out.println(js.toJson(hostGroupDelete));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupDelete)));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			System.out.println(response);
 			rs = new JSONObject(response);
+			System.out.println(rs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return rs;
+	}
+
+	public Object hostGroupExists(HostGroupExistsRequest hostGroupExists) {
+		Object result = null;
+		Gson js = new Gson();
+		HttpClient client = new HttpClient();
+		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
+		JSONObject rs = null;
+		try {
+			System.out.println(js.toJson(hostGroupExists));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupExists)));
+			client.executeMethod(putMethod);
+			String response = putMethod.getResponseBodyAsString();
+			System.out.println(response);
+			rs = new JSONObject(response);
+			System.out.println(rs);
 			if (rs.has("result")) {
 				result = rs.get("result");
 			} else if (rs.has("error")) {
@@ -69,7 +85,7 @@ public class TemplateService {
 		return result;
 	}
 
-	public Object exists(TemplateExistsRequest exists) {
+	public Object hostGroupGetobjects(HostGroupGetobjectsRequest hostGroupGetobjects) {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
@@ -77,35 +93,13 @@ public class TemplateService {
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
-			String json = js.toJson(exists);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
+			System.out.println(js.toJson(hostGroupGetobjects));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupGetobjects)));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			System.out.println(response);
 			rs = new JSONObject(response);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return rs;
-	}
-
-	public Object getobjects(TemplateGetobjectsRequest getobjects) {
-		Object result = null;
-		Gson js = new Gson();
-		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
-		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
-		JSONObject rs = null;
-		try {
-			String json = js.toJson(getobjects);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
-			client.executeMethod(putMethod);
-			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
-			rs = new JSONObject(response);
+			System.out.println(rs);
 			if (rs.has("result")) {
 				result = rs.get("result");
 			} else if (rs.has("error")) {
@@ -117,21 +111,17 @@ public class TemplateService {
 		return result;
 	}
 
-	public Object get(TemplateGetRequest get) {
-		Object result = null;
+	public Object hostGroupGet(HostGroupGetRequest hostGroupGet) {
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
 		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
-			String json = js.toJson(get);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupGet)));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
-			System.out.println("json response:" + response);
+
 			rs = new JSONObject(response);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -139,36 +129,38 @@ public class TemplateService {
 		return rs;
 	}
 
-	public List<Template> getTemplateToBean(TemplateGetRequest get) {
-		List<Template> templates = null;
-		JSONObject result = (JSONObject) get(get);
+	public List<HostGroup> getHostGroupBean(HostGroupGetRequest hostGroupGet) {
+		JSONObject result = (JSONObject) hostGroupGet(hostGroupGet);
+		List<HostGroup> hostGroups = null;
 		if (result.has("result")) {
 			try {
 				JSONArray array = result.getJSONArray("result");
-				if ((array == null) || (array.length() <= 0)) {
-					return templates;
-				}
-
-				templates = new ArrayList();
-				for (int i = 0; i < array.length(); i++) {
-					JSONObject jsonObject = array.getJSONObject(i);
-					Template template = new Template();
-					template.setTemplateid(jsonObject.getString("templateid"));
-					template.setHost(jsonObject.getString("host"));
-					template.setName(jsonObject.getString("name"));
-					templates.add(template);
+				if ((array != null) && (array.length() > 0)) {
+					hostGroups = new ArrayList();
+					for (int i = 0; i < array.length(); i++) {
+						JSONObject object = array.getJSONObject(i);
+						HostGroup group = new HostGroup();
+						group.setGroupid(object.getString("groupid"));
+						group.setInternal(object.getInt("internal"));
+						group.setName(object.getString("name"));
+						hostGroups.add(group);
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
 			}
-		} else if (result.has("error")) {
+			return hostGroups;
+		}
+
+		if (result.has("error")) {
 			return null;
 		}
-		return templates;
+
+		return hostGroups;
 	}
 
-	public Object isreadable(TemplateIsreadableRequest isreadable) {
+	public Object hostGroupIsreadable(HostGroupIsreadableRequest hostGroupIsreadable) {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
@@ -176,13 +168,13 @@ public class TemplateService {
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
-			String json = js.toJson(isreadable);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
+			System.out.println(js.toJson(hostGroupIsreadable));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupIsreadable)));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			System.out.println(response);
 			rs = new JSONObject(response);
+			System.out.println(rs);
 			if (rs.has("result")) {
 				result = rs.get("result");
 			} else if (rs.has("error")) {
@@ -194,7 +186,7 @@ public class TemplateService {
 		return result;
 	}
 
-	public Object iswritable(TemplateIswritableRequest iswritable) {
+	public Object hostGroupIswritable(HostGroupIswritableRequest hostGroupIswritable) {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
@@ -202,13 +194,13 @@ public class TemplateService {
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
-			String json = js.toJson(iswritable);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
+			System.out.println(js.toJson(hostGroupIswritable));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupIswritable)));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			System.out.println(response);
 			rs = new JSONObject(response);
+			System.out.println(rs);
 			if (rs.has("result")) {
 				result = rs.get("result");
 			} else if (rs.has("error")) {
@@ -220,7 +212,7 @@ public class TemplateService {
 		return result;
 	}
 
-	public Object massadd(TemplateMassaddRequest massadd) {
+	public Object hostGroupMassadd(HostGroupMassaddRequest hostGroupMassadd) {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
@@ -228,13 +220,35 @@ public class TemplateService {
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
-			String json = js.toJson(massadd);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
+			System.out.println(js.toJson(hostGroupMassadd));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupMassadd)));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			System.out.println(response);
 			rs = new JSONObject(response);
+			System.out.println(rs);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return rs;
+	}
+
+	public Object hostGroupMassremove(HostGroupMassremoveRequest hostGroupMassremove) {
+		Object result = null;
+		Gson js = new Gson();
+		HttpClient client = new HttpClient();
+		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
+		JSONObject rs = null;
+		try {
+			System.out.println(js.toJson(hostGroupMassremove));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupMassremove)));
+			client.executeMethod(putMethod);
+			String response = putMethod.getResponseBodyAsString();
+			System.out.println(response);
+			rs = new JSONObject(response);
+			System.out.println(rs);
 			if (rs.has("result")) {
 				result = rs.get("result");
 			} else if (rs.has("error")) {
@@ -246,7 +260,7 @@ public class TemplateService {
 		return result;
 	}
 
-	public Object massremove(TemplateMassremoveRequest massremove) {
+	public Object hostGroupMassupdate(HostGroupMassupdateRequest hostGroupMassupdate) {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
@@ -254,25 +268,21 @@ public class TemplateService {
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
-			String json = js.toJson(massremove);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
+			System.out.println(js.toJson(hostGroupMassupdate));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupMassupdate)));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			System.out.println(response);
 			rs = new JSONObject(response);
-			if (rs.has("result")) {
-				result = rs.get("result");
-			} else if (rs.has("error")) {
-				result = rs.get("error");
-			}
+			System.out.println(rs);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;
+		return rs;
 	}
 
-	public Object massupdate(TemplateMassupdateRequest massupdate) {
+	public Object hostGroupUpdate(HostGroupUpdateRequest hostGroupUpdate) {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
@@ -280,48 +290,18 @@ public class TemplateService {
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
-			String json = js.toJson(massupdate);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
+			System.out.println(js.toJson(hostGroupUpdate));
+			putMethod.setRequestBody(FormatData.fromString(js.toJson(hostGroupUpdate)));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			System.out.println(response);
 			rs = new JSONObject(response);
-			if (rs.has("result")) {
-				result = rs.get("result");
-			} else if (rs.has("error")) {
-				result = rs.get("error");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
+			System.out.println(rs);
 
-	public Object update(TemplateUpdateRequest update) {
-		Object result = null;
-		Gson js = new Gson();
-		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
-		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
-		JSONObject rs = null;
-		try {
-			String json = js.toJson(update);
-			log.info("json request:" + json);
-			putMethod.setRequestBody(FormatData.fromString(json));
-			client.executeMethod(putMethod);
-			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
-			rs = new JSONObject(response);
-			if (rs.has("result")) {
-				result = rs.get("result");
-			} else if (rs.has("error")) {
-				result = rs.get("error");
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;
+		return rs;
 	}
 
 }
