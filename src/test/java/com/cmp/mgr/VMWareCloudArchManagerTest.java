@@ -20,7 +20,7 @@ public class VMWareCloudArchManagerTest implements CloudArchTest {
 		TccCloudPlatform platform = new TccCloudPlatform();
 		platform.setCloudplatformUser("administrator@vsphere.local");
 		platform.setCloudplatformPassword("123.comM");
-		platform.setCloudplatformIp("180.169.225.158");
+		platform.setCloudplatformIp("192.168.0.250");
 
 		cloudArchManager = new VMWareCloudArchManager(platform);
 	}
