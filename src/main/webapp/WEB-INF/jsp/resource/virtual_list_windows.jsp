@@ -213,33 +213,42 @@ function select(){
 	}
 }
 
+function getSelected() {
+    return $('#simple-table').find('input:checked').map(function() { return $(this).val(); }).get();
+}
+
 //对虚拟机的操作
 function handle(type) {
-	var msg;
-	if(type == 'startup') {
-		msg = '开机';
-	} else if(type == 'shutdown') {
-		msg = '关机';
-	} else if(type == 'delete') {
-		msg = '删除';
-	} else if(type == 'restart') {
-		msg = '重启';
-	} else if(type == 'hangup') {
-		msg = '挂起';
-	} else if(type == 'recover') {
-		msg = '恢复';
-	}
-	
-	bootbox.confirm("确定要进行" + msg + "操作吗?", function(result) {
-		if(result) {
-			top.jzts();
-			var url = "<%=basePath%>virtualhandle/" + type + ".do";
-			$.get(url,function(data){
-				console.log(data + '-------------->');
-				nextPage(${page.currentPage});
-			});
-		}
-	});
+    var url, msg;
+    if(type == 'startup') {
+        msg = '开机';
+        url = 'kvm/startVm';
+    } else if(type == 'shutdown') {
+        msg = '关机';
+        url = 'kvm/stopVm';
+    } else if(type == 'delete') {
+        msg = '删除';
+        url = 'kvm/destroyVm';
+    } else if(type == 'restart') {
+        msg = '重启';
+        url = 'kvm/rebootVm';
+    } else if(type == 'hangup') {
+        msg = '挂起';
+        url = 'kvm/suspendVm';
+    } else if(type == 'recover') {
+        msg = '恢复';
+        url = 'kvm/resumeVm';
+    }
+
+    bootbox.confirm("确定要进行" + msg + "操作吗?", function(result) {
+        if(result) {
+            top.jzts();
+            $.post(url, { ls: getSelected() },function(data) {
+                nextPage(${page.currentPage});
+                consol.log(data);
+            });
+        }
+    });
 }
 	
 </script>
