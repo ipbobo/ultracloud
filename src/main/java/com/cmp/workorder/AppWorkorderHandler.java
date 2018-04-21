@@ -1,6 +1,7 @@
 package com.cmp.workorder;
 
 import com.cmp.entity.DeployedSoft;
+import com.cmp.entity.HostMonitorInfo;
 import com.cmp.entity.Medium;
 import com.cmp.entity.Project;
 import com.cmp.entity.tcc.TccCloudPlatform;
@@ -89,6 +90,9 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 
 	@Resource
 	private HostmachineService hostmachineService;
+	
+	@Resource
+	private ZabbixMonitorService zabbixMonitorService;
 
 	@Override
 	public Map<String, Object> toWorkorderView(CmpWorkOrder cmpWorkorder) throws Exception {
@@ -362,6 +366,12 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			return resMap;
 		}
 		String[] ipArr = ips.split(",");
+		if (ipArr.length != vmCount) {
+			resMap.put("ERROR", "IP地址选择不正确");
+			ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机IP地址选择不正确，请选择" + vmCount + "个IP地址");
+			ShellUtil.addMsgLog(orderInfo.getOrderNo(), "cmp:redo");
+			return resMap;
+		}
 		for (int vmIndex = 0; vmIndex < vmCount; vmIndex++) {
 			Map<String, Object> deployOut = deployVM(ipArr[vmIndex], DEF_USERNAME, DEF_PWD, pj.getId(), pj.getName(), orderInfo, pd);
 			if (deployOut.get("resultCode").equals("0")) {
@@ -553,6 +563,16 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		try {
 			CloneVmResponse response = cloudArchManager.cloneVirtualMachine(cloneVmRequest);
 			hostMachineUUID = response.getHostMor();
+			
+			HostMonitorInfo hostInfo = new HostMonitorInfo();
+			hostInfo.setUUID(response.getUuid());
+			hostInfo.setIp(ip);
+			hostInfo.setPort("10050");
+			hostInfo.setVisibleName(vmName);
+			hostInfo.setMonitorType(0);
+			hostInfo.setOsName("Linux");
+
+			zabbixMonitorService.registerToZabbix(hostInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resMap.put("resultCode", "-1");
@@ -630,7 +650,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	public int downloadScript(VirtualMachine vm, String remoteUrl, String localPath) {
 		ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),  
 				vm.getPassword() , ShellUtil.DEF_CHARSET);
-		shellUtil.exec("curl -k -u admin:password " + localPath + " " + remoteUrl);
+		shellUtil.exec("curl -k -u " + shellUtil.DEF_SHELL_FILE_USERNAME + ":" +  shellUtil.DEF_SHELL_FILE_PASSWORD + " " +remoteUrl  + " -o " + localPath );
 //		if (!shellUtil.checkFileExist(localPath)) {
 //			return -2;
 //		}

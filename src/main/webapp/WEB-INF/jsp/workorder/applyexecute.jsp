@@ -528,6 +528,11 @@
 							$("#"+orderNo+"_op_3").css('display','block');
 							clearInterval(res);
 							break;
+						}else if (data[msgIndex] == "cmp:redo"){
+							$("#"+orderNo+"_op_1").css('display','none');
+							$("#"+orderNo+"_op_0").css('display','block');
+							clearInterval(res);
+							break;
 						}
 						$('#shell_msg_div').append(data[msgIndex]+'<br\>'); 
 					}
