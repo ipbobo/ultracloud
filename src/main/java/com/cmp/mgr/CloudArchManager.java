@@ -13,6 +13,7 @@ import com.cmp.entity.tcc.TccResourcePool;
 import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.entity.tcc.TccVmSnapshot;
 import com.cmp.mgr.bean.CloneVmRequest;
+import com.cmp.mgr.bean.CloneVmResponse;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.bean.CreateVolumeRequest;
 import com.vmware.vim25.mo.Datacenter;
@@ -61,7 +62,7 @@ public interface CloudArchManager {
 
 	public void destroyVirtualMachine(String name);
 
-	public String cloneVirtualMachine(CloneVmRequest request);
+	public CloneVmResponse cloneVirtualMachine(CloneVmRequest request);
 
 	public void createVmSnapshot(String name, String vmName, String desc, boolean memoryFlag);
 

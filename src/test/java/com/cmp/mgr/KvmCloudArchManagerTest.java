@@ -1,20 +1,19 @@
 package com.cmp.mgr;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.cmp.entity.tcc.TccCloudPlatform;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.kvm.KvmCloudArchManager;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class KvmCloudArchManagerTest implements CloudArchTest {
 
 	private KvmCloudArchManager cloudArchManager;
 
-	 static {
-	 	System.setProperty("jna.library.path", "C:/Program Files/VirtViewer v6.0-256/bin");
-	 }
+	static {
+		System.setProperty("jna.library.path", "C:/Program Files/VirtViewer v6.0-256/bin");
+	}
 
 	@Before
 	public void setup() {

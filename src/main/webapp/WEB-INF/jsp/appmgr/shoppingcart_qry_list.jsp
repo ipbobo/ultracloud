@@ -5,6 +5,12 @@
 <html>
 <head>
 <script type="text/javascript">
+//全选
+function checkAllFunc(){
+	$("[name=orderNo]:checkbox").prop("checked", $("#checkAllId").is(":checked"));
+	getAllTotalAmt();//购物车计算金额
+}
+
 //删除清单
 function delCmpOrder(obj, orderNo){
 	if(confirm("确定要删除该清单["+orderNo+"]吗?")){
@@ -55,6 +61,7 @@ function batchBuy(){
     
     var orderNoArr=new Array();
     var totalAmtArr=new Array();
+    var allProjectCode="";
 	$("input:checkbox[name='orderNo']:checked").each(function() {
 		orderNoArr.push($(this).val());
 		var dayNum=getDateDiff(getCurrDate(), $(this).siblings(".expireDate").val());
@@ -63,12 +70,23 @@ function batchBuy(){
 		var memNum=virNum*($(this).siblings(".mem").val());
 		var storeNum=virNum*getStoreNum($(this).siblings(".store").val());
 		totalAmtArr.push((cpuNum*cpuPrice+memNum*memPrice+storeNum*storePrice).toFixed(2)+"");
+		var projectCode=$(this).siblings(".projectCode").val();
+		allProjectCode=(allProjectCode==""?projectCode:allProjectCode);
+		if(allProjectCode!=projectCode){
+			allProjectCode="";
+    		return;
+		}
 	});
+	
+	if(allProjectCode==""){
+		showAlert("该工单中包含多个项目");
+   		return;
+	}
 	
 	$.ajax({
 	    type: 'post',
 	    url: "appCommit.do",
-	    data: {"orderNoStr": orderNoArr.join(), "totalAmtStr": totalAmtArr.join()},
+	    data: {"orderNoStr": orderNoArr.join(), "totalAmtStr": totalAmtArr.join(), "allProjectCode": allProjectCode},
 	    dataType: 'json',
 	    success: function(data){
 	    	showAlert(data.retMsg);
@@ -117,11 +135,12 @@ function getAllTotalAmt(){
 	<tr style="width: 100%;border:1px solid #cccccc;">
 		<td align="center" style="width: 30px;">
 			<input type="checkbox" name="orderNo" value="${var.orderNo}" onclick="getAllTotalAmt()" checked/>
-			<input type="hidden" name="cpuVal" value="${var.cpu}" class="cpu"/>
-			<input type="hidden" name="memVal" value="${var.memory}" class="mem"/>
-			<input type="hidden" name="storeVal" value="${var.diskSize}" class="store"/>
-			<input type="hidden" name="virNumVal" value="${var.virNum}" class="virNum"/>
-			<input type="hidden" name="expireDateVal" value="${var.expireDate}" class="expireDate"/>
+			<input type="hidden" name="cpuVal" value="${var.cpu}" class="cpu"/><!-- 购物车计算金额使用 -->
+			<input type="hidden" name="memVal" value="${var.memory}" class="mem"/><!-- 购物车计算金额使用 -->
+			<input type="hidden" name="storeVal" value="${var.diskSize}" class="store"/><!-- 购物车计算金额使用 -->
+			<input type="hidden" name="virNumVal" value="${var.virNum}" class="virNum"/><!-- 购物车计算金额使用 -->
+			<input type="hidden" name="expireDateVal" value="${var.expireDate}" class="expireDate"/><!-- 购物车计算金额使用 -->
+			<input type="hidden" name="projectCode" value="${var.projectCode}" class="projectCode"/><!-- 工单合并时使用 -->
 		</td>
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
@@ -185,7 +204,7 @@ function getAllTotalAmt(){
 </table>
 <script type="text/javascript">
 $("#shoppingCartNum").html("${shoppingCartNum}");
-getAllTotalAmt();//购物车计算金额，初始化加载
+getAllTotalAmt();//购物车计算金额
 </script>
 </body>
 </html>

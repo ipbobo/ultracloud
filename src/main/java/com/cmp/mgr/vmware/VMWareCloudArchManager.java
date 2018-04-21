@@ -3,6 +3,7 @@ package com.cmp.mgr.vmware;
 import com.cmp.entity.tcc.*;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
+import com.cmp.mgr.bean.CloneVmResponse;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.bean.CreateVolumeRequest;
 import com.vmware.vim25.*;
@@ -495,7 +496,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public String cloneVirtualMachine(CloneVmRequest req) {
+	public CloneVmResponse cloneVirtualMachine(CloneVmRequest req) {
 		String tplName = req.getTplName();
 		String dcName = req.getDcName();
 
@@ -545,7 +546,7 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 			CustomizationGlobalIPSettings globalIPSettings = new CustomizationGlobalIPSettings();
 			globalIPSettings.setDnsServerList(new String[]{"8.8.8.8", "8.8.4.4"});
-			globalIPSettings.setDnsSuffixList(new String[]{"search.com", "my.search.com"});
+			globalIPSettings.setDnsSuffixList(new String[]{"localhost.localdomain"});
 			customSpec.setGlobalIPSettings(globalIPSettings);
 
 			CustomizationFixedIp fixedIp = new CustomizationFixedIp();
@@ -571,7 +572,11 @@ public class VMWareCloudArchManager extends PlatformBindedCloudArchManager {
 
 			vm.cloneVM_Task(dc.getVmFolder(), req.getVmName(), cloneSpec).waitForMe();
 
-			return hostSystem.getMOR().getVal();
+			CloneVmResponse cloneVmResponse = new CloneVmResponse();
+			cloneVmResponse.setUuid(vm.getConfig().getUuid());
+			cloneVmResponse.setHostMor(hostSystem.getMOR().getVal());
+
+			return cloneVmResponse;
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}

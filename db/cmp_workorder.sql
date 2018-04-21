@@ -3,7 +3,7 @@ CREATE TABLE `cmp_workorder` (
   `appNo` varchar(20) NOT NULL COMMENT '申请编号：A+YYYYMMDD+00001',
   `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `lastUpdateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
-  `orderNo` varchar(20) NOT NULL COMMENT '清单编号：O+YYYYMMDD+00001',
+  `orderNo` varchar(20) DEFAULT NULL COMMENT '清单编号：O+YYYYMMDD+00001',
   `appType` varchar(20) DEFAULT NULL COMMENT '申请类型：1-资源申请；2-运维服务申请',
   `status` varchar(10) DEFAULT NULL COMMENT '状态：0-待提交；1-审批中；2-审批通过；3-审批不通过',
   `procInstId` varchar(64) DEFAULT NULL COMMENT '流程实例ID',

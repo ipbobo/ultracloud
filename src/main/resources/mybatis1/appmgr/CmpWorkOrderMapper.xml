@@ -169,10 +169,12 @@
 	
 	<!-- 新增工单 -->
 	<insert id="addWorkOrder" parameterType="pd">
-		insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
+		insert into <include refid="tableName"/> (appNo, orderNo, appType, status, procInstId, applyUserId, projectCode, totalAmt, executeStatus)
+		values(#{appNo}, #{appNo}, #{appType}, #{status}, #{procInstId}, #{applyUserId}, #{projectCode}, #{totalAmt}, '0')
+		<!-- insert into <include refid="tableName"/> (<include refid="saveFieldName"/>)
 		select #{appNo}, #{orderNo}, #{appType}, #{status}, #{procInstId}, #{applyUserId}, areaCode, platType, deployType, envCode, resType, virName, virIp, cpu, memory, diskType, diskSize, diskEncrypt, softCode, softParam, projectCode, osType, osBitNum, imgCode, imgUserName, imgUserPass, imgPath, expireDate, virNum, #{totalAmt}, '0', fileName
 		from cmp_order
-		where orderNo=#{orderNo}
+		where orderNo=#{orderNo} -->
 	</insert>
 	
 	<!-- 新增工单 -->
