@@ -123,11 +123,11 @@ function getAllTotalAmt(){
 	<tr style="width: 100%;border:1px solid #cccccc;">
 		<td align="center" style="width: 30px;">
 			<input type="checkbox" name="orderNo" value="${var.orderNo}" onclick="getAllTotalAmt()" checked/>
-			<input type="hidden" name="cpuVal" value="${var.cpu}" class="cpu"/>
-			<input type="hidden" name="memVal" value="${var.memory}" class="mem"/>
-			<input type="hidden" name="storeVal" value="${var.diskSize}" class="store"/>
-			<input type="hidden" name="virNumVal" value="${var.virNum}" class="virNum"/>
-			<input type="hidden" name="expireDateVal" value="${var.expireDate}" class="expireDate"/>
+			<input type="hidden" name="cpuVal" value="${var.cpu}" class="cpu"/><!-- 购物车计算金额使用 -->
+			<input type="hidden" name="memVal" value="${var.memory}" class="mem"/><!-- 购物车计算金额使用 -->
+			<input type="hidden" name="storeVal" value="${var.diskSize}" class="store"/><!-- 购物车计算金额使用 -->
+			<input type="hidden" name="virNumVal" value="${var.virNum}" class="virNum"/><!-- 购物车计算金额使用 -->
+			<input type="hidden" name="expireDateVal" value="${var.expireDate}" class="expireDate"/><!-- 购物车计算金额使用 -->
 		</td>
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">
