@@ -343,30 +343,34 @@ public class AppMgrController extends BaseController {
 			String[] orderNos=orderNoStr.split(",");
 			if(orderNos!=null && orderNos.length>0){
 				String[] totalAmts=totalAmtStr.split(",");//总价格
+				Double allTotalAmt=0.00;
+				for(String totalAmt: totalAmts){
+					allTotalAmt+=Double.parseDouble(totalAmt);
+				}
+				
 				String applyUserId=StringUtil.getUserName();//获取登录用户
-				for(int i=0;i<orderNos.length;i++){
-					String appNo=cmpCommonService.getAppNo("cmp_workorder");
-					Map<String, Object> variables=new HashMap<String, Object>();
-					variables.put("btnName", "提交");
-					variables.put("USERNAME", user.getUSERNAME());
-					String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动
-					cmpWorkOrderService.addWorkOrder(appNo, orderNos[i], totalAmts[i], applyUserId, procInstId);//提交申请
-					//添加任务拾取
-					List<Task> userTaskList = activitiService.findGroupList(applyUserId, 1, 100);
-					for (Task task : userTaskList) {
-						if (task.getProcessInstanceId().equals(procInstId)) {
-							activitiService.claimTask(task.getId(), applyUserId);
-						}
+				String appNo=cmpCommonService.getAppNo("cmp_workorder");
+				Map<String, Object> variables=new HashMap<String, Object>();
+				variables.put("btnName", "提交");
+				variables.put("USERNAME", user.getUSERNAME());
+				String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动
+				cmpWorkOrderService.addWorkOrder(appNo, allTotalAmt+"", applyUserId, procInstId);//提交申请
+				//添加任务拾取
+				List<Task> userTaskList = activitiService.findGroupList(applyUserId, 1, 100);
+				for (Task task : userTaskList) {
+					if (task.getProcessInstanceId().equals(procInstId)) {
+						activitiService.claimTask(task.getId(), applyUserId);
 					}
-					//更新工单状态
-					Map<String, Object> variablesMap = new HashMap<String, Object>();
-					
-					activitiService.handleTask(appNo, procInstId, applyUserId, null, variablesMap);
-					//更新工单(流程实例ID 和 工单状态)
-					Map<String, String> updateParams = new HashMap<String, String>();
-					updateParams.put("procInstId", procInstId);
-					//updateParams.put("status", "1");
-					cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+				}
+				
+				Map<String, Object> variablesMap = new HashMap<String, Object>();
+				activitiService.handleTask(appNo, procInstId, applyUserId, null, variablesMap);//更新工单状态
+				//更新工单(流程实例ID 和 工单状态)
+				Map<String, String> updateParams = new HashMap<String, String>();
+				updateParams.put("procInstId", procInstId);
+				//updateParams.put("status", "1");
+				cmpWorkOrderService.updateWorkOrder(appNo, updateParams);
+				for(int i=0;i<orderNos.length;i++){
 					cmpOrderService.updateCmpOrderStatus(getPageData("orderNo", orderNos[i], "totalAmt", totalAmts[i], "appNo", appNo));//更新清单状态
 				}
 			}
