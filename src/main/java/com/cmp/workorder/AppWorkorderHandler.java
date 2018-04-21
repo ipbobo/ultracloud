@@ -638,10 +638,10 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	}
 
 	public String generateVMName(String projectName, String ip, String virName) {
-		Date date = new Date();
-		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMdd");
-		//String vmName = projectName + "_" +dateFormat.format(date) + date.getTime(); String vmName = projectName + "_" +virName + "_" + ip ;
-		return vmName;
+		//Date date = new Date();
+		//SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMdd");
+		//String vmName = projectName + "_" +dateFormat.format(date) + date.getTime(); 
+		return projectName + "_" +virName + "_" + ip ;
 	}
 
 }
