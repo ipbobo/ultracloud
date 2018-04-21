@@ -31,26 +31,50 @@
 					<div class="row">
 						<div class="col-xs-12">
 						
-						<!-- 检索  -->
+						
 						<form action="virtualbinding/goListVirtualmachine.do" method="post" name="userForm" id="userForm">
 						<input name="xzvalue" id="xzvalue" value="" type="hidden" />
-						<input name="cluster_id" id="cluster_id" value="${pd.cluster_id}" type="hidden" />
-						<table style="margin-top:5px;width:100%;">
-							<tr>
-								<td style="vertical-align:top;">
-								</td>
-								<td style="vertical-align:top;padding-left:5px;width:150px;">
-									<div class="nav-search" style="float: right;padding-top: 0px;margin-top: 0px;">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-								<td style="vertical-align:top;padding-left:5px;width: 32px;"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-							</tr>
-						</table>
+						<input name="environment_id" id="environment_id" value="${pd.environment_id}" type="hidden" />
+						
 						<!-- 检索  -->
+						<table style="margin-top: 5px; width: 100%">
+									<tr>
+										<td style="vertical-align:top;">
+											<a class="btn btn-mini btn-primary" onclick="select();">确定</a>
+											<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
+										</td>
+										
+										<td style="width:60px;text-align: right;vertical-align:center;">平台类型:</td>
+										<td  style="vertical-align:top;padding-left:5px;width:100px;">
+											<select class="chosen-select form-control" name="type" id="type"  style="vertical-align:top;"   >
+											<option value="">请选择</option>
+											<option value="vmware">vmware</option>
+											<option value="kvm">kvm</option>
+											<option value="openstack">openstack</option>
+											</select>
+										</td>
+
+										<td
+											style="vertical-align: top; padding-left: 5px; width: 150px;">
+											<div class="nav-search"
+												style="float: right; padding-top: 0px; margin-top: 0px;">
+												<span class="input-icon"> <input type="text"
+													placeholder="云平台名称" class="nav-search-input"
+													id="nav-search-input" autocomplete="off" name="keywords"
+													value="${pd.keywords }" placeholder="云平台名称" /> <i
+													class="ace-icon fa fa-search nav-search-icon"></i>
+												</span>
+											</div>
+										</td>
+										<td
+											style="vertical-align: top; padding-left: 5px; width: 32px;"><a
+											class="btn btn-light btn-xs" onclick="tosearch();" title="检索"><i
+												id="nav-search-icon"
+												class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a>
+										</td>
+									</tr>
+								</table>
+								<!-- 检索  -->
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover"  style="margin-top:5px;">
 							<thead>
@@ -58,6 +82,7 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
+									<th class="center">序号</th>
 									<th class="center">服务器名称</th>
 									<th class="center">ip</th>
 									<th class="center">状态</th>
@@ -76,6 +101,7 @@
 											<td class='center'>
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
+											<td class='center'>${vs.index+1}</td>
 											<td class="center">${var.name }</td>
 											<td class="center">${var.ip }</td>
 											<td class="center">
@@ -101,17 +127,7 @@
 							</c:choose>
 							</tbody>
 						</table>
-						
-					<div class="page-header position-relative">
-					<table style="width:100%;">
-						<tr>
-							<td style="vertical-align:top;">
-								<a class="btn btn-mini btn-primary" onclick="select();">确定</a>
-								<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
-							</td>
-							<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
-						</tr>
-					</table>
+					
 					</div>
 					</form>
 	
@@ -152,7 +168,7 @@
 $(top.hangge());
 
 //检索
-function searchs(){
+function tosearch(){
 	top.jzts();
 	$("#userForm").submit();
 }

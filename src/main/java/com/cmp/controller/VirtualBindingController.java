@@ -30,19 +30,21 @@ public class VirtualBindingController extends BaseController {
 
 	@Resource(name = "virtualBindingService")
 	private VirtualBindingService virtualBindingService;
-	
+
 	@Resource(name = "virtualMachineService")
 	private VirtualMachineService virtualMachineService;
-	
+
 	@Resource(name = "virtualMachineSyncService")
 	private VirtualMachineSyncService virtualMachineSyncService;
-	
-	 /**去绑定页面
+
+	/**
+	 * 去绑定页面
+	 * 
 	 * @param
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/goEdit")
-	public ModelAndView goEdit()throws Exception {
+	@RequestMapping(value = "/goEdit")
+	public ModelAndView goEdit() throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -51,34 +53,38 @@ public class VirtualBindingController extends BaseController {
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
-	}	
-	
-	/**弹窗显示未绑定虚拟机列表
+	}
+
+	/**
+	 * 弹窗显示未绑定虚拟机列表
+	 * 
 	 * @param page
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/goListVirtualmachine")
+	@RequestMapping(value = "/goListVirtualmachine")
 	public ModelAndView goListVirtualmachine(Page page) throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
-		if(null != keywords && !"".equals(keywords)){
+		String keywords = pd.getString("keywords"); // 关键词检索条件
+		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		
-		List<PageData> varList = virtualBindingService.list(page); 
+
+		page.setShowCount(Integer.MAX_VALUE);
+		List<PageData> varList = virtualBindingService.list(page);
 		mv.addObject("varList", varList);
 		mv.setViewName("resource/virtualbinding_list_virtual");
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-	
+
 	/**
 	 * 保存存量资源绑定
+	 * 
 	 * @param request
 	 * @param response
 	 * @return
@@ -93,12 +99,12 @@ public class VirtualBindingController extends BaseController {
 			String USERNAME = request.getParameter("USERNAME");
 			String virtualmachines = request.getParameter("virtualmachines");
 
-			if(null != virtualmachines && !"".equals(virtualmachines)){
+			if (null != virtualmachines && !"".equals(virtualmachines)) {
 				String ArrayDATA_IDS[] = virtualmachines.split(",");
-				
+
 				List<PageData> vmSyncList = virtualBindingService.datalistByIds(ArrayDATA_IDS);
-				if(null != vmSyncList) {
-					for(PageData vmSyncPD : vmSyncList) {
+				if (null != vmSyncList) {
+					for (PageData vmSyncPD : vmSyncList) {
 						vmSyncPD.put("project_id", project_id);
 						vmSyncPD.put("user", USERNAME);
 						vmSyncPD.remove("id");

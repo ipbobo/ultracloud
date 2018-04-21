@@ -193,7 +193,7 @@
 	
 	<!-- 列表 -->
 	<select id="listTemplate" parameterType="page" resultType="pd">
-		select id,name,url,cloudplatform_id,gmt_create,gmt_modified,type,detail,USERNAME,uuid
+		select id,name,url,cloudplatform_id,gmt_create,gmt_modified,type,detail,USERNAME,uuid,ostype,osname,bitrate
 		from 
 		<include refid="mttableName"></include>
 		where type=#{pd.type}

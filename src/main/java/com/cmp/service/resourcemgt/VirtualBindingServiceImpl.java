@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmp.service.ProjectService;
+import com.cmp.service.servicemgt.EnvironmentService;
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.service.system.user.impl.UserService;
@@ -34,6 +35,9 @@ public class VirtualBindingServiceImpl implements VirtualBindingService {
 	@Resource(name = "userService")
 	private UserService userService;
 	
+	@Resource(name = "environmentService")
+	private EnvironmentService environmentService;
+	
 	/**
 	 * 加载初始化数据
 	 * @param mv
@@ -49,6 +53,9 @@ public class VirtualBindingServiceImpl implements VirtualBindingService {
 		
 		List<PageData>	userList = userService.listAllUser(pd);
 		mv.addObject("userList", userList);
+		
+		List<PageData> environmentList = environmentService.listAll(pd);
+		mv.addObject("environmentList", environmentList);
 	}
 
 	/**

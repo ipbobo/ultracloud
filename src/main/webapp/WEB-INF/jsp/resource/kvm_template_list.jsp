@@ -62,6 +62,8 @@
 									</th>
 									<th class="center">模板名称</th>
 									<th class="center">存放位置</th>
+									<th class="center">操作系统类型</th>
+									<th class="center">位数</th>
 									<th class="center">备注</th>
 									<th class="center">创建时间</th>
 									<th class="center">创建人</th>
@@ -82,6 +84,8 @@
 											</td>
 											<td class="center">${var.name }</td>
 											<td class="center">${var.url}</td>
+											<td class="center">${var.ostype}</td>
+											<td class="center">${var.bitrate}</td>
 											<td class="center">${var.detail}</td>
 											<td class="center">${var.gmt_create }</td>
 											<td class="center">${var.USERNAME}</td>
@@ -187,7 +191,7 @@ function add(){
 	 diag.Title ="新增";
 	 diag.URL = '<%=basePath%>kvm/goAddTemplate.do';
 	 diag.Width = 600;
-	 diag.Height = 300;
+	 diag.Height = 400;
 	 diag.CancelEvent = function(){ //关闭事件
 		 console.log('11111');
 		 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
@@ -211,7 +215,7 @@ function edit(Id){
 	 diag.Title ="编辑";
 	 diag.URL = '<%=basePath%>kvm/goEditTemplate.do?id='+Id;
 	 diag.Width = 600;
-	 diag.Height = 300;
+	 diag.Height = 400;
 	 diag.CancelEvent = function(){ //关闭事件
 		 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 			 location.reload();

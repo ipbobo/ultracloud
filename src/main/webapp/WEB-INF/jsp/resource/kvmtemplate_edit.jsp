@@ -38,7 +38,25 @@
 								<td><input type="text" name="url" id="url" value="${pd.url}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;备注:</td>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;操作系统类型:</td>
+								<td id="js">
+									<select class="chosen-select form-control" name="ostype" id="ostype"  style="vertical-align:top;"   >
+									<option value="redhat" <c:if test="${pd.ostype == 'redhat' }">selected</c:if>>redhat</option>
+									<option value="windows" <c:if test="${pd.ostype == 'windows' }">selected</c:if>>windows</option>
+									<option value="centos" <c:if test="${pd.ostype == 'centos' }">selected</c:if>>centos</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td style="width:130px;text-align: right;padding-top: 13px;">操作系统名称:</td>
+								<td><input type="text" name="osname" id="osname" value="${pd.osname}" maxlength="30" style="width:100%;"/></td>
+							</tr>
+							<tr>
+								<td style="width:130px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;位数:</td>
+								<td><input type="number" name="bitrate" id="bitrate" value="${pd.bitrate}" maxlength="30" style="width:100%;"/></td>
+							</tr>
+							<tr>
+								<td style="width:120px;text-align: right;padding-top: 13px;">备注:</td>
 								<td><input type="text" name="detail" id="detail" value="${pd.detail}" maxlength="30"  style="width:100%;"/></td>
 							</tr>
 							<tr>
@@ -99,6 +117,26 @@
 		            time:2
 		        });
 				$("#url").focus();
+			return false;
+			}
+			if($("#ostype").val()==""){
+				$("#ostype").tips({
+					side:3,
+		            msg:'请选择操作系统类型',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#ostype").focus();
+			return false;
+			}
+			if($("#bitrate").val()==""){
+				$("#bitrate").tips({
+					side:3,
+		            msg:'请输入位数',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#bitrate").focus();
 			return false;
 			}
 

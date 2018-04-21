@@ -14,10 +14,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.cmp.entity.tcc.TccCloudPlatform;
+import com.cmp.entity.tcc.TccDatastore;
 import com.cmp.entity.tcc.TccVirtualMachine;
 import com.cmp.mgr.CloudArchManager;
 import com.cmp.mgr.CloudArchManagerAdapter;
-import com.cmp.mgr.openstack.OpenstatckCloudArchManager;
 import com.cmp.mgr.vmware.VMWareCloudArchManager;
 import com.cmp.service.resourcemgt.ClusterService;
 import com.cmp.service.resourcemgt.DatacenterService;
@@ -91,6 +91,28 @@ public class ResourceServiceImpl implements ResourceService {
 		}
 
 		return cloudArchManager;
+	}
+
+	public List<Datacenter> syncDatacenter(CloudArchManager cloudArchManager) {
+		return cloudArchManager.getDatacenters();
+	}
+
+	public List<TccDatastore> syncDataStore(Datacenter datacenter) {
+		// 同步存储
+		Datastore[] store = datacenter.getDatastores();
+		List<TccDatastore> list = new ArrayList<TccDatastore>();
+		for (int i = 0; i < store.length; i++) {
+			TccDatastore ds = new TccDatastore();
+			ds.setCapacity(store[i].getSummary().getCapacity());
+			ds.setFreeSpace(store[i].getSummary().getFreeSpace() / 1024 / 1024 / 1024);
+			ds.setMaxFileSize(store[i].getSummary().getCapacity() / 1024 / 1024 / 1024);
+			ds.setName(store[i].getName());
+			ds.setUuid(store[i].getMOR().get_value());
+
+			list.add(ds);
+		}
+
+		return list;
 	}
 
 	/**
@@ -417,6 +439,7 @@ public class ResourceServiceImpl implements ResourceService {
 	 * @param vmId
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public void releaseResource(String type, String[] vmId) throws Exception {
 		switch (type) {
 		case "vmware":
@@ -426,6 +449,24 @@ public class ResourceServiceImpl implements ResourceService {
 				String cpf_id = pd.getString("cpf_id");
 				cloudMap.put(cpf_id, pd);
 			}
+
+			for (Map.Entry<String, PageData> entity : cloudMap.entrySet()) {
+				PageData cloudPD = entity.getValue();
+				CloudArchManager cloudArchManager = this.initCloud(cloudPD);
+				List<Datacenter> dcList = cloudArchManager.getDatacenters();
+				if (null != dcList) {
+					for (Datacenter dc : dcList) {
+						List<TccDatastore> list = this.syncDataStore(dc);
+						for(TccDatastore ds : list) {
+							
+						}
+						
+						List<PageData> preStorageList = storageService.listAll(cloudPD, false);
+
+					}
+				}
+			}
+
 			break;
 		case "kvm":
 			List<PageData> kvmVMList = (List<PageData>) dao.findForList("VirtualMachineSyncMapper.listKVMByvmId", vmId);

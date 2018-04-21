@@ -14,6 +14,8 @@ public class TccDatastore implements java.io.Serializable {
 	private long maxFileSize;
 
 	private long freeSpace;
+	
+	private String uuid;
 
 	public String getName() {
 		return name;
@@ -50,5 +52,13 @@ public class TccDatastore implements java.io.Serializable {
 	@Override public String toString() {
 		return ToStringBuilder.reflectionToString(
 				this, ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 }

@@ -35,13 +35,13 @@
 									<input type="hidden" name="expirationtime_isforever" id="expirationtime_isforever" value="${pd.expirationtime_isforever}"/>
 									<tr height="42px;">
 										<td style="width:120px;text-align: right;padding-top: 13px;"><i class="ace-icon fa fa-asterisk red"></i>&nbsp;环境:</td>
-										<td id="cluster_td">
-										<select class="chosen-select form-control" name="cluster_id" id="cluster_id" data-placeholder="请选择" style="vertical-align:top;" style="width:98%;" >
-										<option value="">请选择</option>
-										<c:forEach items="${clusterList}" var="cluster">
-											<option value="${cluster.id }">${cluster.name }</option>
-										</c:forEach>
-										</select>
+										<td id="level_td">
+											<select class="chosen-select form-control" name="environment_id" id=environment_id data-placeholder="请选择环境" style="vertical-align:top;"  title="环境" style="width:98%;" >
+											<option value="">请选择</option>
+											<c:forEach items="${environmentList}" var="environment">
+												<option value="${environment.id}" <c:if test="${environment.id == pd.environment_id }">selected</c:if>>${environment.name }</option>
+											</c:forEach>
+											</select>
 										</td>
 									</tr>
 									<tr height="42px;">
@@ -115,27 +115,26 @@
 	<script type="text/javascript">
 	//选择云主机
 	function selectHostmachine() {
-		 var cluster_id = $("#cluster_id").val();
+		 var environment_id = $("#environment_id").val();
 		 var project_id = $("#project_id").val();
 		 var USERNAME = $("#USERNAME").val();
 		 
-		 if($("#cluster_id").val()=="") {
-				$("#cluster_td").tips({
+		 if($("#environment_id").val()=="") {
+				$("#environment_id").tips({
 					side:3,
 		            msg:'请先选择环境',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#cluster_id").focus();
+				$("#environment_id").focus();
 			return false;
 		 }
 		 
-		 var cluster_id = $("#cluster_id").val();
 		 top.jzts();
 		 var diag = new top.Dialog();
 		 diag.Drag=true;
 		 diag.Title ="选择云主机";
-		 diag.URL = '<%=basePath%>virtualbinding/goListVirtualmachine.do?cluster_id='+cluster_id;
+		 diag.URL = '<%=basePath%>virtualbinding/goListVirtualmachine.do?environment_id='+environment_id;
 		 diag.Width = 800;
 		 diag.Height = 500;
 		 diag.CancelEvent = function(){ //关闭事件

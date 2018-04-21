@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSON;
 import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.resourcemgt.HostmachineService;
 import com.cmp.service.resourcemgt.VirtualMService;
+import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.service.servicemgt.MirrorService;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
@@ -54,6 +55,9 @@ public class KVMController extends BaseController {
 
 	@Resource(name = "cloudplatformService")
 	private CloudplatformService cloudplatformService;
+
+	@Resource(name = "environmentService")
+	private EnvironmentService environmentService;
 
 	/**
 	 * 按类型查询列表
@@ -325,6 +329,9 @@ public class KVMController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 
+		List<PageData> environmentList = environmentService.listAll(pd);
+		mv.addObject("environmentList", environmentList);
+
 		mv.setViewName("resource/kvm_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
@@ -368,6 +375,9 @@ public class KVMController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
+
+		List<PageData> environmentList = environmentService.listAll(pd);
+		mv.addObject("environmentList", environmentList);
 
 		pd = hostmachineService.findById(pd, false); // 根据ID读取
 		mv.setViewName("resource/kvm_edit");

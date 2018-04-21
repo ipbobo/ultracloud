@@ -21,6 +21,10 @@
 	<sql id="clusterTableName">
 		t_cluster
 	</sql>
+	<!--表名 -->
+	<sql id="cloudplatformTableName">
+		t_cloudplatform
+	</sql>
 	
 	<!-- 查询已分配用户的虚拟机 -->
 	<select id="datalistAlreadyBinded" parameterType="pd" resultType="pd">
@@ -38,12 +42,37 @@
 				a.name,
 				a.status,
 				a.ip
-		from <include refid="virtualSyncTableName"></include> a, <include refid="hostmachineTableName"></include> b, <include refid="clusterTableName"></include> c
-		WHERE a.hostmachine_id=b.id
-		AND   b.cluster_id=c.id
+		from <include refid="virtualSyncTableName"></include> a, <include refid="cloudplatformTableName"></include> b
+		WHERE a.cpf_id=b.id
 		AND a.user IS NULL AND a.project_id IS NULL
-		AND c.id=#{pd.cluster_id}
-		ORDER BY a.gmt_modified desc
+		AND b.environment_id=#{pd.environment_id}
+		<if test="pd.type!= null and pd.type != ''">
+		AND a.type=#{pd.type}
+		</if>
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					b.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		union
+		SELECT  a.id,
+				a.name,
+				a.status,
+				a.ip
+		from <include refid="virtualSyncTableName"></include> a, <include refid="hostmachineTableName"></include> b
+		WHERE a.hostmachine_id=b.id
+		AND a.user IS NULL AND a.project_id IS NULL
+		AND b.environment_id=#{pd.environment_id}
+		<if test="pd.type!= null and pd.type != ''">
+		AND a.type=#{pd.type}
+		</if>
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					b.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
 	</select>
 	
 	<!-- 修改 -->

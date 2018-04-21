@@ -287,7 +287,7 @@
 	<!-- 批量查询vmware下的虚拟机,根据虚拟机id -->
 	<select id="listVmwareByvmId" parameterType="String" resultType="pd">
 		SELECT
-		a.id,a.cpu,a.memory,a.datadisk,a.cpf_id,a.deptId,a.project_id,b.type,b.ip,b.username,b.password
+		a.id as vmId,a.cpu,a.memory,a.datadisk,a.deptId,a.project_id,b.id,b.type,b.ip,b.username,b.password
 		FROM t_virtualmachine a, t_cloudplatform b
 		WHERE a.cpf_id=b.id
 		and a.id
