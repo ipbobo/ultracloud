@@ -1,6 +1,5 @@
 package com.cmp.service;
 
-import com.cmp.util.ZabbixUtil;
 import com.google.gson.Gson;
 import com.zabbix.api.domain.base.HostGroup;
 import com.zabbix.api.domain.hostgroup.*;
@@ -9,6 +8,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,11 +17,14 @@ import java.util.List;
 @Service
 public class ZabbixHostgroupService {
 
+	@Value("${zabbix.url}")
+	private String apiUrl;
+
 	public Object hostGroupCreate(HostGroupCreateRequest hostGroupCreate) {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
@@ -42,7 +45,7 @@ public class ZabbixHostgroupService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
@@ -63,7 +66,7 @@ public class ZabbixHostgroupService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
@@ -89,7 +92,7 @@ public class ZabbixHostgroupService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
@@ -114,7 +117,7 @@ public class ZabbixHostgroupService {
 	public Object hostGroupGet(HostGroupGetRequest hostGroupGet) {
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
@@ -164,7 +167,7 @@ public class ZabbixHostgroupService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
@@ -190,7 +193,7 @@ public class ZabbixHostgroupService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
@@ -216,7 +219,7 @@ public class ZabbixHostgroupService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
@@ -238,7 +241,7 @@ public class ZabbixHostgroupService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
@@ -264,7 +267,7 @@ public class ZabbixHostgroupService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
@@ -286,7 +289,7 @@ public class ZabbixHostgroupService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {

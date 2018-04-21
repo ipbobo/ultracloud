@@ -3,6 +3,7 @@ package com.cmp.mgr.kvm;
 import com.cmp.entity.tcc.*;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
+import com.cmp.mgr.bean.CloneVmResponse;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.bean.CreateVolumeRequest;
 import com.cmp.mgr.libvirt.LibvirtConnect;
@@ -231,7 +232,7 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public String cloneVirtualMachine(CloneVmRequest request) {
+	public CloneVmResponse cloneVirtualMachine(CloneVmRequest request) {
 		throw new UnsupportedOperationException();
 	}
 

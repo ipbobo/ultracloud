@@ -3,6 +3,7 @@ package com.cmp.mgr.openstack;
 import com.cmp.entity.tcc.*;
 import com.cmp.mgr.PlatformBindedCloudArchManager;
 import com.cmp.mgr.bean.CloneVmRequest;
+import com.cmp.mgr.bean.CloneVmResponse;
 import com.cmp.mgr.bean.CreateVmRequest;
 import com.cmp.mgr.bean.CreateVolumeRequest;
 import com.vmware.vim25.mo.Datacenter;
@@ -153,7 +154,7 @@ public class OpenstatckCloudArchManager extends PlatformBindedCloudArchManager {
 	}
 
 	@Override
-	public String cloneVirtualMachine(CloneVmRequest request) {
+	public CloneVmResponse cloneVirtualMachine(CloneVmRequest request) {
 		// TODO Auto-generated method stub
 		return null;
 	}

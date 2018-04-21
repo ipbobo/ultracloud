@@ -12,18 +12,12 @@ public class ZabbixUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(ZabbixUtil.class);
 
-	public static String API_URL = "http://192.168.0.150/zabbix/api_jsonrpc.php";
-
-	private static String USERNAME = "Admin";
-
-	private static String PASSWORD = "zabbix";
-
-	public static void login() {
+	public static void login(String apiUrl, String username, String password) {
 		try {
 			HttpClient client = new HttpClient();
-			PutMethod putMethod = new PutMethod(API_URL);
+			PutMethod putMethod = new PutMethod(apiUrl);
 			putMethod.setRequestHeader("Content-Type", "application/json-rpc");
-			String jsonrpc = loginJson(USERNAME, PASSWORD);
+			String jsonrpc = loginJson(username, password);
 
 			JSONObject jsonObj = new JSONObject(jsonrpc);
 			putMethod.setRequestBody(FormatData.fromString(jsonObj.toString()));
