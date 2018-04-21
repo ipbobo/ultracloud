@@ -61,6 +61,7 @@ function batchBuy(){
     
     var orderNoArr=new Array();
     var totalAmtArr=new Array();
+    var allProjectCode="";
 	$("input:checkbox[name='orderNo']:checked").each(function() {
 		orderNoArr.push($(this).val());
 		var dayNum=getDateDiff(getCurrDate(), $(this).siblings(".expireDate").val());
@@ -69,12 +70,18 @@ function batchBuy(){
 		var memNum=virNum*($(this).siblings(".mem").val());
 		var storeNum=virNum*getStoreNum($(this).siblings(".store").val());
 		totalAmtArr.push((cpuNum*cpuPrice+memNum*memPrice+storeNum*storePrice).toFixed(2)+"");
+		var projectCode=$(this).siblings(".projectCode").val();
+		allProjectCode=(allProjectCode==""?projectCode:allProjectCode);
+		if(allProjectCode!=projectCode){
+			showAlert("该工单中包含多个项目");
+    		return;
+		}
 	});
 	
 	$.ajax({
 	    type: 'post',
 	    url: "appCommit.do",
-	    data: {"orderNoStr": orderNoArr.join(), "totalAmtStr": totalAmtArr.join()},
+	    data: {"orderNoStr": orderNoArr.join(), "totalAmtStr": totalAmtArr.join(), "allProjectCode": allProjectCode},
 	    dataType: 'json',
 	    success: function(data){
 	    	showAlert(data.retMsg);
@@ -128,6 +135,7 @@ function getAllTotalAmt(){
 			<input type="hidden" name="storeVal" value="${var.diskSize}" class="store"/><!-- 购物车计算金额使用 -->
 			<input type="hidden" name="virNumVal" value="${var.virNum}" class="virNum"/><!-- 购物车计算金额使用 -->
 			<input type="hidden" name="expireDateVal" value="${var.expireDate}" class="expireDate"/><!-- 购物车计算金额使用 -->
+			<input type="hidden" name="projectCode" value="${var.projectCode}" class="projectCode"/><!-- 工单合并时使用 -->
 		</td>
 		<td>
 			<table style="width: 100%;border-collapse:separate;border-spacing:0px 10px;">

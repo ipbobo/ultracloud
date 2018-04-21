@@ -18,7 +18,7 @@ public class CmpWorkOrderService {
 	private DaoSupport dao;
 	
 	//提交申请
-	public void addWorkOrder(String appNo, String totalAmt, String applyUserId, String procInstId) throws Exception {
+	public void addWorkOrder(String appNo, String totalAmt, String applyUserId, String procInstId, String projectCode) throws Exception {
 		PageData pd=new PageData();
 		pd.put("appNo", appNo);//申请编号
 		pd.put("totalAmt", totalAmt);//总价格
@@ -26,6 +26,7 @@ public class CmpWorkOrderService {
 		pd.put("status", "0");//状态：0-待提交；1-审批中；2-审批通过；3-审批不通过
 		pd.put("procInstId", procInstId);//流程实例ID
 		pd.put("applyUserId", applyUserId);//申请者
+		pd.put("projectCode", projectCode);//项目代码
 		dao.save("CmpWorkOrderMapper.addWorkOrder", pd);
 	}
 	
