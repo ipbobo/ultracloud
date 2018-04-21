@@ -2,6 +2,7 @@ package com.cmp.service;
 
 import com.cmp.entity.HostMonitorInfo;
 import com.cmp.entity.ZabbixTemplateService;
+import com.cmp.util.ZabbixUtil;
 import com.zabbix.api.domain.base.Host;
 import com.zabbix.api.domain.base.HostGroup;
 import com.zabbix.api.domain.base.HostInterface;
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,9 +38,19 @@ public class ZabbixMonitorServiceImpl implements ZabbixMonitorService {
 
 	private @Autowired ZabbixTemplateService zabbixTemplateService;
 
+	@Value("${zabbix.url}")
+	private String apiUrl;
+
+	@Value("${zabbix.user}")
+	private String username;
+
+	@Value("${zabbix.password}")
+	private String password;
+
 	public void registerToZabbix(HostMonitorInfo hostInfo) {
 		String groupid = "", templateid = "";
 
+		ZabbixUtil.login(apiUrl, username, password);
 		String groupname = hostInfo.getOsName();
 		String createResult = hostGroupCreate(groupname);
 		Pattern pattern = Pattern.compile("[0-9]*");

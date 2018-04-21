@@ -26,13 +26,13 @@ public class ZabbixMonitorServiceTest implements CloudArchTest {
 
 	@Test
 	public void testRegisterToZabbix() {
-		ZabbixUtil.login();
+		ZabbixUtil.login("http://192.168.0.150/zabbix/api_jsonrpc.php", "Admin", "zabbix");
 
 		HostMonitorInfo hostInfo = new HostMonitorInfo();
-		hostInfo.setHostName("localhost");
-		hostInfo.setIp("192.168.0.152");
-		hostInfo.setPort("80");
-		hostInfo.setVisibleName("TestVM4");
+		hostInfo.setUUID("4224f272-ff27-1e83-dbca-181fb49a04e4");
+		hostInfo.setIp("192.168.0.155");
+		hostInfo.setPort("10050");
+		hostInfo.setVisibleName("TestVM5");
 		hostInfo.setMonitorType(0);
 		hostInfo.setOsName("Linux");
 
