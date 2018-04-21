@@ -232,6 +232,9 @@
 		<if test="id != null and id != ''">
 			and cpf_id=#{id}
 		</if>
+		<if test="id != null and id != ''">
+			and hostmachine_id=#{hostmachine_id}
+		</if>
 	</select>
 		
 	<!-- 批量删除 -->

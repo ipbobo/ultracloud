@@ -46,6 +46,7 @@ import com.cmp.service.resourcemgt.DatacenternetworkService;
 import com.cmp.sid.AutoDeployNode;
 import com.cmp.sid.AutoDeployScriptNode;
 import com.cmp.sid.CmpDict;
+import com.cmp.sid.CmpOrder;
 import com.cmp.sid.CmpWorkOrder;
 import com.cmp.sid.RelateTask;
 import com.cmp.sid.VirtualMachine;
@@ -994,15 +995,19 @@ public class CmpWorkOrderController extends BaseController{
 	 */
 	@RequestMapping(value="/toSetParam")
 	@ResponseBody
-	public List<AutoDeployNode> toSetParam(String appNo) throws Exception{
+	public List<AutoDeployNode> toSetParam(String orderNo) throws Exception{
 		LinkedList<AutoDeployNode> autoDeployNodeList = new LinkedList<AutoDeployNode>();
 		LinkedList<AutoDeployScriptNode> scriptNodeList = new LinkedList<AutoDeployScriptNode>();
-		CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo(appNo);
-		if (workorder == null) {
+		//CmpWorkOrder workorder = cmpWorkOrderService.findByAppNo(appNo);
+		CmpOrder orderInfo = null;
+		List<CmpOrder> orderInfoList = cmpOrderService.getOrderDtl(orderNo);
+		if (orderInfoList == null || orderInfoList.size() == 0) {
 			cmpLogService.addCmpLog("1", "自动部署软件参数设置", "工单查询失败,未查询到相应的工单", "-1", StringUtil.getClientIp(getRequest()));
 			return autoDeployNodeList;
+		}else {
+			orderInfo = orderInfoList.get(0);
 		}
-		String softCodeStr = workorder.getSoftCode();
+		String softCodeStr = orderInfo.getSoftCode();
 		if (softCodeStr == null || softCodeStr.length() == 0) {
 			cmpLogService.addCmpLog("1", "自动部署软件参数设置", "工单未设置部署软件", "-1", StringUtil.getClientIp(getRequest()));
 			return autoDeployNodeList;
@@ -1026,7 +1031,7 @@ public class CmpWorkOrderController extends BaseController{
 			//查询用户修改的参数信息
 			PageData s_pd = new PageData();
 			s_pd.put("softCode", softCode);
-			s_pd.put("orderNo", workorder.getOrderNo());
+			s_pd.put("orderNo", orderInfo.getOrderNo());
 			List<PageData> userSetParamList = cmpOrderService.findSoftParam(s_pd);
 			Map<String, String> userSetParamMap = new HashMap<String, String>();
 			for (PageData userSetParamPd : userSetParamList) {

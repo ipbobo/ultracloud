@@ -67,14 +67,18 @@ public class KvmCloudArchManager extends PlatformBindedCloudArchManager {
 			int[] idArr = conn.listDomains();
 			for (int id : idArr) {
 				Domain domain = conn.domainLookupByID(id);
-				ls.add(converters.toVirtualMachine().apply(domain));
+				if (domain.isActive() == 1) {
+					ls.add(converters.toVirtualMachine().apply(domain));
+				}
 				domain.free();
 			}
 
 			String[] definedNames = conn.listDefinedDomains();
 			for (String name : definedNames) {
 				Domain domain = conn.domainLookupByName(name);
-				converters.toVirtualMachine().apply(domain);
+				if (domain.isActive() == 1) {
+					converters.toVirtualMachine().apply(domain);
+				}
 				domain.free();
 			}
 		} catch (Exception e) {

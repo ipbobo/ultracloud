@@ -19,7 +19,7 @@ public class KvmCloudArchManagerTest implements CloudArchTest {
 	@Before
 	public void setup() {
 		TccCloudPlatform platform = new TccCloudPlatform();
-		platform.setCloudplatformIp("180.169.225.158");
+		platform.setCloudplatformIp("192.168.0.31");
 
 		cloudArchManager = new KvmCloudArchManager(platform);
 	}
