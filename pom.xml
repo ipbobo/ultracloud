@@ -557,6 +557,13 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/sun.misc.BASE64Decoder.jar</systemPath>
 		</dependency>
+		<dependency>
+			<groupId>com.zabbix</groupId>
+			<artifactId>zabbix</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/zabbix2.2-v20150325.jar</systemPath>
+		</dependency>
 		<!-- begin-actiiviti Jar包 -->
 		<dependency>
 			<groupId>org.activiti</groupId>
