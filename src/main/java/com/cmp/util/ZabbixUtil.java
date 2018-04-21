@@ -8,31 +8,15 @@ import org.json.JSONStringer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileReader;
-import java.util.Properties;
-
 public class ZabbixUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(ZabbixUtil.class);
 
-	public static String API_URL;
+	public static String API_URL = "http://192.168.0.150/zabbix/api_jsonrpc.php";
 
-	private static String USERNAME;
+	private static String USERNAME = "Admin";
 
-	private static String PASSWORD;
-
-	static {
-		try {
-			Properties properties = new Properties();
-			properties.load(new FileReader(ZabbixUtil.class.getResource("/").getPath() + "/" + "env.properties"));
-
-			API_URL = properties.getProperty("zabbix.url");
-			USERNAME = properties.getProperty("zabbix.user");
-			PASSWORD = properties.getProperty("zabbix.password");
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-	}
+	private static String PASSWORD = "zabbix";
 
 	public static void login() {
 		try {
@@ -48,7 +32,7 @@ public class ZabbixUtil {
 			String loginResponse = putMethod.getResponseBodyAsString();
 			JSONObject obj = new JSONObject(loginResponse);
 
-			String sessionId = "";
+			String sessionId;
 			if (obj.has("result")) {
 				sessionId = obj.getString("result");
 				FormatData.auth = sessionId;

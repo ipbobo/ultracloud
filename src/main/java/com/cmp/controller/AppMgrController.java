@@ -340,6 +340,7 @@ public class AppMgrController extends BaseController {
 			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
 			String orderNoStr=request.getParameter("orderNoStr");//清单ID字符串
 			String totalAmtStr=request.getParameter("totalAmtStr");//总价格字符串
+			String allProjectCode=request.getParameter("allProjectCode");//所有项目代码
 			String[] orderNos=orderNoStr.split(",");
 			if(orderNos!=null && orderNos.length>0){
 				String[] totalAmts=totalAmtStr.split(",");//总价格
@@ -354,7 +355,7 @@ public class AppMgrController extends BaseController {
 				variables.put("btnName", "提交");
 				variables.put("USERNAME", user.getUSERNAME());
 				String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动
-				cmpWorkOrderService.addWorkOrder(appNo, allTotalAmt+"", applyUserId, procInstId);//提交申请
+				cmpWorkOrderService.addWorkOrder(appNo, allTotalAmt+"", applyUserId, procInstId, allProjectCode);//提交申请
 				//添加任务拾取
 				List<Task> userTaskList = activitiService.findByProcessInstId(procInstId);
 				for (Task task : userTaskList) {
