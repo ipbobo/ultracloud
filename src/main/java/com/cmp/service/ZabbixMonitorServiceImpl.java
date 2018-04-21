@@ -1,7 +1,7 @@
 package com.cmp.service;
 
 import com.cmp.entity.HostMonitorInfo;
-import com.cmp.entity.TemplateService;
+import com.cmp.entity.ZabbixTemplateService;
 import com.zabbix.api.domain.base.Host;
 import com.zabbix.api.domain.base.HostGroup;
 import com.zabbix.api.domain.base.HostInterface;
@@ -10,6 +10,7 @@ import com.zabbix.api.domain.hostgroup.HostGroupCreateRequest;
 import com.zabbix.api.domain.hostgroup.HostGroupExistsRequest;
 import com.zabbix.api.domain.hostgroup.HostGroupGetRequest;
 import com.zabbix.api.domain.template.TemplateGetRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -22,39 +23,36 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.Collections.singletonList;
+
 @Service
-public class CloudMonitorServiceImpl implements CloudMonitorService {
+public class ZabbixMonitorServiceImpl implements ZabbixMonitorService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private @Autowired HostgroupService hostgroupService;
+	private @Autowired ZabbixHostgroupService zabbixHostgroupService;
 
-	private @Autowired HostService hostService;
+	private @Autowired ZabbixHostService zabbixHostService;
 
-	private @Autowired TemplateService templateService;
+	private @Autowired ZabbixTemplateService zabbixTemplateService;
 
 	public void registerToZabbix(HostMonitorInfo hostInfo) {
-		String groupid = "";
-		String templateid = "";
-		String groupname = hostInfo.getOsName();
-		boolean result = hostGroupExists(groupname);
+		String groupid = "", templateid = "";
 
-		if (result) {
-			List<String> names = new ArrayList<>();
-			names.add(groupname);
-			List<HostGroup> hostgroups = getHostGroup(names);
-			groupid = hostgroups.get(0).getGroupid();
+		String groupname = hostInfo.getOsName();
+		String createResult = hostGroupCreate(groupname);
+		Pattern pattern = Pattern.compile("[0-9]*");
+		Matcher isNum = pattern.matcher(createResult);
+		if (isNum.matches()) {
+			groupid = createResult;
 		} else {
-			String createresult = hostGroupCreate(groupname);
-			Pattern pattern = Pattern.compile("[0-9]*");
-			Matcher isNum = pattern.matcher(createresult);
-			if (isNum.matches()) {
-				groupid = createresult;
-			} else {
-				logger.error("hostGroupCreate出错了" + createresult);
+			if (createResult.contains("already exists")) {
+				List<HostGroup> hostgroups = getHostGroup(singletonList(groupname));
+				groupid = hostgroups.get(0).getGroupid();
 			}
 		}
-		if (!"".equals(groupid)) {
+
+		if (StringUtils.isNotBlank(groupid)) {
 			String osname = hostInfo.getOsName();
 			if ("windows".equalsIgnoreCase(osname)) {
 				List<Template> templates = getTemplateByName("Template OS Windows");
@@ -67,6 +65,7 @@ public class CloudMonitorServiceImpl implements CloudMonitorService {
 					templateid = templates.get(0).getTemplateid();
 				}
 			}
+
 			Host host = new Host();
 			HostGroup group = new HostGroup();
 			group.setGroupid(groupid);
@@ -84,7 +83,7 @@ public class CloudMonitorServiceImpl implements CloudMonitorService {
 			// - connect using host IP address.
 			hostInterface.setMain(1); // 0 - not default; 1 - default.
 			hostInterface.setPort(hostInfo.getPort()); // agent监控默认端口
-			String rs = hostService.createHost(host, hostInterface, group, template);
+			zabbixHostService.createHost(host, hostInterface, group, template);
 		}
 	}
 
@@ -93,12 +92,10 @@ public class CloudMonitorServiceImpl implements CloudMonitorService {
 		hostGroupGet.getParams().setOutput("extend");
 		List<String> names = new ArrayList<>();
 		if (groupnames != null && groupnames.size() > 0) {
-			for (String name : groupnames) {
-				names.add(name);
-			}
+			names.addAll(groupnames);
 		}
 		hostGroupGet.getParams().getFilter().setName(names);
-		return hostgroupService.getHostGroupBean(hostGroupGet);
+		return zabbixHostgroupService.getHostGroupBean(hostGroupGet);
 	}
 
 	private List<Template> getTemplateByName(String templatename) {
@@ -107,13 +104,15 @@ public class CloudMonitorServiceImpl implements CloudMonitorService {
 		List<String> hosts = new ArrayList<>();
 		hosts.add(templatename);
 		get.getParams().getFilter().setHost(hosts);
-		return templateService.getTemplateToBean(get);
+		return zabbixTemplateService.getTemplateToBean(get);
 	}
 
 	private boolean hostGroupExists(String hostgroupname) {
 		HostGroupExistsRequest hostGroupExists = new HostGroupExistsRequest();
 		hostGroupExists.getParams().getName().add(hostgroupname);
-		return (boolean) hostgroupService.hostGroupExists(hostGroupExists);
+		Object obj = zabbixHostgroupService.hostGroupExists(hostGroupExists);
+
+		return obj instanceof Boolean && (Boolean) obj;
 	}
 
 	private String hostGroupCreate(String hostgroupname) {
@@ -122,7 +121,7 @@ public class CloudMonitorServiceImpl implements CloudMonitorService {
 		HostGroup hostGroup = new HostGroup();
 		hostGroup.setName(hostgroupname);
 		hostGroupCreate.getParams().add(hostGroup);
-		JSONObject rs = (JSONObject) hostgroupService
+		JSONObject rs = (JSONObject) zabbixHostgroupService
 				.hostGroupCreate(hostGroupCreate);
 		if (rs.has("result")) {
 			try {
