@@ -73,10 +73,15 @@ function batchBuy(){
 		var projectCode=$(this).siblings(".projectCode").val();
 		allProjectCode=(allProjectCode==""?projectCode:allProjectCode);
 		if(allProjectCode!=projectCode){
-			showAlert("该工单中包含多个项目");
+			allProjectCode="";
     		return;
 		}
 	});
+	
+	if(allProjectCode==""){
+		showAlert("该工单中包含多个项目");
+   		return;
+	}
 	
 	$.ajax({
 	    type: 'post',
