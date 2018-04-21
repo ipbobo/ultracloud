@@ -628,12 +628,12 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	}
 
 	public int downloadScript(VirtualMachine vm, String remoteUrl, String localPath) {
-		ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),
-				vm.getPassword(), ShellUtil.DEF_CHARSET);
-		shellUtil.exec("curl -o " + localPath + " " + remoteUrl);
-		if (!shellUtil.checkFileExist(localPath)) {
-			return -2;
-		}
+		ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),  
+				vm.getPassword() , ShellUtil.DEF_CHARSET);
+		shellUtil.exec("curl -k -u admin:password " + localPath + " " + remoteUrl);
+//		if (!shellUtil.checkFileExist(localPath)) {
+//			return -2;
+//		}
 		return 0;
 	}
 

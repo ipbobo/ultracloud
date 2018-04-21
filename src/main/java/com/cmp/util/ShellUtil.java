@@ -17,6 +17,8 @@ public class ShellUtil{
 	public static final String DEF_CHARSET = "utf-8";
 	public static final int CONN_TIME_OUT = 5000;
 	public static final String LOCAL_SCRIPT_DIR = "/tmp";
+	public static final String DEF_SHELL_FILE_USERNAME="admin";
+	public static final String DEF_SHELL_FILE_PASSWORD="password";
 	private Connection conn;  
     private String ipAddr;  
     private String charset = Charset.defaultCharset().toString();  
@@ -204,9 +206,9 @@ public class ShellUtil{
 //		}
     	ShellUtil shellUtil = new ShellUtil("192.168.0.175", 22, "root",  
 				"password" , ShellUtil.DEF_CHARSET);
-		shellUtil.exec("curl -o " + "/tmp/2.sh" + " " + "https://192.168.0.35/scripts/zabbix_agent_install.sh");
-		boolean f = shellUtil.checkFileExist("/tmp/2.sh");
-		System.out.println(f);
+		shellUtil.exec("curl -k -u admin:password " + "https://192.168.0.35/scripts/zabbix_agent_install.sh" + " -o " + "/tmp/2.sh");
+		//boolean f = shellUtil.checkFileExist("/tmp/2.sh");
+		//System.out.println(f);
     }
 
  
