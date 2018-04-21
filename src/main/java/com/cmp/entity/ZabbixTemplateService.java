@@ -1,6 +1,5 @@
 package com.cmp.entity;
 
-import com.cmp.util.ZabbixUtil;
 import com.google.gson.Gson;
 import com.zabbix.api.domain.base.Template;
 import com.zabbix.api.domain.template.*;
@@ -11,30 +10,34 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TemplateService {
+public class ZabbixTemplateService {
 
-	private Logger log = LoggerFactory.getLogger("allmoniapi");
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Value("${zabbix.url}")
+	private String apiUrl;
 
 	public Object create(TemplateCreateRequest create) {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(create);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			rs = new JSONObject(response);
 
 		} catch (Exception e) {
@@ -47,16 +50,16 @@ public class TemplateService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(delete);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			rs = new JSONObject(response);
 			if (rs.has("result")) {
 				result = rs.get("result");
@@ -73,16 +76,16 @@ public class TemplateService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(exists);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			rs = new JSONObject(response);
 
 		} catch (Exception e) {
@@ -95,16 +98,16 @@ public class TemplateService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(getobjects);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			rs = new JSONObject(response);
 			if (rs.has("result")) {
 				result = rs.get("result");
@@ -121,16 +124,16 @@ public class TemplateService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(get);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			System.out.println("json response:" + response);
 			rs = new JSONObject(response);
 		} catch (Exception e) {
@@ -172,16 +175,16 @@ public class TemplateService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(isreadable);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			rs = new JSONObject(response);
 			if (rs.has("result")) {
 				result = rs.get("result");
@@ -198,16 +201,16 @@ public class TemplateService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(iswritable);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			rs = new JSONObject(response);
 			if (rs.has("result")) {
 				result = rs.get("result");
@@ -224,16 +227,16 @@ public class TemplateService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(massadd);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			rs = new JSONObject(response);
 			if (rs.has("result")) {
 				result = rs.get("result");
@@ -250,16 +253,16 @@ public class TemplateService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(massremove);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			rs = new JSONObject(response);
 			if (rs.has("result")) {
 				result = rs.get("result");
@@ -276,16 +279,16 @@ public class TemplateService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(massupdate);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			rs = new JSONObject(response);
 			if (rs.has("result")) {
 				result = rs.get("result");
@@ -302,16 +305,16 @@ public class TemplateService {
 		Object result = null;
 		Gson js = new Gson();
 		HttpClient client = new HttpClient();
-		PostMethod putMethod = new PostMethod(ZabbixUtil.API_URL);
+		PostMethod putMethod = new PostMethod(apiUrl);
 		putMethod.setRequestHeader("Content-Type", "application/json-rpc");
 		JSONObject rs = null;
 		try {
 			String json = js.toJson(update);
-			log.info("json request:" + json);
+			logger.info("json request:" + json);
 			putMethod.setRequestBody(FormatData.fromString(json));
 			client.executeMethod(putMethod);
 			String response = putMethod.getResponseBodyAsString();
-			log.info("json response:" + response);
+			logger.info("json response:" + response);
 			rs = new JSONObject(response);
 			if (rs.has("result")) {
 				result = rs.get("result");

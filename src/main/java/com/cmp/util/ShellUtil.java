@@ -3,6 +3,7 @@ package com.cmp.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,7 +16,9 @@ public class ShellUtil{
 	public static final int DEF_PORT = 22;
 	public static final String DEF_CHARSET = "utf-8";
 	public static final int CONN_TIME_OUT = 5000;
-	public static final String LOCAL_SCRIPT_DIR = "/data/script";
+	public static final String LOCAL_SCRIPT_DIR = "/tmp";
+	public static final String DEF_SHELL_FILE_USERNAME="admin";
+	public static final String DEF_SHELL_FILE_PASSWORD="password";
 	private Connection conn;  
     private String ipAddr;  
     private String charset = Charset.defaultCharset().toString();  
@@ -167,6 +170,18 @@ public class ShellUtil{
         }
     }
     
+	/**
+     * ping方法，仅仅为了判断是否可连通。
+     * 
+     * @param host
+     * @param port
+     * @return
+     */
+    public static boolean ping2(String host, int port, int timeOut) {
+        return new RemoteFtpUtils().canConn(host, port, timeOut);
+    }
+    
+    
     public static void main(String[] args) {  
   
 //    	ShellUtil tool = new ShellUtil("180.169.225.158", 7001, "root",  
@@ -174,18 +189,26 @@ public class ShellUtil{
 //  
 //        String result = tool.exec("./test.sh", "231321321"); 
     	//ping
-//    	boolean pingRes = ShellUtil.ping("192.168.1.130",  3000);
-//        System.out.print(pingRes);  
+//    	for (int i=0;i<10;i++) {
+//    		boolean pingRes = ShellUtil.ping("192.168.0.165",  3000);
+//            System.out.print(pingRes);  
+//    	}
+    	
     	//ftp 命令下载测试
-    	try {
-			ShellUtil tool = new ShellUtil("192.168.0.130", 22, "root",  
-     "r00t0neio", "utf-8");  
-			List result = tool.exec("ls"); 
-			System.out.println(result.size());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//    	try {
+//			ShellUtil tool = new ShellUtil("192.168.0.130", 22, "root",  
+//     "r00t0neio", "utf-8");  
+//			List result = tool.exec("ls"); 
+//			System.out.println(result.size());
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+    	ShellUtil shellUtil = new ShellUtil("192.168.0.175", 22, "root",  
+				"password" , ShellUtil.DEF_CHARSET);
+		shellUtil.exec("curl -k -u admin:password " + "https://192.168.0.35/scripts/zabbix_agent_install.sh" + " -o " + "/tmp/2.sh");
+		//boolean f = shellUtil.checkFileExist("/tmp/2.sh");
+		//System.out.println(f);
     }
 
  

@@ -180,6 +180,7 @@ public class VirtualMServiceImpl implements VirtualMService {
 
 	@Override
 	public void destroyVm(List<Integer> ls) throws Exception {
+		//System.setProperty("jna.library.path", "C:\\Program Files\\VirtViewer v6.0-256\\bin");
 		for (Integer id : ls) {
 			PageData pd = findById(id);
 
@@ -187,8 +188,7 @@ public class VirtualMServiceImpl implements VirtualMService {
 			// if (Integer.valueOf(0).equals(status)) {
 			// continue;
 			// }
-
-			String platformId = pd.getString("platform");
+			String platformId = pd.getString("hostmachine_id");
 			if (StringUtils.isBlank(platformId)) {
 				continue;
 			}

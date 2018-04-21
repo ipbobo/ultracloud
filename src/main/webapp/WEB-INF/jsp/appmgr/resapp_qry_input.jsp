@@ -1056,7 +1056,7 @@ $(window).scroll(function() {
 		<td id="shoppingCartId" class="shoppingCart">
 			<div id="getShoppingCartList" style="height:0px;overflow-y: auto;"></div>
 			<div id="batchBuy" class="divbtn" style="display:none;width:100%;height:50px;padding:10px;border-top:1px solid #f5f5f5;">
-				共计(元)：<span id="allTotalAmt" style="font-size:26px;color: #f5620a;">￥0.00</span>
+				<input id="checkAllId" type="checkbox" onclick="checkAllFunc()" checked>全选&nbsp;共计(元)：<span id="allTotalAmt" style="font-size:20px;color: #f5620a;">￥0.00</span>
 				<span class="btncls active" style="width:80px;background-color:#f5620a;"><a href="javascript:void()" onclick="batchBuy()">批量购买</a></span>
 				<span style="width:10px;float:right;">&nbsp;</span>
 			    <span class="btncls" style="width:80px;"><a href="javascript:void()" onclick="clearShoppingCart()">清空购物车</a></span>

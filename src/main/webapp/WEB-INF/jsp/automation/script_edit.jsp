@@ -74,7 +74,7 @@
 							</tr>
 							<tr>
 								<td style="width:120px;text-align: right;padding-top: 13px;">直接输入路径:</td>
-								<td><input type="text" name="url" id="url" value="${pd.url}" maxlength="30" placeholder="这里输入路径" title="路径" style="width:100%;"/></td>
+								<td><input type="text" name="url" id="url" value="${pd.url}" maxlength="200" placeholder="这里输入路径" title="路径" style="width:100%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:120px;text-align: right;padding-top: 13px;" id="FILEPATHn">通过文件上传:</td>

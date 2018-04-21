@@ -8,38 +8,16 @@ import org.json.JSONStringer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileReader;
-import java.util.Properties;
-
 public class ZabbixUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(ZabbixUtil.class);
 
-	public static String API_URL;
-
-	private static String USERNAME;
-
-	private static String PASSWORD;
-
-	static {
-		try {
-			Properties properties = new Properties();
-			properties.load(new FileReader(ZabbixUtil.class.getResource("/").getPath() + "/" + "env.properties"));
-
-			API_URL = properties.getProperty("zabbix.url");
-			USERNAME = properties.getProperty("zabbix.user");
-			PASSWORD = properties.getProperty("zabbix.password");
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-	}
-
-	public static void login() {
+	public static void login(String apiUrl, String username, String password) {
 		try {
 			HttpClient client = new HttpClient();
-			PutMethod putMethod = new PutMethod(API_URL);
+			PutMethod putMethod = new PutMethod(apiUrl);
 			putMethod.setRequestHeader("Content-Type", "application/json-rpc");
-			String jsonrpc = loginJson(USERNAME, PASSWORD);
+			String jsonrpc = loginJson(username, password);
 
 			JSONObject jsonObj = new JSONObject(jsonrpc);
 			putMethod.setRequestBody(FormatData.fromString(jsonObj.toString()));
@@ -48,7 +26,7 @@ public class ZabbixUtil {
 			String loginResponse = putMethod.getResponseBodyAsString();
 			JSONObject obj = new JSONObject(loginResponse);
 
-			String sessionId = "";
+			String sessionId;
 			if (obj.has("result")) {
 				sessionId = obj.getString("result");
 				FormatData.auth = sessionId;

@@ -21,7 +21,7 @@ public class HostMonitorInfo {
 		return hostName;
 	}
 
-	public void setHostName(String hostName) {
+	public void setUUID(String hostName) {
 		this.hostName = hostName;
 	}
 

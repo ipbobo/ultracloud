@@ -135,6 +135,16 @@ public class HostmachineServiceImpl implements HostmachineService {
 			return (PageData) dao.findForObject("HostmachineMapper.findById", pd);
 		}
 	}
+	
+	/**
+	 * 通过uuid获取数据
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findByUUID(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("HostmachineMapper.findByUUID", pd);
+	}
 
 	/**
 	 * 批量删除

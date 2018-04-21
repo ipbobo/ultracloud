@@ -408,7 +408,7 @@ public class AppOperServiceController  extends BaseController {
 		String procInstId = activitiService.start(procDefKey, user.getUSERNAME(), workworder.getAppNo(), variables);
 		
 		//拾取任务并完成
-		List<Task> userTaskList = activitiService.findGroupList(user.getUSERNAME(), 1, 100);
+		List<Task> userTaskList = activitiService.findByProcessInstId(procInstId);
 		for (Task task : userTaskList) {
 			if (task.getProcessInstanceId().equals(procInstId)) {
 				activitiService.claimTask(task.getId(), user.getUSERNAME());
