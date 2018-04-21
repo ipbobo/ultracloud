@@ -26,7 +26,6 @@ import com.cmp.service.resourcemgt.HostmachineService;
 import com.cmp.service.resourcemgt.VirtualBindingService;
 import com.cmp.service.resourcemgt.VirtualMachineSyncService;
 import com.fh.dao.DaoSupport;
-import com.fh.entity.Page;
 import com.fh.util.PageData;
 import com.fh.util.UuidUtil;
 import com.vmware.vim25.mo.ClusterComputeResource;
@@ -70,24 +69,15 @@ public class ResourceServiceImpl implements ResourceService {
 	private DatacenternetworkService datacenternetworkService;
 
 	/**
-	 * 同步云平台数据
+	 * 连接云平台
 	 * 
-	 * @param type
-	 * @param ip
-	 * @param useranme
-	 * @param password
-	 * @throws Exception
+	 * @param cloudPD
+	 * @return
 	 */
-	public void syncCloudData(PageData cloudPD) throws Exception {
+	public CloudArchManager initCloud(PageData cloudPD) {
 		String platformManagerType = null;
+		CloudArchManager cloudArchManager = null;
 		if ("vmware".equals(cloudPD.getString("type"))) {
-			List<PageData> preDatacenterList = datacenterService.listAll(cloudPD);
-			List<PageData> preClusterList = clusterService.listAll(cloudPD);
-			List<PageData> preHostmachineList = hostmachineService.listAll(cloudPD, false);
-			List<PageData> preVirtualMachineList = virtualMachineSyncService.listAll(cloudPD, true);
-			List<PageData> preStorageList = storageService.listAll(cloudPD, false);
-			List<PageData> preDatacenterNetworkList = datacenternetworkService.listAll(cloudPD, true);
-
 			platformManagerType = VMWareCloudArchManager.class.getName();
 
 			TccCloudPlatform platform = new TccCloudPlatform();
@@ -97,7 +87,32 @@ public class ResourceServiceImpl implements ResourceService {
 			platform.setPlatformManagerType(platformManagerType);
 
 			CloudArchManagerAdapter adapter = new CloudArchManagerAdapter();
-			CloudArchManager cloudArchManager = adapter.getCloudArchManagerAdaptee(platform);
+			cloudArchManager = adapter.getCloudArchManagerAdaptee(platform);
+		}
+
+		return cloudArchManager;
+	}
+
+	/**
+	 * 同步云平台数据
+	 * 
+	 * @param type
+	 * @param ip
+	 * @param useranme
+	 * @param password
+	 * @throws Exception
+	 */
+	public void syncCloudData(PageData cloudPD) throws Exception {
+		if ("vmware".equals(cloudPD.getString("type"))) {
+			List<PageData> preDatacenterList = datacenterService.listAll(cloudPD);
+			List<PageData> preClusterList = clusterService.listAll(cloudPD);
+			List<PageData> preHostmachineList = hostmachineService.listAll(cloudPD, false);
+			List<PageData> preVirtualMachineList = virtualMachineSyncService.listAll(cloudPD, true);
+			List<PageData> preStorageList = storageService.listAll(cloudPD, false);
+			List<PageData> preDatacenterNetworkList = datacenternetworkService.listAll(cloudPD, true);
+
+			// 连接云平台
+			CloudArchManager cloudArchManager = this.initCloud(cloudPD);
 
 			List<Datacenter> datacenterList = cloudArchManager.getDatacenters();
 			List<PageData> dcList = new ArrayList<PageData>();
@@ -153,7 +168,8 @@ public class ResourceServiceImpl implements ResourceService {
 						double cpuTotal = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores())
 								* (host[i].getHardware().getCpuInfo().getHz() / 1000 / 1000 / 1000);
 						// 剩余cpu数
-						//double cpuCoreRemainCount = Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores());
+						// double cpuCoreRemainCount =
+						// Double.valueOf(host[i].getHardware().getCpuInfo().getNumCpuCores());
 						// 内存
 						double memorySize = new Double(host[i].getHardware().getMemorySize() / 1024 / 1024 / 1024);
 						if (null == hostmachineId) {
@@ -263,7 +279,7 @@ public class ResourceServiceImpl implements ResourceService {
 
 			this.initCloud(dcList, cluList, hostmachineList, storeList, networkList, vmList, cloudPD);
 		} else if ("OpenStack".equals(cloudPD.getString("type"))) {
-			platformManagerType = OpenstatckCloudArchManager.class.getName();
+			// platformManagerType = OpenstatckCloudArchManager.class.getName();
 			// ToDo
 		}
 	}
@@ -396,75 +412,28 @@ public class ResourceServiceImpl implements ResourceService {
 	}
 
 	/**
-	 * 新增
+	 * 删除虚拟机时进行资源释放
 	 * 
-	 * @param pd
+	 * @param vmId
 	 * @throws Exception
 	 */
-	public void save(PageData pd) throws Exception {
-		dao.save("DocumentMapper.save", pd);
-	}
-
-	/**
-	 * 删除
-	 * 
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void delete(PageData pd) throws Exception {
-		dao.delete("DocumentMapper.delete", pd);
-	}
-
-	/**
-	 * 修改
-	 * 
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void edit(PageData pd) throws Exception {
-		dao.update("DocumentMapper.edit", pd);
-	}
-
-	/**
-	 * 列表
-	 * 
-	 * @param page
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("DocumentMapper.datalistPage", page);
-	}
-
-	/**
-	 * 列表(全部)
-	 * 
-	 * @param pd
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("DocumentMapper.listAll", pd);
-	}
-
-	/**
-	 * 通过id获取数据
-	 * 
-	 * @param pd
-	 * @throws Exception
-	 */
-	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("DocumentMapper.findById", pd);
-	}
-
-	/**
-	 * 批量删除
-	 * 
-	 * @param ArrayDATA_IDS
-	 * @throws Exception
-	 */
-	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("DocumentMapper.deleteAll", ArrayDATA_IDS);
+	public void releaseResource(String type, String[] vmId) throws Exception {
+		switch (type) {
+		case "vmware":
+			List<PageData> vmwareVMList = (List<PageData>) dao.findForList("VirtualMachineSyncMapper.listVmwareByvmId", vmId);
+			Map<String, PageData> cloudMap = new HashMap<String, PageData>();
+			for (PageData pd : vmwareVMList) {
+				String cpf_id = pd.getString("cpf_id");
+				cloudMap.put(cpf_id, pd);
+			}
+			break;
+		case "kvm":
+			List<PageData> kvmVMList = (List<PageData>) dao.findForList("VirtualMachineSyncMapper.listKVMByvmId", vmId);
+			// ToDo
+			break;
+		default:
+			break;
+		}
 	}
 
 	private String existUuid(String uuid, List<PageData> preList) {

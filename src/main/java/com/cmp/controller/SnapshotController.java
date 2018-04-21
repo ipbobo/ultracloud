@@ -50,7 +50,7 @@ public class SnapshotController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 
-		pd.put("FROM_USERNAME", Jurisdiction.getUsername());
+		//pd.put("FROM_USERNAME", Jurisdiction.getUsername());
 		page.setPd(pd);
 		List<PageData> varList = snapshotService.list(page);
 		mv.setViewName("console/snapshot/snapshot");
