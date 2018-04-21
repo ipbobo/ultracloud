@@ -130,6 +130,16 @@
 			id = #{id}
 	</select>
 	
+		<!-- 通过ID获取数据 -->
+	<select id="findByUUID" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			uuid = #{uuid}
+	</select>
+	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd" >
 		select  s.id,

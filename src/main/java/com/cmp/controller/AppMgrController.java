@@ -356,7 +356,7 @@ public class AppMgrController extends BaseController {
 				String procInstId=activitiService.start(processDefinitionKey, applyUserId, appNo, variables);//流程启动
 				cmpWorkOrderService.addWorkOrder(appNo, allTotalAmt+"", applyUserId, procInstId);//提交申请
 				//添加任务拾取
-				List<Task> userTaskList = activitiService.findGroupList(applyUserId, 1, 100);
+				List<Task> userTaskList = activitiService.findByProcessInstId(procInstId);
 				for (Task task : userTaskList) {
 					if (task.getProcessInstanceId().equals(procInstId)) {
 						activitiService.claimTask(task.getId(), applyUserId);

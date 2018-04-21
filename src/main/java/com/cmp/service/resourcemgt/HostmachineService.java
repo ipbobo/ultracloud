@@ -68,6 +68,8 @@ public interface HostmachineService {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd, boolean isSyncTable) throws Exception;
+	
+	public PageData findByUUID(PageData pd) throws Exception ;
 
 	/**
 	 * 批量删除

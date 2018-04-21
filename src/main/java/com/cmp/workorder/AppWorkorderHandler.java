@@ -32,6 +32,7 @@ import com.cmp.service.VirtualMachineService;
 import com.cmp.service.autodeploy.AutoDeployConfigService;
 import com.cmp.service.resourcemgt.CloudplatformService;
 import com.cmp.service.resourcemgt.DatacenterService;
+import com.cmp.service.resourcemgt.HostmachineService;
 import com.cmp.service.servicemgt.AreaService;
 import com.cmp.service.servicemgt.EnvironmentService;
 import com.cmp.service.servicemgt.MirrorService;
@@ -106,6 +107,10 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	
 	@Resource
 	private AreaService areaService;
+	
+	@Resource
+	private HostmachineService hostmachineService;
+	
 	@Override
 	public Map<String, Object> toWorkorderView(CmpWorkOrder cmpWorkorder) throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
@@ -267,14 +272,17 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		
 		String softNameStr = "";
 		String softCodeStr = orderInfo.getSoftCode();
-		String[] softCodeArr =  softCodeStr.split(",");
-		for (String softCode : softCodeArr) {
-			PageData m_pd = new PageData();
-			m_pd.put("id", softCode);
-			m_pd = mediumService.findById(m_pd);
-			String softName = m_pd.getString("name");
-			softNameStr = softNameStr + softName + "  ";
+		if (softCodeStr != null && softCodeStr.length() != 0) {
+			String[] softCodeArr =  softCodeStr.split(",");
+			for (String softCode : softCodeArr) {
+				PageData m_pd = new PageData();
+				m_pd.put("id", softCode);
+				m_pd = mediumService.findById(m_pd);
+				String softName = m_pd.getString("name");
+				softNameStr = softNameStr + softName + "  ";
+			}
 		}
+		
 		cloudInfo.setSoft(softNameStr);
 		cloudInfo.setApplicant(orderInfo.getApplyUserId());
 		cloudInfo.setExecuteStatus(orderInfo.getExecuteStatus());
@@ -368,7 +376,8 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		
 		//部署虚拟机
 		String DEF_USERNAME = "root";
-		String DEF_PWD = "r00t0neio";
+		String DEF_PWD = "password";
+		int DEF_CONN_PORT = 22;
 		int vmCount = Integer.parseInt(orderInfo.getVirNum());
 		if (vmCount < 1) {
 			resMap.put("ERROR", "部署的虚拟机数不正确");
@@ -384,12 +393,21 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			Map<String, Object> deployOut = deployVM(ipArr[vmIndex],DEF_USERNAME, DEF_PWD, pj.getId(), pj.getName(),  orderInfo, pd);
 			if (deployOut.get("resultCode").equals("0")) {
 				//查询系统连接情况
-				/*
 				VirtualMachine vm = (VirtualMachine)deployOut.get("vm");
-				if (!ShellUtil.ping(vm.getIp(), ShellUtil.CONN_TIME_OUT)) {
+				boolean bPing = false;
+				for (int index = 0 ; index < 20 ; index++) {
+					ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机启动中，尝试连接虚拟机...");
+					if ((bPing = ShellUtil.ping2(vm.getIp(), DEF_CONN_PORT, ShellUtil.CONN_TIME_OUT))) {
+						break;
+					}
+				}
+				if (!bPing) {
 					ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机:[" + vm.getIp() + "] 连接异常, IP地址无法连接! 无法执行shell脚本安装软件。");
 					continue;
+				}else {
+					ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机:[" + vm.getIp() + "] 启动完成, 准备部署软件。");
 				}
+				
 				//部署虚拟机成功，部署软件
 				String softCodeStr = orderInfo.getSoftCode();
 				String[] softCodeArr =  softCodeStr.split(",");
@@ -417,7 +435,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 					}
 					script_pd = scriptService.findByMediumId(script_pd);
 					String remoteScriptUrl = script_pd.getString("url");//脚本路径
-					String scriptId = script_pd.getString("id");
+					String scriptId = String.valueOf(script_pd.get("id") == null? "":script_pd.get("id"));
 					//下载脚本
 					String localScriptUrl = ShellUtil.LOCAL_SCRIPT_DIR + "/" + scriptId + ".sh";
 					int downRes = downloadScript(vm, remoteScriptUrl, localScriptUrl);
@@ -432,7 +450,6 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 					//执行软件安装脚本命令
 					installSoft(vm, orderInfo, softCode, softName, shellcmd);
 				}
-				*/
 			}else if (deployOut.get("resultCode").equals("-1")) {
 				Map<String , String> exeParams = new HashMap<String , String>();
 				exeParams.put("executeStatus", "3");
@@ -486,7 +503,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		VirtualMachine vm = new VirtualMachine();
 		//添加虚拟机
-		int currentVMNum = virtualMachineService.countByProject(projectId);
+		//int currentVMNum = virtualMachineService.countByProject(projectId);
 		String vmName = generateVMName(projectName);//projectName + "_" + (currentVMNum + 1);//虚拟机的名字为当前项目名称+项目拥有的虚拟机总数+1
 		String osName = cmpDictService.getCmpDict("os_type", orderInfo.getOsType()).getDictValue();
 		String osBitNum = cmpDictService.getCmpDict("os_bit_num", orderInfo.getOsBitNum()).getDictValue();
@@ -568,9 +585,12 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 			resMap.put("resultMsg", "虚拟机[" + vmName + "]模板安装异常。");
 			ShellUtil.addMsgLog(orderInfo.getOrderNo(), "虚拟机[" + vmName + "]模板安装异常。");
 			return resMap;
-			
 		}
 		
+		PageData hm_pd = new PageData();
+		hm_pd.put("uuid", hostMachineUUID);
+		hm_pd = hostmachineService.findByUUID(hm_pd);
+		String hostmachineId = hm_pd.getString("id");
 		//TccVirtualMachine  vmInst = cloudArchManager.getVirtualMachineByName(vmName);
 		//String vmIp = vmInst.getIpAddress();
 		String softCode = orderInfo.getSoftCode();
@@ -591,7 +611,7 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 		vm.setStatus("0");
 		vm.setType(platFormType);
 		vm.setPlatform(cloudPlatformId);
-		vm.setHostmachineId(hostMachineUUID);
+		vm.setHostmachineId(hostmachineId == null? "" : hostmachineId);
 		vm.setAppNo(orderInfo.getAppNo());
 		vm.setUser(orderInfo.getApplyUserId());
 		vm.setDuedate(orderInfo.getExpireDate());
@@ -636,9 +656,6 @@ public class AppWorkorderHandler implements IWorkorderHandler {
 	public int downloadScript(VirtualMachine vm, String remoteUrl, String localPath) {
 		ShellUtil shellUtil = new ShellUtil(vm.getIp(), ShellUtil.DEF_PORT, vm.getUsername(),  
 				vm.getPassword() , ShellUtil.DEF_CHARSET);
-		if (!shellUtil.login()) {
-			return -1;
-		}
 		shellUtil.exec("curl -o " + localPath + " " + remoteUrl);
 		if (!shellUtil.checkFileExist(localPath)) {
 			return -2;

@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ch.ethz.ssh2.Connection;
+import ch.ethz.ssh2.ConnectionInfo;
 import ch.ethz.ssh2.SFTPv3Client;
 import ch.ethz.ssh2.SFTPv3FileAttributes;
 import ch.ethz.ssh2.Session;
@@ -23,6 +24,32 @@ public class RemoteFtpUtils {
 			return null;
 		}
 		return con;
+	}
+	
+	/**
+	 * 尝试是否可以连接
+	 * @param ip
+	 * @param port
+	 * @param username
+	 * @param pwd
+	 * @return
+	 * @throws IOException
+	 */
+	public boolean canConn(String ip, int port, int timeout) {
+		ConnectionInfo ci = null;
+		Connection con = new Connection(ip, port);
+		try {
+			ci = con.connect(null, timeout, 0);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		if (ci == null) {
+			return false;
+		}else {
+			con.close();
+			return true;
+		}
 	}
 	
 	/**
@@ -124,10 +151,8 @@ public class RemoteFtpUtils {
 	
 	public static void main(String[] args) throws IOException {
 		RemoteFtpUtils fptUtils = new RemoteFtpUtils();
-		Connection con = fptUtils.getConn("192.168.0.130", 22, "root",  
-			      "r00t0neio");
-		List li = fptUtils.execCommand(con, "ls", "utf-8");
-		System.out.println(li.size());
+		boolean f = fptUtils.canConn("192.168.0.131", 22, 3000);
+		System.out.println(f);
 		//System.out.println(fptUtils.checkFileExist(con, "/root/test.sh"));
 		System.exit(0);
 	}

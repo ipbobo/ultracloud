@@ -25,6 +25,7 @@ public class VirtualMachine {
 	private String softStatus;	//软件安装状态
 	private String appNo;	//工单号
 	private String type;    //类型
+	private String deptId;	//部门ID
 	
 	
 	public String getId() {
@@ -178,5 +179,12 @@ public class VirtualMachine {
 	public void setMountDiskType(String mountDiskType) {
 		this.mountDiskType = mountDiskType;
 	}
+	public String getDeptId() {
+		return deptId;
+	}
+	public void setDeptId(String deptId) {
+		this.deptId = deptId;
+	}
+	
 	
 }
