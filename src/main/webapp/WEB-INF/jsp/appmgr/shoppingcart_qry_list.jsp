@@ -5,6 +5,12 @@
 <html>
 <head>
 <script type="text/javascript">
+//全选
+function checkAllFunc(){
+	$("[name=orderNo]:checkbox").prop("checked", $("#checkAllId").is(":checked"));
+	getAllTotalAmt();//购物车计算金额
+}
+
 //删除清单
 function delCmpOrder(obj, orderNo){
 	if(confirm("确定要删除该清单["+orderNo+"]吗?")){
@@ -185,7 +191,7 @@ function getAllTotalAmt(){
 </table>
 <script type="text/javascript">
 $("#shoppingCartNum").html("${shoppingCartNum}");
-getAllTotalAmt();//购物车计算金额，初始化加载
+getAllTotalAmt();//购物车计算金额
 </script>
 </body>
 </html>
