@@ -15,8 +15,9 @@
     <link rel="stylesheet" href="static/ace/css/chosen.css"/>
     <%@ include file="../../system/index/top.jsp" %>
     <link rel="stylesheet" href="static/ace/css/datepicker.css"/>
+    <link rel="stylesheet" href="css/newSkin.css">
 </head>
-<body class="no-skin">
+<body class="no-skin new-page-list">
 <div class="main-container" id="main-container">
     <div class="main-content">
         <div class="main-content-inner">
@@ -28,13 +29,13 @@
                             <c:if test="${QX == 1}">
                                 <table style="margin-top:5px;">
                                     <tr>
-                                        <td style="padding-left:6px;"><a class="btn btn-success btn-sm">创建</a></td>
-                                        <td style="padding-left:6px;"><a class="btn btn-warning btn-sm">回滚</a></td>
-                                        <td style="padding-left:6px;"><a class="btn btn-danger btn-sm">删除</a></td>
+                                        <td style="padding-left:6px;"><a class="btn btn-success btn-sm new-ctl-style bt-green">创建</a></td>
+                                        <td style="padding-left:6px;"><a class="btn btn-warning btn-sm new-ctl-style bt-blue">回滚</a></td>
+                                        <td style="padding-left:6px;"><a class="btn btn-danger btn-sm new-ctl-style bt-red">删除</a></td>
                                         <td style="padding-left:6px;">
                                             <div class="nav-search">
 										<span class="input-icon">
-											<input type="text" class="nav-search-input"
+											<input type="text" class="nav-search-input new-ctl-style"
                                                    id="nav-search-input" autocomplete="off" name="keywords"
                                                    value="${pd.keywords }" placeholder="这里输入关键词"/>
 											<i class="ace-icon fa fa-search nav-search-icon"></i>

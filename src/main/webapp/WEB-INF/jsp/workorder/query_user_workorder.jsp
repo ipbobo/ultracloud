@@ -16,7 +16,7 @@
 <%@ include file="../system/index/top.jsp"%>
 	<link rel="stylesheet" href="css/newSkin.css">
 </head>
-<body class="no-skin queryUserApplyWorkOrderPre">
+<body class="no-skin queryUserApplyWorkOrderPre new-page-list">
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<!-- /section:basics/sidebar -->
@@ -65,16 +65,11 @@
 														<option value="${var.id}"  <c:if test="${pd.project !='' && var.id == pd.project }">selected="selected"</c:if>>${var.shortname}</option>
 													</c:forEach>
 											</select></td>
-											<td style="width: 120px; text-align: right;" rowspan="2">
-												<button class="btn btn-info" id="btn_query" type="submit">查询</button>
-											</td>
-											<td style="width: 80px; text-align: right;" rowspan="2">&nbsp;导出:</td>
-											<td style="width: 120px; text-align: left;" rowspan="2">
-												&nbsp;&nbsp;<a class="btn btn-light btn-xs"
-												onclick="toExcel();" title="导出到EXCEL"><i
-													id="nav-search-icon"
-													class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a>
-											</td>
+											<!--修改begin @zjb-->
+
+											<td style=" text-align: left;" colspan="2"></td>
+											<!--修改end-->
+
 										</tr>
 										<tr>
 											<td style="width: 120px; text-align: right;">&nbsp;工单号:</td>
@@ -89,7 +84,14 @@
 													<option value="3" <c:if test="${pd.workorder_time !='' && '3' == pd.workorder_time }">selected="selected"</c:if>>近一年</option>
 											</select></td>
 
-
+											<!--修改begin @zjb-->
+											<td style="width: 80px; text-align: left;"></td>
+											<td style="width: 120px; text-align: left;"></td>
+											<td style="text-align: right; padding-right: 20px" colspan="2">
+												<button class="btn btn-info bt-blue" id="btn_query" type="submit">查询&nbsp;<i class="ace-icon fa fa-search"></i></button>
+												<a class="btn btn-light btn-xs bt-green" onclick="toExcel();" title="导出到EXCEL">导出&nbsp;<i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a>
+											</td>
+											<!--修改end-->
 
 
 										</tr>

@@ -13,6 +13,7 @@
 <script type="text/javascript" src="static/ace/js/ace/ace.js"></script><!-- ace scripts -->
 <script type="text/javascript" src="static/ace/js/chosen.jquery.js"></script><!-- 下拉框 -->
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
+<link rel="stylesheet" href="css/newSkin.css">
 <script type="text/javascript">
 //业务视图总览类型改变时触发
 function bizviewTypeFunc(bizviewTypeId){
@@ -58,7 +59,7 @@ function tabFunc(tabId){
 }
 </script>
 </head>
-<body onload="loadData()">
+<body onload="loadData()" class="new-page-list">
 <ul class="nav nav-tabs">
 	<li class="active"><a href="#jstab" onclick="tabFunc('jstab')" data-toggle="tab" style="border-left: 0px;">计算</a></li>
 	<li><a href="#cctab" onclick="tabFunc('cctab')" data-toggle="tab">存储</a></li>

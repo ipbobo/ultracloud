@@ -13,7 +13,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <%@ include file="../../system/index/top.jsp"%>
 	<link rel="stylesheet" href="css/newSkin.css">
 </head>
-<body class="no-skin control-list">
+<body class="no-skin control-list new-page-list">
 	<div class="main-container" id="main-container">
 		<div class="main-content">
 			<div class="main-content-inner">
@@ -26,16 +26,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<table style="margin-top:5px;">
 									<tr>
 										<c:if test="${BQX == 1}">
-											<td style="padding-left:6px;"><a class="btn btn-primary btn-sm" onclick="apply()">申请</a></td>
+											<td style="padding-left:6px;"><a class="btn btn-primary btn-sm new-ctl-style bt-green" onclick="apply()">申请</a></td>
 										</c:if>
-										<td style="padding-left:6px;"><a class="btn btn-success btn-sm" onclick="start()">开机</a></td>
-										<td style="padding-left:6px;"><a class="btn btn-success2 btn-sm" onclick="resume()">恢复</a></td>
-										<td style="padding-left:6px;"><a class="btn btn-warning btn-sm" onclick="suspend()">挂起</a></td>
-										<td style="padding-left:6px;"><a class="btn btn-danger2  btn-sm" onclick="reboot()">重启</a></td>
-										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm" onclick="stop()">关机</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-success btn-sm new-ctl-style bt-blue" onclick="start()">开机</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-success2 btn-sm new-ctl-style bt-green-2" onclick="resume()">恢复</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-warning btn-sm new-ctl-style bt-green" onclick="suspend()">挂起</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-danger2  btn-sm new-ctl-style bt-yellow-2" onclick="reboot()">重启</a></td>
+										<td style="padding-left:6px;"><a class="btn btn-danger  btn-sm new-ctl-style bt-red" onclick="stop()">关机</a></td>
 										<td style="padding-left:6px;">
 											<div class="btn-group" style="height: 33px">
-												<button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<button type="button" class="btn btn-sm btn-primary dropdown-toggle new-ctl-style bt-withe" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 													更多操作<span class="caret"></span>
 												</button>
 												<%--<a class="btn btn-primary btn-sm">更多操作</a>
@@ -57,13 +57,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td style="padding-left:6px;">
 											<div class="nav-search">
 												<span class="input-icon">
-													<input type="text" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+													<input type="text" class="nav-search-input new-ctl-style" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
 													<i class="ace-icon fa fa-search nav-search-icon"></i>
 												</span>
 											</div>
 										</td>
-										<td style="vertical-align: top; padding-left: 2px; width: 32px;">
-											<a class="btn btn-light btn-xs" onclick="searchs();" title="检索">
+										<td style="vertical-align: top; padding-left: 2px; width: 32px; padding-top: 3px">
+											<a class="btn btn-light btn-xs new-ctl-style" onclick="searchs();" title="检索">
 												<i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i>
 											</a>
 										</td>

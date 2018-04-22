@@ -17,8 +17,9 @@
 <%@ include file="../../system/index/top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
+	<link rel="stylesheet" href="css/newSkin.css">
 </head>
-<body class="no-skin">
+<body class="no-skin new-page-list">
 
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
@@ -35,16 +36,16 @@
 							<c:if test="${QX == 1}">
 							<table style="margin-top:5px;">
 								<tr>
-									<td style="padding-left:6px;"><a class="btn btn-primary btn-sm">申请</a></td>
-									<td style="padding-left:6px;"><a class="btn btn-success btn-sm">挂载</a></td>
-									<td style="padding-left:6px;"><a class="btn btn-warning btn-sm">卸载</a></td>
-									<td style="padding-left:6px;"><a class="btn btn-success btn-sm">快照</a></td>
-									<td style="padding-left:6px;"><a class="btn btn-success btn-sm">扩容</a></td>
-									<td style="padding-left:6px;"><a class="btn btn-danger btn-sm">删除</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-primary btn-sm new-ctl-style bt-blue">申请</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-success btn-sm new-ctl-style bt-yellow-1">挂载</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-warning btn-sm new-ctl-style bt-yellow-2">卸载</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-success btn-sm new-ctl-style bt-purple">快照</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-success btn-sm new-ctl-style bt-green">扩容</a></td>
+									<td style="padding-left:6px;"><a class="btn btn-danger btn-sm new-ctl-style bt-red">删除</a></td>
 									<td style="padding-left:6px;">
 										<div class="nav-search">
 											<span class="input-icon">
-												<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+												<input type="text" placeholder="这里输入关键词" class="nav-search-input new-ctl-style" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
 												<i class="ace-icon fa fa-search nav-search-icon"></i>
 											</span>
 										</div>

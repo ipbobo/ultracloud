@@ -141,13 +141,27 @@ function getBarChart(chartId, titleArr, keyArr, valArr, colorArr, unit){
 	        {
 	            type: 'category',
 	            show: true,
-	            data: keyArr
+	            data: keyArr,
+                axisLine: {
+                    lineStyle: {
+                        type: 'solid',
+                        color: '#1c96d5'//左边线的颜色
+                    }
+                }//@zjb 2017-4-21
 	        }
 	    ],
 	    yAxis: [
 	        {
-	            type: 'value',
-            	show: true
+                splitLine:{show: false},//去掉网格线 @zjb 2017-4-21
+                type: 'value',
+                show: true,
+                splitArea : {show : true},//显示网格 @zjb 2017-4-21
+                axisLine: {
+                    lineStyle: {
+                        type: 'solid',
+                        color: '#1c96d5'//左边线的颜色
+                    }
+                }//@zjb 2017-4-21
 	        }
 	    ],
 	    series: [

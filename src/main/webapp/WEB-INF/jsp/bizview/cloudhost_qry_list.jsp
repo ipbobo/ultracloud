@@ -12,10 +12,11 @@
 <script type="text/javascript" src="static/ace/js/ace/ace.js"></script><!-- ace scripts -->
 <script type="text/javascript" src="static/ace/js/chosen.jquery.js"></script><!-- 下拉框 -->
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
+<link rel="stylesheet" href="css/newSkin.css">
 <script type="text/javascript">
 </script>
 </head>
-<body>
+<body class="new-page-list">
 <form id="mainForm" name="mainForm" action="bizview/cloudhostlist.do" enctype="multipart/form-data" method="post">
 <input type="hidden" name="operType" value="${pd.operType}">
 <input type="hidden" name="bizviewType" value="${pd.bizviewType}">

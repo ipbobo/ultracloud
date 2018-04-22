@@ -13,26 +13,30 @@
 <script type="text/javascript" src="static/ace/js/chosen.jquery.js"></script><!-- 下拉框 -->
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
+<link rel="stylesheet" href="css/newSkin.css">
+<script src="js/tuoyunChart.js"></script>
 <script type="text/javascript">
-getGaugeChart('cpuGaugeChart', ['', 'CPU使用率'], ['50%', '40%'], [0, 70], '${(cmpRes.cpuTotalNum==0?0:cmpRes.cpuUseNum/cmpRes.cpuTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getGaugeChart('memGaugeChart', ['', '内存使用率'], ['50%', '40%'], [0, 70], '${(cmpRes.memTotalNum==0?0:cmpRes.memUseNum/cmpRes.memTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
-getBarChart('cpuChart', ['CPU容量'], ['总量','使用量'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuUseNum}'], ['#00E5EE','#FF0000'], "核");//获取图表
-getBarChart('memChart', ['内存容量'], ['总量','使用量'], ['${cmpRes.memTotalNum}', '${cmpRes.memUseNum}'], ['#00E5EE','#FF0000'], "GB");//获取图表
+getTuoyunChart('cpuGaugeChart','CPU使用率',${(cmpRes.cpuTotalNum==0?0:cmpRes.cpuUseNum/cmpRes.cpuTotalNum)*100},'meterStyle1');
+getTuoyunChart('memGaugeChart','内存使用率',${(cmpRes.memTotalNum==0?0:cmpRes.memUseNum/cmpRes.memTotalNum)*100},'meterStyle1');
+/*getGaugeChart('cpuGaugeChart', ['', 'CPU使用率'], ['50%', '40%'], [0, 70], '${(cmpRes.cpuTotalNum==0?0:cmpRes.cpuUseNum/cmpRes.cpuTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表
+getGaugeChart('memGaugeChart', ['', '内存使用率'], ['50%', '40%'], [0, 70], '${(cmpRes.memTotalNum==0?0:cmpRes.memUseNum/cmpRes.memTotalNum)*100}', [[0.1, '#00ff00'],[0.2, '#66ff00'],[0.3, '#99ff00'],[0.4, '#ccff00'],[0.5, '#ffff00'],[0.6, '#ffcc00'],[0.7, '#ff9900'],[0.8, '#ff6600'],[0.9, '#ff3300'],[1, '#ff0000']], "%");//获取图表*/
+getBarChart('cpuChart', ['CPU容量'], ['总量','使用量'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuUseNum}'], ['#f9b552','#009fe9'], "核");//获取图表
+getBarChart('memChart', ['内存容量'], ['总量','使用量'], ['${cmpRes.memTotalNum}', '${cmpRes.memUseNum}'], ['#f9b552','#009fe9'], "GB");//获取图表
 </script>
 </head>
-<body>
+<body class="new-page-list">
 <form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
 	<table style="margin-top: 0px;margin-left: 0px;margin-bottom: 10px;">
 		<tr class="tablecls">
 			<td align="left" style="width: 120px;padding-right: 10px;">
-				<select class="chosen-select form-control" name="bizviewType" id="bizviewType" data-placeholder="请选择业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="bizviewTypeFunc('bizviewType')">
+				<select class="chosen-select form-control new-ctl-style-select color-gray" name="bizviewType" id="bizviewType" data-placeholder="请选择业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="bizviewTypeFunc('bizviewType')">
 				<c:forEach items="${bizviewTypeList}" var="var">
 					<option value="${var.dictCode}" <c:if test="${bizviewType==var.dictCode || (bizviewType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 				</c:forEach>
 			  	</select>
 			</td>
 			<td align="left" style="width: 120px;">
-				<select class="chosen-select form-control" name="subBizviewType" id="subBizviewType" data-placeholder="请选择子业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="subBizviewTypeFunc('bizviewType', 'subBizviewType')">
+				<select class="chosen-select form-control new-ctl-style-select color-gray" name="subBizviewType" id="subBizviewType" data-placeholder="请选择子业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="subBizviewTypeFunc('bizviewType', 'subBizviewType')">
 				<option value="">全部集群</option>
 				<c:forEach items="${subBizviewTypeList}" var="var">
 					<option value="${var.dictCode}"<c:if test="${subBizviewType==var.dictCode}">selected</c:if>>${var.dictValue}</option>
@@ -42,12 +46,12 @@ getBarChart('memChart', ['内存容量'], ['总量','使用量'], ['${cmpRes.mem
 		</tr>
 	</table>
 </form>
-<table style="width: 100%;border:1px solid #cccccc;margin-top: 0px;margin-left: 0px;margin-bottom: 10px;">
-	<tr>
-		<td align="left" valign="top" style="width: 300px;padding:10px;border-right:1px solid #cccccc;border-bottom:1px solid #cccccc;">
-			<table style="width: 100%;">
-				<tr>
-					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>资源信息</b></td>
+<table style="width: 100%;margin-top: 0px;margin-left: 0px;margin-bottom: 10px;">
+	<tbody><tr>
+		<td align="left" valign="top" style="width: 300px;padding:10px;border:1px solid #eeeeee; background: #ffffff">
+			<table style="width: 100%;" class="in-table-list">
+				<tbody><tr>
+					<th style="border-bottom:1px solid #eeeeee;" colspan="2"><b>资源信息</b></th>
 				</tr>
 				<tr>
 					<td align="right" style="width: 120px;padding-top: 10px;">数据中心：</td>
@@ -75,22 +79,23 @@ getBarChart('memChart', ['内存容量'], ['总量','使用量'], ['${cmpRes.mem
 				</tr>
 			</table>
 		</td>
-		<td align="left" valign="top" style="padding:10px;border-right:1px solid #cccccc;border-bottom:1px solid #cccccc;">
-			<table style="width: 100%;">
-				<tr>
-					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>容量视图</b></td>
+		<td width="20px"></td>
+		<td align="left" valign="top" style="padding:10px;border:1px solid #eeeeee; background: #ffffff">
+			<table style="width: 100%;" class="in-table-list">
+				<tbody><tr>
+					<th style="border-bottom:1px solid #eeeeee;" colspan="2"><b>容量视图</b></th>
 				</tr>
 				<tr>
-					<td align="center" style="width: 50%;padding-top: 10px;">
+					<td align="center" style="width: 30%;padding-top: 10px;">
 						<div class="col-xs-12">
-							<div id="cpuGaugeChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
-							<div id="memGaugeChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
+							<div id="cpuGaugeChart" style="width: 70%;"></div>
+							<div id="memGaugeChart" style="width: 70%;"></div>
 						</div>
 					</td>
-					<td align="center" style="width: 50%;padding-top: 10px;">
+					<td align="center" style="width: 70%;padding-top: 10px;">
 						<div class="col-xs-12">
-							<div id="cpuChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
-							<div id="memChart" style="width: 100%;height:150px;" class="col-xs-4 col-sm-4"></div>
+							<div id="cpuChart" style="width: 50%;height:250px;" class="col-xs-4 col-sm-4"></div>
+							<div id="memChart" style="width: 50%;height:250px;" class="col-xs-4 col-sm-4"></div>
 						</div>
 					</td>
 				</tr>

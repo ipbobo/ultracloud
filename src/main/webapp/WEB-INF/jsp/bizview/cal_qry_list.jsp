@@ -13,24 +13,25 @@
 <script type="text/javascript" src="static/ace/js/chosen.jquery.js"></script><!-- 下拉框 -->
 <script type="text/javascript" src="js/commonUtil.js"></script><!-- 公共JS -->
 <script type="text/javascript" src="plugins/echarts/echarts.min.js"></script><!-- 百度echarts -->
+<link rel="stylesheet" href="css/newSkin.css">
 <script type="text/javascript">
-getBarChart('cpuChart', ['CPU容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuAppNum}', '${cmpRes.cpuUseNum}', '${cmpRes.cpuRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "核");//获取图表
-getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.memTotalNum}', '${cmpRes.memAppNum}', '${cmpRes.memUseNum}', '${cmpRes.memRestNum}'], ['#00E5EE', '#FF0000', '#CCCCCC','#00FF00'], "GB");//获取图表
+getBarChart('cpuChart', ['CPU容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.cpuTotalNum}', '${cmpRes.cpuAppNum}', '${cmpRes.cpuUseNum}', '${cmpRes.cpuRestNum}'], ['#f9b552', '#009fe9', '#5f52a1','#df2360'], "核");//获取图表
+getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩余'], ['${cmpRes.memTotalNum}', '${cmpRes.memAppNum}', '${cmpRes.memUseNum}', '${cmpRes.memRestNum}'], ['#f9b552', '#009fe9', '#5f52a1','#df2360'], "GB");//获取图表
 </script>
 </head>
-<body>
+<body class="new-page-list">
 <form id="mainForm" name="mainForm" action="" enctype="multipart/form-data" method="post">
 	<table style="margin-top: 0px;margin-left: 0px;margin-bottom: 10px;">
 		<tr class="tablecls">
 			<td align="left" style="width: 120px;padding-right: 10px;">
-				<select class="chosen-select form-control" name="bizviewType" id="bizviewType" data-placeholder="请选择业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="bizviewTypeFunc('bizviewType')">
+				<select class="chosen-select form-control new-ctl-style-select color-gray" name="bizviewType" id="bizviewType" data-placeholder="请选择业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="bizviewTypeFunc('bizviewType')">
 				<c:forEach items="${bizviewTypeList}" var="var">
 					<option value="${var.dictCode}" <c:if test="${bizviewType==var.dictCode || (bizviewType=='' && var.dictDefault=='1')}">selected</c:if>>${var.dictValue}</option>
 				</c:forEach>
 			  	</select>
 			</td>
 			<td align="left" style="width: 120px;">
-				<select class="chosen-select form-control" name="subBizviewType" id="subBizviewType" data-placeholder="请选择子业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="subBizviewTypeFunc('bizviewType', 'subBizviewType')">
+				<select class="chosen-select form-control new-ctl-style-select color-gray" name="subBizviewType" id="subBizviewType" data-placeholder="请选择子业务视图总览类型" style="vertical-align:top;width: 100%;" onchange="subBizviewTypeFunc('bizviewType', 'subBizviewType')">
 				<option value="">全部${cmpRes.bizviewTypeName}</option>
 				<c:forEach items="${subBizviewTypeList}" var="var">
 					<option value="${var.dictCode}"<c:if test="${subBizviewType==var.dictCode}">selected</c:if>>${var.dictValue}</option>
@@ -40,12 +41,12 @@ getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩
 		</tr>
 	</table>
 </form>
-<table style="width: 100%;border:1px solid #cccccc;margin-top: 0px;margin-left: 0px;margin-bottom: 10px;">
-	<tr>
-		<td align="left" valign="top" style="width: 300px;padding:10px;border-right:1px solid #cccccc;border-bottom:1px solid #cccccc;">
-			<table style="width: 100%;">
-				<tr>
-					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>资源信息</b></td>
+<table style="width: 100%;margin-top: 0px;margin-left: 0px;margin-bottom: 10px;">
+	<tbody><tr>
+		<td align="left" valign="top" style="width: 300px;padding:10px;border:1px solid #eeeeee; background: #ffffff">
+			<table style="width: 100%;" class="in-table-list">
+				<tbody><tr>
+					<th style="border-bottom:1px solid #eeeeee;" colspan="2"><b>资源信息</b></th>
 				</tr>
 				<tr>
 					<td align="right" style="width: 120px;padding-top: 10px;">${cmpRes.bizviewTypeName}：</td>
@@ -85,16 +86,17 @@ getBarChart('memChart', ['内存容量'], ['总量','申请中','已分配','剩
 				</tr>
 			</table>
 		</td>
-		<td align="left" valign="top" style="padding:10px;border-right:1px solid #cccccc;border-bottom:1px solid #cccccc;">
-			<table style="width: 100%;">
-				<tr>
-					<td style="border-bottom:1px solid #cccccc;" colspan="2"><b>容量视图</b></td>
+		<td width="20px"></td>
+		<td align="left" valign="top" style="padding:10px;border:1px solid #eeeeee; background: #ffffff">
+			<table style="width: 100%;" class="in-table-list">
+				<tbody><tr>
+					<th style="border-bottom:1px solid #eeeeee;" colspan="2"><b>容量视图</b></th>
 				</tr>
 				<tr>
 					<td align="left" style="width: 100%;padding-top: 10px;">
 						<div class="col-xs-12">
-							<div id="cpuChart" style="width: 300px;height:150px;" class="col-xs-4 col-sm-4"></div>
-							<div id="memChart" style="width: 300px;height:150px;" class="col-xs-4 col-sm-4"></div>
+							<div id="cpuChart" style="width: 400px;height:250px;" class="col-xs-4 col-sm-4"></div>
+							<div id="memChart" style="width: 400px;height:250px;" class="col-xs-4 col-sm-4"></div>
 						</div>
 					</td>
 				</tr>
